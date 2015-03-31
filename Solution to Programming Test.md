@@ -15,11 +15,11 @@ To solve the above listed problems:
 
 1.	In my design, types of accounts are encapsulated in AccountsEnum providing type information for relevant class. Objects InterestCalculator and InterestRateProvider are introduced for calculate the interest of different types of accounts, where InterestRateProvider provide interest rates required by InterestCalculator:
 
-    a.	Considering InterestCalculator is designed only for calculating accumulated interest with stepped interest rates,            this object is encapsulated inside the object of Checking Account (AccountChecking) which extends the base vanilla           account.
+    a)	Considering InterestCalculator is designed only for calculating accumulated interest with stepped interest rates,            this object is encapsulated inside the object of Checking Account (AccountChecking) which extends the base vanilla           account.
     
-    b.	According to current rules of interest calculation, the format of interest information for Savings and Maxi Savings          account is the same as it is of Checking account, in my design, Savings (AccountSavings) and Maxi Savings                    (AccountMaxiSavings) accounts are designed as the extension of Checking Account. InterestCalculator provides relevant         functions for the interest calculation of different types of accounts.
+    b)	According to current rules of interest calculation, the format of interest information for Savings and Maxi Savings          account is the same as it is of Checking account, in my design, Savings (AccountSavings) and Maxi Savings                    (AccountMaxiSavings) accounts are designed as the extension of Checking Account. InterestCalculator provides relevant         functions for the interest calculation of different types of accounts.
     
-    c.	Furthermore, in my design, general forms of functions are provided for calculating interest with stepped interest            rates (steps can be larger than 1 and 2).
+    c)	Furthermore, in my design, general forms of functions are provided for calculating interest with stepped interest            rates (steps can be larger than 1 and 2).
 
 2.	Objects related printing information is encapsulated as nested objects within relevant objects. For Account, this is PrintTransactions; for Customer, it is PrintStatements, for Bank, it is is PrintCustomerSummary. An interface of printer (Printer) is provided to communicate printing information between objects and the outside world. Shared formatting methods (toDollars and format) are included in a public object Formatter.
 
