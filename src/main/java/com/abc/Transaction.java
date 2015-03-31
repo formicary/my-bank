@@ -1,16 +1,23 @@
 package com.abc;
 
-import java.util.Calendar;
 import java.util.Date;
 
-public class Transaction {
-    public final double amount;
+/**
+ *
+ * @author R. Fei
+ */
+class Transaction {
+    final double amount;
+    final Date transactionDate;
 
-    private Date transactionDate;
-
-    public Transaction(double amount) {
+    Transaction(double amount) {
         this.amount = amount;
-        this.transactionDate = DateProvider.getInstance().now();
+        this.transactionDate = new Date();
     }
-
+    /*This constructor is for test only: date is added with Transactions to test 
+      the calculation of accured interest */
+    Transaction(double amount, Date myDate) {
+        this.amount = amount;
+        this.transactionDate = myDate;
+    }    
 }
