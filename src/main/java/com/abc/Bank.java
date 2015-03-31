@@ -2,45 +2,101 @@ package com.abc;
 
 import java.util.ArrayList;
 import java.util.List;
-
-public class Bank {
-    private List<Customer> customers;
-
-    public Bank() {
-        customers = new ArrayList<Customer>();
+/**
+ *
+ * @author R. Fei
+ */
+class Bank {
+    
+    private final List<Customer> customers;
+    private final PrintCustomerSummary Printer;
+    
+    Bank() {
+        this.customers = new ArrayList<>();
+        this.Printer = new PrintCustomerSummary(customers);
     }
 
-    public void addCustomer(Customer customer) {
+    void addCustomer(Customer customer) {
         customers.add(customer);
     }
-
+    /*
+     * Print customers with the number of accounts under their name:
+     * " Customer Summary
+     *   - John (2 accounts)
+     *   - Name (n accounts) " 
+     */
     public String customerSummary() {
-        String summary = "Customer Summary";
-        for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-        return summary;
+        if ( null != Printer )
+            return Printer.PrintOut();
+        else
+            return "Bad Printer Error";
     }
-
-    //Make sure correct plural of word is created based on the number passed in:
-    //If number passed in is 1 just return the word otherwise add an 's' at the end
-    private String format(int number, String word) {
-        return number + " " + (number == 1 ? word : word + "s");
-    }
-
-    public double totalInterestPaid() {
-        double total = 0;
-        for(Customer c: customers)
-            total += c.totalInterestEarned();
+    /* Total interest accured from all bank accounts of all customers */
+    double totalInterestPaid() {
+        double total = 0.0;
+        total = customers.stream().map((c) -> c.totalInterestEarned()).
+                     reduce(total, (accumulator, _item) -> accumulator + _item);
         return total;
     }
+    
+    public String reportTotalInterestPaid(){
+        if ( null != Printer )
+            return Printer.PrintMoney(totalInterestPaid());
+        else
+            return "Bad Printer Error";
+    }
 
-    public String getFirstCustomer() {
+    String getFirstCustomer() {
         try {
-            customers = null;
             return customers.get(0).getName();
         } catch (Exception e){
-            e.printStackTrace();
+            System.err.println("IndexOutOfBoundsException: " + e.getMessage());
             return "Error";
         }
     }
+    /* Required by Printing Customer Summary */
+    List<Customer> getCustomers(){
+        return customers;
+    }
+    /***************************************************************************
+     * Nested class for Print() method.
+     **************************************************************************/
+    private class PrintCustomerSummary implements Printer{
+    
+        private final List<Customer> customers;
+        private final Formatter format;
+
+        private PrintCustomerSummary(List<Customer> customers){
+            this.customers = customers;
+            this.format = new Formatter();
+        }
+        @Override
+        public String PrintOut(){
+            return this.customerSummary();
+        }
+        private String PrintMoney(double amount){
+            if( null != format)
+                return format.toDollars(amount);
+            else
+                return "Missed Formatting Information";
+        }
+        /*
+         * Print customers with the number of accounts under their name:
+         * " Customer Summary
+         *   - John (2 accounts)
+             - Name (n accounts) " 
+         */
+        private String customerSummary() {       
+            if ( null != customers && !customers.isEmpty()){
+                String summary = "Customer Summary";
+                summary = customers.stream().map((c) -> 
+                        "\n - " + c.getName() + 
+                        " (" + format.format(c.getNumberOfAccounts(), "account") + ")").
+                        reduce(summary, String::concat);
+                return summary + "\n";
+            }
+            else
+                return "No Customer Found!";       
+        }
+    }  
 }
