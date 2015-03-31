@@ -1,0 +1,9 @@
+package com.abc;
+
+/**
+ *
+ * @author R. Fei
+ */
+public interface Printer {
+    String PrintOut();
+}
