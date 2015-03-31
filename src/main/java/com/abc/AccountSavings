@@ -1,0 +1,11 @@
+package com.abc;
+
+/**
+ *
+ * @author R. Fei
+ */
+class AccountSavings extends AccountChecking{
+    AccountSavings(){
+        this.accountType = AccountsEnum.SAVINGS;
+    }
+}
