@@ -1,0 +1,11 @@
+package com.abc;
+
+/**
+ *
+ * @author R. Fei
+ */
+class AccountMaxiSavings extends AccountChecking {
+    AccountMaxiSavings(){
+        this.accountType = AccountsEnum.MAXI_SAVINGS;
+    }
+}
