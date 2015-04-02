@@ -5,6 +5,8 @@ package com.abc;
  * CHECKINGS
  * SAVINGS
  * MAXI SAVINGS
+ *
+ * @author Fragkakis Manos
  */
 public enum AccountType {
 

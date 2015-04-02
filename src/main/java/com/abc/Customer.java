@@ -12,6 +12,8 @@ import static java.lang.Math.abs;
  * the opening of an account
  * the retrieval on interests earned from the accounts
  * and the retrieval on statement for the accounts
+ *
+ * @author Fragkakis Manos
  */
 public class Customer {
 

@@ -8,6 +8,8 @@ import java.util.Date;
  * and has the following characteristics
  * the amount of transaction
  * and the date the transaction happened
+ *
+ * @author Fragkakis Manos
  */
 public class Transaction {
 

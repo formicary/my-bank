@@ -8,6 +8,8 @@ import java.util.List;
  * and has customers
  * and methods to retrieve informations about customers
  * and interests paid to them
+ *
+ * @author Fragkakis Manos
  */
 public class Bank {
     private List<Customer> customers;

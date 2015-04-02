@@ -8,6 +8,8 @@ import java.util.*;
  * An Account has the following characteristics
  * withdraw, deposit, interests earned, balance
  * and can transfer money to another account
+ *
+ * @author Fragkakis Manos
  */
 public class Account {
 

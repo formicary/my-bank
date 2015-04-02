@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
@@ -18,8 +19,9 @@ public class TransactionTest {
 
     @Test
     public void check_last_ten_days_transactions() throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        Date date = sdf.parse("21/03/2015 15:31:23");
+        Calendar cal1 = Calendar.getInstance();
+        cal1.set(2015, Calendar.MARCH, 21, 10, 11, 12);
+        Date date = cal1.getTime();
 
         Account maxiSavingsAccount = new Account(AccountType.MAXI_SAVINGS);
         Customer manos = new Customer("Manos").openAccount(maxiSavingsAccount);
@@ -29,3 +31,4 @@ public class TransactionTest {
         assertEquals(manos.getTotalInterestEarned(), maxiSavingsAccount.getSumTransactions() * 0.05, 0.0);
     }
 }
+
