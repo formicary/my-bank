@@ -91,7 +91,6 @@ public class Customer {
      * @return statement for the customers account
      */
     private String statementForAccount(Account account) {
-//        Utils utils = new Utils();
         StringBuilder statementBuilder = new StringBuilder("\n");
         statementBuilder.append(account.getAccountType().getDescription()).append("\n");
 

@@ -157,6 +157,7 @@ public class Account {
             else if (daysBetween > 0 && balance > 1000) {
                 interestAccrue += 1 + (balance - 1000) * 0.002 * (daysBetween / 365.0);
             }
+
             // increase balance, with the transaction amount
             balance += transaction.getAmount();
         }
@@ -181,8 +182,8 @@ public class Account {
         int daysBetween;
         double interestAccrue = 0.0d;
         double balance = 0.0d;
-        boolean oppositeDaysFlag = dateOfSearch.before(firstTransaction);
         double intRate = 0;
+        boolean oppositeDaysFlag = dateOfSearch.before(firstTransaction);
 
         // iterate through the transactions
         for (Transaction transaction : transactions) {

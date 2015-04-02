@@ -22,6 +22,7 @@ public class Bank {
 
     /**
      * A bank manager can get a report showing the list of customers and how many accounts they have
+     *
      * @return Report for all the customers of the bank
      */
     public String customerSummary() {
