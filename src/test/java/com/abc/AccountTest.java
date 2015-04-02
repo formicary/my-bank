@@ -236,12 +236,14 @@ public class AccountTest {
         Date date3 = cal3.getTime();
         Date date4 = cal4.getTime();
 
+        /* interest calculated for 3 deposits on checking account */
         checkingAccount.specificDeposit(1000, date1);
         checkingAccount.specificDeposit(2000, date2);
         checkingAccount.specificDeposit(3000, date3);
         double postDepositDailyInterestAccrualChecking = checkingAccount.getInterestEarned(date4);
         assertEquals(0.1232876712328767, postDepositDailyInterestAccrualChecking, DOUBLE_DELTA);
 
+        /* interest calculated for 3 deposits on saving account */
         savingsAccount.specificDeposit(1000, date1);
         savingsAccount.specificDeposit(2000, date2);
         savingsAccount.specificDeposit(3000, date3);
