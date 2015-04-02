@@ -6,6 +6,7 @@ import java.util.List;
 import static java.lang.Math.abs;
 
 public class Customer {
+
     private String name;
     private List<Account> accounts;
 
@@ -14,65 +15,96 @@ public class Customer {
         this.accounts = new ArrayList<Account>();
     }
 
+    /**
+     * Get the name of the customer
+     *
+     * @return String name of customer
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Add am account to the accounts of the customer
+     *
+     * @param account The account
+     * @return the customer instance
+     */
     public Customer openAccount(Account account) {
         accounts.add(account);
         return this;
     }
 
+    /**
+     * Return number of customer accounts
+     *
+     * @return the number of the accounts
+     */
     public int getNumberOfAccounts() {
         return accounts.size();
     }
 
-    public double totalInterestEarned() {
-        double total = 0;
-        for (Account a : accounts)
-            total += a.interestEarned();
+    /**
+     * Calculates the interests for the customer accounts
+     *
+     * @return Total interests for all the customer accounts
+     */
+    public double getTotalInterestEarned() {
+        double total = 0.0d;
+        for (Account account : accounts)
+            total += account.getInterestEarned();
         return total;
     }
 
+    /**
+     * Returns a statement with all the types of the account a customer has
+     * every transaction for each account and the sum of
+     *
+     * @return statement for all the accounts of the customer
+     */
     public String getStatement() {
-        String statement = null;
-        statement = "Statement for " + name + "\n";
-        double total = 0.0;
-        for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+        StringBuilder statement = new StringBuilder("Statement for ");
+        statement.append(name);
+        double balance = 0.0d;
+
+        for (Account account : accounts) {
+            statement.append("\n").append(statementForAccount(account));
+            balance += account.getSumTransactions();
         }
-        statement += "\nTotal In All Accounts " + toDollars(total);
-        return statement;
+
+        statement.append("\n\nTotal In All Accounts ").append(toDollars(balance));
+        return statement.toString();
     }
 
-    private String statementForAccount(Account a) {
-        String s = "";
+    /**
+     * Creates a statement for an account of the customer
+     *
+     * @param account the account for which the statement will be created
+     * @return statement for the customers account
+     */
+    private String statementForAccount(Account account) {
+//        Utils utils = new Utils();
+        StringBuilder statementBuilder = new StringBuilder("\n");
+        statementBuilder.append(account.getAccountType().getDescription()).append("\n");
 
-       //Translate to pretty account type
-        switch(a.getAccountType()){
-            case Account.CHECKING:
-                s += "Checking Account\n";
-                break;
-            case Account.SAVINGS:
-                s += "Savings Account\n";
-                break;
-            case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
-                break;
+        double total = 0.0d;
+        for (Transaction transaction : account.getTransactions()) {
+            statementBuilder.append("  ").append(transaction.getAmount() < 0 ? "withdrawal" : "deposit").append(" ").append(toDollars(transaction.getAmount())).append("\n");
+            total += transaction.getAmount();
         }
-
-        //Now total up all the transactions
-        double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
-        }
-        s += "Total " + toDollars(total);
-        return s;
+        statementBuilder.append("Total ").append(toDollars(total));
+        return statementBuilder.toString();
     }
 
-    private String toDollars(double d){
+    /**
+     * Converts an amount to dollars two decimals
+     *
+     * @param d the amount that will be converted
+     * @return representation of the amount into dollars
+     */
+    private String toDollars(double d) {
         return String.format("$%,.2f", abs(d));
     }
+
+
 }

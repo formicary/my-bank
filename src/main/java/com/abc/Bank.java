@@ -14,33 +14,55 @@ public class Bank {
         customers.add(customer);
     }
 
+    /**
+     * A bank manager can get a report showing the list of customers and how many accounts they have
+     * @return Report for all the customers of the bank
+     */
     public String customerSummary() {
-        String summary = "Customer Summary";
+        StringBuilder sb = new StringBuilder("Customer Summary");
         for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-        return summary;
+            sb.append("\n - ").append(c.getName()).append(" (").append(format(c.getNumberOfAccounts(), "account")).append(")");
+        return String.valueOf(sb);
     }
 
-    //Make sure correct plural of word is created based on the number passed in:
-    //If number passed in is 1 just return the word otherwise add an 's' at the end
+    /**
+     * Create the plural version of a word by adding an 's', based on the number passed in
+     * If number passed in is 1 just return the word otherwise add an 's' at the end
+     *
+     * @param number number for the calculation
+     * @param word   word that will be converted in plural
+     * @return a string that show the number and the word
+     */
     private String format(int number, String word) {
         return number + " " + (number == 1 ? word : word + "s");
     }
 
-    public double totalInterestPaid() {
+    /**
+     * A bank manager can get a report showing the total interest paid by the bank on all accounts
+     *
+     * @return total interest paid for all the customers of the bank
+     */
+    public double getTotalInterestPaid() {
         double total = 0;
-        for(Customer c: customers)
-            total += c.totalInterestEarned();
+        for (Customer c : customers)
+            total += c.getTotalInterestEarned();
         return total;
     }
 
+    /**
+     * Return the first customer of the bank
+     *
+     * @return the first customer or an Error message if bank has no customers
+     */
     public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
+        String result;
+        if (!customers.isEmpty()) {
+            result = customers.get(0).getName();
+        } else {
+            result = "Error, no customers found";
         }
+        return result;
     }
+
+
 }
