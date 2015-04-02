@@ -135,22 +135,28 @@ public class Account {
         double balance = 0.0d;
         boolean oppositeDaysFlag = dateOfSearch.before(firstTransaction);
 
+        // iterate through the transactions
         for (Transaction transaction : transactions) {
+            // get every transaction date
             dayOfTransactionCheck = transaction.getTransactionDate();
             if (dateOfSearch.before(dayOfTransactionCheck)) {
                 dayOfTransactionCheck = dateOfSearch;
                 oppositeDaysFlag = true;
             }
+            // and calculate the days between the first transaction and the one is checked
             daysBetween = (int) daysBetweenDates(firstTransaction, dayOfTransactionCheck);
-
+            // if days are positive, and balance less or equal to 1000, increase interest
             if (daysBetween > 0 && balance <= 1000) {
                 interestAccrue += balance * 0.001 * (daysBetween / 365.0);
-            } else if (daysBetween > 0 && balance > 1000) {
+            }
+            // if days are positive, and balance bigger than 1000, increase interest
+            else if (daysBetween > 0 && balance > 1000) {
                 interestAccrue += 1 + (balance - 1000) * 0.002 * (daysBetween / 365.0);
             }
+            // increase balance, with the transaction amount
             balance += transaction.getAmount();
         }
-
+        // interest calculation after the last transaction
         if (!oppositeDaysFlag) {
             daysBetween = (int) daysBetweenDates(dayOfTransactionCheck, dateOfSearch);
             interestAccrue += balance * 0.001 * (daysBetween / 365.0);
@@ -174,26 +180,32 @@ public class Account {
         boolean oppositeDaysFlag = dateOfSearch.before(firstTransaction);
         double intRate = 0;
 
+        // iterate through the transactions
         for (Transaction transaction : transactions) {
+            // get every transaction date
             dayOfTransactionCheck = transaction.getTransactionDate();
             if (dateOfSearch.before(dayOfTransactionCheck)) {
                 dayOfTransactionCheck = dateOfSearch;
                 oppositeDaysFlag = true;
             }
+            // and calculate the days between the first transaction and the one is checked
             daysBetween = (int) daysBetweenDates(firstTransaction, dayOfTransactionCheck);
 
+            // if days are positive, and withdrawals occurred on the last ten days, set interest rate and increase interest
             if (daysBetween > 0 && searchForWithdrawals(daysBetween)) {
                 intRate = 0.001;
                 interestAccrue += balance * intRate * (daysBetween / 365.0);
-            } else if (daysBetween > 0 && !searchForWithdrawals(daysBetween)) {
+            }
+            // if days are positive, and NO withdrawals occurred on the last ten days, set interest rate and increase interest
+            else if (daysBetween > 0 && !searchForWithdrawals(daysBetween)) {
                 intRate = 0.05;
                 interestAccrue += balance * intRate * (daysBetween / 365.0);
             }
-
+            // increase balance, with the transaction amount
             balance += transaction.getAmount();
         }
 
-        // interest calculation for the lest transaction
+        // interest calculation after the last transaction
         if (!oppositeDaysFlag) {
             daysBetween = (int) daysBetweenDates(dayOfTransactionCheck, dateOfSearch);
             interestAccrue += balance * intRate * (daysBetween / 365.0);
@@ -233,7 +245,7 @@ public class Account {
             // increase balance, with the transaction amount
             balance += transaction.getAmount();
         }
-        // interest calculation for the lest transaction
+        // interest calculation after the last transaction
         if (!oppositeDaysFlag) {
             daysBetween = (int) daysBetweenDates(dayOfTransactionCheck, dateOfSearch);
             interestAccrue += balance * 0.001 * (daysBetween / 365.0);
