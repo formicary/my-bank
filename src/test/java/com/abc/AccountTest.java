@@ -240,18 +240,26 @@ public class AccountTest {
         checkingAccount.specificDeposit(2000, date2);
         checkingAccount.specificDeposit(3000, date3);
         double postDepositDailyInterestAccrualChecking = checkingAccount.getInterestEarned(date4);
-        assertEquals(0.1232876712328767,postDepositDailyInterestAccrualChecking,DOUBLE_DELTA);
+        assertEquals(0.1232876712328767, postDepositDailyInterestAccrualChecking, DOUBLE_DELTA);
 
         savingsAccount.specificDeposit(1000, date1);
         savingsAccount.specificDeposit(2000, date2);
         savingsAccount.specificDeposit(3000, date3);
         double postDepositDailyInterestAccrualSavings = savingsAccount.getInterestEarned(date4);
-        assertEquals(1.1506849315068493,postDepositDailyInterestAccrualSavings,DOUBLE_DELTA);
+        assertEquals(1.1506849315068493, postDepositDailyInterestAccrualSavings, DOUBLE_DELTA);
 
+        /* withdrawal on the last 10 days, between transactions */
         maxiAccount.specificDeposit(1000, date1);
-        maxiAccount.specificDeposit(2000, date2);
+        maxiAccount.specificWithdraw(1000, date2);
         maxiAccount.specificDeposit(3000, date3);
-        double postDepositDailyInterestAccrualMaxi = maxiAccount.getInterestEarned(date4);
-        assertEquals(6.1643835616438345,postDepositDailyInterestAccrualMaxi,DOUBLE_DELTA);
+        double postDepositDailyInterestAccrualMaxi1 = maxiAccount.getInterestEarned(date4);
+        assertEquals(0.03287671232876713, postDepositDailyInterestAccrualMaxi1, DOUBLE_DELTA);
+
+        /* withdrawal older than 10 days, between transactions */
+        maxiAccount.specificDeposit(1000, date1);
+        maxiAccount.specificWithdraw(500, date1);
+        maxiAccount.specificDeposit(3000, date3);
+        double postDepositDailyInterestAccrualMaxi2 = maxiAccount.getInterestEarned(date4);
+        assertEquals(0.13835616438356163,postDepositDailyInterestAccrualMaxi2,DOUBLE_DELTA);
     }
 }

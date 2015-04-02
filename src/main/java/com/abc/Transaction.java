@@ -3,6 +3,12 @@ package com.abc;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * Class Transaction represent a bank transaction
+ * and has the following characteristics
+ * the amount of transaction
+ * and the date the transaction happened
+ */
 public class Transaction {
 
     private double amount;

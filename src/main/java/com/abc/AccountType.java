@@ -1,5 +1,11 @@
 package com.abc;
 
+/**
+ * Declared the types of account used by the bank
+ * CHECKINGS
+ * SAVINGS
+ * MAXI SAVINGS
+ */
 public enum AccountType {
 
     CHECKING("Checking Account"),

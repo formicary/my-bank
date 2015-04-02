@@ -2,9 +2,17 @@ package com.abc;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import static java.lang.Math.abs;
 
+/**
+ * Class Customer Represents the instance of a bank customer
+ * and have a name for the customer
+ * and the accounts the customer have.
+ * Also a customer have some actions which are
+ * the opening of an account
+ * the retrieval on interests earned from the accounts
+ * and the retrieval on statement for the accounts
+ */
 public class Customer {
 
     private String name;

@@ -3,6 +3,12 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class Bank represents the instance of a bank
+ * and has customers
+ * and methods to retrieve informations about customers
+ * and interests paid to them
+ */
 public class Bank {
     private List<Customer> customers;
 

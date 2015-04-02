@@ -2,6 +2,13 @@ package com.abc;
 
 import java.util.*;
 
+/**
+ * Class Account represents a bank account
+ * Account has a Type of Account and a List of Transactions
+ * An Account has the following characteristics
+ * withdraw, deposit, interests earned, balance
+ * and can transfer money to another account
+ */
 public class Account {
 
     private AccountType typeOfAccount;
@@ -139,10 +146,7 @@ public class Account {
         for (Transaction transaction : transactions) {
             // get every transaction date
             dayOfTransactionCheck = transaction.getTransactionDate();
-            if (dateOfSearch.before(dayOfTransactionCheck)) {
-                dayOfTransactionCheck = dateOfSearch;
-                oppositeDaysFlag = true;
-            }
+
             // and calculate the days between the first transaction and the one is checked
             daysBetween = (int) daysBetweenDates(firstTransaction, dayOfTransactionCheck);
             // if days are positive, and balance less or equal to 1000, increase interest
@@ -184,23 +188,22 @@ public class Account {
         for (Transaction transaction : transactions) {
             // get every transaction date
             dayOfTransactionCheck = transaction.getTransactionDate();
-            if (dateOfSearch.before(dayOfTransactionCheck)) {
-                dayOfTransactionCheck = dateOfSearch;
-                oppositeDaysFlag = true;
-            }
+
             // and calculate the days between the first transaction and the one is checked
             daysBetween = (int) daysBetweenDates(firstTransaction, dayOfTransactionCheck);
 
-            // if days are positive, and withdrawals occurred on the last ten days, set interest rate and increase interest
-            if (daysBetween > 0 && searchForWithdrawals(daysBetween)) {
+            // if withdrawals occurred on the last ten days, set specific interest rate
+            if (searchForWithdrawals(daysBetween)) {
                 intRate = 0.001;
-                interestAccrue += balance * intRate * (daysBetween / 365.0);
             }
-            // if days are positive, and NO withdrawals occurred on the last ten days, set interest rate and increase interest
-            else if (daysBetween > 0 && !searchForWithdrawals(daysBetween)) {
+            // if NO withdrawals occurred on the last ten days, set specific interest rate
+            else if (!searchForWithdrawals(daysBetween)) {
                 intRate = 0.05;
-                interestAccrue += balance * intRate * (daysBetween / 365.0);
             }
+
+            if(daysBetween > 0)
+                interestAccrue += balance * intRate * (daysBetween / 365.0);
+
             // increase balance, with the transaction amount
             balance += transaction.getAmount();
         }
@@ -232,10 +235,7 @@ public class Account {
         for (Transaction transaction : transactions) {
             // get every transaction date
             dayOfTransactionCheck = transaction.getTransactionDate();
-            if (dateOfSearch.before(dayOfTransactionCheck)) {
-                dayOfTransactionCheck = dateOfSearch;
-                oppositeDaysFlag = true;
-            }
+
             // and calculate the days between the first transaction and the one is checked
             daysBetween = (int) daysBetweenDates(firstTransaction, dayOfTransactionCheck);
             // if days are positive, increase interest
@@ -317,7 +317,7 @@ public class Account {
      * @param endDate   The date on which the search will end
      * @return The number of days between the dates
      */
-    protected static long daysBetweenDates(Date startDate, Date endDate) {
+    private static long daysBetweenDates(Date startDate, Date endDate) {
         // Get msec from each, and subtract.
         long diff = endDate.getTime() - startDate.getTime();
         return diff / (1000 * 60 * 60 * 24);
