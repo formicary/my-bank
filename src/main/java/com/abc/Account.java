@@ -131,7 +131,6 @@ public class Account {
         Date dayOfTransactionCheck = null;
         Date firstTransaction = transactions.get(0).getTransactionDate();
         int daysBetween;
-        int transactionsSize = transactions.size();
         double interestAccrue = 0.0;
         double balance = 0.0d;
         boolean oppositeDaysFlag = dateOfSearch.before(firstTransaction);
@@ -170,7 +169,6 @@ public class Account {
         Date firstTransaction = transactions.get(0).getTransactionDate();
         Date dayOfTransactionCheck = null;
         int daysBetween;
-        int transactionsSize = transactions.size();
         double interestAccrue = 0.0d;
         double balance = 0.0d;
         boolean oppositeDaysFlag = dateOfSearch.before(firstTransaction);
@@ -214,7 +212,6 @@ public class Account {
         Date firstTransaction = transactions.get(0).getTransactionDate();
         Date dayOfTransactionCheck = null;
         int daysBetween;
-        int transactionsSize = transactions.size();
         double balance = 0.0d;
         double interestAccrue = 0.0d;
         boolean oppositeDaysFlag = dateOfSearch.before(firstTransaction);
