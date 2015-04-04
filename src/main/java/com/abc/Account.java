@@ -50,6 +50,11 @@ public class Account {
                 if (amount <= 2000)
                     return 20 + (amount-1000) * 0.05;
                 return 70 + (amount-2000) * 0.1;
+            xase MAXI_SAVINGS:
+                boolean check = false;
+                for (Transaction trans:transactions){
+                  check = (trans.timestamp() - 10 < now()) ? true : false;
+                }
             default:
                 return amount * 0.001;
         }
