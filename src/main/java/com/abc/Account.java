@@ -52,11 +52,13 @@ public class Account {
                 boolean check = false;
                 Date rightnow = DateProvider.getInstance().now();
                 for (Transaction trans:transactions){
-                  check = check || withinTenDays(rightnow, trans.timestamp());
+                    if(trans.amount < 0){
+                        check = check || withinTenDays(rightnow, trans.timestamp());
+                    }
                 }
-                return (check ? amount * (0.0001/365) : amount * (0.05/365));
+                return (check ? amount * (0.001/365) : amount * (0.05/365));
             default:
-                return amount * 0.001;
+                return amount * (0.001/365);
         }
     }
 

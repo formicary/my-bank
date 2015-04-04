@@ -18,8 +18,10 @@ public class Customer {
         return name;
     }
 
-    public Customer openAccount(Account account) {
-        accounts.add(account);
+    public Customer openAccount(Account... accounts_in) {
+        for(Account a:accounts_in) {
+            accounts.add(a);
+        }
         return this;
     }
 

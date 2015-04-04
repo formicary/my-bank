@@ -17,4 +17,7 @@ public class Transaction {
         return this.transactionDate;
     }
 
+    //FOR TESTING PURPOSES ONLY
+    public void setTime(Date time){ this.transactionDate = time; }
+
 }
