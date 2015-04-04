@@ -33,6 +33,15 @@ public class Customer {
             total += a.interestEarned();
         return total;
     }
+    
+    public void transfer(double amount, account from, account to){
+        if (amount <= 0){
+            throw new IllegalArgumentException("Amount must be greater than zero.");
+        } else {
+            from.transactions.add(new Transaction(-amount));
+            to.transactions.add(new Transaction(amount));
+        }
+    }
 
     public String getStatement() {
         String statement = null;
