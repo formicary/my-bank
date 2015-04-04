@@ -34,7 +34,7 @@ public class Customer {
         return total;
     }
     
-    public void transfer(double amount, account from, account to){
+    public void transfer(double amount, Account from, Account to){
         if (amount <= 0){
             throw new IllegalArgumentException("Amount must be greater than zero.");
         } else {
