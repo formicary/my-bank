@@ -6,14 +6,14 @@ import java.util.Date;
 
 public class Account {
 
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
+    public enum Type{
+      CHECKING, SAVINGS, MAXI_SAVINGS
+    }
 
-    private final int accountType;
+    private Type accountType;
     public List<Transaction> transactions;
 
-    public Account(int accountType) {
+    public Account(Type accountType) {
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
     }
@@ -38,10 +38,7 @@ public class Account {
         double amount = sumTransactions();
         switch(accountType){
             case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
+                return (amount <= 1000 ? amount * (0.001/365) : 1 + (amount-1000) * (0.002/365));
 //            case SUPER_SAVINGS:
 //                if (amount <= 4000)
 //                    return 20;
@@ -57,6 +54,7 @@ public class Account {
                 for (Transaction trans:transactions){
                   check = check || withinTenDays(rightnow, trans.timestamp());
                 }
+                return (check ? amount * (0.0001/365) : amount * (0.05/365));
             default:
                 return amount * 0.001;
         }
@@ -67,17 +65,13 @@ public class Account {
     }
 
     public double sumTransactions() {
-       return checkIfTransactionsExist(true);
-    }
-
-    private double checkIfTransactionsExist(boolean checkAll) {
         double amount = 0.0;
         for (Transaction t: transactions)
             amount += t.amount;
         return amount;
     }
 
-    public int getAccountType() {
+    public Type getAccountType() {
         return accountType;
     }
 

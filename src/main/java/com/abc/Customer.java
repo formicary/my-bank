@@ -33,7 +33,7 @@ public class Customer {
             total += a.interestEarned();
         return total;
     }
-    
+
     public void transfer(double amount, Account from, Account to){
         if (amount <= 0){
             throw new IllegalArgumentException("Amount must be greater than zero.");
@@ -60,14 +60,14 @@ public class Customer {
 
        //Translate to pretty account type
         switch(a.getAccountType()){
-            case Account.CHECKING:
-                s += "Checking Account\n";
+            case CHECKING:
+                s = "Checking Account\n";
                 break;
-            case Account.SAVINGS:
-                s += "Savings Account\n";
+            case SAVINGS:
+                s = "Savings Account\n";
                 break;
-            case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
+            case MAXI_SAVINGS:
+                s = "Maxi Savings Account\n";
                 break;
         }
 
