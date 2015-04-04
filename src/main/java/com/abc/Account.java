@@ -50,10 +50,10 @@ public class Account {
                 return 70 + (amount-2000) * 0.1;*/
             case MAXI_SAVINGS:
                 boolean check = false;
-                Date rightnow = DateProvider.getInstance().now();
+                Date right_now = DateProvider.getInstance().now();
                 for (Transaction trans:transactions){
                     if(trans.amount < 0){
-                        check = check || withinTenDays(rightnow, trans.timestamp());
+                        check = check || withinTenDays(right_now, trans.timestamp());
                     }
                 }
                 return (check ? amount * (0.001/365) : amount * (0.05/365));
@@ -62,8 +62,8 @@ public class Account {
         }
     }
 
-    private boolean withinTenDays(Date current, Date then){
-      return ((current.getTime() - then.getTime()) / (24*60*60*1000)) < 10;
+    public boolean withinTenDays(Date current, Date then){
+      return ((current.getTime() - then.getTime()) / (24*60*60*1000)) <= 10;
     }
 
     public double sumTransactions() {

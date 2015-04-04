@@ -18,6 +18,7 @@ public class Transaction {
     }
 
     //FOR TESTING PURPOSES ONLY
+    //PLEASE DON'T USE THIS
     public void setTime(Date time){ this.transactionDate = time; }
 
 }

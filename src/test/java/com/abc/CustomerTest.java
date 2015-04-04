@@ -69,17 +69,13 @@ public class CustomerTest {
 
     @Test
     public void testTwoAccount(){
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.Type.SAVINGS));
-        oscar.openAccount(new Account(Account.Type.CHECKING));
+        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.Type.SAVINGS), new Account(Account.Type.CHECKING));
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
     @Test
     public void testThreeAcounts() {
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.Type.SAVINGS));
-        oscar.openAccount(new Account(Account.Type.CHECKING));
+        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.Type.SAVINGS), new Account(Account.Type.CHECKING));
         assertNotEquals(3, oscar.getNumberOfAccounts());
     }
 
@@ -91,6 +87,6 @@ public class CustomerTest {
         checkingAccount.deposit(1000);
         checkingAccount.withdraw(500);
         checkingAccount2.deposit(1000);
-        assertEquals(2.5, lewis.totalInterestEarned());
+        assertEquals(2.5, lewis.totalInterestEarned(), 1e-15);
     }
 }
