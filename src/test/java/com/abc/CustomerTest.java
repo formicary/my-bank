@@ -87,6 +87,6 @@ public class CustomerTest {
         checkingAccount.deposit(1000);
         checkingAccount.withdraw(500);
         checkingAccount2.deposit(1000);
-        assertEquals(2.5, lewis.totalInterestEarned(), 1e-15);
+        assertEquals(1.5/365 + 1/165, lewis.totalInterestEarned(), 1e-15);
     }
 }

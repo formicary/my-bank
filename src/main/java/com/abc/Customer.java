@@ -18,6 +18,7 @@ public class Customer {
         return name;
     }
 
+    // Adjusted to take variable number of accounts, that way openAccount does not need to be called repeatedly.
     public Customer openAccount(Account... accounts_in) {
         for(Account a:accounts_in) {
             accounts.add(a);
@@ -36,6 +37,7 @@ public class Customer {
         return total;
     }
 
+    // Implemented here to maintain encapsulation within a Customer's accounts.
     public void transfer(double amount, Account from, Account to){
         if (amount <= 0){
             throw new IllegalArgumentException("Amount must be greater than zero.");
@@ -45,42 +47,25 @@ public class Customer {
         }
     }
 
+    /* Individual account statement function assimilated into getStatement to avoid having to parse the list of
+        transactions multiple times; here a single pass is done which should help efficiency.
+     */
     public String getStatement() {
         String statement = null;
         statement = "Statement for " + name + "\n";
         double total = 0.0;
         for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+            double runningtotal = 0;
+            statement += "\n" + a.getAccountType().toString() + "\n";
+            for (Transaction t : a.transactions) {
+                statement += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
+                runningtotal += t.amount;
+            }
+            statement += "Total " + toDollars(runningtotal) + "\n";
+            total += runningtotal;
         }
         statement += "\nTotal In All Accounts " + toDollars(total);
         return statement;
-    }
-
-    private String statementForAccount(Account a) {
-        String s = "";
-
-       //Translate to pretty account type
-        switch(a.getAccountType()){
-            case CHECKING:
-                s = "Checking Account\n";
-                break;
-            case SAVINGS:
-                s = "Savings Account\n";
-                break;
-            case MAXI_SAVINGS:
-                s = "Maxi Savings Account\n";
-                break;
-        }
-
-        //Now total up all the transactions
-        double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
-        }
-        s += "Total " + toDollars(total);
-        return s;
     }
 
     private String toDollars(double d){

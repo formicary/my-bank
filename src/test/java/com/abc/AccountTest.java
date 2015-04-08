@@ -38,6 +38,9 @@ public class AccountTest {
     }
 
     @Test
+    /*
+        Depreciated constructor, but calculating time with milliseconds is a pain.
+     */
     public void test_ten_days(){
         Account account = new Account(Account.Type.SAVINGS);
         Date first = new Date(10,10,15);

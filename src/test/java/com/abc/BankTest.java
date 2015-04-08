@@ -67,6 +67,9 @@ public class BankTest {
     }
 
 
+    // NB: these test cases have fractional values due to assertEquals's accuracy measurements, making solid testing
+    // values diffcult to ascertain.
+
     @Test
     public void checkingAccount() {
         Bank bank = new Bank();
