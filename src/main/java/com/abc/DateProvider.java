@@ -1,4 +1,4 @@
-package com.abc;
+package mybank;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -12,7 +12,7 @@ public class DateProvider {
         return instance;
     }
 
-    public Date now() {
+    public  Date now() {
         return Calendar.getInstance().getTime();
     }
 }
