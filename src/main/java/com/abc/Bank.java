@@ -16,15 +16,13 @@ public class Bank {
     }
     
     //using StringBuilder.append method to save bytecode
-    public String customerSummary() {
+     public String customerSummary() {
         StringBuilder sb = new StringBuilder("Customer Summary");
         
-        for (Customer c : customers)
-        
-        // !!!!　This is wrong method 
-        //still figuring out . maybe need change that format method as well
-        	sb.append("\n - " + c.getName() + "HAVE \t(" + format(c.getNumberOfAccounts(), "\t account") + ")");
-           
+        for (Customer c : customers) {
+        	sb.append("\n - ").append(c.getName()).append("HAVE \t")
+        	.append(format(c.getNumberOfAccounts(), "account")).append(" )");
+        }
         return sb.toString();
     }
     
