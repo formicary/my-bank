@@ -3,7 +3,7 @@ import java.util.Date;
 import org.junit.Ignore;
 
 
-public class accountTest {
+public class AccountTest {
 
 
 
