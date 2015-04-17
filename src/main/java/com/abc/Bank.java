@@ -20,6 +20,9 @@ public class Bank {
         StringBuilder sb = new StringBuilder("Customer Summary");
         
         for (Customer c : customers)
+        
+        // !!!!　This is wrong method 
+        //still figuring out . maybe need change that format method as well
         	sb.append("\n - " + c.getName() + "HAVE \t(" + format(c.getNumberOfAccounts(), "\t account") + ")");
            
         return sb.toString();
