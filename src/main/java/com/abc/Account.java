@@ -96,19 +96,14 @@ import java.util.*;
 		double totalCheckingInterest = 0.0;
 		double tempInterest;
 		double tempbalance;
-		
+		double interestRate;
 		
 		for(Transaction t : transactions){
 			int i = 0;
-			
-			tempbalance += t.amount;
-			double interestRate;
-			//checking if balance for time being(after each transaction), deciding interestRate values.
-			if (tempbalance<=1000){
-				interestRate = 0.001;
-			}else if (tempbalance>1000){
-				interestRate = 0.002;
-			}					
+			tempbalance += t.amount;			
+			//deciding interestRate
+			interestRate =(tempbalance<1000 ? 0.001 : 0.002);
+								
 			//check if there is at least two Transactions exist in account. 
 			//Adding up interest from first transaction date to last transaction date with variable interest rate values ;
 			if (numberOfTransaction>1 && i<(numberOfTransaction-1)){
@@ -137,13 +132,12 @@ import java.util.*;
 		double totalCheckingInterest = 0.0;
 		double tempInterest;
 		double tempbalance;
+		double interestRate;
 		
 		for(Transaction t : transactions){
 			int i = 0;
 			int daysBetween;
-			tempbalance += t.amount;
-			double interestRate = 0.001;		
-			
+			tempbalance += t.amount;	
 			//check if there is at least two Transactions exist in account. 
 			//Adding up interest from first transaction date to last transaction date with variable interest rate values ;
 			if (numberOfTransaction>1 && i<(numberOfTransaction-1)){
@@ -201,4 +195,3 @@ import java.util.*;
 	    
 
 	}
-
