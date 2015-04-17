@@ -1,10 +1,9 @@
-package com.abc;
+package mybank;
 
-import java.util.Calendar;
 import java.util.Date;
 
 public class Transaction {
-    public final double amount;
+    public double amount;
 
     private Date transactionDate;
 
@@ -12,5 +11,8 @@ public class Transaction {
         this.amount = amount;
         this.transactionDate = DateProvider.getInstance().now();
     }
-
+    
+    public Date transactionDate(){
+    	return transactionDate;
+    }
 }
