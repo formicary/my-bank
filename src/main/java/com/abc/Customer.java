@@ -8,7 +8,7 @@ import static java.lang.Math.abs;
 public class Customer {
     private String name;
     private List<Account> accounts;
-//private List<Account> accounts = new ArrayList<Account>();
+
     public Customer(String name) {
         this.name = name;
         this.accounts = new ArrayList<Account>();
