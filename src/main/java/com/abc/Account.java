@@ -3,16 +3,17 @@ package mybank;
 import java.util.*;
 
 
-public class Account {		
-	  AccountType accountType;
-	  List<Transaction> transactions;
-	  DateProvider dateProvider = new DateProvider();
+	public class Account {		
+	    AccountType accountType;
+	    List<Transaction> transactions;
+	    DateProvider dateProvider = new DateProvider();
 	    
-	  public Account(AccountType accountType) {
-	  this.accountType = accountType;
-	  this.transactions = new ArrayList<Transaction>();
+	    public Account(AccountType accountType) {
+	        this.accountType = accountType;
+	        this.transactions = new ArrayList<Transaction>();
 	    }
 	    
+
 
 	public void deposit(double amount) {
 	        if (amount <= 0) {
@@ -33,9 +34,11 @@ public class Account {
 	  
 	    }
 	}
+	
     public AccountType getAccountType() {
         return accountType;
     }
+    
 
 	// new Checking/Saving/Max_Saving accounts interests calculation method added.
     // rewarding interest in daily basis, upon current inquiring data
@@ -53,10 +56,13 @@ public class Account {
 		
 		for(Transaction t : transactions){
 			int i = 0;
+			
 			tempbalance += t.amount;
-			//check at least two Transactions exist in account. A
+
+			//check at least two Transactions exist in account. 
 			//Adding up interest from first transaction date to last transaction date;
 			if(numberOfTransaction>1 && i<(numberOfTransaction-1)){
+
 			//get days period between each(two) of transactions
 				int daysBetween = Days.daysBetween(transactions.get(i).transactionDate(), transactions.get(++i).transactionDate()).getDays();
 			//adding up interests base one account balance(after each transaction) for the time being.! Notice 'tempInterest' will not include(or add up) any interests
@@ -66,8 +72,10 @@ public class Account {
 			
 			}else if(numberOfTransaction>=1 && (numberOfTransaction-1) == i ){
 			//add interest that begin from 'most recent transaction day' to 'current inquiring day'
-			return totalCheckingInterest = tempInterest + tempbalance*(betweenCurrentToLast/365)*0.001;
+			return totalCheckingInterest = tempInterest + tempbalance*(betweenCurrentToLast/365)*0.001;	
+			
 			}else{
+				
 			throw new IllegalArgumentException("No transactions exist");
 			}
 		
@@ -89,8 +97,10 @@ public class Account {
 		double tempInterest;
 		double tempbalance;
 		
+		
 		for(Transaction t : transactions){
 			int i = 0;
+			
 			tempbalance += t.amount;
 			double interestRate;
 			//checking if balance for time being(after each transaction), deciding interestRate values.
@@ -105,6 +115,7 @@ public class Account {
 				    int daysBetween = Days.daysBetween(transactions.get(i).transactionDate(), transactions.get(++i).transactionDate()).getDays();
 					tempInterest += tempbalance*(daysBetween/365)*interestRate;
 					i++;
+					
 			//check if there at least one transactions.
 			}else if(numberOfTransaction>= 1 && (numberOfTransaction-1) == i){
 				return totalCheckingInterest = tempInterest  + tempbalance*(betweenCurrentToLast/365)*interestRate;
@@ -126,6 +137,7 @@ public class Account {
 		double totalCheckingInterest = 0.0;
 		double tempInterest;
 		double tempbalance;
+		
 		for(Transaction t : transactions){
 			int i = 0;
 			int daysBetween;
@@ -169,16 +181,24 @@ public class Account {
 	                return amount * 0.001;
 	        }
 	    }
-
-	    public double sumTransactions() {
-	       return checkIfTransactionsExist(true);
-	    }
-
+	    
+	    /*Delete this checkIfTransactionsExist() method, replace its iteration under sumTransaction() method.
+	     * improve efficiency of code
 	    private double checkIfTransactionsExist(boolean checkAll) {
 	        double amount = 0.0;
 	        for (Transaction t: transactions)
 	            amount += t.amount;
 	        return amount;
+	    }	 */
+	    
+	    public double sumTransactions() {
+	        double amount = 0.0;
+	        for (Transaction t: transactions){
+	            amount += t.amount;
+	        }
+	        return amount;
 	    }
+	    
 
 	}
+

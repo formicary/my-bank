@@ -1,5 +1,8 @@
 package mybank;
 
+
+
+
 import java.util.Date;
 
 public class Transaction {
@@ -15,4 +18,6 @@ public class Transaction {
     public Date transactionDate(){
     	return transactionDate;
     }
+
+
 }
