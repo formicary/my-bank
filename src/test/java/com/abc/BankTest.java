@@ -18,6 +18,9 @@ public class BankTest {
         assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
     }
 
+    //For the simplicity those tests below assuming Interest is  annual basis with 'current feature',
+    //however, our interest is calculated on daily basis.
+
     @Test
     public void checkingAccount() {
         Bank bank = new Bank();
@@ -30,11 +33,11 @@ public class BankTest {
         assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
-    //test assuming Interest is  annual basis, but our interest is calculated on daily basis.
-    // adding new a Interest test in new accountTest class
+     //For the simplicity, this assuming base on annual and 'current feature'.
+  
     public void savings_account() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(AccountType.MAXI_SAVINGS);
+        Account checkingAccount = new Account(AccountType.SAVINGS);
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
         checkingAccount.deposit(1500.0);
