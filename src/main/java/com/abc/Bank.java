@@ -1,4 +1,5 @@
-package com.abc;
+package mybank;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,12 +14,16 @@ public class Bank {
     public void addCustomer(Customer customer) {
         customers.add(customer);
     }
-
+    
+    //using StringBuilder.append method to save bytecode
     public String customerSummary() {
-        String summary = "Customer Summary";
+        StringBuilder sb = new StringBuilder("Customer Summary");
+        
         for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-        return summary;
+        	sb.append("\n - " + c.getName() + "HAVE \t(" + format(c.getNumberOfAccounts(), "\t account") + ")");
+        
+           
+        return sb.toString();
     }
 
     //Make sure correct plural of word is created based on the number passed in:
@@ -33,6 +38,8 @@ public class Bank {
             total += c.totalInterestEarned();
         return total;
     }
+    
+
 
     public String getFirstCustomer() {
         try {
