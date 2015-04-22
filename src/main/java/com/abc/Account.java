@@ -38,30 +38,66 @@ public class Account {
         }
     }
 
+    //transfer between accounts
     public void transfer(Account to, double amount) {
         withdraw(amount);
         to.deposit(amount);
     }
 
     public double interestEarned() {
-        double amount = sumTransactions(); //get total amount in account
+        double amount = 0.0; //counter for total amount
+        double totalInterest = 0.0; //counter for total interest
+
+        Date prevDate = null;
+        for (Transaction t : transactions) { //loop through every transaction in account
+            int numDaysBetween = 0;
+            double interest; //counter for this steps current interest
+            if (prevDate != null) { //get days between last transaction and this transaction
+                numDaysBetween = getDaysBetween(t.transactionDate, prevDate);
+            }
+            prevDate = t.transactionDate;
+
+            //Get current steps interest, create a new total amount with compounded interest
+            interest = interestRate(amount, numDaysBetween);
+            amount += interest + t.amount;
+            totalInterest += interest;
+
+        }
+
+        //Get extra interest from last transaction to current time
+        int numDaysPresent = getDaysBetween(Calendar.getInstance().getTime(), transactions.get(transactions.size() - 1).transactionDate);
+        totalInterest += interestRate(amount, numDaysPresent);
+        return totalInterest;
+    }
+
+    public double interestRate(double amount, int days) {
         switch(accountType){
             case SAVINGS:
                 //Rate of 0.1% for the first $1,000 then 0.2%
                 if (amount <= 1000)
-                    return amount * 0.001;
+                    return compoundInterest(.001, days, amount);
                 else
-                    return 1 + (amount-1000) * 0.002;
+                    return compoundInterest(.001, days, 1000) + compoundInterest(.002, days, amount - 1000);
             case MAXI_SAVINGS:
                 //Change Maxi-Savings accounts to have an interest rate of 5% assuming no withdrawals in the past 10 days otherwise 0.1%
                 if (checkIfTransactionsExist(10))
-                    return amount * 0.001;
+                    return compoundInterest(.001, days, amount);
                 else
-                    return amount * 0.05;
+                    return compoundInterest(.05, days, amount);
             default:
                 //Flat rate of 0.1%
-                return amount * 0.001;
+                return compoundInterest(.001, days, amount);
         }
+    }
+
+    private double compoundInterest (double rate, int days, double amount) {
+        //Returns just the interest gained from amount based on rate and days
+        return amount * (Math.pow((1 + rate/365),days) - 1);
+    }
+
+    public int getDaysBetween(Date firstDate, Date secondDate){
+        //Gets rounded down num days in between two dates
+        return (int)( (firstDate.getTime() - secondDate.getTime()) / (1000 * 60 * 60 * 24));
     }
 
     private boolean checkIfTransactionsExist(int periodDays) {

@@ -1,5 +1,4 @@
 package com.abc;
-
 import org.junit.Test;
 
 import java.text.DateFormat;
@@ -11,6 +10,9 @@ import static org.junit.Assert.assertEquals;
 
 public class BankTest {
     private static final double DOUBLE_DELTA = 1e-15;
+
+    //Set up fake date format
+    DateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy hh:mm a");
 
     @Test
     public void customerSummary() {
@@ -38,7 +40,12 @@ public class BankTest {
     }
 
     @Test
-    public void checkingAccount() {
+    public void checkingAccount() throws ParseException {
+
+        //Set up fake date to test with
+        Date date = dateFormat.parse("Jan 1, 2015 10:00 PM");
+        DateProvider.setDate(date);
+
         Bank bank = new Bank();
         Account checkingAccount = new Account(Account.CHECKING);
         Customer bill = new Customer("Bill").openAccount(checkingAccount);
@@ -46,21 +53,32 @@ public class BankTest {
 
         checkingAccount.deposit(100.0);
 
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(0.030141486651191762, bank.totalInterestPaid(), DOUBLE_DELTA);
+
+        //Reset fake date for other test cases
+        DateProvider.resetDate();
     }
 
     @Test
-    public void savings_account() {
+    public void savings_account() throws ParseException {
+
+        //Set up fake date to test with
+        Date date = dateFormat.parse("Jan 1, 2015 10:00 PM");
+        DateProvider.setDate(date);
+
         Bank bank = new Bank();
         Account checkingAccount = new Account(Account.SAVINGS);
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
         checkingAccount.deposit(1500.0);
 
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(0.6028747454026595, bank.totalInterestPaid(), DOUBLE_DELTA);
+
+        //Reset fake date for other test cases
+        DateProvider.resetDate();
     }
 
-    @Test
+    @Test //Since deposited today, should be no interest
     public void maxi_savings_account_today() {
         Bank bank = new Bank();
         Account checkingAccount = new Account(Account.MAXI_SAVINGS);
@@ -68,24 +86,27 @@ public class BankTest {
 
         checkingAccount.deposit(3000.0);
 
-        assertEquals(3.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
     public void maxi_savings_account_past() throws ParseException {
 
         //Set up fake date to test with
-        DateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy hh:mm a");
-        Date date = dateFormat.parse("Apr 7, 2015 12:00 PM");
+        Date date = dateFormat.parse("Jan 1, 2015 10:00 PM");
         DateProvider.setDate(date);
 
         Bank bank = new Bank();
         Account checkingAccount = new Account(Account.MAXI_SAVINGS);
         bank.addCustomer(new Customer("Jeff").openAccount(checkingAccount));
 
-        checkingAccount.deposit(3000.0);
+        checkingAccount.deposit(1000.0);
 
-        assertEquals(150.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        date = dateFormat.parse("Apr 1, 2015 10:00 PM");
+        DateProvider.setDate(date);
+        checkingAccount.deposit(1000.0);
+
+        assertEquals(17.785795065379215, bank.totalInterestPaid(), DOUBLE_DELTA);
 
         //Reset fake date for other test cases
         DateProvider.resetDate();
