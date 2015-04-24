@@ -6,7 +6,7 @@ import java.util.*;
 	public class Account {		
 	    AccountType accountType;
 	    List<Transaction> transactions;
-	    DateProvider dateProvider = new DateProvider();
+	    DateProvider dateProvider;
 	    
 	    public Account(AccountType accountType) {
 	        this.accountType = accountType;
@@ -49,10 +49,12 @@ import java.util.*;
 		// Days between 'current inquiring day' and 'most recent transaction day' 
 		int betweenCurrentToLast = Days.daysBetween(LastTransactionDay, currentDate).getDays();
 		int numberOfTransaction = transactions.size();
+		int daysBetween = 0;
 		
-		double totalCheckingInterest = 0.0;
-		double tempInterest = 0;
-		double tempbalance;
+		double totalCheckingInterest = 0.0; //default value
+		double tempInterest = 0.0; // default value
+		double tempbalance = 0.0;
+		
 		
 		for(Transaction t : transactions){
 			int i = 0;
@@ -64,8 +66,8 @@ import java.util.*;
 			if(numberOfTransaction>1 && i<(numberOfTransaction-1)){
 
 			//get days period between each(two) of transactions
-				int daysBetween = Days.daysBetween(transactions.get(i).transactionDate(), transactions.get(++i).transactionDate()).getDays();
-			//adding up interests base one account balance(after each transaction) for the time being.! Notice 'tempInterest' will not include(or add up) any interests
+				daysBetween = Days.daysBetween(transactions.get(i).transactionDate(), transactions.get(++i).transactionDate()).getDays();
+			//adding up interests base on account balance(after each transaction) for the time being. Notice 'tempInterest' will not include(or add up) any interests
 			//that begin from 'most recent transaction day' to 'current inquiring day'.
 				tempInterest += tempbalance*(daysBetween/365)*0.001;
 				i++;
@@ -92,28 +94,31 @@ import java.util.*;
 		
 		int betweenCurrentToLast = Days.daysBetween(LastTransactionDay, currentDate).getDays();
 		int numberOfTransaction = transactions.size();
+		int daysBetween = 0;
 		
-		double totalCheckingInterest = 0.0;
-		double tempInterest;
-		double tempbalance;
-		double interestRate;
+		double totalSavingInterest = 0.0;
+		double tempInterest = 0.0;
+		double tempbalance = 0.0;
+		double interestRate = 0.001; //default interestRate
 		
 		for(Transaction t : transactions){
 			int i = 0;
 			tempbalance += t.amount;			
-			//deciding interestRate
+			//deciding interestRate, base on time being account balance.
 			interestRate =(tempbalance<1000 ? 0.001 : 0.002);
 								
 			//check if there is at least two Transactions exist in account. 
 			//Adding up interest from first transaction date to last transaction date with variable interest rate values ;
 			if (numberOfTransaction>1 && i<(numberOfTransaction-1)){
-				    int daysBetween = Days.daysBetween(transactions.get(i).transactionDate(), transactions.get(++i).transactionDate()).getDays();
+					//get days period between each(two) of transactions
+					daysBetween  = Days.daysBetween(transactions.get(i).transactionDate(), transactions.get(++i).transactionDate()).getDays();
+					//adding up interests base on account balance(after each transaction) for the time being.
 					tempInterest += tempbalance*(daysBetween/365)*interestRate;
 					i++;
 					
 			//check if there at least one transactions.
 			}else if(numberOfTransaction>= 1 && (numberOfTransaction-1) == i){
-				return totalCheckingInterest = tempInterest  + tempbalance*(betweenCurrentToLast/365)*interestRate;
+				return totalSavingInterest = tempInterest  + tempbalance*(betweenCurrentToLast/365)*interestRate;
 			}else{
 				throw new IllegalArgumentException("No transactions exist");
 			}
@@ -128,19 +133,21 @@ import java.util.*;
 		Date currentDate = dateProvider.now();
 		int betweenCurrentToLast = Days.daysBetween(LastTransactionDay, currentDate).getDays();
 		int numberOfTransaction = transactions.size();
+		int daysBetween = 0;
 		
-		double totalCheckingInterest = 0.0;
-		double tempInterest;
-		double tempbalance;
-		double interestRate;
+		double totalMaxiSaveInterest = 0.0;
+		double tempInterest = 0.0;
+		double tempbalance = 0.0;
+		double interestRate = 0.001;   //defaul interest Rate
 		
 		for(Transaction t : transactions){
 			int i = 0;
-			int daysBetween;
-			tempbalance += t.amount;	
+			tempbalance += t.amount;
+	
 			//check if there is at least two Transactions exist in account. 
 			//Adding up interest from first transaction date to last transaction date with variable interest rate values ;
 			if (numberOfTransaction>1 && i<(numberOfTransaction-1)){
+				//get days period between each(two) of transactions
 				daysBetween = Days.daysBetween(transactions.get(i).transactionDate(), transactions.get(++i).transactionDate()).getDays();
 				//checking if there is any withdraws in last 10 days, assigning different interest rate value.
 				if(daysBetween>=11 && ((tempbalance + t.amount) > tempbalance)){
@@ -154,7 +161,7 @@ import java.util.*;
 				if(betweenCurrentToLast>=11){
 					interestRate = 0.05;
 				}
-				return totalCheckingInterest = tempInterest  + tempbalance*(betweenCurrentToLast/365)*interestRate;
+				return totalMaxiSaveInterest = tempInterest  + tempbalance*(betweenCurrentToLast/365)*interestRate;
 			}else{
 				throw new IllegalArgumentException("No transactions exist");
 			}
