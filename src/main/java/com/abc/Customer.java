@@ -2,6 +2,7 @@ package com.abc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.lang.StringBuilder;
 
 import static java.lang.Math.abs;
 
@@ -28,51 +29,81 @@ public class Customer {
     }
 
     public double totalInterestEarned() {
-        double total = 0;
-        for (Account a : accounts)
+        double total = 0.0;
+        for (Account a : accounts) {
             total += a.interestEarned();
+        }
         return total;
     }
 
     public String getStatement() {
-        String statement = null;
-        statement = "Statement for " + name + "\n";
+        StringBuilder statement = new StringBuilder("Statement for ");
+        statement.append(name);
+        statement.append("\n");
         double total = 0.0;
         for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
+            statement.append("\n" + statementForAccount(a) + "\n");
             total += a.sumTransactions();
         }
-        statement += "\nTotal In All Accounts " + toDollars(total);
-        return statement;
+        statement.append("\nTotal In All Accounts ");
+        statement.append(toDollars(total));
+        return statement.toString();
     }
 
     private String statementForAccount(Account a) {
-        String s = "";
+        StringBuilder s = new StringBuilder();
 
        //Translate to pretty account type
         switch(a.getAccountType()){
-            case Account.CHECKING:
-                s += "Checking Account\n";
+            case CHECKING:
+                s.append("Checking Account\n");
                 break;
-            case Account.SAVINGS:
-                s += "Savings Account\n";
+            case SAVINGS:
+                s.append("Savings Account\n");
                 break;
-            case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
+            case MAXI_SAVINGS:
+                s.append("Maxi Savings Account\n");
                 break;
         }
 
         //Now total up all the transactions
         double total = 0.0;
         for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
+            s.append("  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n");
             total += t.amount;
         }
-        s += "Total " + toDollars(total);
-        return s;
+        s.append("Total " + toDollars(total));
+        return s.toString();
     }
 
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
+    }
+
+    // For Transfer between accounts
+    public boolean checkIfAccountExists(Account a) {
+        boolean exist = false;
+        for(Account ac : accounts) {
+            if (ac == a) {
+                exist = true;
+                break;
+            }
+        }
+        return exist;
+    }
+
+    // Transfer: Withdraw from one account and deposit it to another account
+    public void transfer(Account send, Account receive, double amount) {
+        boolean checkSending = checkIfAccountExists(send);
+        boolean checkReceiving = checkIfAccountExists(receive);
+
+        if(checkSending && checkReceiving) {
+            send.withdraw(amount);
+            receive.deposit(amount);
+        } else if (checkSending) {
+            throw new IllegalArgumentException("Invalid Receiving Account for Transfer");
+        } else {
+            throw new IllegalArgumentException("Invalid Sending Account for Transfer");
+        }
     }
 }
