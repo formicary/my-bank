@@ -70,7 +70,7 @@ import java.util.*;
 			//adding up interests base on account balance(after each transaction) for the time being. Notice 'tempInterest' will not include(or add up) any interests
 			//that begin from 'most recent transaction day' to 'current inquiring day'.
 				tempInterest += tempbalance*(daysBetween/365)*0.001;
-				i++;
+				
 			
 			}else if(numberOfTransaction>=1 && (numberOfTransaction-1) == i ){
 			//add interest that begin from 'most recent transaction day' to 'current inquiring day'
@@ -114,7 +114,7 @@ import java.util.*;
 					daysBetween  = Days.daysBetween(transactions.get(i).transactionDate(), transactions.get(++i).transactionDate()).getDays();
 					//adding up interests base on account balance(after each transaction) for the time being.
 					tempInterest += tempbalance*(daysBetween/365)*interestRate;
-					i++;
+				
 					
 			//check if there at least one transactions.
 			}else if(numberOfTransaction>= 1 && (numberOfTransaction-1) == i){
@@ -154,7 +154,7 @@ import java.util.*;
 					interestRate = 0.05;
 				}	
 				tempInterest += tempbalance*(daysBetween/365)*interestRate;
-				i++;
+		
 			}else if(numberOfTransaction>= 1 && (numberOfTransaction-1) == i){
 				//checking if 'most recent transaction day' to 'current inquiring day' endures more than 10 days
 				//if yes assigning different interest rate
