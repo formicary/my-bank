@@ -38,9 +38,7 @@ public class TestSuite {
     @Test
     public void getStatement() throws ParseException {
         Customer henry = setUpTestBank().getCustomerByUniqueID(0);
-
-        System.out.println(henry.getStatement());
-        
+ 
         assertEquals("Statement for Henry\n" +
                 "\n" +
                 "Checking Account\n" +
