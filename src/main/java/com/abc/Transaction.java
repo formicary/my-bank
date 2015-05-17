@@ -4,6 +4,7 @@ import java.util.Date;
 
 /**
  * This class is an abstraction of a transaction (withdrawal, deposit, etc.)
+ * 
  * @author Donald Campbell (campbell.donald@gmail.com)
  *
  */

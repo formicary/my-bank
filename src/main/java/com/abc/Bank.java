@@ -64,7 +64,7 @@ public class Bank {
      * @return The total interest the bank has paid on all customer accounts, as of the current system date.
      */
     public double totalInterestPaid() {
-    	return totalInterestPaid(null);
+    	return totalInterestPaid(DateProvider.getInstance().now());
     }
     
     /**

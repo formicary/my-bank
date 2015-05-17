@@ -6,6 +6,7 @@ import java.util.List;
 
 /**
  * This class holds an abstraction of a retail bank customer.
+ * 
  * @author Donald Campbell (campbell.donald@gmail.com)
  *
  */
@@ -69,11 +70,11 @@ public class Customer {
     }
 
     /**
-     * Returns the total amount of interest (across all accounts) the user has earned at the bank, as of the current system date..
-     * @return The total amount of interest (across all accounts) the user has earned at the bank.
+     * Returns the total amount of interest (across all accounts) the user has earned at the bank, as of the current system time.
+     * @return The total amount of interest (across all accounts) the user has earned at the bank, as of the current system time.
      */
     public double totalInterestEarned() {
-    	return totalInterestEarned(null);
+    	return totalInterestEarned(DateProvider.getInstance().now());
     } 
     
     /**
@@ -92,30 +93,40 @@ public class Customer {
     }
 
     /** 
-     * Returns a statement for the user on all his/her accounts.
+     * Returns a statement for the user on all his/her accounts, as of a given date.
      * @return A string representing a statement of the user's accounts.
      */
     public String getStatement() {
+    	return getStatement(DateProvider.getInstance().now());
+    }
+    
+    /**
+     * Returns a statement for the user on all his/her accounts, as of the current system date.
+     * @param asOf The date to use when generating the statement.
+     * @return A string represeenting a statement of the user's accounts, as of a current system date.
+     */
+    public String getStatement(Date asOf) {
         String statement = null;
         statement = "Statement for " + name + "\n";
         double total = 0.0;
         
         for (Account currAccount : accounts) {
-            statement += "\n" + statementForAccount(currAccount) + "\n";
-            total += currAccount.getBalance();
+            statement += "\n" + statementForAccount(currAccount, asOf) + "\n";
+            total += currAccount.getBalance(asOf);
         }
         
         statement += "\nTotal In All Accounts " + HelperFunctions.toDollars(total);
         
         return statement;
     }
-
+    
     /**
-     * Returns a statement for a specific account.
+     * Returns a statement for a specific account, as of a given date.
      * @param account The account to generate a statement for.
+     * @param asOf The date to use when generating the statement. 
      * @return A string representing the statement for the account.
      */
-    private String statementForAccount(Account account) {
+    private String statementForAccount(Account account, Date asOf) {
         String outputString = "";
         double total = 0.0, interest;
         Transaction currTrans;
@@ -135,14 +146,18 @@ public class Customer {
         for (int transIndex = 0; transIndex < account.getNumberOfTransactions(); transIndex++) {
         	currTrans = account.getTransaction(transIndex);
         	
+        	if (currTrans.getTransactionDate().after(asOf)) {
+        		break;
+        	}
+        	
         	outputString += "  " + HelperFunctions.formatDate(currTrans.getTransactionDate()) + " " + (currTrans.getAmount() < 0 ? "withdrawal" : "deposit") + " " + HelperFunctions.toDollars(currTrans.getAmount()) + "\n";
             total += currTrans.getAmount();
         }
         
-        interest = account.calculateInterest();
+        interest = account.calculateInterest(asOf);
         total += interest;
         
-        outputString += "Interest " + HelperFunctions.toDollars(account.calculateInterest()) + "\n";
+        outputString += "Interest " + HelperFunctions.toDollars(account.calculateInterest(asOf)) + "\n";
         outputString += "Total " + HelperFunctions.toDollars(total);
         
         return outputString;

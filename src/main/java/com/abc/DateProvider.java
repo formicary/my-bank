@@ -5,6 +5,7 @@ import java.util.Date;
 
 /**
  * Date provider provides a method to get the current system date.
+ * 
  * @author Donald Campbell (campbell.donald@gmail.com)
  *
  */

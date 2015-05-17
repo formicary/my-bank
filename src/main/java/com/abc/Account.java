@@ -73,10 +73,10 @@ public class Account {
 
     /**
      * Calculate interest on the account, as of a specific date.
-     * @param now The date to use as a reference point for calculating the interest.
+     * @param asOf The date to use as a reference point for calculating the interest.
      * @return Interest earned on the account, as of a certain date.
      */
-    public double calculateInterest(Date now) {
+    public double calculateInterest(Date asOf) {
         double amount = 0.0, interest, totalInterest = 0.0;
         Date transactionDate, lastPosted = openingDate, lastWithdrawalDate = null;
         Transaction transaction;
@@ -85,11 +85,9 @@ public class Account {
         	transaction = transactions.get(index);
         	transactionDate = transaction.getTransactionDate();
         	 
-        	if (now != null) {
-        		if (transactionDate.after(now)) {
-        			break;
-        		}
-        	} 
+        	if (transactionDate.after(asOf)) {
+        		break;
+        	}
         	
         	interest = compoundInterest(amount, lastWithdrawalDate, transactionDate, lastPosted);
         	
@@ -104,19 +102,18 @@ public class Account {
         	lastPosted = transactionDate;
         } 
         
-        if (now != null) {
-        	compoundInterest(amount, lastWithdrawalDate, now, lastPosted);
-        } // if
+        interest = compoundInterest(amount, lastWithdrawalDate, asOf, lastPosted);	
+        totalInterest += interest; 
         
         return Math.round(totalInterest * 100.0) / 100.0;
     }
     
     /**
      * Calculate interest on the account as of the current system date.
-     * @return The interest earned by the account, as of current system date.
+     * @return The interest earned by the account, as of the current system date.
      */
     public double calculateInterest() {
-    	return calculateInterest(null);
+    	return calculateInterest(DateProvider.getInstance().now());
     }
     
     /**
@@ -197,10 +194,23 @@ public class Account {
      * Returns a sum of all the transactions posted to the account (not taking account of interest).
      * @return The sum of all transactions posted to the account (not taking into account interest).
      */
-    public double sumTransactions () {
+    public double sumTransactions() {
+    	return sumTransactions (DateProvider.getInstance().now());
+    }
+    
+    /**
+     * Returns a sum of all the transactions posted to the account (not taking account of interest), as of a given date.
+     * @param asOf Date to use when calculating the sum of transactions.
+     * @return The sum of transactions as of the given date.
+     */
+    public double sumTransactions (Date asOf) {
     	double totalAmount = 0.0;
     	
     	for (Transaction transaction : transactions) {
+    		if (transaction.getTransactionDate().after(asOf)) {
+    			break;
+    		} // if
+    		
     		totalAmount += transaction.getAmount();
     	}  
     	
@@ -208,12 +218,21 @@ public class Account {
     } 
     
     /**
-     * Returns the current balance of the account.
-     * @return The currnet balance of the account.
+     * Returns the current balance of the account, as of the current system date.
+     * @return The current balance of the account.
      */
     public double getBalance() {
-    	return sumTransactions() + calculateInterest();
+    	return sumTransactions(DateProvider.getInstance().now()) + calculateInterest(DateProvider.getInstance().now());
     } 
+    
+    /** 
+     * Returns the current balance of the account, as of a given date.
+     * @param asOf Date to use when quoting current account balance.
+     * @return Account balance as of the given date.
+     */
+    public double getBalance(Date asOf) {
+    	return sumTransactions(asOf) + calculateInterest(asOf);
+    }
 
     /**
      * Getter method for the account type.
