@@ -1,57 +1,182 @@
 package com.abc;
 
-import org.junit.Ignore;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
 
-    @Test //Test customer statement generation
-    public void testApp(){
+    private static final double DOUBLE_DELTA = 1e-15;
+    
+    private Bank setUpTestBank() throws ParseException {
+    	Bank bank = new Bank();
+        
+        Customer henry = bank.registerNewCustomer("Henry", 0);
+        
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-hh.mm.ss");
+        
+        henry.openAccount(Account.CHECKING, formatter.parse("2015-01-01-12.00.00"));
+        henry.openAccount(Account.SAVINGS, formatter.parse("2015-01-01-12.00.00"));
+        henry.openAccount(Account.MAXI_SAVINGS, formatter.parse("2015-01-01-12.00.00"));
 
-        Account checkingAccount = new Account(Account.CHECKING);
-        Account savingsAccount = new Account(Account.SAVINGS);
+        henry.deposit(0, 10000.0, formatter.parse("2015-01-01-12.00.00"));
+        henry.withdraw(0, 50.0, formatter.parse("2015-01-02-12.00.00"));
+        
+        henry.deposit(1, 4000.0, formatter.parse("2015-01-03-12.00.00"));
+        henry.withdraw(1, 200.0, formatter.parse("2015-01-04-12.00.00"));
 
-        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
-
-        checkingAccount.deposit(100.0);
-        savingsAccount.deposit(4000.0);
-        savingsAccount.withdraw(200.0);
-
+        henry.deposit(2, 6000.0, formatter.parse("2015-01-05-12.00.00"));
+        henry.withdraw(2, 2000.0, formatter.parse("2015-01-06-12.00.00"));
+        henry.deposit(2, 6000.0, formatter.parse("2015-01-07-12.00.00"));
+        
+        return bank;
+    }
+    
+    @Test
+    public void getStatement() throws ParseException {
+        Customer henry = setUpTestBank().getCustomerByUniqueID(0);
+        
         assertEquals("Statement for Henry\n" +
                 "\n" +
                 "Checking Account\n" +
-                "  deposit $100.00\n" +
-                "Total $100.00\n" +
+                "  20150101 deposit $10,000.00\n" +
+                "  20150102 withdrawal $50.00\n" +
+                "Interest $0.03\n" + 
+                "Total $9,950.03\n" +
                 "\n" +
                 "Savings Account\n" +
-                "  deposit $4,000.00\n" +
-                "  withdrawal $200.00\n" +
-                "Total $3,800.00\n" +
+                "  20150103 deposit $4,000.00\n" +
+                "  20150104 withdrawal $200.00\n" +
+                "Interest $0.02\n" +
+                "Total $3,800.02\n" +
                 "\n" +
-                "Total In All Accounts $3,900.00", henry.getStatement());
+                "Maxi Savings Account\n" +
+                "  20150105 deposit $6,000.00\n" +
+                "  20150106 withdrawal $2,000.00\n" +
+                "  20150107 deposit $6,000.00\n" + 
+                "Interest $0.83\n" + 
+                "Total $10,000.83\n" +
+                "\n" +
+                "Total In All Accounts $23,750.88", henry.getStatement());
     }
+    
+    @Test
+	public void customerSummary() throws ParseException {
+		Bank bank = setUpTestBank();
+		Customer jill = bank.registerNewCustomer("Jill", 2);
+	
+		jill.openAccount(Account.CHECKING);
+		
+		jill.deposit(0, 150000.00);
+		
+		assertEquals(bank.customerSummary(), "Customer Summary\n - Henry (3 accounts)\n - Jill (1 account)");
+	}
 
     @Test
-    public void testOneAccount(){
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
+    public void getNumberOfAccounts() {
+        Bank bank = new Bank();
+    	Customer oscar = bank.registerNewCustomer("Oscar", 0);
+    	
+    	oscar.openAccount(Account.SAVINGS);
         assertEquals(1, oscar.getNumberOfAccounts());
-    }
-
-    @Test
-    public void testTwoAccount(){
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
+        
+        oscar.openAccount(Account.CHECKING);
+        
         assertEquals(2, oscar.getNumberOfAccounts());
-    }
-
-    @Ignore
-    public void testThreeAcounts() {
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
+        
+        oscar.openAccount(Account.MAXI_SAVINGS);
+        
         assertEquals(3, oscar.getNumberOfAccounts());
     }
+
+    @Test
+    public void totalInterestPaid() throws ParseException {
+        Bank bank = setUpTestBank();
+        
+        assertEquals(0.88, bank.totalInterestPaid(), DOUBLE_DELTA);
+    }
+    
+    @Test
+	public void validDeposit() {
+		Bank bank = new Bank();
+		Customer bill = bank.registerNewCustomer("Bill", 0);
+		bill.openAccount(Account.CHECKING);
+		
+		assertEquals(bill.getAccountBalance(0), 0.0, DOUBLE_DELTA);
+		
+		bill.deposit(0, 100.0);
+	
+		assertEquals(bill.getAccountBalance(0), 100.0, DOUBLE_DELTA);
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+	public void invalidDeposit() {
+		Bank bank = new Bank();
+		Customer bill = bank.registerNewCustomer("Bill", 0);
+		bill.openAccount(Account.CHECKING);
+		
+		bill.deposit(0, -100.0);
+	}
+	
+    @Test
+	public void validWithdrawal() {
+		Bank bank = new Bank();
+		Customer bill = bank.registerNewCustomer("Bill", 0);
+		bill.openAccount(Account.CHECKING);
+		
+		assertEquals(bill.getAccountBalance(0), 0.0, DOUBLE_DELTA);
+		
+		bill.deposit(0, 100.0);
+		bill.withdraw(0, 50.0);
+		
+		assertEquals(bill.getAccountBalance(0), 50.0, DOUBLE_DELTA);
+    }
+    
+	@Test(expected = IllegalArgumentException.class)
+	public void invalidWithdrawal() {
+		Bank bank = new Bank();
+		Customer bill = bank.registerNewCustomer("Bill", 0);
+		bill.openAccount(Account.CHECKING);
+		
+		bill.withdraw(0, -100.0);
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void insufficientFunds() {
+		Bank bank = new Bank();
+		Customer bill = bank.registerNewCustomer("Bill", 0);
+		bill.openAccount(Account.CHECKING);
+		
+		bill.deposit(0, 100.0);
+		bill.withdraw(0, 150.0);
+	}
+	
+	@Test
+	public void transferMoney() {
+		Bank bank = new Bank();
+		Customer bill = bank.registerNewCustomer("Bill", 0);
+		bill.openAccount(Account.CHECKING);
+		bill.openAccount(Account.SAVINGS);
+		
+		bill.deposit(0, 150.0);
+		
+		assertEquals(bill.getAccountBalance(0), 150.0, DOUBLE_DELTA);
+		assertEquals(bill.getAccountBalance(1), 0.0, DOUBLE_DELTA);
+		
+		bill.transferMoney(0, 1, 50.0);
+		
+		assertEquals(bill.getAccountBalance(0), 100.0, DOUBLE_DELTA);
+		assertEquals(bill.getAccountBalance(1), 50.0, DOUBLE_DELTA);
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void invalidAccountIndex() {
+		Bank bank = new Bank();
+		Customer bill = bank.registerNewCustomer("Bill", 0);
+		
+		bill.getAccountBalance(0);
+	}
 }

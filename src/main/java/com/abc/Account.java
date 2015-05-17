@@ -1,8 +1,15 @@
 package com.abc;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+/***
+ * This class holds a single account. The account class is not directly editable.
+ * All interactions with the account class are handled through the Customer class.
+ * @author Donald Campbell (campbell.donald@gmail.com)
+ *
+ */
 public class Account {
 
     public static final int CHECKING = 0;
@@ -10,64 +17,209 @@ public class Account {
     public static final int MAXI_SAVINGS = 2;
 
     private final int accountType;
-    public List<Transaction> transactions;
+    
+    private Date openingDate;
+    
+    private List<Transaction> transactions;
 
+    /**
+     * Constructor accepting an account type. Assumes current system date for opening date.
+     * @param accountType The type of account (checking, savings, maxi_savings).
+     */
     public Account(int accountType) {
-        this.accountType = accountType;
-        this.transactions = new ArrayList<Transaction>();
+        this(accountType, DateProvider.getInstance().now());
+    }
+    
+    /**
+     * Constructor accepting a specified opening date.
+     * @param accountType The type of account (checking, savings, maxi_savings)
+     * @param openingDate A date object representing the opening date.
+     */
+    public Account(int accountType, Date openingDate) {
+    	this.accountType = accountType;
+    	this.transactions = new ArrayList<Transaction>();
+    	
+    	this.openingDate = openingDate;
+    }
+    
+    /**
+     * Returns the number of transactions currently posted to this account.
+     * @return The number of transactions currently posted to this account.
+     */
+    public int getNumberOfTransactions() {
+    	return transactions.size();
+    }
+    
+    /**
+     * Returns a given transaction, referenced by index. Returns null if index is outside of range of transactions.
+     * @param index The index of transaction caller wishes to have returned.
+     * @return The transaction object representing the transaction at the given index.
+     */
+    public Transaction getTransaction(int index) {
+    	if (index >= 0 && index < transactions.size()) {
+    		return transactions.get(index);
+    	} else {
+    		return null;
+    	}
+    }
+    
+    /** 
+     * Posts a new transaction to the account.
+     * @param toAdd The transaction to add.
+     */
+    public void addTransaction(Transaction toAdd) {
+    	transactions.add(toAdd);
     }
 
-    public void deposit(double amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
-        } else {
-            transactions.add(new Transaction(amount));
-        }
+    /**
+     * Calculate interest on the account, as of a specific date.
+     * @param now The date to use as a reference point for calculating the interest.
+     * @return Interest earned on the account, as of a certain date.
+     */
+    public double calculateInterest(Date now) {
+        double amount = 0.0, interest, totalInterest = 0.0;
+        Date transactionDate, lastPosted = openingDate, lastWithdrawalDate = null;
+        Transaction transaction;
+        
+        for (int index = 0; index < transactions.size(); index++) {
+        	transaction = transactions.get(index);
+        	transactionDate = transaction.getTransactionDate();
+        	 
+        	if (now != null) {
+        		if (transactionDate.after(now)) {
+        			break;
+        		}
+        	} 
+        	
+        	interest = compoundInterest(amount, lastWithdrawalDate, transactionDate, lastPosted);
+        	
+        	if (transaction.getAmount() < 0) {
+        		lastWithdrawalDate = transactionDate;
+         	} 
+        	
+        	amount += transaction.getAmount();
+        	amount += interest;
+        	totalInterest += interest;
+        	
+        	lastPosted = transactionDate;
+        } 
+        
+        if (now != null) {
+        	compoundInterest(amount, lastWithdrawalDate, now, lastPosted);
+        } // if
+        
+        return Math.round(totalInterest * 100.0) / 100.0;
+    }
+    
+    /**
+     * Calculate interest on the account as of the current system date.
+     * @return The interest earned by the account, as of current system date.
+     */
+    public double calculateInterest() {
+    	return calculateInterest(null);
+    }
+    
+    /**
+     * Calculate the interest earned (compounded daily) between the last posted transaction date and a reference date given an opening balance, the date of the last withdrawal, and the date of the last posted transaction.
+     * @param startAmount The starting amount of the account.
+     * @param lastWithdrawalDate The date of the last withdrawal transaction.
+     * @param referenceDate The reference date to compound your interest to.
+     * @param lastPosted The date of the last posted transaction.
+     * @return The total amount of interest accrued between the date of the last posted transaction and the reference date.
+     */
+    private double compoundInterest (double startAmount, Date lastWithdrawalDate, Date referenceDate, Date lastPosted) {
+    	double amount = startAmount, totalInterest = 0.0, interest, daysSinceLastWithdrawal;
+    	int numberOfDays = (int) Math.floor(HelperFunctions.daysBetween(referenceDate, lastPosted));
+    	boolean withdrawalInRange;
+    	
+        for (int x = 0; x < numberOfDays; x++) {
+        	if (lastWithdrawalDate != null) {
+        		daysSinceLastWithdrawal = Math.floor(HelperFunctions.daysBetween(lastWithdrawalDate, lastPosted));
+        	
+        		if ((daysSinceLastWithdrawal + x) > 10.0) {
+        			withdrawalInRange = false;
+        		} else {
+        			withdrawalInRange = true;
+        		}
+        	} else {
+        		withdrawalInRange = false;
+        	} // else
+    		
+    		interest = calculateInterestOnAmount(amount, withdrawalInRange);
+    			
+    		totalInterest += interest;
+        	amount += interest;
+    	} 
+        
+        return totalInterest;
+    }
+    
+    /**
+     * Calculate the amount of interest compounded in one day given an account balance amount, and whether a withdrawal operation was posted within the last 10 days.
+     * @param amount The account balance off which to calculate the daily-compounded interest
+     * @param withdrawalInRange A boolean representing whether a withdrawal transaction was posted within the last 10 days.
+     * @return The amount of interest earned in one day on the given amount.
+     */
+    private double calculateInterestOnAmount(double amount, boolean withdrawalInRange) {
+    	double interest;
+    	
+    	switch(accountType) {
+	    	case CHECKING:
+	    		interest = amount * (0.001 / 365.0);
+	    		break;
+	    		
+	        case SAVINGS:
+	            if (amount <= 1000) {
+	                interest = amount * (0.001 / 365.0);
+	            } else {
+	                interest = (1000 * (0.002 / 365.0)) + ((amount - 1000) * (0.002 / 365.0));
+	            } // else
+	            break;
+	            
+	        case MAXI_SAVINGS:
+	        	if (!withdrawalInRange) {
+	        		interest = amount * (0.05 / 365.0);
+	        	} else {
+	        		interest = amount * (0.001 / 365.0);
+	        	} // else
+	        	
+	        	break;
+	            
+	        default:
+	            interest = amount * 0.001;
+	            break;
+	    }
+    	
+    	return interest;
     }
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
-    }
-}
+    /**
+     * Returns a sum of all the transactions posted to the account (not taking account of interest).
+     * @return The sum of all transactions posted to the account (not taking into account interest).
+     */
+    public double sumTransactions () {
+    	double totalAmount = 0.0;
+    	
+    	for (Transaction transaction : transactions) {
+    		totalAmount += transaction.getAmount();
+    	}  
+    	
+    	return totalAmount;
+    } 
+    
+    /**
+     * Returns the current balance of the account.
+     * @return The currnet balance of the account.
+     */
+    public double getBalance() {
+    	return sumTransactions() + calculateInterest();
+    } 
 
-    public double interestEarned() {
-        double amount = sumTransactions();
-        switch(accountType){
-            case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
-            case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
-            default:
-                return amount * 0.001;
-        }
-    }
-
-    public double sumTransactions() {
-       return checkIfTransactionsExist(true);
-    }
-
-    private double checkIfTransactionsExist(boolean checkAll) {
-        double amount = 0.0;
-        for (Transaction t: transactions)
-            amount += t.amount;
-        return amount;
-    }
-
+    /**
+     * Getter method for the account type.
+     * @return The account type.
+     */
     public int getAccountType() {
         return accountType;
     }
-
 }
