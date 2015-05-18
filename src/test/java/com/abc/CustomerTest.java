@@ -33,24 +33,31 @@ public class CustomerTest {
                 "Total In All Accounts $3,900.00", henry.getStatement());
     }
 
+    /**
+     * Test a customer can open a bank account
+     */
     @Test
     public void testOneAccount(){
         Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
         assertEquals(1, oscar.getNumberOfAccounts());
     }
 
+      /**
+     * Test a customer can open 2 bank accounts
+     */
     @Test
     public void testTwoAccount(){
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
+        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
         oscar.openAccount(new Account(Account.CHECKING));
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
+    /**
+     * Test a customer can open 3 bank accounts
+     */
     @Ignore
     public void testThreeAcounts() {
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
+        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
         oscar.openAccount(new Account(Account.CHECKING));
         assertEquals(3, oscar.getNumberOfAccounts());
     }
