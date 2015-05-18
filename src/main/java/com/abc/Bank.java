@@ -6,15 +6,25 @@ import java.util.List;
 public class Bank {
     private List<Customer> customers;
 
+    /**
+     * Bank object represents a list of customers associated with that bank
+     */
     public Bank() {
-        System.out.println("Test Commit");
         customers = new ArrayList<Customer>();
     }
 
+    /**
+     * Add a new customer to the list of customers
+     * @param customer - customer to add
+     */
     public void addCustomer(Customer customer) {
         customers.add(customer);
     }
 
+    /**
+     * Loop through the list of customers.
+     * @return - Return a list showing each customer and the number of accounts they own
+     */
     public String customerSummary() {
         String summary = "Customer Summary";
         for (Customer c : customers)
@@ -28,6 +38,10 @@ public class Bank {
         return number + " " + (number == 1 ? word : word + "s");
     }
 
+    /**
+     * Loop through each customer associated with the bank
+     * @return the total interest earned
+     */
     public double totalInterestPaid() {
         double total = 0;
         for(Customer c: customers)
@@ -35,6 +49,10 @@ public class Bank {
         return total;
     }
 
+    /**
+     * Get the first customer in the array list
+     * @return - the first customer
+     */
     public String getFirstCustomer() {
         try {
             customers = null;
