@@ -7,6 +7,7 @@ public class Bank {
     private List<Customer> customers;
 
     public Bank() {
+        System.out.println("Test Commit");
         customers = new ArrayList<Customer>();
     }
 
