@@ -104,22 +104,29 @@ public class Account {
         
         return transactionsCreated;
     }
-
-    public double sumTransactions() {
-       return checkIfTransactionsExist(true);
-    }
-
+    
     /**
-     * Loop through all transactions and sum the total amount
-     * @param checkAll -//TODO: 
+     * Sum through all transactions for this account.
      * @return 
      */
-    private double checkIfTransactionsExist(boolean checkAll) {
+    public double sumTransactions() {
         double amount = 0.0;
         for (Transaction t: getTransactions())
             amount += t.amount;
         return amount;
     }
+
+    
+    
+    /**
+     * This method is not really needed. Can transfer the code to sumTransactions.
+     */
+    /**private double checkIfTransactionsExist(boolean checkAll) {
+        double amount = 0.0;
+        for (Transaction t: getTransactions())
+            amount += t.amount;
+        return amount;
+    }**/
 
     /**
      * Get the account type
