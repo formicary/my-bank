@@ -75,4 +75,12 @@ public class Customer {
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
     }
+        public void transferFounds(double amount, Account account, Account target) throws Exception  {
+    	if(account.sumTransactions()<amount) {
+    		throw new Exception("insufficent founds");
+    	} else {
+    		account.withdraw(amount);
+    		target.deposit(amount);
+    	}
+    }
 }
