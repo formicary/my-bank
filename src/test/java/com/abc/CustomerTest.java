@@ -54,4 +54,22 @@ public class CustomerTest {
         oscar.openAccount(new Account(Account.CHECKING));
         assertEquals(3, oscar.getNumberOfAccounts());
     }
+     @Test
+    //A customer can transfer between their accounts
+    public void testTransferFoundsBetweenAccounts() throws Exception {
+    	Account savings = new Account(Account.SAVINGS);
+    	savings.deposit(100000);
+    	Account checking = new Account(Account.CHECKING);
+        Customer oscar = new Customer("Oscar").openAccount(savings);
+        oscar.openAccount(checking);
+        oscar.transferFounds(10000, savings, checking);
+        assertEquals(10000, checking.sumTransactions(), 1e-8);
+        assertEquals(90000, savings.sumTransactions(), 1e-8);
+    }
+    
+    @Test
+    public void testCalculateAPY() {
+    	assertEquals(0.01005002d, Account.calculateAPY(0.01), 1e-8);
+    }
+
 }
