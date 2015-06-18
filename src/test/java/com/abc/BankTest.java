@@ -13,7 +13,6 @@ public class BankTest {
         Customer john = new Customer("John");
         john.openAccount(new Account(Account.CHECKING));
         bank.addCustomer(john);
-
         assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
     }
 
@@ -24,7 +23,7 @@ public class BankTest {
         Customer bill = new Customer("Bill").openAccount(checkingAccount);
         bank.addCustomer(bill);
 
-        checkingAccount.deposit(100.0);
+        checkingAccount.deposit(100.0, false);
 
         assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
@@ -35,7 +34,7 @@ public class BankTest {
         Account checkingAccount = new Account(Account.SAVINGS);
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
-        checkingAccount.deposit(1500.0);
+        checkingAccount.deposit(1500.0, false);
 
         assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
@@ -46,9 +45,8 @@ public class BankTest {
         Account checkingAccount = new Account(Account.MAXI_SAVINGS);
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
-        checkingAccount.deposit(3000.0);
+        checkingAccount.deposit(3000.0, false);
 
         assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
-
 }

@@ -33,6 +33,34 @@ public class Customer {
             total += a.interestEarned();
         return total;
     }
+    
+    public int makeTransfer(int accountIdx1, int accountIdx2,
+    		double amount) {
+    	// for now transfer between two accounts by number
+    	// (this can be made easier to use in a GUI or something)
+    	// return an int for possible error handling
+    	
+    	// FROM idx1 TO idx2
+    	int na = getNumberOfAccounts();
+    	if(accountIdx1 >= na || accountIdx1 < 0) {
+    		throw new IllegalArgumentException("account " + accountIdx1 + " does not exist.");
+    	}
+    	if(accountIdx2 >= na || accountIdx2 < 0) {
+    		throw new IllegalArgumentException("account " + accountIdx2 + " does not exist.");    		
+    	}
+    	if(accountIdx1 == accountIdx2) {
+    		throw new IllegalArgumentException("account source and destination are the same.");
+    	}
+    	
+    	try {
+    		accounts.get(accountIdx1).withdraw(amount, true);
+    	} catch(IllegalArgumentException e) {
+    		e.printStackTrace();
+    		return 1;
+    	}
+    	accounts.get(accountIdx2).deposit(amount, true);
+    	return 0;
+    }
 
     public String getStatement() {
         String statement = null;
@@ -40,7 +68,7 @@ public class Customer {
         double total = 0.0;
         for (Account a : accounts) {
             statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+            total += a.getAccountBalance();
         }
         statement += "\nTotal In All Accounts " + toDollars(total);
         return statement;
@@ -65,7 +93,28 @@ public class Customer {
         //Now total up all the transactions
         double total = 0.0;
         for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
+        	String transactionType = "";
+        	switch(t.transactionType) {
+        		case Transaction.INTEREST:
+        			transactionType += "interest";
+        			break;
+        		case Transaction.DEPOSIT:
+        			transactionType += "deposit";
+        			break;
+        		case Transaction.WITHDRAWAL:
+        			transactionType += "withdrawal";
+        			break;
+        		case Transaction.TRANSFER_IN:
+        			transactionType += "transfer in";
+        			break;
+        		case Transaction.TRANSFER_OUT:
+        			transactionType += "transfer out";
+        			break;
+        		default:
+        			transactionType += "undefined";
+        			break;
+        	}
+            s += "  " + transactionType + " " + toDollars(t.amount) + "\n";
             total += t.amount;
         }
         s += "Total " + toDollars(total);
