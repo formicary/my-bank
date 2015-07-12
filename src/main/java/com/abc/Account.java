@@ -2,6 +2,8 @@ package com.abc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class Account {
 
@@ -25,13 +27,13 @@ public class Account {
         }
     }
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
+    public void withdraw(double amount) {
+    	if (amount <= 0) {
+    		throw new IllegalArgumentException("amount must be greater than zero");
+    	} else {
+    		transactions.add(new Transaction(-amount));
+    	}
     }
-}
 
     public double interestEarned() {
         double amount = sumTransactions();
@@ -45,11 +47,10 @@ public void withdraw(double amount) {
 //                if (amount <= 4000)
 //                    return 20;
             case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
+            	if (!withdrawalsPastTenDays())
+            		return amount * 0.05;
+            	else
+            		return amount * 0.001;
             default:
                 return amount * 0.001;
         }
@@ -58,12 +59,28 @@ public void withdraw(double amount) {
     public double sumTransactions() {
        return checkIfTransactionsExist(true);
     }
-
+    
+    
     private double checkIfTransactionsExist(boolean checkAll) {
         double amount = 0.0;
         for (Transaction t: transactions)
             amount += t.amount;
         return amount;
+    }
+    
+    // Work out if a withdrawal has occurred in the past 10 days
+    public boolean withdrawalsPastTenDays() {
+    	boolean recentWithdrawals = false;
+    	Date today = DateProvider.getInstance().now();
+    	for (Transaction t : transactions) {
+    		Date transactionDate = t.getTransactionDate();
+    		long difference = today.getTime() - transactionDate.getTime();
+    		int differenceDays = (int) TimeUnit.MILLISECONDS.toDays(difference);
+    		// If in last 10 days and transaction is a withdrawal, set recentWithdrawals to true
+    		if (differenceDays <= 10 && t.amount < 0)
+    			recentWithdrawals = true;
+    	}
+    	return recentWithdrawals;
     }
 
     public int getAccountType() {

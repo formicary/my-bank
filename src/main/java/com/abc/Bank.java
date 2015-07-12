@@ -6,6 +6,7 @@ import java.util.List;
 public class Bank {
     private List<Customer> customers;
 
+    // Bank constructor
     public Bank() {
         customers = new ArrayList<Customer>();
     }
