@@ -6,11 +6,22 @@ import java.util.Date;
 public class Transaction {
     public final double amount;
 
-    private Date transactionDate;
+    private Calendar transactionDate;
 
     public Transaction(double amount) {
         this.amount = amount;
-        this.transactionDate = DateProvider.getInstance().now();
+        this.transactionDate = Calendar.getInstance();
+        this.transactionDate.setTime(Calendar.getInstance().getTime());
+    }
+    public Calendar getDate(){
+        return this.transactionDate;
+    }
+
+    /*
+    This is included for testing purposes
+     */
+    public void setDate(Date date){
+        this.transactionDate.setTime(date);
     }
 
 }
