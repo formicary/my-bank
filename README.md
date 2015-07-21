@@ -15,6 +15,7 @@ instructions
 * You'll notice there is no database or UI; these are not needed - the exercise deliberately avoids these requirements.
 * REMEMBER: this is YOUR code, made any changes you feel are necessary.
 * You're welcome to spend as much time as you like; however it's anticipated that this should take about 2 hours.
+* The code will be a representation of your work, so it's important that all the code--new and pre-existing--is how you want your work to be seen.  Please make sure that you are happy with ALL the code.
 
 abc-bank
 --------
@@ -37,4 +38,4 @@ A dummy application for a bank; should provide various functions of a retail ban
 
 * A customer can transfer between their accounts
 * Change **Maxi-Savings accounts** to have an interest rate of 5% assuming no withdrawals in the past 10 days otherwise 0.1%
-* Interest rates should accrue daily (incl. weekends), rates above are per-annum
+* Interest rates should accrue and compounded daily (incl. weekends), rates above are per-annum
