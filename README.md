@@ -13,7 +13,7 @@ instructions
 * The project uses maven to resolve dependencies however if you want to avoid maven configuration the only external JAR that's required is junit-4.11.
 * Refactor and add features (from the below list) as you see fit; there is no need to add all the features in order to "complete" the exercise. Keep in mind that code quality is the critical measure and there should be an obvious focus on testing.
 * You'll notice there is no database or UI; these are not needed - the exercise deliberately avoids these requirements.
-* REMEMBER: this is YOUR code, made any changes you feel are necessary.
+* REMEMBER: this is YOUR code, make any changes you feel are necessary.
 * You're welcome to spend as much time as you like; however it's anticipated that this should take about 2 hours.
 * The code will be a representation of your work, so it's important that all the code--new and pre-existing--is how you want your work to be seen.  Please make sure that you are happy with ALL the code.
 
