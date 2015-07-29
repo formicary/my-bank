@@ -18,10 +18,9 @@ public class Customer {
         return name;
     }
 
-    public int openAccount(Account account) {
+    public Customer openAccount(Account account) {
         accounts.add(account);
-        return accounts.indexOf(account); // changed to return index of new account, intended for use in tandem with transferBetweenAccounts
-        								  // alternative values include: unique account ID, account type (if only 1 of each account type allowed)
+        return this;
     }
 
     public int getNumberOfAccounts() {
