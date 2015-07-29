@@ -29,21 +29,23 @@ public class Customer {
 
     
     //account type, account itself, account location
-    public void transferBetweenAccounts(double amount, int withdrawAcc, int depositAcc){
-    	if(withdrawAcc < 0 || withdrawAcc >= accounts.size() 
-    			|| depositAcc < 0 || depositAcc >= accounts.size()){
-    		throw  new IndexOutOfBoundsException("Incorrect account ID given");
+    public void transferBetweenAccounts(double amount, Account withdrawAcc, Account depositAcc){
+   
+    	if(!(accounts.contains(withdrawAcc) && accounts.contains(depositAcc))){
+    		throw new IllegalArgumentException("accounts must be linked to this customer");
     	}
-    	if(amount > accounts.get(withdrawAcc).amount){
+    	
+    	if(amount > withdrawAcc.amount){
     	    System.out.println("Transfer failed: not enough money in account for a transfer.");
     	    return;
     	}
-    	accounts.get(withdrawAcc).withdraw(amount);
-    	accounts.get(depositAcc).deposit(amount);
+    	
+    	withdrawAcc.withdraw(amount);
+    	depositAcc.deposit(amount);
     }
     
     public double totalInterestEarned() {
-        double total = 0;
+        double total = 0.00;
         for (Account a : accounts)
             total += a.totalInterest;
         return total;
@@ -89,5 +91,4 @@ public class Customer {
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
     }
-
 }
