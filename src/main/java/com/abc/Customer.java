@@ -18,19 +18,35 @@ public class Customer {
         return name;
     }
 
-    public Customer openAccount(Account account) {
+    public int openAccount(Account account) {
         accounts.add(account);
-        return this;
+        return accounts.indexOf(account); // changed to return index of new account, intended for use in tandem with transferBetweenAccounts
+        								  // alternative values include: unique account ID, account type (if only 1 of each account type allowed)
     }
 
     public int getNumberOfAccounts() {
         return accounts.size();
     }
 
+    
+    //account type, account itself, account location
+    public void transferBetweenAccounts(double amount, int withdrawAcc, int depositAcc){
+    	if(withdrawAcc < 0 || withdrawAcc >= accounts.size() 
+    			|| depositAcc < 0 || depositAcc >= accounts.size()){
+    		throw  new IndexOutOfBoundsException("Incorrect account ID given");
+    	}
+    	if(amount > accounts.get(withdrawAcc).amount){
+    	    System.out.println("Transfer failed: not enough money in account for a transfer.")
+    	    return;
+    	}
+    	accounts.get(withdrawAcc).withdraw(amount);
+    	accounts.get(depositAcc).deposit(amount);
+    }
+    
     public double totalInterestEarned() {
         double total = 0;
         for (Account a : accounts)
-            total += a.interestEarned();
+            total += a.totalInterest;
         return total;
     }
 
@@ -40,7 +56,7 @@ public class Customer {
         double total = 0.0;
         for (Account a : accounts) {
             statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+            total += a.amount;
         }
         statement += "\nTotal In All Accounts " + toDollars(total);
         return statement;
@@ -63,16 +79,16 @@ public class Customer {
         }
 
         //Now total up all the transactions
-        double total = 0.0;
         for (Transaction t : a.transactions) {
             s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
         }
-        s += "Total " + toDollars(total);
+        s += "Interest earned " + toDollars(a.totalInterest) + "\n";
+        s += "Total " + toDollars(a.amount);
         return s;
     }
 
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
     }
+
 }
