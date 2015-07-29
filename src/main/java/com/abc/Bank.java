@@ -36,8 +36,12 @@ public class Bank {
 
     public String getFirstCustomer() {
         try {
-            customers = null;
+          //  customers = null; - found error: would result in a null pointer exception 
+          if(customers.size() > 0){
             return customers.get(0).getName();
+          } else {
+              return ("No current customers");
+          }
         } catch (Exception e){
             e.printStackTrace();
             return "Error";
