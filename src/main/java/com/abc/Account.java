@@ -32,6 +32,10 @@ public class Account {
 	public double totalInterest = 0.0;
 
 	public Account(int accountType) {
+		if(!(accountType == CHECKING || accountType == SAVINGS || accountType == MAXI_SAVINGS)){
+			throw new IllegalArgumentException("must be a valid account type");
+		}
+		
 		this.accountType = accountType;
 		this.transactions = new ArrayList<Transaction>();
 		
@@ -146,5 +150,4 @@ public class Account {
 		totalInterest += interest;
 		amount += interest;
 	}
-	
 }
