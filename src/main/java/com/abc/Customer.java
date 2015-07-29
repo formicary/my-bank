@@ -36,7 +36,7 @@ public class Customer {
     		throw  new IndexOutOfBoundsException("Incorrect account ID given");
     	}
     	if(amount > accounts.get(withdrawAcc).amount){
-    	    System.out.println("Transfer failed: not enough money in account for a transfer.")
+    	    System.out.println("Transfer failed: not enough money in account for a transfer.");
     	    return;
     	}
     	accounts.get(withdrawAcc).withdraw(amount);
