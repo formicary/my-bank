@@ -3,14 +3,16 @@ package com.abc;
 import java.util.Calendar;
 import java.util.Date;
 
-public class Transaction {
-    public final double amount;
+public class DateProvider {
+	private static DateProvider instance = null;
 
-    private Date transactionDate;
+	public static DateProvider getInstance() {
+		if (instance == null)
+			instance = new DateProvider();
+		return instance;
+	}
 
-    public Transaction(double amount) {
-        this.amount = amount;
-        this.transactionDate = DateProvider.getInstance().now();
-    }
-
+	public Date now() {
+		return Calendar.getInstance().getTime();
+	}
 }
