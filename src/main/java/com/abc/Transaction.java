@@ -1,16 +1,20 @@
 package com.abc;
 
-import java.util.Calendar;
 import java.util.Date;
 
 public class Transaction {
     public final double amount;
 
-    private Date transactionDate;
+    private final Date transactionDate;
 
     public Transaction(double amount) {
         this.amount = amount;
         this.transactionDate = DateProvider.getInstance().now();
+    }
+
+    public Date getTransactionDate() {
+        // Return a defensive copy to avoid mutation of date
+        return new Date(transactionDate.getTime());
     }
 
 }
