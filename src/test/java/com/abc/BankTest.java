@@ -51,4 +51,24 @@ public class BankTest {
         assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
+    @Test(expected=IllegalArgumentException.class)
+    public void negative_deposit(){
+        Bank bank = new Bank();
+        Account checkingAccount = new AccountChecking();
+        Customer bill = new Customer("Bill").openAccount(checkingAccount);
+        bank.addCustomer(bill);
+
+        checkingAccount.deposit(-100.0);
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void negative_withdrawal(){
+        Bank bank = new Bank();
+        Account checkingAccount = new AccountChecking();
+        Customer bill = new Customer("Bill").openAccount(checkingAccount);
+        bank.addCustomer(bill);
+
+        checkingAccount.withdraw(-100.0);
+    }
+
 }
