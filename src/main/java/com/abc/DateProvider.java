@@ -15,4 +15,11 @@ public class DateProvider {
     public Date now() {
         return Calendar.getInstance().getTime();
     }
+    
+    //Find the day x days ago from today
+    public Date daysAgo(int days) {
+    	Calendar oldDay = Calendar.getInstance();
+    	oldDay.add(Calendar.DATE, -days);
+    	return oldDay.getTime();    	
+    }
 }

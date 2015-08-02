@@ -26,7 +26,7 @@ public class BankTest {
 
         checkingAccount.deposit(100.0);
 
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(0.1, bank.totalInterestPaid(false), DOUBLE_DELTA);
     }
 
     @Test
@@ -37,9 +37,10 @@ public class BankTest {
 
         checkingAccount.deposit(1500.0);
 
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(2.0, bank.totalInterestPaid(false), DOUBLE_DELTA);
     }
 
+    /*
     @Test
     public void maxi_savings_account() {
         Bank bank = new Bank();
@@ -49,6 +50,32 @@ public class BankTest {
         checkingAccount.deposit(3000.0);
 
         assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
-    }
+    }   
+    */
+    
+    @Test
+    public void maxi_savings_account() {
+        Bank bank = new Bank();
+        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
+        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
+        checkingAccount.deposit(3000.0);
+        checkingAccount.withdraw(1000.0);
+        checkingAccount.setLastWithdrawalDate(15);
+        
+        //assertEquals(20.0, bank.totalInterestPaid(false), DOUBLE_DELTA);
+        assertEquals(100.0, bank.totalInterestPaid(false), DOUBLE_DELTA);
+    } 
+    
+    @Test
+    public void interestInccured() {
+        Bank bank = new Bank();
+        Account checkingAccount = new Account(Account.CHECKING);
+        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+
+        checkingAccount.deposit(3000.0);
+        checkingAccount.setLastAccruementDate(10);
+        
+        assertEquals(30.14, (double)Math.round(bank.totalInterestPaid(true)*100)/100, DOUBLE_DELTA);
+    } 
 }
