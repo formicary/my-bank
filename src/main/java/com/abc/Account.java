@@ -1,6 +1,7 @@
 package com.abc;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -13,18 +14,26 @@ public abstract class Account {
     }
 
     public void deposit(double amount) {
+        deposit(amount, DateProvider.INSTANCE.now());
+    }
+
+    public void deposit(double amount, Date onDate) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
-            transactions.add(new Transaction(amount));
+            transactions.add(new Transaction(amount, onDate));
         }
     }
 
     public void withdraw(double amount) {
+        withdraw(amount, DateProvider.INSTANCE.now());
+    }
+
+    public void withdraw(double amount, Date onDate) {
     	if (amount <= 0) {
-    		throw new IllegalArgumentException("amount must be greater than zero");
+            throw new IllegalArgumentException("amount must be greater than zero");
     	} else {
-    		transactions.add(new Transaction(-amount));
+            transactions.add(new Transaction(-amount, onDate));
     	}
     }
 

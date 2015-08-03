@@ -1,6 +1,7 @@
 package com.abc;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static java.lang.Math.abs;
@@ -34,7 +35,11 @@ public class Customer {
         return total;
     }
 
-    public void transfer(Account src, Account dest, double amount){
+    public void transfer(Account src, Account dest, double amount) {
+        transfer(src, dest, amount, DateProvider.INSTANCE.now());
+    }
+
+    public void transfer(Account src, Account dest, double amount, Date onDate){
         if (!accounts.contains(src)) {
             throw new IllegalArgumentException("customer must own source account");
         } else if (!accounts.contains(dest)) {
