@@ -24,4 +24,12 @@ public class TransactionTest {
         assertEquals(t.amount, 5, DOUBLE_DELTA);
         assertTrue(t.getTransactionDate().compareTo(new Date(0)) == 0);
     }
+
+    @Test
+    public void transaction_immutable() {
+        Date d = new Date(0);
+        Transaction t = new Transaction(5, d);
+        d.setTime(10000);
+        assertTrue(t.getTransactionDate().compareTo(new Date(0)) == 0);
+    }
 }
