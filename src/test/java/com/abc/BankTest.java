@@ -4,6 +4,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Date;
+import java.util.Calendar;
+
 public class BankTest {
     private static final double DOUBLE_DELTA = 1e-15;
 
@@ -51,6 +54,31 @@ public class BankTest {
         assertEquals(100.0, bank.totalInterestPaid(), DOUBLE_DELTA);
 
         maxiSavingsAccount.withdraw(1000.0);
+
+        assertEquals(1.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+    }
+    
+    @Test
+    public void maxi_savings_account_dates() {
+        Bank bank = new Bank();
+        Account maxiSavingsAccount = new AccountMaxiSavings();
+        bank.addCustomer(new Customer("Bill").openAccount(maxiSavingsAccount));
+
+        Date longAgo = new Date(0);
+        Date quiteLongAgo = new Date(86400); // Day after epoch
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(DateProvider.INSTANCE.now());
+        cal.add(Calendar.DAY_OF_MONTH, -1);
+
+        Date yesterday = cal.getTime();
+
+        maxiSavingsAccount.deposit(2100.0, longAgo);
+        maxiSavingsAccount.withdraw(100.0, quiteLongAgo);
+
+        assertEquals(100.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+
+        maxiSavingsAccount.withdraw(1000.0, yesterday);
 
         assertEquals(1.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
