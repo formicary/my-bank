@@ -34,6 +34,19 @@ public class Customer {
         return total;
     }
 
+    public void transfer(Account src, Account dest, double amount){
+        if (!accounts.contains(src)) {
+            throw new IllegalArgumentException("customer must own source account");
+        } else if (!accounts.contains(dest)) {
+            throw new IllegalArgumentException("customer must own destination account");
+        } else if (amount <= 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        } else {
+            src.withdraw(amount);
+            dest.deposit(amount);
+        }
+    }
+
     public String getStatement() {
         String statement = null;
         statement = "Statement for " + name + "\n";
