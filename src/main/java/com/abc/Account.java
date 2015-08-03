@@ -1,12 +1,12 @@
 package com.abc;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public abstract class Account {
 
-
-    public List<Transaction> transactions;
+    private List<Transaction> transactions;
 
     public Account() {
         this.transactions = new ArrayList<Transaction>();
@@ -26,6 +26,12 @@ public abstract class Account {
     	} else {
     		transactions.add(new Transaction(-amount));
     	}
+    }
+
+    public Iterable<Transaction> getTransactions() {
+        return new Iterable<Transaction>(){
+            public Iterator<Transaction> iterator(){ return transactions.iterator(); }
+        };
     }
 
     public abstract String getPrettyName();
