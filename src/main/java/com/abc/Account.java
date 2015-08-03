@@ -57,7 +57,7 @@ public abstract class Account {
     public double sumTransactionsBefore(Date endDate) {
         double amount = 0.0;
         for (Transaction t: getTransactions()){
-            if(t.getTransactionDate().before(endDate)) {
+            if(!t.getTransactionDate().after(endDate)) {
                 amount += t.amount;
             }
         }

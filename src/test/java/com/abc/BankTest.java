@@ -43,12 +43,16 @@ public class BankTest {
     @Test
     public void maxi_savings_account() {
         Bank bank = new Bank();
-        Account checkingAccount = new AccountMaxiSavings();
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+        Account maxiSavingsAccount = new AccountMaxiSavings();
+        bank.addCustomer(new Customer("Bill").openAccount(maxiSavingsAccount));
 
-        checkingAccount.deposit(3000.0);
+        maxiSavingsAccount.deposit(2000.0);
 
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(100.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+
+        maxiSavingsAccount.withdraw(1000.0);
+
+        assertEquals(1.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test(expected=IllegalArgumentException.class)
