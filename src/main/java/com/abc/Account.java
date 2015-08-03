@@ -48,10 +48,6 @@ public abstract class Account {
     public abstract double interestEarned();
 
     public double sumTransactions() {
-       return checkIfTransactionsExist(true);
-    }
-
-    private double checkIfTransactionsExist(boolean checkAll) {
         double amount = 0.0;
         for (Transaction t: transactions)
             amount += t.amount;
