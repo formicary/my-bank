@@ -35,10 +35,10 @@ public class BankTest {
     @Test
     public void savings_account() {
         Bank bank = new Bank();
-        Account checkingAccount = new AccountSavings();
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+        Account savingsAccount = new AccountSavings();
+        bank.addCustomer(new Customer("Bill").openAccount(savingsAccount));
 
-        checkingAccount.deposit(1500.0);
+        savingsAccount.deposit(1500.0);
 
         assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }

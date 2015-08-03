@@ -48,10 +48,7 @@ public abstract class Account {
     public abstract double interestEarned();
 
     public double sumTransactions() {
-        double amount = 0.0;
-        for (Transaction t: getTransactions())
-            amount += t.amount;
-        return amount;
+        return sumTransactionsBefore(DateProvider.INSTANCE.now());
     }
 
     public double sumTransactionsBefore(Date endDate) {
