@@ -1,8 +1,9 @@
-package com.abc;
-
-import org.junit.Test;
+package test.java.com.abc;
 
 import static org.junit.Assert.assertTrue;
+import main.java.com.abc.Transaction;
+
+import org.junit.Test;
 
 public class TransactionTest {
     @Test

@@ -1,8 +1,11 @@
-package com.abc;
-
-import org.junit.Test;
+package test.java.com.abc;
 
 import static org.junit.Assert.assertEquals;
+import main.java.com.abc.Account;
+import main.java.com.abc.Bank;
+import main.java.com.abc.Customer;
+
+import org.junit.Test;
 
 public class BankTest {
     private static final double DOUBLE_DELTA = 1e-15;

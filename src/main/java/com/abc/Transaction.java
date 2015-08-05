@@ -1,4 +1,4 @@
-package com.abc;
+package main.java.com.abc;
 
 import java.util.Calendar;
 import java.util.Date;

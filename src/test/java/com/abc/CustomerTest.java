@@ -1,9 +1,11 @@
-package com.abc;
+package test.java.com.abc;
+
+import static org.junit.Assert.assertEquals;
+import main.java.com.abc.Account;
+import main.java.com.abc.Customer;
 
 import org.junit.Ignore;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
 
