@@ -117,4 +117,17 @@ public class CustomerTest {
     	
     	albert.transfer(100, albertChecking, notAlbertSavings);
     }
+    
+    @Test(expected=IllegalArgumentException.class)
+    public void testTransferUnavailableFunds() {
+    	Customer roger = new Customer("Roger");
+    	
+    	Account rogerChecking = new Account(Account.CHECKING);
+    	Account rogerSaving = new Account(Account.SAVINGS);
+    	
+    	roger.openAccount(rogerSaving);
+    	roger.openAccount(rogerChecking);
+    	
+    	roger.transfer(100, rogerSaving, rogerChecking);
+    }
 }
