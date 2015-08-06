@@ -1,5 +1,6 @@
 package main.java.com.abc;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -18,10 +19,22 @@ public class Account {
     
     private boolean maxiRate;
     private Timer maxiRateTimer;
+    
+    private Timer interestTimer;
 
     public Account(int accountType) {
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
+        
+        interestTimer = new Timer();
+        
+        interestTimer.scheduleAtFixedRate(new TimerTask() {
+        	@Override
+        	public void run() {
+        		accrueDailyInterest();
+        	}
+        }, DateProvider.getInstance().now(), 86400000);
+        
         if (accountType == MAXI_SAVINGS) {
         	maxiRate = true;
         }
@@ -85,6 +98,24 @@ public class Account {
             default:
                 return amount * 0.001;
         }
+    }
+    
+    private void accrueDailyInterest() {
+    	double amount = sumTransactions();
+    	switch(accountType) {
+    		case SAVINGS:
+    			if (amount <= 1000)
+    				deposit(amount * (0.001/365));
+    			else
+    				deposit((amount - 1000) * (0.002/365));
+    		case MAXI_SAVINGS:
+    			if (maxiRate)
+    				deposit(amount * (0.05/365));
+    			else
+    				deposit(amount * (0.001/365));
+    		case CHECKING:
+    			deposit(amount * (0.001/365));
+    	}
     }
 
     public double sumTransactions() {
