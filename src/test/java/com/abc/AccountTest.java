@@ -3,6 +3,7 @@ package test.java.com.abc;
 import static org.junit.Assert.*;
 import main.java.com.abc.Account;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class AccountTest {
@@ -34,20 +35,27 @@ public class AccountTest {
 	public void testInterestEarnedMaxiTwoPercent() {
 		Account maxi = new Account(Account.MAXI_SAVINGS);
 		maxi.deposit(1000);
-		assertEquals(20.0, maxi.interestEarned(), DELTA);
+		assertEquals(50.0, maxi.interestEarned(), DELTA);
 	}
 	
 	@Test
 	public void testInterestEarnedMaxiFivePercent() {
 		Account maxi = new Account(Account.MAXI_SAVINGS);
 		maxi.deposit(1500);
-		assertEquals(45.0,  maxi.interestEarned(), DELTA);
+		assertEquals(75.0,  maxi.interestEarned(), DELTA);
 	}
+	
 	
 	@Test
 	public void testInterestEarnedMaxiTenPercent() {
 		Account maxi = new Account(Account.MAXI_SAVINGS);
 		maxi.deposit(3000);
-		assertEquals(170.0, maxi.interestEarned(), DELTA);
+		assertEquals(150.0, maxi.interestEarned(), DELTA);
+	}
+	
+	@Ignore
+	@Test
+	public void testMaxiSavingsRateLess() {
+		
 	}
 }
