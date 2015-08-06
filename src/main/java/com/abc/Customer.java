@@ -34,9 +34,16 @@ public class Customer {
         return total;
     }
     
-    public void transfer(int amount, Account withdrawFromAccount, Account depositToAccount) {
+    public void transfer(double amount, Account withdrawFromAccount, Account depositToAccount) {
     	if (!(this.accounts.contains(withdrawFromAccount) && this.accounts.contains(depositToAccount))) {
     		throw new IllegalArgumentException("Transfers may only be made between accounts owned by the Customer");
+    	}
+    	if (amount > withdrawFromAccount.sumTransactions()) {
+    		throw new IllegalArgumentException("Error: Funds Unavailable");
+    	}
+    	else {
+    		withdrawFromAccount.withdraw(amount);
+    		depositToAccount.deposit(amount);
     	}
     	
     }
