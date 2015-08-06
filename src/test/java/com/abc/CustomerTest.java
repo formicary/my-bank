@@ -130,4 +130,22 @@ public class CustomerTest {
     	
     	roger.transfer(100, rogerSaving, rogerChecking);
     }
+    
+    @Test
+    public void testTransfer() {
+    	Customer freidrich = new Customer("Freidrich");
+    	
+    	Account freidrichChecking = new Account(Account.CHECKING);
+    	Account freidrichSaving = new Account(Account.SAVINGS);
+    	
+    	freidrich.openAccount(freidrichSaving);
+    	freidrich.openAccount(freidrichChecking);
+    
+    	freidrichChecking.deposit(100);
+    	
+    	freidrich.transfer(50, freidrichChecking, freidrichSaving);
+    	
+    	assertEquals(50, freidrichSaving.sumTransactions(), DELTA);
+    	assertEquals(50, freidrichChecking.sumTransactions(), DELTA);
+    }
 }
