@@ -1,7 +1,11 @@
 package main.java.com.abc;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Account {
 
@@ -11,10 +15,16 @@ public class Account {
 
     private final int accountType;
     public List<Transaction> transactions;
+    
+    private boolean maxiRate;
+    private Timer maxiRateTimer;
 
     public Account(int accountType) {
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
+        if (accountType == MAXI_SAVINGS) {
+        	maxiRate = true;
+        }
     }
 
     public void deposit(double amount) {
@@ -25,13 +35,36 @@ public class Account {
         }
     }
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
-    }
-}
+	public void withdraw(double amount) {
+	    if (amount <= 0) {
+	        throw new IllegalArgumentException("amount must be greater than zero");
+	    } else {
+	        transactions.add(new Transaction(-amount));
+	        if (accountType == MAXI_SAVINGS) {
+	        	this.maxiRate = false;
+	        	
+	        	maxiRateTimer = new Timer();
+	        	
+	        	Date futureDate = getDate();
+	        	
+	        	maxiRateTimer.schedule(new TimerTask(){
+	        		@Override
+	        		public void run() {
+	        			maxiRate = true;
+	        			this.cancel();
+	        		}
+	        	}, futureDate );
+	        }
+	    }
+	}
+	
+	private Date getDate() {
+	Calendar c = Calendar.getInstance();
+	c.setTime(new Date());
+	c.add(Calendar.DATE, 10);
+
+	return c.getTime();
+	}
 
     public double interestEarned() {
         double amount = sumTransactions();
@@ -45,11 +78,10 @@ public void withdraw(double amount) {
 //                if (amount <= 4000)
 //                    return 20;
             case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
+                if (maxiRate)
+                    return (amount) * 0.05;
+                else
+                	return (amount) * 0.001;
             default:
                 return amount * 0.001;
         }
