@@ -9,7 +9,7 @@ import org.junit.Test;
 
 public class CustomerTest {
 
-	private final static double VERY_SMALL_AMOUNT = 1e-15;
+	private final static double DELTA = 1e-15;
 	
     @Test //Test customer statement generation
     public void testApp(){
@@ -69,7 +69,7 @@ public class CustomerTest {
     	
     	peteChecking.deposit(100);
     	
-    	assertEquals(0.1, peter.totalInterestEarned(), VERY_SMALL_AMOUNT);
+    	assertEquals(0.1, peter.totalInterestEarned(), DELTA);
     }
     
     @Test
@@ -85,7 +85,7 @@ public class CustomerTest {
     	peteSavings.deposit(100);
     	
     	
-    	assertEquals(0.2, peter.totalInterestEarned(), VERY_SMALL_AMOUNT);
+    	assertEquals(0.2, peter.totalInterestEarned(), DELTA);
     }
     
     @Test
@@ -99,11 +99,11 @@ public class CustomerTest {
     	peter.openAccount(peteSavings);
     	peter.openAccount(peteMaxi);
     	
-    	peteChecking.deposit(100);
-    	peteSavings.deposit(100);
-    	peteMaxi.deposit(100);
+    	peteChecking.deposit(1000);
+    	peteSavings.deposit(2000);
+    	peteMaxi.deposit(3000);
     	
     	
-    	assertEquals(2.2, peter.totalInterestEarned(), VERY_SMALL_AMOUNT);
+    	assertEquals(174.0, peter.totalInterestEarned(), DELTA);
     }
 }
