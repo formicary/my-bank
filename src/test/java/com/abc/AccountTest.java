@@ -30,14 +30,14 @@ public class AccountTest {
 		savings.deposit(2100);
 		assertEquals(3.2, savings.interestEarned(), DELTA);
 	}
-	
+	@Ignore
 	@Test
 	public void testInterestEarnedMaxiTwoPercent() {
 		Account maxi = new Account(Account.MAXI_SAVINGS);
 		maxi.deposit(1000);
 		assertEquals(50.0, maxi.interestEarned(), DELTA);
 	}
-	
+	@Ignore
 	@Test
 	public void testInterestEarnedMaxiFivePercent() {
 		Account maxi = new Account(Account.MAXI_SAVINGS);
@@ -45,7 +45,7 @@ public class AccountTest {
 		assertEquals(75.0,  maxi.interestEarned(), DELTA);
 	}
 	
-	
+	@Ignore
 	@Test
 	public void testInterestEarnedMaxiTenPercent() {
 		Account maxi = new Account(Account.MAXI_SAVINGS);
@@ -53,9 +53,22 @@ public class AccountTest {
 		assertEquals(150.0, maxi.interestEarned(), DELTA);
 	}
 	
-	@Ignore
+	
 	@Test
-	public void testMaxiSavingsRateLess() {
+	public void testMaxiSavingsRatePointOnePercent() {
+		Account maxi = new Account(Account.MAXI_SAVINGS);
+		maxi.deposit(3050);
+		
+		maxi.withdraw(50);
+		assertEquals(3.0, maxi.interestEarned(), DELTA);
+	}
+	
+	@Test
+	public void testMaxiSavingsRateFivePercent() {
+		Account maxi = new Account(Account.MAXI_SAVINGS);
+		maxi.deposit(3000);
+		
+		assertEquals(150.0, maxi.interestEarned(), DELTA);
 		
 	}
 }
