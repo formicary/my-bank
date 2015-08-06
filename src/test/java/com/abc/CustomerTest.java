@@ -49,11 +49,59 @@ public class CustomerTest {
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
-    @Ignore
+    @Test
     public void testThreeAcounts() {
         Customer oscar = new Customer("Oscar")
                 .openAccount(new Account(Account.SAVINGS));
         oscar.openAccount(new Account(Account.CHECKING));
+        oscar.openAccount(new Account(Account.MAXI_SAVINGS));
         assertEquals(3, oscar.getNumberOfAccounts());
+    }
+    
+    @Test
+    public void testInterestEarnedOneAccount() {
+    	Customer peter = new Customer("Peter");
+    	Account peteChecking = new Account(Account.CHECKING);
+    	
+    	peter.openAccount(peteChecking);
+    	
+    	peteChecking.deposit(100);
+    	
+    	assertEquals(0.1, peter.totalInterestEarned(), 1e-15);
+    }
+    
+    @Test
+    public void testInterestEarnedTwoAccounts() {
+    	Customer peter = new Customer("Peter");
+    	Account peteChecking = new Account(Account.CHECKING);
+    	Account peteSavings = new Account(Account.SAVINGS);
+    	
+    	peter.openAccount(peteChecking);
+    	peter.openAccount(peteSavings);
+    	
+    	peteChecking.deposit(100);
+    	peteSavings.deposit(100);
+    	
+    	
+    	assertEquals(0.2, peter.totalInterestEarned(), 1e-15);
+    }
+    
+    @Test
+    public void testInterestEarnedThreeAccounts() {
+    	Customer peter = new Customer("Peter");
+    	Account peteChecking = new Account(Account.CHECKING);
+    	Account peteSavings = new Account(Account.SAVINGS);
+    	Account peteMaxi = new Account(Account.MAXI_SAVINGS);
+    	
+    	peter.openAccount(peteChecking);
+    	peter.openAccount(peteSavings);
+    	peter.openAccount(peteMaxi);
+    	
+    	peteChecking.deposit(100);
+    	peteSavings.deposit(100);
+    	peteMaxi.deposit(100);
+    	
+    	
+    	assertEquals(2.2, peter.totalInterestEarned(), 1e-15);
     }
 }

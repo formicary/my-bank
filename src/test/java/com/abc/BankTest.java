@@ -16,7 +16,7 @@ public class BankTest {
         Customer john = new Customer("John");
         john.openAccount(new Account(Account.CHECKING));
         bank.addCustomer(john);
-
+        
         assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
     }
 
@@ -39,7 +39,7 @@ public class BankTest {
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
         checkingAccount.deposit(1500.0);
-
+        
         assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
