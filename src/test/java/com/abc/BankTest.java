@@ -47,8 +47,10 @@ public class BankTest {
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
         checkingAccount.deposit(3000.0);
+        checkingAccount.deposit(1000.0);
+        checkingAccount.withdraw(2000.0);
 
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
 }
