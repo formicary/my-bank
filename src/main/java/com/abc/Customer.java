@@ -33,6 +33,13 @@ public class Customer {
             total += a.interestEarned();
         return total;
     }
+    
+    public void transfer(int amount, Account withdrawFromAccount, Account depositToAccount) {
+    	if (!(this.accounts.contains(withdrawFromAccount) && this.accounts.contains(depositToAccount))) {
+    		throw new IllegalArgumentException("Transfers may only be made between accounts owned by the Customer");
+    	}
+    	
+    }
 
     public String getStatement() {
         String statement = null;
