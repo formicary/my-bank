@@ -106,4 +106,15 @@ public class CustomerTest {
     	
     	assertEquals(174.0, peter.totalInterestEarned(), DELTA);
     }
+    
+    @Test(expected=IllegalArgumentException.class)
+    public void testTransferBetweenNonCustomerAccounts() {
+    	Customer albert = new Customer("Albert");
+    	Account albertChecking = new Account(Account.CHECKING);
+    	Account notAlbertSavings = new Account(Account.SAVINGS);
+    	
+    	albert.openAccount(albertChecking);
+    	
+    	albert.transfer(100, albertChecking, notAlbertSavings);
+    }
 }
