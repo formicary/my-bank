@@ -21,6 +21,9 @@ public class InterestCalculatorFactory {
 	@Qualifier("maxiSavingAccountInterestCalculator")
 	private IntrestCalculator maxiSavingAccountInterestCalculator;
 
+	
+	
+	
 	public IntrestCalculator getCalculator(final Account account) {
 
 		switch (account.getAccountType()) {
