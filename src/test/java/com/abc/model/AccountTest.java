@@ -31,7 +31,7 @@ public class AccountTest {
 							.withWithdrawal("30")
 							.get();
 		
-		assertEquals("$80.00", accout.getBalance().getFormatted());
+		assertEquals(new Money("80.00"), accout.getBalance());
 	}
 	
 	
@@ -44,7 +44,7 @@ public class AccountTest {
 							.withWithdrawal("30")
 							.get();
 		
-		assertEquals("$10.00", accout.getIntrestPaid().getFormatted());
+		assertEquals(new Money("10.00"), accout.getIntrestPaid());
 	}
 	
 	
