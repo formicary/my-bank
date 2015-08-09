@@ -1,18 +1,18 @@
 package com.abc.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 public class Customer {
 	
     private final String name;
-    private final List<Account> accounts;
+    private final Set<Account> accounts;
 
     public Customer(String name) {
     	Objects.requireNonNull("The name of the customer is required");
         this.name = name;
-        this.accounts = new ArrayList<Account>(0);
+        this.accounts = new HashSet<Account>(0);
     }
 
     public String getName() {
@@ -32,13 +32,22 @@ public class Customer {
     public Money totalInterestEarned() {
         Money amount = Money.ZERO_USD;
         for (final Account account : accounts){
-        	amount = amount.add( account.getIntrestPaid() );
+        	amount = amount.plus( account.getIntrestPaid() );
         }
         return amount;
     }
     
-    public List<Account> getAccounts(){
+    public Set<Account> getAccounts(){
     	return accounts;
     }
 
+    public Account getAccountByNumber(final int number){
+    	for(Account account : accounts){
+    		if(account.getNumber() == number){
+    			return account;
+    		}
+    	}
+    	return null;
+    }
+    
 }

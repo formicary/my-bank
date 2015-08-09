@@ -1,50 +1,35 @@
 package com.abc.model;
 
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.List;
 import java.util.Objects;
 
 public class Account{
-
+	
+	private final int number;
 	private final AccountType accountType;
 	private final List<Transaction> transactionList;
 
-	public Account(AccountType accountType) {
+	
+	
+	public Account(Integer number, AccountType accountType) {
+		Objects.requireNonNull(number, "Account number is required");
 		Objects.requireNonNull(accountType, "Type of the account is required");
+		this.number = number;
 		this.accountType = accountType;
 		this.transactionList = new ArrayList<Transaction>();
 	}
 
 	
 
-	/*public double interestEarned() {
-		double amount = sumTransactions();
-		switch (accountType) {
-		case SAVINGS:
-			if (amount <= 1000)
-				return amount * 0.001;
-			else
-				return 1 + (amount - 1000) * 0.002;
-			// case SUPER_SAVINGS:
-			// if (amount <= 4000)
-			// return 20;
-		case MAXI_SAVINGS:
-			if (amount <= 1000)
-				return amount * 0.02;
-			if (amount <= 2000)
-				return 20 + (amount - 1000) * 0.05;
-			return 70 + (amount - 2000) * 0.1;
-		default:
-			return amount * 0.001;
-		}
-	}*/
-
+	public int getNumber() {
+		return number;
+	}
 
 	public Money getBalance() {
 		Money money = Money.ZERO_USD;
 		for(final Transaction transaction : transactionList){
-			money = money.add(transaction.getMoney());
+			money = money.plus(transaction.getMoney());
 		}
 		return money;
 	}
@@ -54,7 +39,7 @@ public class Account{
 		Money money = Money.ZERO_USD;
 		for(final Transaction transaction : transactionList){
 			if(transaction.isInterest()){
-				money = money.add(transaction.getMoney());
+				money = money.plus(transaction.getMoney());
 			}
 		}
 		return money;
@@ -73,5 +58,39 @@ public class Account{
 		Objects.requireNonNull(transaction);
 		transactionList.add(transaction);
 	}
+	
+
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + number;
+		return result;
+	}
+
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Account other = (Account) obj;
+		if (number != other.number)
+			return false;
+		return true;
+	}
+
+
+
+	@Override
+	public String toString() {
+		return "Account [number=" + number + ", accountType=" + accountType + ", transactionList=" + transactionList
+				+ "]";
+	}	
 	
 }

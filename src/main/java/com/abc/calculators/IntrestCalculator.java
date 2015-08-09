@@ -1,13 +1,10 @@
 package com.abc.calculators;
 
-import java.math.BigDecimal;
-
 import com.abc.model.Account;
+import com.abc.model.Money;
 
 public interface IntrestCalculator {
 
-	BigDecimal calculateInterestEarned(Account account);
-	
-	
+	Money calculateInterestEarned(Account account);
 	
 }

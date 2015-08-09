@@ -27,9 +27,9 @@ public class InterestCalculatorFactory {
 		case SAVINGS:
 			return savingAccountInterestCalculator;
 		case CHECKING:
-			return savingAccountInterestCalculator;
+			return checkingAccountInterestCalculator;
 		case MAXI_SAVINGS:
-			return savingAccountInterestCalculator;
+			return maxiSavingAccountInterestCalculator;
 		default:
 			break;
 		}

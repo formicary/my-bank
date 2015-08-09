@@ -4,24 +4,24 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Objects;
 
-import com.abc.providers.DateProvider;
-
-public class Transaction {
+public class Transaction{
 	
 	private final TransactionType type;
     private final Money money;
     private final Date transactionDate;
 
-    public Transaction(TransactionType type, final BigDecimal amount) {
-	    this(type, new Money(amount));	
+    public Transaction(Date date, TransactionType type, final BigDecimal amount) {
+	    this(date, type, new Money(amount));	
     }
     
-    public Transaction(TransactionType type, final Money amount) {
+    public Transaction(Date date, TransactionType type, final Money amount) {
+    	Objects.requireNonNull(date);
     	Objects.requireNonNull(type);
     	Objects.requireNonNull(amount);
+    	
     	this.type = type;
         this.money = amount;
-        this.transactionDate = DateProvider.getInstance().now();
+        this.transactionDate = date;
     }
 
 	public Money getMoney() {
@@ -48,5 +48,8 @@ public class Transaction {
 		return type == TransactionType.DEPOSIT;
 	}
 
-    
+	@Override
+	public String toString() {
+		return "Transaction [type=" + type + ", money=" + money + ", transactionDate=" + transactionDate + "]";
+	}
 }

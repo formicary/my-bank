@@ -28,7 +28,7 @@ public class CustomerStatementGeneratorImpl implements CustomerStatementGenerato
             	.append("\n")
             	.append(accountStatementGenerator.generate(account))
             	.append("\n");
-            	total = total.add(account.getBalance());
+            	total = total.plus(account.getBalance());
         }
 		
 		statement

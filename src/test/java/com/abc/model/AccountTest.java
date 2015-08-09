@@ -1,9 +1,13 @@
 package com.abc.model;
 
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import org.junit.Test;
 
@@ -51,7 +55,7 @@ public class AccountTest {
 		
 		assertTrue(accout.getTransactionList().isEmpty());
 		
-		Transaction transaction = new Transaction(TransactionType.DEPOSIT, new BigDecimal("10"));
+		Transaction transaction = new Transaction(new Date(), TransactionType.DEPOSIT, new BigDecimal("10"));
 		accout.addTransaction(transaction);
 		
 		assertFalse(accout.getTransactionList().isEmpty());
