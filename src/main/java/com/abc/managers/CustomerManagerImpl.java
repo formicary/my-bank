@@ -17,9 +17,5 @@ public class CustomerManagerImpl implements CustomerManager {
 	public void generateStatement(final Customer customer) {
 		customerStatementGenerator.generate(customer);
 	}
-	
-	
-
-	
 
 }

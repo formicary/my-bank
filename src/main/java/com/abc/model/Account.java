@@ -1,6 +1,7 @@
 package com.abc.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -51,7 +52,7 @@ public class Account{
 	}
 
 	public List<Transaction> getTransactionList() {
-		return transactionList;
+		return Collections.unmodifiableList(transactionList);
 	}
 	
 	public void addTransaction(Transaction transaction){

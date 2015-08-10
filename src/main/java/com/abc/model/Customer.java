@@ -1,5 +1,6 @@
 package com.abc.model;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -38,7 +39,7 @@ public class Customer {
     }
     
     public Set<Account> getAccounts(){
-    	return accounts;
+    	return Collections.unmodifiableSet(accounts);
     }
 
     public Account getAccountByNumber(final int number){

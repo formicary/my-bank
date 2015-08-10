@@ -50,24 +50,6 @@ public class TransactionManagerImpl implements TransactionManager{
 	}
 	
 	
-	private void createTransaction(final Account account, final TransactionType type, final Money amount){
-		final Date now = dateProvider.getDate().getTime();
-		final Transaction transaction = new Transaction(now, type, amount);
-		account.addTransaction( transaction );
-	}
-	
-	
-	
-	private void validate(final Account account,final Money money){
-		Objects.requireNonNull(account);
-		Objects.requireNonNull(money);
-		if(money.areLowerThenZero()){
-			throw new IllegalArgumentException("amount must be greater than zero");
-		}
-	}
-
-
-
 	public void moveCustomerMoney(CustomerTransactionRequest request) {
 		Objects.requireNonNull(request);
 		requestValidator.validate(request);
@@ -80,5 +62,24 @@ public class TransactionManagerImpl implements TransactionManager{
 	}
 	
 	
+	
+	private void createTransaction(final Account account, final TransactionType type, final Money amount){
+		final Date now = dateProvider.getDate().getTime();
+		final Transaction transaction = new Transaction(now, type, amount);
+		account.addTransaction( transaction );
+	}
+	
+	
+	
+	
+	private void validate(final Account account,final Money money){
+		Objects.requireNonNull(account);
+		Objects.requireNonNull(money);
+		if(money.areLowerThenZero()){
+			throw new IllegalArgumentException("amount must be greater than zero");
+		}
+	}
+
+
 	
 }

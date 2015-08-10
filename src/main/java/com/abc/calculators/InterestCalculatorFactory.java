@@ -33,8 +33,6 @@ public class InterestCalculatorFactory {
 			return checkingAccountInterestCalculator;
 		case MAXI_SAVINGS:
 			return maxiSavingAccountInterestCalculator;
-		default:
-			break;
 		}
 		throw new IllegalArgumentException("No interest calculator was found for account type: "
 				+ account.getAccountType());

@@ -1,37 +1,38 @@
 package com.abc.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Bank {
 
-	private final List<Customer> customers;
+	private final List<Customer> customerList;
 
 	public Bank() {
-		customers = new ArrayList<Customer>();
+		customerList = new ArrayList<Customer>();
 	}
 
 	public void addCustomer(Customer customer) {
-		customers.add(customer);
+		customerList.add(customer);
 	}
 
 	public Money totalInterestPaid() {
 		Money total = Money.ZERO_USD;
-		for (Customer customer : customers)
+		for (Customer customer : customerList)
 			total = total.plus(customer.totalInterestEarned());
 		return total;
 	}
 
 	public List<Customer> getCustomers() {
-		return customers;
+		return Collections.unmodifiableList(customerList);
 	}
 
 	public Customer getFirstCustomer() {
-		if (customers.isEmpty()) {
+		if (customerList.isEmpty()) {
 			return null;
 		}
 
-		return customers.iterator().next();
+		return customerList.iterator().next();
 	}
 
 }
