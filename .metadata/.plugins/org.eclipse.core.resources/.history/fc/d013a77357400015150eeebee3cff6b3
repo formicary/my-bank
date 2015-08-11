@@ -1,0 +1,6 @@
+.idea/
+target/
+bin/
+*.iml
+/bin
+/bin
