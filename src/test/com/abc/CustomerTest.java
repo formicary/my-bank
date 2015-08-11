@@ -60,7 +60,9 @@ public class CustomerTest {
         // and returned results are in fact correct
         List<Account> accounts = oscar.getAccounts();
         accounts.get(0).deposit(100.0);
-        oscar.transfer(accounts.get(0),accounts.get(1),50.0);
+        accounts.get(0).deposit(100.0);
+        oscar.transfer(accounts.get(0), accounts.get(1), 50.0);
+        System.out.println(accounts.get(0).dayDifference(accounts.get(0).transactions.get(0),accounts.get(0).transactions.get(1)));
         assertTrue(accounts.get(1).sumTransactions() == 50.0);
     }
 
