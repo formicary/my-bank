@@ -15,9 +15,15 @@ public class Bank {
     }
 
     public String customerSummary() {
-        String summary = "Customer Summary";
-        for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
+    	String summary = null;
+    	
+    	if (customers.isEmpty())
+    		summary = "There are currently no customers with active accounts";
+        else {
+	    	summary = "Customer Summary";
+	        for (Customer c : customers)
+	            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
+        }
         return summary;
     }
 
@@ -33,14 +39,4 @@ public class Bank {
             total += c.totalInterestEarned();
         return total;
     }
-
-//    public String getFirstCustomer() {
-//        try {
-//            customers = null;
-//            return customers.get(0).getName();
-//        } catch (Exception e){
-//            e.printStackTrace();
-//            return "Error";
-//        }
-//    }
 }

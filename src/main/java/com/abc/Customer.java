@@ -36,13 +36,18 @@ public class Customer {
 
     public String getStatement() {
         String statement = null;
-        statement = "Statement for " + name + "\n";
-        double total = 0.0;
-        for (Account a : accounts) {
-            statement += "\n" + a.getAccountType().toString() + ":\n" + statementForAccount(a) + "\n";
-            total += a.getAccountTotal();
+        
+        if (accounts.isEmpty())
+            statement = name + " has no open accounts";
+        else {
+        	statement = "Statement for " + name + "\n";
+        	double total = 0.0;
+	        for (Account a : accounts) {
+	            statement += "\n" + a.getAccountType().toString() + ":\n" + statementForAccount(a) + "\n";
+	            total += a.getAccountTotal();
+	        }
+	        statement += "\nTotal In All Accounts " + toDollars(total);
         }
-        statement += "\nTotal In All Accounts " + toDollars(total);
         return statement;
     }
 

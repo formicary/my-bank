@@ -25,6 +25,13 @@ public class BankTest {
     }
 
     @Test
+    public void testCustomerSummaryNoCustomers(){
+        Bank bank = new Bank();
+
+        assertEquals("There are currently no customers with active accounts", bank.customerSummary());
+    }
+
+    @Test
     public void testCheckingAccount() {
         Bank bank = new Bank();
         Account checkingAccount = new Account(Account.AccountType.CHECKING);

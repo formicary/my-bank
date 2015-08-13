@@ -8,7 +8,6 @@ public class CustomerTest {
 
     @Test //Test customer statement generation
     public void testStatement(){
-
         Account checkingAccount = new Account(Account.AccountType.CHECKING);
         Account checkingAccount2 = new Account(Account.AccountType.CHECKING);
         Account savingsAccount = new Account(Account.AccountType.SAVINGS);
@@ -42,6 +41,13 @@ public class CustomerTest {
                 "Total In All Accounts $3,900.00", henry.getStatement());
     }
 
+    @Test
+    public void testStatementNoAccounts(){
+        Customer henry = new Customer("Henry");
+
+        assertEquals("Henry has no open accounts", henry.getStatement());
+    }
+    
     @Test
     public void testOneAccount(){
         Customer oscar = new Customer("Oscar").openAccount(new Account(Account.AccountType.SAVINGS));
