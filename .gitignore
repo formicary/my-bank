@@ -1,2 +1,4 @@
-# OS-specific junk #
-.DS_Store
+.idea/
+target/
+bin/
+*.iml
