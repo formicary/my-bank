@@ -8,31 +8,49 @@ public class BankTest {
     private static final double DOUBLE_DELTA = 1e-15;
 
     @Test
-    public void customerSummary() {
+    public void testCustomerSummary() {
         Bank bank = new Bank();
         Customer john = new Customer("John");
-        john.openAccount(new Account(Account.CHECKING));
+        john.openAccount(new Account(Account.AccountType.CHECKING));
+        john.openAccount(new Account(Account.AccountType.SAVINGS));
+        Customer fred = new Customer("Fred");
+//        fred.openAccount(new Account(Account.AccountType.MAXI_SAVINGS));
+        fred.openAccount(new Account(Account.AccountType.SAVINGS));
         bank.addCustomer(john);
+        bank.addCustomer(fred);
 
-        assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
+        assertEquals("Customer Summary\n" +
+        		" - John (2 accounts)\n" +
+        		" - Fred (1 account)", bank.customerSummary());
     }
 
     @Test
-    public void checkingAccount() {
+    public void testCheckingAccount() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.CHECKING);
+        Account checkingAccount = new Account(Account.AccountType.CHECKING);
         Customer bill = new Customer("Bill").openAccount(checkingAccount);
         bank.addCustomer(bill);
 
-        checkingAccount.deposit(100.0);
+        checkingAccount.deposit(1000.0);
 
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(1.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
-    public void savings_account() {
+    public void testSavingsAccount_lt1000() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.SAVINGS);
+        Account checkingAccount = new Account(Account.AccountType.SAVINGS);
+        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+
+        checkingAccount.deposit(500.0);
+
+        assertEquals(0.5, bank.totalInterestPaid(), DOUBLE_DELTA);
+    }
+
+    @Test
+    public void testSavingsAccount_gt1000() {
+        Bank bank = new Bank();
+        Account checkingAccount = new Account(Account.AccountType.SAVINGS);
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
         checkingAccount.deposit(1500.0);
@@ -41,9 +59,31 @@ public class BankTest {
     }
 
     @Test
-    public void maxi_savings_account() {
+    public void testSuperSavingsAccount_lt1000() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
+        Account checkingAccount = new Account(Account.AccountType.SUPER_SAVINGS);
+        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+
+        checkingAccount.deposit(500.0);
+
+        assertEquals(10.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+    }
+
+    @Test
+    public void testSuperSavingsAccount_lt2000() {
+        Bank bank = new Bank();
+        Account checkingAccount = new Account(Account.AccountType.SUPER_SAVINGS);
+        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+
+        checkingAccount.deposit(1500.0);
+
+        assertEquals(45.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+    }
+
+    @Test
+    public void testSuperSavingsAccount_gt2000() {
+        Bank bank = new Bank();
+        Account checkingAccount = new Account(Account.AccountType.SUPER_SAVINGS);
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
         checkingAccount.deposit(3000.0);
