@@ -21,14 +21,14 @@ public class BankTest {
 
         assertEquals("Customer Summary\n" +
         		" - John (2 accounts)\n" +
-        		" - Fred (1 account)", bank.customerSummary());
+        		" - Fred (1 account)", bank.getCustomerSummary());
     }
 
     @Test
     public void testCustomerSummaryNoCustomers(){
         Bank bank = new Bank();
 
-        assertEquals("There are currently no customers with active accounts", bank.customerSummary());
+        assertEquals("There are currently no customers with active accounts", bank.getCustomerSummary());
     }
 
     @Test
@@ -40,7 +40,7 @@ public class BankTest {
 
         checkingAccount.deposit(1000.0);
 
-        assertEquals(1.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(1.0, bank.getTotalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
@@ -51,7 +51,7 @@ public class BankTest {
 
         checkingAccount.deposit(500.0);
 
-        assertEquals(0.5, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(0.5, bank.getTotalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
@@ -62,7 +62,7 @@ public class BankTest {
 
         checkingAccount.deposit(1500.0);
 
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(2.0, bank.getTotalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
@@ -73,7 +73,7 @@ public class BankTest {
 
         checkingAccount.deposit(500.0);
 
-        assertEquals(10.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(10.0, bank.getTotalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
@@ -84,7 +84,7 @@ public class BankTest {
 
         checkingAccount.deposit(1500.0);
 
-        assertEquals(45.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(45.0, bank.getTotalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
@@ -95,7 +95,7 @@ public class BankTest {
 
         checkingAccount.deposit(3000.0);
 
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(170.0, bank.getTotalInterestPaid(), DOUBLE_DELTA);
     }
 
 }

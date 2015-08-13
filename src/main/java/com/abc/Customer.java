@@ -27,10 +27,13 @@ public class Customer {
         return accounts.size();
     }
 
-    public double totalInterestEarned() {
+    public double getTotalInterestEarned() {
         double total = 0;
-        for (Account a : accounts)
-            total += a.interestEarned();
+    	if (!accounts.isEmpty()) {
+    		// Get total interest paid on all accounts
+	        for (Account a : accounts)
+	            total += a.getInterestEarned();
+    	}
         return total;
     }
 
@@ -42,8 +45,9 @@ public class Customer {
         else {
         	statement = "Statement for " + name + "\n";
         	double total = 0.0;
+            //Display all transactions for all accounts
 	        for (Account a : accounts) {
-	            statement += "\n" + a.getAccountType().toString() + ":\n" + statementForAccount(a) + "\n";
+	            statement += "\n" + a.getAccountType().toString() + ":\n" + getStatementForAccount(a) + "\n";
 	            total += a.getAccountTotal();
 	        }
 	        statement += "\nTotal In All Accounts " + toDollars(total);
@@ -51,7 +55,7 @@ public class Customer {
         return statement;
     }
 
-    private String statementForAccount(Account a) {
+    private String getStatementForAccount(Account a) {
         String s = "";
 
         //Display all transactions on the account

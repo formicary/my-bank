@@ -54,7 +54,8 @@ public void withdraw(double amount) {
     }
 }
 
-    public double interestEarned() {
+    public double getInterestEarned() {
+    	// Calculate interest differently based on account type
         switch(accountType){
             case SAVINGS:
                 if (accountTotal <= 1000)

@@ -14,13 +14,14 @@ public class Bank {
         customers.add(customer);
     }
 
-    public String customerSummary() {
+    public String getCustomerSummary() {
     	String summary = null;
     	
     	if (customers.isEmpty())
     		summary = "There are currently no customers with active accounts";
         else {
 	    	summary = "Customer Summary";
+            //Display list of customers and number of accounts for each customer
 	        for (Customer c : customers)
 	            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
         }
@@ -33,10 +34,13 @@ public class Bank {
         return number + " " + (number == 1 ? word : word + "s");
     }
 
-    public double totalInterestPaid() {
+    public double getTotalInterestPaid() {
         double total = 0;
-        for(Customer c: customers)
-            total += c.totalInterestEarned();
+    	if (!customers.isEmpty()) {
+    		// Get total interest paid on all accounts for all customers
+	        for(Customer c: customers)
+	            total += c.getTotalInterestEarned();
+    	}
         return total;
     }
 }
