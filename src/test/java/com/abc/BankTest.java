@@ -38,7 +38,11 @@ public class BankTest {
         Customer bill = new Customer("Bill").openAccount(checkingAccount);
         bank.addCustomer(bill);
 
-        checkingAccount.deposit(1000.0);
+        try {
+        	checkingAccount.deposit(1000.0);
+        } catch (Exception e) {
+        	e.toString();
+        }
 
         assertEquals(1.0, bank.getTotalInterestPaid(), DOUBLE_DELTA);
     }
@@ -97,5 +101,4 @@ public class BankTest {
 
         assertEquals(170.0, bank.getTotalInterestPaid(), DOUBLE_DELTA);
     }
-
 }

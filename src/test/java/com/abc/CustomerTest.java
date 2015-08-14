@@ -16,11 +16,16 @@ public class CustomerTest {
         henry.openAccount(checkingAccount2);
         henry.openAccount(savingsAccount);
 
-        checkingAccount.deposit(100.0);
-        checkingAccount2.deposit(100.0);
-        checkingAccount2.withdraw(100.0);
-        savingsAccount.deposit(4000.0);
-        savingsAccount.withdraw(200.0);
+        try {
+            checkingAccount.deposit(100.0);
+            checkingAccount2.deposit(100.0);
+            checkingAccount2.withdraw(100.0);
+            savingsAccount.deposit(4000.0);
+            savingsAccount.withdraw(200.0);
+        } catch (Exception e) {
+        	e.toString();
+        }
+
 
         assertEquals("Statement for Henry\n" +
                 "\n" +
@@ -49,8 +54,52 @@ public class CustomerTest {
     }
     
     @Test
+    public void testDeposit_ltZero(){
+        Account checkingAccount = new Account(Account.AccountType.CHECKING);
+
+        String message = "";
+        try {
+            checkingAccount.deposit(-100.0);
+        } catch (Exception e) {
+        	message += e.toString();
+        }
+
+        assertEquals("java.lang.IllegalArgumentException: Amount must be greater than zero.", message);
+    }
+
+    @Test
+    public void testWithdrawal_ltZero(){
+        Account checkingAccount = new Account(Account.AccountType.CHECKING);
+
+        String message = "";
+        try {
+            checkingAccount.withdraw(-100.0);
+        } catch (Exception e) {
+        	message += e.toString();
+        }
+
+        assertEquals("java.lang.IllegalArgumentException: Amount must be greater than zero.", message);
+    }
+
+    @Test
+    public void testWithdrawal_gtAccountTotal(){
+        Account checkingAccount = new Account(Account.AccountType.CHECKING);
+
+        String message = "";
+        try {
+        	checkingAccount.deposit(100.0);
+            checkingAccount.withdraw(200.0);
+        } catch (Exception e) {
+        	message += e.toString();
+        }
+
+        assertEquals("java.lang.IllegalArgumentException: Insufficient funds in account!", message);
+    }
+
+    @Test
     public void testOneAccount(){
         Customer oscar = new Customer("Oscar").openAccount(new Account(Account.AccountType.SAVINGS));
+
         assertEquals(1, oscar.getNumberOfAccounts());
     }
 
@@ -59,6 +108,7 @@ public class CustomerTest {
         Customer oscar = new Customer("Oscar")
                 .openAccount(new Account(Account.AccountType.SAVINGS));
         oscar.openAccount(new Account(Account.AccountType.CHECKING));
+
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
@@ -69,6 +119,7 @@ public class CustomerTest {
         oscar.openAccount(new Account(Account.AccountType.CHECKING));
         oscar.openAccount(new Account(Account.AccountType.SUPER_SAVINGS));
 //        oscar.openAccount(new Account(Account.AccountType.MAXI_SAVINGS));
+
         assertEquals(3, oscar.getNumberOfAccounts());
     }
-}
+ }

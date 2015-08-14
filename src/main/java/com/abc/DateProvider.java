@@ -5,7 +5,6 @@ import java.util.Date;
 
 public class DateProvider {
 
-	// TODO: Create unit test(s) for DateProvider?
     //Singleton Design Pattern
 	private static DateProvider instance = null;
 

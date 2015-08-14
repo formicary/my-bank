@@ -30,7 +30,7 @@ public class Customer {
     public double getTotalInterestEarned() {
         double total = 0;
     	if (!accounts.isEmpty()) {
-    		// Get total interest paid on all accounts
+    		// Get total interest earned on all accounts
 	        for (Account a : accounts)
 	            total += a.getInterestEarned();
     	}
