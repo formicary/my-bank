@@ -8,8 +8,8 @@ public class Account {
 	public enum AccountType{
 		CHECKING("Checking Account"),
 		SAVINGS("Savings Account"),
-		SUPER_SAVINGS("Super Savings Account"),
-		MAXI_SAVINGS("Maxi Savings Account");
+		SUPER_SAVINGS("Super-Savings Account"),
+		MAXI_SAVINGS("Maxi-Savings Account");
 		
 		private final String accountDesc;
 		
