@@ -43,7 +43,7 @@ public class BankTest {
         	e.toString();
         }
 
-        assertEquals(1.0, bank.getTotalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(1.0/365, bank.getTotalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
@@ -54,7 +54,7 @@ public class BankTest {
 
         checkingAccount.deposit(500.0);
 
-        assertEquals(0.5, bank.getTotalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(0.5/365, bank.getTotalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
@@ -65,7 +65,7 @@ public class BankTest {
 
         checkingAccount.deposit(1500.0);
 
-        assertEquals(2.0, bank.getTotalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(2.0/365, bank.getTotalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
@@ -76,7 +76,7 @@ public class BankTest {
 
         checkingAccount.deposit(500.0);
 
-        assertEquals(10.0, bank.getTotalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(10.0/365, bank.getTotalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
@@ -87,7 +87,7 @@ public class BankTest {
 
         checkingAccount.deposit(1500.0);
 
-        assertEquals(45.0, bank.getTotalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(45.0/365, bank.getTotalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
@@ -98,7 +98,7 @@ public class BankTest {
 
         checkingAccount.deposit(3000.0);
 
-        assertEquals(170.0, bank.getTotalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(170.0/365, bank.getTotalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
@@ -111,7 +111,7 @@ public class BankTest {
         checkingAccount.deposit(1000.0);
         checkingAccount.deposit(1000.0);
 
-        assertEquals(150.0, bank.getTotalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(150.0/365, bank.getTotalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
@@ -126,7 +126,7 @@ public class BankTest {
         checkingAccount.deposit(1000.0);
         checkingAccount.withdraw(500.0);
 
-        assertEquals(2.4, bank.getTotalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(2.4/365, bank.getTotalInterestPaid(), DOUBLE_DELTA);
     }
 
 }

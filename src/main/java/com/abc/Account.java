@@ -55,33 +55,68 @@ public class Account {
 	}
 
     public double getInterestEarned() {
-    	// Calculate interest differently based on account type
-        switch(accountType){
-            case SAVINGS:
-            	//Rate of 0.1% for the first $1,000 then 0.2% for the rest
-                if (accountTotal <= 1000)
-                    return accountTotal * 0.001;
-                else
-                    return 1 + (accountTotal-1000) * 0.002;
-            case SUPER_SAVINGS:
-            	//Rate of 2% for the first $1,000 then 5% for the next $1,000 then 10% for the rest
-                if (accountTotal <= 1000)
-                    return accountTotal * 0.02;
-                if (accountTotal <= 2000)
-                    return 20 + (accountTotal-1000) * 0.05;
-                return 70 + (accountTotal-2000) * 0.1;
-            case MAXI_SAVINGS:
-            	//Rate of 5% assuming no withdrawals in the past 10 days otherwise 0.1%
-            	Transaction lastWithdrawal = getLastWithdrawal();
-            	if (lastWithdrawal != null) {
-	            	if (getDateDiff(lastWithdrawal.getTransactionDate(), DateProvider.getInstance().now()) <= 10)
-            			return accountTotal * 0.001;
-            	}
-    			return accountTotal * 0.05;
-            default:
-            	//Flat rate of 0.1% for Checking account
-                return accountTotal * 0.001;
-        }
+    	
+    	double interestEarned = 0.0;
+
+    	//If no transactions have been made, then the interest is zero
+    	//regardless of account type
+    	if (transactions.isEmpty()) {
+    		return interestEarned;
+    	}
+    	
+    	double currentAmount = 0.0;
+    	
+    	//Calculate interest differently based on account type
+    	for (int i = 0; i < transactions.size(); ++i) {
+    		long numDays = 0;
+    		if (i < transactions.size()-1)
+    			numDays = getDateDiff(transactions.get(i).getTransactionDate(), transactions.get(i+1).getTransactionDate());
+    		else {
+    			numDays = getDateDiff(transactions.get(i).getTransactionDate(), DateProvider.getInstance().now());
+    			
+    			//Accruing the daily interest for the current day
+    			if (numDays == 0)
+    				numDays = 1;
+    		}
+
+    		currentAmount += transactions.get(i).getTransactionAmount();
+
+	        switch(accountType){
+	            case SAVINGS:
+		        	//Rate of 0.1% for the first $1,000 then 0.2% for the rest
+                    if (currentAmount <= 1000)
+                    	interestEarned += (currentAmount * 0.001)/365 * numDays;
+                    else
+                    	interestEarned +=  (1 + (currentAmount-1000) * 0.002)/365 * numDays;
+                    break;
+	            case SUPER_SAVINGS:
+	            	//Rate of 2% for the first $1,000 then 5% for the next $1,000 then 10% for the rest
+	                if (currentAmount <= 1000)
+                    	interestEarned += (currentAmount * 0.02)/365 * numDays;
+	                else if (currentAmount <= 2000)
+                    	interestEarned +=  (20 + (currentAmount-1000) * 0.05)/365 * numDays;
+	                else
+                    	interestEarned +=  (70 + (currentAmount-2000) * 0.1)/365 * numDays;	                
+                    break;
+	            case MAXI_SAVINGS:
+	            	//Rate of 5% assuming no withdrawals in the past 10 days otherwise 0.1%
+	            	Transaction lastWithdrawal = getLastWithdrawal();
+	            	if (lastWithdrawal != null) {
+		            	if (getDateDiff(lastWithdrawal.getTransactionDate(), DateProvider.getInstance().now()) <= 10) {
+		            		interestEarned += (currentAmount * 0.001)/365 * numDays;
+		            		break;
+		            	}
+	            	}
+            		interestEarned += (currentAmount * 0.05)/365 * numDays;
+                    break;
+	            default:
+	            	//Flat rate of 0.1% for Checking account
+            		interestEarned += (currentAmount * 0.001)/365 * numDays;
+                    break;
+	        }
+    	}
+    	
+    	return interestEarned;
     }
 
     private long getDateDiff(Date date1, Date date2) {
