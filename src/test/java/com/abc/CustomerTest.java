@@ -48,7 +48,7 @@ public class CustomerTest {
     }
 
     @Test
-    public void testStatementNoAccounts(){
+    public void testStatement_NoAccounts(){
         Customer henry = new Customer("Henry");
 
         assertEquals("Henry has no open accounts", henry.getStatement());
@@ -84,7 +84,7 @@ public class CustomerTest {
     }
 
     @Test //Test that the right exception is caught and correct message is provided
-    public void testWithdrawalInsufficientFunds(){
+    public void testWithdrawal_InsufficientFunds(){
         Account checkingAccount = new Account(Account.AccountType.CHECKING);
 
         String message = "";
@@ -151,7 +151,7 @@ public class CustomerTest {
     }
 
     @Test //Test that the right exception is caught and correct message is provided
-    public void testTransferInvalidAccount(){
+    public void testTransfer_InvalidAccount(){
         Account checkingAccount = new Account(Account.AccountType.CHECKING);
         Account maxiSavingsAccount = new Account(Account.AccountType.MAXI_SAVINGS);
         
@@ -191,7 +191,7 @@ public class CustomerTest {
     }
 
     @Test //Test that the right exception is caught and correct message is provided
-    public void testTransferInsufficientFunds(){
+    public void testTransfer_InsufficientFunds(){
         Account checkingAccount = new Account(Account.AccountType.CHECKING);
         Account maxiSavingsAccount = new Account(Account.AccountType.MAXI_SAVINGS);
         

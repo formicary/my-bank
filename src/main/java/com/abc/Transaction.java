@@ -1,6 +1,5 @@
 package com.abc;
 
-import java.util.Calendar;
 import java.util.Date;
 
 public class Transaction {
@@ -25,5 +24,9 @@ public class Transaction {
 
     public String getTransactionType() {
         return transactionType;
+    }
+
+    public Date getTransactionDate() {
+        return transactionDate;
     }
 }

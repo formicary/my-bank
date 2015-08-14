@@ -24,7 +24,7 @@ public class BankTest {
     }
 
     @Test
-    public void testCustomerSummaryNoCustomers(){
+    public void testCustomerSummary_NoCustomers(){
         Bank bank = new Bank();
 
         assertEquals("There are currently no customers with active accounts", bank.getCustomerSummary());
@@ -100,4 +100,33 @@ public class BankTest {
 
         assertEquals(170.0, bank.getTotalInterestPaid(), DOUBLE_DELTA);
     }
+
+    @Test
+    public void testMaxiSavingsAccount_NoWithdrawals() {
+        Bank bank = new Bank();
+        Account checkingAccount = new Account(Account.AccountType.MAXI_SAVINGS);
+        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+
+        checkingAccount.deposit(1000.0);
+        checkingAccount.deposit(1000.0);
+        checkingAccount.deposit(1000.0);
+
+        assertEquals(150.0, bank.getTotalInterestPaid(), DOUBLE_DELTA);
+    }
+
+    @Test
+    public void testMaxiSavingsAccount_WithdrawalWithinPastTenDays() {
+        Bank bank = new Bank();
+        Account checkingAccount = new Account(Account.AccountType.MAXI_SAVINGS);
+        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+
+        checkingAccount.deposit(1000.0);
+        checkingAccount.withdraw(100.0);
+        checkingAccount.deposit(1000.0);
+        checkingAccount.deposit(1000.0);
+        checkingAccount.withdraw(500.0);
+
+        assertEquals(2.4, bank.getTotalInterestPaid(), DOUBLE_DELTA);
+    }
+
 }

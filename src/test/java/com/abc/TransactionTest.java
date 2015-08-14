@@ -23,17 +23,16 @@ public class TransactionTest {
     }
 
     @Test
-    public void testTransactionTypePosAmount() {
+    public void testTransactionType_PosAmount() {
         Transaction t = new Transaction(100.0);
 
         assertEquals("Deposit", t.getTransactionType());
     }
 
     @Test
-    public void testTransactionTypeNegAmount() {
+    public void testTransactionType_NegAmount() {
         Transaction t = new Transaction(-50.0);
 
         assertEquals("Withdrawal", t.getTransactionType());
     }
-
 }
