@@ -66,9 +66,10 @@ public class Account {
     	
     	double currentAmount = 0.0;
     	
-    	//Calculate interest differently based on account type
+    	//Accruing daily interest based on daily amount in account
     	for (int i = 0; i < transactions.size(); ++i) {
     		long numDays = 0;
+    		//Calculate with same amount until next transaction or current day
     		if (i < transactions.size()-1)
     			numDays = getDateDiff(transactions.get(i).getTransactionDate(), transactions.get(i+1).getTransactionDate());
     		else {
@@ -81,6 +82,7 @@ public class Account {
 
     		currentAmount += transactions.get(i).getTransactionAmount();
 
+        	//Calculate interest differently based on account type
 	        switch(accountType){
 	            case SAVINGS:
 		        	//Rate of 0.1% for the first $1,000 then 0.2% for the rest
