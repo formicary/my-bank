@@ -70,4 +70,13 @@ public class Customer {
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
     }
+    
+    public void transfer(Account fromAccount, Account toAccount, double amount) throws IllegalArgumentException {
+    	if (accounts.contains(fromAccount) && accounts.contains(toAccount)) {
+	    	fromAccount.withdraw(amount);
+	    	toAccount.deposit(amount);
+	    }
+	    else
+	        throw new IllegalArgumentException("One or more of the accounts specified do not exist for this customer.");
+    }
 }

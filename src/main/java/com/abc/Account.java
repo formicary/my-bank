@@ -41,16 +41,16 @@ public class Account {
         }
     }
 
-public void withdraw(double amount) throws IllegalArgumentException {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("Amount must be greater than zero.");
-    } else if (amount > accountTotal){
-        throw new IllegalArgumentException("Insufficient funds in account!");
-    } else {
-        transactions.add(new Transaction(-amount));
-        accountTotal -= amount;
-    }
-}
+	public void withdraw(double amount) throws IllegalArgumentException {
+	    if (amount <= 0) {
+	        throw new IllegalArgumentException("Amount must be greater than zero.");
+	    } else if (amount > accountTotal){
+	        throw new IllegalArgumentException("Insufficient funds in account!");
+	    } else {
+	        transactions.add(new Transaction(-amount));
+	        accountTotal -= amount;
+	    }
+	}
 
     public double getInterestEarned() {
     	// Calculate interest differently based on account type

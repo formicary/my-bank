@@ -14,8 +14,7 @@ public class BankTest {
         john.openAccount(new Account(Account.AccountType.CHECKING));
         john.openAccount(new Account(Account.AccountType.SAVINGS));
         Customer fred = new Customer("Fred");
-//        fred.openAccount(new Account(Account.AccountType.MAXI_SAVINGS));
-        fred.openAccount(new Account(Account.AccountType.SAVINGS));
+        fred.openAccount(new Account(Account.AccountType.MAXI_SAVINGS));
         bank.addCustomer(john);
         bank.addCustomer(fred);
 
