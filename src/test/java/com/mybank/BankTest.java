@@ -1,4 +1,4 @@
-package com.abc;
+package com.mybank;
 
 import org.junit.Test;
 

@@ -15,9 +15,10 @@ Features
   * **Savings accounts** have a rate of 0.1% for the first $1,000 then 0.2%
   * **Super-Savings accounts** have a rate of 2% for the first $1,000 then 5% for the next $1,000 then 10%
   * **Maxi-Savings accounts** have an interest rate of 5% assuming no withdrawals in the past 10 days otherwise 0.1%
+* Interest rates accrue daily (incl. weekends), rates above are per-annum
 * A bank manager can get a report showing the list of customers and how many accounts they have
 * A bank manager can get a report showing the total interest paid by the bank on all accounts
 
 ### Additional Features
 
-* Interest rates should accrue and compound daily (incl. weekends), rates above are per-annum
+* Interest rates should compound daily (incl. weekends)
