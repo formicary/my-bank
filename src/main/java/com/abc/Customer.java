@@ -2,6 +2,9 @@ package com.abc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Calendar;
+import java.util.Date;
+
 
 import static java.lang.Math.abs;
 
@@ -29,8 +32,10 @@ public class Customer {
 
     public double totalInterestEarned() {
         double total = 0;
-        for (Account a : accounts)
-            total += a.interestEarned();
+        for (Account a : accounts){
+        	Date date = new Date(a.openDate.getTime()+365*24*60*60*1000);
+            total += a.interestEarned(date);
+        }
         return total;
     }
 
@@ -47,6 +52,11 @@ public class Customer {
     }
 
     private String statementForAccount(Account a) {
+    	StringBuilder sb = new StringBulder();
+    	for(Transaction t : a.getTransactions())
+    		sb.append(t.amount);
+    	
+    	
         String s = "";
 
        //Translate to pretty account type
@@ -75,4 +85,30 @@ public class Customer {
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
     }
+    
+    public void transfer(double amount,int i, int j){
+    	if (amount <= 0) {
+    		throw new IllegalArgumentException("amount must be greater than zero");
+    	} 
+    	if (accounts.size() < 2){
+    		throw new IllegalArgumentException("you must have at least two accounts to make any transfer");
+    	}
+    	int check1 = 0;
+    	int check2 = 0;
+    	for(Account a: accounts){
+    		if (a.getAccountType() == i)
+    			check1 = 1;
+   				Account a1 = a;
+   			if (a.getAccountType() == j)
+   				check2 = 1;
+   				Account a2 = a;
+   		}
+    	if(check1 == 1 & check2 ==1){
+    		a1.withdraw(amount);
+    		a2.deposit(amount);
+    	} else {
+    		throw new IllegalArgumentException("Please correctly specify the types the two accounts");
+    	}
+    }
 }
+
