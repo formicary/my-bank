@@ -1,12 +1,71 @@
-package com.abc;
+package test.java.com.abc;
 
+import main.java.com.abc.Account;
+import main.java.com.abc.Bank;
+import main.java.com.abc.Customer;
+
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import static org.junit.Assert.assertEquals;
 
 public class BankTest {
     private static final double DOUBLE_DELTA = 1e-15;
 
+	@Rule
+	public ExpectedException expectedException = ExpectedException.none();
+	
+	@Test
+	public void testInvalidDepositAmount(){
+		Bank bank = new Bank();
+		Account checkingAccount = new Account(Account.CHECKING);
+		Customer abhinav = new Customer("Abhinav").openAccount(checkingAccount);
+		bank.addCustomer(abhinav);
+
+		expectedException.expect(IllegalArgumentException.class);
+		assertEquals(1, checkingAccount.deposit(-100.0));
+	}
+	
+	@Test
+	public void testInvalidWithdrwalAmount(){
+		Bank bank = new Bank();
+		Account checkingAccount = new Account(Account.CHECKING);
+		Customer abhinav = new Customer("Abhinav").openAccount(checkingAccount);
+		bank.addCustomer(abhinav);
+
+		expectedException.expect(IllegalArgumentException.class);
+		assertEquals(1, checkingAccount.withdraw(-100.0));
+	}
+	
+	@Test
+	public void testTransfer(){
+		Account checkingAccount = new Account(Account.CHECKING);
+        Account savingsAccount = new Account(Account.SAVINGS);
+
+        Customer abhinav = new Customer("Abhinav").openAccount(checkingAccount).openAccount(savingsAccount);
+
+        checkingAccount.deposit(1000.0);
+        savingsAccount.deposit(1000.0);
+        
+        abhinav.transfer(abhinav, checkingAccount, savingsAccount, 100);
+        String statment = "Statement for Abhinav\n" +
+                "\n" +
+                "Checking Account\n" +
+                "  deposit $1,000.00\n" +
+                "  deposit $100.00\n" +
+                "Total $1,100.00\n" +
+                "\n" +
+                "Savings Account\n" +
+                "  deposit $1,000.00\n" +
+                "  withdrawal $100.00\n" +
+                "Total $900.00\n" +
+                "\n" +
+                "Total In All Accounts $2,000.00";
+        assertEquals(statment, abhinav.getStatement());
+        
+	}
+    
     @Test
     public void customerSummary() {
         Bank bank = new Bank();
@@ -30,7 +89,7 @@ public class BankTest {
     }
 
     @Test
-    public void savings_account() {
+    public void savingsAccount() {
         Bank bank = new Bank();
         Account checkingAccount = new Account(Account.SAVINGS);
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
@@ -41,7 +100,7 @@ public class BankTest {
     }
 
     @Test
-    public void maxi_savings_account() {
+    public void maxiSavingsAccount() {
         Bank bank = new Bank();
         Account checkingAccount = new Account(Account.MAXI_SAVINGS);
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
