@@ -1,73 +1,64 @@
 package com.abc;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
-public class Account {
+public abstract class Account {
 
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
+    private List<Transaction> transactions;
 
-    private final int accountType;
-    public List<Transaction> transactions;
-
-    public Account(int accountType) {
-        this.accountType = accountType;
+    public Account() {
         this.transactions = new ArrayList<Transaction>();
     }
 
     public void deposit(double amount) {
+        deposit(amount, DateProvider.INSTANCE.now());
+    }
+
+    public void deposit(double amount, Date onDate) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
-            transactions.add(new Transaction(amount));
+            transactions.add(new Transaction(amount, onDate));
         }
     }
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
+    public void withdraw(double amount) {
+        withdraw(amount, DateProvider.INSTANCE.now());
     }
-}
 
-    public double interestEarned() {
-        double amount = sumTransactions();
-        switch(accountType){
-            case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
-            case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
-            default:
-                return amount * 0.001;
-        }
+    public void withdraw(double amount, Date onDate) {
+    	if (amount <= 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+    	} else {
+            transactions.add(new Transaction(-amount, onDate));
+    	}
     }
+
+    public Iterable<Transaction> getTransactions() {
+        return new Iterable<Transaction>(){
+            public Iterator<Transaction> iterator(){ return transactions.iterator(); }
+        };
+    }
+
+    public abstract String getPrettyName();
+    
+    public abstract double interestEarned();
 
     public double sumTransactions() {
-       return checkIfTransactionsExist(true);
+        return sumTransactionsBefore(DateProvider.INSTANCE.now());
     }
 
-    private double checkIfTransactionsExist(boolean checkAll) {
+    public double sumTransactionsBefore(Date endDate) {
         double amount = 0.0;
-        for (Transaction t: transactions)
-            amount += t.amount;
+        for (Transaction t: getTransactions()){
+            if(!t.getTransactionDate().after(endDate)) {
+                amount += t.amount;
+            }
+        }
         return amount;
-    }
-
-    public int getAccountType() {
-        return accountType;
     }
 
 }
