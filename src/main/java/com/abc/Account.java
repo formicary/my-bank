@@ -1,4 +1,4 @@
-package com.abc;
+package main.java.com.abc;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,7 @@ public class Account {
     public static final int SAVINGS = 1;
     public static final int MAXI_SAVINGS = 2;
 
-    private final int accountType;
+    public final int accountType;
     public List<Transaction> transactions;
 
     public Account(int accountType) {
@@ -17,22 +17,24 @@ public class Account {
         this.transactions = new ArrayList<Transaction>();
     }
 
-    public void deposit(double amount) {
+    public int deposit(double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
             transactions.add(new Transaction(amount));
+            return 1;
         }
     }
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
+    public int withdraw(double amount) {
+    	if (amount <= 0) {
+    		throw new IllegalArgumentException("amount must be greater than zero");
+    	} else {
+    		transactions.add(new Transaction(-amount));
+    		return 1;
+    	}
     }
-}
-
+    
     public double interestEarned() {
         double amount = sumTransactions();
         switch(accountType){
@@ -69,5 +71,4 @@ public void withdraw(double amount) {
     public int getAccountType() {
         return accountType;
     }
-
 }
