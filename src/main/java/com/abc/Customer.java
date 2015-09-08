@@ -1,4 +1,4 @@
-package com.abc;
+package main.java.com.abc;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,8 +6,8 @@ import java.util.List;
 import static java.lang.Math.abs;
 
 public class Customer {
-    private String name;
-    private List<Account> accounts;
+    public String name;
+    public List<Account> accounts;
 
     public Customer(String name) {
         this.name = name;
@@ -70,6 +70,20 @@ public class Customer {
         }
         s += "Total " + toDollars(total);
         return s;
+    }
+    
+    public void transfer(Customer cust, Account transferTo, Account transferFrom, double amount){
+    	
+    	List<Account> customerAccountList = cust.accounts;
+    	for(Account account: customerAccountList){
+    		if(account.accountType == transferFrom.accountType){
+    			account.withdraw(amount);
+    		}
+    		
+    		if(account.accountType == transferTo.accountType){
+    			account.deposit(amount);
+    		}
+    	}
     }
 
     private String toDollars(double d){
