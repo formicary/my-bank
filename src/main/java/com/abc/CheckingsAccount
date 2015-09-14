@@ -1,0 +1,18 @@
+package com.abc;
+
+public class CheckingsAccount extends Account {
+
+	public CheckingsAccount() {
+		super();
+		accName = "Checkings Account";
+	}
+
+	/**
+	 * Calculates the daily compound interest.
+	 */
+	@Override
+	public double calcInterest(double diffInDays, double balance) {
+		return (balance*Math.pow((1 + 0.001 / 365), (diffInDays)))-balance;
+	}
+	
+}
