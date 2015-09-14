@@ -1,0 +1,41 @@
+package com.abc;
+
+import java.util.Date;
+
+public class MaxiSavingsAccount extends Account {
+
+	public MaxiSavingsAccount() {
+		super();
+		accName = "Maxi-Savings Account";
+	}
+
+	/**
+	 * Calculates and returns interest. 5% assuming no withdrawals in the past
+	 * 10 days otherwise 0.1%.
+	 */
+	@Override
+	public double calcInterest(double diffInDays, double balance) {
+
+		// Ten days before current date
+		Date tenDay = new Date(System.currentTimeMillis() - 10L * 24 * 3600
+				* 1000);
+		
+		// Iterator variable
+		int i = 0;
+		
+		// Check each transaction if it occurred in the previous 10 days.
+		while (i < transactions.size()
+				&& transactions.get(i).getTransactionDate().compareTo(tenDay) > 0) {
+			// Check if transaction was a deposit
+			if (!transactions.get(i).getType()) {
+				// System.out.println("withrawn111111");
+				return (balance * Math.pow((1 + 0.001 / 365), (diffInDays)))
+						- balance;
+			}
+			i++;
+		}
+
+		return (balance * Math.pow((1 + 0.05 / 365), (diffInDays))) - balance;
+	}
+
+}
