@@ -1,0 +1,27 @@
+package com.abc;
+
+public class SavingsAccount extends Account {
+
+	public SavingsAccount() {
+		super();
+		accName = "Savings Account";
+	}
+	
+	/**
+	 * Calculates the daily compound interest. Will calculate 0.1% for the first $1,000 then 0.2%.
+	 */
+	@Override
+	public double calcInterest(double diffInDays, double balance) {
+
+		double cap = 1000;
+		if (balance <= cap)
+			return (balance * Math.pow((1 + 0.001 / 365), (diffInDays)))
+					- balance;
+		else {
+			double temp = (cap * Math.pow((1 + 0.001 / 365), (diffInDays)))
+					- cap;
+			return temp + (balance - cap) * 0.002;
+		}
+	}
+
+}
