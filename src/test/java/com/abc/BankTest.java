@@ -1,5 +1,16 @@
 package com.abc;
 
+import java.util.Date;
+import java.util.List;
+
+import main.java.com.abc.Account;
+import main.java.com.abc.Bank;
+import main.java.com.abc.CheckingsAccount;
+import main.java.com.abc.Customer;
+import main.java.com.abc.MaxiSavingsAccount;
+import main.java.com.abc.SavingsAccount;
+import main.java.com.abc.Transaction;
+
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -11,7 +22,7 @@ public class BankTest {
     public void customerSummary() {
         Bank bank = new Bank();
         Customer john = new Customer("John");
-        john.openAccount(new Account(Account.CHECKING));
+        john.openAccount(new CheckingsAccount());
         bank.addCustomer(john);
 
         assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
@@ -20,35 +31,55 @@ public class BankTest {
     @Test
     public void checkingAccount() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.CHECKING);
+        Account checkingAccount = new CheckingsAccount();
         Customer bill = new Customer("Bill").openAccount(checkingAccount);
         bank.addCustomer(bill);
 
         checkingAccount.deposit(100.0);
+        Date lastYear = new Date(System.currentTimeMillis() - 365L * 24 * 3600
+				* 1000);
+        List<Transaction> t = checkingAccount.getTransactions();
+        t.get(0).setTransactionDate(lastYear);
+        
 
         assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
-
+    
     @Test
     public void savings_account() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.SAVINGS);
+        Account checkingAccount = new SavingsAccount();
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
-        checkingAccount.deposit(1500.0);
-
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        checkingAccount.deposit(1000.0);
+        Date lastYear = new Date(System.currentTimeMillis() - 365L * 24 * 3600
+				* 1000);
+        List<Transaction> t = checkingAccount.getTransactions();
+        t.get(0).setTransactionDate(lastYear);
+        assertEquals(1.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
-
+    
     @Test
     public void maxi_savings_account() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
+        Account checkingAccount = new MaxiSavingsAccount();
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
-        checkingAccount.deposit(3000.0);
-
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        checkingAccount.deposit(1000.0);
+        Date lastYear = new Date(System.currentTimeMillis() - 365L * 24 * 3600
+				* 1000);
+        List<Transaction> t = checkingAccount.getTransactions();
+        t.get(0).setTransactionDate(lastYear);
+        assertEquals(51.27, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
+    @Test
+    public void customerFirst() {
+        Bank bank = new Bank();
+        Customer john = new Customer("John");
+        john.openAccount(new CheckingsAccount());
+        bank.addCustomer(john);
 
+        assertEquals("John", bank.getFirstCustomer());
+    }
 }
+
