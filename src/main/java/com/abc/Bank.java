@@ -36,7 +36,8 @@ public class Bank {
 
     public String getFirstCustomer() {
         try {
-            customers = null;
+        	if ( customers == null || customers.isEmpty())
+                return null;
             return customers.get(0).getName();
         } catch (Exception e){
             e.printStackTrace();
