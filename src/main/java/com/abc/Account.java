@@ -1,73 +1,115 @@
 package com.abc;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-public class Account {
+public abstract class Account {
 
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
+	protected double balance;
+	protected String accName;
+	public List<Transaction> transactions = new ArrayList<Transaction>();
 
-    private final int accountType;
-    public List<Transaction> transactions;
+	public List<Transaction> getTransactions() {
+		return transactions;
+	}
+	/**
+	 * Deposit into account.
+	 * @param amount The amount to be deposited.
+	 */
+	public synchronized void deposit(double amount) {
+		if (amount <= 0) {
+			throw new IllegalArgumentException(
+					"amount must be greater than zero");
+		} else {
+			transactions.add(new Transaction(amount, true));
 
-    public Account(int accountType) {
-        this.accountType = accountType;
-        this.transactions = new ArrayList<Transaction>();
-    }
+			balance += amount;
+		}
+	}
 
-    public void deposit(double amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
-        } else {
-            transactions.add(new Transaction(amount));
-        }
-    }
+	/**
+	 * Withdraw from account.
+	 * @param amount The amount to be withdrawn
+	 */
+	public synchronized void withdraw(double amount) {
+		if (amount <= 0) {
+			throw new IllegalArgumentException(
+					"amount must be greater than zero");
+		} else if (amount>balance){
+			throw new IllegalArgumentException(
+					"Amount requested exceeds the balance available in account");
+		}
+		else {
+			if (balance >= 0) {
+				transactions.add(new Transaction(-amount, false));
+				balance -= amount;
+			}
+		}
+	}
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
-    }
-}
+	/**
+	 * Retrieves current account balance.
+	 * @return Returns balance
+	 */
+	public double getBalance() {
+		return balance;
+	}
 
-    public double interestEarned() {
-        double amount = sumTransactions();
-        switch(accountType){
-            case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
-            case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
-            default:
-                return amount * 0.001;
-        }
-    }
+	/**
+	 * Calculates interest by going over all transactions and calculating the daily interest. Calculates the interest between all transactions, up to the current date.
+	 * @return Total interest earned to date.
+	 */
+	public double interestEarned() {
 
-    public double sumTransactions() {
-       return checkIfTransactionsExist(true);
-    }
+		// Day in milliseconds
+		final long DAY_IN_MILLIS = 1000 * 60 * 60 * 24;
+		// Current date
+		Date currentDate = DateProvider.getInstance().now();
+		// Sum of all Interest
+		double interest = 0;
+		// Balance at current time of transaction
+		double prevBalance = 0;
+		// Go over each transaction. Calculates the number of days apart from
+		for (int i = 0; i < transactions.size(); i++) {
+			// DAte of the transaction
+			Date transDate = transactions.get(i).getTransactionDate();
+			// Number of days between each transaction
+			double diffInDays;
+			// Calculates number of days between each transaction. If the current transaction is the latest one, then the current date is used.
+			if (i != transactions.size() - 1) {
+				diffInDays = (int) ((transactions.get(i + 1)
+						.getTransactionDate().getTime() - transDate.getTime()) / DAY_IN_MILLIS);
+			} else {
+				diffInDays = (int) ((currentDate.getTime() - transDate
+						.getTime()) / DAY_IN_MILLIS);
+			}
+			prevBalance += transactions.get(i).getAmount();
 
-    private double checkIfTransactionsExist(boolean checkAll) {
-        double amount = 0.0;
-        for (Transaction t: transactions)
-            amount += t.amount;
-        return amount;
-    }
+			if (diffInDays > 0) {
+				interest += calcInterest(diffInDays, prevBalance);
+			}
+		}
+		DecimalFormat df = new DecimalFormat("#.##");      
+		interest = Double.valueOf(df.format(interest));
+		return interest;
+	}
 
-    public int getAccountType() {
-        return accountType;
-    }
+	/**
+	 * Abstract method which is implemented by all types of accounts to calculate the interest. Calculates the interest between two dates.
+	 * @param diffInDays Number of days the interest needs to be calculated for.
+	 * @param balance Balance at that time.
+	 * @return Interest in that period of time.
+	 */
+	public abstract double calcInterest(double diffInDays, double balance);
+
+	/**
+	 * Account type.
+	 * @return Returns the type of account.
+	 */
+	public String getAccountType() {
+		return accName;
+	}
 
 }
