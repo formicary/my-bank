@@ -42,10 +42,8 @@ public abstract class Account {
 					"Amount requested exceeds the balance available in account");
 		}
 		else {
-			if (balance >= 0) {
-				transactions.add(new Transaction(-amount, false));
-				balance -= amount;
-			}
+			transactions.add(new Transaction(-amount, false));
+			balance -= amount;
 		}
 	}
 
