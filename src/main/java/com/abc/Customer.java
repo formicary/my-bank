@@ -45,6 +45,16 @@ public class Customer {
         statement += "\nTotal In All Accounts " + toDollars(total);
         return statement;
     }
+    
+    // A customer can transfer between their accounts
+    public void transfer(Account from, Account to, double amount) {
+    	if(!accounts.contains(from) || !accounts.contains(to)) {
+    		throw new IllegalArgumentException("accounts must be owned by customer");
+    	}
+    	
+    	from.withdraw(amount);
+    	to.deposit(amount);
+    }
 
     private String statementForAccount(Account a) {
         String s = "";
@@ -64,9 +74,9 @@ public class Customer {
 
         //Now total up all the transactions
         double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
+        for (Transaction t : a.getTransactions()) {
+            s += "  " + (t.getType() < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.getAmount()) + "\n";
+            total += t.getAmount();
         }
         s += "Total " + toDollars(total);
         return s;
