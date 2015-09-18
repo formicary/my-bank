@@ -10,7 +10,10 @@ public class Transaction {
 
     public Transaction(double amount) {
         this.amount = amount;
-        this.transactionDate = DateProvider.getInstance().now();
+        this.transactionDate = Calendar.getInstance().getTime();
     }
-
+    
+    public int fromCreationToDateInDays(Date d) {
+    	return (int) ((d.getTime() - transactionDate.getTime()) / (1000 * 60 * 60 * 24));
+    }
 }

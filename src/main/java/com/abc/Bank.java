@@ -1,6 +1,8 @@
 package com.abc;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class Bank {
@@ -28,19 +30,13 @@ public class Bank {
     }
 
     public double totalInterestPaid() {
+    	return totalInterestPaidOnDay(Calendar.getInstance().getTime());
+    }
+    
+    public double totalInterestPaidOnDay(Date d) {
         double total = 0;
         for(Customer c: customers)
-            total += c.totalInterestEarned();
+            total += c.totalInterestEarnedOnDay(d);
         return total;
-    }
-
-    public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
-        }
     }
 }
