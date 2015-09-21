@@ -5,6 +5,8 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+import java.math.BigDecimal;
+
 public class CustomerTest {
 
     @Test //Test customer statement generation
@@ -15,9 +17,9 @@ public class CustomerTest {
 
         Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
 
-        checkingAccount.deposit(100.0);
-        savingsAccount.deposit(4000.0);
-        savingsAccount.withdraw(200.0);
+        checkingAccount.deposit(BigDecimal.valueOf(100.0));
+        savingsAccount.deposit(BigDecimal.valueOf(4000.0));
+        savingsAccount.withdraw(BigDecimal.valueOf(200.0));
 
         assertEquals("Statement for Henry\n" +
                 "\n" +
