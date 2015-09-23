@@ -10,6 +10,9 @@ public class Customer {
     private List<Account> accounts;
 
     public Customer(String name) {
+        if(name == null || name == "") {
+            throw new IllegalArgumentException("name must not be empty");
+        }
         this.name = name;
         this.accounts = new ArrayList<Account>();
     }
@@ -40,7 +43,7 @@ public class Customer {
         double total = 0.0;
         for (Account a : accounts) {
             statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+            total += a.getBalance();
         }
         statement += "\nTotal In All Accounts " + toDollars(total);
         return statement;
@@ -49,18 +52,8 @@ public class Customer {
     private String statementForAccount(Account a) {
         String s = "";
 
-       //Translate to pretty account type
-        switch(a.getAccountType()){
-            case Account.CHECKING:
-                s += "Checking Account\n";
-                break;
-            case Account.SAVINGS:
-                s += "Savings Account\n";
-                break;
-            case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
-                break;
-        }
+        s += a.getAccountType();
+        s += "\n";
 
         //Now total up all the transactions
         double total = 0.0;
@@ -74,5 +67,11 @@ public class Customer {
 
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
+    }
+
+    // transfer between two accounts
+    public void transfer(Account sender, Account recipient, double amount) {
+        sender.withdraw(amount);
+        recipient.deposit(amount);
     }
 }
