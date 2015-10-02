@@ -22,6 +22,15 @@ public class Customer {
         accounts.add(account);
         return this;
     }
+    
+    public void transfer(double amount, Account accountWithdrawn, Account accountRecieved){
+    	if (amount <= 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        } else {
+            accountWithdrawn.withdraw(amount);
+            accountRecieved.deposit(amount);
+        }
+    }
 
     public int getNumberOfAccounts() {
         return accounts.size();

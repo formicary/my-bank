@@ -15,4 +15,14 @@ public class DateProvider {
     public Date now() {
         return Calendar.getInstance().getTime();
     }
+    
+    @SuppressWarnings("deprecation")
+	public int day(){
+    	return Calendar.getInstance().getTime().getDay();
+    }
+    
+    @SuppressWarnings("deprecation")
+	public int month(){
+    	return Calendar.getInstance().getTime().getMonth();
+    }
 }
