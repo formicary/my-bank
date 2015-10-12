@@ -35,8 +35,7 @@ public class Customer {
     }
 
     public String getStatement() {
-        String statement = null;
-        statement = "Statement for " + name + "\n";
+        String statement = "Statement for " + name + "\n";
         double total = 0.0;
         for (Account a : accounts) {
             statement += "\n" + statementForAccount(a) + "\n";
@@ -64,15 +63,37 @@ public class Customer {
 
         //Now total up all the transactions
         double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
+
+        //for each
+        for (Transaction t : a.getTransactions()) {
+            s += "  " + (t.getAmount() < 0 ? "withdrawal" : "deposit") + " " + toDollars(abs(t.getAmount())) + "\n";
+            total += t.getAmount();
         }
         s += "Total " + toDollars(total);
         return s;
     }
 
     private String toDollars(double d){
-        return String.format("$%,.2f", abs(d));
+    //    return String.format("$%,.2f", abs(d));
+        return String.format("$%,.2f", d);
+    }
+
+    public List<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
+    }
+
+    public void transfer(Account from, Account to, double amount) {
+        // in this scenario it is implied that the fund available in an account is equal to the sum of the transactions
+        // i.e.  when a customer open an account the initial fund amount is always 0 and that interests are not involved
+        if (from.sumTransactions() > 0 && from.sumTransactions() >= amount) {
+            from.withdraw(amount);
+            to.deposit(amount);
+        } else {
+            throw new IllegalArgumentException(" amount not available in selected account ");
+        }
     }
 }
