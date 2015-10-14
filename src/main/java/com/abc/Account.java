@@ -1,73 +1,148 @@
-package com.abc;
+package main.java.com.abc;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Account class to hold information relevant to the account (type, balance,
+ * transactions), as well as relevant actions (deposit, withdraw and calculation
+ * of interest)
+ * 
+ * @author Stavros Mobile
+ * 
+ */
 public class Account {
 
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
+	/**
+	 * Different types of bank account
+	 */
+	public enum Type {
+		CHECKING, SAVINGS, MAXI_SAVINGS
+	};
 
-    private final int accountType;
-    public List<Transaction> transactions;
+	/**
+	 * Current account type
+	 */
+	private final Type accountType;
 
-    public Account(int accountType) {
-        this.accountType = accountType;
-        this.transactions = new ArrayList<Transaction>();
-    }
+	/**
+	 * Account balance
+	 */
+	private double balance;
 
-    public void deposit(double amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
-        } else {
-            transactions.add(new Transaction(amount));
-        }
-    }
+	/**
+	 * List of transactions of the account
+	 */
+	private List<Transaction> transactions;
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
-    }
-}
+	/**
+	 * Constructor
+	 * 
+	 * @param accountType
+	 */
+	public Account(Type accountType) {
+		this.accountType = accountType;
+		this.balance = 0.;
+		this.transactions = new ArrayList<Transaction>();
+	}
 
-    public double interestEarned() {
-        double amount = sumTransactions();
-        switch(accountType){
-            case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
-            case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
-            default:
-                return amount * 0.001;
-        }
-    }
+	/**
+	 * Deposit to account
+	 * 
+	 * @param amount
+	 */
+	public void deposit(double amount) {
+		if (amount <= 0.) {
+			throw new IllegalArgumentException(
+					"Amount must be greater than zero");
+		} else {
+			balance += amount;
+			transactions.add(new Transaction(amount));
+		}
+	}
 
-    public double sumTransactions() {
-       return checkIfTransactionsExist(true);
-    }
+	/**
+	 * Withdraw from account
+	 * 
+	 * @param amount
+	 */
+	public void withdraw(double amount) {
+		if (amount <= 0) {
+			throw new IllegalArgumentException(
+					"Amount must be greater than zero");
+		} else if (amount > this.balance) {
+			throw new IllegalArgumentException(
+					"The requested transaction cannot be completed");
+		} else {
+			balance -= amount;
+			transactions.add(new Transaction(-amount));
+		}
+	}
 
-    private double checkIfTransactionsExist(boolean checkAll) {
-        double amount = 0.0;
-        for (Transaction t: transactions)
-            amount += t.amount;
-        return amount;
-    }
+	/**
+	 * Interest of account according to type and current balance
+	 * 
+	 * @return
+	 */
+	public double interestEarned() {
+		switch (accountType) {
+		case CHECKING:
+			return this.balance * 0.001;
+		case SAVINGS:
+			if (this.balance <= 1000)
+				return this.balance * 0.001;
+			else
+				return 1 + (this.balance - 1000) * 0.002;
+		case MAXI_SAVINGS:
 
-    public int getAccountType() {
-        return accountType;
-    }
+			int dayDif = DateProvider.getInstance().getDay()
+					- this.transactions.get(this.transactions.size() - 1)
+							.getDay();
+			if (dayDif < 0)
+				dayDif += 365;
+			if (dayDif > 10)
+				return this.balance * .05;
+			else
+				return this.balance * .001;
+		default:
+			return 0;
+		}
+	}
+
+	/**
+	 * 
+	 * @return Account type
+	 */
+	public Type getAccountType() {
+		return accountType;
+	}
+
+	/**
+	 * 
+	 * @return Balance
+	 */
+	public double getBalance() {
+		return this.balance;
+	}
+
+	/**
+	 * 
+	 * @param i
+	 * @return Requested transaction of it exists
+	 */
+	public Transaction getTransaction(int i) {
+		if (i >= this.transactions.size())
+			throw new IllegalArgumentException("Invalid transaction request");
+		else
+			return this.transactions.get(i);
+	}
+
+	/**
+	 * 
+	 * @return Total number of transactions completed
+	 */
+	public int getNumberOfTransactions() {
+		return this.transactions.size();
+	}
 
 }
