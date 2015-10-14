@@ -2,6 +2,9 @@ package com.abc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.NumberFormat;
 
 import static java.lang.Math.abs;
 
@@ -27,20 +30,20 @@ public class Customer {
         return accounts.size();
     }
 
-    public double totalInterestEarned() {
-        double total = 0;
+    public BigDecimal totalInterestEarned() {
+    	BigDecimal total = new BigDecimal("0");
         for (Account a : accounts)
-            total += a.interestEarned();
+        	total = total.add(a.interestEarned());
         return total;
     }
 
     public String getStatement() {
         String statement = null;
         statement = "Statement for " + name + "\n";
-        double total = 0.0;
+        BigDecimal total = new BigDecimal("0");
         for (Account a : accounts) {
             statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+            total = total.add(a.sumTransactions());
         }
         statement += "\nTotal In All Accounts " + toDollars(total);
         return statement;
@@ -63,16 +66,30 @@ public class Customer {
         }
 
         //Now total up all the transactions
-        double total = 0.0;
+        BigDecimal total = new BigDecimal("0");
         for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
+            s += "  " + (total.compareTo(BigDecimal.ZERO) > 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
+            total = total.add(t.amount);
         }
         s += "Total " + toDollars(total);
         return s;
     }
+    
+    public void transferFunds(BigDecimal amount, Account accountFrom, Account accountTo){
+    	if(this.accounts.contains(accountFrom) && this.accounts.contains(accountTo)){
+    	accountFrom.withdraw(amount.doubleValue());
+    	accountTo.deposit(amount.doubleValue());
+    	} else {
+    		throw new IllegalArgumentException("accounts must be owned by same customer");
+    	}
+    }
 
-    private String toDollars(double d){
-        return String.format("$%,.2f", abs(d));
+    
+    public String toDollars(BigDecimal d){
+    	d = d.setScale(2, RoundingMode.HALF_UP);
+    	if(d.compareTo(BigDecimal.ZERO) < 0){
+    		d = d.negate();
+    	}
+    	return NumberFormat.getCurrencyInstance(java.util.Locale.US).format(d);
     }
 }

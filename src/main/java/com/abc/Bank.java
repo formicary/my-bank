@@ -2,6 +2,9 @@ package com.abc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.math.BigDecimal;
+
+//All number representations changed to BigDecimal. As for currency, double is a poor representation due to rounding errors.
 
 public class Bank {
     private List<Customer> customers;
@@ -27,20 +30,21 @@ public class Bank {
         return number + " " + (number == 1 ? word : word + "s");
     }
 
-    public double totalInterestPaid() {
-        double total = 0;
+    public BigDecimal totalInterestPaid() {
+    	BigDecimal total = new BigDecimal("0.0");
         for(Customer c: customers)
-            total += c.totalInterestEarned();
+            total = total.add(c.totalInterestEarned());
         return total;
     }
 
     public String getFirstCustomer() {
         try {
-            customers = null;
             return customers.get(0).getName();
         } catch (Exception e){
             e.printStackTrace();
             return "Error";
         }
     }
+
+
 }

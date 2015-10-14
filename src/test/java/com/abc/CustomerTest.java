@@ -1,6 +1,7 @@
 package com.abc;
 
 import org.junit.Ignore;
+import java.math.BigDecimal;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -41,17 +42,33 @@ public class CustomerTest {
 
     @Test
     public void testTwoAccount(){
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
+        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
         oscar.openAccount(new Account(Account.CHECKING));
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
-    @Ignore
+    @Test
     public void testThreeAcounts() {
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
+        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
         oscar.openAccount(new Account(Account.CHECKING));
+        oscar.openAccount(new Account(Account.MAXI_SAVINGS));
         assertEquals(3, oscar.getNumberOfAccounts());
+    }
+    
+    @Test
+    public void testTransferFunds(){
+    	Customer jeff = new Customer("Jeff");
+    	
+    	Account checkingAccount = new Account(Account.CHECKING);
+    	Account maxi_savingsAccount = new Account(Account.MAXI_SAVINGS);
+    	
+    	jeff.openAccount(checkingAccount);
+    	jeff.openAccount(maxi_savingsAccount);
+    	
+    	checkingAccount.deposit(2000.0);
+    	maxi_savingsAccount.deposit(1000.0);
+    	
+    	jeff.transferFunds(new BigDecimal("500"), checkingAccount, maxi_savingsAccount);	
+    	
     }
 }
