@@ -3,6 +3,8 @@ package com.abc;
 import java.util.Calendar;
 import java.util.Date;
 
+// Singleton pattern class for calendar dates
+
 public class DateProvider {
   private static DateProvider instance = null;
 

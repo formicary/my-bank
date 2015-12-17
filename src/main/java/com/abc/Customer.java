@@ -14,10 +14,13 @@ public class Customer {
     this.accounts = new ArrayList<Account>();
   }
 
+  // Getters
+  
   public String getName() {
     return name;
   }
 
+  // TODO: Why does this return a Customer?
   public Customer openAccount(Account account) {
     accounts.add(account);
     return this;
@@ -27,16 +30,17 @@ public class Customer {
     return accounts.size();
   }
 
+  // Calculates the total interest earned across all accounts
   public double totalInterestEarned() {
-    double total = 0;
+    double total = 0.0;
     for (Account a : accounts)
       total += a.interestEarned();
     return total;
   }
 
+  // Returns a statement for the customer's accounts
   public String getStatement() {
-    String statement = null;
-    statement = "Statement for " + name + "\n";
+    String statement = "Statement for " + name + "\n";
     double total = 0.0;
     for (Account a : accounts) {
       statement += "\n" + statementForAccount(a) + "\n";
@@ -46,10 +50,11 @@ public class Customer {
     return statement;
   }
 
+  // TODO: add break to switch
   private String statementForAccount(Account a) {
     String s = "";
 
-    // Translate to pretty account type
+    // Convert account enumeration to appropriate string
     switch (a.getAccountType()) {
     case Account.CHECKING:
       s += "Checking Account\n";
@@ -62,7 +67,7 @@ public class Customer {
       break;
     }
 
-    // Now total up all the transactions
+    // Creates string listing transactions and a total balance
     double total = 0.0;
     for (Transaction t : a.transactions) {
       s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " "
@@ -73,6 +78,7 @@ public class Customer {
     return s;
   }
 
+  // Converts double to dollar format string
   private String toDollars(double d) {
     return String.format("$%,.2f", abs(d));
   }

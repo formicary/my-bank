@@ -17,6 +17,7 @@ public class Account {
     this.transactions = new ArrayList<Transaction>();
   }
 
+  // TODO: code duplication between deposit and withdraw, combine?
   public void deposit(double amount) {
     if (amount <= 0) {
       throw new IllegalArgumentException("amount must be greater than zero");
@@ -33,6 +34,7 @@ public class Account {
     }
   }
 
+  // TODO: remove magic numbers
   public double interestEarned() {
     double amount = sumTransactions();
     switch (accountType) {
@@ -59,6 +61,7 @@ public class Account {
     return checkIfTransactionsExist(true);
   }
 
+  // TODO: unused method argument
   private double checkIfTransactionsExist(boolean checkAll) {
     double amount = 0.0;
     for (Transaction t : transactions)
