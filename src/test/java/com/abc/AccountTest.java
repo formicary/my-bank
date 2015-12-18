@@ -43,5 +43,47 @@ public class AccountTest {
     account.transact(300);
     assertEquals(400, account.sumTransactions(), DOUBLE_DELTA);
   }
+  
+  @Test
+  public void checkingInterestEarned() {
+    Account account = new Account(Account.Type.CHECKING);
+    account.transact(500);
+    assertEquals(0.5, account.interestEarned(), DOUBLE_DELTA);
+  }
+  
+  @Test
+  public void savingsInterestEarnedLow() {
+    Account account = new Account(Account.Type.SAVINGS);
+    account.transact(500);
+    assertEquals(0.5, account.interestEarned(), DOUBLE_DELTA);
+  }
+  
+  @Test
+  public void savingsInterestEarnedHigh() {
+    Account account = new Account(Account.Type.SAVINGS);
+    account.transact(1500);
+    assertEquals(2.0, account.interestEarned(), DOUBLE_DELTA);
+  }
+  
+  @Test
+  public void maxiSavingsInterestEarnedLow() {
+    Account account = new Account(Account.Type.MAXI_SAVINGS);
+    account.transact(500);
+    assertEquals(10.0, account.interestEarned(), DOUBLE_DELTA);
+  }
+  
+  @Test
+  public void maxiSavingsInterestEarnedMed() {
+    Account account = new Account(Account.Type.MAXI_SAVINGS);
+    account.transact(1500);
+    assertEquals(45, account.interestEarned(), DOUBLE_DELTA);
+  }
+  
+  @Test
+  public void maxiSavingsInterestEarnedHigh() {
+    Account account = new Account(Account.Type.MAXI_SAVINGS);
+    account.transact(2500);
+    assertEquals(120.0, account.interestEarned(), DOUBLE_DELTA);
+  }
 
 }
