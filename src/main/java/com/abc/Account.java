@@ -1,7 +1,6 @@
 package com.abc;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class Account {
@@ -91,7 +90,7 @@ public class Account {
     long withdrawalsTimeThreshold = 864000000; // 10 days in ms
     
     boolean withdrawals = false;
-    long withdrawalsTime = Calendar.getInstance().getTimeInMillis()
+    long withdrawalsTime = DateProvider.getInstance().now().getTime()
         - withdrawalsTimeThreshold;
     for (Transaction t : transactions) {
       if (t.getDate().getTime() >= withdrawalsTime) {
