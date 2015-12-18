@@ -9,6 +9,8 @@ public class Account {
     CHECKING, SAVINGS, MAXI_SAVINGS;
   }
 
+  private final double interestRateThreshold = 1000;
+
   private final Type accountType;
   public List<Transaction> transactions;
 
@@ -16,11 +18,13 @@ public class Account {
     this.accountType = accountType;
     this.transactions = new ArrayList<Transaction>();
   }
-  
+
   public Type getAccountType() {
     return accountType;
   }
 
+  // Records transaction for this account
+  // Positive amount for deposit, negative amount for withdrawal
   public void transact(double amount) {
     if (amount == 0) {
       throw new IllegalArgumentException("amount cannot be zero");
@@ -28,42 +32,69 @@ public class Account {
       transactions.add(new Transaction(amount));
     }
   }
-
-  // TODO: remove magic numbers
-  public double interestEarned() {
-    double amount = sumTransactions();
-    switch (accountType) {
-    case SAVINGS:
-      if (amount <= 1000)
-        return amount * 0.001;
-      else
-        return 1 + (amount - 1000) * 0.002;
-      // case SUPER_SAVINGS:
-      // if (amount <= 4000)
-      // return 20;
-    case MAXI_SAVINGS:
-      if (amount <= 1000) {
-        return amount * 0.02;
-      } else if (amount <= 2000) {
-        return 2 + (amount - 1000) * 0.05;
-      } else {
-        return 7 + (amount - 2000) * 0.01;
-      }
-    default:
-      return amount * 0.001;
-    }
-  }
-
+  
+  // Calculates the total amount in the account based on transactions
   public double sumTransactions() {
-    return checkIfTransactionsExist(true);
-  }
-
-  // TODO: unused method argument
-  private double checkIfTransactionsExist(boolean checkAll) {
     double amount = 0.0;
     for (Transaction t : transactions)
       amount += t.getAmount();
     return amount;
+  }
+
+  // Calculates the total interest earned
+  public double interestEarned() {
+    double amount = sumTransactions();
+    switch (accountType) {
+    case CHECKING:
+      return checkingInterest(amount);
+    case SAVINGS:
+      return savingsInterest(amount);
+    case MAXI_SAVINGS:
+      return maxiSavingsInterest(amount);
+    default:
+      return 0.0;
+    }
+  }
+  
+  // Calculates interest for a checking account
+  private double checkingInterest(double amount) {
+    double interestRate = 0.001;
+    return amount * interestRate;
+  }
+  
+  // Calculates interest for a savings account
+  private double savingsInterest(double amount) {
+    double firstInterestRate = 0.001;
+    double secondInterestRate = 0.002;
+    
+    if (amount <= interestRateThreshold) {
+      return amount * firstInterestRate;
+    }
+    double result = interestRateThreshold * firstInterestRate;
+    amount -= interestRateThreshold;
+    result += amount * secondInterestRate;
+    return result;
+  }
+  
+  // Calculates interest for a maxi savings account
+  private double maxiSavingsInterest(double amount) {
+    double firstInterestRate = 0.02;
+    double secondInterestRate = 0.05;
+    double thirdInterestRate = 0.1;
+    
+    if (amount <= interestRateThreshold) {
+      return amount * firstInterestRate;
+    }
+    double result = interestRateThreshold * firstInterestRate;
+    amount -= interestRateThreshold;
+    if (amount <= interestRateThreshold) {
+      result += amount * secondInterestRate;
+      return result;
+    }
+    result += interestRateThreshold * secondInterestRate;
+    amount -= interestRateThreshold;
+    result += amount * thirdInterestRate;
+    return result;
   }
 
 }
