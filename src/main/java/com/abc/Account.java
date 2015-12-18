@@ -71,7 +71,8 @@ public class Account {
     return amounts;
   }
   
-  // Calculates the total compound interest earned
+  // Calculates the total compound interest earned at a daily rate
+  // Annual interest rates are split on days per year
   public double interestEarned() {
     if (transactions.size() <= 0) {
       return 0.0;
@@ -96,6 +97,7 @@ public class Account {
     return total;
   }
   
+  // Old version of method
   /*
   // Calculates the total interest earned
   public double interestEarned() {
@@ -163,6 +165,7 @@ public class Account {
     }
   }
   
+  // Old version of method
   /*
   private double maxiSavingsInterest(double amount) {
     double firstInterestRate = 0.02;

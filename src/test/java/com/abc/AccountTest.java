@@ -44,6 +44,8 @@ public class AccountTest {
     assertEquals(400, account.sumTransactions(), DOUBLE_DELTA);
   }
   
+  // Tests for older versions of methods
+  
   /*
   @Test
   public void checkingInterestEarned() {
