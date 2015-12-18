@@ -5,17 +5,20 @@ import java.util.List;
 
 public class Account {
 
-  // TODO: Extract to enumeration
-  public static final int CHECKING = 0;
-  public static final int SAVINGS = 1;
-  public static final int MAXI_SAVINGS = 2;
+  public enum Type {
+    CHECKING, SAVINGS, MAXI_SAVINGS;
+  }
 
-  private final int accountType;
+  private final Type accountType;
   public List<Transaction> transactions;
 
-  public Account(int accountType) {
+  public Account(Type accountType) {
     this.accountType = accountType;
     this.transactions = new ArrayList<Transaction>();
+  }
+  
+  public Type getAccountType() {
+    return accountType;
   }
 
   // TODO: code duplication between deposit and withdraw, combine?
@@ -70,10 +73,6 @@ public class Account {
     for (Transaction t : transactions)
       amount += t.getAmount();
     return amount;
-  }
-
-  public int getAccountType() {
-    return accountType;
   }
 
 }

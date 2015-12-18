@@ -18,24 +18,24 @@ public class CustomerTest {
   @Test
   public void oneAccount() {
     Customer oscar = new Customer("Oscar").openAccount(new Account(
-        Account.SAVINGS));
+        Account.Type.SAVINGS));
     assertEquals(1, oscar.getNumberOfAccounts());
   }
   
   @Test
   public void twoAccount() {
     Customer oscar = new Customer("Oscar").openAccount(new Account(
-        Account.SAVINGS));
-    oscar.openAccount(new Account(Account.CHECKING));
+        Account.Type.SAVINGS));
+    oscar.openAccount(new Account(Account.Type.CHECKING));
     assertEquals(2, oscar.getNumberOfAccounts());
   }
   
   @Test
   public void threeAccounts() {
     Customer oscar = new Customer("Oscar").openAccount(new Account(
-        Account.SAVINGS));
-    oscar.openAccount(new Account(Account.CHECKING));
-    oscar.openAccount(new Account(Account.MAXI_SAVINGS));
+        Account.Type.SAVINGS));
+    oscar.openAccount(new Account(Account.Type.CHECKING));
+    oscar.openAccount(new Account(Account.Type.MAXI_SAVINGS));
     assertEquals(3, oscar.getNumberOfAccounts());
   }
   
@@ -47,7 +47,7 @@ public class CustomerTest {
   
   @Test
   public void interestEarnedOneAccount() {
-    Account checkingAccount = new Account(Account.CHECKING);
+    Account checkingAccount = new Account(Account.Type.CHECKING);
     Customer henry = new Customer("Henry").openAccount(checkingAccount);
     checkingAccount.deposit(200.0);
     assertEquals(0.2, henry.totalInterestEarned(), DOUBLE_DELTA);
@@ -56,8 +56,8 @@ public class CustomerTest {
   @Test
   public void statement() {
 
-    Account checkingAccount = new Account(Account.CHECKING);
-    Account savingsAccount = new Account(Account.SAVINGS);
+    Account checkingAccount = new Account(Account.Type.CHECKING);
+    Account savingsAccount = new Account(Account.Type.SAVINGS);
 
     Customer henry = new Customer("Henry").openAccount(checkingAccount)
         .openAccount(savingsAccount);
