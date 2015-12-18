@@ -15,19 +15,18 @@ public class Customer {
   }
 
   // Getters
-  
   public String getName() {
     return name;
   }
 
-  // TODO: Why does this return a Customer?
+  public int getNumberOfAccounts() {
+    return accounts.size();
+  }
+  
+  // Opens an account, returns this to chain account opening
   public Customer openAccount(Account account) {
     accounts.add(account);
     return this;
-  }
-
-  public int getNumberOfAccounts() {
-    return accounts.size();
   }
 
   // Calculates the total interest earned across all accounts
@@ -50,7 +49,7 @@ public class Customer {
     return statement;
   }
 
-  // TODO: add break to switch
+  // TODO: add default to switch
   private String statementForAccount(Account a) {
     String s = "";
 
