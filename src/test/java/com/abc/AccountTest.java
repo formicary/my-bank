@@ -7,6 +7,7 @@ import static org.junit.Assert.assertEquals;
 public class AccountTest {
   
   private static final double DOUBLE_DELTA = 1e-15;
+  private final int DaysPerYear = 365;
   
   @Test
   public void accountType() {
@@ -44,28 +45,25 @@ public class AccountTest {
     assertEquals(400, account.sumTransactions(), DOUBLE_DELTA);
   }
   
-  // Tests for older versions of methods
-  
-  /*
   @Test
   public void checkingInterestEarned() {
     Account account = new Account(Account.Type.CHECKING);
     account.transact(500);
-    assertEquals(0.5, account.interestEarned(), DOUBLE_DELTA);
+    assertEquals(0.5 / DaysPerYear, account.interestEarned(), DOUBLE_DELTA);
   }
   
   @Test
   public void savingsInterestEarnedLow() {
     Account account = new Account(Account.Type.SAVINGS);
     account.transact(500);
-    assertEquals(0.5, account.interestEarned(), DOUBLE_DELTA);
+    assertEquals(0.5 / DaysPerYear, account.interestEarned(), DOUBLE_DELTA);
   }
   
   @Test
   public void savingsInterestEarnedHigh() {
     Account account = new Account(Account.Type.SAVINGS);
     account.transact(1500);
-    assertEquals(2.0, account.interestEarned(), DOUBLE_DELTA);
+    assertEquals(2.0 / DaysPerYear, account.interestEarned(), DOUBLE_DELTA);
   }
   
   @Test
@@ -73,7 +71,7 @@ public class AccountTest {
     Account account = new Account(Account.Type.MAXI_SAVINGS);
     account.transact(500);
     account.transact(-200);
-    assertEquals(0.3, account.interestEarned(), DOUBLE_DELTA);
+    assertEquals(0.3 / DaysPerYear, account.interestEarned(), DOUBLE_DELTA);
   }
   
   @Test
@@ -81,9 +79,12 @@ public class AccountTest {
     Account account = new Account(Account.Type.MAXI_SAVINGS);
     account.transact(500);
     account.transact(200);
-    assertEquals(35.0, account.interestEarned(), DOUBLE_DELTA);
+    assertEquals(35.0 / DaysPerYear, account.interestEarned(), DOUBLE_DELTA);
   }
   
+  // Tests for old version of method
+  
+  /*
   @Test
   public void maxiSavingsInterestEarnedLow() {
     Account account = new Account(Account.Type.MAXI_SAVINGS);

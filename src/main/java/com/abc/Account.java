@@ -81,21 +81,23 @@ public class Account {
     
     // Calculate compounded interest using list of totals
     double total = 0.0;
+    double interest = 0.0;
     for (Double d : amountsPerDay) {
       total += d;
       switch (accountType) {
       case CHECKING:
-        total += checkingInterest(total);
+        interest += checkingInterest(total);
         break;
       case SAVINGS:
-        total += savingsInterest(total);
+        interest += savingsInterest(total);
         break;
       case MAXI_SAVINGS:
-        total += maxiSavingsInterest(total);
+        interest += maxiSavingsInterest(total);
         break;
       }
+      total += interest;
     }
-    return total;
+    return interest;
   }
   
   // Old version of method
