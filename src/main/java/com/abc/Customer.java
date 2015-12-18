@@ -68,7 +68,7 @@ public class Customer {
 
     // Creates string listing transactions and a total balance
     double total = 0.0;
-    for (Transaction t : a.transactions) {
+    for (Transaction t : a.getTransactions()) {
       s += "  " + (t.getAmount() < 0 ? "withdrawal" : "deposit") + " "
           + toDollars(t.getAmount()) + "\n";
       total += t.getAmount();

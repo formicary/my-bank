@@ -10,17 +10,22 @@ public class Account {
   }
 
   private final double interestRateThreshold = 1000;
-
   private final Type accountType;
-  public List<Transaction> transactions;
+  private List<Transaction> transactions;
 
   public Account(Type accountType) {
     this.accountType = accountType;
     this.transactions = new ArrayList<Transaction>();
   }
 
+  // Getters 
+  
   public Type getAccountType() {
     return accountType;
+  }
+  
+  public List<Transaction> getTransactions() {
+    return transactions;
   }
 
   // Records transaction for this account
