@@ -7,9 +7,29 @@ import static org.junit.Assert.assertEquals;
 public class BankTest {
   
   private static final double DOUBLE_DELTA = 1e-15;
+  
+  @Test
+  public void firstCustomerNoCustomers() {
+    Bank bank = new Bank();
+    assertEquals("No customers", bank.getFirstCustomer());
+  }
+  
+  @Test
+  public void firstCustomerOneCustomer() {
+    Bank bank = new Bank();
+    String name = "Bill";
+    bank.addCustomer(new Customer(name));
+    assertEquals(name, bank.getFirstCustomer());
+  }
+  
+  @Test
+  public void customerSummaryNoCustomers() {
+    Bank bank = new Bank();
+    assertEquals("Customer Summary", bank.customerSummary());
+  }
 
   @Test
-  public void customerSummary() {
+  public void customerSummaryOneCustomer() {
     Bank bank = new Bank();
     Customer john = new Customer("John");
     john.openAccount(new Account(Account.CHECKING));
@@ -20,7 +40,7 @@ public class BankTest {
   }
 
   @Test
-  public void checkingAccount() {
+  public void checkingAccountInterestPaid() {
     Bank bank = new Bank();
     Account checkingAccount = new Account(Account.CHECKING);
     Customer bill = new Customer("Bill").openAccount(checkingAccount);
@@ -32,7 +52,7 @@ public class BankTest {
   }
 
   @Test
-  public void savingsAccount() {
+  public void savingsAccountInterestPaid() {
     Bank bank = new Bank();
     Account savingsAccount = new Account(Account.SAVINGS);
     bank.addCustomer(new Customer("Bill").openAccount(savingsAccount));
@@ -43,7 +63,7 @@ public class BankTest {
   }
 
   @Test
-  public void maxiSavingsAccount() {
+  public void maxiSavingsAccountInterestPaid() {
     Bank bank = new Bank();
     Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
     bank.addCustomer(new Customer("Bill").openAccount(maxiSavingsAccount));
@@ -52,5 +72,5 @@ public class BankTest {
 
     assertEquals(17.0, bank.totalInterestPaid(), DOUBLE_DELTA);
   }
-
+  
 }

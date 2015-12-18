@@ -9,12 +9,19 @@ public class Bank {
   public Bank() {
     customers = new ArrayList<Customer>();
   }
+  
+  public String getFirstCustomer() {
+    if (customers != null && customers.size() > 0) {
+      return customers.get(0).getName();
+    } else {
+      return "No customers";
+    }
+  }
 
   public void addCustomer(Customer customer) {
     customers.add(customer);
   }
 
-  // TODO: should this include a number of accounts?
   // Prints a summary of customers' accounts
   public String customerSummary() {
     String summary = "Customer Summary";
@@ -38,15 +45,5 @@ public class Bank {
     }
     return total;
   }
-
-  // TODO: error here, customers should not be set to null
-  public String getFirstCustomer() {
-    try {
-      customers = null;
-      return customers.get(0).getName();
-    } catch (Exception e) {
-      e.printStackTrace();
-      return "Error";
-    }
-  }
+  
 }
