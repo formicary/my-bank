@@ -62,7 +62,8 @@ public class AccountTest {
   @Test
   public void savingsInterestEarnedHigh() {
     Account account = new Account(Account.Type.SAVINGS);
-    account.transact(1500);
+    account.transact(1300);
+    account.transact(200);
     assertEquals(2.0 / DaysPerYear, account.interestEarned(), DOUBLE_DELTA);
   }
   

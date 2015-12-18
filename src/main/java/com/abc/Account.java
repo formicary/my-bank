@@ -65,6 +65,7 @@ public class Account {
       double amount = t.getAmount();
       if (current < amounts.size()) {
         amount += amounts.get(current);
+        amounts.remove(current);
       }
       amounts.add(current, amount);
     }
