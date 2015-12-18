@@ -9,6 +9,7 @@ public class Account {
     CHECKING, SAVINGS, MAXI_SAVINGS;
   }
 
+  private final int daysPerYear = 365;
   private final double interestRateThreshold = 1000;
   private final Type accountType;
   private List<Transaction> transactions;
@@ -46,6 +47,56 @@ public class Account {
     return amount;
   }
 
+  // Create list of total transactions for each day
+  private List<Double> sumTransactionsPerDay() {
+    List<Double> amounts = new ArrayList<Double>();
+    long day = 86400000;
+    long time = transactions.get(0).getDate().getTime()
+        - (transactions.get(0).getDate().getTime() % day);
+    int current = 0;
+    
+    for (Transaction t : transactions) {
+      // Advance to correct day
+      while (t.getDate().getTime() >= time + day) {
+        time += day;
+        current++;
+      }
+      // Sum the total transactions for each day in list bucket
+      double amount = t.getAmount();
+      if (current < amounts.size()) {
+        amount += amounts.get(current);
+      }
+      amounts.add(current, amount);
+    }
+    return amounts;
+  }
+  
+  // Calculates the total compound interest earned
+  public double interestEarned() {
+    if (transactions.size() <= 0) {
+      return 0.0;
+    }
+    List<Double> amountsPerDay = sumTransactionsPerDay();
+    
+    // Calculate compounded interest using list of totals
+    double total = 0.0;
+    for (Double d : amountsPerDay) {
+      switch (accountType) {
+      case CHECKING:
+        total += checkingInterest(d);
+        break;
+      case SAVINGS:
+        total += savingsInterest(d);
+        break;
+      case MAXI_SAVINGS:
+        total += maxiSavingsInterest(d);
+        break;
+      }
+    }
+    return total;
+  }
+  
+  /*
   // Calculates the total interest earned
   public double interestEarned() {
     double amount = sumTransactions();
@@ -60,17 +111,18 @@ public class Account {
       return 0.0;
     }
   }
+  */
   
   // Calculates interest for a checking account
   private double checkingInterest(double amount) {
-    double interestRate = 0.001;
+    double interestRate = 0.001 / daysPerYear;
     return amount * interestRate;
   }
   
   // Calculates interest for a savings account
   private double savingsInterest(double amount) {
-    double firstInterestRate = 0.001;
-    double secondInterestRate = 0.002;
+    double firstInterestRate = 0.001 / daysPerYear;
+    double secondInterestRate = 0.002 / daysPerYear;
     
     if (amount <= interestRateThreshold) {
       return amount * firstInterestRate;
@@ -83,11 +135,11 @@ public class Account {
   
   // Calculates interest for a maxi savings account
   private double maxiSavingsInterest(double amount) {
-    double standardInterestRate = 0.001;
-    double noWithdrawalsInterestRate = 0.05;
+    double standardInterestRate = 0.001 / daysPerYear;
+    double noWithdrawalsInterestRate = 0.05 / daysPerYear;
     
     // Check for withdrawals within 10 days
-    long withdrawalsTimeThreshold = 864000000; // 10 days in ms
+    long withdrawalsTimeThreshold = 86400000 * 10; // 10 days in ms
     
     boolean withdrawals = false;
     long withdrawalsTime = DateProvider.getInstance().now().getTime()

@@ -44,6 +44,7 @@ public class AccountTest {
     assertEquals(400, account.sumTransactions(), DOUBLE_DELTA);
   }
   
+  /*
   @Test
   public void checkingInterestEarned() {
     Account account = new Account(Account.Type.CHECKING);
@@ -81,7 +82,6 @@ public class AccountTest {
     assertEquals(35.0, account.interestEarned(), DOUBLE_DELTA);
   }
   
-  /*
   @Test
   public void maxiSavingsInterestEarnedLow() {
     Account account = new Account(Account.Type.MAXI_SAVINGS);
