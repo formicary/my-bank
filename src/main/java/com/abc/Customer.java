@@ -22,13 +22,14 @@ public class Customer {
   public int getNumberOfAccounts() {
     return accounts.size();
   }
-  
+
   // Opens an account, returns this to chain account opening
   public Customer openAccount(Account account) {
     accounts.add(account);
     return this;
   }
-  
+
+  // Transfers the specified amount between accounts at the indices from and to
   public void transfer(int from, int to, double amount) {
     if (from >= accounts.size() || to >= accounts.size()) {
       throw new IllegalArgumentException("account(s) do not exist");
