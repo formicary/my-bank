@@ -20,16 +20,14 @@ public class Bank {
     String summary = "Customer Summary";
     for (Customer c : customers) {
       summary += "\n - " + c.getName() + " ("
-          + pluralise(c.getNumberOfAccounts(), "account") + ")";
+          + formatCustomer(c.getNumberOfAccounts(), "account") + ")";
     }
     return summary;
   }
 
-  // Make sure correct plural of word is created based on the number passed in:
-  // If number passed in is 1 just return the word otherwise add an 's' at the
-  // end
-  private String pluralise(int number, String word) {
-    return number + " " + (number == 1 ? word : word + "s");
+  // Makes sure correct plural of word is created based on n
+  private String formatCustomer(int n, String word) {
+    return n + " " + (n == 1 ? word : word + "s");
   }
 
   // Calculates the total interest to be paid to the customer
