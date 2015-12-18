@@ -28,6 +28,14 @@ public class Customer {
     accounts.add(account);
     return this;
   }
+  
+  public void transfer(int from, int to, double amount) {
+    if (from >= accounts.size() || to >= accounts.size()) {
+      throw new IllegalArgumentException("account(s) do not exist");
+    }
+    accounts.get(from).transact(-amount);
+    accounts.get(to).transact(amount);
+  }
 
   // Calculates the total interest earned across all accounts
   public double totalInterestEarned() {

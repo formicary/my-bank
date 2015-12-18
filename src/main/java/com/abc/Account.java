@@ -18,7 +18,7 @@ public class Account {
     this.transactions = new ArrayList<Transaction>();
   }
 
-  // Getters 
+  // Getters
   
   public Type getAccountType() {
     return accountType;

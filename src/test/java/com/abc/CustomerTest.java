@@ -39,6 +39,32 @@ public class CustomerTest {
     assertEquals(3, oscar.getNumberOfAccounts());
   }
   
+  @Test(expected = IllegalArgumentException.class)
+  public void transferNoAccounts() {
+    Customer harry = new Customer("Harry");
+    harry.transfer(0, 0, 300.0);
+  }
+  
+  @Test
+  public void transferSameAccount() {
+    Account account = new Account(Account.Type.CHECKING);
+    Customer harry = new Customer("Harry").openAccount(account);
+    harry.transfer(0, 0, 300.0);
+    assertEquals(0.0, account.sumTransactions(), DOUBLE_DELTA);
+  }
+  
+  @Test
+  public void transferTwoAccounts() {
+    Account first = new Account(Account.Type.SAVINGS);
+    Account second = new Account(Account.Type.CHECKING);
+    Customer harry = new Customer("Harry").openAccount(first).openAccount(
+        second);
+    first.transact(500.0);
+    harry.transfer(0, 1, 300.0);
+    assertEquals(200.0, first.sumTransactions(), DOUBLE_DELTA);
+    assertEquals(300.0, second.sumTransactions(), DOUBLE_DELTA);
+  }
+  
   @Test
   public void interestEarnedNoAccounts() {
     Customer henry = new Customer("Henry");
@@ -55,10 +81,8 @@ public class CustomerTest {
 
   @Test
   public void statement() {
-
     Account checkingAccount = new Account(Account.Type.CHECKING);
     Account savingsAccount = new Account(Account.Type.SAVINGS);
-
     Customer henry = new Customer("Henry").openAccount(checkingAccount)
         .openAccount(savingsAccount);
 
