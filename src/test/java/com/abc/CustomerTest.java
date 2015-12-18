@@ -49,7 +49,7 @@ public class CustomerTest {
   public void interestEarnedOneAccount() {
     Account checkingAccount = new Account(Account.Type.CHECKING);
     Customer henry = new Customer("Henry").openAccount(checkingAccount);
-    checkingAccount.deposit(200.0);
+    checkingAccount.transact(200.0);
     assertEquals(0.2, henry.totalInterestEarned(), DOUBLE_DELTA);
   }
 
@@ -62,9 +62,9 @@ public class CustomerTest {
     Customer henry = new Customer("Henry").openAccount(checkingAccount)
         .openAccount(savingsAccount);
 
-    checkingAccount.deposit(100.0);
-    savingsAccount.deposit(4000.0);
-    savingsAccount.withdraw(200.0);
+    checkingAccount.transact(100.0);
+    savingsAccount.transact(4000.0);
+    savingsAccount.transact(-200.0);
 
     assertEquals("Statement for Henry\n" 
         + "\n" 

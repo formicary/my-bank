@@ -21,20 +21,11 @@ public class Account {
     return accountType;
   }
 
-  // TODO: code duplication between deposit and withdraw, combine?
-  public void deposit(double amount) {
-    if (amount <= 0) {
-      throw new IllegalArgumentException("amount must be greater than zero");
+  public void transact(double amount) {
+    if (amount == 0) {
+      throw new IllegalArgumentException("amount cannot be zero");
     } else {
       transactions.add(new Transaction(amount));
-    }
-  }
-
-  public void withdraw(double amount) {
-    if (amount <= 0) {
-      throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-      transactions.add(new Transaction(-amount));
     }
   }
 

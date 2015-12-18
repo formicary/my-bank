@@ -46,7 +46,7 @@ public class BankTest {
     Customer bill = new Customer("Bill").openAccount(checkingAccount);
     bank.addCustomer(bill);
 
-    checkingAccount.deposit(100.0);
+    checkingAccount.transact(100.0);
 
     assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
   }
@@ -57,7 +57,7 @@ public class BankTest {
     Account savingsAccount = new Account(Account.Type.SAVINGS);
     bank.addCustomer(new Customer("Bill").openAccount(savingsAccount));
 
-    savingsAccount.deposit(1500.0);
+    savingsAccount.transact(1500.0);
 
     assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
   }
@@ -68,7 +68,7 @@ public class BankTest {
     Account maxiSavingsAccount = new Account(Account.Type.MAXI_SAVINGS);
     bank.addCustomer(new Customer("Bill").openAccount(maxiSavingsAccount));
 
-    maxiSavingsAccount.deposit(3000.0);
+    maxiSavingsAccount.transact(3000.0);
 
     assertEquals(17.0, bank.totalInterestPaid(), DOUBLE_DELTA);
   }
