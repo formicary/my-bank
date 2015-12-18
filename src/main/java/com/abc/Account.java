@@ -1,6 +1,7 @@
 package com.abc;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class Account {
@@ -83,6 +84,36 @@ public class Account {
   
   // Calculates interest for a maxi savings account
   private double maxiSavingsInterest(double amount) {
+    double standardInterestRate = 0.001;
+    double noWithdrawalsInterestRate = 0.05;
+    
+    // Check for withdrawals within 10 days
+    long withdrawalsTimeThreshold = 864000000; // 10 days in ms
+    
+    boolean withdrawals = false;
+    long withdrawalsTime = Calendar.getInstance().getTimeInMillis()
+        - withdrawalsTimeThreshold;
+    for (Transaction t : transactions) {
+      if (t.getDate().getTime() >= withdrawalsTime) {
+         if (t.getAmount() < 0) {
+           withdrawals = true;
+           break;
+         }
+      } else {
+        // The time is before 10 days ago, so stop checking
+        break;
+      }
+    }
+    
+    if (withdrawals) {
+      return amount * standardInterestRate;
+    } else {
+      return amount * noWithdrawalsInterestRate;
+    }
+  }
+  
+  /*
+  private double maxiSavingsInterest(double amount) {
     double firstInterestRate = 0.02;
     double secondInterestRate = 0.05;
     double thirdInterestRate = 0.1;
@@ -101,5 +132,6 @@ public class Account {
     result += amount * thirdInterestRate;
     return result;
   }
+  */
 
 }

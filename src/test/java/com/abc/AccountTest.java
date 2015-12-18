@@ -66,6 +66,23 @@ public class AccountTest {
   }
   
   @Test
+  public void maxiSavingsInterestEarnedStandard() {
+    Account account = new Account(Account.Type.MAXI_SAVINGS);
+    account.transact(500);
+    account.transact(-200);
+    assertEquals(0.3, account.interestEarned(), DOUBLE_DELTA);
+  }
+  
+  @Test
+  public void maxiSavingsInterestEarnedNoWithdrawals() {
+    Account account = new Account(Account.Type.MAXI_SAVINGS);
+    account.transact(500);
+    account.transact(200);
+    assertEquals(35.0, account.interestEarned(), DOUBLE_DELTA);
+  }
+  
+  /*
+  @Test
   public void maxiSavingsInterestEarnedLow() {
     Account account = new Account(Account.Type.MAXI_SAVINGS);
     account.transact(500);
@@ -85,5 +102,6 @@ public class AccountTest {
     account.transact(2500);
     assertEquals(120.0, account.interestEarned(), DOUBLE_DELTA);
   }
+  */
 
 }
