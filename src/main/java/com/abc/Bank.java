@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Bank {
+
     private List<Customer> customers;
 
     public Bank() {
@@ -16,8 +17,9 @@ public class Bank {
 
     public String customerSummary() {
         String summary = "Customer Summary";
-        for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
+        for (Customer c : customers) {
+            summary += "\n - " + c.getCustomerName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
+        }
         return summary;
     }
 
@@ -29,18 +31,21 @@ public class Bank {
 
     public double totalInterestPaid() {
         double total = 0;
-        for(Customer c: customers)
-            total += c.totalInterestEarned();
+        for (Customer c : customers) {
+            total += c.getTotalInterestEarned();
+        }
         return total;
     }
 
     public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
+        String customerName = "";
+        if (!customers.isEmpty()) {
+            if (customers.size() > 0) {
+                customerName = customers.get(0).getCustomerName();
+            }
+        } else {
+            return "No Customer Found. Please Try Again";
         }
+        return customerName;
     }
 }

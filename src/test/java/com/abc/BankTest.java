@@ -1,26 +1,28 @@
 package com.abc;
 
+import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-
 public class BankTest {
+
     private static final double DOUBLE_DELTA = 1e-15;
 
     @Test
     public void customerSummary() {
         Bank bank = new Bank();
         Customer john = new Customer("John");
-        john.openAccount(new Account(Account.CHECKING));
+        john.openAccount(new Account(0));
         bank.addCustomer(john);
 
         assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
+
+        System.out.println("Customer Summary\n - John (1 account)" + bank.customerSummary());
     }
 
     @Test
     public void checkingAccount() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.CHECKING);
+        Account checkingAccount = new Account(0);
         Customer bill = new Customer("Bill").openAccount(checkingAccount);
         bank.addCustomer(bill);
 
@@ -32,7 +34,7 @@ public class BankTest {
     @Test
     public void savings_account() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.SAVINGS);
+        Account checkingAccount = new Account(1);
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
         checkingAccount.deposit(1500.0);
@@ -43,7 +45,7 @@ public class BankTest {
     @Test
     public void maxi_savings_account() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
+        Account checkingAccount = new Account(2);
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
         checkingAccount.deposit(3000.0);
