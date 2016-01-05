@@ -20,10 +20,5 @@ public class Transaction {
     public Date getTransactionDate() {
       return transactionDate;
     }
-    
-    public static String toDollars(double d) {
-      //does not account for negative d
-      return String.format("$%,.2f", abs(d));
-    }
-    
+   
 }

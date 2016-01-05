@@ -43,7 +43,6 @@ public class Bank {
     try {
       return customers.get(0).getName();
     } catch (Exception e) {
-      e.printStackTrace();
       return "Error: No Customers Exist";
     }
   }

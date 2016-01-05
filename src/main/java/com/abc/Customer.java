@@ -40,7 +40,8 @@ public class Customer {
       statement += "\n" + a.toString() + "\n";
       total += a.sumTransactions();
     }
-    statement += "\nTotal In All Accounts " + Transaction.toDollars(total);
+    statement += "\nTotal In All Accounts " 
+            + BankUtil.toDollars(total) + ((total < 0) ? "-":"");
     return statement;
   }
 }

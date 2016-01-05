@@ -57,6 +57,13 @@ public class AccountTest {
   }
     
   @Test
+  public void interestOnNegativeAmountShouldBeZero() {
+    assertEquals(checkingAcc.interestEarned(),0,DELTA);
+    checkingAcc.withdraw(500);
+    assertEquals(checkingAcc.interestEarned(),0,DELTA);
+  }
+  
+  @Test
   public void interestCorrectlyCalculatedForChecking() {
     assertEquals(checkingAcc.interestEarned(),0,DELTA);
     checkingAcc.deposit(500);
@@ -108,11 +115,32 @@ public class AccountTest {
   }
   
   @Test
-  public void withdrawalMadeWithinNdaysWorksWithNoTransactions() {
+  public void withdrawalMadeWithinNdays() {
     assertFalse(checkingAcc.withdrawalInThePastNDays(1));
     checkingAcc.deposit(5);
     assertFalse(checkingAcc.withdrawalInThePastNDays(1));
     checkingAcc.withdraw(5);
     assertTrue(checkingAcc.withdrawalInThePastNDays(1));
+  }
+
+  @Test
+  public void accountToStringFormat() {
+    assertEquals(checkingAcc.toString(),
+        "Checking Account\n"
+        + "Total $0.00");
+    savingsAcc.deposit(10);
+    savingsAcc.withdraw(5);
+    assertEquals(savingsAcc.toString(),
+        "Savings Account\n"
+        + "  deposit $10.00\n"
+        + "  withdrawal $5.00\n"
+        + "Total $5.00");
+    maxiSavingsAcc.withdraw(50);
+    maxiSavingsAcc.deposit(10);
+    assertEquals(maxiSavingsAcc.toString(),
+        "Maxi Savings Account\n"
+        + "  withdrawal $50.00\n"
+        + "  deposit $10.00\n"
+        + "Total $40.00-");
   }
 }

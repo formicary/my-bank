@@ -83,9 +83,6 @@ public class Account {
     return amount;
   }
 
-  /*
-   * public int getAccountType() { return accountType; }
-   */
   public boolean withdrawalInThePastNDays(int n) {
     for (int i = transactions.size() - 1; i >= 0; i--) {
       Transaction curr = transactions.get(i);
@@ -127,10 +124,10 @@ public class Account {
     for (Transaction t : transactions) {
       sb.append("  "
           + (t.getTransactionAmount() < 0 ? "withdrawal" : "deposit") + " "
-          + Transaction.toDollars(t.getTransactionAmount()) + "\n");
+          + BankUtil.toDollars(t.getTransactionAmount()) + "\n");
       total += t.getTransactionAmount();
     }
-    sb.append("Total " + Transaction.toDollars(total));
+    sb.append("Total " + BankUtil.toDollars(total) + (total >= 0 ? "" : "-"));
     return sb.toString();
   }
 
