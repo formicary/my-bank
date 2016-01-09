@@ -31,10 +31,8 @@ public class Customer {
         openAccount(new MaxiSavingsAccount());
     }
     
-    // Private method: to enforce creation of account inside this class
+    // Private method: to enforce opening of account inside this class
     private void openAccount(Account a) {
-        // First account has accountNumber 0, second has account number 1, etc
-        // TODO: Improve this
         accounts.put(numberOfAccounts, a);
         numberOfAccounts++;
     }

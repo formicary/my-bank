@@ -31,6 +31,43 @@ public class CustomerTest {
                 "Total In All Accounts $3,900.00", henry.getStatement());
     }
 
+    @Test //Test customer statement generation
+    public void testApp2(){
+
+        Customer henry = new Customer("Henry");
+        henry.openCheckingAccount();
+        henry.openSavingsAccount();
+        
+        henry.depositFunds(0, 100.0);
+        henry.depositFunds(1, 4000.0);
+        henry.withdrawFunds(1, 200.0);
+        henry.withdrawFunds(1, 500.0);
+        henry.withdrawFunds(1, 200.0);
+        
+        assertEquals("Statement for Henry\n" +
+                "\n" +
+                "Checking Account\n" +
+                "  deposit $100.00\n" +
+                "Total $100.00\n" +
+                "\n" +
+                "Savings Account\n" +
+                "  deposit $4,000.00\n" +
+                "  withdrawal $200.00\n" +
+                "  withdrawal $500.00\n" +
+                "  withdrawal $200.00\n" +
+                "Total $3,100.00\n" +
+                "\n" +
+                "Total In All Accounts $3,200.00", henry.getStatement());
+    }
+    
+    @Test(expected = Exception.class)
+    public void testInvalidDeposit() {
+        Customer henry = new Customer("Henry");
+        henry.openCheckingAccount();
+        
+        henry.depositFunds(0, -100.0);
+    }
+    
     @Test
     public void testTransferFund(){
 

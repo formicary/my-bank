@@ -28,7 +28,6 @@ public class Bank {
         return total;
     }
 
-    // Note: this function is not used anywhere else in this application
     public String getFirstCustomer() {
         if (customers.isEmpty()) {
             return "Error";
