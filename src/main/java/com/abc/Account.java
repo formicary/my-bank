@@ -51,6 +51,7 @@ public abstract class Account {
         for (Transaction t : transactions) {
             statement.append("  " + t.getTransactionType() + " " + Utils.toDollars(t.getAmount()) + "\n");
         }
+        
         statement.append("Total " + Utils.toDollars(sumTransactions()));
         return statement.toString();
     }
