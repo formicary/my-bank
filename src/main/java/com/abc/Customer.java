@@ -6,7 +6,9 @@ public class Customer {
     
     private final String name;
     private int numberOfAccounts;
+    
     // Each account will be associated a unique account number
+    // (currently account numbers are 0, 1, 2, ... for simplicity)
     private Hashtable<Integer, Account> accounts;
 
     public Customer(String name) {
@@ -85,4 +87,8 @@ public class Customer {
         return statement.toString();
     }
    
+    @Override
+    public String toString() {
+        return name;
+    }
 }

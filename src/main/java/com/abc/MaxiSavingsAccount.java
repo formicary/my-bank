@@ -7,16 +7,18 @@ public class MaxiSavingsAccount extends Account {
     @Override
     protected double computeInterest(double amount) {
         if (noWithdrawalInThePast(10)) {
-            return amount * 0.05;
+            double interest = Utils.annualInterestWithDailyCompound(amount, 0.05);
+            return Utils.roundTo2Decimal(interest);
         } else {
-            return amount * 0.001;
+            double interest = Utils.annualInterestWithDailyCompound(amount, 0.001);
+            return Utils.roundTo2Decimal(interest);
         }
     }
 
     private boolean noWithdrawalInThePast(int numberOfDays) {
         Date today = DateProvider.getInstance().now();
         for (Transaction t : transactions) {
-            if (t.getAmount() > 0) {
+            if (t.getTransactionType() == "deposit") {
                 continue;
             }
             Date dateOfTransaction = t.getDate();
