@@ -50,6 +50,13 @@ public class Customer {
         accounts.get(accountNumber).withdraw(amount);
     }
     
+    public void transferFundFundFrom(int thisAccount, int thatAccount, double amount) {
+        checkAccountNumberExists(thisAccount);
+        checkAccountNumberExists(thatAccount);
+        accounts.get(thisAccount).withdraw(amount);
+        accounts.get(thatAccount).deposit(amount);
+    }
+    
     private void checkAccountNumberExists(int accountNumber) {
         if (!accounts.containsKey(accountNumber)) {
             throw new IllegalArgumentException("Customer's account number " +

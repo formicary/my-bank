@@ -33,6 +33,33 @@ public class CustomerTest {
     }
 
     @Test
+    public void testTransferFund(){
+
+        Customer henry = new Customer("Henry");
+        henry.openCheckingAccount();
+        henry.openSavingsAccount();
+        
+        henry.depositFunds(0, 100.0);
+        henry.depositFunds(1, 4000.0);
+        double amountToTransfer = 400.0;
+        henry.transferFundFundFrom(1, 0, amountToTransfer);
+
+        assertEquals("Statement for Henry\n" +
+                "\n" +
+                "Checking Account\n" +
+                "  deposit $100.00\n" +
+                "  deposit $400.00\n" +
+                "Total $500.00\n" +
+                "\n" +
+                "Savings Account\n" +
+                "  deposit $4,000.00\n" +
+                "  withdrawal $400.00\n" +
+                "Total $3,600.00\n" +
+                "\n" +
+                "Total In All Accounts $4,100.00", henry.getStatement());
+    }
+    
+    @Test
     public void testOneAccount(){
         Customer oscar = new Customer("Oscar");
         oscar.openSavingsAccount();
