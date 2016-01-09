@@ -1,12 +1,11 @@
 package com.abc;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
-
+    
     @Test //Test customer statement generation
     public void testApp(){
 

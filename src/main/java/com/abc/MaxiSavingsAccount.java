@@ -1,16 +1,29 @@
 package com.abc;
 
+import java.util.Date;
+
 public class MaxiSavingsAccount extends Account {
 
     @Override
     protected double computeInterest(double amount) {
-        if (amount <= 1000)
-            return amount * 0.02;
-        if (amount <= 2000)
-            return 20 + (amount-1000) * 0.05;
-        return 70 + (amount-2000) * 0.1;
+        if (noWithdrawalInThePast(10)) {
+            return amount * 0.05;
+        } else {
+            return amount * 0.001;
+        }
     }
 
+    private boolean noWithdrawalInThePast(int numberOfDays) {
+        Date today = DateProvider.getInstance().now();
+        for (Transaction t : transactions) {
+            Date dateOfTransaction = t.getDate();
+            if (Utils.dateDifferenceinDays(today, dateOfTransaction) <= numberOfDays) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
     @Override
     public String toString() {
         return "Maxi Savings Account";

@@ -5,7 +5,7 @@ import java.util.List;
 
 public abstract class Account {
     
-    private List<Transaction> transactions;
+    protected List<Transaction> transactions;
 
     public Account() {
         transactions = new ArrayList<Transaction>();

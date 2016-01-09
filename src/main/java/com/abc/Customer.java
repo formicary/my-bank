@@ -1,7 +1,6 @@
 package com.abc;
 
 import java.util.Hashtable;
-import java.util.Set;
 
 public class Customer {
     
