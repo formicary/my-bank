@@ -15,10 +15,10 @@ public class Bank {
     }
 
     public String customerSummary() {
-        String summary = "Customer Summary";
+        StringBuilder summary = new StringBuilder("Customer Summary");
         for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + Utils.format(c.getNumberOfAccounts(), "account") + ")";
-        return summary;
+            summary.append("\n - " + c.getName() + " (" + Utils.format(c.getNumberOfAccounts(), "account") + ")");
+        return summary.toString();
     }
 
     public double totalInterestPaid() {

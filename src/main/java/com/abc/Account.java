@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.UUID;
 
 public abstract class Account {
-
-    private String uniqueID;
+    
+    private int accountNumber;
     private List<Transaction> transactions;
 
     public Account() {
-        this.uniqueID = UUID.randomUUID().toString();
-        this.transactions = new ArrayList<Transaction>();
+        accountNumber = (int) UUID.randomUUID().getMostSignificantBits();
+        transactions = new ArrayList<Transaction>();
     }
 
     public synchronized void deposit(double amount) {

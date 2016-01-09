@@ -1,13 +1,12 @@
 package com.abc;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import static java.lang.Math.abs;
+import java.util.List;
 
 public class Customer {
     
-    private String name;
+    private final String name;
     private List<Account> accounts;
 
     public Customer(String name) {
