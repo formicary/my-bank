@@ -9,7 +9,7 @@ public class CheckingAccount extends Account {
     
     @Override
     public String toString() {
-        return "Checking Account\n";
+        return "Checking Account";
     }
 
 }

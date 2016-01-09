@@ -12,7 +12,7 @@ public class SavingsAccount extends Account {
 
     @Override
     public String toString() {
-        return "Savings Account\n";
+        return "Savings Account";
     }
     
 }

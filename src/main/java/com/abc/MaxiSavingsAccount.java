@@ -13,7 +13,7 @@ public class MaxiSavingsAccount extends Account {
 
     @Override
     public String toString() {
-        return "Maxi Savings Account\n";
+        return "Maxi Savings Account";
     }
     
 }
