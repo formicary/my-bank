@@ -40,7 +40,7 @@ public abstract class Account {
     public synchronized double sumTransactions() {
         double amount = 0.0;
         for (Transaction t: transactions)
-            amount += t.amount;
+            amount += t.getAmount();
         return amount;
     }
     
@@ -49,7 +49,7 @@ public abstract class Account {
         statement.append(getAccountType() + "\n");
 
         for (Transaction t : transactions) {
-            statement.append("  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + Utils.toDollars(t.amount) + "\n");
+            statement.append("  " + t.getTransactionType() + " " + Utils.toDollars(t.getAmount()) + "\n");
         }
         statement.append("Total " + Utils.toDollars(sumTransactions()));
         return statement.toString();
