@@ -55,7 +55,7 @@ public class BankTest {
         
         bill.depositFunds(accountNumberToDeposit, amount);
 
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(150.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
 }

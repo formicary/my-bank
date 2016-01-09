@@ -16,6 +16,9 @@ public class MaxiSavingsAccount extends Account {
     private boolean noWithdrawalInThePast(int numberOfDays) {
         Date today = DateProvider.getInstance().now();
         for (Transaction t : transactions) {
+            if (t.getAmount() > 0) {
+                continue;
+            }
             Date dateOfTransaction = t.getDate();
             if (Utils.dateDifferenceinDays(today, dateOfTransaction) <= numberOfDays) {
                 return false;

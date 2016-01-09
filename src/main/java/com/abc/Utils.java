@@ -17,6 +17,7 @@ public class Utils {
         return number + " " + (number <= 1 ? word : word + "s");
     }
 
+    
     public static int dateDifferenceinDays(Date dateAfter, Date dateBefore) {
         long difference = dateAfter.getTime() - dateBefore.getTime();
         int days = (int) TimeUnit.DAYS.convert(difference, TimeUnit.MILLISECONDS);
