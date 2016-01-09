@@ -2,5 +2,5 @@
 target/
 bin/
 *.iml
-.class
+.classpath
 .project
