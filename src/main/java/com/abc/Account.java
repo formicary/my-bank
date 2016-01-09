@@ -45,16 +45,17 @@ public abstract class Account {
     }
     
     public String statementForAccount() {
-        String s = "";
-        s += this;
+        StringBuilder statement = new StringBuilder();
+        statement.append(getAccountType() + "\n");
 
-        //Now total up all the transactions
-        double total = 0.0;
         for (Transaction t : transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + Utils.toDollars(t.amount) + "\n";
-            total += t.amount;
+            statement.append("  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + Utils.toDollars(t.amount) + "\n");
         }
-        s += "Total " + Utils.toDollars(total);
-        return s;
+        statement.append("Total " + Utils.toDollars(sumTransactions()));
+        return statement.toString();
+    }
+    
+    private String getAccountType() {
+        return "" + this;
     }
 }
