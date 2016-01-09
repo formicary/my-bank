@@ -2,15 +2,12 @@ package com.abc;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public abstract class Account {
     
-    private int accountNumber;
     private List<Transaction> transactions;
 
     public Account() {
-        accountNumber = (int) UUID.randomUUID().getMostSignificantBits();
         transactions = new ArrayList<Transaction>();
     }
 

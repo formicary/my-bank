@@ -1,35 +1,70 @@
 package com.abc;
 
-import java.util.ArrayList;
-
-import java.util.List;
+import java.util.Hashtable;
+import java.util.Set;
 
 public class Customer {
     
     private final String name;
-    private List<Account> accounts;
+    private int numberOfAccounts;
+    // Each account will be associated a unique account number
+    private Hashtable<Integer, Account> accounts;
 
     public Customer(String name) {
         this.name = name;
-        this.accounts = new ArrayList<Account>();
+        numberOfAccounts = 0;
+        accounts = new Hashtable<Integer, Account>();
     }
 
     public String getName() {
         return name;
     }
 
-    public void openAccount(Account account) {
-        accounts.add(account);
+    public void openSavingsAccount() {
+        openAccount(new SavingsAccount());
     }
-
+    
+    public void openCheckingAccount() {
+        openAccount(new CheckingAccount());
+    }
+    
+    public void openMaxiSavingsAccount() {
+        openAccount(new MaxiSavingsAccount());
+    }
+    
+    // Private method: to enforce creation of account inside this class
+    private void openAccount(Account a) {
+        // First account has accountNumber 0, second has account number 1, etc
+        // TODO: Improve this
+        accounts.put(numberOfAccounts, a);
+        numberOfAccounts++;
+    }
+    
+    public void depositFunds(int accountNumber, double amount) {
+        checkAccountNumberExists(accountNumber);
+        accounts.get(accountNumber).deposit(amount);
+    }
+    
+    public void withdrawFunds(int accountNumber, double amount) {
+        checkAccountNumberExists(accountNumber);
+        accounts.get(accountNumber).withdraw(amount);
+    }
+    
+    private void checkAccountNumberExists(int accountNumber) {
+        if (!accounts.containsKey(accountNumber)) {
+            throw new IllegalArgumentException("Customer's account number " +
+                   accountNumber + " does not exist.");
+        }
+    }
+    
     public int getNumberOfAccounts() {
-        return accounts.size();
+        return numberOfAccounts;
     }
 
     public double totalInterestEarned() {
         double total = 0;
-        for (Account a : accounts)
-            total += a.interestEarned();
+        for (int accountNumber = 0; accountNumber < numberOfAccounts; accountNumber++)
+            total += accounts.get(accountNumber).interestEarned();
         return total;
     }
 
@@ -37,7 +72,8 @@ public class Customer {
         StringBuilder statement = new StringBuilder();
         statement.append("Statement for " + name + "\n");
         double total = 0.0;
-        for (Account a : accounts) {
+        for (int accountNumber = 0; accountNumber < numberOfAccounts; accountNumber++) {
+            Account a = accounts.get(accountNumber);
             statement.append("\n" + a.statementForAccount() + "\n");
             total += a.sumTransactions();
         }

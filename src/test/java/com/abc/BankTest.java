@@ -11,7 +11,7 @@ public class BankTest {
     public void testCustomerSummary() {
         Bank bank = new Bank();
         Customer john = new Customer("John");
-        john.openAccount(new CheckingAccount());
+        john.openCheckingAccount();
         bank.addCustomer(john);
 
         assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
@@ -20,12 +20,12 @@ public class BankTest {
     @Test
     public void testCheckingAccount() {
         Bank bank = new Bank();
-        Account checkingAccount = new CheckingAccount();
         Customer bill = new Customer("Bill");
-        bill.openAccount(checkingAccount);
+        bill.openCheckingAccount();
+        int accountNumberToDeposit = 0;
+        double amount = 100.0;
+        bill.depositFunds(accountNumberToDeposit, amount);
         bank.addCustomer(bill);
-
-        checkingAccount.deposit(100.0);
 
         assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
@@ -33,12 +33,12 @@ public class BankTest {
     @Test
     public void testSavingsAccount() {
         Bank bank = new Bank();
-        Account savingsAccount = new SavingsAccount();
         Customer bill = new Customer("Bill");
-        bill.openAccount(savingsAccount);
+        bill.openSavingsAccount();
         bank.addCustomer(bill);
-
-        savingsAccount.deposit(1500.0);
+        int accountNumberToDeposit = 0;
+        double amount = 1500.0;
+        bill.depositFunds(accountNumberToDeposit, amount);
 
         assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
@@ -46,12 +46,14 @@ public class BankTest {
     @Test
     public void testMaxiSavingsAccount() {
         Bank bank = new Bank();
-        Account maxiSavingsAccount = new MaxiSavingsAccount();
         Customer bill = new Customer("Bill");
-        bill.openAccount(maxiSavingsAccount);
+        bill.openMaxiSavingsAccount();
         bank.addCustomer(bill);
-
-        maxiSavingsAccount.deposit(3000.0);
+        
+        int accountNumberToDeposit = 0;
+        double amount = 3000.0;
+        
+        bill.depositFunds(accountNumberToDeposit, amount);
 
         assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
