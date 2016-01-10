@@ -1,0 +1,9 @@
+Extra Assertions:
+I assumed accounts can overdraft unlimited amount (unrealistic but fulfills the current requirement).
+
+Extension:
+I have some idea on how to associate each account with a unique account number to
+reflect more closely to real world application.
+(currently it's just 0, 1, 2,... and only unique for each customer, not globally)
+However, since the requirements are already met(in my opinion), I'll ask the bank if 
+this extension will be useful to the bank.
