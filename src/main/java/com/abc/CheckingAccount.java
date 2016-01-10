@@ -4,8 +4,7 @@ public class CheckingAccount extends Account {
 
     @Override
     protected double computeInterest(double amount) {
-      double interest = amount * Utils.annualInterestRateWithDailyCompound(0.001);
-      return Utils.roundTo2Decimal(interest);
+      return Utils.annualInterestWithDailyCompound(amount, 0.001);
     }
     
     @Override

@@ -6,8 +6,7 @@ public class Customer {
     
     private final String name;
     private int numberOfAccounts;
-    
-    // Each account will be associated a unique account number
+    // Each account will be associated with a unique account number
     // (currently account numbers are 0, 1, 2, ... for simplicity)
     private Hashtable<Integer, Account> accounts;
 

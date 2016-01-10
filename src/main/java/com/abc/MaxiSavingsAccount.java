@@ -7,11 +7,9 @@ public class MaxiSavingsAccount extends Account {
     @Override
     protected double computeInterest(double amount) {
         if (noWithdrawalInThePast(10)) {
-            double interest = Utils.annualInterestWithDailyCompound(amount, 0.05);
-            return Utils.roundTo2Decimal(interest);
+            return Utils.annualInterestWithDailyCompound(amount, 0.05);
         } else {
-            double interest = Utils.annualInterestWithDailyCompound(amount, 0.001);
-            return Utils.roundTo2Decimal(interest);
+            return Utils.annualInterestWithDailyCompound(amount, 0.001);
         }
     }
 

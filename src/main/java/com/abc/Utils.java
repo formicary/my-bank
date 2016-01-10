@@ -24,7 +24,8 @@ public class Utils {
     }
     
     public static double annualInterestWithDailyCompound(double amount, double annualRate){
-        return amount * annualInterestRateWithDailyCompound(annualRate);
+        double annualInterest = amount * annualInterestRateWithDailyCompound(annualRate);
+        return roundTo2Decimal(annualInterest);
     }
     
     public static double annualInterestRateWithDailyCompound(double annualRate) {

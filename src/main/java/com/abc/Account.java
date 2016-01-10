@@ -53,7 +53,7 @@ public abstract class Account {
         return statement.toString();
     }
     
-    private String getAccountType() {
+    public String getAccountType() {
         return "" + this;
     }
    

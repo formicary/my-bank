@@ -2,15 +2,16 @@ package com.abc;
 
 public class SavingsAccount extends Account {
 
+    private final double interestForFirstThousand = 1;
+    
     @Override
     protected double computeInterest(double amount) {
         if (amount <= 1000) {
-            double interest = Utils.annualInterestWithDailyCompound(amount, 0.001);
-            return Utils.roundTo2Decimal(interest);
+            return Utils.annualInterestWithDailyCompound(amount, 0.001);
         }
         else {
-            double interest = Utils.annualInterestWithDailyCompound(amount - 1000, 0.002);
-            return 1 + Utils.roundTo2Decimal(interest);
+            return interestForFirstThousand 
+                    + Utils.annualInterestWithDailyCompound(amount - 1000, 0.002);
         }
     }
 
