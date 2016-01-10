@@ -5,8 +5,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class BankTest {
-    private static final double DOUBLE_DELTA = 1e-15;
-
+   
     @Test
     public void testCustomerSummary() {
         Bank bank = new Bank();
@@ -38,7 +37,7 @@ public class BankTest {
         bill.openCheckingAccount();
         bill.depositFunds(0, 100.0);
 
-       assertEquals(0.10, bank.totalInterestPaid(), DOUBLE_DELTA);
+       assertEquals(0.10, bank.totalInterestPaid(), Utils.DOUBLE_DELTA);
     }
 
     @Test
@@ -49,7 +48,7 @@ public class BankTest {
         bill.openSavingsAccount();
         bill.depositFunds(0, 1500.0);
 
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(2.0, bank.totalInterestPaid(), Utils.DOUBLE_DELTA);
     }
 
     @Test
@@ -60,7 +59,7 @@ public class BankTest {
         bank.addCustomer(bill);
         bill.depositFunds(0, 3000.0);
 
-        assertEquals(153.8, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(153.8, bank.totalInterestPaid(), Utils.DOUBLE_DELTA);
     }
 
     @Test
@@ -72,7 +71,7 @@ public class BankTest {
         bill.depositFunds(0, 3100.0);
         bill.withdrawFunds(0, 100.0);
 
-        assertEquals(3.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(3.0, bank.totalInterestPaid(), Utils.DOUBLE_DELTA);
     }
     
     @Test
@@ -87,7 +86,7 @@ public class BankTest {
         bill.depositFunds(0, 3000.0);
         oscar.depositFunds(0, 1500.0);
         
-        assertEquals(155.80, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(155.80, bank.totalInterestPaid(), Utils.DOUBLE_DELTA);
     }
 
 }

@@ -7,6 +7,8 @@ import java.util.concurrent.TimeUnit;
 
 public class Utils {
 
+    public static final double DOUBLE_DELTA = 1e-15;
+    
     public static String toDollars(double d){
         return String.format("$%,.2f", abs(d));
     }
