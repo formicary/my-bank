@@ -16,7 +16,12 @@ public class Customer {
     
     public void transferBalance(Account sourceAccount, Account destinationAccount, double amount)
     {
-    	if(sourceAccount == destinationAccount)
+    	if(!accounts.contains(sourceAccount) || !accounts.contains(destinationAccount))
+    	{
+    		throw new IllegalArgumentException("Cannot transfer to or from an account not owned by the customer");
+    	}
+    	
+    	else if(sourceAccount == destinationAccount)
     	{
     		throw new IllegalArgumentException("Cannot transfer to the same account. Please select a valid account");
     	}
