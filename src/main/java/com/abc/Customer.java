@@ -13,7 +13,22 @@ public class Customer {
         this.name = name;
         this.accounts = new ArrayList<Account>();
     }
+    
+    public void transferBalance(Account sourceAccount, Account destinationAccount, double amount)
+    {
+    	if(sourceAccount == destinationAccount)
+    	{
+    		throw new IllegalArgumentException("Cannot transfer to the same account. Please select a valid account");
+    	}
 
+    	Account sourceAccountType = accounts.get(accounts.indexOf(sourceAccount));
+    	Account destinationAccountType = accounts.get(accounts.indexOf(destinationAccount));
+    	
+    	sourceAccountType.withdraw(amount);
+    	destinationAccountType.deposit(amount);
+    }
+    	
+    
     public String getName() {
         return name;
     }
@@ -40,7 +55,7 @@ public class Customer {
         double total = 0.0;
         for (Account a : accounts) {
             statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+            total += a.totalBalance;
         }
         statement += "\nTotal In All Accounts " + toDollars(total);
         return statement;
@@ -51,13 +66,13 @@ public class Customer {
 
        //Translate to pretty account type
         switch(a.getAccountType()){
-            case Account.CHECKING:
+            case "CHECKING":
                 s += "Checking Account\n";
                 break;
-            case Account.SAVINGS:
+            case "SAVINGS":
                 s += "Savings Account\n";
                 break;
-            case Account.MAXI_SAVINGS:
+            case "MAXI_SAVINGS":
                 s += "Maxi Savings Account\n";
                 break;
         }
@@ -65,8 +80,8 @@ public class Customer {
         //Now total up all the transactions
         double total = 0.0;
         for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
+            s += "  " + (t.getAmount() < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.getAmount()) + "\n";
+            total += t.getAmount();
         }
         s += "Total " + toDollars(total);
         return s;

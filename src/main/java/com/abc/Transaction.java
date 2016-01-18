@@ -4,13 +4,23 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class Transaction {
-    public final double amount;
-
-    private Date transactionDate;
+    private final double amount;
+    public Date transactionDate;
 
     public Transaction(double amount) {
         this.amount = amount;
-        this.transactionDate = DateProvider.getInstance().now();
+        this.transactionDate = DateProvider.now();
     }
-
+    
+    public Date getTransactionDate()
+    {
+    	return transactionDate;
+    }
+    
+    
+    public double getAmount()
+    {
+    	return amount;
+    }
+    
 }

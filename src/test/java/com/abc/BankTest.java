@@ -1,5 +1,9 @@
 package com.abc;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -11,7 +15,7 @@ public class BankTest {
     public void customerSummary() {
         Bank bank = new Bank();
         Customer john = new Customer("John");
-        john.openAccount(new Account(Account.CHECKING));
+        john.openAccount(new CheckingAccount());
         bank.addCustomer(john);
 
         assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
@@ -20,35 +24,83 @@ public class BankTest {
     @Test
     public void checkingAccount() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.CHECKING);
+        CheckingAccount checkingAccount = new CheckingAccount();
         Customer bill = new Customer("Bill").openAccount(checkingAccount);
         bank.addCustomer(bill);
 
         checkingAccount.deposit(100.0);
 
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(100*(Math.pow(1+0.001, 1/365)-1), bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
     public void savings_account() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.SAVINGS);
+        SavingsAccount checkingAccount = new SavingsAccount();
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
         checkingAccount.deposit(1500.0);
 
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals((1000*(Math.pow(1+0.001, 1/365)-1)+((500*(Math.pow(1+0.002, 1/365)-1)))), bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
-    public void maxi_savings_account() {
+    public void maxi_savings_account_no_withdrawal() {
+    	
+    	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    	Date transDate = null;
+    	try 
+    	{
+    		transDate = sdf.parse("06/01/2016");
+		} 
+    	catch (ParseException e) 
+    	{
+			e.printStackTrace();
+		}
+    	
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+        MaxiSavingsAccount maxiSavingsAccount = new MaxiSavingsAccount();
+        bank.addCustomer(new Customer("Bill").openAccount(maxiSavingsAccount));     
+        maxiSavingsAccount.deposit(3000.0);
+        maxiSavingsAccount.transactions.get(0).transactionDate = transDate;
 
-        checkingAccount.deposit(3000.0);
-
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(3000*(Math.pow(1+0.05, 1/365)-1), bank.totalInterestPaid(), DOUBLE_DELTA);
     }
+    
+    @Test
+    public void maxi_savings_account_withdrawal() {
+    	
+    	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    	Date transDate = null;
+    	try 
+    	{
+    		transDate = sdf.parse("06/01/2016");
+		} 
+    	catch (ParseException e) 
+    	{
+			e.printStackTrace();
+		}
+    	
+        Bank bank = new Bank();
+        MaxiSavingsAccount maxiSavingsAccount = new MaxiSavingsAccount();
+        bank.addCustomer(new Customer("Bill").openAccount(maxiSavingsAccount));     
+        maxiSavingsAccount.deposit(3000.0);
+        maxiSavingsAccount.transactions.get(0).transactionDate = transDate;
+
+        assertEquals(3000*(Math.pow(1+0.001, 1/365)-1), bank.totalInterestPaid(), DOUBLE_DELTA);
+    }
+    
+    @Test
+    public void getFirstCustomer()
+    {
+    	Bank bank = new Bank();
+    	Customer richard = new Customer("Richard");
+    	Customer bill = new Customer("Bill");    	
+    	bank.addCustomer(richard);
+    	bank.addCustomer(bill);
+    	
+    	assertEquals("Richard", bank.getFirstCustomer());    	
+    }
+
 
 }
