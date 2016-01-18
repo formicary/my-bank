@@ -30,7 +30,7 @@ public class BankTest {
 
         checkingAccount.deposit(100.0);
 
-        assertEquals(100*(Math.pow(1+0.001, 1/365)-1), bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(100*(Math.pow(1+0.001/365, 365)-1), bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
@@ -41,7 +41,7 @@ public class BankTest {
 
         checkingAccount.deposit(1500.0);
 
-        assertEquals((1000*(Math.pow(1+0.001, 1/365)-1)+((500*(Math.pow(1+0.002, 1/365)-1)))), bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals((1000*(Math.pow(1+0.001/365, 365)-1)+((500*(Math.pow(1+0.002/365, 365))-1))), bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
@@ -51,7 +51,7 @@ public class BankTest {
     	Date transDate = null;
     	try 
     	{
-    		transDate = sdf.parse("06/01/2016");
+    		transDate = sdf.parse("04/01/2016");
 		} 
     	catch (ParseException e) 
     	{
@@ -62,9 +62,10 @@ public class BankTest {
         MaxiSavingsAccount maxiSavingsAccount = new MaxiSavingsAccount();
         bank.addCustomer(new Customer("Bill").openAccount(maxiSavingsAccount));     
         maxiSavingsAccount.deposit(3000.0);
-        maxiSavingsAccount.transactions.get(0).transactionDate = transDate;
+        maxiSavingsAccount.withdraw(2000.0);
+        maxiSavingsAccount.transactions.get(1).transactionDate = transDate;
 
-        assertEquals(3000*(Math.pow(1+0.05, 1/365)-1), bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(1000*(Math.pow(1+0.05/365, 365)-1), bank.totalInterestPaid(), DOUBLE_DELTA);
     }
     
     @Test
@@ -74,7 +75,7 @@ public class BankTest {
     	Date transDate = null;
     	try 
     	{
-    		transDate = sdf.parse("06/01/2016");
+    		transDate = sdf.parse("16/01/2016");
 		} 
     	catch (ParseException e) 
     	{
@@ -83,11 +84,12 @@ public class BankTest {
     	
         Bank bank = new Bank();
         MaxiSavingsAccount maxiSavingsAccount = new MaxiSavingsAccount();
-        bank.addCustomer(new Customer("Bill").openAccount(maxiSavingsAccount));     
+        bank.addCustomer(new Customer("Bill").openAccount(maxiSavingsAccount)); 
         maxiSavingsAccount.deposit(3000.0);
-        maxiSavingsAccount.transactions.get(0).transactionDate = transDate;
+        maxiSavingsAccount.withdraw(2000.0);
+        maxiSavingsAccount.transactions.get(1).transactionDate = transDate;
 
-        assertEquals(3000*(Math.pow(1+0.001, 1/365)-1), bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(1000*(Math.pow(1+0.001/365, 365)-1), bank.totalInterestPaid(), DOUBLE_DELTA);
     }
     
     @Test
@@ -101,6 +103,4 @@ public class BankTest {
     	
     	assertEquals("Richard", bank.getFirstCustomer());    	
     }
-
-
 }

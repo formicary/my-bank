@@ -5,7 +5,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -50,10 +49,11 @@ public abstract class Account {
     }
  
     public Date latestWithdrawal()
-    {
-    	Date maxDate = null;
+    {    	
+    	int lastTransaction = transactions.size()-1;
+    	Date maxDate = transactions.get(lastTransaction).getTransactionDate();
     	
-    	for(int i=transactions.size()-1; i>=0; i--)
+    	for(int i=lastTransaction; i>=0; i--)
     	{	
     		if(transactions.get(i).getAmount()<0)
     		{
