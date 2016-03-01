@@ -1,0 +1,24 @@
+Fei Gao's Work Summary 
+
+1. Changed the design of my-bank by make Account class to abstract class so that when new bank account added,
+it just need to extend this abastract class.
+
+2. Added three new classes. They are the implementation of Checking Account,Saving Account and Maxi-Savings Accounts
+
+3. Synchronized method are used for the Withdraw, Deposit and Transfer functions to avoid race condition. Add checking 
+for withdraw and Transfer so that the amount can't exceed the balance of the account.
+
+4. StringBuffer is used to improve the performance over string concatenation
+
+5. Additional Feature added so that user can transfer between their accounts.
+
+6. Updated the Maxi-Saving accounts interest calculation fomular.
+
+7. The system will now do daily compound interest calculate. The interste claculation will now consider user transactions 
+so that the calculation is dynamic and more accurate.
+
+8. Comments are added in the code which help the code more readable. 
+
+9. More test case are added to test the system. A test suite is also provided to make the test more convenient.
+
+10. There are also some other small changes made in the code 
