@@ -1,54 +1,105 @@
 package com.abc;
 
+import java.util.Date;
+import java.util.List;
+
+import org.junit.Before;
 import org.junit.Test;
+
+import com.abc.Account;
+import com.abc.Bank;
+import com.abc.CheckingAccount;
+import com.abc.Customer;
+import com.abc.DateProvider;
+import com.abc.MaxiSavingAccount;
+import com.abc.SavingAccount;
+import com.abc.Transaction;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * Tested the Customer Summary and totalInterestPaid function
+ * 
+ * The totalInterestPaid test only focus on the sum of interest test rather than
+ * interest rate calculation test
+ * 
+ * @author Fei
+ * 
+ */
 public class BankTest {
-    private static final double DOUBLE_DELTA = 1e-15;
+	private static final double DOUBLE_DELTA = 1e-15;
+	private Bank bank;
+	private Customer fei;
+	private Customer john;
 
-    @Test
-    public void customerSummary() {
-        Bank bank = new Bank();
-        Customer john = new Customer("John");
-        john.openAccount(new Account(Account.CHECKING));
-        bank.addCustomer(john);
+	@Before
+	public void setUp() {
+		bank = new Bank();
+		fei = new Customer("Fei");
+		john = new Customer("John");
+		bank.addCustomer(fei);
+		bank.addCustomer(john);
+	}
 
-        assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
-    }
+	@Test
+	// Account size 0 and 1 test
+	public void customerSummaryTestOneZero() {
+		john.openAccount(new CheckingAccount());
+		assertEquals(
+				"Customer Summary\n - Fei (0 account)\n - John (1 account)",
+				bank.customerSummary());
+	}
 
-    @Test
-    public void checkingAccount() {
-        Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.CHECKING);
-        Customer bill = new Customer("Bill").openAccount(checkingAccount);
-        bank.addCustomer(bill);
+	@Test
+	// Account test with all three accounts
+	public void customerSummaryTestThree() {
+		john.openAccount(new CheckingAccount());
+		john.openAccount(new SavingAccount());
+		john.openAccount(new MaxiSavingAccount());
+		assertEquals(
+				"Customer Summary\n - Fei (0 account)\n - John (3 accounts)",
+				bank.customerSummary());
+	}
 
-        checkingAccount.deposit(100.0);
+	/*
+	 * This test only focus on the sum of interest. Whether the interest is
+	 * calculated correct or not will be test separately in each account test
+	 */
+	@Test
+	public void totalInterestPaidTest() {
+		Account feiChecking = new CheckingAccount();
+		Account johnChecking = new CheckingAccount();
+		Account johnSaving = new SavingAccount();
+		Account johnMaxiSaving = new MaxiSavingAccount();
 
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
-    }
+		fei.openAccount(feiChecking);
+		john.openAccount(johnChecking);
+		john.openAccount(johnSaving);
+		john.openAccount(johnMaxiSaving);
 
-    @Test
-    public void savings_account() {
-        Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+		List<Transaction> feiCheckingTran = feiChecking.getTransactions();
+		List<Transaction> johnCheckingTran = johnChecking.getTransactions();
+		List<Transaction> johnSavingTran = johnSaving.getTransactions();
+		List<Transaction> johnMaxiSavingTran = johnMaxiSaving.getTransactions();
 
-        checkingAccount.deposit(1500.0);
+		// Test the transaction that happened 100 days ago
+		Date now = DateProvider.getInstance().now();
+		Date trans = new Date(now.getTime() - 100 * 1000 * 60 * 60 * 24L);
 
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
-    }
+		// 1000*(1+0.001/365)^100 -1000 = 0.27
+		feiCheckingTran.add(new Transaction(1000, trans, "deposit"));
 
-    @Test
-    public void maxi_savings_account() {
-        Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+		// 1000*(1+0.001/365)^100 -1000 = 0.27
+		johnCheckingTran.add(new Transaction(1000, trans, "deposit"));
 
-        checkingAccount.deposit(3000.0);
+		// 1000*(1+0.001/365)^100 -1000 = 0.27
+		johnSavingTran.add(new Transaction(1000, trans, "deposit"));
 
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
-    }
+		// 1000*(1+0.05/365)^100 -1000 = 13.79
+		johnMaxiSavingTran.add(new Transaction(1000, trans, "deposit"));
+
+		// Sum: 14.60=3*0.27+13.79
+		assertEquals(14.60, bank.totalInterestPaid(), DOUBLE_DELTA);
+	}
 
 }
