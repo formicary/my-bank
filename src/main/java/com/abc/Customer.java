@@ -52,7 +52,7 @@ public class Customer implements BankCustomer {
         String s = "";
 
         // Translate to pretty account type
-        switch(a.getAccountType()){
+        switch(a.getAccountType()) {
             case Account.CHECKING:
                 s += "Checking Account\n";
                 break;

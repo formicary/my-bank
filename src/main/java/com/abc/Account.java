@@ -35,12 +35,13 @@ public class Account implements CustomerAccount {
 
     public double interestEarned() {
         double amount = sumTransactions();
-        switch(accountType){
+        switch(accountType) {
             case SAVINGS:
                 if (amount <= 1000)
                     return amount * 0.001;
                 else
                     return 1 + (amount-1000) * 0.002;
+// TODO
 //            case SUPER_SAVINGS:
 //                if (amount <= 4000)
 //                    return 20;
