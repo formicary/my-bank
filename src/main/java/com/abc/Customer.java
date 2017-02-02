@@ -5,7 +5,7 @@ import java.util.List;
 
 import static java.lang.Math.abs;
 
-public class Customer {
+public class Customer implements BankCustomer {
     private String name;
     private List<Account> accounts;
 
@@ -29,6 +29,7 @@ public class Customer {
 
     public double totalInterestEarned() {
         double total = 0;
+        
         for (Account a : accounts)
             total += a.interestEarned();
         return total;
@@ -38,6 +39,7 @@ public class Customer {
         String statement = null;
         statement = "Statement for " + name + "\n";
         double total = 0.0;
+        
         for (Account a : accounts) {
             statement += "\n" + statementForAccount(a) + "\n";
             total += a.sumTransactions();
@@ -49,7 +51,7 @@ public class Customer {
     private String statementForAccount(Account a) {
         String s = "";
 
-       //Translate to pretty account type
+        // Translate to pretty account type
         switch(a.getAccountType()){
             case Account.CHECKING:
                 s += "Checking Account\n";
@@ -62,7 +64,7 @@ public class Customer {
                 break;
         }
 
-        //Now total up all the transactions
+        // Now total up all the transactions
         double total = 0.0;
         for (Transaction t : a.transactions) {
             s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
