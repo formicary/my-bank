@@ -3,7 +3,7 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Account {
+public class Account implements CustomerAccount {
 
     public static final int CHECKING = 0;
     public static final int SAVINGS = 1;
@@ -25,13 +25,13 @@ public class Account {
         }
     }
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
-    }
-}
+	public void withdraw(double amount) {
+	    if (amount <= 0) {
+	        throw new IllegalArgumentException("amount must be greater than zero");
+	    } else {
+	        transactions.add(new Transaction(-amount));
+	    }
+	}
 
     public double interestEarned() {
         double amount = sumTransactions();
