@@ -35,9 +35,31 @@ public class BankTest {
 
         assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
     }
+    
+    @Test
+    public void bankInterestSummary() {
+    	Customer tom = new Customer("Tom");
+    	checkingAccount.deposit(200.0);
+    	savingsAccount.deposit(450.0);
+    	tom.openAccount(checkingAccount);
+    	bank.addCustomer(tom);
+    	
+    	checkingAccount = new Account(Account.CHECKING);
+    	savingsAccount = new Account(Account.SAVINGS);
+    	
+    	Customer oscar = new Customer("Oscar");
+    	savingsAccount.deposit(150.0);
+    	maxiSavingsAccount.deposit(225.0);
+    	
+    	oscar.openAccount(savingsAccount);
+    	oscar.openAccount(maxiSavingsAccount);
+    	bank.addCustomer(oscar);
+    	    	
+    	assertEquals(4.85, bank.totalInterestPaid(), DOUBLE_DELTA);
+    }
 
     @Test
-    public void testCheckingAccount() {
+    public void checkingAccount() {
         Account checkingAccount = new Account(Account.CHECKING);
         bank.addCustomer(bill.openAccount(checkingAccount));
         
@@ -62,7 +84,7 @@ public class BankTest {
      * TODO - 0.1%
      */
     @Test
-    public void testSavingsAccountRateOne() {
+    public void savingsAccountRateOne() {
         Account checkingAccount = new Account(Account.SAVINGS);
         bank.addCustomer(bill.openAccount(checkingAccount));
 
@@ -75,7 +97,7 @@ public class BankTest {
      * TODO - 0.2%
      */
     @Test
-    public void testSavingsAccountRateTwo() {
+    public void savingsAccountRateTwo() {
         Account checkingAccount = new Account(Account.SAVINGS);
         bank.addCustomer(bill.openAccount(checkingAccount));
 
@@ -99,7 +121,7 @@ public class BankTest {
      * TODO - 2%
      */
     @Test
-    public void testMaxiSavingsAccountRateOne() {
+    public void maxiSavingsAccountRateOne() {
         Account checkingAccount = new Account(Account.MAXI_SAVINGS);
         bank.addCustomer(bill.openAccount(checkingAccount));
 
@@ -112,7 +134,7 @@ public class BankTest {
      * TODO - 5%
      */
     @Test
-    public void testMaxiSavingsAccountRateTwo() {
+    public void maxiSavingsAccountRateTwo() {
         Account checkingAccount = new Account(Account.MAXI_SAVINGS);
         bank.addCustomer(bill.openAccount(checkingAccount));
 
@@ -125,17 +147,18 @@ public class BankTest {
      * TODO - 10%
      */
     @Test
-    public void testMaxiSavingsAccountRateThree() {
+    public void maxiSavingsAccountRateThree() {
         Account checkingAccount = new Account(Account.MAXI_SAVINGS);
         bank.addCustomer(bill.openAccount(checkingAccount));
 
         checkingAccount.deposit(4000.0);
 
         assertEquals(270.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        System.out.println(bank.totalInterestPaid());
     }
         
     @Test
-    public void testGetFirstCustomer() {
+    public void getFirstCustomer() {
     	Customer tom = new Customer("Tom");
     	Customer oscar = new Customer("Oscar");
     	Customer theo = new Customer("Theo");
