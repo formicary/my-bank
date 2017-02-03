@@ -169,7 +169,7 @@ public class BankTest {
     	
     	assertEquals("Tom", bank.getFirstCustomer());
     }
-    
+
 //    @Test
 //    public void testInterestEarnedChecking() {
 //    	oscar.openAccount(checkingAccount);
