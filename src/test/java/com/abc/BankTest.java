@@ -39,8 +39,6 @@ public class BankTest {
     @Test
     public void testCheckingAccount() {
         Account checkingAccount = new Account(Account.CHECKING);
-//        bill.openAccount(checkingAccount);
-//        bank.addCustomer(bill);
         bank.addCustomer(bill.openAccount(checkingAccount));
         
         checkingAccount.deposit(100.0);
