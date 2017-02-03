@@ -67,6 +67,21 @@ public class CustomerTest {
 		assertEquals(50.0, checkingAccount.sumTransactions(), DOUBLE_DELTA);
 	}
 	
+	@Test
+	public void transferFunds() {
+		Account checkingAccount = new Account(Account.CHECKING);
+		Account savingsAccount = new Account(Account.SAVINGS);
+		Customer sarah = new Customer("Sarah");
+        checkingAccount.deposit(100.0);
+        savingsAccount.deposit(400.0);
+		
+		sarah.openAccount(checkingAccount);
+		sarah.openAccount(savingsAccount);
+        
+		sarah.transfer(checkingAccount, savingsAccount, 40.0);
+		assertEquals(60.0, checkingAccount.sumTransactions(), DOUBLE_DELTA);
+	}
+		
 	/**
 	 * Test opening one customer account
 	 */

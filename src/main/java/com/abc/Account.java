@@ -32,7 +32,7 @@ public class Account implements CustomerAccount {
 	        transactions.add(new Transaction(-amount));
 	    }
 	}
-
+	
     public double interestEarned() {
         double amount = sumTransactions();
         switch(accountType) {

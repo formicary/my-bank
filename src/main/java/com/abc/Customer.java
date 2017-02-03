@@ -22,7 +22,45 @@ public class Customer implements BankCustomer {
         accounts.add(account);
         return this;
     }
-
+    
+    public boolean transfer(Account from, Account to, double amount) {
+    	boolean transferred = false;
+    	Account tempFrom = null, 
+    			tempTo = null;
+    	int fromIndex = 0, 
+    		toIndex = 0;
+    	int MIN_NO_ACCOUNTS = 2;
+    	
+    	if(accounts.size() >= MIN_NO_ACCOUNTS) {
+        	// check both from and to exist in accounts
+        	for (int i = 0; i < accounts.size(); i++) {
+        		if (accounts.get(i).getAccountType() == from.getAccountType()) {
+        			tempFrom = accounts.get(i);
+        			fromIndex = i;
+        		}
+        		if (accounts.get(i).getAccountType() == to.getAccountType()) {
+        			tempTo = accounts.get(i);
+        			toIndex = i;
+        		}
+        	}
+        	
+    		if(amount > tempFrom.sumTransactions()) {
+    			throw new IllegalArgumentException("insufficient funds to transfer amount from " + from.getAccountType() + " to " + to.getAccountType());
+    		} else {
+    			tempFrom.withdraw(amount);
+    			tempTo.deposit(amount);
+    			     		
+    			// update the amounts on both accounts
+    			accounts.set(fromIndex, tempFrom);
+    			accounts.set(toIndex, tempTo);
+    		}
+    		transferred = true;
+    	} else {
+    		throw new IllegalArgumentException("accounts do not exist");
+    	}
+    	return transferred;
+    }
+    
     public int getNumberOfAccounts() {
         return accounts.size();
     }
