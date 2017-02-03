@@ -7,6 +7,7 @@ import static org.junit.Assert.assertEquals;
 public class BankTest {
     private static final double DOUBLE_DELTA = 1e-15;
     
+    private Bank bank;
     private Account checkingAccount;
     private Account savingsAccount;
     private Account maxiSavingsAccount;
@@ -17,6 +18,7 @@ public class BankTest {
     	this.checkingAccount = new Account(Account.CHECKING);
     	this.savingsAccount = new Account(Account.SAVINGS);
     	this.maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
+    	this.bank = new Bank();
     	this.bill = new Customer("Bill");
     }
     
@@ -27,7 +29,6 @@ public class BankTest {
 
     @Test
     public void customerSummary() {
-        Bank bank = new Bank();
         Customer john = new Customer("John");
         john.openAccount(new Account(Account.CHECKING));
         bank.addCustomer(john);
@@ -37,7 +38,6 @@ public class BankTest {
 
     @Test
     public void testCheckingAccount() {
-        Bank bank = new Bank();
         Account checkingAccount = new Account(Account.CHECKING);
 //        bill.openAccount(checkingAccount);
 //        bank.addCustomer(bill);
@@ -65,7 +65,6 @@ public class BankTest {
      */
     @Test
     public void testSavingsAccountRateOne() {
-        Bank bank = new Bank();
         Account checkingAccount = new Account(Account.SAVINGS);
         bank.addCustomer(bill.openAccount(checkingAccount));
 
@@ -79,7 +78,6 @@ public class BankTest {
      */
     @Test
     public void testSavingsAccountRateTwo() {
-        Bank bank = new Bank();
         Account checkingAccount = new Account(Account.SAVINGS);
         bank.addCustomer(bill.openAccount(checkingAccount));
 
@@ -104,7 +102,6 @@ public class BankTest {
      */
     @Test
     public void testMaxiSavingsAccountRateOne() {
-        Bank bank = new Bank();
         Account checkingAccount = new Account(Account.MAXI_SAVINGS);
         bank.addCustomer(bill.openAccount(checkingAccount));
 
@@ -118,7 +115,6 @@ public class BankTest {
      */
     @Test
     public void testMaxiSavingsAccountRateTwo() {
-        Bank bank = new Bank();
         Account checkingAccount = new Account(Account.MAXI_SAVINGS);
         bank.addCustomer(bill.openAccount(checkingAccount));
 
@@ -132,13 +128,25 @@ public class BankTest {
      */
     @Test
     public void testMaxiSavingsAccountRateThree() {
-        Bank bank = new Bank();
         Account checkingAccount = new Account(Account.MAXI_SAVINGS);
         bank.addCustomer(bill.openAccount(checkingAccount));
 
         checkingAccount.deposit(4000.0);
 
         assertEquals(270.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+    }
+        
+    @Test
+    public void testGetFirstCustomer() {
+    	Customer tom = new Customer("Tom");
+    	Customer oscar = new Customer("Oscar");
+    	Customer theo = new Customer("Theo");
+    	
+    	bank.addCustomer(tom.openAccount(checkingAccount));
+    	bank.addCustomer(oscar.openAccount(savingsAccount));
+    	bank.addCustomer(theo.openAccount(maxiSavingsAccount));
+    	
+    	assertEquals("Tom", bank.getFirstCustomer());
     }
     
 //    @Test
