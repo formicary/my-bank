@@ -1,5 +1,8 @@
 package com.abc;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import org.junit.*;
 
 import static org.junit.Assert.assertEquals;
@@ -178,8 +181,13 @@ public class BankTest {
     }
     
     @Test
-    public void date() {
-    	
+    public void calcCompountInterest() {
+    	double expected = 3153.802489402342;
+    	Account a = new Account(Account.MAXI_SAVINGS);
+    	a.deposit(3000.0);
+    	    	    	
+//    	assertEquals(expected, product, DOUBLE_DELTA);
+    	assertEquals(expected, a.interestEarned(), DOUBLE_DELTA);
     }
 
 //    @Test
