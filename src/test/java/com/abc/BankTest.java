@@ -181,6 +181,17 @@ public class BankTest {
     }
     
     @Test
+    public void hasWithdrawalBeenMade() {
+    	Account a = new Account(Account.MAXI_SAVINGS);
+    	boolean expected = true;
+    	// deposit 300, 300,  100
+    	// withdraw 150
+    	// deposit 100
+    	boolean withdrawal = a.hasWithdrawalBeenMade();
+    	assertEquals(expected, withdrawal);
+    }
+    
+    @Test
     public void calcCompountInterest() {
     	double expected = 3153.802489402342;
     	Account a = new Account(Account.MAXI_SAVINGS);

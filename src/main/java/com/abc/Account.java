@@ -87,7 +87,7 @@ public class Account implements CustomerAccount {
         return amount;
     }
     
-    private boolean hasWithdrawalBeenMade() {   	
+    public boolean hasWithdrawalBeenMade() {   	
     	long DAY_IN_MS = 1000 * 60 * 60 * 24;
     	double totalSoFar = 0.0;
     	double today = 0.0;
