@@ -1,6 +1,7 @@
 package com.abc;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Account implements CustomerAccount {
@@ -10,7 +11,7 @@ public class Account implements CustomerAccount {
     public static final int MAXI_SAVINGS = 2;
 
     private final int accountType;
-    public List<Transaction> transactions;
+    private List<Transaction> transactions;
 
     public Account(int accountType) {
         this.accountType = accountType;
@@ -46,12 +47,10 @@ public class Account implements CustomerAccount {
 //                if (amount <= 4000)
 //                    return 20;
             case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                else if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                else
-                	return 70 + (amount-2000) * 0.1;
+            	if(haveWithdawalsBeenMade())
+            		return amount * 0.001;
+            	else
+            		return amount * 0.05;
             default:
                 return amount * 0.001;
         }
@@ -64,12 +63,46 @@ public class Account implements CustomerAccount {
     private double checkIfTransactionsExist(boolean checkAll) {
         double amount = 0.0;
         for (Transaction t: transactions)
-            amount += t.amount;
+            amount += t.getAmount();
         return amount;
+    }
+    
+    private boolean haveWithdawalsBeenMade() {   	
+    	long DAY_IN_MS = 1000 * 60 * 60 * 24;
+    	double totalSoFar = 0.0;
+    	double today = 0.0;
+    	double yesterday = 0.0;
+    	int DAYS = 10;
+    	boolean withdrawal = false;
+    	
+    	for (int i = DAYS-1; i > 0; i--) {
+    		Date d = new Date(System.currentTimeMillis() - (i * DAY_IN_MS));
+    		
+    		for (Transaction t : transactions) {
+    			if (t.getTransactionDate().toString().equals(d.toString()))
+    				today += t.getAmount();
+    		}
+    		
+    		totalSoFar += today;
+    		
+    		if (totalSoFar > yesterday) {
+    			yesterday = totalSoFar;
+    			today = 0.0;
+    		} else {
+    			withdrawal = true;
+    			break;
+    		}
+    	}
+   	
+    	return withdrawal;
     }
 
     public int getAccountType() {
         return accountType;
+    }
+    
+    public List<Transaction> getTransactions() {
+    	return transactions;
     }
 
 }

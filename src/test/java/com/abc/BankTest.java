@@ -169,6 +169,18 @@ public class BankTest {
     	
     	assertEquals("Tom", bank.getFirstCustomer());
     }
+    
+    @Test
+    public void maxiSavings() {
+    	Customer tom = new Customer("Tom");
+    	bank.addCustomer(tom.openAccount(maxiSavingsAccount));
+    	maxiSavingsAccount.deposit(300.0);
+    }
+    
+    @Test
+    public void date() {
+    	
+    }
 
 //    @Test
 //    public void testInterestEarnedChecking() {
