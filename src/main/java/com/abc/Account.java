@@ -95,15 +95,12 @@ public class Account implements CustomerAccount {
     	int DAYS = 10;
     	boolean withdrawal = false;
     	
-//    	for (int i = DAYS-1; i >= 0; i--) {
     	for (int i = 0; i > DAYS-1; i++) {
     		Date d = new Date(System.currentTimeMillis() - (i * DAY_IN_MS));
     		
-    		for (Transaction t : transactions) {
-    			if (t.getTransactionDate().toString().equals(d.toString())) {
+    		for (Transaction t : transactions)
+    			if (t.getTransactionDate().toString().equals(d.toString()))
     				today += t.getAmount();
-    			}
-    		}
     		
     		totalSoFar += today;
     		

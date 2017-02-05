@@ -185,8 +185,7 @@ public class BankTest {
     	double expected = 3153.802489402342;
     	Account a = new Account(Account.MAXI_SAVINGS);
     	a.deposit(3000.0);
-    	    	    	
-//    	assertEquals(expected, product, DOUBLE_DELTA);
+    	
     	assertEquals(expected, a.interestEarned(), DOUBLE_DELTA);
     }
 
