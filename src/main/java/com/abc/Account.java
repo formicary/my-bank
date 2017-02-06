@@ -133,7 +133,6 @@ public class Account implements CustomerAccount {
 		double exponent = DAYS_PER_YEAR * years;
 		product = amount * Math.pow(body, exponent);
 		return product;
-
 	}
 
 	public int getAccountType() {
