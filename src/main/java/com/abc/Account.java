@@ -21,8 +21,7 @@ public class Account implements CustomerAccount {
 
 	public void deposit(double amount) {
 		if (amount <= 0) {
-			throw new IllegalArgumentException(
-					"amount must be greater than zero");
+			throw new IllegalArgumentException("amount must be greater than zero");
 		} else {
 			transactions.add(new Transaction(amount));
 		}
@@ -30,8 +29,7 @@ public class Account implements CustomerAccount {
 
 	public void withdraw(double amount) {
 		if (amount <= 0) {
-			throw new IllegalArgumentException(
-					"amount must be greater than zero");
+			throw new IllegalArgumentException("amount must be greater than zero");
 		} else {
 			transactions.add(new Transaction(-amount));
 		}
@@ -40,18 +38,18 @@ public class Account implements CustomerAccount {
 	public double interestEarned() {
 		double amount = sumTransactions();
 		switch (accountType) {
-		case SAVINGS:
-			if (amount <= 1000)
+			case SAVINGS:
+				if (amount <= 1000)
+					return dailyCompoundInterest(amount, 0.001, 1);
+				else
+					return 1 + dailyCompoundInterest((amount - 1000), 0.002, 1);
+			case MAXI_SAVINGS:
+				if (hasWithdrawalBeenMade())
+					return dailyCompoundInterest(amount, 0.001, 1);
+				else
+					return dailyCompoundInterest(amount, 0.05, 1);
+			default:
 				return dailyCompoundInterest(amount, 0.001, 1);
-			else
-				return 1 + dailyCompoundInterest((amount - 1000), 0.002, 1);
-		case MAXI_SAVINGS:
-			if (hasWithdrawalBeenMade())
-				return dailyCompoundInterest(amount, 0.001, 1);
-			else
-				return dailyCompoundInterest(amount, 0.05, 1);
-		default:
-			return dailyCompoundInterest(amount, 0.001, 1);
 		}
 	}
 
@@ -126,8 +124,7 @@ public class Account implements CustomerAccount {
 		return withdrawal;
 	}
 
-	private double dailyCompoundInterest(double amount, double rate,
-			double years) {
+	private double dailyCompoundInterest(double amount, double rate, double years) {
 		double product = 0.0;
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new Date());
