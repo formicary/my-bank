@@ -159,7 +159,7 @@ public class BankTest {
         assertEquals(270.0, bank.totalInterestPaid(), DOUBLE_DELTA);
         System.out.println(bank.totalInterestPaid());
     }
-        
+    
     @Test
     public void getFirstCustomer() {
     	Customer tom = new Customer("Tom");
@@ -173,6 +173,7 @@ public class BankTest {
     	assertEquals("Tom", bank.getFirstCustomer());
     }
     
+    //TODO
     @Test
     public void maxiSavings() {
     	Customer tom = new Customer("Tom");
@@ -184,11 +185,11 @@ public class BankTest {
     public void hasWithdrawalBeenMade() {
     	Account a = new Account(Account.MAXI_SAVINGS);
     	boolean expected = true;
-    	// deposit 300, 300,  100
-    	// withdraw 150
-    	// deposit 100
-    	boolean withdrawal = a.hasWithdrawalBeenMade();
-    	assertEquals(expected, withdrawal);
+    	a.deposit(300.0);
+    	a.deposit(100.0);
+    	a.withdraw(150.0);
+    	a.deposit(100.0);
+    	assertEquals(expected, a.hasWithdrawalBeenMade());
     }
     
     @Test
@@ -199,35 +200,4 @@ public class BankTest {
     	
     	assertEquals(expected, a.interestEarned(), DOUBLE_DELTA);
     }
-
-//    @Test
-//    public void testInterestEarnedChecking() {
-//    	oscar.openAccount(checkingAccount);
-//    	checkingAccount.deposit(1000.0);
-//    	assertEquals(1010.0, savingsAccount.interestEarned(), DOUBLE_DELTA);
-//    }
-//    
-//    @Test
-//    public void testInterestEarnedSavingsRateOne() {
-//    	oscar.openAccount(savingsAccount);
-//    	savingsAccount.deposit(1000.0);
-//    	//TODO
-//    	assertEquals(1010.0, savingsAccount.interestEarned(), DOUBLE_DELTA);
-//    }
-//    
-//    @Test
-//    public void testInterestEarnedSavingsRateTwo() {
-//    	oscar.openAccount(savingsAccount);
-//    	savingsAccount.deposit(2000.0);
-//    	assertEquals(2040.0, savingsAccount.interestEarned(), DOUBLE_DELTA);
-//    }
-//    
-//    @Test
-//    public void testInterestEarnedMaxiSavings() {
-//    	oscar.openAccount(maxiSavingsAccount);
-//    	maxiSavingsAccount.deposit(1000.0);
-//    	//TODO
-//    	assertEquals(expected, maxiSavingsAccount.interestEarned(), DOUBLE_DELTA);
-//    }
-
 }

@@ -1,9 +1,8 @@
 package com.abc;
 
-import java.util.Calendar;
 import java.util.Date;
 
-public class Transaction {
+public class Transaction implements BankTransaction {
     private final double amount;
     private Date date;
 

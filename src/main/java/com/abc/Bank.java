@@ -3,7 +3,7 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Bank {
+public class Bank implements BankProvider {
     private List<Customer> customers;
 
     public Bank() {
