@@ -57,8 +57,9 @@ public class BankTest {
     	oscar.openAccount(savingsAccount);
     	oscar.openAccount(maxiSavingsAccount);
     	bank.addCustomer(oscar);
-    	    	
-    	assertEquals(4.85, bank.totalInterestPaid(), DOUBLE_DELTA);
+
+        double actual = Double.valueOf((String.format("%.2f", bank.totalInterestPaid())));
+    	assertEquals(586.89, actual, DOUBLE_DELTA);
     }
 
     @Test
@@ -67,21 +68,9 @@ public class BankTest {
         bank.addCustomer(bill.openAccount(checkingAccount));
         
         checkingAccount.deposit(100.0);
-
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+        double actual = Double.valueOf((String.format("%.2f", bank.totalInterestPaid())));
+        assertEquals(100.10, actual, DOUBLE_DELTA);
     }
-
-//	TODO
-//    @Test
-//    public void testSavingsAccount() {
-//        Bank bank = new Bank();
-//        Account checkingAccount = new Account(Account.SAVINGS);
-//        bank.addCustomer(bill.openAccount(checkingAccount));
-//
-//        checkingAccount.deposit(1500.0);
-//
-//        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
-//    }
     
     /*
      * TODO - 0.1%
@@ -92,8 +81,8 @@ public class BankTest {
         bank.addCustomer(bill.openAccount(checkingAccount));
 
         checkingAccount.deposit(1000.0);
-
-        assertEquals(1.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        double actual = Double.valueOf((String.format("%.2f", bank.totalInterestPaid())));
+        assertEquals(1001.00, actual, DOUBLE_DELTA);
     }
     
     /*
@@ -105,20 +94,9 @@ public class BankTest {
         bank.addCustomer(bill.openAccount(checkingAccount));
 
         checkingAccount.deposit(2000.0);
-
-        assertEquals(4.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        double actual = Double.valueOf((String.format("%.2f", bank.totalInterestPaid())));
+        assertEquals(1003.00, actual, DOUBLE_DELTA);
     }
-
-//    @Test
-//    public void testMaxiSavingsAccount() {
-//        Bank bank = new Bank();
-//        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
-//        bank.addCustomer(bill.openAccount(checkingAccount));
-//
-//        checkingAccount.deposit(3000.0);
-//
-//        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
-//    }
 
     /**
      * TODO - 2%
@@ -129,8 +107,8 @@ public class BankTest {
         bank.addCustomer(bill.openAccount(checkingAccount));
 
         checkingAccount.deposit(1000.0);
-
-        assertEquals(20, bank.totalInterestPaid(), DOUBLE_DELTA);
+        double actual = Double.valueOf((String.format("%.2f", bank.totalInterestPaid())));
+        assertEquals(1051.27, actual, DOUBLE_DELTA);
     }
 
     /**
@@ -142,8 +120,8 @@ public class BankTest {
         bank.addCustomer(bill.openAccount(checkingAccount));
 
         checkingAccount.deposit(2000.0);
-
-        assertEquals(70.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        double actual = Double.valueOf((String.format("%.2f", bank.totalInterestPaid())));
+        assertEquals(2102.53, actual, DOUBLE_DELTA);
     }
 
     /**
@@ -155,9 +133,8 @@ public class BankTest {
         bank.addCustomer(bill.openAccount(checkingAccount));
 
         checkingAccount.deposit(4000.0);
-
-        assertEquals(270.0, bank.totalInterestPaid(), DOUBLE_DELTA);
-        System.out.println(bank.totalInterestPaid());
+        double actual = Double.valueOf((String.format("%.2f", bank.totalInterestPaid())));
+        assertEquals(4205.07, actual, DOUBLE_DELTA);
     }
     
     @Test
