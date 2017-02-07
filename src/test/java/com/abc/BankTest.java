@@ -31,9 +31,18 @@ public class BankTest {
     public void customerSummary() {
         Customer john = new Customer("John");
         john.openAccount(new Account(Account.CHECKING));
+        john.openAccount(new Account(Account.SAVINGS));
         bank.addCustomer(john);
-
-        assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
+        
+        Customer simon = new Customer("Simon");
+        simon.openAccount(new Account(Account.MAXI_SAVINGS));
+        bank.addCustomer(simon);
+        
+        String expected = "Customer Summary" +
+        		"\n - John (2 accounts)" +
+        		"\n - Simon (1 account)";
+        
+        assertEquals(expected, bank.customerSummary());
     }
     
     @Test
@@ -44,8 +53,8 @@ public class BankTest {
     	tom.openAccount(checkingAccount);
     	bank.addCustomer(tom);
     	
-    	checkingAccount = new Account(Account.CHECKING);
     	savingsAccount = new Account(Account.SAVINGS);
+    	maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
     	
     	Customer oscar = new Customer("Oscar");
     	savingsAccount.deposit(150.0);
@@ -131,7 +140,7 @@ public class BankTest {
     	
     	assertEquals("Tom", bank.getFirstCustomer());
     }
-        
+    
     @Test
     public void hasWithdrawalBeenMade() {
     	Account a = new Account(Account.MAXI_SAVINGS);

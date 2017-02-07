@@ -37,7 +37,7 @@ public class Bank implements BankProvider {
     public String getFirstCustomer() {
         try {
             return customers.get(0).getName();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return "Error";
         }
