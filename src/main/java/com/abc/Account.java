@@ -30,13 +30,15 @@ public class Account {
      * Otherwise, the amount is added to ArrayList of transactions.
      * @param amount to be added
      */
-    public void deposit(double amount) {
-    	
+    public boolean deposit(double amount) {
+    	boolean result = false;
 		if(MONEY_ZERO >= amount) {
 			System.out.println("amount to deposit must be greater than zero");
 		} else {
 			getTransactions().add(new Transaction(amount));
-		}		
+			result = true;
+		}
+		return result;
     }
     /**
      * withdraw takes a new amount of type double.
@@ -44,16 +46,22 @@ public class Account {
      * Otherwise, the amount is taken from the ArrayList of transactions.
      * @param amount to be withdrawn
      */
-	public void withdraw(double amount) {
+	public boolean withdraw(double amount) {
+		boolean result = false;
 	    if (MONEY_ZERO >= amount) {
 	        System.out.println("amount to withdraw must be greater than zero");
-	    } 
-	    else if (sumTransactions() < amount) {
-	    	System.out.println("insufficient funds to withdraw");
-	    }	    
-	    else {
-	        getTransactions().add(new Transaction(-amount));
 	    }
+	    else {
+	    	if (sumTransactions() < amount) {
+		    	System.out.println("insufficient funds to withdraw");
+	    	}
+	    	else {
+	    		getTransactions().add(new Transaction(-amount));
+	    		result = true;
+	    	}
+	    }
+	    return result;
+
 	}
 	/**
 	 * This method calculates the interest earned for an account type

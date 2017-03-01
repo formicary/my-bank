@@ -64,30 +64,41 @@ public class Bank {
     	return accounts.size()+1;
     }
     
-    public void withdrawFrom(int accountNo, double amount) {
+    public boolean withdrawFrom(int accountNo, double amount) {
+    	boolean result = false;
     	for(int i=0; i<accounts.size();i++) {
     		if(accountNo == accounts.get(i).getAccountNo()) {
-    			accounts.get(i).withdraw(amount);
-    			System.out.println("withdrawn " + amount +
-    					" from account no: " + accountNo +
-    					" successfully");
+    			result = accounts.get(i).withdraw(amount);
+    			if(result) {
+        			System.out.println("withdrawn " + amount +
+        					" from account no: " + accountNo +
+        					" successfully");    				
+    			}
     		}
     	}
+    	return result;
     }
-    public void depositTo(int accountNo, double amount) {
+    public boolean depositTo(int accountNo, double amount) {
+    	boolean result = false;
     	for(int i=0; i<accounts.size();i++) {
     		if(accountNo == accounts.get(i).getAccountNo()) {
-    			accounts.get(i).deposit(amount);
-    			System.out.println("deposited " + amount + 
-    					" to account no: " + accountNo +
-    					" successfully");
+    			result = accounts.get(i).deposit(amount);
+    			if(result) {
+        			System.out.println("deposited " + amount + 
+        					" to account no: " + accountNo +
+        					" successfully");    				
+    			}
     		}
     	}
+    	return result;
     }
     
     public void transfer(int sourceAccountNo, int destAccountNo, double amount) {
-    	withdrawFrom(sourceAccountNo, amount);
-    	depositTo(destAccountNo, amount);
+    	boolean validCheck = false;
+    	validCheck = withdrawFrom(sourceAccountNo, amount);
+    	if(validCheck) {
+    		depositTo(destAccountNo, amount);
+    	}
     }
     public List<Customer> getCustomers() {
 		return customers;
@@ -103,12 +114,14 @@ public class Bank {
 	    john.openAccount(new Account(Account.SAVINGS));
 	    bank.addCustomer(john);	    
 	    bank.addCustomer(anon);
-	    john.getAccounts().get(0).deposit(new Double("500.00"));
+	    anon.getAccounts().get(0).deposit(new Double("0.00")); // 3
+	    john.getAccounts().get(0).deposit(new Double("500.00")); // 1
 	    bank.transfer(1, 2, new Double("100.00"));
-	    john.getAccounts().get(1).deposit(new Double("300.00"));
+	    
 	    bank.transfer(3, 1, new Double("999.00"));
 	    System.out.println(john.getStatement());
 	    System.out.println(anon.getStatement());
+	    System.out.println();
         
     }
 }
