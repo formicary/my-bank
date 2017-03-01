@@ -9,7 +9,7 @@ public class Customer {
     private String name;
     private List<Account> accounts;
 
-    public Customer(String name) {
+	public Customer(String name) {
         this.name = name;
         this.accounts = new ArrayList<Account>();
     }
@@ -64,7 +64,7 @@ public class Customer {
 
         //Now total up all the transactions
         double total = 0.0;
-        for (Transaction t : a.transactions) {
+        for (Transaction t : a.getTransactions()) {
             s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
             total += t.amount;
         }
@@ -75,4 +75,8 @@ public class Customer {
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
     }
+
+	public List<Account> getAccounts() {
+		return accounts;
+	}
 }

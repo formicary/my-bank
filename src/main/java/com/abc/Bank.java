@@ -5,18 +5,31 @@ import java.util.List;
 
 public class Bank {
     private List<Customer> customers;
+    private List<Account> accounts;
 
     public Bank() {
         customers = new ArrayList<Customer>();
+        accounts = new ArrayList<Account>();
     }
 
     public void addCustomer(Customer customer) {
         customers.add(customer);
+        addAccounts(customer);
+    }
+    
+    public void addAccounts(Customer customer) {
+    	for(Account a: customer.getAccounts()) {
+    		if(!accounts.contains(a.getAccountNo()))
+    		{
+    			accounts.add(a);
+    		}
+    		
+    	}
     }
 
     public String customerSummary() {
         String summary = "Customer Summary";
-        for (Customer c : customers)
+        for (Customer c : getCustomers())
             summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
         return summary;
     }
@@ -29,18 +42,52 @@ public class Bank {
 
     public double totalInterestPaid() {
         double total = 0;
-        for(Customer c: customers)
+        for(Customer c: getCustomers())
             total += c.totalInterestEarned();
         return total;
     }
 
-    public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
+//    public String getFirstCustomer() throws Exception {
+//    	try {
+//	    	if (getCustomers().size() > 0) {
+//	            for(int i=0; i<getCustomers().size(); i++) {
+//	            	return getCustomers().get(i).getName();
+//	            }  		
+//	    	}
+//	    	else {
+//	    		return "Error retrieving name of first customer";
+//	    	}
+//        } catch (Exception e){
+//            e.printStackTrace();
+//            return "Error retrieving name of first customer";
+//        }
+//    }
+    
+    public int generateAccountNo() {
+    	return accounts.size();
+    }
+    
+    public void withdrawFrom() {
+    	
+    }
+	public void depositFrom() {
+    	
+    }
+    public List<Customer> getCustomers() {
+		return customers;
+	}
+
+    public static void main (String [] args) {
+        Bank bank = new Bank();
+        Customer anon = new Customer("Anon");
+        Account account = new Account(Account.CHECKING);
+        account.deposit(new Double("100.00"));
+        anon.openAccount(account);
+        bank.addCustomer(anon);
+        for(Account a: bank.accounts)
+        {
+        	System.out.println(a.getAccountNo());
         }
+        
     }
 }
