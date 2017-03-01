@@ -24,7 +24,13 @@ public class Customer {
     }
 
     public int getNumberOfAccounts() {
-        return accounts.size();
+    	if(!accounts.isEmpty()) {
+    		return accounts.size();
+    	}
+    	else {
+    		return 0;
+    	}
+        
     }
 
     public double totalInterestEarned() {

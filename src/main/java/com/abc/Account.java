@@ -23,7 +23,8 @@ public class Account {
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
     }
-    /**
+
+	/**
      * deposit takes a new amount of type double.
      * If the amount is less than or equal to zero, an exception is raised.
      * Otherwise, the amount is added to ArrayList of transactions.
@@ -100,5 +101,9 @@ public class Account {
 	public int getAccountNo() {
 		return accountNo;
 	}
+	
+    public void setAccountNo(int accountNo) {
+		this.accountNo = accountNo;
+	}	
 
 }

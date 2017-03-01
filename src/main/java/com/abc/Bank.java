@@ -19,13 +19,11 @@ public class Bank {
     
     public void addAccounts(Customer customer) {
     	for(Account a: customer.getAccounts()) {
-    		if(!accounts.contains(a.getAccountNo()))
-    		{
-    			accounts.add(a);
-    		}
+    		a.setAccountNo(generateAccountNo());
+    		accounts.add(a);
     	}
     }
-
+    
     public String customerSummary() {
         String summary = "Customer Summary";
         for (Customer c : getCustomers())
@@ -63,40 +61,54 @@ public class Bank {
 //    }
     
     public int generateAccountNo() {
-    	return accounts.size();
+    	return accounts.size()+1;
     }
     
     public void withdrawFrom(int accountNo, double amount) {
     	for(int i=0; i<accounts.size();i++) {
     		if(accountNo == accounts.get(i).getAccountNo()) {
     			accounts.get(i).withdraw(amount);
-    			System.out.println("withdrawn " + amount + " successfully");
+    			System.out.println("withdrawn " + amount +
+    					" from account no: " + accountNo +
+    					" successfully");
     		}
     	}
     }
     public void depositFrom(int accountNo, double amount) {
     	for(int i=0; i<accounts.size();i++) {
     		if(accountNo == accounts.get(i).getAccountNo()) {
-    			accounts.get(i).withdraw(amount);
-    			System.out.println("deposited " + amount + " successfully");
+    			accounts.get(i).deposit(amount);
+    			System.out.println("deposited " + amount + 
+    					" to account no: " + accountNo +
+    					" successfully");
     		}
     	}
+    }
+    
+    public void transfer(int sourceAccountNo, int destAccountNo, double amount) {
+    	withdrawFrom(sourceAccountNo, amount);
+    	depositFrom(destAccountNo, amount);
     }
     public List<Customer> getCustomers() {
 		return customers;
 	}
 
     public static void main (String [] args) {
-        Bank bank = new Bank();
-        Customer anon = new Customer("Anon");
-        Account account = new Account(Account.CHECKING);
-        account.deposit(new Double("100.00"));
-        anon.openAccount(account);
-        bank.addCustomer(anon);
-        for(Account a: bank.accounts)
-        {
-        	System.out.println(a.getAccountNo());
-        }
+
+	    Bank bank = new Bank();
+	    Customer john = new Customer("John");
+	    john.openAccount(new Account(Account.CHECKING));
+	    Customer anon = new Customer("Anon");
+	    anon.openAccount(new Account(Account.CHECKING));
+	    john.openAccount(new Account(Account.SAVINGS));
+	    bank.addCustomer(john);	    
+	    bank.addCustomer(anon);
+	    john.getAccounts().get(0).deposit(new Double("500.00"));
+	    bank.transfer(1, 2, new Double("100.00"));
+	    john.getAccounts().get(1).deposit(new Double("300.00"));
+	    bank.transfer(3, 1, new Double("999.00"));
+	    System.out.println(john.getStatement());
+	    System.out.println(anon.getStatement());
         
     }
 }
