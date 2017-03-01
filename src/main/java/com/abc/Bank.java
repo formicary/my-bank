@@ -74,7 +74,7 @@ public class Bank {
     		}
     	}
     }
-    public void depositFrom(int accountNo, double amount) {
+    public void depositTo(int accountNo, double amount) {
     	for(int i=0; i<accounts.size();i++) {
     		if(accountNo == accounts.get(i).getAccountNo()) {
     			accounts.get(i).deposit(amount);
@@ -87,7 +87,7 @@ public class Bank {
     
     public void transfer(int sourceAccountNo, int destAccountNo, double amount) {
     	withdrawFrom(sourceAccountNo, amount);
-    	depositFrom(destAccountNo, amount);
+    	depositTo(destAccountNo, amount);
     }
     public List<Customer> getCustomers() {
 		return customers;
