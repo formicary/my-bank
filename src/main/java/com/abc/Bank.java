@@ -23,7 +23,6 @@ public class Bank {
     		{
     			accounts.add(a);
     		}
-    		
     	}
     }
 
@@ -67,11 +66,21 @@ public class Bank {
     	return accounts.size();
     }
     
-    public void withdrawFrom() {
-    	
+    public void withdrawFrom(int accountNo, double amount) {
+    	for(int i=0; i<accounts.size();i++) {
+    		if(accountNo == accounts.get(i).getAccountNo()) {
+    			accounts.get(i).withdraw(amount);
+    			System.out.println("withdrawn " + amount + " successfully");
+    		}
+    	}
     }
-	public void depositFrom() {
-    	
+    public void depositFrom(int accountNo, double amount) {
+    	for(int i=0; i<accounts.size();i++) {
+    		if(accountNo == accounts.get(i).getAccountNo()) {
+    			accounts.get(i).withdraw(amount);
+    			System.out.println("deposited " + amount + " successfully");
+    		}
+    	}
     }
     public List<Customer> getCustomers() {
 		return customers;
