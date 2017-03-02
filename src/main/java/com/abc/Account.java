@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Account {
-
+	
+	//Constant variables
     public static final int CHECKING = 0;
     public static final int SAVINGS = 1;
     public static final int MAXI_SAVINGS = 2;
@@ -15,7 +16,7 @@ public class Account {
     private int accountNo;
     
     /**
-     * The Account constructor defines an account type and a list of transactions (deposit or withdrawal)
+     * The Account constructor defines an account type and a list of transactions
      * @param accountType account type
      * @param transactions list of transactions
      */
@@ -25,10 +26,13 @@ public class Account {
     }
 
 	/**
-     * deposit takes a new amount of type double.
-     * If the amount is less than or equal to zero, an exception is raised.
-     * Otherwise, the amount is added to ArrayList of transactions.
-     * @param amount to be added
+     * Deposits a new amount into an account.
+     * If amount less than or equal to zero, user notified.
+     * Otherwise, amount added to ArrayList of transactions
+     * and method returns true.
+     * @param amount to deposit
+     * @return true if transaction successful
+     * @return false if transaction unsuccessful
      */
     public boolean deposit(double amount) {
     	boolean result = false;
@@ -41,10 +45,14 @@ public class Account {
 		return result;
     }
     /**
-     * withdraw takes a new amount of type double.
-     * If the amount is less than or equal to zero, an exception is raised.
-     * Otherwise, the amount is taken from the ArrayList of transactions.
-     * @param amount to be withdrawn
+     * Withdraws a new amount from an account.
+     * If amount less than or equal to zero, user notified.
+     * If total account balance less than amount to withdraw, user notified.
+     * Otherwise, negative amount added to ArrayList of transactions
+     * and method returns true.
+     * @param amount to withdraw
+     * @return true if transaction successful
+     * @return false if transaction unsuccessful
      */
 	public boolean withdraw(double amount) {
 		boolean result = false;
@@ -64,7 +72,7 @@ public class Account {
 
 	}
 	/**
-	 * This method calculates the interest earned for an account type
+	 * Calculates the interest earned for an account type
 	 * @return interest earned
 	 */
     public double interestEarned() {
@@ -86,10 +94,19 @@ public class Account {
         }
     }
     
+    /**
+     * Check if list of transactions empty
+     * @return true if list of transactions empty
+     * @return false if list of transactions populated
+     */
     public boolean isTransactionsEmpty() {
     	return getTransactions().isEmpty(); 
     }
-
+    
+    /**
+     * Sum all transactions to calculate total account balance
+     * @return account balance
+     */
     public double sumTransactions() {
         double amount = 0.00;
         for (Transaction t: getTransactions()) {

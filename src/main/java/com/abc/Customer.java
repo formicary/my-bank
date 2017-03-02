@@ -5,7 +5,7 @@ import java.util.List;
 
 import static java.lang.Math.abs;
 
-public class Customer {
+public class Customer implements Common {
     private String name;
     private List<Account> accounts;
 
@@ -32,6 +32,20 @@ public class Customer {
     	}
         
     }
+    
+   public Account getAccount(int accountNo) {
+	   Account account = null;
+	   for(int i=0; i<accounts.size(); i++) {
+		   if(accountNo == accounts.get(i).getAccountNo()) {
+			   account = accounts.get(i);
+		   }
+	   }
+	   return account;
+   }
+   public void transferTo(int accountNo, double amount) {
+	   
+	   
+   }
 
     public double totalInterestEarned() {
         double total = 0;
@@ -77,12 +91,14 @@ public class Customer {
         s += "Total " + toDollars(total);
         return s;
     }
-
-    private String toDollars(double d){
-        return String.format("$%,.2f", abs(d));
-    }
+    
+    @Override
+	public String toDollars(double d) {
+		return String.format("$%,.2f", abs(d));
+	}
 
 	public List<Account> getAccounts() {
 		return accounts;
 	}
+
 }

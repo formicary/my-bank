@@ -1,9 +1,11 @@
 package com.abc;
 
+import static java.lang.Math.abs;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Bank {
+public class Bank implements Common {
     private List<Customer> customers;
     private List<Account> accounts;
 
@@ -59,18 +61,26 @@ public class Bank {
 //            return "Error retrieving name of first customer";
 //        }
 //    }
-    
+    /**
+     * Generation bank account number
+     * @return account no
+     */
     public int generateAccountNo() {
     	return accounts.size()+1;
     }
-    
+    /**
+     * Withdraw amount from an account
+     * @param accountNo account to withdraw from
+     * @param amount amount to withdraw
+     * @return result of transaction
+     */    
     public boolean withdrawFrom(int accountNo, double amount) {
     	boolean result = false;
     	for(int i=0; i<accounts.size();i++) {
     		if(accountNo == accounts.get(i).getAccountNo()) {
     			result = accounts.get(i).withdraw(amount);
     			if(result) {
-        			System.out.println("withdrawn " + amount +
+        			System.out.println("withdrawn " + toDollars(amount) +
         					" from account no: " + accountNo +
         					" successfully");    				
     			}
@@ -78,13 +88,19 @@ public class Bank {
     	}
     	return result;
     }
+    /**
+     * Deposit amount into an account
+     * @param accountNo account to deposit to
+     * @param amount amount to deposit
+     * @return result of transaction
+     */
     public boolean depositTo(int accountNo, double amount) {
     	boolean result = false;
     	for(int i=0; i<accounts.size();i++) {
     		if(accountNo == accounts.get(i).getAccountNo()) {
     			result = accounts.get(i).deposit(amount);
     			if(result) {
-        			System.out.println("deposited " + amount + 
+        			System.out.println("deposited " + toDollars(amount) + 
         					" to account no: " + accountNo +
         					" successfully");    				
     			}
@@ -92,7 +108,12 @@ public class Bank {
     	}
     	return result;
     }
-    
+    /**
+     * Transfer between bank accounts
+     * @param accountNo account to withdraw from
+     * @param amount amount to withdraw
+     * @return result of transaction
+     */    
     public void transfer(int sourceAccountNo, int destAccountNo, double amount) {
     	boolean validCheck = false;
     	validCheck = withdrawFrom(sourceAccountNo, amount);
@@ -100,6 +121,12 @@ public class Bank {
     		depositTo(destAccountNo, amount);
     	}
     }
+    
+	@Override
+	public String toDollars(double d) {
+		return String.format("$%,.2f", abs(d));
+	}
+	
     public List<Customer> getCustomers() {
 		return customers;
 	}
@@ -115,13 +142,17 @@ public class Bank {
 	    bank.addCustomer(john);	    
 	    bank.addCustomer(anon);
 	    anon.getAccounts().get(0).deposit(new Double("0.00")); // 3
-	    john.getAccounts().get(0).deposit(new Double("500.00")); // 1
+	    // john.getAccounts().get(0).deposit(new Double("500.00")); // 1
+	    john.getAccount(1).deposit(new Double("500.00"));
 	    bank.transfer(1, 2, new Double("100.00"));
 	    
 	    bank.transfer(3, 1, new Double("999.00"));
+	    
+	    
 	    System.out.println(john.getStatement());
 	    System.out.println(anon.getStatement());
-	    System.out.println();
+	    System.out.println(bank.customerSummary());
         
     }
+
 }
