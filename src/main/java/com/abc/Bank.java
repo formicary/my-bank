@@ -160,6 +160,7 @@ public class Bank implements Common {
     	bank.addAccounts(deedee);
     	bank.transfer(2, 1, 100.00);
     	System.out.println(ca.getAccountNo());
+    	System.out.println(deedee.getStatement());
     	
 
         

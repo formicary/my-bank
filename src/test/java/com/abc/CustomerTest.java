@@ -5,13 +5,25 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+import org.junit.*;
+
 public class CustomerTest {
+
+	private Customer oscar;
+    private CheckingAccount checkingAccount;
+    private SavingsAccount savingsAccount;
+    
+	@Before
+	public void setUp() {
+		oscar = new Customer("Oscar");
+		checkingAccount = new CheckingAccount();
+	    savingsAccount = new SavingsAccount();		
+	}
 
     @Test //Test customer statement generation
     public void testApp(){
+    	
 
-        Account checkingAccount = new Account(Account.CHECKING);
-        Account savingsAccount = new Account(Account.SAVINGS);
 
         Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
 
@@ -35,23 +47,21 @@ public class CustomerTest {
 
     @Test
     public void testOneAccount(){
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
+        oscar.openAccount(savingsAccount);
         assertEquals(1, oscar.getNumberOfAccounts());
     }
 
     @Test
     public void testTwoAccount(){
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
+        oscar.openAccount(savingsAccount);
+        oscar.openAccount(checkingAccount);
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
     @Ignore
     public void testThreeAcounts() {
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
+        oscar.openAccount(savingsAccount);
+        oscar.openAccount(checkingAccount);
         assertEquals(3, oscar.getNumberOfAccounts());
     }
 }

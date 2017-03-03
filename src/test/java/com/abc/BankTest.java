@@ -21,8 +21,8 @@ public class BankTest {
     	john = new Customer("John");
     	bill = new Customer("Bill");
     	checkingAccount = new CheckingAccount();
-    	savingsAccount = new Account(Account.SAVINGS);
-    	maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
+    	savingsAccount = new SavingsAccount();
+    	maxiSavingsAccount = new MaxiSavingsAccount();
     }
     
 

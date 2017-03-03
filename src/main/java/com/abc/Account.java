@@ -11,8 +11,7 @@ public abstract class Account {
     private int accountNo;
     
     /**
-     * The Account constructor defines an account type and a list of transactions
-     * @param accountType account type
+     * Create Account with list of transactions
      * @param transactions list of transactions
      */
 	public Account() {
@@ -20,7 +19,7 @@ public abstract class Account {
     }
 
 	/**
-     * Deposits a new amount into an account.
+     * Deposit a new amount into an account.
      * If amount less than or equal to zero, user notified.
      * Otherwise, amount added to ArrayList of transactions
      * and method returns true.
@@ -30,7 +29,7 @@ public abstract class Account {
     public boolean deposit(double amount) {
     	boolean result = false;
 		if(MONEY_ZERO >= amount) {
-			System.out.println("amount to deposit must be greater than zero");
+			System.out.println("Amount to deposit must be greater than zero");
 		} else {
 			getTransactions().add(new Transaction(amount));
 			result = true;
@@ -38,7 +37,7 @@ public abstract class Account {
 		return result;
     }
     /**
-     * Withdraws a new amount from an account.
+     * Withdraw a new amount from an account.
      * If amount less than or equal to zero, user notified.
      * If total account balance less than amount to withdraw, user notified.
      * Otherwise, negative amount added to ArrayList of transactions
@@ -49,11 +48,11 @@ public abstract class Account {
 	public boolean withdraw(double amount) {
 		boolean result = false;
 	    if (MONEY_ZERO >= amount) {
-	        System.out.println("amount to withdraw must be greater than zero");
+	        System.out.println("Amount to withdraw must be greater than zero");
 	    }
 	    else {
 	    	if (sumTransactions() < amount) {
-		    	System.out.println("insufficient funds to withdraw");
+		    	System.out.println("Insufficient funds to withdraw");
 	    	}
 	    	else {
 	    		getTransactions().add(new Transaction(-amount));
