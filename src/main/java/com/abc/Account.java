@@ -63,7 +63,8 @@ public abstract class Account {
 
 	}
 	/**
-	 * Calculates the interest earned for an account type
+	 * Calculates the interest earned on an account
+	 * Logic defined in subclass
 	 * @return interest earned
 	 */
 	public abstract double interestEarned();

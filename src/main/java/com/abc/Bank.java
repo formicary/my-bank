@@ -2,10 +2,13 @@ package com.abc;
 
 import static java.lang.Math.abs;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class Bank implements Common {
+	
     private List<Customer> customers;
     private List<Account> accounts;
 
@@ -13,19 +16,30 @@ public class Bank implements Common {
         customers = new ArrayList<Customer>();
         accounts = new ArrayList<Account>();
     }
-
+    
+    /**
+     * Add customer(s) and associated accounts(s) to bank
+     * @param customer
+     */
     public void addCustomer(Customer customer) {
         customers.add(customer);
         addAccounts(customer);
     }
     
+    /**
+     * Add customer account(s) with account number
+     * @param customer
+     */
     public void addAccounts(Customer customer) {
     	for(Account a: customer.getAccounts()) {
     		a.setAccountNo(generateAccountNo());
     		accounts.add(a);
     	}
     }
-    
+    /**
+     * Summary of customer names and number of associated accounts
+     * @return String
+     */
     public String customerSummary() {
         String summary = "Customer Summary";
         for (Customer c : getCustomers())
@@ -45,8 +59,8 @@ public class Bank implements Common {
         return number + " " + (number == 1 ? word : word + "s");
     }
     /**
-     * 
-     * @return
+     * Calculate total amount of interest paid to customers
+     * @return interest paid
      */
     public double totalInterestPaid() {
         double total = 0;
@@ -71,7 +85,7 @@ public class Bank implements Common {
 //        }
 //    }
     /**
-     * Generation bank account number
+     * Generate bank account number
      * @return account no
      */
     public int generateAccountNo() {
@@ -89,9 +103,8 @@ public class Bank implements Common {
     		if(accountNo == accounts.get(i).getAccountNo()) {
     			result = accounts.get(i).withdraw(amount);
     			if(result) {
-        			System.out.println("withdrawn " + toDollars(amount) +
-        					" from account no: " + accountNo +
-        					" successfully");    				
+        			System.out.println("Withdrawn " + toDollars(amount) +
+        					" from account no " + accountNo);    				
     			}
     		}
     	}
@@ -109,9 +122,8 @@ public class Bank implements Common {
     		if(accountNo == accounts.get(i).getAccountNo()) {
     			result = accounts.get(i).deposit(amount);
     			if(result) {
-        			System.out.println("deposited " + toDollars(amount) + 
-        					" to account no: " + accountNo +
-        					" successfully");    				
+        			System.out.println("Deposited " + toDollars(amount) + 
+        					" to account no " + accountNo);    				
     			}
     		}
     	}
@@ -119,7 +131,8 @@ public class Bank implements Common {
     }
     /**
      * Transfer between bank accounts
-     * @param accountNo account to withdraw from
+     * @param sourceAccountNo account to withdraw from
+     * @param destAccountNo account to deposit to
      * @param amount amount to withdraw
      * @return result of transaction
      */    
@@ -130,10 +143,14 @@ public class Bank implements Common {
     		depositTo(destAccountNo, amount);
     	}
     }
-    
+    /**
+     * Display amount in Canadian currency
+     */
 	@Override
 	public String toDollars(double d) {
-		return String.format("$%,.2f", abs(d));
+        NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.CANADA);
+        String currency = nf.format(abs(d));
+        return currency;	
 	}
 	
     public List<Customer> getCustomers() {
