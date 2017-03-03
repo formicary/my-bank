@@ -3,15 +3,10 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Account {
+public abstract class Account {
 	
-	//Constant variables
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
     public static final double MONEY_ZERO = 0.00;
 
-    private final int accountType;
     private List<Transaction> transactions;
     private int accountNo;
     
@@ -20,8 +15,7 @@ public class Account {
      * @param accountType account type
      * @param transactions list of transactions
      */
-	public Account(int accountType) {
-        this.accountType = accountType;
+	public Account() {
         this.transactions = new ArrayList<Transaction>();
     }
 
@@ -31,8 +25,7 @@ public class Account {
      * Otherwise, amount added to ArrayList of transactions
      * and method returns true.
      * @param amount to deposit
-     * @return true if transaction successful
-     * @return false if transaction unsuccessful
+     * @return result of transaction
      */
     public boolean deposit(double amount) {
     	boolean result = false;
@@ -51,8 +44,7 @@ public class Account {
      * Otherwise, negative amount added to ArrayList of transactions
      * and method returns true.
      * @param amount to withdraw
-     * @return true if transaction successful
-     * @return false if transaction unsuccessful
+     * @return result of transaction
      */
 	public boolean withdraw(double amount) {
 		boolean result = false;
@@ -75,27 +67,10 @@ public class Account {
 	 * Calculates the interest earned for an account type
 	 * @return interest earned
 	 */
-    public double interestEarned() {
-        double amount = sumTransactions();
-        switch(getAccountType()){
-            case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
-            case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
-            default:
-                return amount * 0.001;
-        }
-    }
-    
+	public abstract double interestEarned();
+
     /**
-     * Check if list of transactions empty
+     * Check if list of transactions is empty
      * @return true if list of transactions empty
      * @return false if list of transactions populated
      */
@@ -113,10 +88,6 @@ public class Account {
         	amount += t.amount;
         }
         return amount;
-    }
-
-    public int getAccountType() {
-        return accountType;
     }
     
     public List<Transaction> getTransactions() {

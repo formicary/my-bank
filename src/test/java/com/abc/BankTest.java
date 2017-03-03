@@ -20,7 +20,7 @@ public class BankTest {
     	bank = new Bank();
     	john = new Customer("John");
     	bill = new Customer("Bill");
-    	checkingAccount = new Account(Account.CHECKING);
+    	checkingAccount = new CheckingAccount();
     	savingsAccount = new Account(Account.SAVINGS);
     	maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
     }

@@ -35,10 +35,19 @@ public class Bank implements Common {
 
     //Make sure correct plural of word is created based on the number passed in:
     //If number passed in is 1 just return the word otherwise add an 's' at the end
+    /**
+     * 
+     * @param number
+     * @param word
+     * @return
+     */
     private String format(int number, String word) {
         return number + " " + (number == 1 ? word : word + "s");
     }
-
+    /**
+     * 
+     * @return
+     */
     public double totalInterestPaid() {
         double total = 0;
         for(Customer c: getCustomers())
@@ -132,26 +141,27 @@ public class Bank implements Common {
 	}
 
     public static void main (String [] args) {
+    	Bank bank = new Bank();
+    	CheckingAccount ca = new CheckingAccount();
+    	SavingsAccount sa =  new SavingsAccount();
+    	ca.deposit(2000.00);
+    	sa.deposit(2000.00);
+    	for(Transaction t: ca.getTransactions()){
+    		System.out.println(t.amount);
+    	}
+    	System.out.println(ca.interestEarned());
+    	System.out.println(sa.interestEarned());    	
+    	Customer anon = new Customer("anon");
+    	Customer deedee = new Customer("deedee");
+    	anon.openAccount(ca);
+    	deedee.openAccount(sa);
+    	System.out.println(deedee.totalInterestEarned());
+    	bank.addAccounts(anon);
+    	bank.addAccounts(deedee);
+    	bank.transfer(2, 1, 100.00);
+    	System.out.println(ca.getAccountNo());
+    	
 
-	    Bank bank = new Bank();
-	    Customer john = new Customer("John");
-	    john.openAccount(new Account(Account.CHECKING));
-	    Customer anon = new Customer("Anon");
-	    anon.openAccount(new Account(Account.CHECKING));
-	    john.openAccount(new Account(Account.SAVINGS));
-	    bank.addCustomer(john);	    
-	    bank.addCustomer(anon);
-	    anon.getAccounts().get(0).deposit(new Double("0.00")); // 3
-	    // john.getAccounts().get(0).deposit(new Double("500.00")); // 1
-	    john.getAccount(1).deposit(new Double("500.00"));
-	    bank.transfer(1, 2, new Double("100.00"));
-	    
-	    bank.transfer(3, 1, new Double("999.00"));
-	    
-	    
-	    System.out.println(john.getStatement());
-	    System.out.println(anon.getStatement());
-	    System.out.println(bank.customerSummary());
         
     }
 
