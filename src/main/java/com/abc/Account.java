@@ -51,12 +51,14 @@ public abstract class Account {
 			System.out.println("Amount to withdraw must be greater than zero");
 		}
 		else {
-			if (sumTransactions() < amount) {
-				System.out.println("Insufficient funds to withdraw");
-			}
-			else {
-				getTransactions().add(new Transaction(-amount));
-				result = true;
+			if(!isTransactionsEmpty()) {
+				if (sumTransactions() < amount) {
+					System.out.println("Insufficient funds to withdraw");
+				}
+				else {
+					getTransactions().add(new Transaction(-amount));
+					result = true;
+				}
 			}
 		}
 		return result;

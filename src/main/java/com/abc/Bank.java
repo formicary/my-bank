@@ -48,7 +48,7 @@ public class Bank implements Common {
 	}
 
 	/**
-	 * Singular word returned if number equal to one
+	 * Singular form of word returned if number equal to one
 	 * Otherwise, plural returned
 	 * @param number
 	 * @param word
@@ -67,22 +67,6 @@ public class Bank implements Common {
 			total += c.totalInterestEarned();
 		return total;
 	}
-
-	//    public String getFirstCustomer() throws Exception {
-	//    	try {
-	//	    	if (getCustomers().size() > 0) {
-	//	            for(int i=0; i<getCustomers().size(); i++) {
-	//	            	return getCustomers().get(i).getName();
-	//	            }  		
-	//	    	}
-	//	    	else {
-	//	    		return "Error retrieving name of first customer";
-	//	    	}
-	//        } catch (Exception e){
-	//            e.printStackTrace();
-	//            return "Error retrieving name of first customer";
-	//        }
-	//    }
 	/**
 	 * Generate bank account number
 	 * @return account no
@@ -154,32 +138,6 @@ public class Bank implements Common {
 
 	public List<Customer> getCustomers() {
 		return customers;
-	}
-
-	public static void main (String [] args) {
-		Bank bank = new Bank();
-		CheckingAccount ca = new CheckingAccount();
-		SavingsAccount sa =  new SavingsAccount();
-		ca.deposit(2000.00);
-		sa.deposit(2000.00);
-		for(Transaction t: ca.getTransactions()){
-			System.out.println(t.amount);
-		}
-		System.out.println(ca.interestEarned());
-		System.out.println(sa.interestEarned());    	
-		Customer anon = new Customer("anon");
-		Customer deedee = new Customer("deedee");
-		anon.openAccount(ca);
-		deedee.openAccount(sa);
-		System.out.println(deedee.totalInterestEarned());
-		bank.addAccounts(anon);
-		bank.addAccounts(deedee);
-		bank.transfer(2, 1, 100.00);
-		System.out.println(ca.getAccountNo());
-		System.out.println(deedee.getStatement());
-
-
-
 	}
 
 }

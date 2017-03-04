@@ -40,20 +40,10 @@ public class Customer implements Common {
 		}
 
 	}
-	public Account getAccount(int accountNo) {
-		Account account = null;
-		for(int i=0; i<accounts.size(); i++) {
-			if(accountNo == accounts.get(i).getAccountNo()) {
-				account = accounts.get(i);
-			}
-		}
-		return account;
-	}
-	public void transferTo(int accountNo, double amount) {
-
-
-	}
-
+	/**
+	 * Calculate total interest earned on all accounts held by customer
+	 * @return total interest earned
+	 */
 	public double totalInterestEarned() {
 		double total = 0;
 		for (Account a : accounts)
@@ -61,7 +51,10 @@ public class Customer implements Common {
 		return total;
 	}
 
-
+	/**
+	 * Prints bank statement of all accounts held by customer
+	 * @return customer bank statement
+	 */
 	public String getStatement() {
 		String statement = null;
 		statement = "Statement for " + name + "\n";
@@ -73,7 +66,11 @@ public class Customer implements Common {
 		statement += "\nTotal In All Accounts " + toDollars(total);
 		return statement;
 	}
-
+	/**
+	 * Displays account type as a string
+	 * @param a account
+	 * @return account type
+	 */
 	private String statementForAccount(Account a) {
 		String s = "";
 
@@ -96,7 +93,9 @@ public class Customer implements Common {
 		s += "Total " + toDollars(total);
 		return s;
 	}
-
+	/**
+	 * Display amount in Canadian currency
+	 */
 	@Override
 	public String toDollars(double d) {
 		NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.CANADA);
