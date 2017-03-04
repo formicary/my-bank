@@ -9,6 +9,7 @@ public abstract class Account {
 
 	private List<Transaction> transactions;
 	private int accountNo;
+	private static int lastAccountNo = 0;
 
 	/**
 	 * Create Account with list of transactions
@@ -16,6 +17,8 @@ public abstract class Account {
 	 */
 	public Account() {
 		this.transactions = new ArrayList<Transaction>();
+		lastAccountNo++;
+		this.accountNo = lastAccountNo;
 	}
 
 	/**
@@ -28,8 +31,8 @@ public abstract class Account {
 	 */
 	public boolean deposit(double amount) {
 		boolean result = false;
-		if(MONEY_ZERO >= amount) {
-			System.out.println("Amount to deposit must be greater than zero");
+		if(amount <= MONEY_ZERO) {
+			System.err.println("Unable to deposit: amount to deposit must be greater than zero");
 		} else {
 			getTransactions().add(new Transaction(amount));
 			result = true;
@@ -47,29 +50,37 @@ public abstract class Account {
 	 */
 	public boolean withdraw(double amount) {
 		boolean result = false;
-		if (MONEY_ZERO >= amount) {
-			System.out.println("Amount to withdraw must be greater than zero");
+		if (amount <= MONEY_ZERO) {
+			System.err.println("Unable to withdraw: amount to withdraw must be greater than zero");
 		}
 		else {
-			if(!isTransactionsEmpty()) {
-				if (sumTransactions() < amount) {
-					System.out.println("Insufficient funds to withdraw");
-				}
-				else {
-					getTransactions().add(new Transaction(-amount));
-					result = true;
-				}
+			if (sumTransactions() < amount) {
+				System.err.println("Unable to withdraw: insufficient funds");
+			}
+			else {
+				getTransactions().add(new Transaction(-amount));
+				result = true;
 			}
 		}
 		return result;
 
 	}
+	/**
+	 * Transfer to another bank account
+	 * @param account account to transfer to
+	 * @param amount amount to transfer
+	 */	
 	public void transferTo(Account account, double amount) {
 		boolean validCheck = false;
-		validCheck = withdraw(amount);
-		if(validCheck) {
-			account.deposit(amount);
+		try {
+			validCheck = withdraw(amount);
+			if(validCheck) {
+				account.deposit(amount);
+			}			
+		} catch (NullPointerException e) {
+			System.err.println("Error: The specified account does not exist.\nTransaction unauthorized.");
 		}
+
 	}
 	/**
 	 * Calculates the interest earned on an account
@@ -84,7 +95,7 @@ public abstract class Account {
 	 * @return false if list of transactions populated
 	 */
 	public boolean isTransactionsEmpty() {
-		return (null == getTransactions() || getTransactions().isEmpty()); 
+		return (getTransactions() == null || getTransactions().isEmpty()); 
 	}
 
 	/**

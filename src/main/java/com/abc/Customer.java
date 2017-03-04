@@ -8,7 +8,7 @@ import static java.lang.Math.abs;
 
 import java.text.NumberFormat;
 
-public class Customer implements Common {
+public class Customer {
 
 	private String name;
 	private List<Account> accounts;
@@ -45,11 +45,13 @@ public class Customer implements Common {
 	}
 	public Account getAccount(int accountNo) {
 		Account account = null;
+
 		for (Account a: accounts) {
 			if (accountNo == a.getAccountNo()) {
 				account = a;
 			}
 		}
+
 		return account;
 	}
 	/**
@@ -75,7 +77,7 @@ public class Customer implements Common {
 			statement += "\n" + statementForAccount(a) + "\n";
 			total += a.sumTransactions();
 		}
-		statement += "\nTotal In All Accounts " + toDollars(total);
+		statement += "\nTotal In All Accounts " + Common.toDollars(total);
 		return statement;
 	}
 	/**
@@ -99,20 +101,11 @@ public class Customer implements Common {
 		//Now total up all the transactions
 		double total = 0.0;
 		for (Transaction t : a.getTransactions()) {
-			s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
+			s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + Common.toDollars(t.amount) + "\n";
 			total += t.amount;
 		}
-		s += "Total " + toDollars(total);
+		s += "Total " + Common.toDollars(total);
 		return s;
-	}
-	/**
-	 * Display amount in Canadian currency
-	 */
-	@Override
-	public String toDollars(double d) {
-		NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.CANADA);
-		String currency = nf.format(abs(d));
-		return currency;		
 	}
 
 	public String getName() {

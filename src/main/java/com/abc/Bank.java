@@ -7,14 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class Bank implements Common {
+public class Bank {
 
 	private List<Customer> customers;
 	private List<Account> accounts;
 
 	public Bank() {
 		customers = new ArrayList<Customer>();
-		accounts = new ArrayList<Account>();
 	}
 
 	/**
@@ -23,19 +22,8 @@ public class Bank implements Common {
 	 */
 	public void addCustomer(Customer customer) {
 		customers.add(customer);
-		addAccounts(customer);
 	}
 
-	/**
-	 * Add customer account(s) with account number
-	 * @param customer
-	 */
-	private void addAccounts(Customer customer) {
-		for(Account a: customer.getAccounts()) {
-			a.setAccountNo(generateAccountNo());
-			accounts.add(a);
-		}
-	}
 	/**
 	 * Summary of customer names and number of associated accounts
 	 * @return String
@@ -68,13 +56,6 @@ public class Bank implements Common {
 		return total;
 	}
 	/**
-	 * Generate bank account number
-	 * @return account no
-	 */
-	public int generateAccountNo() {
-		return accounts.size()+1;
-	}
-	/**
 	 * Withdraw amount from an account
 	 * @param accountNo account to withdraw from
 	 * @param amount amount to withdraw
@@ -86,7 +67,7 @@ public class Bank implements Common {
 			if(accountNo == accounts.get(i).getAccountNo()) {
 				result = accounts.get(i).withdraw(amount);
 				if(result) {
-					System.out.println("Withdrawn " + toDollars(amount) +
+					System.out.println("Withdrawn " + Common.toDollars(amount) +
 							" from account no " + accountNo);    				
 				}
 			}
@@ -105,7 +86,7 @@ public class Bank implements Common {
 			if(accountNo == accounts.get(i).getAccountNo()) {
 				result = accounts.get(i).deposit(amount);
 				if(result) {
-					System.out.println("Deposited " + toDollars(amount) + 
+					System.out.println("Deposited " + Common.toDollars(amount) + 
 							" to account no " + accountNo);    				
 				}
 			}
@@ -126,15 +107,6 @@ public class Bank implements Common {
 			depositTo(destAccountNo, amount);
 		}
 	}
-	/**
-	 * Display amount in Canadian currency
-	 */
-	@Override
-	public String toDollars(double d) {
-		NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.CANADA);
-		String currency = nf.format(abs(d));
-		return currency;	
-	}
 
 	public List<Customer> getCustomers() {
 		return customers;
@@ -150,11 +122,11 @@ public class Bank implements Common {
 		anon.openAccount(sa);
 		anon.openAccount(ca);
 		test.openAccount(new SavingsAccount());
-		ca.deposit(500.00);
+		ca.deposit(0);
 		ca.transferTo(sa, 100.00);
 		bank.addCustomer(anon);
 		bank.addCustomer(test);
-		anon.getAccount(2).transferTo(test.getAccount(3), 100.00);
+		anon.getAccount(1).transferTo(test.getAccount(3), 10.00);
 		System.out.println(anon.getStatement());
 		System.out.println(test.getStatement());
 	}

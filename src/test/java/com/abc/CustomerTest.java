@@ -69,14 +69,4 @@ public class CustomerTest {
         oscar.openAccount(maxiSavingsAccount);
         assertEquals(3, oscar.getNumberOfAccounts());
     }
-    
-    @Test
-    public void testTransferToSavingsAcount() {
-    	oscar.openAccount(savingsAccount);
-    	oscar.openAccount(checkingAccount);
-    	checkingAccount.deposit(500.00);
-    	bank.addCustomer(oscar);
-    	checkingAccount.transferTo(savingsAccount, 100.00);
-    	assertEquals(100.00, savingsAccount.sumTransactions(), DOUBLE_DELTA);
-    }
 }
