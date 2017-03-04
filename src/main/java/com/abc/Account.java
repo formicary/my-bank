@@ -75,7 +75,7 @@ public abstract class Account {
 	 * @return false if list of transactions populated
 	 */
 	public boolean isTransactionsEmpty() {
-		return getTransactions().isEmpty(); 
+		return (null == getTransactions() || getTransactions().isEmpty()); 
 	}
 
 	/**
