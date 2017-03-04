@@ -32,7 +32,7 @@ public abstract class Account {
 	public boolean deposit(double amount) {
 		boolean result = false;
 		if(amount <= MONEY_ZERO) {
-			System.err.println("Unable to deposit: amount to deposit must be greater than zero");
+			System.err.println("Unable to deposit: Amount to deposit must be greater than zero");
 		} else {
 			getTransactions().add(new Transaction(amount));
 			result = true;
@@ -51,11 +51,11 @@ public abstract class Account {
 	public boolean withdraw(double amount) {
 		boolean result = false;
 		if (amount <= MONEY_ZERO) {
-			System.err.println("Unable to withdraw: amount to withdraw must be greater than zero");
+			System.err.println("Unable to withdraw: Amount to withdraw must be greater than zero");
 		}
 		else {
 			if (sumTransactions() < amount) {
-				System.err.println("Unable to withdraw: insufficient funds");
+				System.err.println("Unable to withdraw: Insufficient funds");
 			}
 			else {
 				getTransactions().add(new Transaction(-amount));

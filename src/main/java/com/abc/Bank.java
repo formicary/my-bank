@@ -126,7 +126,7 @@ public class Bank {
 		ca.transferTo(sa, 100.00);
 		bank.addCustomer(anon);
 		bank.addCustomer(test);
-		anon.getAccount(1).transferTo(test.getAccount(3), 10.00);
+		anon.getAccount(4).transferTo(test.getAccount(3), 10.00);
 		System.out.println(anon.getStatement());
 		System.out.println(test.getStatement());
 	}

@@ -40,18 +40,36 @@ public class Customer {
 		}
 
 	}
+	/**
+	 * Check if account with specified account number exists
+	 * @param accountNo account number of account
+	 * @return true if account exits
+	 */
 	public boolean isValidAcc(int accountNo) {
-		return getAccount(accountNo) != null;
+		boolean result = false;
+		for(Account a: accounts) {
+			if(accountNo == a.getAccountNo()) {
+				return true;
+			}
+		}
+		return result;
 	}
-	public Account getAccount(int accountNo) {
+	/**
+	 * Return account associated with specified account number
+	 * @param accountNo account number of account
+	 * @return account
+	 * @throws IllegalArgumentException if account does not exist
+	 */
+	public Account getAccount(int accountNo) throws IllegalArgumentException {
+		if(!isValidAcc(accountNo)) {
+			throw new IllegalArgumentException("Error: The specified account does not exist");
+		}
 		Account account = null;
-
 		for (Account a: accounts) {
 			if (accountNo == a.getAccountNo()) {
 				account = a;
 			}
 		}
-
 		return account;
 	}
 	/**
