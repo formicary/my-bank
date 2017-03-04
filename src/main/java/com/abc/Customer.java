@@ -40,6 +40,18 @@ public class Customer implements Common {
 		}
 
 	}
+	public boolean isValidAcc(int accountNo) {
+		return getAccount(accountNo) != null;
+	}
+	public Account getAccount(int accountNo) {
+		Account account = null;
+		for (Account a: accounts) {
+			if (accountNo == a.getAccountNo()) {
+				account = a;
+			}
+		}
+		return account;
+	}
 	/**
 	 * Calculate total interest earned on all accounts held by customer
 	 * @return total interest earned

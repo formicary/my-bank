@@ -30,7 +30,7 @@ public class Bank implements Common {
 	 * Add customer account(s) with account number
 	 * @param customer
 	 */
-	public void addAccounts(Customer customer) {
+	private void addAccounts(Customer customer) {
 		for(Account a: customer.getAccounts()) {
 			a.setAccountNo(generateAccountNo());
 			accounts.add(a);
@@ -138,6 +138,25 @@ public class Bank implements Common {
 
 	public List<Customer> getCustomers() {
 		return customers;
+	}
+	
+	public static void main (String [] args) {
+		
+		Bank bank = new Bank();
+		Customer anon = new Customer("Anon");
+		Customer test = new Customer("Test");
+		SavingsAccount sa = new SavingsAccount();
+		CheckingAccount ca = new CheckingAccount();
+		anon.openAccount(sa);
+		anon.openAccount(ca);
+		test.openAccount(new SavingsAccount());
+		ca.deposit(500.00);
+		ca.transferTo(sa, 100.00);
+		bank.addCustomer(anon);
+		bank.addCustomer(test);
+		anon.getAccount(2).transferTo(test.getAccount(3), 100.00);
+		System.out.println(anon.getStatement());
+		System.out.println(test.getStatement());
 	}
 
 }

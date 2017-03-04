@@ -64,6 +64,13 @@ public abstract class Account {
 		return result;
 
 	}
+	public void transferTo(Account account, double amount) {
+		boolean validCheck = false;
+		validCheck = withdraw(amount);
+		if(validCheck) {
+			account.deposit(amount);
+		}
+	}
 	/**
 	 * Calculates the interest earned on an account
 	 * Logic defined in subclass

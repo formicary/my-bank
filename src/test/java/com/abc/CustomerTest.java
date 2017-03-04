@@ -8,16 +8,20 @@ import static org.junit.Assert.assertEquals;
 import org.junit.*;
 
 public class CustomerTest {
-
+	private static final double DOUBLE_DELTA = 1e-15;
 	private Customer oscar;
     private CheckingAccount checkingAccount;
     private SavingsAccount savingsAccount;
+    private MaxiSavingsAccount maxiSavingsAccount;
+    private Bank bank;
     
 	@Before
 	public void setUp() {
+		bank = new Bank();
 		oscar = new Customer("Oscar");
 		checkingAccount = new CheckingAccount();
-	    savingsAccount = new SavingsAccount();		
+	    savingsAccount = new SavingsAccount();	
+	    maxiSavingsAccount = new MaxiSavingsAccount();
 	}
 
     @Test //Test customer statement generation
@@ -58,10 +62,21 @@ public class CustomerTest {
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
-    @Ignore
+    @Test
     public void testThreeAcounts() {
         oscar.openAccount(savingsAccount);
         oscar.openAccount(checkingAccount);
+        oscar.openAccount(maxiSavingsAccount);
         assertEquals(3, oscar.getNumberOfAccounts());
+    }
+    
+    @Test
+    public void testTransferToSavingsAcount() {
+    	oscar.openAccount(savingsAccount);
+    	oscar.openAccount(checkingAccount);
+    	checkingAccount.deposit(500.00);
+    	bank.addCustomer(oscar);
+    	checkingAccount.transferTo(savingsAccount, 100.00);
+    	assertEquals(100.00, savingsAccount.sumTransactions(), DOUBLE_DELTA);
     }
 }
