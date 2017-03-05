@@ -62,7 +62,7 @@ public class Customer {
 	 */
 	public Account getAccount(int accountNo) throws IllegalArgumentException {
 		if(!isValidAcc(accountNo)) {
-			throw new IllegalArgumentException("Error: The specified account does not exist");
+			throw new IllegalArgumentException("Error: Account with account number " + accountNo + " does not exist");
 		}
 		Account account = null;
 		for (Account a: accounts) {

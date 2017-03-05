@@ -4,6 +4,8 @@ import static java.lang.Math.abs;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -112,23 +114,19 @@ public class Bank {
 		return customers;
 	}
 	
+	@SuppressWarnings("deprecation")
 	public static void main (String [] args) {
 		
 		Bank bank = new Bank();
 		Customer anon = new Customer("Anon");
-		Customer test = new Customer("Test");
-		SavingsAccount sa = new SavingsAccount();
-		CheckingAccount ca = new CheckingAccount();
-		anon.openAccount(sa);
-		anon.openAccount(ca);
-		test.openAccount(new SavingsAccount());
-		ca.deposit(0);
-		ca.transferTo(sa, 100.00);
+		MaxiSavingsAccount ms = new MaxiSavingsAccount();
+		ms.deposit(100.00);
+		ms.withdraw(20.00);
+		Date date = new GregorianCalendar(2017, 2, 3).getTime();
+		ms.getTransactions().get(1).setTransactionDate(date);
+		anon.openAccount(ms);
 		bank.addCustomer(anon);
-		bank.addCustomer(test);
-		anon.getAccount(4).transferTo(test.getAccount(3), 10.00);
-		System.out.println(anon.getStatement());
-		System.out.println(test.getStatement());
+		System.out.println(anon.totalInterestEarned());
 	}
 
 }
