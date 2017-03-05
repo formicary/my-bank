@@ -9,7 +9,7 @@ public class Common {
 	/**
 	 * Display amount in Canadian currency
 	 * @param d amount to convert
-	 * @return amount in Canadian currency
+	 * @return amount in Canadian dollars
 	 */
     public static String toDollars(double d) {
 		NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.CANADA);

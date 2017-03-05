@@ -28,6 +28,17 @@ public class Customer {
 		return this;
 	}
 	/**
+	 * Close a specified account
+	 * @param account account to close
+	 * @return customer with removed account
+	 */
+	public Customer closeAccount(Account account) {
+		if(accounts.contains(account)) {
+			accounts.remove(account);
+		}
+		return this;
+	}
+	/**
 	 * Return number of accounts held by customer
 	 * @return number of accounts
 	 */
@@ -99,7 +110,7 @@ public class Customer {
 		return statement;
 	}
 	/**
-	 * Displays account type as a string
+	 * Displays account type and account number as a string
 	 * @param a account
 	 * @return account type
 	 */
@@ -107,12 +118,15 @@ public class Customer {
 		String s = "";
 
 		if(a instanceof CheckingAccount) {
+			s += "Account No: " + a.getAccountNo() +"\n";
 			s += "Checking Account\n";
 		}
 		else if(a instanceof SavingsAccount) {
+			s += "Account No: " + a.getAccountNo() +"\n";
 			s += "Savings Account\n";
 		}
 		else if(a instanceof MaxiSavingsAccount) {
+			s += "Account No: " + a.getAccountNo() +"\n";
 			s += "Maxi Savings Account\n";
 		}
 

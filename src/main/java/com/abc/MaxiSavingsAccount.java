@@ -9,7 +9,7 @@ public class MaxiSavingsAccount extends SavingsAccount {
 	}
 
 	/**
-	 * Calculates the interest earned for a Savings Account
+	 * Calculates the interest earned for a Maxi-Savings Account
 	 * @return interest earned
 	 */
 	@Override
@@ -22,19 +22,9 @@ public class MaxiSavingsAccount extends SavingsAccount {
         	return amount * 0.001;
         }
     }	
-//    public double interestEarned() {
-//        double amount = sumTransactions();
-//        if (amount <= 1000) {
-//            return amount * 0.02;
-//        }
-//        else if (amount <= 2000) {
-//            return 20 + (amount-1000) * 0.05;
-//        }
-//        return 70 + (amount-2000) * 0.1;          
-//    }
 	/**
 	 * Check if any withdrawals in the past 10 days
-	 * @return false if withdrawal within past 10 days
+	 * @return false if withdrawal within past 10 days; true otherwise
 	 */
 	public boolean isMaxiInterestAGoGo() {
 		boolean result = true;
@@ -42,7 +32,7 @@ public class MaxiSavingsAccount extends SavingsAccount {
 		for(Transaction t: getTransactions()) {
 			diff = DateProvider.getInstance().now().getTime()-t.getTransactionDate().getTime();
 			diff = TimeUnit.MILLISECONDS.toDays(diff);
-			if(diff < 10 && t.getAmount() < 0) {			
+			if((diff < 10) && (t.getAmount() < 0)) {			
 				result = false;
 			}
 		}

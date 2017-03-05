@@ -12,8 +12,7 @@ public abstract class Account {
 	private static int lastAccountNo = 0;
 
 	/**
-	 * Create Account with list of transactions
-	 * @param transactions list of transactions
+	 * Create account with list of transactions and assign sequential account number
 	 */
 	public Account() {
 		this.transactions = new ArrayList<Transaction>();
@@ -82,6 +81,7 @@ public abstract class Account {
 		}
 
 	}
+
 	/**
 	 * Calculates the interest earned on an account
 	 * Logic defined in subclass
@@ -91,8 +91,8 @@ public abstract class Account {
 
 	/**
 	 * Check if list of transactions is empty
-	 * @return true if list of transactions empty
-	 * @return false if list of transactions populated
+	 * @return true if list of transactions empty; 
+	 * false if list of transactions populated
 	 */
 	public boolean isTransactionsEmpty() {
 		return (getTransactions() == null || getTransactions().isEmpty()); 
@@ -117,7 +117,7 @@ public abstract class Account {
 	public int getAccountNo() {
 		return accountNo;
 	}
-
+	
 	public void setAccountNo(int accountNo) {
 		this.accountNo = accountNo;
 	}	
