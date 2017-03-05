@@ -1,6 +1,5 @@
 package com.abc;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -8,16 +7,14 @@ import static org.junit.Assert.assertEquals;
 import org.junit.*;
 
 public class CustomerTest {
-	private static final double DOUBLE_DELTA = 1e-15;
+	
 	private Customer oscar;
     private CheckingAccount checkingAccount;
     private SavingsAccount savingsAccount;
     private MaxiSavingsAccount maxiSavingsAccount;
-    private Bank bank;
     
 	@Before
 	public void setUp() {
-		bank = new Bank();
 		oscar = new Customer("Oscar");
 		checkingAccount = new CheckingAccount();
 	    savingsAccount = new SavingsAccount();	
@@ -37,12 +34,12 @@ public class CustomerTest {
 
         assertEquals("Statement for Henry\n" +
                 "\n" +
-        		"Account No: 1" +
+        		"Account No: 10\n" +
                 "Checking Account\n" +
                 "  deposit $100.00\n" +
                 "Total $100.00\n" +
                 "\n" +
-                "Account No: 2" +
+                "Account No: 11\n" +
                 "Savings Account\n" +
                 "  deposit $4,000.00\n" +
                 "  withdrawal $200.00\n" +

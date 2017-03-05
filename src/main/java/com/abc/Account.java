@@ -1,11 +1,7 @@
 package com.abc;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Set;
 
 public abstract class Account {
 
@@ -19,7 +15,7 @@ public abstract class Account {
 	 * Create account with list of transactions and assign sequential account number
 	 */
 	public Account() {
-		this.transactions = new HashMap<Transaction, Integer>();
+		this.transactions = new LinkedHashMap<Transaction, Integer>();
 		lastAccountNo++;
 		this.accountNo = lastAccountNo;
 	}
@@ -48,6 +44,7 @@ public abstract class Account {
 	 * Otherwise, amount added to ArrayList of transactions
 	 * and method returns true.
 	 * @param amount to deposit
+	 * @param type of transaction
 	 * @return result of transaction
 	 */
 	public boolean deposit(double amount, int flag) {
@@ -94,6 +91,7 @@ public abstract class Account {
 	 * Otherwise, negative amount added to ArrayList of transactions
 	 * and method returns true.
 	 * @param amount to withdraw
+	 * @param flag type of transaction
 	 * @return result of transaction
 	 */
 	public boolean withdraw(double amount, int flag) {

@@ -2,12 +2,7 @@ package com.abc;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-
-import static java.lang.Math.abs;
-
-import java.text.NumberFormat;
 
 public class Customer {
 
@@ -134,9 +129,9 @@ public class Customer {
 		return s;
 	}
 	/**
-	 * Returns transaction type as a string
+	 * Returns transaction totals a string
 	 * @return 
-	 * @return transaction type
+	 * @return transaction totals
 	 */
 	private String getTotals(Account a, String s) {
 		double total = 0.0;

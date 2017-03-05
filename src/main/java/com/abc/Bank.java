@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Map;
 
 public class Bank {
 
@@ -64,23 +63,6 @@ public class Bank {
 
 	public List<Customer> getCustomers() {
 		return customers;
-	}
-	
-	public static void main (String [] args) {
-		
-		Bank bank = new Bank();
-		Customer anon = new Customer("Anon");
-		MaxiSavingsAccount ms = new MaxiSavingsAccount();
-		CheckingAccount ca = new CheckingAccount();
-		ms.deposit(100.00);
-		ms.withdraw(20.00);
-		Date date = new GregorianCalendar(2017, 2, 3).getTime();
-
-		anon.openAccount(ms);
-		anon.openAccount(ca);
-		anon.getAccount(1).transferTo(anon.getAccount(2), 50.00);
-		bank.addCustomer(anon);
-		System.out.println(anon.getStatement());
 	}
 
 }
