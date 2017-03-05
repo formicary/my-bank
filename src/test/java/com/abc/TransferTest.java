@@ -101,6 +101,25 @@ public class TransferTest {
     	assertEquals(420.00, andrew.getAccount(1).sumTransactions(), DOUBLE_DELTA);
     	assertEquals(john.getAccount(2), sa);
     	assertEquals(andrew.getAccount(1), ca);
+    	assertEquals("Statement for Andrew\n" +
+                "\n" +
+                "Account No: 1\n" +
+                "Checking Account\n" +
+                "  deposit $1,000.00\n" +
+                "  transfer out $600.00\n" +
+                "  transfer in $20.00\n" +
+                "Total $420.00\n" +
+                "\n" +
+                "Total In All Accounts $420.00", andrew.getStatement());    	
+    	assertEquals("Statement for John\n" +
+                "\n" +
+                "Account No: 2\n" +
+                "Savings Account\n" +
+                "  transfer in $600.00\n" +
+                "  transfer out $20.00\n" +
+                "Total $580.00\n" +
+                "\n" +
+                "Total In All Accounts $580.00", john.getStatement());
     }    
 
 }
