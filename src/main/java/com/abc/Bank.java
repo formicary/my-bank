@@ -1,8 +1,6 @@
 package com.abc;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 public class Bank {
@@ -18,15 +16,18 @@ public class Bank {
 	 * @param customer customer to add to bank
 	 */
 	public void addCustomer(Customer customer) {
-		customers.add(customer);
+		if(customer != null) {
+			getCustomers().add(customer);
+		}
+		
 	}
 	/**
 	 * Remove customer and associated account(s) from bank
 	 * @param customer customer to remove from bank
 	 */
 	public void removeCustomer(Customer customer) {
-		if(customers.contains(customer)) {
-			customers.remove(customer);
+		if(getCustomers().contains(customer)) {
+			getCustomers().remove(customer);
 		}
 	}
 	/**

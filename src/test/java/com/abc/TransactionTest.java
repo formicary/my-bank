@@ -9,11 +9,17 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class TransactionTest {
+	/**
+	 * Test initialisation of Transaction object
+	 */
     @Test
     public void transaction() {
         Transaction t = new Transaction(5);
         assertTrue(t instanceof Transaction);
     }
+    /**
+     * Test setting of transaction date in Transaction object
+     */
     @Test
     public void dateTest() {
     	Transaction t = new Transaction(2);

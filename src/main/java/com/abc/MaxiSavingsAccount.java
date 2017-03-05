@@ -27,7 +27,7 @@ public class MaxiSavingsAccount extends SavingsAccount {
 	 * Check if any withdrawals in the past 10 days
 	 * @return false if withdrawal within past 10 days; true otherwise
 	 */
-	public boolean isMaxiInterestAGoGo() {
+	private boolean isMaxiInterestAGoGo() {
 		boolean result = true;
 		long diff = 0;
 		for (Map.Entry<Transaction, Integer> entry: getTransactions().entrySet()) {	

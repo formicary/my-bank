@@ -23,7 +23,7 @@ public abstract class Account {
 	/**
 	 * Deposit a new amount into an account.
 	 * If amount less than or equal to zero, user notified.
-	 * Otherwise, amount added to ArrayList of transactions
+	 * Otherwise, amount added to LinkedHashMap of transactions
 	 * and method returns true.
 	 * @param amount to deposit
 	 * @return result of transaction
@@ -41,13 +41,13 @@ public abstract class Account {
 	/**
 	 * Deposit a new amount into an account.
 	 * If amount less than or equal to zero, user notified.
-	 * Otherwise, amount added to ArrayList of transactions
+	 * Otherwise, amount added to LinkedHashMap of transactions
 	 * and method returns true.
 	 * @param amount to deposit
 	 * @param type of transaction
 	 * @return result of transaction
 	 */
-	public boolean deposit(double amount, int flag) {
+	private boolean deposit(double amount, int flag) {
 		boolean result = false;
 		int type = (flag == Common.TRANSFER ? Common.TRANSFER_DEPOSIT : Common.DEPOSIT);
 		if(amount <= Common.MONEY_ZERO) {
@@ -62,7 +62,7 @@ public abstract class Account {
 	 * Withdraw a new amount from an account.
 	 * If amount less than or equal to zero, user notified.
 	 * If total account balance less than amount to withdraw, user notified.
-	 * Otherwise, negative amount added to ArrayList of transactions
+	 * Otherwise, negative amount added to LinkedHashMap of transactions
 	 * and method returns true.
 	 * @param amount to withdraw
 	 * @return result of transaction
@@ -88,13 +88,13 @@ public abstract class Account {
 	 * Withdraw a new amount from an account.
 	 * If amount less than or equal to zero, user notified.
 	 * If total account balance less than amount to withdraw, user notified.
-	 * Otherwise, negative amount added to ArrayList of transactions
+	 * Otherwise, negative amount added to LinkedHashMap of transactions
 	 * and method returns true.
 	 * @param amount to withdraw
 	 * @param flag type of transaction
 	 * @return result of transaction
 	 */
-	public boolean withdraw(double amount, int flag) {
+	private boolean withdraw(double amount, int flag) {
 		boolean result = false;
 		int type = (flag == Common.TRANSFER ? Common.TRANSFER_WITHDRAW : Common.WITHDRAW);
 		if (amount <= +Common.MONEY_ZERO) {
@@ -142,7 +142,7 @@ public abstract class Account {
 	 * @return true if list of transactions empty; 
 	 * false if list of transactions populated
 	 */
-	public boolean isTransactionsEmpty() {
+	private boolean isTransactionsEmpty() {
 		return (getTransactions() == null || getTransactions().isEmpty()); 
 	}
 
@@ -165,7 +165,7 @@ public abstract class Account {
 	public int getAccountNo() {
 		return accountNo;
 	}
-	
+
 	public void setAccountNo(int accountNo) {
 		this.accountNo = accountNo;
 	}	

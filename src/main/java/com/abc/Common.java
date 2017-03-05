@@ -28,5 +28,4 @@ public class Common {
 		String currency = nf.format(abs(d));
 		return currency;
 	}
-
 }
