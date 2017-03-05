@@ -1,5 +1,6 @@
 package com.abc;
 
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class MaxiSavingsAccount extends SavingsAccount {
@@ -29,10 +30,10 @@ public class MaxiSavingsAccount extends SavingsAccount {
 	public boolean isMaxiInterestAGoGo() {
 		boolean result = true;
 		long diff = 0;
-		for(Transaction t: getTransactions()) {
-			diff = DateProvider.getInstance().now().getTime()-t.getTransactionDate().getTime();
+		for (Map.Entry<Transaction, Integer> entry: getTransactions().entrySet()) {	
+			diff = DateProvider.getInstance().now().getTime()-entry.getKey().getTransactionDate().getTime();
 			diff = TimeUnit.MILLISECONDS.toDays(diff);
-			if((diff < 10) && (t.getAmount() < 0)) {			
+			if((diff < 10) && (entry.getKey().getAmount() < 0)) {			
 				result = false;
 			}
 		}

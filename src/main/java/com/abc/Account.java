@@ -1,13 +1,17 @@
 package com.abc;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public abstract class Account {
 
-	public static final double MONEY_ZERO = 0.00;
 
-	private List<Transaction> transactions;
+
+	private Map<Transaction, Integer> transactions;
 	private int accountNo;
 	private static int lastAccountNo = 0;
 
@@ -15,7 +19,7 @@ public abstract class Account {
 	 * Create account with list of transactions and assign sequential account number
 	 */
 	public Account() {
-		this.transactions = new ArrayList<Transaction>();
+		this.transactions = new HashMap<Transaction, Integer>();
 		lastAccountNo++;
 		this.accountNo = lastAccountNo;
 	}
@@ -30,14 +34,33 @@ public abstract class Account {
 	 */
 	public boolean deposit(double amount) {
 		boolean result = false;
-		if(amount <= MONEY_ZERO) {
+		if(amount <= Common.MONEY_ZERO) {
 			System.err.println("Unable to deposit: Amount to deposit must be greater than zero");
 		} else {
-			getTransactions().add(new Transaction(amount));
+			getTransactions().put(new Transaction(amount), Common.DEPOSIT);
 			result = true;
 		}
 		return result;
 	}
+	/**
+	 * Deposit a new amount into an account.
+	 * If amount less than or equal to zero, user notified.
+	 * Otherwise, amount added to ArrayList of transactions
+	 * and method returns true.
+	 * @param amount to deposit
+	 * @return result of transaction
+	 */
+	public boolean deposit(double amount, int flag) {
+		boolean result = false;
+		int type = (flag == Common.TRANSFER ? Common.TRANSFER_DEPOSIT : Common.DEPOSIT);
+		if(amount <= Common.MONEY_ZERO) {
+			System.err.println("Unable to deposit: Amount to deposit must be greater than zero");
+		} else {
+			getTransactions().put(new Transaction(amount), type);
+			result = true;
+		}
+		return result;
+	}	
 	/**
 	 * Withdraw a new amount from an account.
 	 * If amount less than or equal to zero, user notified.
@@ -49,7 +72,7 @@ public abstract class Account {
 	 */
 	public boolean withdraw(double amount) {
 		boolean result = false;
-		if (amount <= MONEY_ZERO) {
+		if (amount <= +Common.MONEY_ZERO) {
 			System.err.println("Unable to withdraw: Amount to withdraw must be greater than zero");
 		}
 		else {
@@ -57,7 +80,34 @@ public abstract class Account {
 				System.err.println("Unable to withdraw: Insufficient funds");
 			}
 			else {
-				getTransactions().add(new Transaction(-amount));
+				getTransactions().put(new Transaction(-amount), Common.WITHDRAW);
+				result = true;
+			}
+		}
+		return result;
+
+	}
+	/**
+	 * Withdraw a new amount from an account.
+	 * If amount less than or equal to zero, user notified.
+	 * If total account balance less than amount to withdraw, user notified.
+	 * Otherwise, negative amount added to ArrayList of transactions
+	 * and method returns true.
+	 * @param amount to withdraw
+	 * @return result of transaction
+	 */
+	public boolean withdraw(double amount, int flag) {
+		boolean result = false;
+		int type = (flag == Common.TRANSFER ? Common.TRANSFER_WITHDRAW : Common.WITHDRAW);
+		if (amount <= +Common.MONEY_ZERO) {
+			System.err.println("Unable to withdraw: Amount to withdraw must be greater than zero");
+		}
+		else {
+			if (sumTransactions() < amount) {
+				System.err.println("Unable to withdraw: Insufficient funds");
+			}
+			else {
+				getTransactions().put(new Transaction(-amount), type);
 				result = true;
 			}
 		}
@@ -72,9 +122,9 @@ public abstract class Account {
 	public void transferTo(Account account, double amount) {
 		boolean validCheck = false;
 		try {
-			validCheck = withdraw(amount);
+			validCheck = withdraw(amount, Common.TRANSFER);
 			if(validCheck) {
-				account.deposit(amount);
+				account.deposit(amount, Common.TRANSFER);
 			}			
 		} catch (NullPointerException e) {
 			System.err.println("Error: The specified account does not exist.\nTransaction unauthorized.");
@@ -104,13 +154,13 @@ public abstract class Account {
 	 */
 	public double sumTransactions() {
 		double amount = 0.00;
-		for (Transaction t: getTransactions()) {
-			amount += t.amount;
+		for (Map.Entry<Transaction, Integer> entry: getTransactions().entrySet()) {
+			amount += entry.getKey().getAmount();
 		}
 		return amount;
 	}
 
-	public List<Transaction> getTransactions() {
+	public Map<Transaction, Integer> getTransactions() {
 		return transactions;
 	}
 

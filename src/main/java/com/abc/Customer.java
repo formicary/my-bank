@@ -3,6 +3,7 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import static java.lang.Math.abs;
 
@@ -56,7 +57,7 @@ public class Customer {
 	 * @param accountNo account number of account
 	 * @return true if account exits
 	 */
-	public boolean isValidAcc(int accountNo) {
+	private boolean isValidAcc(int accountNo) {
 		boolean result = false;
 		for(Account a: accounts) {
 			if(accountNo == a.getAccountNo()) {
@@ -129,17 +130,38 @@ public class Customer {
 			s += "Account No: " + a.getAccountNo() +"\n";
 			s += "Maxi Savings Account\n";
 		}
-
-		//Now total up all the transactions
+		s = getTotals(a, s);
+		return s;
+	}
+	/**
+	 * Returns transaction type as a string
+	 * @return 
+	 * @return transaction type
+	 */
+	private String getTotals(Account a, String s) {
 		double total = 0.0;
-		for (Transaction t : a.getTransactions()) {
-			s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + Common.toDollars(t.amount) + "\n";
-			total += t.amount;
+		int type;
+		for (Map.Entry<Transaction, Integer> entry: a.getTransactions().entrySet()) {		
+			s += "  "; 
+			type = entry.getValue();
+			
+			if(type == Common.DEPOSIT) {
+				s += Common.DEPOSIT_STR + " " + Common.toDollars(entry.getKey().amount) + "\n";
+			}
+			else if(type == Common.WITHDRAW) {
+				s += Common.WITHDRAW_STR + " " + Common.toDollars(entry.getKey().amount) + "\n";
+			}
+			else if(type == Common.TRANSFER_DEPOSIT) {
+				s += Common.TRANSFER_DEPOSIT_STR + " " + Common.toDollars(entry.getKey().amount) + "\n";
+			}
+			else {
+				s += Common.TRANSFER_WITHDRAW_STR + " " + Common.toDollars(entry.getKey().amount) + "\n";
+			}
+			total += entry.getKey().amount;
 		}
 		s += "Total " + Common.toDollars(total);
 		return s;
 	}
-
 	public String getName() {
 		return name;
 	}    

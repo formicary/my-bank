@@ -37,10 +37,12 @@ public class CustomerTest {
 
         assertEquals("Statement for Henry\n" +
                 "\n" +
+        		"Account No: 1" +
                 "Checking Account\n" +
                 "  deposit $100.00\n" +
                 "Total $100.00\n" +
                 "\n" +
+                "Account No: 2" +
                 "Savings Account\n" +
                 "  deposit $4,000.00\n" +
                 "  withdrawal $200.00\n" +
