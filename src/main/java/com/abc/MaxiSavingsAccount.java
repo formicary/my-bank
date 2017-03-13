@@ -33,7 +33,7 @@ public class MaxiSavingsAccount extends SavingsAccount {
 		for (Map.Entry<Transaction, Integer> entry: getTransactions().entrySet()) {	
 			diff = DateProvider.getInstance().now().getTime()-entry.getKey().getTransactionDate().getTime();
 			diff = TimeUnit.MILLISECONDS.toDays(diff);
-			if((diff < 10) && (entry.getKey().getAmount() < 0)) {			
+			if((diff <= 10) && (entry.getKey().getAmount() < 0)) {			
 				result = false;
 			}
 		}

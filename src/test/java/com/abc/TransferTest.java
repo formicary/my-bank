@@ -105,9 +105,9 @@ public class TransferTest {
                 "\n" +
                 "Account No: 1\n" +
                 "Checking Account\n" +
-                "  deposit $1,000.00\n" +
-                "  transfer out $600.00\n" +
-                "  transfer in $20.00\n" +
+                "\tdeposit $1,000.00\n" +
+                "\ttransfer out $600.00\n" +
+                "\ttransfer in $20.00\n" +
                 "Total $420.00\n" +
                 "\n" +
                 "Total In All Accounts $420.00", andrew.getStatement());    	
@@ -115,8 +115,8 @@ public class TransferTest {
                 "\n" +
                 "Account No: 2\n" +
                 "Savings Account\n" +
-                "  transfer in $600.00\n" +
-                "  transfer out $20.00\n" +
+                "\ttransfer in $600.00\n" +
+                "\ttransfer out $20.00\n" +
                 "Total $580.00\n" +
                 "\n" +
                 "Total In All Accounts $580.00", john.getStatement());

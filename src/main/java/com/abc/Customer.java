@@ -137,7 +137,7 @@ public class Customer {
 		double total = 0.0;
 		int type;
 		for (Map.Entry<Transaction, Integer> entry: a.getTransactions().entrySet()) {		
-			s += "  "; 
+			s += "\t"; 
 			type = entry.getValue();
 			
 			if(type == Common.DEPOSIT) {

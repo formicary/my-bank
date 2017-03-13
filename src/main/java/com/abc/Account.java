@@ -69,7 +69,7 @@ public abstract class Account {
 	 */
 	public boolean withdraw(double amount) {
 		boolean result = false;
-		if (amount <= +Common.MONEY_ZERO) {
+		if (amount <= Common.MONEY_ZERO) {
 			System.err.println("Unable to withdraw: Amount to withdraw must be greater than zero");
 		}
 		else {
@@ -97,7 +97,7 @@ public abstract class Account {
 	private boolean withdraw(double amount, int flag) {
 		boolean result = false;
 		int type = (flag == Common.TRANSFER ? Common.TRANSFER_WITHDRAW : Common.WITHDRAW);
-		if (amount <= +Common.MONEY_ZERO) {
+		if (amount <= Common.MONEY_ZERO) {
 			System.err.println("Unable to withdraw: Amount to withdraw must be greater than zero");
 		}
 		else {
