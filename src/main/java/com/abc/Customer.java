@@ -29,8 +29,9 @@ public class Customer {
 
     public double totalInterestEarned() {
         double total = 0;
-        for (Account a : accounts)
+        for (Account a : accounts) {
             total += a.interestEarned();
+        }
         return total;
     }
 
@@ -73,6 +74,27 @@ public class Customer {
     }
 
     private String toDollars(double d){
-        return String.format("$%,.2f", abs(d));
+        if (d < 0){
+            return String.format("-$%,.2f", abs(d));
+        }
+        return String.format("$%,.2f", d);
+    }
+    
+    //Additional Feature A customer can transfer between their accounts
+    public Customer transferBetweenAccounts(double amount, Account from, Account to){
+        from.withdraw(amount);
+        to.deposit(amount);
+        return this;
+    }
+    //Added Feature Change Maxi-Savings accounts 
+    public void endOfDay(){
+        try {
+            for (Account a : accounts){
+                a.endOfDay();
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+            System.out.println("No Account for this Customer");
+        }
     }
 }

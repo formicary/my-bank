@@ -27,7 +27,7 @@ public class CustomerTest {
                 "\n" +
                 "Savings Account\n" +
                 "  deposit $4,000.00\n" +
-                "  withdrawal $200.00\n" +
+                "  withdrawal -$200.00\n" +
                 "Total $3,800.00\n" +
                 "\n" +
                 "Total In All Accounts $3,900.00", henry.getStatement());
