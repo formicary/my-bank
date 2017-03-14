@@ -16,8 +16,9 @@ public class Bank {
 
     public String customerSummary() {
         String summary = "Customer Summary";
-        for (Customer c : customers)
+        for (Customer c : customers) {
             summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
+        }
         return summary;
     }
 
@@ -29,18 +30,19 @@ public class Bank {
 
     public double totalInterestPaid() {
         double total = 0;
-        for(Customer c: customers)
+        for(Customer c: customers) {
             total += c.totalInterestEarned();
+        }
         return total;
     }
 
     public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
+        return customers.get(0).getName();       
+    }
+    //Added Feature Change Maxi-Savings accounts 
+    public void endOfDay() {
+        for (Customer c : customers){
+            c.endOfDay();
         }
     }
 }
