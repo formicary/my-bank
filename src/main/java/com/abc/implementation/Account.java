@@ -1,8 +1,8 @@
 package com.abc.implementation;
 
-import com.abc.AccountType;
 import com.abc.interfaces.IAccount;
 import com.abc.interfaces.ITransaction;
+import com.abc.utilities.AccountType;
 
 public abstract class Account implements IAccount {
 

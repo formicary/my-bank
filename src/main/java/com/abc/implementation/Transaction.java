@@ -2,8 +2,8 @@ package com.abc.implementation;
 
 import org.joda.time.LocalDate;
 
-import com.abc.DateProvider;
 import com.abc.interfaces.ITransaction;
+import com.abc.utilities.DateProvider;
 
 public class Transaction implements ITransaction{
     private final double amount;

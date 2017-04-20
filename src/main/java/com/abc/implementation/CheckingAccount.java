@@ -1,9 +1,9 @@
 package com.abc.implementation;
 
-import com.abc.AccountType;
 import com.abc.interfaces.IRateHelper;
 import com.abc.interfaces.ITransaction;
 import com.abc.interfaces.ITransactionHelper;
+import com.abc.utilities.AccountType;
 
 public class CheckingAccount extends Account {
 

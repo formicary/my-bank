@@ -1,4 +1,4 @@
-package com.abc;
+package com.abc.utilities;
 
 import org.joda.time.LocalDate;
 
