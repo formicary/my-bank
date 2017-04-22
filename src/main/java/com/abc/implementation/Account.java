@@ -46,7 +46,7 @@ public abstract class Account implements IAccount {
 				}
 				currentTransaction = newTransaction;
 			} else {
-				throw new IllegalArgumentException("you don't have suffient funds available");
+				throw new IllegalArgumentException("you don't have sufficient funds available");
 			}
 		}
 	}
