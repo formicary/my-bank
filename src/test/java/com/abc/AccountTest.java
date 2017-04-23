@@ -63,16 +63,19 @@ public class AccountTest {
     	IRateHelper rateHelper = mock(IRateHelper.class);
     	when(rateHelper.getEarnedInterest(0.1, 5)).thenReturn(0.1);
     	when(rateHelper.getEarnedInterest(0.1, 0)).thenReturn(0.1);
+    	when(rateHelper.getEarnedInterest(0.5, 3)).thenReturn(0.5);
     	when(rateHelper.getEarnedInterest(0.5, 4)).thenReturn(0.5);
+    	when(rateHelper.getEarnedInterest(0.5, 5)).thenReturn(0.5);
+    	when(rateHelper.getEarnedInterest(0.5, 6)).thenReturn(0.5);
     	when(rateHelper.getEarnedInterest(0.5, 10)).thenReturn(0.5);
     	
     	when(rateHelper.getDailyRate(0.001)).thenReturn(0.1);
     	when(rateHelper.getDailyRate(0.05)).thenReturn(0.5);
     	
-    	ITransaction transaction1 = new Transaction(100, new LocalDate(2017, 4, 1));
-    	ITransaction transaction2 = new Transaction(20, new LocalDate(2017, 4, 5));
+    	ITransaction transaction1 = new Transaction(100, new LocalDate(2017, 4, 11));
+    	ITransaction transaction2 = new Transaction(20, new LocalDate(2017, 4, 15));
     	transaction1.setNextTransaction(transaction2);
-    	ITransaction transaction3 = new Transaction(-50, new LocalDate(2017, 4, 10));
+    	ITransaction transaction3 = new Transaction(-50, new LocalDate(2017, 4, 20));
     	transaction2.setNextTransaction(transaction3);
     	
         IAccount maxiAccount = new MaxiSavingsAccount(transaction1, rateHelper, new TransactionHelper());

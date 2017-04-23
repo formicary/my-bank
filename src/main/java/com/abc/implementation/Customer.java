@@ -58,46 +58,56 @@ public class Customer implements ICustomer{
     }
 
     public String getStatement() {
-        String statement = null;
-        statement = "Statement for " + name + "\n";
+        StringBuilder statement = new StringBuilder("");
+        statement.append("Statement for ");
+        statement.append(name);
+        statement.append("\n");
         double total = 0.0;
         for (IAccount a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
+        	statement.append("\n");
+        	statement.append(statementForAccount(a));
+        	statement.append("\n");
             total += a.getTotalBalance();
         }
-        statement += "\nTotal In All Accounts " + toDollars(total);
-        return statement;
+        statement.append("\nTotal In All Accounts ");
+        statement.append(toDollars(total));
+        return statement.toString();
     }
 
-    private String statementForAccount(IAccount a) {
-        String s = "";
+    private String statementForAccount(IAccount account) {
+        StringBuilder result = new StringBuilder("");
 
        //Translate to pretty account type
-        switch(a.getAccountType()){
+        switch(account.getAccountType()){
             case CHECKING:
-                s += "Checking Account\n";
+            	result.append("Checking Account\n");
                 break;
             case SAVINGS:
-                s += "Savings Account\n";
+            	result.append("Savings Account\n");
                 break;
             case MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
+            	result.append("Maxi Savings Account\n");
                 break;
         }
 
         //Now total up all the transactions
         double total = 0.0;
-        ITransaction transaction = a.getRootTransaction();
+        ITransaction transaction = account.getRootTransaction();
         while (transaction != null) {
-            s += "  " + (transaction.getAmount() < 0 ? "withdrawal" : "deposit") + " " + toDollars(transaction.getAmount()) + "\n";
+        	result.append("  ");
+        	result.append(transaction.getAmount() < 0 ? "withdrawal" : "deposit"); 
+        	result.append(" ");
+        	result.append(toDollars(transaction.getAmount()));
+        	result.append("\n");
             total += transaction.getAmount();
             transaction = transaction.getNextTransaction();
         }
-        s += "Total " + toDollars(total);
-        return s;
+        result.append("Total ");
+        result.append(toDollars(total));
+        return result.toString();
     }
 
-    private String toDollars(double d){
-        return String.format("$%,.2f", abs(d));
+    private String toDollars(double amout){
+        return String.format("$%,.2f", abs(amout));
     }
 }

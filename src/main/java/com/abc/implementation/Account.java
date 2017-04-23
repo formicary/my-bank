@@ -18,7 +18,7 @@ public abstract class Account implements IAccount {
 
 	public abstract double compoundInterestEarned();
 
-	public void deposit(double amount) throws IllegalArgumentException {
+	public void deposit(double amount) {
 		if (amount <= 0) {
 			throw new IllegalArgumentException("amount must be greater than zero");
 		} else {
@@ -32,7 +32,7 @@ public abstract class Account implements IAccount {
 		}
 	}
 
-	public void withdraw(double amount) throws IllegalArgumentException {
+	public void withdraw(double amount) {
 		if (amount <= 0) {
 			throw new IllegalArgumentException("amount must be greater than zero");
 		} else {
