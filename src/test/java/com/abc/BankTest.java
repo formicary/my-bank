@@ -2,6 +2,11 @@ package com.abc;
 
 import org.junit.Test;
 
+import com.abc.implementation.Bank;
+import com.abc.interfaces.ICustomer;
+
+import static org.mockito.Mockito.*;
+
 import static org.junit.Assert.assertEquals;
 
 public class BankTest {
@@ -10,45 +15,26 @@ public class BankTest {
     @Test
     public void customerSummary() {
         Bank bank = new Bank();
-        Customer john = new Customer("John");
-        john.openAccount(new Account(Account.CHECKING));
+        ICustomer john = mock(ICustomer.class);
+        when(john.getNumberOfAccounts()).thenReturn(1);
+        when(john.getName()).thenReturn("John");
         bank.addCustomer(john);
 
         assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
     }
-
+    
     @Test
-    public void checkingAccount() {
-        Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.CHECKING);
-        Customer bill = new Customer("Bill").openAccount(checkingAccount);
+    public void totalInterestPaid()
+    {
+    	Bank bank = new Bank();
+    	ICustomer bill = mock(ICustomer.class);
+        when(bill.totalInterestEarned()).thenReturn(50.0);
+        ICustomer josh = mock(ICustomer.class);
+        when(josh.totalInterestEarned()).thenReturn(100.0);
         bank.addCustomer(bill);
-
-        checkingAccount.deposit(100.0);
-
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
-    }
-
-    @Test
-    public void savings_account() {
-        Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
-
-        checkingAccount.deposit(1500.0);
-
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
-    }
-
-    @Test
-    public void maxi_savings_account() {
-        Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
-
-        checkingAccount.deposit(3000.0);
-
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        bank.addCustomer(josh);
+        
+        assertEquals(150.0, bank.totalInterestPaid(),DOUBLE_DELTA);
     }
 
 }
