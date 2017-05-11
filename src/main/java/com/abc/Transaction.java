@@ -4,7 +4,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class Transaction {
-    public final double amount;
+    private final double amount;
 
     private Date transactionDate;
 
@@ -15,6 +15,10 @@ public class Transaction {
 
     public Date getTransactionDate() {
         return this.transactionDate;
+    }
+
+    public double getAmount() {
+        return this.amount;
     }
 
 }

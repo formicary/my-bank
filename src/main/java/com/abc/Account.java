@@ -87,7 +87,7 @@ public class Account {
     public double sumTransactions() {
         double amount = 0.0;
         for (Transaction t: this.transactions)
-            amount += t.amount;
+            amount += t.getAmount();
         return amount;
     }
 
