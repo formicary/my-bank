@@ -1,7 +1,6 @@
 package com.abc;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class Account {
@@ -68,7 +67,6 @@ public class Account {
 
     //Returns a boolean False if the withdrawal has been performed within last 10 days
     private boolean hasWithdrawnLastTen(){
-        Date now = DateProvider.getInstance().now();
         for ( Transaction t: transactions)
             if (t.amount < 0 &
                     t.getTransactionDate().after(DateProvider.getInstance().tenDaysAgo()))
