@@ -1,5 +1,6 @@
 package com.abc;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +47,20 @@ public class Customer {
         return statement;
     }
 
+    public void transfereBetweenAccounts(Account a, Account b, double amount){
+        if (amount <= 0)
+            throw new IllegalArgumentException("amount must be greater than zero");
+        else if (checkIfAccountExist(a) & checkIfAccountExist(b))
+            a.withdraw(amount); b.deposit(amount);
+    }
+
+    public boolean checkIfAccountExist(Account account) {
+        for (Account a: accounts)
+            if (account == a)
+                return true;
+        return false;
+    }
+
     private String statementForAccount(Account a) {
         String s = "";
 
@@ -74,5 +89,9 @@ public class Customer {
 
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
+    }
+
+    public List<Account> getAccount(){
+        return accounts;
     }
 }

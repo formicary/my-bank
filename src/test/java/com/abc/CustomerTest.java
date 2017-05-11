@@ -4,8 +4,10 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class CustomerTest {
+    private static final double DOUBLE_DELTA = 1e-15;
 
     @Test //Test customer statement generation
     public void testApp(){
@@ -37,6 +39,33 @@ public class CustomerTest {
     public void testOneAccount(){
         Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
         assertEquals(1, oscar.getNumberOfAccounts());
+    }
+
+    @Test
+    public void testTransfereBetweenAccounts(){
+        Account checking;
+        Account saving;
+        Customer oscar = new Customer("Oscar").openAccount(checking = new Account(Account.CHECKING));
+        oscar.openAccount(saving = new Account(Account.SAVINGS));
+        oscar.transfereBetweenAccounts(checking, saving, 200.00);
+
+        assertEquals(200.00, saving.sumTransactions(), DOUBLE_DELTA);
+        assertEquals(-200.00, checking.sumTransactions(), DOUBLE_DELTA);
+    }
+
+    @Test
+    public void testCheckIfAccountExists(){
+        Account saving;
+        Customer oscar = new Customer("Oscar").openAccount(saving = new Account(Account.SAVINGS));
+        assertTrue(oscar.checkIfAccountExist(saving));
+    }
+
+    @Test
+    public void testTotalInterestEarned(){
+        Account saving;
+        Customer oscar = new Customer("Oscar").openAccount(saving=new Account(Account.SAVINGS));
+        saving.deposit(500.00);
+        assertEquals(500.00*0.001/365, saving.interestEarned(), DOUBLE_DELTA);
     }
 
     @Test
