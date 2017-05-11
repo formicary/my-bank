@@ -2,72 +2,90 @@ package com.abc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
+import java.util.Calendar;
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+import org.joda.time.LocalDate;
 
 public class Account {
 
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
+    private final AccountType accountType;
+    private List<Transaction> transactions;
 
-    private final int accountType;
-    public List<Transaction> transactions;
-
-    public Account(int accountType) {
+    public Account(AccountType accountType) {
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
+    }
+    public Account(int accountTypeOrdinal) {
+        AccountType accountType = AccountType.values()[accountTypeOrdinal];
+        this.accountType = accountType;
+        this.transactions = new ArrayList<Transaction>();
+    }
+
+    public List<Transaction> getTransactions() {
+        return this.transactions;
     }
 
     public void deposit(double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
-            transactions.add(new Transaction(amount));
+            this.transactions.add(new Transaction(amount));
         }
     }
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
+    public void withdraw(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        } else {
+            this.transactions.add(new Transaction(-amount));
+        }
     }
-}
+
+    public double accrueInterestDaily() {
+        double interest = interestEarned();
+        this.deposit(interest / 365);
+        return interest/365;
+    }
 
     public double interestEarned() {
-        double amount = sumTransactions();
-        switch(accountType){
+        double amount = getBalance();
+        switch(this.accountType){
             case SAVINGS:
                 if (amount <= 1000)
                     return amount * 0.001;
                 else
                     return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
+            case SUPER_SAVINGS:
+                if (amount <= 4000)
+                    return 20;
             case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
+//              Check if it has been less than 10 days since the last transaction
+                Transaction lastTransaction = transactions.get(transactions.size() - 1);
+                Date lastTransactionDate = lastTransaction.getTransactionDate();
+                DateTime currentDate = DateTime.now();
+
+                int difference = Days.daysBetween(new LocalDate(lastTransactionDate),
+                                                    new LocalDate(currentDate)).getDays();
+                if (difference >= 10) {
+                    return amount * 0.05;
+                }
+                return amount * 0.001;
             default:
                 return amount * 0.001;
         }
     }
 
-    public double sumTransactions() {
-       return checkIfTransactionsExist(true);
-    }
-
-    private double checkIfTransactionsExist(boolean checkAll) {
+    public double getBalance() {
         double amount = 0.0;
-        for (Transaction t: transactions)
-            amount += t.amount;
+        for (Transaction t: this.transactions)
+            amount += t.getAmount();
         return amount;
     }
 
-    public int getAccountType() {
-        return accountType;
+    public AccountType getAccountType() {
+        return this.accountType;
     }
 
 }

@@ -7,18 +7,28 @@ public class Bank {
     private List<Customer> customers;
 
     public Bank() {
-        customers = new ArrayList<Customer>();
+        this.customers = new ArrayList<Customer>();
     }
 
     public void addCustomer(Customer customer) {
-        customers.add(customer);
+        this.customers.add(customer);
     }
 
-    public String customerSummary() {
-        String summary = "Customer Summary";
+    public String customerSummaries() {
+        StringBuilder summary = new StringBuilder();
+        summary.append("Customer Summaries");
         for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-        return summary;
+            summary.append("\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")");
+        return summary.toString();
+    }
+
+    public String customerSummary(Customer c) {
+        StringBuilder summary = new StringBuilder();
+        summary.append("Customer Summary");
+        if (this.customers.contains(c)) {
+            summary.append("\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")");
+        }
+        return summary.toString();
     }
 
     //Make sure correct plural of word is created based on the number passed in:
@@ -36,7 +46,6 @@ public class Bank {
 
     public String getFirstCustomer() {
         try {
-            customers = null;
             return customers.get(0).getName();
         } catch (Exception e){
             e.printStackTrace();
