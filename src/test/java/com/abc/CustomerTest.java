@@ -66,10 +66,10 @@ public class CustomerTest {
         james.openAccount(dest);
         james.deposit(source, 500.0);
         james.deposit(dest, 300.0);
-        assertTrue(500 == source.sumTransactions());
-        assertTrue(300 == dest.sumTransactions());
+        assertTrue(500 == source.getBalance());
+        assertTrue(300 == dest.getBalance());
         james.transfer(source, dest, 200.0);
-        assertTrue(300 == source.sumTransactions());
-        assertTrue(500 == dest.sumTransactions());
+        assertTrue(300 == source.getBalance());
+        assertTrue(500 == dest.getBalance());
     }
 }

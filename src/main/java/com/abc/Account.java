@@ -12,19 +12,17 @@ public class Account {
 
     private final AccountType accountType;
     private List<Transaction> transactions;
-    private DateTime lastModified;
 
     public Account(AccountType accountType) {
         this.accountType = accountType;
-        this.lastModified = DateTime.now();
         this.transactions = new ArrayList<Transaction>();
     }
     public Account(int accountTypeOrdinal) {
         AccountType accountType = AccountType.values()[accountTypeOrdinal];
         this.accountType = accountType;
-        this.lastModified = DateTime.now();
         this.transactions = new ArrayList<Transaction>();
     }
+
     public List<Transaction> getTransactions() {
         return this.transactions;
     }
@@ -45,20 +43,14 @@ public class Account {
         }
     }
 
-    public void accrueInterestDaily() {
-        DateTime currentDate = DateTime.now();
-
-        int difference = Days.daysBetween(new LocalDate(lastModified),
-                new LocalDate(currentDate)).getDays();
-        if (difference >= 1) {
-            double interest = interestEarned();
-            this.deposit(interest / 365);
-            this.lastModified = currentDate;
-        }
+    public double accrueInterestDaily() {
+        double interest = interestEarned();
+        this.deposit(interest / 365);
+        return interest/365;
     }
 
     public double interestEarned() {
-        double amount = sumTransactions();
+        double amount = getBalance();
         switch(this.accountType){
             case SAVINGS:
                 if (amount <= 1000)
@@ -69,6 +61,7 @@ public class Account {
                 if (amount <= 4000)
                     return 20;
             case MAXI_SAVINGS:
+//              Check if it has been less than 10 days since the last transaction
                 Transaction lastTransaction = transactions.get(transactions.size() - 1);
                 Date lastTransactionDate = lastTransaction.getTransactionDate();
                 DateTime currentDate = DateTime.now();
@@ -84,7 +77,7 @@ public class Account {
         }
     }
 
-    public double sumTransactions() {
+    public double getBalance() {
         double amount = 0.0;
         for (Transaction t: this.transactions)
             amount += t.getAmount();
