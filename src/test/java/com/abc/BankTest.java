@@ -6,6 +6,7 @@ import static org.junit.Assert.assertEquals;
 
 public class BankTest {
     private static final double DOUBLE_DELTA = 1e-15;
+    private static final double DOUBLE_DAILY_INTEREST = 0.001/365;
 
     @Test
     public void customerSummary() {
@@ -26,7 +27,7 @@ public class BankTest {
 
         checkingAccount.deposit(100.0);
 
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(100*DOUBLE_DAILY_INTEREST, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
@@ -37,7 +38,7 @@ public class BankTest {
 
         checkingAccount.deposit(1500.0);
 
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(1000*DOUBLE_DAILY_INTEREST + 1000*DOUBLE_DAILY_INTEREST, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
@@ -48,7 +49,7 @@ public class BankTest {
 
         checkingAccount.deposit(3000.0);
 
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(150.0/365, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
 }
