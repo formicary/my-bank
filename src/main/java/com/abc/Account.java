@@ -1,10 +1,6 @@
 package com.abc;
 
-import sun.util.calendar.BaseCalendar;
-import sun.util.calendar.LocalGregorianCalendar;
-
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -21,7 +17,6 @@ public class Account {
     public Account(int accountType) {
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
-
     }
 
     public void deposit(double amount) {
@@ -29,7 +24,6 @@ public class Account {
             throw new IllegalArgumentException("amount must be greater than zero");
         else
             transactions.add(new Transaction(amount));
-
     }
 
     public void withdraw(double amount) {
@@ -37,7 +31,6 @@ public class Account {
             throw new IllegalArgumentException("amount must be greater than zero");
         else
             transactions.add(new Transaction(-amount));
-
     }
 
     //Interest earned is now performed daily instead of anually
