@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Bank {
-    private List<Customer> customers;
+    private ArrayList<Customer> customers;
 
     public Bank() {
         customers = new ArrayList<Customer>();
@@ -12,6 +12,10 @@ public class Bank {
 
     public void addCustomer(Customer customer) {
         customers.add(customer);
+    }
+    
+    public ArrayList<Customer> getCustomers() {
+    	return customers;
     }
 
     public String customerSummary() {
@@ -28,19 +32,18 @@ public class Bank {
     }
 
     public double totalInterestPaid() {
-        double total = 0;
-        for(Customer c: customers)
+        double total = 0.0;
+        for (Customer c: customers)
             total += c.totalInterestEarned();
         return total;
     }
 
     public String getFirstCustomer() {
-        try {
-            customers = null;
+        try {            
             return customers.get(0).getName();
         } catch (Exception e){
             e.printStackTrace();
-            return "Error";
+            return "No customers available";
         }
     }
 }
