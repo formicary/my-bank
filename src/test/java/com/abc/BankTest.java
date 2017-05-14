@@ -10,11 +10,14 @@ public class BankTest {
     @Test
     public void customerSummary() {
         Bank bank = new Bank();
-        Customer john = new Customer("John");
-        john.openAccount(new Account(Account.CHECKING));
+        Customer john = new Customer("John").openAccount(new Account(Account.CHECKING));
         bank.addCustomer(john);
-
-        assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
+        Customer gray = new Customer("Gray").openAccount(new Account(Account.CHECKING));
+        gray.openAccount(new Account(Account.SAVINGS));
+        bank.addCustomer(gray);
+        
+        assertEquals("Customer Summary\n - John (1 account)"
+        		+ "\n - Gray (2 accounts)", bank.customerSummary());
     }
 
     @Test
@@ -32,10 +35,10 @@ public class BankTest {
     @Test
     public void savings_account() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+        Account savingsAccount = new Account(Account.SAVINGS);
+        bank.addCustomer(new Customer("Bill").openAccount(savingsAccount));
 
-        checkingAccount.deposit(1500.0);
+        savingsAccount.deposit(1500.0);
 
         assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
@@ -43,12 +46,13 @@ public class BankTest {
     @Test
     public void maxi_savings_account() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+        Account maxiAccount = new Account(Account.MAXI_SAVINGS);
+        bank.addCustomer(new Customer("Bill").openAccount(maxiAccount));
 
-        checkingAccount.deposit(3000.0);
-
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        maxiAccount.deposit(3000.0);
+        assertEquals(150.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        maxiAccount.withdraw(1000.0);
+        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
 }

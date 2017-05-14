@@ -10,7 +10,7 @@ instructions
 * There are several deliberate design, code quality and test issues that should be identified and resolved.
 * Below is a list of the current features supported by the application; as well as some additional features that have been requested by the business owner.
 * In order to work on this take a fork into your own GitHub area; make whatever changes you feel are necessary and when you are satisfied submit back via a pull request. See details on GitHub's [Fork & Pull](https://help.github.com/articles/using-pull-requests) model
-* Be sure to put your name in the pull request comment so your work can be easily identied.
+* Be sure to put your name in the pull request comment so your work can be easily identified.
 * The project uses maven to resolve dependencies however if you want to avoid maven configuration the only external JAR that's required is junit-4.11.
 * Refactor and add features (from the below list) as you see fit; there is no need to add all the features in order to "complete" the exercise. Keep in mind that code quality is the critical measure and there should be an obvious focus on testing.
 * You'll notice there is no database or UI; these are not needed - the exercise deliberately avoids these requirements.
