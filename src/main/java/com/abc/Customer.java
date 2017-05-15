@@ -15,16 +15,15 @@ public class Customer {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
-    public Customer openAccount(Account account) {
+    public void openAccount(Account account) {
         accounts.add(account);
-        return this;
     }
 
     public int getNumberOfAccounts() {
-        return accounts.size();
+        return this.accounts.size();
     }
 
     public double totalInterestEarned() {
@@ -75,4 +74,16 @@ public class Customer {
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
     }
+    
+    public void transfer (Account from, Account to, double amount){
+    	
+    	if (from.getBalance() >= amount){
+    		from.withdraw(amount);
+        	to.deposit(amount);
+    	}
+    	else{
+    		throw new IllegalArgumentException("Insufficient funds in source account");
+    	}
+    }
+    
 }
