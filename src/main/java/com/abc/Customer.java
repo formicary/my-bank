@@ -23,6 +23,19 @@ public class Customer {
         return this;
     }
 
+    public void transferMoneyBetweenAccounts(int accountFrom, int accountTo, double amount) {
+        if (amount <= 0) {throw new IllegalArgumentException("amount must be greater than zero");}
+        if (accounts.size() <= 1) {throw new IllegalArgumentException("you don't have 2 open accounts at the moment!");}
+
+        // run the transaction
+        accounts.get(accountFrom).withdraw(amount);
+        accounts.get(accountTo).deposit(amount);
+    }
+
+    public List<Account> getAccounts(){
+        return accounts;
+    }
+
     public int getNumberOfAccounts() {
         return accounts.size();
     }
@@ -30,7 +43,7 @@ public class Customer {
     public double totalInterestEarned() {
         double total = 0;
         for (Account a : accounts)
-            total += a.interestEarned();
+            total += a.interestEarned(true);
         return total;
     }
 

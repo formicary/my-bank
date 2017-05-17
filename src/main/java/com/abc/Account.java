@@ -3,11 +3,20 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class Account {
+    public static double savingsInterestRateLow = 0.001;
+    public static double savingsInterestRateHigh = 0.002;
+    public static double maxiSavingsInterestRateFewDays = 0.001;
+    public static double maxiSavingsInterestRateManyDays = 0.05;
+    public static double checkingInterestRate = 0.001;
+    public static double numberOfDays = 365.0;
 
     public static final int CHECKING = 0;
     public static final int SAVINGS = 1;
     public static final int MAXI_SAVINGS = 2;
+
+    public double moneyIn = 0.0;
 
     private final int accountType;
     public List<Transaction> transactions;
@@ -21,6 +30,7 @@ public class Account {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
+            moneyIn += amount;
             transactions.add(new Transaction(amount));
         }
     }
@@ -29,37 +39,43 @@ public void withdraw(double amount) {
     if (amount <= 0) {
         throw new IllegalArgumentException("amount must be greater than zero");
     } else {
-        transactions.add(new Transaction(-amount));
+        if (amount <= moneyIn) {
+            moneyIn -= amount;
+            transactions.add(new Transaction(-amount));
+        } else {
+            throw new IllegalArgumentException("you don't have enough money for this transaction");
+        }
+
     }
 }
 
-    public double interestEarned() {
+    public double interestEarned(boolean dailyAccrue) {
         double amount = sumTransactions();
+        System.out.println(amount);
         switch(accountType){
             case SAVINGS:
                 if (amount <= 1000)
-                    return amount * 0.001;
+                    amount *= savingsInterestRateLow;
                 else
-                    return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
+                    amount = 1 + (amount-1000) * savingsInterestRateHigh;
+                break;
             case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
-            default:
-                return amount * 0.001;
+                if (DateProvider.numberOfDaysPassed(10, transactions))
+                    amount *= maxiSavingsInterestRateManyDays;
+                else
+                    amount *= maxiSavingsInterestRateFewDays;
+                break;
+            case CHECKING:
+                amount *= checkingInterestRate;
+                break;
         }
+        if(dailyAccrue == true)
+            return amount/numberOfDays;
+        else
+            return amount;
     }
 
-    public double sumTransactions() {
-       return checkIfTransactionsExist(true);
-    }
-
-    private double checkIfTransactionsExist(boolean checkAll) {
+    public double sumTransactions(){
         double amount = 0.0;
         for (Transaction t: transactions)
             amount += t.amount;
