@@ -26,22 +26,22 @@ public class Account {
         this.transactions = new ArrayList<Transaction>();
     }
 
-    public void deposit(double amount) {
+    public void deposit(double amount, boolean payment) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
             moneyIn += amount;
-            transactions.add(new Transaction(amount));
+            transactions.add(new Transaction(amount, payment));
         }
     }
 
-public void withdraw(double amount) {
+public void withdraw(double amount, boolean payment) {
     if (amount <= 0) {
         throw new IllegalArgumentException("amount must be greater than zero");
     } else {
         if (amount <= moneyIn) {
             moneyIn -= amount;
-            transactions.add(new Transaction(-amount));
+            transactions.add(new Transaction(-amount, payment));
         } else {
             throw new IllegalArgumentException("you don't have enough money for this transaction");
         }
@@ -51,7 +51,6 @@ public void withdraw(double amount) {
 
     public double interestEarned(boolean dailyAccrue) {
         double amount = sumTransactions();
-        System.out.println(amount);
         switch(accountType){
             case SAVINGS:
                 if (amount <= 1000)

@@ -10,7 +10,7 @@ public class DateProvider {
 
     public static long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
         long diffInMillies = date2.getTime() - date1.getTime();
-        System.out.print(timeUnit.convert(diffInMillies,TimeUnit.MILLISECONDS));
+
         return timeUnit.convert(diffInMillies,TimeUnit.MILLISECONDS);
     }
 
@@ -25,7 +25,8 @@ public class DateProvider {
         for(Transaction t: transactions){
             if(t.transactionType == 0) {
                 Date now = DateProvider.getInstance().now();
-                if(DateProvider.getDateDiff(now,t.transactionDate,TimeUnit.MINUTES) > 1440*days) //if there are more that *days* days until the last withdraw
+                if(DateProvider.getDateDiff(now,t.transactionDate,TimeUnit.MINUTES) > 1440*days)
+                    //if there are more than *days* days until the last withdraw
                     return true;
             }
         }

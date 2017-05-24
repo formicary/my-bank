@@ -28,8 +28,8 @@ public class Customer {
         if (accounts.size() <= 1) {throw new IllegalArgumentException("you don't have 2 open accounts at the moment!");}
 
         // run the transaction
-        accounts.get(accountFrom).withdraw(amount);
-        accounts.get(accountTo).deposit(amount);
+        accounts.get(accountFrom).withdraw(amount, false);
+        accounts.get(accountTo).deposit(amount, false);
     }
 
     public List<Account> getAccounts(){
@@ -78,7 +78,21 @@ public class Customer {
         //Now total up all the transactions
         double total = 0.0;
         for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
+            switch(t.transactionType) {
+                case 0:
+                    s += "  withdrawal " + toDollars(t.amount) + "\n";
+                    break;
+                case 1:
+                    s += "  deposit " + toDollars(t.amount) + "\n";
+                    break;
+                case 2:
+                    if(t.amount >= 0)
+                        s += "  transfer " + toDollars(t.amount) + "\n";
+                    else
+                        s += "  transfer -" + toDollars(t.amount) + "\n";
+                    break;
+            }
+
             total += t.amount;
         }
         s += "Total " + toDollars(total);

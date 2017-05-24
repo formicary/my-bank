@@ -37,8 +37,8 @@ public class AccountTest {
         john.openAccount(checkingAccount);
         john.openAccount(maxiAccount);
 
-        maxiAccount.deposit(2000);
-        checkingAccount.deposit(2000);
+        maxiAccount.deposit(2000, true);
+        checkingAccount.deposit(2000, true);
 
         double expectedvalue = (2000*Account.maxiSavingsInterestRateFewDays/Account.numberOfDays) + (2000*Account.checkingInterestRate/Account.numberOfDays);
         assertEquals(expectedvalue, john.totalInterestEarned(),DOUBLE_DELTA);
