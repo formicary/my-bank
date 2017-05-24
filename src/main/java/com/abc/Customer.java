@@ -23,6 +23,19 @@ public class Customer {
         return this;
     }
 
+    public void transferMoneyBetweenAccounts(int accountFrom, int accountTo, double amount) {
+        if (amount <= 0) {throw new IllegalArgumentException("amount must be greater than zero");}
+        if (accounts.size() <= 1) {throw new IllegalArgumentException("you don't have 2 open accounts at the moment!");}
+
+        // run the transaction
+        accounts.get(accountFrom).withdraw(amount, false);
+        accounts.get(accountTo).deposit(amount, false);
+    }
+
+    public List<Account> getAccounts(){
+        return accounts;
+    }
+
     public int getNumberOfAccounts() {
         return accounts.size();
     }
@@ -30,7 +43,7 @@ public class Customer {
     public double totalInterestEarned() {
         double total = 0;
         for (Account a : accounts)
-            total += a.interestEarned();
+            total += a.interestEarned(true);
         return total;
     }
 
@@ -65,7 +78,21 @@ public class Customer {
         //Now total up all the transactions
         double total = 0.0;
         for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
+            switch(t.transactionType) {
+                case 0:
+                    s += "  withdrawal " + toDollars(t.amount) + "\n";
+                    break;
+                case 1:
+                    s += "  deposit " + toDollars(t.amount) + "\n";
+                    break;
+                case 2:
+                    if(t.amount >= 0)
+                        s += "  transfer " + toDollars(t.amount) + "\n";
+                    else
+                        s += "  transfer -" + toDollars(t.amount) + "\n";
+                    break;
+            }
+
             total += t.amount;
         }
         s += "Total " + toDollars(total);
