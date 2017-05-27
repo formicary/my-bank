@@ -17,11 +17,27 @@ public class Customer {
     public String getName() {
         return name;
     }
+    
+    public List<Account> getAccounts(){
+    	return accounts;
+    }
 
     public Customer openAccount(Account account) {
         accounts.add(account);
         return this;
     }
+    
+    public void transfer(int from, int to, double amount) {
+    	if(amount <= 0)
+    		throw new IllegalArgumentException("Amount must be positive number");
+    	if(accounts.size() < 2)
+    		throw new IllegalArgumentException("You have to have at least to account for this transaction");
+    	
+    	accounts.get(from).withdraw(amount);
+    	accounts.get(to).deposit(amount);
+    	
+    }
+
 
     public int getNumberOfAccounts() {
         return accounts.size();
@@ -40,7 +56,7 @@ public class Customer {
         double total = 0.0;
         for (Account a : accounts) {
             statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+            total += a.getMoney();
         }
         statement += "\nTotal In All Accounts " + toDollars(total);
         return statement;

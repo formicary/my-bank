@@ -1,12 +1,13 @@
 package com.abc;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
 
+	private static final double DOUBLE_DELTA = 1e-15;
+	
     @Test //Test customer statement generation
     public void testApp(){
 
@@ -32,6 +33,32 @@ public class CustomerTest {
                 "\n" +
                 "Total In All Accounts $3,900.00", henry.getStatement());
     }
+    
+    @Test
+    public void testTranfer(){
+    	Account checking = new Account(Account.CHECKING);
+    	Account savings = new Account(Account.SAVINGS);
+    	Account maxi_savings = new Account(Account.MAXI_SAVINGS);
+        Customer oscar = new Customer("Oscar");
+        
+        oscar.openAccount(checking);
+        oscar.openAccount(savings);
+        oscar.openAccount(maxi_savings);
+        
+        checking.deposit(300.0);
+        savings.deposit(2000.0);
+        maxi_savings.deposit(3500.0);
+        
+        oscar.transfer(0, 1, 300.0);
+        assertEquals(0.0, checking.getMoney(), DOUBLE_DELTA);
+        assertEquals(2300.0, savings.getMoney(), DOUBLE_DELTA);
+        
+        
+        oscar.transfer(1, 2, 500.0);
+        assertEquals(1800.0, savings.getMoney(), DOUBLE_DELTA);
+        assertEquals(4000.0, maxi_savings.getMoney(), DOUBLE_DELTA);
+        
+    }
 
     @Test
     public void testOneAccount(){
@@ -47,11 +74,12 @@ public class CustomerTest {
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
-    @Ignore
+    @Test
     public void testThreeAcounts() {
         Customer oscar = new Customer("Oscar")
                 .openAccount(new Account(Account.SAVINGS));
         oscar.openAccount(new Account(Account.CHECKING));
+        oscar.openAccount(new Account(Account.MAXI_SAVINGS));
         assertEquals(3, oscar.getNumberOfAccounts());
     }
 }

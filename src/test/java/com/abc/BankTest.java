@@ -25,8 +25,8 @@ public class BankTest {
         bank.addCustomer(bill);
 
         checkingAccount.deposit(100.0);
-
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+        double expected = (100.0 * Account.checkingInterest) / Account.daysPerAnnum;
+        assertEquals(expected, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
@@ -36,8 +36,8 @@ public class BankTest {
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
         checkingAccount.deposit(1500.0);
-
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        double expected = (1000.0 * Account.savingsInterestLow) / Account.daysPerAnnum + (500.0*Account.savingsInterestHigh)/Account.daysPerAnnum;
+        assertEquals(expected, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
@@ -47,8 +47,8 @@ public class BankTest {
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
         checkingAccount.deposit(3000.0);
-
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        double expected = (3000*Account.maxiSavingsInterest/Account.daysPerAnnum);
+        assertEquals(expected, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
 }
