@@ -1,12 +1,12 @@
 package com.abc.account;
 
-public class Checking extends Account {
+public  class Checking extends Account {
 
 	
 
 	public double interestEarned() {
-        double amount = sumTransactions();       
-         return amount * 0.001;
+        double amount =getBalance();      
+         return amount* 0.001;
         }
     }
 	

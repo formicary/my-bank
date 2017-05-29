@@ -36,6 +36,7 @@ public class Customer {
     public double totalInterestEarned() {
         double total = 0;
         for (AccountI a : accounts)
+        	
             total += a.interestEarned();
         return total;
     }

@@ -4,13 +4,12 @@ import java.util.Date;
 
 import com.abc.DateProvider;
 
-public class Transaction {
+public class Transaction implements TransactionI{
 	
     private final double amount;
 
     private Date transactionDate;
-    // 1 for deposit and 2 for withdraw
-    
+   
 
 	public double getAmount() {
 		return amount;

@@ -16,4 +16,8 @@ public interface AccountI {
 	 double sumTransactions();
 	 
 	 List<Transaction> getTransactions();
+
+	
+	 
+	 
 }

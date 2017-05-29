@@ -10,7 +10,7 @@ import com.abc.account.Saving;
 import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
-
+	private static final double DOUBLE_DELTA = 1e-15;
     @Test //Test customer statement generation
     public void testApp(){
 
@@ -57,5 +57,32 @@ public class CustomerTest {
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
-    
+   @Test
+   public void totalInterestEarnedChecking(){
+	   Bank bank = new Bank();
+       AccountI checkingAccount = new Checking();
+       
+       Customer bill = new Customer("Bill").openAccount(checkingAccount);
+       bank.addCustomer(bill);
+
+       checkingAccount.deposit(100.0);
+       
+       
+       assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+   }
+   /*testing totalInterestEarned for customers with multiple accounts*/
+   @Test
+   public void totalInterestEarnedmultiAccounts(){
+	   Bank bank = new Bank();
+       AccountI checkingAccount = new Checking();
+       AccountI SavingAccount = new Saving();
+       Customer bill = new Customer("Bill").openAccount(checkingAccount);
+       bank.addCustomer(bill);
+       bill.openAccount(SavingAccount);
+       checkingAccount.deposit(100.0);
+       SavingAccount.deposit(100.0);
+      
+       assertEquals(0.2, bank.totalInterestPaid(), DOUBLE_DELTA);
+   }
+   
 }

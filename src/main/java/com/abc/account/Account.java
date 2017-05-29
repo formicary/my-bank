@@ -11,6 +11,14 @@ import com.abc.transaction.Withdraw;
 abstract class Account implements AccountI {
 	
 	private List<Transaction> transactions;
+	private double balance;
+	public double getBalance() {
+		return balance;
+	}
+
+	public void setBalance(double balance) {
+		this.balance = balance;
+	}
 		
 	public abstract double interestEarned();
 	
@@ -42,17 +50,19 @@ abstract class Account implements AccountI {
         } else {
         	
             transactions.add(new Deposit(amount));
+            setBalance(this.balance+=amount);
         }
     }
 
     
     public void withdraw(double amount) {
-    	double balance = sumTransactions();
-    	if (amount<balance){
+    	//double balance = sumTransactions();
+    	if (amount<=balance){
 		    if (amount <= 0) {
 		        throw new IllegalArgumentException("amount must be greater than zero");
 		    } else {
 		    	transactions.add(new Withdraw(-amount));
+		    	setBalance(balance+=-amount);
 		    }
     	}else{
 				throw new NegativeAmountException("The amount requested exceed available balance");
@@ -75,9 +85,11 @@ abstract class Account implements AccountI {
     
     public void transferFund(Account from,Account to,double amount) throws NegativeAmountException{
     	
-    	double balance = from.sumTransactions();
-    	if (amount<balance){
+    	//double balance = from.sumTransactions();
+    	
+    	if (amount<getBalance()){
     		from.withdraw(amount);
+    		
         	to.deposit(amount);
     		
     	}else{
@@ -87,7 +99,7 @@ abstract class Account implements AccountI {
     		
     	
     }
-    public boolean checkforWithdrawals(int numberOfDays,int type){
+    public boolean checkforWithdrawals(int numberOfDays){
     	
     	Calendar today =Calendar.getInstance();
     	today.roll(Calendar.DATE, -numberOfDays);
@@ -100,6 +112,8 @@ abstract class Account implements AccountI {
         	}
         return true;
     }
+
+	
     
 
 	

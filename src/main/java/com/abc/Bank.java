@@ -30,19 +30,21 @@ public class Bank {
         return summary.toString();
     }
 
-    //Make sure correct plural of word is created based on the number passed in:
-    //If number passed in is 1 just return the word otherwise add an 's' at the end
+    /*Make sure correct plural of word is created based on the number passed in:
+    If number passed in is 1 just return the word otherwise add an 's' at the end*/
     private String format(int number, StringBuilder word) {
     	 
         return number + " " + (number == 1 ? word : word.append("s") );
     }
 /*
- * totalInterestPaid() gives the total amount paid to all customers by the bank fro all accounts
+ * totalInterestPaid() gives the total amount paid to all customers by the bank from all accounts
  * */
     public double totalInterestPaid() {
         double total = 0;
         for(Customer c: customers)
+        	
             total += c.totalInterestEarned();
+        
         return total;
     }
 
