@@ -34,6 +34,18 @@ public class Customer {
         return total;
     }
 
+    public double totalInterestEarnedDaily() {
+        double total = 0;
+        for (Account a : accounts)
+            total += a.interestEarnedDaily();
+        return total;
+    }
+
+    public void transfer(double amount, Account fromAccount, Account toAccount) {
+        fromAccount.withdraw(amount);
+        toAccount.deposit(amount);
+    }
+
     public String getStatement() {
         String statement = null;
         statement = "Statement for " + name + "\n";

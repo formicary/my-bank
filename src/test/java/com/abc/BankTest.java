@@ -6,6 +6,7 @@ import static org.junit.Assert.assertEquals;
 
 public class BankTest {
     private static final double DOUBLE_DELTA = 1e-15;
+    private static final double DOUBLE_DAILY_DELTA = 1e-2;
 
     @Test
     public void customerSummary() {
@@ -48,7 +49,25 @@ public class BankTest {
 
         checkingAccount.deposit(3000.0);
 
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(3.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
+    //test for daily interest, larger delta since daily interest is approximated.
+    @Test
+    public void checkingAccountDaily() {
+        Bank bank = new Bank();
+        Account checkingAccount = new Account(Account.CHECKING);
+        Customer bill = new Customer("Bill").openAccount(checkingAccount);
+        bank.addCustomer(bill);
+
+        double total_interest = 0.0;
+        checkingAccount.deposit(1000000.0);
+        for(int i = 0; i < 365; i++) {
+            double interest = bank.totalInterestPaidDaily();
+            checkingAccount.deposit(interest);
+            total_interest += interest;
+        }
+
+        assertEquals(1000.0, total_interest, DOUBLE_DAILY_DELTA);
+    }
 }

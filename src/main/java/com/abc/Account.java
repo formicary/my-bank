@@ -25,13 +25,19 @@ public class Account {
         }
     }
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
+    public void withdraw(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        } else {
+            transactions.add(new Transaction(-amount));
+        }
     }
-}
+
+    private boolean noWithdrawsWithinTenDays() {
+        for (Transaction t: transactions)
+            if(t.withinTenDays()) return false;
+        return true;
+    }
 
     public double interestEarned() {
         double amount = sumTransactions();
@@ -45,21 +51,32 @@ public void withdraw(double amount) {
 //                if (amount <= 4000)
 //                    return 20;
             case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
+                if (noWithdrawsWithinTenDays())
+                    return amount * 0.05;
+                return amount * 0.001;
             default:
                 return amount * 0.001;
         }
     }
 
-    public double sumTransactions() {
-       return checkIfTransactionsExist(true);
+    public double interestEarnedDaily() {
+        double amount = sumTransactions();
+        switch(accountType){
+            case SAVINGS:
+                if (amount <= 1000)
+                    return amount * 0.00000273836;
+                else
+                    return 0.00273836 + (amount-1000) * 1.0000054740;
+            case MAXI_SAVINGS:
+                if (noWithdrawsWithinTenDays())
+                    return amount * 1.00013368061;
+                return amount * 0.00000273836;
+            default:
+                return amount * 0.00000273836;
+        }
     }
 
-    private double checkIfTransactionsExist(boolean checkAll) {
+    public double sumTransactions() {
         double amount = 0.0;
         for (Transaction t: transactions)
             amount += t.amount;

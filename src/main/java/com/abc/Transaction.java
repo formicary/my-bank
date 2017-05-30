@@ -13,4 +13,11 @@ public class Transaction {
         this.transactionDate = DateProvider.getInstance().now();
     }
 
+
+    public boolean withinTenDays() {
+        Date now = DateProvider.getInstance().now();
+        if(now.getTime() - transactionDate.getTime() < 1000 * 60 * 60 * 24 * 10) return true;
+        return false;
+    }
+
 }
