@@ -1,73 +1,95 @@
 package com.abc;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.abc.exceptions.*;
+import com.abc.transactions.Deposit;
+import com.abc.transactions.Transaction;
+import com.abc.transactions.Transfer;
+import com.abc.transactions.Withdrawal;
 
-public class Account {
+import java.util.Collection;
+import java.util.Date;
+import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
+public abstract class Account {
+    protected long accountID;
+    protected Map<Date, Transaction> transactions;
+    protected double balance;
+    protected static final int DAYS_A_YEAR = 365;
+    protected Date lastTransactionDate;
+    protected Lock lock = new ReentrantLock();
 
-    private final int accountType;
-    public List<Transaction> transactions;
+    public abstract double interestEarned();
 
-    public Account(int accountType) {
-        this.accountType = accountType;
-        this.transactions = new ArrayList<Transaction>();
+
+    public void deposit(double amount) throws NonPositiveAmountException {
+
+        lock.lock();
+        Deposit deposit = new Deposit(balance, amount);
+        balance = deposit.executeTransaction();
+        transactions.put(deposit.getTransactionDate(), deposit);
+        lastTransactionDate = deposit.getTransactionDate();
+        lock.unlock();
     }
 
-    public void deposit(double amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
+    public void withdraw(double amount) throws ExceedsNegativeBalanceException, NonPositiveAmountException {
+        lock.lock();
+        Withdrawal withdrawal = new Withdrawal(balance, amount);
+        balance = withdrawal.executeTransaction();
+        transactions.put(withdrawal.getTransactionDate(), withdrawal);
+        lastTransactionDate = withdrawal.getTransactionDate();
+        lock.unlock();
+    }
+
+    public void transfer(int toCustomerId, int toAccountID, double amount, Bank bank) throws CustomerNotExistException, IdenticalAccountIDException, ExceedsNegativeBalanceException, NonPositiveAmountException, AccountNotExistException {
+
+        if (!(bank.getSystemManagement().getCustomers().containsKey(toCustomerId))) {
+            throw new CustomerNotExistException("Transfer transaction failed: Customer with Id " + toCustomerId + " and account id " + toAccountID + " does not exist!");
+
+        } else if (!bank.getSystemManagement().getCustomers().get(toCustomerId).getAccountManagement().getAccounts().containsKey(toAccountID)) {
+            throw new AccountNotExistException("Transfer transaction failed: Account id " + toAccountID + " does not exist!");
+
         } else {
-            transactions.add(new Transaction(amount));
+            Account account = bank.getSystemManagement().getCustomers().get(toCustomerId).getAccountManagement().getAccounts().get(toAccountID);
+            if (this.accountID == account.accountID) {
+                throw new IdenticalAccountIDException("Transfer transaction failed: The source account should be different from the destination account!");
+
+            }
+            lock.lock();
+            Transfer transfer = new Transfer(balance, amount, this, account);
+            balance = transfer.executeTransaction();
+            transactions.put(transfer.getTransactionDate(), transfer);
+            lastTransactionDate = transfer.getTransactionDate();
+            lock.unlock();
         }
+
     }
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
-    }
-}
-
-    public double interestEarned() {
-        double amount = sumTransactions();
-        switch(accountType){
-            case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
-            case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
-            default:
-                return amount * 0.001;
-        }
+    public double accrueInterestDaily() {
+        double interest = interestEarned();
+        Deposit deposit = new Deposit(balance, interest / DAYS_A_YEAR);
+        transactions.put(deposit.getTransactionDate(), deposit);
+        return interest / DAYS_A_YEAR;
     }
 
-    public double sumTransactions() {
-       return checkIfTransactionsExist(true);
+    public Collection<Transaction> getTransactions() {
+        return this.transactions.values();
     }
 
-    private double checkIfTransactionsExist(boolean checkAll) {
-        double amount = 0.0;
-        for (Transaction t: transactions)
-            amount += t.amount;
-        return amount;
+    public double getBalance() {
+        return balance;
     }
 
-    public int getAccountType() {
-        return accountType;
+    public long getAccountID() {
+        return accountID;
     }
 
+    public void setAccountID(long accountID) {
+        this.accountID = accountID;
+    }
+
+    public Date getLastTransactionDate() {
+        return lastTransactionDate;
+    }
 }
