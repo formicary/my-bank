@@ -31,13 +31,13 @@ public class CustomerTest {
         oscar.openAccount("Acc1", new Account(SAVINGS));
 
         int expected = 1;
-        int result = oscar.getNumberOfAccounts();
+        int result = oscar.numberOfAccounts();
         assertEquals(expected, result);
 
         oscar.openAccount("Acc2", new Account(CHECKING));
 
         expected = 2;
-        result = oscar.getNumberOfAccounts();
+        result = oscar.numberOfAccounts();
         assertEquals(expected, result);
     }
 
@@ -67,8 +67,70 @@ public class CustomerTest {
                 + "Total $100.00\n"
                 + "\n"
                 + "Total In All Accounts $3,900.00";
-        String result = oscar.getStatement();
+        String result = oscar.createStatement();
 
         assertEquals(expected, result);
+    }
+
+    @Test
+    public void testTransferSuccess() {
+        Customer oscar = new Customer("Oscar");
+
+        Account savings = new Account(SAVINGS);
+        Account checking = new Account(CHECKING);
+
+        oscar.openAccount("Acc1", savings);
+        oscar.openAccount("Acc2", checking);
+
+        savings.deposit(1000);
+
+        oscar.transfer("Acc1", "Acc2", 750.0);
+
+        double expectedSavings = 250.0;
+        double expectedChecking = 750.0;
+
+        double resultSavings = savings.sumTransactions();
+        double resultChecking = checking.sumTransactions();
+
+        assertEquals(expectedSavings, resultSavings, 0.001);
+        assertEquals(expectedChecking, resultChecking, 0.001);
+
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testTransferInvalidAccount() {
+        Customer oscar = new Customer("Oscar");
+
+        Account savings = new Account(SAVINGS);
+        Account checking = new Account(CHECKING);
+
+        oscar.openAccount("Acc1", savings);
+        oscar.openAccount("Acc2", checking);
+
+        oscar.transfer("Acc1", "Acc3", 500.0);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testTransferInsufficientFunds() {
+        Customer oscar = new Customer("Oscar");
+
+        Account savings = new Account(SAVINGS);
+        Account checking = new Account(CHECKING);
+
+        oscar.openAccount("Acc1", savings);
+        oscar.openAccount("Acc2", checking);
+
+        savings.deposit(200.0);
+
+        oscar.transfer("Acc1", "Acc2", 750.0);
+
+        double expectedSavings = 250.0;
+        double expectedChecking = 750.0;
+
+        double resultSavings = savings.sumTransactions();
+        double resultChecking = checking.sumTransactions();
+
+        assertEquals(expectedSavings, resultSavings, 0.001);
+        assertEquals(expectedChecking, resultChecking, 0.001);
     }
 }
