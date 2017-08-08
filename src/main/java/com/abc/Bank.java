@@ -1,22 +1,37 @@
 package com.abc;
-
+import java.util.HashMap; 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Bank {
-    private List<Customer> customers;
-
+    // UPDATE: Customers need  to have a unique identifier, using HashMap to enable key and value pair
+    // Assign ID for each customer and HashMap provides function to check if a key already exsit or not
+    // private List<Customer> customers;
+    private HashMap<String,Customer> customers;
+    public InterestProvider interestProvider; 
     public Bank() {
-        customers = new ArrayList<Customer>();
+        customers = new HashMap<String,Customer>();
+        interestProvider = new InterestProvider();
     }
 
     public void addCustomer(Customer customer) {
-        customers.add(customer);
+        customer.updateInterestRate(this.interestProvider);
+        // UPDATE: Check for duplicate customer name 
+        // UPDATE: Repalce ArrayList with HashMap instead.
+        if(this.customers.containsKey(customer.getName())){
+            // NOTE: Current using customer name as identifier for each customer
+            // TO-DO: Assign Customer with unique ID as identifier 
+            throw new IllegalArgumentException("Duplicate customer name ");
+        } else {
+            customers.put(customer.getName(),customer);
+        }   
+
     }
 
     public String customerSummary() {
         String summary = "Customer Summary";
-        for (Customer c : customers)
+        
+        for (Customer c : this.customers.values())
             summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
         return summary;
     }
@@ -29,18 +44,27 @@ public class Bank {
 
     public double totalInterestPaid() {
         double total = 0;
-        for(Customer c: customers)
+        for(Customer c : this.customers.values())
             total += c.totalInterestEarned();
         return total;
     }
 
-    public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
+    // REMOVED: Not used
+    // public String getFirstCustomer() {
+    //     try {
+    //         customers = null;
+    //         return customers.get(0).getName();
+    //     } catch (Exception e){
+    //         e.printStackTrace();
+    //         return "Error";
+    //     }
+    // }
+
+    // UPDATE: change interest rate to a new InteresProvider
+    // NOTE: Ignore the possibility of accounts failed to update thier InterestProvider
+    public void changeInterestRate( InterestProvider newInterestRate ){
+        for(Customer c : this.customers.values()){
+            c.updateInterestRate(newInterestRate);
         }
     }
 }
