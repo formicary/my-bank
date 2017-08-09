@@ -10,8 +10,13 @@ public class Bank {
         customers = new ArrayList<Customer>();
     }
 
-    public void addCustomer(Customer customer) {
-        customers.add(customer);
+    public void addCustomer(Customer customer) { //Should also check whether already a customer
+    											//but the name is too little info
+    	if(!customers.contains(customer)){
+    		customers.add(customer);				
+    	} else{
+    		//Customer is already on record
+    	}
     }
 
     public String customerSummary() {
@@ -35,12 +40,14 @@ public class Bank {
     }
 
     public String getFirstCustomer() {
-        try {
-            customers = null;
+        if(!customers.isEmpty()){
+ 
             return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
+            
+        } else{
+        	
+            return "None";
+            
         }
     }
 }
