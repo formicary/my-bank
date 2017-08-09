@@ -1,73 +1,162 @@
 package com.abc;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import com.abc.interestCalculation.InterestCalculator;
 
 public class Account {
 
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
 
-    private final int accountType;
+    private final AccountType accountType;
     public List<Transaction> transactions;
+    
+    private double balance;
+    
+    private double totalInterestEarned; 
 
-    public Account(int accountType) {
+    
+ 
+    public Account(AccountType accountType) {
+    	switch(accountType){
+    		case CHECKING: break;
+    		case SAVINGS: break;
+    		case MAXI_SAVINGS: break;
+    		default: throw new IllegalArgumentException("Invalid accoount type");
+    	}
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
+        this.balance = 0.0;
+        this.totalInterestEarned = 0.0;
     }
 
+    
     public void deposit(double amount) {
         if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
-        } else {
-            transactions.add(new Transaction(amount));
+        	
+            throw new IllegalArgumentException("Amount must be greater than zero");
+        
+        }
+        else {
+        	this.updateBalance();
+            transactions.add(new Transaction(amount, TransactionType.DEPOSIT));
+            this.balance+=amount;
+        
         }
     }
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
-    }
-}
+    
+	public void withdraw(double amount) {
+		if (amount <= 0) {
+			
+			throw new IllegalArgumentException("Amount must be greater than zero");
+		
+		} else if (this.balance - amount < 0.0) {
+			
+			throw new IllegalArgumentException("Account balance not enough to make withdrawal"
+					+ " only " + this.balance + " left");
+		
+		} else {
+			this.updateBalance();
+			transactions.add(new Transaction(-amount, TransactionType.WITHDRAWAL));
+			this.balance -= amount;
+		
+		}
+	}
 
+	
     public double interestEarned() {
-        double amount = sumTransactions();
-        switch(accountType){
-            case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
-            case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
-            default:
-                return amount * 0.001;
-        }
+    	this.updateBalance();
+    	return this.totalInterestEarned;
+    }
+    
+    
+    public double calculateInterest(){
+        InterestCalculator calc = new InterestCalculator();
+        return calc.calculateInterest(this);
     }
 
+    
     public double sumTransactions() {
-       return checkIfTransactionsExist(true);
-    }
-
-    private double checkIfTransactionsExist(boolean checkAll) {
+    	
+    	if (this.transactions.isEmpty()) return 0.0;
+    	
         double amount = 0.0;
+        
         for (Transaction t: transactions)
-            amount += t.amount;
+            amount += t.getAmount();
+        
         return amount;
     }
 
-    public int getAccountType() {
+    
+    public AccountType getAccountType() {
         return accountType;
     }
+    
+    public double getCurrentBalance(){
+    	return this.balance;
+    }
+    
+    public double getUpdatedCurrentBalance(){
+    	this.updateBalance();
+    	return this.balance;
+    }
+   
+    
+    public Transaction getLastTransactionByType(TransactionType t){
+    	Transaction lastTransaction = new Transaction(0, TransactionType.EMPTY);
+    	
+    	for(int i=this.transactions.size()-1; i>-1; i--)
+    	{    	
+    		if(this.transactions.get(i).getType()==t){
+    			lastTransaction = this.transactions.get(i);
+    			break;
+    		}
+    	}
+    	
+    	return lastTransaction;
+    }
+    
+    
+    public Transaction getLastTransaction(){
+    	
+    	Transaction lastTransaction = new Transaction(0, TransactionType.EMPTY);
+    	
+    	if(!this.transactions.isEmpty()){
+    		lastTransaction = this.transactions.get(this.transactions.size() - 1);
+    	}
+    	
+    	return lastTransaction;
+    }
+    
+    
+	public long getDaysSinceLastTransaction() {
+		
+		Transaction lastTransaction = this.getLastTransaction();
+		
+		if (lastTransaction.getType() == TransactionType.EMPTY) {
+			
+			return 0; // Better to throw a "NoTransactionsException"
+			
+		} else {
+			
+			DateProvider dp = new DateProvider();
+			Date lastTransactionDate = lastTransaction.getDate();
+			Date today = dp.now();
+			
+			return dp.daysAppart(today, lastTransactionDate);
+		
+		}
+	}
+    
+	
+	public void updateBalance() {
+		double interest = this.calculateInterest();
+		this.transactions.add(new Transaction(interest, TransactionType.INTEREST_EARNED));
+		this.totalInterestEarned += interest;
+		this.balance += interest;
+	}
 
 }

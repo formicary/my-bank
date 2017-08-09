@@ -51,22 +51,24 @@ public class Customer {
 
        //Translate to pretty account type
         switch(a.getAccountType()){
-            case Account.CHECKING:
+            case CHECKING:
                 s += "Checking Account\n";
                 break;
-            case Account.SAVINGS:
+            case SAVINGS:
                 s += "Savings Account\n";
                 break;
-            case Account.MAXI_SAVINGS:
+            case MAXI_SAVINGS:
                 s += "Maxi Savings Account\n";
                 break;
+            default: throw new IllegalArgumentException("Invalid accoount type");
         }
 
         //Now total up all the transactions
         double total = 0.0;
         for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
+        	
+            s += "  " + (t.getType().toString().toLowerCase()) + " " + toDollars(t.getAmount()) + "\n";
+            total += t.getAmount();
         }
         s += "Total " + toDollars(total);
         return s;
@@ -74,5 +76,25 @@ public class Customer {
 
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
+    }
+    
+    public void transferBetweenAccounts(Account fromAccount, Account toAccount, double amount){
+    	
+    	if(!accounts.contains(fromAccount) || !accounts.contains(fromAccount)){
+    		
+    		throw new IllegalArgumentException("Both accounts should belong "
+    				+ "to the customer requesting the transfer");
+    		
+    	} else if(amount>fromAccount.getCurrentBalance()){
+    		
+    		throw new IllegalArgumentException("Transfer invalid, "
+    				+ "source account has only " + fromAccount.getCurrentBalance() + " left");
+    		
+    	} else{
+    		
+    		fromAccount.withdraw(amount);
+    		toAccount.deposit(amount);
+    		
+    	}
     }
 }
