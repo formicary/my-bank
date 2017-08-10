@@ -1,13 +1,22 @@
 package com.abc;
 
-import org.junit.Test;
+import Banking.Transaction;
 
-import static org.junit.Assert.assertTrue;
+import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 public class TransactionTest {
-    @Test
-    public void transaction() {
-        Transaction t = new Transaction(5);
-        assertTrue(t instanceof Transaction);
-    }
+	
+	@Test
+	public void canCreateATransaction(){
+		Transaction t = new Transaction(1);
+		assertEquals(t.amount,1,0);	
+	}
+	
+	@Test (expected = Exception.class)
+	public void cantCreateATransaction(){
+		Object o = "a";
+		Transaction t = new Transaction((int)o);
+	}
+
 }
