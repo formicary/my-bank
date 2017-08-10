@@ -1,57 +1,119 @@
 package com.abc;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+import Banking.Account;
+import Banking.CheckingAccount;
+import Banking.Customer;
+import Banking.MaxiSavingAccount;
+import Banking.SavingAccount;
+
+
 public class CustomerTest {
 
-    @Test //Test customer statement generation
-    public void testApp(){
+	@Test
+	public void checkCustomerName(){
+		
+		String name = "Dave";
+		
+		Customer customer = new Customer(name);
+		
+		assertEquals(customer.getName(),name);
+	}
+	
+	@Test
+	public void canOpenAnAccounts(){
+		
+		Customer customer = new Customer("Dave");
+		
+		customer.openAccount(new CheckingAccount());
+		assertEquals(customer.getNumberOfAccounts(),1);
+		
+		customer.openAccount(new SavingAccount());
+		assertEquals(customer.getNumberOfAccounts(),2);
+		
+		customer.openAccount(new MaxiSavingAccount());
+		assertEquals(customer.getNumberOfAccounts(),3);
+	}
+	
 
-        Account checkingAccount = new Account(Account.CHECKING);
-        Account savingsAccount = new Account(Account.SAVINGS);
-
-        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
-
-        checkingAccount.deposit(100.0);
-        savingsAccount.deposit(4000.0);
-        savingsAccount.withdraw(200.0);
-
-        assertEquals("Statement for Henry\n" +
-                "\n" +
-                "Checking Account\n" +
-                "  deposit $100.00\n" +
-                "Total $100.00\n" +
-                "\n" +
-                "Savings Account\n" +
-                "  deposit $4,000.00\n" +
-                "  withdrawal $200.00\n" +
-                "Total $3,800.00\n" +
-                "\n" +
-                "Total In All Accounts $3,900.00", henry.getStatement());
-    }
-
-    @Test
-    public void testOneAccount(){
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
-        assertEquals(1, oscar.getNumberOfAccounts());
-    }
-
-    @Test
-    public void testTwoAccount(){
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
-        assertEquals(2, oscar.getNumberOfAccounts());
-    }
-
-    @Ignore
-    public void testThreeAcounts() {
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
-        assertEquals(3, oscar.getNumberOfAccounts());
-    }
+	@Test
+	public void checkInterestEarnedChecking(){
+		
+		Account.resetAccountNumber();
+		
+		Customer customer = new Customer("Dave");
+		customer.openAccount(new CheckingAccount());
+		
+		double checkAmount = 100;
+		
+		customer.getAccountByNumber(0).deposit(checkAmount);
+				
+		assertEquals(customer.totalInterestEarned(),checkAmount * CheckingAccount.getInterestRate(),0);
+		
+	}
+	
+	@Test
+	public void checkInterestEarnedSaving(){
+		
+		Account.resetAccountNumber();
+		
+		Customer customer = new Customer("Dave");
+		customer.openAccount(new SavingAccount());
+		
+		double savingLowAmount = 100, savingHighAmount = 1000;
+		
+		customer.getAccountByNumber(0).deposit(savingLowAmount);
+				
+		assertEquals(customer.totalInterestEarned(),savingLowAmount * SavingAccount.getLowerInterestRate(),0);
+		
+		customer.getAccountByNumber(0).deposit(savingHighAmount);
+		
+		double lowerInterest = SavingAccount.getUpperInterestThreshold() * SavingAccount.getLowerInterestRate();
+		double upperInterest = (savingHighAmount + savingLowAmount - SavingAccount.getUpperInterestThreshold()) * SavingAccount.getUpperInterestRate();
+		
+		assertEquals(customer.totalInterestEarned(),lowerInterest + upperInterest,0);
+		
+	}
+	
+	@Test
+	public void checkInterestEarnedMaxiSaving(){
+		
+		Account.resetAccountNumber();
+		
+		Customer customer = new Customer("Dave");
+		customer.openAccount(new MaxiSavingAccount());
+		
+		double maxiSavingNoWithdrawalAmount = 100, maxiSavingWithdrawalAmount = 50;
+		
+		customer.getAccountByNumber(0).deposit(maxiSavingNoWithdrawalAmount);
+		assertEquals(customer.totalInterestEarned(),maxiSavingNoWithdrawalAmount * MaxiSavingAccount.getUpperInterestRate(),0);
+		
+		customer.getAccountByNumber(0).withdraw(maxiSavingWithdrawalAmount);
+		assertEquals(customer.totalInterestEarned(),(maxiSavingNoWithdrawalAmount - maxiSavingWithdrawalAmount) * MaxiSavingAccount.getLowerInterestRate(),0);
+	}
+	
+	@Test
+	public void checkThatMoneyCanBeTransfered(){
+		
+		Account.resetAccountNumber();
+		
+		Customer customer = new Customer("Dave");
+		
+		customer.openAccount(new CheckingAccount());
+		customer.openAccount(new CheckingAccount());
+		
+		double depositAmount = 10, transferAmount = 5;
+		
+		customer.getAccountByNumber(0).deposit(depositAmount);
+		
+		customer.transferMoney(0, 1, transferAmount);
+		
+		assertEquals(customer.getAccountByNumber(0).sumTransactions(),depositAmount - transferAmount,0);
+		assertEquals(customer.getAccountByNumber(1).sumTransactions(),transferAmount,0);
+		
+	}
 }
+

@@ -18,9 +18,8 @@ public class Customer {
         return name;
     }
 
-    public Customer openAccount(Account account) {
+    public void openAccount(Account account) {
         accounts.add(account);
-        return this;
     }
 
     public int getNumberOfAccounts() {
@@ -34,6 +33,10 @@ public class Customer {
         return total;
     }
 
+    /**
+     * Summarises the customers accounts.
+     * @return the summary
+     */
     public String getStatement() {
         String statement = null;
         statement = "Statement for " + name + "\n";
@@ -46,25 +49,29 @@ public class Customer {
         return statement;
     }
 
-    private String statementForAccount(Account a) {
+    /**
+     * Summarizes an account
+     * @param account - the account to be summarized
+     * @return
+     */
+    private String statementForAccount(Account account) {
         String s = "";
 
-       //Translate to pretty account type
-        switch(a.getAccountType()){
-            case Account.CHECKING:
+        switch(account.getAccountType()){
+            case CHECKING:
                 s += "Checking Account\n";
                 break;
-            case Account.SAVINGS:
+            case SAVING:
                 s += "Savings Account\n";
                 break;
-            case Account.MAXI_SAVINGS:
+            case MAXI_SAVINGS:
                 s += "Maxi Savings Account\n";
                 break;
         }
 
         //Now total up all the transactions
         double total = 0.0;
-        for (Transaction t : a.transactions) {
+        for (Transaction t : account.transactions) {
             s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
             total += t.amount;
         }
@@ -74,5 +81,44 @@ public class Customer {
 
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
+    }
+
+    /**
+     * Transfers money from one account to another.
+     * @param fromAccountNum - the account the money is being taken from
+     * @param toAccountNum - the account the money is going to 
+     * @param amount - the amount of money being transfered
+     */
+    public void transferMoney(int fromAccountNum, int toAccountNum, double amount){
+
+    	if((fromAccountNum == toAccountNum) || amount < 0){
+    		return;
+    	}
+    	
+    	Account fromAccount = getAccountByNumber(fromAccountNum);
+    	Account toAccount = getAccountByNumber(toAccountNum);
+    	
+    	if((fromAccount != null) && (toAccount != null)){
+    		
+    		fromAccount.withdraw(amount);
+    		toAccount.deposit(amount);
+    	} 
+    }
+    
+    /**
+     * Find and return the account with the specified number.
+     * @param accNum - the account number
+     * @return the account with the specified number.
+     */
+    public Account getAccountByNumber(int accNum){
+    	Account accountWithNum = null;
+    	
+    	for(Account acc : accounts){	
+    		if(acc.accountNum == accNum){
+    			accountWithNum = acc;
+    			break;
+    		}
+    	}
+    	return accountWithNum;
     }
 }

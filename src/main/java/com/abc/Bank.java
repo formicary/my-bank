@@ -13,7 +13,15 @@ public class Bank {
     public void addCustomer(Customer customer) {
         customers.add(customer);
     }
+    
+    public List<Customer> getCustomers(){
+    	return customers;
+    }
 
+    /**
+     * Constructs a summary of the banks customers.
+     * @return customer summary 
+     */
     public String customerSummary() {
         String summary = "Customer Summary";
         for (Customer c : customers)
@@ -27,6 +35,10 @@ public class Bank {
         return number + " " + (number == 1 ? word : word + "s");
     }
 
+    /**
+     * Calculates the total interest paid to the banks customers.
+     * @return the total interest
+     */
     public double totalInterestPaid() {
         double total = 0;
         for(Customer c: customers)
@@ -34,8 +46,13 @@ public class Bank {
         return total;
     }
 
+    /**
+     * Gets the name of the banks first customer
+     * @return first customer name
+     */
     public String getFirstCustomer() {
-        try {
+        
+    	try {
             customers = null;
             return customers.get(0).getName();
         } catch (Exception e){
