@@ -1,3 +1,5 @@
+package com.abc;
+
 public class SavingAccount extends Account{
 
 	private static double lowerInterestRate = 0.001, upperInterestRate = 0.002;
