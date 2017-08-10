@@ -1,3 +1,5 @@
+package com.abc;
+
 public class CheckingAccount extends Account{
 
 	private static double interestRate;
