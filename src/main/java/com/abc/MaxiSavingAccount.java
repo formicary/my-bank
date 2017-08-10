@@ -1,3 +1,5 @@
+package com.abc;
+
 public class MaxiSavingAccount extends Account{
 
 	private static final int MILLISECONDS_IN_DAY = 86400000;
