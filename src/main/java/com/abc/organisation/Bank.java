@@ -22,9 +22,6 @@ public class Bank {
     public void addEmployee(Employee employee){
         employees.add(employee);
     }
-    public Interest createInterest(InterestRate rate, Band interestBand){
-        return new Interest(rate,interestBand);
-    }
     public void payInterest(Interest interest,AccountConstantsNew accountType){
         for(Customer customer:customers.all()){
             customer.gainInterest(interest, accountType);
