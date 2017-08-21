@@ -41,6 +41,9 @@ public class Bank {
             customer.gainInterest(withdrawalInterest,accountType);
         }
     }
+    public Customers customerInformation(){
+        return customers;
+    }
     public int customerCount() {
         return customers.size();
     }

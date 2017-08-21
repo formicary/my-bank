@@ -1,4 +1,4 @@
-package com.abc;
+package com.abc.history;
 
 import com.abc.accounts.SavingsAccount;
 import com.abc.history.TransactionHistory;

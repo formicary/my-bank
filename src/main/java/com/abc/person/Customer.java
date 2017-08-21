@@ -31,6 +31,9 @@ public class Customer implements Person{
         }
         return NullAccount.getInstance();
     }
+    public boolean accountExists(AccountConstantsNew accountType){
+       return accounts.exists(accountType);
+    }
     public Account openAccount(AccountConstantsNew accountType){
         if(accounts.exists(accountType)){
             return NullAccount.getInstance();

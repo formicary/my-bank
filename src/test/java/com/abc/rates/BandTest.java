@@ -37,7 +37,7 @@ public class BandTest {
         Money money = new Money(500);
         float interestValue = band.interestInBand(money);
         System.out.println(interestValue);
-        assertEquals(0.0f, interestValue, 0.001f);
+        assertEquals(0.1f, interestValue, 0.001f);
     }
     @Test
     public void obtainFirstBandOfInterestRate(){
@@ -81,5 +81,10 @@ public class BandTest {
         System.out.println(interestValue);
         assertEquals(0.5f, interestValue, 0.001f);
     }
+
+
+
+
+
 
 }

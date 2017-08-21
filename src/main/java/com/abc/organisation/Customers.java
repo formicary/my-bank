@@ -25,10 +25,14 @@ public class Customers {
     }
     public String interestReport(AccountConstantsNew accountType){
         StringBuilder sb = new StringBuilder();
-        accountTypeInString(sb, accountType);
-        sb.append("\n")
-                .append(totalInterestPaid(accountType).amount());
+        interestStatement(accountType, sb);
         return sb.toString();
+    }
+    private void interestStatement(AccountConstantsNew accountType,StringBuilder sb){
+            accountTypeInString(sb, accountType);
+            sb.append("\n")
+                    .append(totalInterestPaid(accountType).amount())
+                    .append("\n");
     }
     private void accountTypeInString(StringBuilder sb,AccountConstantsNew accountType){
         if(accountType==AccountConstantsNew.MAXI_SAVINGS){
@@ -47,6 +51,7 @@ public class Customers {
         }
         return finalMoney;
     }
+
     private void createSection(StringBuilder sb,Customer customer){
         sb.append(fullName(customer))
                 .append("\n")

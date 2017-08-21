@@ -11,8 +11,10 @@ import java.util.ArrayList;
 public class BankManager extends Employee{
     private Customers customerReport;
     private Name name;
-    public BankManager(Name name, Customers customerReport) {
+    public BankManager(Name name) {
         super(name);
+    }
+    public void requestCustomers(Customers customerReport){
         this.customerReport=customerReport;
     }
     public String customerReport(){
