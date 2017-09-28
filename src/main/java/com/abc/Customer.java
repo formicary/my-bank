@@ -20,7 +20,7 @@ public class Customer {
 
     public Customer openAccount(Account account) {
         if (account == null) {
-            throw new IllegalArgumentException("Account must be non null");
+            throw new IllegalArgumentException("Account must be initialized.");
         }
         accounts.add(account);
         return this;

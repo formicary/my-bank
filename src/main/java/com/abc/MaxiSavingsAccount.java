@@ -1,23 +1,41 @@
 package com.abc;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 
-public class MaxiSavingsAccount extends Account implements InterestByRules {
-    private List<InterestRateWithValue> interestRules = new ArrayList<>();
-    {
-        interestRules.add(new InterestRateWithValue(0.02,1000.0));
-        interestRules.add(new InterestRateWithValue(0.05,1000.0));
-    }
+public class MaxiSavingsAccount extends Account {
+    private double ifNoWithdrawalsRate = 0.05;
 
     public MaxiSavingsAccount(){
         this.transactions = new ArrayList<Transaction>();
         totalAmount = 0;
-        defaultInterestRate = 0.1;
+        defaultInterestRate = 0.001;
     }
 
     public double interestEarned() {
-        return calculateInterestWithRules(totalAmount, interestRules, defaultInterestRate, 0.0);
+        return interestEarned(totalAmount, DateProvider.getInstance().now().toLocalDate());
+    }
+
+    protected double interestEarned(double amount, LocalDate date) {
+        if (noWithdrawPastDays(date,10)) {
+            return amount * ifNoWithdrawalsRate;
+        } else {
+            return amount * defaultInterestRate;
+        }
+    }
+
+    private boolean noWithdrawPastDays(LocalDate toDate, int numberOfDay) {
+        for (Transaction t: transactions) {
+
+            LocalDate dateOfTransaction = t.getTransactionDate().toLocalDate();
+
+            if(t.getAmount() < 0 && !t.getAnotherAccount().isPresent()
+                && dateOfTransaction.isAfter(toDate.minusDays(numberOfDay))
+                && dateOfTransaction.isBefore(toDate.plusDays(1))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public String toString() {
