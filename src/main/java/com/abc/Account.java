@@ -3,71 +3,40 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Account {
+public abstract class Account implements InterestInterface {
+    protected List<Transaction> transactions;
+    protected double totalAmount;
+    protected double defaultInterestRate;
 
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
-
-    private final int accountType;
-    public List<Transaction> transactions;
-
-    public Account(int accountType) {
-        this.accountType = accountType;
+    public Account() {
         this.transactions = new ArrayList<Transaction>();
+        totalAmount = 0;
     }
 
     public void deposit(double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
+            totalAmount += amount;
             transactions.add(new Transaction(amount));
         }
     }
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
-    }
-}
-
-    public double interestEarned() {
-        double amount = sumTransactions();
-        switch(accountType){
-            case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
-            case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
-            default:
-                return amount * 0.001;
+    public void withdraw(double amount) {
+        if (amount <= 0 || amount > totalAmount) {
+            throw new IllegalArgumentException("amount must be greater than zero and greater than totalAmount");
+        } else {
+            totalAmount -= amount;
+            transactions.add(new Transaction(-amount));
         }
     }
 
-    public double sumTransactions() {
-       return checkIfTransactionsExist(true);
+    public List<Transaction> getTransactions() {
+        return transactions;
     }
 
-    private double checkIfTransactionsExist(boolean checkAll) {
-        double amount = 0.0;
-        for (Transaction t: transactions)
-            amount += t.amount;
-        return amount;
+    public double getTotalAmount() {
+        return totalAmount;
     }
-
-    public int getAccountType() {
-        return accountType;
-    }
-
+    public abstract String toString();
 }

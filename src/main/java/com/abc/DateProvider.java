@@ -1,10 +1,14 @@
 package com.abc;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class DateProvider {
+
     private static DateProvider instance = null;
+
+    private DateProvider() {
+
+    }
 
     public static DateProvider getInstance() {
         if (instance == null)
@@ -12,7 +16,7 @@ public class DateProvider {
         return instance;
     }
 
-    public Date now() {
-        return Calendar.getInstance().getTime();
+    public LocalDateTime now() {
+        return LocalDateTime.now();
     }
 }

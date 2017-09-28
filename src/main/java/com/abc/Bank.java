@@ -2,6 +2,7 @@ package com.abc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class Bank {
     private List<Customer> customers;
@@ -10,15 +11,20 @@ public class Bank {
         customers = new ArrayList<Customer>();
     }
 
+
     public void addCustomer(Customer customer) {
+        if (customer == null) {
+            throw new IllegalArgumentException("Customer must not be null");
+        }
         customers.add(customer);
     }
 
     public String customerSummary() {
-        String summary = "Customer Summary";
+        StringBuilder summary = new StringBuilder("Customer Summary");
         for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-        return summary;
+            summary.append("\n - ").append(c.getName()).append(" (")
+                    .append(format(c.getNumberOfAccounts(), "account")).append(")");
+        return summary.toString();
     }
 
     //Make sure correct plural of word is created based on the number passed in:
@@ -34,13 +40,11 @@ public class Bank {
         return total;
     }
 
-    public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
+    public Optional<String> getFirstCustomerName() {
+        if (customers == null || customers.isEmpty()) {
+            return Optional.empty();
+        } else {
+            return Optional.of(customers.get(0).getName());
         }
     }
 }
