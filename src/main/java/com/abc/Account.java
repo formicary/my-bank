@@ -1,73 +1,94 @@
 package com.abc;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
-public class Account {
+public abstract class Account implements InterestInterface {
+    protected List<Transaction> transactions;
+    protected double totalAmount;
+    protected double defaultInterestRate;
 
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
-
-    private final int accountType;
-    public List<Transaction> transactions;
-
-    public Account(int accountType) {
-        this.accountType = accountType;
+    public Account() {
         this.transactions = new ArrayList<Transaction>();
+        totalAmount = 0;
     }
 
     public void deposit(double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
+            totalAmount += amount;
             transactions.add(new Transaction(amount));
         }
     }
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
-    }
-}
-
-    public double interestEarned() {
-        double amount = sumTransactions();
-        switch(accountType){
-            case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
-            case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
-            default:
-                return amount * 0.001;
+    public void withdraw(double amount) {
+        if (amount <= 0 || amount > totalAmount) {
+            throw new IllegalArgumentException("amount must be greater than zero and greater than totalAmount");
+        } else {
+            totalAmount -= amount;
+            transactions.add(new Transaction(-amount));
         }
     }
 
-    public double sumTransactions() {
-       return checkIfTransactionsExist(true);
+    public void transferTo(double amount, Account to) {
+        transfer(amount,this, to);
     }
 
-    private double checkIfTransactionsExist(boolean checkAll) {
-        double amount = 0.0;
-        for (Transaction t: transactions)
-            amount += t.amount;
-        return amount;
+    public void transferFrom(double amount, Account from) {
+        transfer(amount, from, this);
     }
 
-    public int getAccountType() {
-        return accountType;
+    private synchronized void transfer(double amount, Account from, Account to) {
+        if (amount <= 0) throw new IllegalArgumentException("Amount to transfer must be positive");
+        else if (amount > from.totalAmount) throw new IllegalArgumentException("To send the money, you need to have the money");
+        else {
+            from.totalAmount -= amount;
+            to.totalAmount += amount;
+            LocalDateTime now = DateProvider.getInstance().now();
+            from.addTransaction(new Transaction(-amount,to, now));
+            to.addTransaction(new Transaction(amount, from, now));
+        }
     }
 
+    protected abstract double interestEarned(double amount, LocalDate date);
+
+    public double interestEarnedDaily() {
+        Map<LocalDate,Double> groupedTransactions = groupTransactionByDay();
+        double result = 0;
+        for (LocalDate date: groupedTransactions.keySet()) {
+            result += interestEarned(groupedTransactions.get(date) + result, date);
+        }
+        return result;
+    }
+
+    protected Map<LocalDate, Double> groupTransactionByDay() {
+        Map<LocalDate,Double> groupedTransactions = new TreeMap<>();
+        transactions.forEach(t -> {LocalDate date = t.getTransactionDate().toLocalDate();
+            if (groupedTransactions.containsKey(date)) {
+                groupedTransactions.put(date, groupedTransactions.get(date) + t.getAmount());
+            } else {
+                groupedTransactions.put(date,t.getAmount());
+            }
+        });
+        return groupedTransactions;
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    private void addTransaction(Transaction t) {
+        transactions.add(t);
+    }
+
+    public double getTotalAmount() {
+        return totalAmount;
+    }
+
+    public abstract String toString();
 }

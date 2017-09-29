@@ -1,16 +1,40 @@
 package com.abc;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 
 public class Transaction {
-    public final double amount;
 
-    private Date transactionDate;
+    private final double amount;
+    private LocalDateTime transactionDate;
+    private Optional<Account> anotherAccount;
 
-    public Transaction(double amount) {
+    public Transaction(double amount, LocalDateTime date) {
         this.amount = amount;
-        this.transactionDate = DateProvider.getInstance().now();
+        this.transactionDate = date;
+        anotherAccount = Optional.empty();
     }
 
+    public Transaction(double amount, Account second, LocalDateTime now) {
+        this.amount = amount;
+        this.transactionDate = now;
+        anotherAccount = Optional.of(second);
+    }
+
+    public Transaction(double amount) {
+        this(amount, DateProvider.getInstance().now());
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public LocalDateTime getTransactionDate() {
+        return transactionDate;
+    }
+
+    public Optional<Account> getAnotherAccount() {
+        return anotherAccount;
+    }
 }
