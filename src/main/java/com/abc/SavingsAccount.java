@@ -1,5 +1,6 @@
 package com.abc;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,11 @@ public class SavingsAccount extends Account implements InterestByRules {
     }
 
     public double interestEarned() {
-        return calculateInterestWithRules(totalAmount, interestRules, defaultInterestRate, 0.0);
+        return interestEarned(totalAmount, null);
+    }
+
+    protected double interestEarned(double amount, LocalDate date) {
+        return calculateInterestWithRules(amount, interestRules, defaultInterestRate, 0.0);
     }
 
     public String toString() {
