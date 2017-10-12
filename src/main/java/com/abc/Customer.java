@@ -46,6 +46,14 @@ public class Customer {
         return statement;
     }
 
+    public void transferBetweenAccounts(Account custAccFrom, Account custAccTo, double amount) {
+        if (accounts.contains(custAccFrom) && accounts.contains(custAccTo)) {
+            Account.transfer(custAccFrom, custAccTo, amount);
+        } else {
+            throw new IllegalArgumentException("Given Account/s not owned by you");
+        }
+    }
+
     private String statementForAccount(Account a) {
         String s = "";
 

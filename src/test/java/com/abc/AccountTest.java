@@ -109,6 +109,7 @@ public class AccountTest {
         Account maxiSaving = new MaxiSavingsAccount();
 
         checking.deposit(-5); saving.deposit(-10); maxiSaving.deposit(-15);
+        fail();
     }
 
     @Test
@@ -132,6 +133,7 @@ public class AccountTest {
 
         checking.deposit(5); saving.deposit(10); maxiSaving.deposit(15);
         checking.withdraw(6); saving.withdraw(11); maxiSaving.withdraw(16);
+        fail();
     }
 
     @Test
@@ -153,6 +155,7 @@ public class AccountTest {
 
         checking.deposit(10);
         Account.transfer(checking, saving, 15);
+        fail();
     }
 
     @Test
