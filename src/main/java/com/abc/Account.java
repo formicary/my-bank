@@ -1,18 +1,19 @@
 package com.abc;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-public class Account {
+public abstract class Account {
 
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
+    public enum Accounts{
+        CHECKING, SAVINGS, MAXI_SAVINGS
+    }
 
-    private final int accountType;
-    public List<Transaction> transactions;
+    protected List<Transaction> transactions;
+    private final Accounts accountType;
 
-    public Account(int accountType) {
+    public Account(Accounts accountType) {
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
     }
@@ -21,53 +22,53 @@ public class Account {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
-            transactions.add(new Transaction(amount));
+            transactions.add(new Transaction(amount, DateProvider.getInstance().now()));
         }
     }
 
     public void withdraw(double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
+        } else if (amount > this.sumTransactions()) {
+            throw new IllegalArgumentException("Insufficient funds for withdrawal");
         } else {
-            transactions.add(new Transaction(-amount));
+            transactions.add(new Transaction(-amount, DateProvider.getInstance().now()));
         }
     }
 
-    public double interestEarned() {
-        double amount = sumTransactions();
-        switch(accountType){
-            case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
-            case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
-            default:
-                return amount * 0.001;
+    public abstract double interestEarned();
+
+    public Transaction lastWithdrawal() {
+        //Transactions are ordered according to time
+        for (int i = transactions.size() - 1; i >= 0 ; i--) {
+            Transaction t = transactions.get(i);
+            if (t.getAmount() < 0) {
+                return t;
+            }
+        }
+        return null;
+    }
+
+    public static void transfer(Account from, Account to, double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        } else if (from.sumTransactions() < amount) {
+            throw new IllegalArgumentException("Insufficient funds for transfer");
+        } else {
+            Date time = DateProvider.getInstance().now();
+            from.transactions.add(new Transaction(-amount, DateProvider.getInstance().now()));
+            to.transactions.add(new Transaction(amount, DateProvider.getInstance().now()));
         }
     }
 
     public double sumTransactions() {
-       return checkIfTransactionsExist(true);
-    }
-
-    private double checkIfTransactionsExist(boolean checkAll) {
-        double amount = 0.0;
+       double amount = 0.0;
         for (Transaction t: transactions)
             amount += t.getAmount();
         return amount;
     }
 
-    public int getAccountType() {
+    public Accounts getAccountType() {
         return accountType;
     }
-
 }
