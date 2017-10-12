@@ -46,18 +46,26 @@ public class Customer {
         return statement;
     }
 
+    public void transferBetweenAccounts(Account custAccFrom, Account custAccTo, double amount) {
+        if (accounts.contains(custAccFrom) && accounts.contains(custAccTo)) {
+            Account.transfer(custAccFrom, custAccTo, amount);
+        } else {
+            throw new IllegalArgumentException("Given Account/s not owned by you");
+        }
+    }
+
     private String statementForAccount(Account a) {
         String s = "";
 
        //Translate to pretty account type
         switch(a.getAccountType()){
-            case Account.CHECKING:
+            case CHECKING:
                 s += "Checking Account\n";
                 break;
-            case Account.SAVINGS:
+            case SAVINGS:
                 s += "Savings Account\n";
                 break;
-            case Account.MAXI_SAVINGS:
+            case MAXI_SAVINGS:
                 s += "Maxi Savings Account\n";
                 break;
         }
@@ -65,8 +73,8 @@ public class Customer {
         //Now total up all the transactions
         double total = 0.0;
         for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
+            s += "  " + (t.getAmount() < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.getAmount()) + "\n";
+            total += t.getAmount();
         }
         s += "Total " + toDollars(total);
         return s;

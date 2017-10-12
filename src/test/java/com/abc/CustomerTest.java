@@ -1,17 +1,26 @@
 package com.abc;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class CustomerTest {
+    private static final double DOUBLE_DELTA = 1e-15;
 
-    @Test //Test customer statement generation
-    public void testApp(){
+    @Test
+    public void canOpenAccounts() {
+        Customer dave = new Customer("Dave");
+        assertEquals("Dave", dave.getName());
 
-        Account checkingAccount = new Account(Account.CHECKING);
-        Account savingsAccount = new Account(Account.SAVINGS);
+        dave.openAccount(new CheckingAccount()).openAccount(new SavingsAccount()).openAccount(new MaxiSavingsAccount());
+        assertEquals(3, dave.getNumberOfAccounts());
+    }
+
+    @Test
+    public void canGenerateStatement(){
+
+        Account checkingAccount = new CheckingAccount();
+        Account savingsAccount = new SavingsAccount();
 
         Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
 
@@ -34,24 +43,60 @@ public class CustomerTest {
     }
 
     @Test
-    public void testOneAccount(){
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
-        assertEquals(1, oscar.getNumberOfAccounts());
+    public void canCalculateTotalInterest() {
+        Account checkingAccount = new CheckingAccount();
+        Account savingsAccount = new SavingsAccount();
+        Account maxiSavingsAccount = new MaxiSavingsAccount();
+
+        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount).openAccount(maxiSavingsAccount);
+
+        checkingAccount.deposit(100.0);
+        savingsAccount.deposit(4000.0);
+        maxiSavingsAccount.deposit(1500.0);
+        maxiSavingsAccount.withdraw(500.0);
+        savingsAccount.withdraw(200.0);
+
+        double totalInterest = savingsAccount.interestEarned() + checkingAccount.interestEarned() + maxiSavingsAccount.interestEarned();
+
+        assertEquals(totalInterest, henry.totalInterestEarned(), DOUBLE_DELTA);
+
     }
 
     @Test
-    public void testTwoAccount(){
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
-        assertEquals(2, oscar.getNumberOfAccounts());
+    public void canTransferBetweenAccounts() {
+        Account checkingAccount = new CheckingAccount();
+        Account savingsAccount = new SavingsAccount();
+        Account maxiSavingsAccount = new MaxiSavingsAccount();
+
+        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount).openAccount(maxiSavingsAccount);
+
+        checkingAccount.deposit(100.0);
+        savingsAccount.deposit(4000.0);
+        maxiSavingsAccount.deposit(1500.0);
+        maxiSavingsAccount.withdraw(500.0);
+        savingsAccount.withdraw(200.0);
+
+        henry.transferBetweenAccounts(checkingAccount, savingsAccount, 100);
+        assertEquals(0.0, checkingAccount.sumTransactions(), DOUBLE_DELTA);
+        assertEquals(3900, savingsAccount.sumTransactions(), DOUBLE_DELTA);
+
     }
 
-    @Ignore
-    public void testThreeAcounts() {
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
-        assertEquals(3, oscar.getNumberOfAccounts());
+    @Test (expected = Exception.class)
+    public void cantTransferBetweenAccounts() {
+        Account checkingAccount = new CheckingAccount();
+        Account savingsAccount = new SavingsAccount();
+        Account maxiSavingsAccount = new MaxiSavingsAccount();
+
+        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(maxiSavingsAccount);
+
+        checkingAccount.deposit(100.0);
+        savingsAccount.deposit(4000.0);
+        maxiSavingsAccount.deposit(1500.0);
+        maxiSavingsAccount.withdraw(500.0);
+        savingsAccount.withdraw(200.0);
+
+        henry.transferBetweenAccounts(checkingAccount, savingsAccount, 100);
+        fail();
     }
 }
