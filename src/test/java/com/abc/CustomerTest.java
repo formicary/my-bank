@@ -16,7 +16,6 @@ public class CustomerTest {
     savingsAccount.withdraw(200.0);
     
     Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
-    System.out.println("Henry: " + henry.getStatement());
     assertEquals("Statement for Henry\n" 
         + "\n" 
         + "Checking Account\n" 
@@ -50,5 +49,18 @@ public class CustomerTest {
     oscar.openAccount(new CheckingAccount());
     oscar.openAccount(new MaxiSavingsAccount());
     assertEquals(3, oscar.getNumberOfAccounts());
+  }
+  
+  @Test
+  public void transferFromEmptyTest() {
+    Account checkingAccount = new CheckingAccount();
+    Account savingsAccount = new SavingsAccount();
+    checkingAccount.deposit(100.0);
+    
+    Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
+    henry.transferMoney(savingsAccount, checkingAccount, 50.0);
+
+    assertEquals(savingsAccount.sumTransactions(), -50.0, 0.01);
+    assertEquals(checkingAccount.sumTransactions(), 150.0, 0.01);
   }
 }

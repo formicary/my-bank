@@ -14,6 +14,10 @@ public class Bank {
     customers.add(customer);
   }
 
+  /**
+   * Provides a summary of all customers with the number of their accounts.
+   * @return readable summary
+   */
   public String customerSummary() {
     String summary = "Customer Summary";
     for (Customer c : customers) {
@@ -28,6 +32,10 @@ public class Bank {
     return number + " " + (number == 1 ? word : word + "s");
   }
 
+  /**
+   * Computes total interest paid out to all customers.
+   * @return amount of total interest paid
+   */
   public double totalInterestPaid() {
     double total = 0;
     for (Customer c: customers) {
@@ -36,6 +44,10 @@ public class Bank {
     return total;
   }
 
+  /**
+   * Finds the first customer to register at the bank.
+   * @return first customer 
+   */
   public String getFirstCustomer() {
     try {
       customers = null;

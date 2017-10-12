@@ -13,7 +13,12 @@ public abstract class Account {
     this.transactions = new ArrayList<Transaction>();
   }
   
-  public void deposit(double amount) {
+  /**
+   * Deposit money into the account as a transaction.
+   * @param amount to be added (positive number)
+   * @throws IllegalArgumentException for non-positive number
+   */
+  public void deposit(double amount) throws IllegalArgumentException {
     if (amount <= 0) {
       throw new IllegalArgumentException("amount must be greater than zero");
     } else {
@@ -21,7 +26,12 @@ public abstract class Account {
     }
   }
 
-  public void withdraw(double amount) {
+  /**
+   * Withdraws money from the account as a transaction.
+   * @param amount to be withdrawn (positive number)
+   * @throws IllegalArgumentException for non-positive number
+   */
+  public void withdraw(double amount) throws IllegalArgumentException {
     if (amount <= 0) {
       throw new IllegalArgumentException("amount must be greater than zero");
     } else {

@@ -26,7 +26,34 @@ public class Customer {
   public int getNumberOfAccounts() {
     return accounts.size();
   }
+  
+  /**
+   * Transfers amount of cash from one account to another (same customer). Throws exception
+   * on error.
+   * @param sourceAccount the account to take the money from
+   * @param destAccount   the account to place the money in 
+   * @param amount        the amount of money to transfer
+   * @throws Exception    error in withdraw or deposit
+   */
+  public void transferMoney(Account sourceAccount, Account destAccount, double amount) {
+    // transfer the money with fallbacks for failure
+    try {
+      sourceAccount.withdraw(amount);
+      try {
+        destAccount.deposit(amount);
+      } catch (Exception e) {
+        sourceAccount.deposit(amount); 
+        throw e;
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
 
+  /**
+   * Computes total interest across all accounts.
+   * @return total interest of all accounts
+   */
   public double totalInterestEarned() {
     double total = 0;
     for (Account a : accounts) {
@@ -35,6 +62,10 @@ public class Customer {
     return total;
   }
 
+  /**
+   * Provides a pretty statement for all accounts.
+   * @return readable customer statement
+   */
   public String getStatement() {
     String statement = null;
     statement = "Statement for " + name + "\n";
