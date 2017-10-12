@@ -2,7 +2,6 @@ package com.abc;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class CustomerTest {
@@ -13,12 +12,11 @@ public class CustomerTest {
     Account checkingAccount = new Account(Account.CHECKING);
     Account savingsAccount = new Account(Account.SAVINGS);
 
-    Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
-
     checkingAccount.deposit(100.0);
     savingsAccount.deposit(4000.0);
     savingsAccount.withdraw(200.0);
-
+    
+    Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
     assertEquals("Statement for Henry\n" 
         + "\n" 
         + "Checking Account\n" 
@@ -46,10 +44,11 @@ public class CustomerTest {
     assertEquals(2, oscar.getNumberOfAccounts());
   }
 
-  @Ignore
+  @Test
   public void testThreeAcounts() {
     Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
     oscar.openAccount(new Account(Account.CHECKING));
+    oscar.openAccount(new Account(Account.MAXI_SAVINGS));
     assertEquals(3, oscar.getNumberOfAccounts());
   }
 }
