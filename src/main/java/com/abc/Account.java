@@ -1,73 +1,78 @@
 package com.abc;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-public class Account {
+public abstract class Account {
+  private final String prettyAccountName;
+  private List<Transaction> transactions;
 
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
 
-    private final int accountType;
-    public List<Transaction> transactions;
-
-    public Account(int accountType) {
-        this.accountType = accountType;
-        this.transactions = new ArrayList<Transaction>();
-    }
-
-    public void deposit(double amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
-        } else {
-            transactions.add(new Transaction(amount));
-        }
-    }
-
-public void withdraw(double amount) {
+  public Account(String prettyAccountName) {
+    this.prettyAccountName = prettyAccountName;
+    this.transactions = new ArrayList<Transaction>();
+  }
+  
+  /**
+   * Deposit money into the account as a transaction.
+   * @param amount to be added (positive number)
+   * @throws IllegalArgumentException for non-positive number
+   */
+  public void deposit(double amount) throws IllegalArgumentException {
     if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
+      throw new IllegalArgumentException("amount must be greater than zero");
     } else {
-        transactions.add(new Transaction(-amount));
+      transactions.add(new Transaction(amount));
     }
-}
+  }
 
-    public double interestEarned() {
-        double amount = sumTransactions();
-        switch(accountType){
-            case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
-            case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
-            default:
-                return amount * 0.001;
-        }
+  /**
+   * Withdraws money from the account as a transaction.
+   * @param amount to be withdrawn (positive number)
+   * @throws IllegalArgumentException for non-positive number
+   */
+  public void withdraw(double amount) throws IllegalArgumentException {
+    if (amount <= 0) {
+      throw new IllegalArgumentException("amount must be greater than zero");
+    } else {
+      transactions.add(new Transaction(-amount));
     }
+  }
 
-    public double sumTransactions() {
-       return checkIfTransactionsExist(true);
-    }
+  abstract double interestEarned();
 
-    private double checkIfTransactionsExist(boolean checkAll) {
-        double amount = 0.0;
-        for (Transaction t: transactions)
-            amount += t.amount;
-        return amount;
-    }
+  public double sumTransactions() {
+    return checkIfTransactionsExist(true);
+  }
 
-    public int getAccountType() {
-        return accountType;
+  private double checkIfTransactionsExist(boolean checkAll) {
+    double amount = 0.0;
+    for (Transaction t: transactions) {
+      amount += t.getAmount();
     }
+    return amount;
+  }
+
+  public String getPrettyAccountName() {
+    return this.prettyAccountName;
+  }
+
+  public List<Transaction> getTransactions() {
+    return this.transactions;
+  }
+  
+  public void addTransaction(Transaction transaction) {
+    this.transactions.add(transaction);
+  }
+
+  protected Date getLastWithdrawalDate() {
+    for (int i = transactions.size() - 1; i >= 0; i--) {
+      if (transactions.get(i).getAmount() < 0) {
+        return (transactions.get(i).getTransactionDate());
+      }
+    }
+    return null;
+  }
 
 }
