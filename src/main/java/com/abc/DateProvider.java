@@ -6,6 +6,9 @@ import java.util.Date;
 public class DateProvider {
   private static DateProvider instance = null;
 
+  private DateProvider() {
+  }
+  
   /**
    * Getter for singleton instance of class. 
    * @return instance of DateProvider

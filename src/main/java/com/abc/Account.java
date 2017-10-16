@@ -48,7 +48,7 @@ public abstract class Account {
   private double checkIfTransactionsExist(boolean checkAll) {
     double amount = 0.0;
     for (Transaction t: transactions) {
-      amount += t.amount;
+      amount += t.getAmount();
     }
     return amount;
   }
