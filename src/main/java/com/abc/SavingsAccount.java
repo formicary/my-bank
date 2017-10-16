@@ -1,6 +1,9 @@
 package com.abc;
 
 public class SavingsAccount extends Account {
+  private static double firstInterest = 0.001;
+  private static double firstLimit = 1000;
+  private static double secondInterest = 0.002;
 
   public SavingsAccount() {
     super("Savings Account");
@@ -9,10 +12,10 @@ public class SavingsAccount extends Account {
   @Override
   double interestEarned() {
     double amount = sumTransactions();
-    if (amount <= 1000) {
-      return amount * 0.001;
+    if (amount <= firstLimit) {
+      return amount * firstInterest;
     } else {
-      return 1 + (amount - 1000) * 0.002;
+      return (firstLimit * firstInterest) + ((amount - firstLimit) * secondInterest);
     }
   }
 

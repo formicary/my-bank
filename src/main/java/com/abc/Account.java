@@ -1,6 +1,7 @@
 package com.abc;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public abstract class Account {
@@ -65,5 +66,13 @@ public abstract class Account {
     this.transactions.add(transaction);
   }
 
+  protected Date getLastWithdrawalDate() {
+    for (int i = transactions.size() - 1; i >= 0; i--) {
+      if (transactions.get(i).getAmount() < 0) {
+        return (transactions.get(i).getTransactionDate());
+      }
+    }
+    return null;
+  }
 
 }

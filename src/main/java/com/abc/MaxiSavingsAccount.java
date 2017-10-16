@@ -1,7 +1,12 @@
 package com.abc;
 
-public class MaxiSavingsAccount extends Account {
+import java.util.Date;
 
+public class MaxiSavingsAccount extends Account {
+  private static double normalInterest = 0.05;
+  private static double reducedInterest = 0.01;
+  private static double dayLimit = 10;
+  
   public MaxiSavingsAccount() {
     super("Maxi Savings Account");
   }
@@ -9,12 +14,13 @@ public class MaxiSavingsAccount extends Account {
   @Override
   double interestEarned() {
     double amount = sumTransactions();
-    if (amount <= 1000) {
-      return amount * 0.02;
-    } else if (amount <= 2000) {
-      return 20 + (amount - 1000) * 0.05;
+    Date lastWithdrawal = getLastWithdrawalDate();
+    if (lastWithdrawal == null 
+        || DateProvider.getInstance().now().getTime() - lastWithdrawal.getTime() 
+        > 24 * 60 * 60 * 1000 * dayLimit) {
+      return amount * normalInterest;
     } else {
-      return 70 + (amount - 2000) * 0.1;
+      return amount * reducedInterest;
     }
   }
 
