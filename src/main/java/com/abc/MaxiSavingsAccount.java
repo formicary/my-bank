@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class MaxiSavingsAccount extends Account {
   private static double normalInterest = 0.05;
-  private static double reducedInterest = 0.01;
+  private static double reducedInterest = 0.001;
   private static double dayLimit = 10;
   
   public MaxiSavingsAccount() {
