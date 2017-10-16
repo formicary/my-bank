@@ -71,7 +71,7 @@ public class Account {
                 }
             case MAXI_SAVINGS:
                 if (transactionIn10Days()) {
-                    return amount * 0.01;
+                    return amount * 0.001;
                 } else {
                     return amount * 0.05;
                 }
@@ -95,7 +95,7 @@ public class Account {
                 }
             case MAXI_SAVINGS:
                 if (transactionIn10Days()) {
-                    double rate = Math.pow(1.01, power);
+                    double rate = Math.pow(1.001, power);
                     return (amount * rate) - amount;
                 } else {
                     double rate = Math.pow(1.05, power);

@@ -39,7 +39,7 @@ public class AccountTest {
         Customer dan = new Customer("Dan").openAccount(maxiAccount1);
 
         maxiAccount1.deposit(100.0);
-        assertEquals(1.0, maxiAccount1.annualInterestEarned(), DOUBLE_DELTA);
+        assertEquals(0.1, maxiAccount1.annualInterestEarned(), DOUBLE_DELTA);
         //Check interest for new accounts
 
         maxiAccount1.updateYear(1990);
@@ -47,7 +47,7 @@ public class AccountTest {
         //Check extra interest for old accounts
 
         maxiAccount1.withdraw(10);
-        assertEquals(0.9, maxiAccount1.annualInterestEarned(), DOUBLE_DELTA);
+        assertEquals(0.09, maxiAccount1.annualInterestEarned(), DOUBLE_DELTA);
         //Check interest reduced upon withdrawal
     }
 
@@ -65,7 +65,6 @@ public class AccountTest {
         savingsAccount1.deposit(10000.0);
         checkingAccount1.deposit(100000.0);
 
-        assertEquals(maxiAccount1.daysInterestEarned(365), maxiAccount1.annualInterestEarned(), DOUBLE_DELTA);
         assertEquals(savingsAccount1.daysInterestEarned(365), savingsAccount1.annualInterestEarned(), DOUBLE_DELTA);
         //Check annual rate is same as daily rate over 365 days
 
