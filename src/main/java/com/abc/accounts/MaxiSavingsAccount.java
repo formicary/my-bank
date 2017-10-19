@@ -20,8 +20,8 @@ public class MaxiSavingsAccount extends Account {
             return 70 + (amount-2000) * TIER_3_INTEREST_RATE;
     }
 
-    public int getAccountType() {
-        return Account.MAXI_SAVINGS;
+    protected String getPrettyAccountType() {
+        return "Maxi Savings Account\n";
     }
 
 

@@ -1,15 +1,12 @@
 package com.abc.accounts;
 
+import com.abc.Customer;
 import com.abc.Transaction;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Account {
-
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
 
     public List<Transaction> transactions;
 
@@ -46,6 +43,19 @@ public abstract class Account {
         return amount;
     }
 
-    public abstract int getAccountType();
+    public String getAccountStatement() {
+        String s = getPrettyAccountType();
+
+        //Now total up all the transactions
+        double total = 0.0;
+        for (Transaction t : transactions) {
+            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + Customer.Formatter.toDollars(t.amount) + "\n";
+            total += t.amount;
+        }
+        s += "Total " + Customer.Formatter.toDollars(total);
+        return s;
+    }
+
+    protected abstract String getPrettyAccountType();
 
 }

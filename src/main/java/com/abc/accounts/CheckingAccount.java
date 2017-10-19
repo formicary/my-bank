@@ -14,8 +14,8 @@ public class CheckingAccount extends Account {
 
     }
 
-    public int getAccountType() {
-        return Account.CHECKING;
+    protected String getPrettyAccountType() {
+        return "Checking Account\n";
     }
 
 }

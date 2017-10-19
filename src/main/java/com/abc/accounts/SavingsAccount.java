@@ -18,7 +18,7 @@ public class SavingsAccount extends Account {
 
     }
 
-    public int getAccountType() {
-        return Account.SAVINGS;
+    protected String getPrettyAccountType() {
+        return "Savings Account\n";
     }
 }
