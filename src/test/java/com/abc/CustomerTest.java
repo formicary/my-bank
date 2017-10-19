@@ -57,4 +57,18 @@ public class CustomerTest {
         oscar.openAccount(new CheckingAccount());
         assertEquals(3, oscar.getNumberOfAccounts());
     }
+
+    @Test
+    public void testTransfer(){
+        Customer oscar = new Customer("Oscar");
+        Account checkingAccountOne = new CheckingAccount();
+        Account checkingAccountTwo = new CheckingAccount();
+        oscar.openAccount(checkingAccountOne);
+        oscar.openAccount(checkingAccountTwo);
+
+        oscar.transferFunds(100, checkingAccountOne, checkingAccountTwo);
+
+        assertEquals(-100, checkingAccountOne.sumTransactions(), 0.01);
+        assertEquals(100, checkingAccountTwo.sumTransactions(), 0.01);
+    }
 }

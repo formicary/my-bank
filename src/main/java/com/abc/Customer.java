@@ -48,12 +48,19 @@ public class Customer {
         return statement;
     }
 
+    public void transferFunds(double amount, Account fromAccount, Account toAccount) {
+        fromAccount.withdraw(amount);
+        toAccount.deposit(amount);
+    }
+
     public static class Formatter {
         public static String toDollars(double d){
             return String.format("$%,.2f", abs(d));
         }
 
     }
+
+
 
 
 }
