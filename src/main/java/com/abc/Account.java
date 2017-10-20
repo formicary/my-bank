@@ -4,13 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Account {
-
+    
     protected static final int CHECKING = 0;
     protected static final int SAVINGS = 1;
     protected static final int MAXI_SAVINGS = 2;
-
-    private final int accountType;
     protected List<Transaction> transactions;
+    private final int accountType;
 
     protected Account(int accountType) {
         this.accountType = accountType;
@@ -38,8 +37,8 @@ public class Account {
     }
     
     private double checkIfTransactionsExist(boolean checkAll) {
-        double total;
-        for (Transaction t: transactions){
+        double total = 0.00;
+        for (Transaction t: transactions) {
             total += t.amount;
         }
         return total;
@@ -51,9 +50,9 @@ public class Account {
 
     protected double interestEarned() {
         double amount = sumTransactions();
-        switch(this.accountType){
+        switch(this.accountType) {
             case SAVINGS:
-                if (amount <= 1000){
+                if (amount <= 1000) {
                     return amount * 0.001;
                 }
                 else {
