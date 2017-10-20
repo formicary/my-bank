@@ -11,7 +11,7 @@ import java.util.Date;
 import static org.junit.Assert.assertEquals;
 
 public class AccountTest {
-    private static final double DOUBLE_DELTA = 1e-15;
+    private static final double DOUBLE_DELTA = 0.01;
 
     @Test
     public void maxiInterestRecentWithdrawal() {
@@ -26,9 +26,7 @@ public class AccountTest {
         maxiAccount.addTransaction(deposit);
         maxiAccount.addTransaction(withdrawal);
 
-        double expectedInterest = 0.001 * (1000 - 100);
-
-        assertEquals(expectedInterest, maxiAccount.interestEarned(), DOUBLE_DELTA);
+        assertEquals(3.8501, maxiAccount.interestEarned(), DOUBLE_DELTA);
 
     }
 
