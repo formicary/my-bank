@@ -1,9 +1,9 @@
 package com.abc.accounts;
 
 import com.abc.DateProvider;
+import com.abc.Transaction;
 
-import java.util.Collections;
-import java.util.Date;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class CheckingAccount extends Account {
@@ -17,40 +17,31 @@ public class CheckingAccount extends Account {
 
     public double interestEarned() {
         Collections.sort(getTransactions());
+        Deque<Transaction> transactionDeque = new ArrayDeque<Transaction>(getTransactions());
 
-        Date firstTransactionDate = getTransactions().get(0).transactionDate;
-        long daysSinceFirstTransaction = TimeUnit.DAYS.convert(
-                DateProvider.getInstance().now().getTime()
-                        - firstTransactionDate.getTime(),
-                TimeUnit.MILLISECONDS);
+        Date firstTransaction = transactionDeque.getFirst().transactionDate;
+        Calendar start = new GregorianCalendar();
+        start.setTime(firstTransaction);
+
+        Calendar end = Calendar.getInstance();
 
         double balance = 0.0;
         double totalInterest = 0.0;
 
-        int transactionCount = 0;
-        long nextTransactionDay = 0;
+        for (Date d = firstTransaction; start.before(end);
+             start.add(Calendar.DAY_OF_YEAR, 1), d = start.getTime()) {
 
-        int i = 0;
-        // Loop over all days between the first transaction and now
-        while (i <= daysSinceFirstTransaction) {
-            // If 'i' is a day with a transaction, add the transaction amount to the balance
-            if (i == nextTransactionDay) {
-                balance += getTransactions().get(transactionCount).amount;
-                transactionCount++;
-                // Set the day counter for the next coming transaction.
-                if (transactionCount <= getTransactions().size() - 1) {
-                    nextTransactionDay = TimeUnit.DAYS.convert(
-                            (getTransactions().get(transactionCount).transactionDate.getTime() -
-                                    firstTransactionDate.getTime()),
-                            TimeUnit.MILLISECONDS);
+            if (!transactionDeque.isEmpty()){
+                Date nextTransaction = transactionDeque.getFirst().transactionDate;
+                if (d.after(nextTransaction) || d.equals(nextTransaction)) {
+                    balance += transactionDeque.removeFirst().amount;
                 }
             }
             double dayInterest = balance * DAILY_INTEREST_RATE;
             totalInterest += dayInterest;
             balance += dayInterest;
-            i++;
-        }
 
+        }
         return totalInterest;
     }
 
