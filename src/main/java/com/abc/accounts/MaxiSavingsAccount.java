@@ -15,6 +15,7 @@ public class MaxiSavingsAccount extends Account {
         super();
     }
 
+    @Override
     public double interestEarned() {
         Collections.sort(getTransactions());
         Deque<Transaction> transactionDeque = new ArrayDeque<Transaction>(getTransactions());
@@ -56,6 +57,11 @@ public class MaxiSavingsAccount extends Account {
         }
         System.out.println(days);
         return totalInterest;
+    }
+
+    // Abstract method implementation not used by this child class.
+    protected double getDailyInterest(double balance) {
+        return 0;
     }
 
     protected String getPrettyAccountType() {
