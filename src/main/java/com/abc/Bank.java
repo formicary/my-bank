@@ -16,24 +16,20 @@ public class Bank {
     
 //Make sure correct plural of word is created based on the number passed in:
     //If number passed in is 1 just return the word otherwise add an 's' at the end
-    private String format(int number, String word) {
+    private String format(int number) {
         String output;
-        if (number<1){
-            throw new IllegalArgumentException("Number provided must be greater than or equal to 1");
-        }
-        else if (number==1){
-            output = number +" "+word;
-            return output;
+        if (number==1){
+            output = Integer.toString(number) +" account";
         } else {
-            output = number+" "+word.append("s");
-            return output;
+            output = Integer.toString(number)+" accounts";
         }
+        return output;
     }
     
     protected String customerSummary() {
         String summary = "Customer Summary";
         for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
+            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts()) + ")";
         return summary;
     }
 
