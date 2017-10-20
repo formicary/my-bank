@@ -2,8 +2,8 @@ package com.abc;
 
 import com.abc.accounts.Account;
 import com.abc.accounts.CheckingAccount;
+import com.abc.accounts.MaxiSavingsAccount;
 import com.abc.accounts.SavingsAccount;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -50,11 +50,12 @@ public class CustomerTest {
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
-    @Ignore
-    public void testThreeAcounts() {
+    @Test
+    public void testThreeAccounts() {
         Customer oscar = new Customer("Oscar")
                 .openAccount(new SavingsAccount());
         oscar.openAccount(new CheckingAccount());
+        oscar.openAccount(new MaxiSavingsAccount());
         assertEquals(3, oscar.getNumberOfAccounts());
     }
 

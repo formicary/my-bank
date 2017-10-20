@@ -23,7 +23,6 @@ public class MaxiSavingsAccount extends Account {
         Date firstTransaction = transactionDeque.getFirst().transactionDate;
         Calendar start = new GregorianCalendar();
         start.setTime(firstTransaction);
-
         Calendar end = Calendar.getInstance();
 
         double balance = 0.0;
@@ -41,11 +40,11 @@ public class MaxiSavingsAccount extends Account {
                 Transaction nextTransaction = transactionDeque.getFirst();
                 Date nextTransactionDate = nextTransaction.transactionDate;
                 if (d.after(nextTransactionDate) || d.equals(nextTransactionDate)) {
+                    balance += transactionDeque.removeFirst().amount;
                     if (nextTransaction.amount < 0) {
                         rateLimitedUntil.setTime(nextTransactionDate);
                         rateLimitedUntil.add(Calendar.DAY_OF_YEAR, 10);
                     }
-                    balance += transactionDeque.removeFirst().amount;
                 }
             }
             double dayInterest = d.before(rateLimitedUntil.getTime())
