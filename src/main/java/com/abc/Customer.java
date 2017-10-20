@@ -6,6 +6,7 @@ import java.util.List;
 import static java.lang.Math.abs;
 
 public class Customer {
+    
     private String name;
     private List<Account> accounts;
 
@@ -29,8 +30,9 @@ public class Customer {
 
     public double totalInterestEarned() {
         double total = 0.00;
-        for (Account a : accounts)
+        for (Account a : accounts) {
             total += a.interestEarned();
+        }
         return total;
     }
      
