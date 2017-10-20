@@ -4,11 +4,12 @@ import com.abc.Customer;
 import com.abc.Transaction;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public abstract class Account {
 
-    public List<Transaction> transactions;
+    private List<Transaction> transactions;
 
     public Account() {
         this.transactions = new ArrayList<Transaction>();
@@ -18,7 +19,7 @@ public abstract class Account {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
-            transactions.add(new Transaction(amount));
+            addTransaction(new Transaction(amount));
         }
     }
 
@@ -26,8 +27,12 @@ public abstract class Account {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
-            transactions.add(new Transaction(-amount));
+            addTransaction(new Transaction(-amount));
         }
+    }
+
+    public void addTransaction(Transaction t) {
+        transactions.add(t);
     }
 
     public abstract double interestEarned();
@@ -50,6 +55,10 @@ public abstract class Account {
         }
         s += "Total " + Customer.Formatter.toDollars(total);
         return s;
+    }
+
+    protected List<Transaction> getTransactions() {
+        return transactions;
     }
 
     protected abstract String getPrettyAccountType();

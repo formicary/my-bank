@@ -47,12 +47,12 @@ public class BankTest {
     @Test
     public void maxi_savings_account() {
         Bank bank = new Bank();
-        Account checkingAccount = new MaxiSavingsAccount();
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+        Account maxiSavingsAccount = new MaxiSavingsAccount();
+        bank.addCustomer(new Customer("Bill").openAccount(maxiSavingsAccount));
 
-        checkingAccount.deposit(3000.0);
+        maxiSavingsAccount.deposit(3000.0);
 
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(0.05 * 3000.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
 }

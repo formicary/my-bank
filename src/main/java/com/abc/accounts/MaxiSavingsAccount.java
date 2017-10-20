@@ -1,10 +1,14 @@
 package com.abc.accounts;
 
+import com.abc.DateProvider;
+import com.abc.Transaction;
+
+import java.util.Date;
+
 public class MaxiSavingsAccount extends Account {
 
-    private static double TIER_1_INTEREST_RATE = 0.02;
-    private static double TIER_2_INTEREST_RATE = 0.05;
-    private static double TIER_3_INTEREST_RATE = 0.1;
+    private static double NO_RECENT_WITHDRAW_INTEREST_RATE = 0.05;
+    private static double RECENT_WITHDRAW_INTEREST_RATE = 0.001;
 
     public MaxiSavingsAccount() {
         super();
@@ -12,12 +16,20 @@ public class MaxiSavingsAccount extends Account {
 
     public double interestEarned() {
         double amount = sumTransactions();
-        if (amount <= 1000)
-            return amount * TIER_1_INTEREST_RATE;
-        else if (amount <= 2000)
-            return 20 + (amount-1000) * TIER_2_INTEREST_RATE;
+        if (hasRecentWithdrawals())
+            return amount * RECENT_WITHDRAW_INTEREST_RATE;
         else
-            return 70 + (amount-2000) * TIER_3_INTEREST_RATE;
+            return amount * NO_RECENT_WITHDRAW_INTEREST_RATE;
+    }
+
+    private boolean hasRecentWithdrawals() {
+        Date tenDaysAgo = DateProvider.getInstance().earlierDate(10);
+        for (Transaction t: getTransactions()) {
+            if (t.amount < 0.0 && t.transactionDate.after(tenDaysAgo)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     protected String getPrettyAccountType() {
