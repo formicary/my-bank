@@ -34,7 +34,7 @@ public class Bank {
     }
 
     protected double totalInterestPaid() {
-        double total;
+        double total = 0.00;
         for(Customer c: customers) {
             total += c.totalInterestEarned();
         }
