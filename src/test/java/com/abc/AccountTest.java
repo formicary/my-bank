@@ -1,6 +1,7 @@
 package com.abc;
 
 import com.abc.accounts.Account;
+import com.abc.accounts.CheckingAccount;
 import com.abc.accounts.MaxiSavingsAccount;
 import org.junit.Test;
 
@@ -46,6 +47,23 @@ public class AccountTest {
         double expectedInterest = 0.05 * (1000 - 100);
 
         assertEquals(expectedInterest, maxiAccount.interestEarned(), DOUBLE_DELTA);
+
+    }
+
+    @Test
+    public void checkingAccountInterest() {
+        Account checkingAccount = new CheckingAccount();
+
+        Date depositDate = DateProvider.getInstance().earlierDate(30);
+        Transaction deposit = new Transaction(1000, depositDate);
+
+        Date withdrawalDate = DateProvider.getInstance().earlierDate(15);
+        Transaction withdrawal = new Transaction(-100, withdrawalDate);
+
+        checkingAccount.addTransaction(deposit);
+        checkingAccount.addTransaction(withdrawal);
+
+        assertEquals(0.0808, checkingAccount.interestEarned(), 0.01);
 
     }
 
