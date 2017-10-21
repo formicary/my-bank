@@ -1,0 +1,10 @@
+= Accenture - Technical Test
+:Author: Christopher J. Smith
+:Email: Christopher@chrismith.org.uk
+:Year: 2017
+:Description: This is a document for notes related to my solution to Accenture's Technical test.
+
+== Changes To Original Files
+. *Changed AccountType to enum* - This is less error prone than having ints passed around as sending an invalid type is more difficult.
+. *Stored account holdings in Account* - To avoid having to calculate account holding every time it's needed
+. *Changed data type for money to BigInteger* - Calculations with doubles are too inaccurate for use with money. BigInteger allows very large values to be stored useful for storing fractional money, and also avoids the inaccuracy of floating point data types. From Java 9 onwards the Money class would be the best data type to use.
