@@ -4,6 +4,8 @@
 :Year: 2017
 :Description: This is a document for notes related to my solution to Accenture's Technical test.
 
+by {Author}
+
 == Assumptions
 . *Currency Percision* - I have assumed money only needs to be accurate to two decimal places of pence/cents(eg 0.01p).
 
