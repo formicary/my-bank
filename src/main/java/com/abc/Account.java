@@ -2,6 +2,7 @@ package com.abc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.math.BigDecimal;
 
 public class Account {
     
@@ -48,31 +49,32 @@ public class Account {
        return checkIfTransactionsExist(true);
     }
 
-    protected double interestEarned() {
+    protected BigDecimal interestEarned() {
         double amount = sumTransactions();
+        BigDecimal exactAmount = BigDecimal.valueOf(amount);
         switch(this.accountType) {
             case SAVINGS:
-                if (amount <= 1000) {
-                    return amount * 0.001;
+                if (exactAmount <= 1000) {
+                    return exactAmount.multiply(BigDecimal.valueOf(0.001);
                 }
                 else {
-                    return 1 + (amount-1000) * 0.002;
+                    return BigDecimal.ONE.add((exactAmount.minus(BigDecimal.valueOf(1000))).multiply(BigDecimal.valueOf(0.002);
                 }
 //            case SUPER_SAVINGS:
 //                if (amount <= 4000)
 //                    return 20;
             case MAXI_SAVINGS:
                 if (amount <= 1000) {
-                    return amount * 0.02;
+                    return exactAmount.multiply(BigDecimal.valueOf(0.02));
                 }
-                else if (amount <= 2000) {
-                    return 20 + (amount-1000) * 0.05;
+                else if (exactAmount <= 2000) {
+                    return BigDecimal.valueOf(20).add(exactAmount.minus(BigDecimal.valueOf(1000))).multiply(BigDecimal.valueOf(0.05));
                 }
                 else {
-                    return 70 + (amount-2000) * 0.1;
+                    return BigDecimal.valueOf(70).add(exactAmount.minusBigDecimal.valueOf(2000)).multiply(BigDecimal.valueOf(0.1));
                 }
             default:
-                return amount * 0.001;
+                return exactAmount.multiply(BigDecimal.valueOf(0.001));
         }
     }
 }
