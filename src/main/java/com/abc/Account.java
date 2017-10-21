@@ -10,11 +10,11 @@ public class Account {
 		CHECKING, SAVINGS, MAXI_SAVINGS
 	}
 
-	private final AccountType accountType;
+	private final AccountType ACCOUNT_TYPE;
 	public List<Transaction> transactions;
 
 	public Account(AccountType accountType) {
-		this.accountType = accountType;
+		this.ACCOUNT_TYPE = accountType;
 		this.transactions = new ArrayList<Transaction>();
 	}
 
@@ -36,7 +36,7 @@ public class Account {
 
 	public double interestEarned() {
 		double amount = sumTransactions();
-		switch (accountType) {
+		switch (ACCOUNT_TYPE) {
 		case SAVINGS:
 			if (amount <= 1000)
 				return amount * 0.001;
@@ -68,7 +68,7 @@ public class Account {
 	}
 
 	public AccountType getAccountType() {
-		return accountType;
+		return ACCOUNT_TYPE;
 	}
 
 }

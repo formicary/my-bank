@@ -1,0 +1,93 @@
+digraph g{
+    #Boilerplate ULM settings
+    fontname = "Bitstream Vera Sans"
+    fontsize = 10
+    node [
+            fontname = "Bitstream Vera Sans"
+            fontsize = 10
+            shape = "record"
+    ]
+    edge [
+            fontname = "Bitstream Vera Sans"
+            fontsize = 10
+    ]
+    
+    #Classes
+    Account [
+                label = "{
+                        Account
+                        |
+                        - ACCOUNT_TYPE : AccountType\l
+                        - transactions : List\<Transaction\>\l
+                        |
+                        + Account(AccountType)\l
+                        + deposit() : void\l
+                        + withdraw() : void\l
+                        + interestEarned() : double\l
+                        + sumTransactions() : double\l
+                        + getAccountType() : AccountType\l
+                        - checkIfTransactionsExist() : double\l
+                    }"
+    ]
+    AccountType [
+                label = "{
+                        \<\<enumeration\>\>\l
+                        AccountType
+                        |
+                        CHECKING\l
+                        SAVINGS\l
+                        MAXI_SAVINGS\l
+                    }"
+    ]
+    Bank [
+                label = "{
+                        Bank
+                        |
+                        - customers : List\<Customer\>\l
+                        |
+                        + Bank()\l
+                        + addCustomer(Customer) : void\l
+                        + customerSummary() : String\l
+                        - format(int number, String word) : String\l
+                        + totalInterestPaid() : double\l
+                        + getFirstCustomer() : String\l
+                    }"
+    ]
+    Customer [
+                label = "{
+                        Customer
+                        |
+                        - name : String\l
+                        - accounts : List\<Account\>\l
+                        |
+                        + Customer(String name)\l
+                        + getName() : String\l
+                        + openAccount(Account) : Customer\l
+                        + getNumberOfAccounts() : int\l
+                        + totalInterestEarned() : double\l
+                        + getStatement() : String\l
+                        - statementForAccount(Account) : String\l
+                        - toDollars(double) : String\l
+                    }"
+    ]
+    DateProvider [
+                label = "{
+                        DateProvider
+                        |
+                        +\<static\> instance : DateProvider\l
+                        |
+                        + getInstance() : DateProvider\l
+                        + now() : Date\l
+                    }"
+    ]
+    Transaction [
+                label = "{
+                        Transaction
+                        |
+                        + AMOUNT : double\l
+                        + transactionDate : Date\l
+                        |
+                        + Transaction(double amount)\l
+                    }"
+    ]
+}
