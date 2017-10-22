@@ -28,7 +28,7 @@ public class Bank {
     protected String customerSummary() {
         String summary = "Customer Summary";
         for (Customer c : customers) {
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts()) + ")";
+            summary += String.format("\n - %1$d (%2$d)", c.getName(), format(c.getNumberOfAccounts()));
         }
         return summary;
     }
