@@ -10,25 +10,25 @@ public class Customer {
     private String name;
     private List<Account> accounts;
 
-    public Customer(String name) {
+    protected Customer(String name) {
         this.name = name;
         this.accounts = new ArrayList<Account>();
     }
 
-    public String getName() {
+    protected String getName() {
         return name;
     }
 
-    public Customer openAccount(Account account) {
+    protected Customer openAccount(Account account) {
         accounts.add(account);
         return this;
     }
 
-    public int getNumberOfAccounts() {
+    protected int getNumberOfAccounts() {
         return accounts.size();
     }
 
-    public double totalInterestEarned() {
+    protected double totalInterestEarned() {
         double total = 0.00;
         for (Account a : accounts) {
             total += a.interestEarned();
@@ -40,7 +40,7 @@ public class Customer {
         return String.format("$%,.2f", abs(d));
     }
     
-    public String getStatement() {
+    protected String getStatement() {
         String statement;
         double total = 0.00;
         statement = "Statement for " + name + "\n";
