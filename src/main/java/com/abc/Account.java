@@ -3,6 +3,7 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class Account {
     
@@ -18,18 +19,22 @@ public class Account {
     }
 
     protected void deposit(double amount) {
+        BigDecimal d = BigDecimal.valueOf(amount);
+        BigDecimal exactAmount.setScale(2, RoundingMode.HALF_EVEN);
         if (amount <= 0.00) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
-            transactions.add(new Transaction(amount));
+            transactions.add(new Transaction(exactAmount.doubleValue()));
         }
     }
 
     protected void withdraw(double amount) {
+        BigDecimal d = BigDecimal.ZERO.subtract(BigDecimal.valueOf(amount));
+        BigDecimal exactAmount.setScale(2, RoundingMode.HALF_EVEN);
         if (amount <= 0.00) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
-            transactions.add(new Transaction(-amount));
+            transactions.add(new Transaction(exactAmount.doubleValue()));
         }
     }
     
@@ -39,42 +44,48 @@ public class Account {
     
     private double checkIfTransactionsExist(boolean checkAll) {
         double total = 0.00;
-        for (Transaction t: transactions) {
-            total += t.amount;
+        BigDecimal roundedTotal;
+        if (checkAll) {
+            for (Transaction t: transactions) {
+                total+=t.amount;
+            }
+        convertedTotal = BigDecimal.valueOf(total);
+        BigDecimal roundedTotal = convertedTotal.setScale(2, RoundingMode.HALF_EVEN);
+        return roundedTotal.doubleValue();
         }
-        return total;
     }
     
-    protected double sumTransactions() {
+    protected BigDecimal sumTransactions() {
        return checkIfTransactionsExist(true);
     }
 
     protected BigDecimal interestEarned() {
         double amount = sumTransactions();
-        BigDecimal exactAmount = BigDecimal.valueOf(amount);
+        BigDecimal convertedAmount = BigDecimal.valueof(amount);
+        BigDecimal roundedAmount = convertedAmount.setScale(2, RoundingMode.HALF_EVEN);
         switch(this.accountType) {
             case SAVINGS:
-                if (exactAmount <= 1000) {
-                    return exactAmount.multiply(BigDecimal.valueOf(0.001);
+                if (amount <= 1000) {
+                    return roundedAmount.multiply(BigDecimal.valueOf(0.001));
                 }
                 else {
-                    return BigDecimal.ONE.add((exactAmount.subtract(BigDecimal.valueOf(1000))).multiply(BigDecimal.valueOf(0.002);
+                    return BigDecimal.ONE.add((roundedAmount.subtract(BigDecimal.valueOf(1000))).multiply(BigDecimal.valueOf(0.002);
                 }
 //            case SUPER_SAVINGS:
 //                if (amount <= 4000)
 //                    return 20;
             case MAXI_SAVINGS:
                 if (amount <= 1000) {
-                    return exactAmount.multiply(BigDecimal.valueOf(0.02));
+                    return roundedAmount.multiply(BigDecimal.valueOf(0.02));
                 }
-                else if (exactAmount <= 2000) {
-                    return BigDecimal.valueOf(20).add(exactAmount.subtract(BigDecimal.valueOf(1000))).multiply(BigDecimal.valueOf(0.05));
+                else if (amount <= 2000) {
+                    return BigDecimal.valueOf(20).add(roundedAmount.subtract(BigDecimal.valueOf(1000))).multiply(BigDecimal.valueOf(0.05));
                 }
                 else {
-                    return BigDecimal.valueOf(70).add(exactAmount.subtract(BigDecimal.valueOf(2000))).multiply(BigDecimal.valueOf(0.1));
+                    return BigDecimal.valueOf(70).add(roundedAmount.subtract(BigDecimal.valueOf(2000))).multiply(BigDecimal.valueOf(0.1));
                 }
             default:
-                return exactAmount.multiply(BigDecimal.valueOf(0.001));
+                return roundedAmount.multiply(BigDecimal.valueOf(0.001));
         }
     }
 }
