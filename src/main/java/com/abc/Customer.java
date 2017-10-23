@@ -1,78 +1,112 @@
 package com.abc;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
-
-import static java.lang.Math.abs;
+import java.math.BigDecimal;
 
 public class Customer {
     private String name;
-    private List<Account> accounts;
+    private final List<Account> ACCOUNTS;
 
     public Customer(String name) {
         this.name = name;
-        this.accounts = new ArrayList<Account>();
+        this.ACCOUNTS = Collections.synchronizedList(new ArrayList<Account>());
     }
 
     public String getName() {
         return name;
     }
+    
+    public void setName(String aName) {
+    	name = aName;
+    }
 
     public Customer openAccount(Account account) {
-        accounts.add(account);
-        return this;
+    	if(account != null) {
+    		ACCOUNTS.add(account);
+    	}
+    	
+    	return this;
     }
 
     public int getNumberOfAccounts() {
-        return accounts.size();
+        return ACCOUNTS.size();
+    }
+    
+    public Iterator<Account> getAccountIterator() {
+    	return ACCOUNTS.iterator();
+    }
+    
+    public List<Account> getAccountListClone() {
+    	return new ArrayList<Account>(ACCOUNTS);
     }
 
-    public double totalInterestEarned() {
-        double total = 0;
-        for (Account a : accounts)
-            total += a.interestEarned();
-        return total;
+    public BigDecimal totalInterestEarned() {
+        BigDecimal result = BigDecimal.ZERO;
+        for (Account acc : ACCOUNTS)
+            result = result.add(acc.interestEarned());
+        return result;
+    }
+    
+    public BigDecimal totalAccountHoldings() {
+        BigDecimal result = BigDecimal.ZERO;
+        for (Account acc : ACCOUNTS)
+            result = result.add(acc.sumTransactions());
+        return result;
     }
 
     public String getStatement() {
-        String statement = null;
-        statement = "Statement for " + name + "\n";
-        double total = 0.0;
-        for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+        StringBuilder result = new StringBuilder();
+        BigDecimal total = BigDecimal.ZERO;
+        
+        result.append("Statement for ").append(name).append('\n');
+        for (Account acc : ACCOUNTS) {
+        	result.append('\n').append(acc.getStatement()).append('\n');
+            total = total.add(acc.sumTransactions());
         }
-        statement += "\nTotal In All Accounts " + toDollars(total);
-        return statement;
+        result.append("\nTotal In All Accounts ");
+        result.append(Transaction.toCurrecy(total));
+        
+        return result.toString();
     }
+    
+    public boolean accountTransfer(Account from, Account to, BigDecimal amount) {
+    	boolean result = false;
 
-    private String statementForAccount(Account a) {
-        String s = "";
-
-       //Translate to pretty account type
-        switch(a.getAccountType()){
-            case CHECKING:
-                s += "Checking Account\n";
-                break;
-            case SAVINGS:
-                s += "Savings Account\n";
-                break;
-            case MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
-                break;
-        }
-
-        //Now total up all the transactions
-        double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
-        }
-        s += "Total " + toDollars(total);
-        return s;
+    	if(checkOwnAccounts(from, to)) {
+    		synchronized(from) {
+	    		if(from.sumTransactions().compareTo(amount) >= 0) {
+	    			from.withdraw(amount);
+	    			to.deposit(amount);
+	    			result = true;
+	    		}
+    		}
+    	}
+    	
+    	return result;
     }
-
-    private String toDollars(double d){
-        return String.format("$%,.2f", abs(d));
+    
+    public boolean checkOwnAccounts(Account... accounts) {
+    	boolean result = false;
+    	
+    	if(accounts != null && accounts.length > 0) {
+    		for(Account a : ACCOUNTS) {
+    			for(int i=0; i < accounts.length; i++) {
+    				accounts[i] = accounts[i] == a ? null : accounts[i];
+    			}
+    		}
+    		
+    		result = true;
+    		for(Account a : accounts) {
+    			if(a != null) {
+    				result = false;
+    				break;
+    			}
+    		}
+    	}
+    	
+    	return result;
     }
 }

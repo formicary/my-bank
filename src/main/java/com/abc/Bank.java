@@ -1,46 +1,80 @@
 package com.abc;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 public class Bank {
-    private List<Customer> customers;
+    private final List<Customer> CUSTOMERS;
 
     public Bank() {
-        customers = new ArrayList<Customer>();
+        CUSTOMERS = Collections.synchronizedList(new ArrayList<Customer>());
     }
 
-    public void addCustomer(Customer customer) {
-        customers.add(customer);
+    public Bank addCustomer(Customer customer) {
+        CUSTOMERS.add(customer);
+        return this;
     }
 
     public String customerSummary() {
-        String summary = "Customer Summary";
-        for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-        return summary;
+    	StringBuilder result = new StringBuilder();
+    	result.append("Customer Summary");
+        for (Customer c : CUSTOMERS) {
+        	result.append("\n - ").append(c.getName()).append(" (");
+        	result.append(pluralise(c.getNumberOfAccounts(), "account"));
+        	result.append(')');
+        }
+
+        return result.toString();
     }
 
     //Make sure correct plural of word is created based on the number passed in:
     //If number passed in is 1 just return the word otherwise add an 's' at the end
-    private String format(int number, String word) {
+    private String pluralise(int number, String word) {
         return number + " " + (number == 1 ? word : word + "s");
     }
 
-    public double totalInterestPaid() {
-        double total = 0;
-        for(Customer c: customers)
-            total += c.totalInterestEarned();
-        return total;
+    public BigDecimal totalInterestPaid() {
+        BigDecimal result = BigDecimal.ZERO;
+        
+        for(Customer c: CUSTOMERS) {
+            result = result.add(c.totalInterestEarned());
+        }
+        
+        return result;
     }
 
-    public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
-        }
+    public Customer getFirstCustomer() {
+    	Customer result = null;
+    	
+    	if(CUSTOMERS.isEmpty() == false) {
+    		result = CUSTOMERS.get(0);
+    	}
+    	
+    	return result;
+    }
+    
+    public void applyInterest() {
+    	for(Customer c : CUSTOMERS) {
+    		Iterator<Account> i = c.getAccountIterator();
+    		Account a = null;
+    		while(i.hasNext()) {
+    			a = i.next();
+    			a.deposit(a.interestEarned());
+    		}
+    	}
+    }
+    
+    public void applyDailyInterest() {
+    	for(Customer c : CUSTOMERS) {
+    		Iterator<Account> i = c.getAccountIterator();
+    		Account a = null;
+    		while(i.hasNext()) {
+    			a = i.next();
+    			a.deposit(a.interestEarnedDaily());
+    		}
+    	}
     }
 }

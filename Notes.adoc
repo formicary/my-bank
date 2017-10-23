@@ -4,13 +4,25 @@
 :Year: 2017
 :Description: This is a document for notes related to my solution to Accenture's Technical test.
 
+by {Author}
+
 == Assumptions
-. *Currency Percision* - I have assumed money only needs to be accurate to two decimal places of pence/cents(eg 0.01p).
+. *Currency Precision* - I have assumed money only needs to be accurate to two decimal places of pence/cents(eg 0.01p).
+. *Customer only allowed to transfer between their accounts* - Requirements don't mention customers being allowed to transfer to other customers, so I avoided allowing such.
 
 == Changes To Original Files
 . *Changed AccountType to enum* - This is less error prone than having ints passed around as sending an invalid type is more difficult.
 . *Stored account holdings in Account* - To avoid having to calculate account holding every time it's needed
-. *Changed data type for money to BigInteger* - Calculations with doubles are too inaccurate for use with money. BigInteger allows very large values to be stored useful for storing fractional money, and also avoids the inaccuracy of floating point data types. From Java 9 onwards the Money class would be the best data type to use.
+. *Changed data type for money to BigDecimal* - Calculations with doubles are too inaccurate for use with money. BigDecimal allows very large values to be stored useful for storing fractional money preciously.
+. *Fixed various Thread unsafe operations* - It would make sense that a system like this is likely to be used concurrently by multiple systems, so needs to be thread safe to do so.
+. *Fixed incorrect naming* - There were some cases of not following Java naming conventions, primarily with final variables.
+. *Fixed cases where encapsulation was broken* - Was possible in places to access member variables of some objects directly. This is bad practise and makes it difficult to iterate on the class in the future.
+. *Used StringBuilders where needed* - The use of StringBuilder reduces the memory usage when creating strings with many appends.
 
 == Added Features
-. *Example* - imitarentur in firmissimum magna nescius de noster distinguantur iudicem praesentibus
+. *Customer account transfers* - Customers can transfer funds among their own accounts, as long as they have the funds to do so.
+. *Maxi-Saving withdraw penalty* - The interest rate for maxi-saving accounts is dropped to a base 0.1%, if a withdrawal has occurred in the past 10 days.
+. *Interest can be calculated daily* - Interest to be given to an account can be calculated compound daily.
+
+== Notes
+. Developed on JDK1.8.0_151
