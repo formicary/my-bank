@@ -13,8 +13,10 @@ import static org.junit.Assert.assertEquals;
 public class AccountTest {
     private static final double DOUBLE_DELTA = 0.01;
 
+    // Test expected values calculated manually using spreadsheet
+
     @Test
-    public void maxiInterestRecentWithdrawal() {
+    public void maxSavingsInterest() {
         Account maxiAccount = new MaxiSavingsAccount();
 
         Date depositDate = DateProvider.getInstance().earlierDate(30);
@@ -27,25 +29,6 @@ public class AccountTest {
         maxiAccount.addTransaction(withdrawal);
 
         assertEquals(3.8501, maxiAccount.interestEarned(), DOUBLE_DELTA);
-
-    }
-
-    @Test
-    public void maxiInterestWithoutRecentWithdrawal() {
-        Account maxiAccount = new MaxiSavingsAccount();
-
-        Date depositDate = DateProvider.getInstance().earlierDate(30);
-        Transaction deposit = new Transaction(1000, depositDate);
-
-        Date withdrawalDate = DateProvider.getInstance().earlierDate(15);
-        Transaction withdrawal = new Transaction(-100, withdrawalDate);
-
-        maxiAccount.addTransaction(deposit);
-        maxiAccount.addTransaction(withdrawal);
-
-        double expectedInterest = 0.05 * (1000 - 100);
-
-        assertEquals(expectedInterest, maxiAccount.interestEarned(), DOUBLE_DELTA);
 
     }
 
