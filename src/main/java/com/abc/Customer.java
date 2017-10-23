@@ -41,6 +41,11 @@ public class Customer {
         return roundedTotal.doubleValue();
     }
      
+    protected void transfer(double amount, int withdrawalAccountIndex, int depositAccountIndex) {
+        accounts.get(withdrawalAccountIndex).withdraw(amount);
+        accounts.get(depositAccountIndex).deposit(amount);
+    }
+        
     private String toDollars(double d) {
         return String.format("%1$.2f", abs(d));
     }
