@@ -15,138 +15,182 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Test cases for classes related to interest schemes.
+ * 
+ * @author Christopher J. Smith
+ */
 public class InterestSchemeTest {
 
 	@Test
+	/**
+	 * Test factory method selects checking account.
+	 */
 	public void factoryTestChecking() {
 		assertTrue(InterestSchemeFactory.getScheme(Account.AccountType.CHECKING) instanceof CheckingAccountInterest);
 	}
-	
+
 	@Test
+	/**
+	 * Test factory method selects savings account.
+	 */
 	public void factoryTestSaving() {
 		assertTrue(InterestSchemeFactory.getScheme(Account.AccountType.SAVINGS) instanceof SavingsAccountInterest);
 	}
-	
+
 	@Test
+	/**
+	 * Test factory method selects maxi savings account.
+	 */
 	public void factoryTestMaxi() {
-		assertTrue(InterestSchemeFactory.getScheme(Account.AccountType.MAXI_SAVINGS) instanceof MaxiSavingsAccountInterest);
+		assertTrue(InterestSchemeFactory
+				.getScheme(Account.AccountType.MAXI_SAVINGS) instanceof MaxiSavingsAccountInterest);
 	}
-	
+
 	@Test
+	/**
+	 * Test checking account interest scheme is singleton.
+	 */
 	public void InterestCheckingSinglton() {
 		CheckingAccountInterest i = CheckingAccountInterest.getInstance();
 		assertSame(i, CheckingAccountInterest.getInstance());
 	}
-	
+
 	@Test
+	/**
+	 * Test checking account calculates interest correctly.
+	 */
 	public void InterestChecking() {
 		ArrayList<Transaction> a = new ArrayList<>();
 		a.add(new Transaction(8888));
 		a.add(new Transaction(18));
 		a.add(new Transaction(245));
-		
-		assertTrue(CheckingAccountInterest.getInstance().getInterest(a)
-				.compareTo(new BigDecimal("9.151")) == 0);
+
+		assertTrue(CheckingAccountInterest.getInstance().getInterest(a).compareTo(new BigDecimal("9.151")) == 0);
 	}
-	
+
 	@Test
+	/**
+	 * Test savings account interest scheme is singleton.
+	 */
 	public void InterestSavingsSingleton() {
 		SavingsAccountInterest i = SavingsAccountInterest.getInstance();
 		assertSame(i, SavingsAccountInterest.getInstance());
 	}
-	
+
 	@Test
+	/**
+	 * Test savings account calculates interest correctly.
+	 */
 	public void InterestSavings() {
 		ArrayList<Transaction> a = new ArrayList<>();
 		a.add(new Transaction(33));
 		a.add(new Transaction(222));
 		a.add(new Transaction(465));
-		
-		assertTrue(SavingsAccountInterest.getInstance().getInterest(a)
-				.compareTo(new BigDecimal("0.72")) == 0);
+
+		assertTrue(SavingsAccountInterest.getInstance().getInterest(a).compareTo(new BigDecimal("0.72")) == 0);
 	}
-	
+
 	@Test
+	/**
+	 * Test savings account calculates interest correctly above threshold.
+	 */
 	public void InterestSavingsThreshold() {
 		ArrayList<Transaction> a = new ArrayList<>();
 		a.add(new Transaction(2587));
 		a.add(new Transaction(450));
 		a.add(new Transaction(1000));
-		
-		assertTrue(SavingsAccountInterest.getInstance().getInterest(a)
-				.compareTo(new BigDecimal("7.074")) == 0);
+
+		assertTrue(SavingsAccountInterest.getInstance().getInterest(a).compareTo(new BigDecimal("7.074")) == 0);
 	}
-	
+
 	@Test
+	/**
+	 * Test maxi savings account interest scheme is singleton.
+	 */
 	public void InterestMaxiSavingsSingleton() {
 		MaxiSavingsAccountInterest i = MaxiSavingsAccountInterest.getInstance();
 		assertSame(i, MaxiSavingsAccountInterest.getInstance());
 	}
-	
+
 	@Test
+	/**
+	 * Test maxi savings account calculates interest correctly.
+	 */
 	public void InterestMaxiSavings() {
 		ArrayList<Transaction> a = new ArrayList<>();
 		a.add(new Transaction(89));
 		a.add(new Transaction(346));
 		a.add(new Transaction(410));
-		
-		assertTrue(MaxiSavingsAccountInterest.getInstance().getInterest(a)
-				.compareTo(new BigDecimal("16.9")) == 0);
+
+		assertTrue(MaxiSavingsAccountInterest.getInstance().getInterest(a).compareTo(new BigDecimal("16.9")) == 0);
 	}
-	
+
 	@Test
+	/**
+	 * Test maxi savings account calculates interest correctly above first
+	 * threshold.
+	 */
 	public void InterestMaxiSavingsThreshold1() {
 		ArrayList<Transaction> a = new ArrayList<>();
 		a.add(new Transaction(56));
 		a.add(new Transaction(584));
 		a.add(new Transaction(799));
-		
-		assertTrue(MaxiSavingsAccountInterest.getInstance().getInterest(a)
-				.compareTo(new BigDecimal("41.95")) == 0);
+
+		assertTrue(MaxiSavingsAccountInterest.getInstance().getInterest(a).compareTo(new BigDecimal("41.95")) == 0);
 	}
-	
+
 	@Test
+	/**
+	 * Test maxi savings account calculates interest correctly above second
+	 * threshold.
+	 */
 	public void InterestMaxiSavingsThreshold2() {
 		ArrayList<Transaction> a = new ArrayList<>();
 		a.add(new Transaction(1257));
 		a.add(new Transaction(999));
 		a.add(new Transaction(15879));
-		
-		assertTrue(MaxiSavingsAccountInterest.getInstance().getInterest(a)
-				.compareTo(new BigDecimal("1683.5")) == 0);
+
+		assertTrue(MaxiSavingsAccountInterest.getInstance().getInterest(a).compareTo(new BigDecimal("1683.5")) == 0);
 	}
-	
+
 	@Test
+	/**
+	 * Test maxi savings account calculates interest correctly when penalty is
+	 * applied.
+	 */
 	public void InterestMaxiSavingsPenalty() {
 		ArrayList<Transaction> a = new ArrayList<>();
 		a.add(new Transaction(89));
 		a.add(new Transaction(346));
 		a.add(new Transaction(410));
 		a.add(new Transaction(-10));
-		
-		assertTrue(MaxiSavingsAccountInterest.getInstance().getInterest(a)
-				.compareTo(new BigDecimal("0.835")) == 0);
+
+		assertTrue(MaxiSavingsAccountInterest.getInstance().getInterest(a).compareTo(new BigDecimal("0.835")) == 0);
 	}
-	
+
+	/**
+	 * Test maxi savings account calculates interest correctly when withdraw has
+	 * been made but outside penalty period.
+	 */
 	@Test
-	public void InterestMaxiSavingsPenaltyPast() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+	public void InterestMaxiSavingsPenaltyPast()
+			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		ArrayList<Transaction> a = new ArrayList<>();
 		a.add(new Transaction(89));
 		a.add(new Transaction(346));
 		a.add(new Transaction(4100));
 		Transaction t = new Transaction(-10);
-		
-		//Using Reflection to edit the date which should usually be uneditable
+
+		// Using Reflection to edit the date which should usually be uneditable
 		Field f = t.getClass().getDeclaredField("TRANSACTION_DATE");
-		long time = DateProvider.getInstance().now().getTime() - 
-				TimeUnit.DAYS.toMillis(11);
+		long time = DateProvider.getInstance().now().getTime() - TimeUnit.DAYS.toMillis(11);
 		Date d = new Date(time);
 		f.setAccessible(true);
 		f.set(t, d);
-		
+
 		a.add(t);
-		
-		assertTrue(MaxiSavingsAccountInterest.getInstance().getInterest(a)
-				.compareTo(new BigDecimal("322.5")) == 0);
+
+		assertTrue(MaxiSavingsAccountInterest.getInstance().getInterest(a).compareTo(new BigDecimal("322.5")) == 0);
 	}
 }

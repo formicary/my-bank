@@ -14,7 +14,7 @@ public class CheckingAccountInterest implements InterestScheme {
 	//Interest rate.
 	public static final BigDecimal BASE_INTEREST = new BigDecimal("0.001");
 	
-	//Singleton reference.
+	// Singleton reference.
 	private static CheckingAccountInterest instance;
 	
 	 /**
