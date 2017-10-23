@@ -18,9 +18,9 @@ public class Bank {
     private String format(int number) {
         String output;
         if (number==1) {
-            output = String.format("%1$s %2$s", Integer.toString(number), "account");
+            output = String.format("%1$d %2$s",number, "account");
         } else {
-            output = String.format("%1$s %2$s", Integer.toString(number), "accounts");
+            output = String.format("%1$d %2$s", number, "accounts");
         }
         return output;
     }
@@ -28,7 +28,7 @@ public class Bank {
     protected String customerSummary() {
         String summary = "Customer Summary";
         for (Customer c : customers) {
-            summary += String.format("\n - %1$d (%2$d)", c.getName(), format(c.getNumberOfAccounts()));
+            summary += String.format("%n - %1$s (%2$s)", c.getName(), format(c.getNumberOfAccounts()));
         }
         return summary;
     }
