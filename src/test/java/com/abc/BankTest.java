@@ -213,5 +213,37 @@ public class BankTest {
     	assertTrue(bill.totalAccountHoldings().compareTo(new BigDecimal("100.0002")) == 0 &&
     				bob.totalAccountHoldings().compareTo(new BigDecimal("5000.0243")) == 0);
     }
+    
+    @Test
+    public void totalHoldings() {
+    	Bank bank = new Bank();
+    	Customer bill = new Customer("Bill");
+    	Customer bob = new Customer("Bob");
+    	
+    	Account ac = new Account(Account.AccountType.CHECKING);
+    	ac.deposit(100);
+    	bill.openAccount(ac);
+    	Account as = new Account(Account.AccountType.SAVINGS);
+    	as.deposit(5000);
+    	bob.openAccount(as);
+    	
+    	bank.addCustomer(bob).addCustomer(bill);
+    	
+    	assertTrue(bank.getTotalHoldings().compareTo(new BigDecimal("5100")) == 0);
+    }
 
+    @Test
+    public void stringCreation() {
+    	Bank bank = new Bank();
+    	Customer bill = new Customer("Bill");
+    	Customer bob = new Customer("Bob");
+    	
+    	Account ac = new Account(Account.AccountType.CHECKING);
+    	ac.deposit(100);
+    	bill.openAccount(ac);
+    	bank.addCustomer(bob).addCustomer(bill);
+    	
+    	String expected = "Customers: 2  Total Holdings: $100.00";
+    	assertEquals(expected, bank.toString());
+    }
 }

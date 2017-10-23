@@ -109,4 +109,8 @@ public class Customer {
     	
     	return result;
     }
+    
+    public String toString() {
+    	return "Accounts: " + getNumberOfAccounts() + "  Total Holdings: " + Transaction.toCurrecy(totalAccountHoldings());
+    }
 }

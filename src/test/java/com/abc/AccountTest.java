@@ -156,4 +156,15 @@ public class AccountTest {
 				"Total $170,703.58";
 		assertEquals(expected, am.getStatement());
 	}
+	
+	@Test 
+	public void stringCreation() {
+		Account ac = new Account(Account.AccountType.CHECKING);
+		ac.deposit(10.1);
+		ac.deposit(6);
+		ac.deposit(101);
+		
+		String expected = "Holdings: $117.10  Transactions: 3";
+		assertEquals(expected, ac.toString());
+	}
 }

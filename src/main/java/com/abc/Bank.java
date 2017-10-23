@@ -77,4 +77,20 @@ public class Bank {
     		}
     	}
     }
+    
+    public BigDecimal getTotalHoldings() {
+    	BigDecimal result = BigDecimal.ZERO;
+    	
+    	for(Customer c : CUSTOMERS) {
+    		result = result.add(c.totalAccountHoldings());
+    	}
+    	
+    	return result;
+    }
+    
+    @Override
+    public String toString() {
+    	return "Customers: " + CUSTOMERS.size() + "  Total Holdings: " + 
+    			Transaction.toCurrecy(getTotalHoldings());
+    }
 }

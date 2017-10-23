@@ -252,4 +252,19 @@ public class CustomerTest {
     	
     	assertTrue(oscar.totalAccountHoldings().compareTo(new BigDecimal("1085")) == 0);
     }
+    
+    @Test
+    public void stringCreation() {
+    	Customer oscar = new Customer("Oscar");
+    	Account a = new Account(Account.AccountType.CHECKING);
+    	a.deposit(1000);
+    	a.deposit(10);
+    	oscar.openAccount(a);
+    	a = new Account(Account.AccountType.CHECKING);
+    	a.deposit(75);
+    	oscar.openAccount(a);
+    	
+    	String expected = "Accounts: 2  Total Holdings: $1,085.00";
+    	assertEquals(expected, oscar.toString());
+    }
 }

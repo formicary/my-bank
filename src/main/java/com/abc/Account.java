@@ -153,7 +153,6 @@ public class Account {
 	
 	@Override
 	public String toString() {
-		//TODO
-		return null;
+		return "Holdings: " + Transaction.toCurrecy(sumTransactions()) + "  Transactions: " + getNumberTransactions(); 
 	}
 }
