@@ -58,6 +58,17 @@ public class Account {
     protected double sumTransactions() {
        return checkIfTransactionsExist(true);
     }
+    
+    private int daysSinceLastWithdrawal() {
+        Date now = DateProvider.getInstance.now();
+        Date last;
+        for (int i = transactions.size()-1; i>=0; i--) {
+            if (transactions.get(i).amount>0) {
+                last = transactions.get(i).transactionDate;
+            }
+        }
+        return (int)((now.getTime() - last.getTime()) / (1000 * 60 * 60 * 24));
+    }
 
     protected double interestEarned() {
         double amount = sumTransactions();
@@ -72,14 +83,11 @@ public class Account {
                     return BigDecimal.ONE.add((roundedAmount.subtract(BigDecimal.valueOf(1000))).multiply(BigDecimal.valueOf(0.002).doubleValue();
                 }
             case MAXI_SAVINGS:
-                if (amount <= 1000) {
-                    return roundedAmount.multiply(BigDecimal.valueOf(0.02)).doubleValue();
-                }
-                else if (amount <= 2000) {
-                    return BigDecimal.valueOf(20).add(roundedAmount.subtract(BigDecimal.valueOf(1000))).multiply(BigDecimal.valueOf(0.05)).doubleValue();
+                if (daysSinceLastWithdrawal() > 10) {
+                    return roundedAmount.multiply(BigDecimal.valueOf(0.05)).doubleValue();
                 }
                 else {
-                    return BigDecimal.valueOf(70).add(roundedAmount.subtract(BigDecimal.valueOf(2000))).multiply(BigDecimal.valueOf(0.1)).doubleValue();
+                    return roundedAmount.multiply(BigDecimal.valueOf(0.001)).doubleValue();
                 }
             default:
                 return roundedAmount.multiply(BigDecimal.valueOf(0.001)).doubleValue();
