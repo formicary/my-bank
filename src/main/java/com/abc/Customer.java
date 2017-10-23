@@ -37,23 +37,24 @@ public class Customer {
     }
      
     private String toDollars(double d) {
-        return String.format("$%,.2f", abs(d));
+        return String.format("%1$.2f", abs(d));
     }
     
     protected String getStatement() {
         String statement;
         double total = 0.00;
-        statement = "Statement for " + name + "\n";
+        statement = String.format("Statement for %1$s \n", name);
         for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
+            statement += String.format("\n %1$s \n", statementForAccount(a));
             total += a.sumTransactions();
         }
-        statement += "\nTotal In All Accounts " + toDollars(total);
+        statement += String.format("\nTotal In All Accounts %1$s", toDollars(total));
         return statement;
     }
 
     private String statementForAccount(Account a) {
         double total = 0.00;
+        String s;
         switch (a.getAccountType()) {
             case Account.CHECKING:
                 s = "Checking Account\n";
@@ -64,12 +65,18 @@ public class Customer {
             case Account.MAXI_SAVINGS:
                 s = "Maxi Savings Account\n";
                 break;
+            default:
+                throw new IllegalArgumentException("Invalid account type");
         }
         for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
+            if (t.amount < 0) {
+                s += String.format("  withdrawal %1$s\n", toDollars(t.amount));
+            } else {
+                s += String.format("  deposit %1$s\n", toDollars(t.amount));
+            }
             total += t.amount;
         }
-        s += "Total " + toDollars(total);
+        s += String.format("Total %1$s", toDollars(total));
         return s;
     }
 }
