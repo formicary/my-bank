@@ -35,10 +35,10 @@ public class Account {
 
 	/**
 	 * Create an instance of an Account given a type.
-	 * @param accountType is the enumerator of the account type being created.
+	 * @param accountType is the enumerator of the account type being created. If null checking will be assumed.
 	 */
 	public Account(AccountType accountType) {
-		ACCOUNT_TYPE = accountType;
+		ACCOUNT_TYPE = accountType != null ? accountType : AccountType.CHECKING;
 		INTEREST = InterestSchemeFactory.getScheme(ACCOUNT_TYPE);
 		
 		//Ensure that elements can be added concurrently.
@@ -58,7 +58,8 @@ public class Account {
 			TRANSACTIONS.add(new Transaction(amount));
 			updateTotal();
 		} else {
-			throw new IllegalArgumentException("amount must be greater than zero.");
+			throw new IllegalArgumentException(Account.class +
+					"::amount must be greater than zero.");
 		}
 	}
 	
@@ -104,7 +105,8 @@ public class Account {
 			TRANSACTIONS.add(new Transaction(amount.negate()));
 			updateTotal();
 		} else {
-			throw new IllegalArgumentException("amount must be greater than zero.");
+			throw new IllegalArgumentException(Account.class +
+					"::amount must be greater than zero.");
 		}
 	}
 	
@@ -143,7 +145,7 @@ public class Account {
 	 * Get the expected interest that will be earned annually.
 	 * @return Returns the amount to be earned through interest.
 	 */
-	public BigDecimal interestEarned() {
+	public BigDecimal getAnnualInterest() {
 		return INTEREST.getInterest(getTransactionsClone());
 	}
 	
@@ -151,7 +153,7 @@ public class Account {
 	 * Get the expected interest that will be earned daily.
 	 * @return Returns the amount to be earned through interest.
 	 */
-	public BigDecimal interestEarnedDaily() {
+	public BigDecimal getDailyInterest() {
 		BigDecimal interest = INTEREST.getInterest(getTransactionsClone());
 		return interest.multiply(DAY_MULTIPLIER);
 	}
@@ -186,7 +188,7 @@ public class Account {
 	 * @return Returns the total sum of all account transactions.
 	 */
 	//Synchronised so that when a new total is being calculated a total isn't returned
-	public synchronized BigDecimal sumTransactions() {		
+	public synchronized BigDecimal getTransactionsSum() {		
 		return totalTransactions;
 	}
 	
@@ -248,7 +250,7 @@ public class Account {
 		BigDecimal total;
 		synchronized(TRANSACTIONS){
 			list = getTransactionsClone();
-			total = sumTransactions();
+			total = getTransactionsSum();
 		}
 		
 		for(Transaction t : list) {
@@ -270,6 +272,6 @@ public class Account {
 	
 	@Override
 	public String toString() {
-		return "Holdings: " + Transaction.toCurrecy(sumTransactions()) + "  Transactions: " + getNumberTransactions(); 
+		return "Holdings: " + Transaction.toCurrecy(getTransactionsSum()) + "  Transactions: " + getNumberTransactions(); 
 	}
 }

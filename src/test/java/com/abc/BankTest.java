@@ -30,14 +30,14 @@ public class BankTest {
         					" - John (1 account)\n" +
         					" - Bob (3 accounts)";
         
-        assertEquals(expected, bank.customerSummary());
+        assertEquals(expected, bank.getCutomersSummary());
     }
 
     @Test
     /**
-     * Testing a single checking account
+     * Testing a single checking account annual interest
      */
-    public void checkingAccount() {
+    public void checkingAccountAnnual() {
         Bank bank = new Bank();
         Account checkingAccount = new Account(Account.AccountType.CHECKING);
         Customer bill = new Customer("Bill").openAccount(checkingAccount);
@@ -45,14 +45,29 @@ public class BankTest {
 
         checkingAccount.deposit(100);
 
-        assertTrue(bank.totalInterestPaid().compareTo(new BigDecimal("0.1")) == 0);
+        assertTrue(bank.getTotalInterestPayableAnually().compareTo(new BigDecimal("0.1")) == 0);
     }
     
     @Test
     /**
-     * Testing multiple checking accounts
+     * Testing a single checking account daily interest
      */
-    public void checkingAccounts() {
+    public void checkingAccountDaily() {
+        Bank bank = new Bank();
+        Account checkingAccount = new Account(Account.AccountType.CHECKING);
+        Customer bill = new Customer("Bill").openAccount(checkingAccount);
+        bank.addCustomer(bill);
+
+        checkingAccount.deposit(100);
+
+        assertTrue(bank.getTotalInterestPayableDaily().compareTo(new BigDecimal("0.00027")) == 0);
+    }
+    
+    @Test
+    /**
+     * Testing multiple checking accounts annual interest
+     */
+    public void checkingAccountsAnnual() {
         Bank bank = new Bank();
         Account checkingAccount = new Account(Account.AccountType.CHECKING);
         Customer bill = new Customer("Bill").openAccount(checkingAccount);
@@ -69,14 +84,38 @@ public class BankTest {
         
         bank.addCustomer(bill).addCustomer(bob).addCustomer(jill);
 
-        assertTrue(bank.totalInterestPaid().compareTo(new BigDecimal("1000.985")) == 0);
+        assertTrue(bank.getTotalInterestPayableAnually().compareTo(new BigDecimal("1000.985")) == 0);
+    }
+    
+    @Test
+    /**
+     * Testing multiple checking accounts daily interest
+     */
+    public void checkingAccountsDaily() {
+        Bank bank = new Bank();
+        Account checkingAccount = new Account(Account.AccountType.CHECKING);
+        Customer bill = new Customer("Bill").openAccount(checkingAccount);
+        checkingAccount.deposit(1000000);
+        checkingAccount = new Account(Account.AccountType.CHECKING);
+        Customer bob = new Customer("Bob").openAccount(checkingAccount);
+        checkingAccount.deposit(10);
+        checkingAccount = new Account(Account.AccountType.CHECKING);
+        Customer jill = new Customer("Jill").openAccount(checkingAccount);
+        checkingAccount.deposit(500);
+        checkingAccount = new Account(Account.AccountType.CHECKING);
+        jill.openAccount(checkingAccount);
+        checkingAccount.deposit(475);
+        
+        bank.addCustomer(bill).addCustomer(bob).addCustomer(jill);
+
+        assertTrue(bank.getTotalInterestPayableDaily().compareTo(new BigDecimal("2.7026595")) == 0);
     }
 
     @Test
     /**
-     * Testing a single savings account in the max threshold
+     * Testing a single savings account annual interest in the max threshold
      */
-    public void savings_account() {
+    public void savingsAccountAnnual() {
         Bank bank = new Bank();
         Account savingsAccount = new Account(Account.AccountType.SAVINGS);
         Customer bill = new Customer("Bill").openAccount(savingsAccount);
@@ -84,14 +123,29 @@ public class BankTest {
 
         bank.addCustomer(bill);
         
-        assertTrue(bank.totalInterestPaid().compareTo(new BigDecimal("2")) == 0);
+        assertTrue(bank.getTotalInterestPayableAnually().compareTo(new BigDecimal("2")) == 0);
     }
     
     @Test
     /**
-     * Testing multiple savings accounts in different thresholds
+     * Testing a single savings account daily interest in the max threshold
      */
-    public void savings_accounts() {
+    public void savingsAccountDaily() {
+        Bank bank = new Bank();
+        Account savingsAccount = new Account(Account.AccountType.SAVINGS);
+        Customer bill = new Customer("Bill").openAccount(savingsAccount);
+        savingsAccount.deposit(1500);
+
+        bank.addCustomer(bill);
+        
+        assertTrue(bank.getTotalInterestPayableDaily().compareTo(new BigDecimal("0.0054")) == 0);
+    }
+    
+    @Test
+    /**
+     * Testing multiple savings accounts annual interest in different thresholds
+     */
+    public void savingsAccountsAnnual() {
         Bank bank = new Bank();
         Account savingsAccount = new Account(Account.AccountType.SAVINGS);
         Customer bill = new Customer("Bill").openAccount(savingsAccount);
@@ -108,28 +162,66 @@ public class BankTest {
 
         bank.addCustomer(bill).addCustomer(bob).addCustomer(jill);
         
-        assertTrue(bank.totalInterestPaid().compareTo(new BigDecimal("22.37")) == 0);
+        assertTrue(bank.getTotalInterestPayableAnually().compareTo(new BigDecimal("22.37")) == 0);
+    }
+    
+    @Test
+    /**
+     * Testing multiple savings accounts daily interest in different thresholds
+     */
+    public void savingsAccountsDaily() {
+        Bank bank = new Bank();
+        Account savingsAccount = new Account(Account.AccountType.SAVINGS);
+        Customer bill = new Customer("Bill").openAccount(savingsAccount);
+        savingsAccount.deposit(1500);
+        savingsAccount = new Account(Account.AccountType.SAVINGS);
+        Customer jill = new Customer("Jill").openAccount(savingsAccount);
+        savingsAccount.deposit(8285);
+        savingsAccount = new Account(Account.AccountType.SAVINGS);
+        Customer bob = new Customer("Bob").openAccount(savingsAccount);
+        savingsAccount.deposit(800);
+        savingsAccount = new Account(Account.AccountType.SAVINGS);
+        bob.openAccount(savingsAccount);
+        savingsAccount.deposit(2500);
+
+        bank.addCustomer(bill).addCustomer(bob).addCustomer(jill);
+        
+        assertTrue(bank.getTotalInterestPayableDaily().compareTo(new BigDecimal("0.060399")) == 0);
     }
 
     @Test
     /**
-     * Testing a single maxi account in the max threshold
+     * Testing a single maxi account annual interest in the max threshold
      */
-    public void maxi_savings_account() {
+    public void maxiSavingsAccountAnnual() {
         Bank bank = new Bank();
         Account checkingAccount = new Account(Account.AccountType.MAXI_SAVINGS);
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
         checkingAccount.deposit(3000);
 
-        assertTrue(bank.totalInterestPaid().compareTo(new BigDecimal("170")) == 0);
+        assertTrue(bank.getTotalInterestPayableAnually().compareTo(new BigDecimal("170")) == 0);
     }
     
     @Test
     /**
-     * Testing multiple maxi accounts in different thresholds
+     * Testing a single maxi account daily interest in the max threshold
      */
-    public void maxi_savings_accounts() {
+    public void maxiSavingsAccountDaily() {
+        Bank bank = new Bank();
+        Account checkingAccount = new Account(Account.AccountType.MAXI_SAVINGS);
+        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+
+        checkingAccount.deposit(3000);
+
+        assertTrue(bank.getTotalInterestPayableDaily().compareTo(new BigDecimal("0.459")) == 0);
+    }
+    
+    @Test
+    /**
+     * Testing multiple maxi accounts annual interest in different thresholds
+     */
+    public void maxiSavingsAccountsAnnual() {
         Bank bank = new Bank();
         Account savingsAccount = new Account(Account.AccountType.MAXI_SAVINGS);
         Customer bill = new Customer("Bill").openAccount(savingsAccount);
@@ -146,7 +238,31 @@ public class BankTest {
         
         bank.addCustomer(bill).addCustomer(bob).addCustomer(jill);
 
-        assertTrue(bank.totalInterestPaid().compareTo(new BigDecimal("597930.309")) == 0);
+        assertTrue(bank.getTotalInterestPayableAnually().compareTo(new BigDecimal("597930.309")) == 0);
+    }
+    
+    @Test
+    /**
+     * Testing multiple maxi accounts daily interest in different thresholds
+     */
+    public void maxiSavingsAccountsDaily() {
+        Bank bank = new Bank();
+        Account savingsAccount = new Account(Account.AccountType.MAXI_SAVINGS);
+        Customer bill = new Customer("Bill").openAccount(savingsAccount);
+        savingsAccount.deposit(3000);
+        savingsAccount = new Account(Account.AccountType.MAXI_SAVINGS);
+        Customer jill = new Customer("Jill").openAccount(savingsAccount);
+        savingsAccount.deposit(5978246);
+        savingsAccount = new Account(Account.AccountType.MAXI_SAVINGS);
+        Customer bob = new Customer("Bob").openAccount(savingsAccount);
+        savingsAccount.deposit(65.45);
+        savingsAccount = new Account(Account.AccountType.MAXI_SAVINGS);
+        bob.openAccount(savingsAccount);
+        savingsAccount.deposit(1888);
+        
+        bank.addCustomer(bill).addCustomer(bob).addCustomer(jill);
+
+        assertTrue(bank.getTotalInterestPayableDaily().compareTo(new BigDecimal("1614.4118343")) == 0);
     }
     
     @Test
@@ -190,8 +306,8 @@ public class BankTest {
     	bank.addCustomer(bob).addCustomer(bill);
     	bank.applyInterest();
     	
-    	assertTrue(bill.totalAccountHoldings().compareTo(new BigDecimal("100.1")) == 0 &&
-    				bob.totalAccountHoldings().compareTo(new BigDecimal("5009")) == 0);
+    	assertTrue(bill.getTotalAccountHoldings().compareTo(new BigDecimal("100.1")) == 0 &&
+    				bob.getTotalAccountHoldings().compareTo(new BigDecimal("5009")) == 0);
     }
     
     @Test
@@ -210,8 +326,8 @@ public class BankTest {
     	bank.addCustomer(bob).addCustomer(bill);
     	bank.applyDailyInterest();
     	    	
-    	assertTrue(bill.totalAccountHoldings().compareTo(new BigDecimal("100.0002")) == 0 &&
-    				bob.totalAccountHoldings().compareTo(new BigDecimal("5000.0243")) == 0);
+    	assertTrue(bill.getTotalAccountHoldings().compareTo(new BigDecimal("100.0002")) == 0 &&
+    				bob.getTotalAccountHoldings().compareTo(new BigDecimal("5000.0243")) == 0);
     }
     
     @Test

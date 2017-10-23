@@ -49,7 +49,7 @@ public class AccountTest {
 		am.deposit(10000);
 		am.deposit(666);
 		am.deposit(489);
-		assertTrue(am.interestEarned().compareTo(new BigDecimal("985.5")) == 0);
+		assertTrue(am.getAnnualInterest().compareTo(new BigDecimal("985.5")) == 0);
 	}
 	
 	@Test
@@ -58,7 +58,7 @@ public class AccountTest {
 		am.deposit(10000);
 		am.deposit(666);
 		am.deposit(489);
-		assertTrue(am.interestEarnedDaily().compareTo(new BigDecimal("2.66085")) == 0);
+		assertTrue(am.getDailyInterest().compareTo(new BigDecimal("2.66085")) == 0);
 	}
 	
 	@Test
@@ -102,7 +102,7 @@ public class AccountTest {
 		am.deposit(new BigDecimal("1896.58"));
 		am.deposit(485);
 		am.deposit(6886);
-		assertTrue(am.sumTransactions().compareTo(new BigDecimal("204263.58")) == 0);
+		assertTrue(am.getTransactionsSum().compareTo(new BigDecimal("204263.58")) == 0);
 	}
 	
 	@Test
@@ -113,7 +113,7 @@ public class AccountTest {
 		am.deposit(new BigDecimal("1896.58"));
 		am.deposit(485);
 		am.withdraw(6886);
-		assertTrue(am.sumTransactions().compareTo(new BigDecimal("170703.58")) == 0);
+		assertTrue(am.getTransactionsSum().compareTo(new BigDecimal("170703.58")) == 0);
 	}
 	
 	@Test
@@ -121,7 +121,7 @@ public class AccountTest {
 		Account am = new Account(Account.AccountType.MAXI_SAVINGS);
 		am.withdraw(1000000);
 		am.withdraw(64);
-		assertTrue(am.sumTransactions().compareTo(new BigDecimal("-1000064")) == 0);
+		assertTrue(am.getTransactionsSum().compareTo(new BigDecimal("-1000064")) == 0);
 	}
 	
 	@Test

@@ -124,7 +124,24 @@ public class CustomerTest {
     }
     
     @Test
-    public void totalInterst() {
+    public void totalInterstAnnual() {
+    	Customer oscar = new Customer("Oscar");
+    	Account a1 = new Account(Account.AccountType.SAVINGS);
+    	a1.deposit(1000);
+    	a1.deposit(50);
+    	
+    	Account a2 = new Account(Account.AccountType.CHECKING);
+    	a2.deposit(2000);
+    	a2.deposit(70);
+    	
+    	oscar.openAccount(a1);
+    	oscar.openAccount(a2);
+    	 
+    	assertTrue(oscar.getTotalAnnualInterestPayable().compareTo(new BigDecimal("3.17")) == 0);
+    }
+    
+    @Test
+    public void totalInterstDaily() {
     	Customer oscar = new Customer("Oscar");
     	Account a1 = new Account(Account.AccountType.SAVINGS);
     	a1.deposit(1000);
@@ -137,7 +154,7 @@ public class CustomerTest {
     	oscar.openAccount(a1);
     	oscar.openAccount(a2);
     	
-    	assertTrue(oscar.totalInterestEarned().compareTo(new BigDecimal("3.17")) == 0);
+    	assertTrue(oscar.getTotalDailyInterestPayable().compareTo(new BigDecimal("0.008559")) == 0);
     }
     
     @Test
@@ -188,8 +205,8 @@ public class CustomerTest {
     	from.deposit(1000);
     	oscar.openAccount(from).openAccount(to);
     	oscar.accountTransfer(from, to, new BigDecimal("1000"));
-    	assertTrue(from.sumTransactions().compareTo(BigDecimal.ZERO) == 0 &&
-    			to.sumTransactions().compareTo(new BigDecimal("1000")) == 0);
+    	assertTrue(from.getTransactionsSum().compareTo(BigDecimal.ZERO) == 0 &&
+    			to.getTransactionsSum().compareTo(new BigDecimal("1000")) == 0);
     }
     
     public void transferAccountPartial() {
@@ -199,8 +216,8 @@ public class CustomerTest {
     	from.deposit(1000);
     	oscar.openAccount(from).openAccount(to);
     	oscar.accountTransfer(from, to, new BigDecimal("500"));
-    	assertTrue(from.sumTransactions().compareTo(new BigDecimal("500")) == 0 &&
-    			to.sumTransactions().compareTo(new BigDecimal("500")) == 0);
+    	assertTrue(from.getTransactionsSum().compareTo(new BigDecimal("500")) == 0 &&
+    			to.getTransactionsSum().compareTo(new BigDecimal("500")) == 0);
     }
     
     @Test
@@ -211,8 +228,8 @@ public class CustomerTest {
     	from.deposit(999);
     	oscar.openAccount(from).openAccount(to);
     	assertTrue(oscar.accountTransfer(from, to, new BigDecimal("1000")) == false &&
-    			from.sumTransactions().compareTo(new BigDecimal("999")) == 0 &&
-    			to.sumTransactions().compareTo(BigDecimal.ZERO) == 0);
+    			from.getTransactionsSum().compareTo(new BigDecimal("999")) == 0 &&
+    			to.getTransactionsSum().compareTo(BigDecimal.ZERO) == 0);
     }
     
     @Test
@@ -223,8 +240,8 @@ public class CustomerTest {
     	from.deposit(500);
     	oscar.openAccount(to);
     	assertTrue(oscar.accountTransfer(from, to, new BigDecimal("500")) == false &&
-    			from.sumTransactions().compareTo(new BigDecimal("500")) == 0 &&
-    			to.sumTransactions().compareTo(BigDecimal.ZERO) == 0);
+    			from.getTransactionsSum().compareTo(new BigDecimal("500")) == 0 &&
+    			to.getTransactionsSum().compareTo(BigDecimal.ZERO) == 0);
     }
     
     @Test
@@ -235,8 +252,8 @@ public class CustomerTest {
     	from.deposit(500);
     	oscar.openAccount(from);
     	assertTrue(oscar.accountTransfer(from, to, new BigDecimal("500")) == false &&
-    			from.sumTransactions().compareTo(new BigDecimal("500")) == 0 &&
-    			to.sumTransactions().compareTo(BigDecimal.ZERO) == 0);
+    			from.getTransactionsSum().compareTo(new BigDecimal("500")) == 0 &&
+    			to.getTransactionsSum().compareTo(BigDecimal.ZERO) == 0);
     }
     
     @Test
@@ -250,7 +267,7 @@ public class CustomerTest {
     	a.deposit(75);
     	oscar.openAccount(a);
     	
-    	assertTrue(oscar.totalAccountHoldings().compareTo(new BigDecimal("1085")) == 0);
+    	assertTrue(oscar.getTotalAccountHoldings().compareTo(new BigDecimal("1085")) == 0);
     }
     
     @Test
