@@ -17,7 +17,7 @@ public class Bank {
 
     private String format(int number) {
         String output;
-        if (number==1){
+        if (number==1) {
             output = String.format("%1$s %2$s", Integer.toString(number), "account");
         } else {
             output = String.format("%1$s %2$s", Integer.toString(number), "accounts");
