@@ -1,3 +1,7 @@
+# Used initialy to visualise issues with build.
+# To visualize can paste into online tool
+# https://dreampuf.github.io/GraphvizOnline/
+
 digraph g{
     #Boilerplate ULM settings
     fontname = "Bitstream Vera Sans"
