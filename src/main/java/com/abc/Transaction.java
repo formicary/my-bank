@@ -6,6 +6,12 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Currency;
 
+/**
+ * Class representing a transaction of funds.
+ * 
+ * @author Christopher J. Smith
+ *
+ */
 public class Transaction {
 	// Constants for value precision
 	private static final int DECIMAL_PLACES = 4;
@@ -159,7 +165,7 @@ public class Transaction {
 	/**
 	 * The toString method but has the amount in exact representation.
 	 * 
-	 * @return
+	 * @return Returns a string representation of a transaction with exact fund amounts.
 	 */
 	public String toStringExact() {
 		return ("Transaction of " + CURRENCY_SYMBOL + getExactAmount() + " on " + TRANSACTION_DATE);

@@ -22,44 +22,44 @@ import java.util.concurrent.TimeUnit;
  */
 public class InterestSchemeTest {
 
-	@Test
 	/**
 	 * Test factory method selects checking account.
 	 */
+	@Test
 	public void factoryTestChecking() {
 		assertTrue(InterestSchemeFactory.getScheme(Account.AccountType.CHECKING) instanceof CheckingAccountInterest);
 	}
 
-	@Test
 	/**
 	 * Test factory method selects savings account.
 	 */
+	@Test
 	public void factoryTestSaving() {
 		assertTrue(InterestSchemeFactory.getScheme(Account.AccountType.SAVINGS) instanceof SavingsAccountInterest);
 	}
 
-	@Test
 	/**
 	 * Test factory method selects maxi savings account.
 	 */
+	@Test
 	public void factoryTestMaxi() {
 		assertTrue(InterestSchemeFactory
 				.getScheme(Account.AccountType.MAXI_SAVINGS) instanceof MaxiSavingsAccountInterest);
 	}
 
-	@Test
 	/**
 	 * Test checking account interest scheme is singleton.
 	 */
+	@Test
 	public void InterestCheckingSinglton() {
 		CheckingAccountInterest i = CheckingAccountInterest.getInstance();
 		assertSame(i, CheckingAccountInterest.getInstance());
 	}
 
-	@Test
 	/**
 	 * Test checking account calculates interest correctly.
 	 */
+	@Test
 	public void InterestChecking() {
 		ArrayList<Transaction> a = new ArrayList<>();
 		a.add(new Transaction(8888));
@@ -69,19 +69,19 @@ public class InterestSchemeTest {
 		assertTrue(CheckingAccountInterest.getInstance().getInterest(a).compareTo(new BigDecimal("9.151")) == 0);
 	}
 
-	@Test
 	/**
 	 * Test savings account interest scheme is singleton.
 	 */
+	@Test
 	public void InterestSavingsSingleton() {
 		SavingsAccountInterest i = SavingsAccountInterest.getInstance();
 		assertSame(i, SavingsAccountInterest.getInstance());
 	}
 
-	@Test
 	/**
 	 * Test savings account calculates interest correctly.
 	 */
+	@Test
 	public void InterestSavings() {
 		ArrayList<Transaction> a = new ArrayList<>();
 		a.add(new Transaction(33));
@@ -91,10 +91,10 @@ public class InterestSchemeTest {
 		assertTrue(SavingsAccountInterest.getInstance().getInterest(a).compareTo(new BigDecimal("0.72")) == 0);
 	}
 
-	@Test
 	/**
 	 * Test savings account calculates interest correctly above threshold.
 	 */
+	@Test
 	public void InterestSavingsThreshold() {
 		ArrayList<Transaction> a = new ArrayList<>();
 		a.add(new Transaction(2587));
@@ -104,19 +104,19 @@ public class InterestSchemeTest {
 		assertTrue(SavingsAccountInterest.getInstance().getInterest(a).compareTo(new BigDecimal("7.074")) == 0);
 	}
 
-	@Test
 	/**
 	 * Test maxi savings account interest scheme is singleton.
 	 */
+	@Test
 	public void InterestMaxiSavingsSingleton() {
 		MaxiSavingsAccountInterest i = MaxiSavingsAccountInterest.getInstance();
 		assertSame(i, MaxiSavingsAccountInterest.getInstance());
 	}
 
-	@Test
 	/**
 	 * Test maxi savings account calculates interest correctly.
 	 */
+	@Test
 	public void InterestMaxiSavings() {
 		ArrayList<Transaction> a = new ArrayList<>();
 		a.add(new Transaction(89));
@@ -126,11 +126,11 @@ public class InterestSchemeTest {
 		assertTrue(MaxiSavingsAccountInterest.getInstance().getInterest(a).compareTo(new BigDecimal("16.9")) == 0);
 	}
 
-	@Test
 	/**
 	 * Test maxi savings account calculates interest correctly above first
 	 * threshold.
 	 */
+	@Test
 	public void InterestMaxiSavingsThreshold1() {
 		ArrayList<Transaction> a = new ArrayList<>();
 		a.add(new Transaction(56));
@@ -140,11 +140,11 @@ public class InterestSchemeTest {
 		assertTrue(MaxiSavingsAccountInterest.getInstance().getInterest(a).compareTo(new BigDecimal("41.95")) == 0);
 	}
 
-	@Test
 	/**
 	 * Test maxi savings account calculates interest correctly above second
 	 * threshold.
 	 */
+	@Test
 	public void InterestMaxiSavingsThreshold2() {
 		ArrayList<Transaction> a = new ArrayList<>();
 		a.add(new Transaction(1257));
@@ -154,11 +154,11 @@ public class InterestSchemeTest {
 		assertTrue(MaxiSavingsAccountInterest.getInstance().getInterest(a).compareTo(new BigDecimal("1683.5")) == 0);
 	}
 
-	@Test
 	/**
 	 * Test maxi savings account calculates interest correctly when penalty is
 	 * applied.
 	 */
+	@Test
 	public void InterestMaxiSavingsPenalty() {
 		ArrayList<Transaction> a = new ArrayList<>();
 		a.add(new Transaction(89));

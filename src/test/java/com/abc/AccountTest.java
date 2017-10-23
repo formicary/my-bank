@@ -18,10 +18,11 @@ import org.junit.Test;
  */
 public class AccountTest {
 
-	@Test
+	
 	/**
 	 * Test creation of an account, check if variable set properly.
 	 */
+	@Test
 	public void accountCreation() {
 		Account am = new Account(Account.AccountType.MAXI_SAVINGS);
 		Account as = new Account(Account.AccountType.SAVINGS);
@@ -31,10 +32,10 @@ public class AccountTest {
 				&& ac.getAccountType() == Account.AccountType.CHECKING);
 	}
 
-	@Test
 	/**
 	 * Test deposition into a account.
 	 */
+	@Test
 	public void deposit() {
 		Account ac = new Account(Account.AccountType.CHECKING);
 		ac.deposit(10.1);
@@ -43,10 +44,10 @@ public class AccountTest {
 		assertEquals(3, ac.getNumberTransactions());
 	}
 
-	@Test
 	/**
 	 * Test withdrawing from an account.
 	 */
+	@Test
 	public void withdraw() {
 		Account ac = new Account(Account.AccountType.CHECKING);
 		ac.withdraw(32.6);
@@ -57,10 +58,10 @@ public class AccountTest {
 		assertEquals(5, ac.getNumberTransactions());
 	}
 
-	@Test
 	/**
 	 * Test calculating annual interest for an account.
 	 */
+	@Test
 	public void interest() {
 		Account am = new Account(Account.AccountType.MAXI_SAVINGS);
 		am.deposit(10000);
@@ -69,10 +70,10 @@ public class AccountTest {
 		assertTrue(am.getAnnualInterest().compareTo(new BigDecimal("985.5")) == 0);
 	}
 
-	@Test
 	/**
 	 * Test calculating daily interest for an account.
 	 */
+	@Test
 	public void interestDaily() {
 		Account am = new Account(Account.AccountType.MAXI_SAVINGS);
 		am.deposit(10000);
@@ -81,10 +82,10 @@ public class AccountTest {
 		assertTrue(am.getDailyInterest().compareTo(new BigDecimal("2.66085")) == 0);
 	}
 
-	@Test
 	/**
 	 * Test creating a clone list.
 	 */
+	@Test
 	public void listClone() {
 		Account am = new Account(Account.AccountType.MAXI_SAVINGS);
 		am.deposit(10000);
@@ -92,10 +93,10 @@ public class AccountTest {
 		assertSame(l.get(0), am.getTransactionIterator().next());
 	}
 
-	@Test
 	/**
 	 * Test clone is is a clone and not connected to account.
 	 */
+	@Test
 	public void listCloneConnected() {
 		Account am = new Account(Account.AccountType.MAXI_SAVINGS);
 		am.deposit(10000);
@@ -104,10 +105,10 @@ public class AccountTest {
 		assertNotEquals(l.size(), am.getNumberTransactions());
 	}
 
-	@Test
 	/**
 	 * Test iterator is provided and works as expected.
 	 */
+	@Test
 	public void transactionIterator() {
 		Account am = new Account(Account.AccountType.MAXI_SAVINGS);
 		am.deposit(10000);
@@ -123,10 +124,10 @@ public class AccountTest {
 		assertTrue(i.next().getAmount().compareTo(new BigDecimal("123456")) == 0);
 	}
 
-	@Test
 	/**
 	 * Test summing transactions of an account.
 	 */
+	@Test
 	public void sumTransactions() {
 		Account am = new Account(Account.AccountType.MAXI_SAVINGS);
 		am.deposit(9894);
@@ -137,10 +138,10 @@ public class AccountTest {
 		assertTrue(am.getTransactionsSum().compareTo(new BigDecimal("204263.58")) == 0);
 	}
 
-	@Test
 	/**
 	 * Test summing transactions of an account, with withdrawals present.
 	 */
+	@Test
 	public void sumTransactionsWithdrawals() {
 		Account am = new Account(Account.AccountType.MAXI_SAVINGS);
 		am.withdraw(9894);
@@ -151,11 +152,11 @@ public class AccountTest {
 		assertTrue(am.getTransactionsSum().compareTo(new BigDecimal("170703.58")) == 0);
 	}
 
-	@Test
 	/**
 	 * Test summing transactions of an account, with withdrawals present making
 	 * account negative.
 	 */
+	@Test
 	public void sumTransactionsWithdrawalsDebt() {
 		Account am = new Account(Account.AccountType.MAXI_SAVINGS);
 		am.withdraw(1000000);
@@ -163,10 +164,10 @@ public class AccountTest {
 		assertTrue(am.getTransactionsSum().compareTo(new BigDecimal("-1000064")) == 0);
 	}
 
-	@Test
 	/**
 	 * Testing transaction exists method.
 	 */
+	@Test
 	public void transactionsExist() {
 		Account am = new Account(Account.AccountType.MAXI_SAVINGS);
 		am.deposit(9894);
@@ -174,19 +175,19 @@ public class AccountTest {
 		assertEquals(am.transactionsExist(), true);
 	}
 
-	@Test
 	/**
 	 * Testing transaction exists for no transactions.
 	 */
+	@Test
 	public void transactionsExistFalse() {
 		Account am = new Account(Account.AccountType.MAXI_SAVINGS);
 		assertEquals(am.transactionsExist(), false);
 	}
 
-	@Test
 	/**
 	 * Testing account statements are produced correctly.
 	 */
+	@Test
 	public void statementTest() {
 		Account am = new Account(Account.AccountType.MAXI_SAVINGS);
 		am.withdraw(9894);
@@ -205,10 +206,10 @@ public class AccountTest {
 		assertEquals(expected, am.getStatement());
 	}
 
-	@Test
 	/**
 	 * Tests the toString method.
 	 */
+	@Test
 	public void stringCreation() {
 		Account ac = new Account(Account.AccountType.CHECKING);
 		ac.deposit(10.1);

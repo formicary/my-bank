@@ -14,19 +14,19 @@ import java.util.Date;
  */
 public class DateProviderTest {
 
-	@Test
 	/**
 	 * Tests that this is a singleton class
 	 */
+	@Test
 	public void singletonTest() {
 		DateProvider instance = DateProvider.getInstance();
 		assertSame(instance, DateProvider.getInstance());
 	}
 
-	@Test
 	/**
 	 * Check that a valid date is returned each call
 	 */
+	@Test
 	public void validDate() {
 		Date d1 = DateProvider.getInstance().now();
 

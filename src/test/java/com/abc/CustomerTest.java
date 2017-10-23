@@ -10,12 +10,18 @@ import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * Test cases for testing the customer class
+ * 
+ * @author CJSm
+ *
+ */
 public class CustomerTest {
 
-	@Test
 	/**
 	 * Test the creation of a customer statement.
 	 */
+	@Test
 	public void testStatement() {
 
 		Account checkingAccount = new Account(Account.AccountType.CHECKING);
@@ -40,29 +46,29 @@ public class CustomerTest {
 						, henry.getStatement());
 	}
 
-	@Test
 	/**
 	 * Test creating a customer with a single account.
 	 */
+	@Test
 	public void testOneAccount() {
 		Customer oscar = new Customer("Oscar").openAccount(new Account(Account.AccountType.SAVINGS));
 		assertEquals(1, oscar.getNumberOfAccounts());
 	}
 
-	@Test
 	/**
 	 * Test creating a customer with two accounts.
 	 */
+	@Test
 	public void testTwoAccount() {
 		Customer oscar = new Customer("Oscar").openAccount(new Account(Account.AccountType.SAVINGS));
 		oscar.openAccount(new Account(Account.AccountType.CHECKING));
 		assertEquals(2, oscar.getNumberOfAccounts());
 	}
 
-	@Test
 	/**
 	 * Test creating a customer with three accounts.
 	 */
+	@Test
 	public void testThreeAcounts() {
 		Customer oscar = new Customer("Oscar").openAccount(new Account(Account.AccountType.SAVINGS))
 				.openAccount(new Account(Account.AccountType.MAXI_SAVINGS))
@@ -70,28 +76,28 @@ public class CustomerTest {
 		assertEquals(3, oscar.getNumberOfAccounts());
 	}
 
-	@Test
 	/**
 	 * Test name is set properly on construction.
 	 */
+	@Test
 	public void name() {
 		assertEquals("Bob", new Customer("Bob").getName());
 	}
 
-	@Test
 	/**
 	 * Test name can be changed after construction.
 	 */
+	@Test
 	public void nameChange() {
 		Customer c = new Customer("Bob");
 		c.setName("Steven");
 		assertEquals("Steven", c.getName());
 	}
 
-	@Test
 	/**
 	 * Test accounts are being added when opened.
 	 */
+	@Test
 	public void accountsStored() {
 		Customer oscar = new Customer("Oscar");
 		Account a1 = new Account(Account.AccountType.SAVINGS);
@@ -100,10 +106,10 @@ public class CustomerTest {
 		assertSame(a1, oscar.getAccountListClone().get(0));
 	}
 
-	@Test
 	/**
 	 * Test account interator acts as expected.
 	 */
+	@Test
 	public void accountsIterator() {
 		Customer oscar = new Customer("Oscar");
 		Account a1 = new Account(Account.AccountType.SAVINGS);
@@ -121,10 +127,10 @@ public class CustomerTest {
 		assertSame(a5, i.next());
 	}
 
-	@Test
 	/**
 	 * Test can create a clone list of accounts.
 	 */
+	@Test
 	public void listClone() {
 		Customer oscar = new Customer("Oscar");
 		Account a1 = new Account(Account.AccountType.SAVINGS);
@@ -132,10 +138,10 @@ public class CustomerTest {
 		assertSame(a1, oscar.getAccountListClone().get(0));
 	}
 
-	@Test
 	/**
 	 * Test that the clone list isn't connected to the original object.
 	 */
+	@Test
 	public void listCloneConncted() {
 		Customer oscar = new Customer("Oscar");
 		Account a1 = new Account(Account.AccountType.SAVINGS);
@@ -146,10 +152,10 @@ public class CustomerTest {
 		assertTrue(l.size() != oscar.getNumberOfAccounts());
 	}
 
-	@Test
 	/**
 	 * Test summing a customers total annual interest.
 	 */
+	@Test
 	public void totalInterstAnnual() {
 		Customer oscar = new Customer("Oscar");
 		Account a1 = new Account(Account.AccountType.SAVINGS);
@@ -166,10 +172,10 @@ public class CustomerTest {
 		assertTrue(oscar.getTotalAnnualInterestPayable().compareTo(new BigDecimal("3.17")) == 0);
 	}
 
-	@Test
 	/**
 	 * Test summing a customers total daily interest.
 	 */
+	@Test
 	public void totalInterstDaily() {
 		Customer oscar = new Customer("Oscar");
 		Account a1 = new Account(Account.AccountType.SAVINGS);
@@ -186,10 +192,10 @@ public class CustomerTest {
 		assertTrue(oscar.getTotalDailyInterestPayable().compareTo(new BigDecimal("0.008559")) == 0);
 	}
 
-	@Test
 	/**
 	 * Test the own account method when the customer does own the account.
 	 */
+	@Test
 	public void ownAccount() {
 		Customer oscar = new Customer("Oscar");
 		Account a1 = new Account(Account.AccountType.SAVINGS);
@@ -197,10 +203,10 @@ public class CustomerTest {
 		assertEquals(oscar.checkOwnAccounts(a1), true);
 	}
 
-	@Test
 	/**
 	 * Test the own account method when the customer does own the accounts.
 	 */
+	@Test
 	public void ownAccounts() {
 		Customer oscar = new Customer("Oscar");
 		Account a1 = new Account(Account.AccountType.SAVINGS);
@@ -212,20 +218,20 @@ public class CustomerTest {
 		assertEquals(oscar.checkOwnAccounts(a1, a2, a3, a4, a5), true);
 	}
 
-	@Test
 	/**
 	 * Test the own account method when the customer doesen't own the account.
 	 */
+	@Test
 	public void ownAccountFail() {
 		Customer oscar = new Customer("Oscar");
 		Account a1 = new Account(Account.AccountType.SAVINGS);
 		assertEquals(oscar.checkOwnAccounts(a1), false);
 	}
 
-	@Test
 	/**
 	 * Test the own account method when the customer doesen't own some accounts.
 	 */
+	@Test
 	public void ownAccountsFail() {
 		Customer oscar = new Customer("Oscar");
 		Account a1 = new Account(Account.AccountType.SAVINGS);
@@ -237,10 +243,10 @@ public class CustomerTest {
 		assertEquals(oscar.checkOwnAccounts(a1, a2, a3, a4, a5), false);
 	}
 
-	@Test
 	/**
 	 * Test transferring all funds between accounts.
 	 */
+	@Test
 	public void transferAccount() {
 		Customer oscar = new Customer("Oscar");
 		Account from = new Account(Account.AccountType.SAVINGS);
@@ -252,10 +258,10 @@ public class CustomerTest {
 				&& to.getTransactionsSum().compareTo(new BigDecimal("1000")) == 0);
 	}
 
-	@Test
 	/**
 	 * Test transferring some funds between accounts.
 	 */
+	@Test
 	public void transferAccountPartial() {
 		Customer oscar = new Customer("Oscar");
 		Account from = new Account(Account.AccountType.SAVINGS);
@@ -268,10 +274,10 @@ public class CustomerTest {
 				&& to.getTransactionsSum().compareTo(new BigDecimal("510")) == 0);
 	}
 
-	@Test
 	/**
 	 * Test transferring funds when don't have required funds.
 	 */
+	@Test
 	public void transferAccountFailAmount() {
 		Customer oscar = new Customer("Oscar");
 		Account from = new Account(Account.AccountType.SAVINGS);
@@ -283,10 +289,10 @@ public class CustomerTest {
 				&& to.getTransactionsSum().compareTo(BigDecimal.ZERO) == 0);
 	}
 
-	@Test
 	/**
 	 * Test transferring funds when don't own from account.
 	 */
+	@Test
 	public void transferAccountFailOwnTo() {
 		Customer oscar = new Customer("Oscar");
 		Account from = new Account(Account.AccountType.SAVINGS);
@@ -298,10 +304,10 @@ public class CustomerTest {
 				&& to.getTransactionsSum().compareTo(BigDecimal.ZERO) == 0);
 	}
 
-	@Test
 	/**
 	 * Test transferring funds when don't own to account.
 	 */
+	@Test
 	public void transferAccountFailOwnFrom() {
 		Customer oscar = new Customer("Oscar");
 		Account from = new Account(Account.AccountType.SAVINGS);
@@ -313,10 +319,10 @@ public class CustomerTest {
 				&& to.getTransactionsSum().compareTo(BigDecimal.ZERO) == 0);
 	}
 
-	@Test
 	/**
 	 * Test calculating all accounts holdings.
 	 */
+	@Test
 	public void accountHoldings() {
 		Customer oscar = new Customer("Oscar");
 		Account a = new Account(Account.AccountType.CHECKING);
@@ -330,10 +336,10 @@ public class CustomerTest {
 		assertTrue(oscar.getTotalAccountHoldings().compareTo(new BigDecimal("1085")) == 0);
 	}
 
-	@Test
 	/**
 	 * Test toString method.
 	 */
+	@Test
 	public void stringCreation() {
 		Customer oscar = new Customer("Oscar");
 		Account a = new Account(Account.AccountType.CHECKING);
