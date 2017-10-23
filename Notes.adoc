@@ -20,13 +20,10 @@ by {Author}
 . *Used StringBuilders where needed* - The use of StringBuilder reduces the memory usage when creating strings with many appends.
 
 == Added Features
-<<<<<<< HEAD
 . *Customer account transfers* - Customers can transfer funds among their own accounts, as long as they have the funds to do so.
 . *Maxi-Saving withdraw penalty* - The interest rate for maxi-saving accounts is dropped to a base 0.1%, if a withdrawal has occurred in the past 10 days.
 . *Interest can be calculated daily* - Interest to be given to an account can be calculated compound daily.
 
 == Notes
 . Developed on JDK1.8.0_151
-=======
-. *Example* - imitarentur in firmissimum magna nescius de noster distinguantur iudicem praesentibus
->>>>>>> f754b58e30c0a447d3b605ffc93984f205eebd95
+
