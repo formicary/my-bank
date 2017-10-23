@@ -84,7 +84,7 @@ public class Account {
                 }
             case MAXI_SAVINGS:
                 if (daysSinceLastWithdrawal() > 10) {
-                    return roundedAmount.multiply(BigDecimal.valueOf(0.05)).doubleValue();
+                    return roundedAmount.multiply(BigDecimal.valueOf(0.05)).multiply(BigDecimal.valueOf(daysSinceLastWithdrawal()-10)).doubleValue();
                 }
                 else {
                     return roundedAmount.multiply(BigDecimal.valueOf(0.001)).doubleValue();
