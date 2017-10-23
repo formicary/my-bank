@@ -1,0 +1,37 @@
+= Accenture - Technical Test
+:Author: Christopher J. Smith
+:Email: Christopher@chrismith.org.uk
+:Year: 2017
+:Description: This is a document for notes related to my solution to Accenture's Technical test.
+
+by {Author}
+
+== Assumptions
+. *Currency Precision* - I have assumed money only needs to be accurate to two decimal places of pence/cents(eg 0.01p).
+. *Customer only allowed to transfer between their accounts* - Requirements don't mention customers being allowed to transfer to other customers, so I avoided allowing such.
+. *Rounding is always down* - Assumed the system would be designed to benefit the bank so always rounded down calculations.
+
+== Changes To Original Files
+. *Changed AccountType to enum* - This is less error prone than having ints passed around as sending an invalid type is more difficult.
+. *Stored account holdings in Account* - To avoid having to calculate account holding every time it's needed
+. *Changed data type for money to BigDecimal* - Calculations with doubles are too inaccurate for use with money. BigDecimal allows very large values to be stored useful for storing fractional money preciously. Also is more accurate when making calculations. There is more overhead to BigDecimal calculation and storage, however I feel the accuracy is worth it when talking about money.
+. *Fixed various Thread unsafe operations* - It would make sense that a system like this is likely to be used concurrently by multiple systems, so needs to be thread safe to do so. Only initial basic steps were made would have to do a lot more design and verifying to ensure system is thread safe.
+. *Fixed incorrect naming* - There were some cases of not following Java naming conventions, primarily with final variables.
+. *Fixed cases where encapsulation was broken* - Was possible in places to access member variables of some objects directly. This is bad practise and makes it difficult to iterate on the class in the future.
+. *Used StringBuilders where needed* - The use of StringBuilder reduces the memory usage when creating strings with many appends.
+. *Renamed some methods* - I felt some methods names didn't really represent what they were doing so renamed them.
+
+== Added Features
+. *Customer account transfers* - Customers can transfer funds among their own accounts, as long as they have the funds to do so.
+. *Maxi-Saving withdraw penalty* - The interest rate for maxi-saving accounts is dropped to a base 0.1%, if a withdrawal has occurred in the past 10 days.
+. *Interest can be calculated daily* - Interest to be given to an account can be calculated compound daily.
+
+== Notes
+. Developed on JDK1.8.0_151
+. Was split on whether or not to split accounts into different objects, decided against in the end as only interest differs between accounts. However it may be best to make multiple account classes if there is added functionality to the accounts.
+. Was undecided on if you wanted a system to intereface and use the classes. Decided against as was mentioned no GUI should be used, so assumed no terminal based system either.
+. The transaction system seems like it would fail to scale well. A separate log and holding system may be better that verifies periodically.
+. The InterestSchemes could probably be designed better to be more universal and not rely on so many constants. You could have a generic multi-threshold scheme then build off of that.
+. Testing I would describe as middling, I feel I covered most positive states for the system. However I could probably made more negative states for what I expect to happen if something is going wrong, like passing nulls.
+. Overall a very interesting and fun little task I thank you for your consideration and hope to keep in contact.
+
