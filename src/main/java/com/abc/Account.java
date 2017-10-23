@@ -20,7 +20,7 @@ public class Account {
 
     protected void deposit(double amount) {
         BigDecimal d = BigDecimal.valueOf(amount);
-        BigDecimal exactAmount.setScale(2, RoundingMode.HALF_EVEN);
+        BigDecimal exactAmount.setScale(2, RoundingMode.DOWN);
         if (amount <= 0.00) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
@@ -30,7 +30,7 @@ public class Account {
 
     protected void withdraw(double amount) {
         BigDecimal d = BigDecimal.ZERO.subtract(BigDecimal.valueOf(amount));
-        BigDecimal exactAmount.setScale(2, RoundingMode.HALF_EVEN);
+        BigDecimal exactAmount.setScale(2, RoundingMode.DOWN);
         if (amount <= 0.00) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
@@ -71,9 +71,6 @@ public class Account {
                 else {
                     return BigDecimal.ONE.add((roundedAmount.subtract(BigDecimal.valueOf(1000))).multiply(BigDecimal.valueOf(0.002).doubleValue();
                 }
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
             case MAXI_SAVINGS:
                 if (amount <= 1000) {
                     return roundedAmount.multiply(BigDecimal.valueOf(0.02)).doubleValue();
