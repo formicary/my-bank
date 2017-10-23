@@ -2,6 +2,7 @@ package com.abc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.math.RoundingMode;
 
 import static java.lang.Math.abs;
 
@@ -30,10 +31,14 @@ public class Customer {
 
     protected double totalInterestEarned() {
         double total = 0.00;
+        BigDecimal roundedTotal;
+        BigDecimal convertedTotal;
         for (Account a : accounts) {
             total += a.interestEarned();
         }
-        return total;
+        convertedTotal = BigDecimal.valueOf(total);
+        roundedTotal = convertedTotal.setScale(2, RoundingMode.HALF_EVEN);
+        return roundedTotal.doubleValue();
     }
      
     private String toDollars(double d) {
@@ -43,12 +48,16 @@ public class Customer {
     protected String getStatement() {
         String statement;
         double total = 0.00;
-        statement = String.format("Statement for %1$s \n", name);
+        BigDecimal roundedTotal;
+        BigDecimal convertedTotal;
+        statement = String.format("Statement for %1$s%n", name);
         for (Account a : accounts) {
-            statement += String.format("\n %1$s \n", statementForAccount(a));
+            statement += String.format("%n%1$s%n", statementForAccount(a));
             total += a.sumTransactions();
         }
-        statement += String.format("\nTotal In All Accounts %1$s", toDollars(total));
+        convertedTotal = BigDecimal.valueOf(total);
+        roundedTotal = convertedTotal.setScale(2, RoundingMode.HALF_EVEN);
+        statement += String.format("%nTotal In All Accounts %1$s", toDollars(roundedTotal));
         return statement;
     }
 
@@ -70,9 +79,9 @@ public class Customer {
         }
         for (Transaction t : a.transactions) {
             if (t.amount < 0) {
-                s += String.format("  withdrawal %1$s\n", toDollars(t.amount));
+                s += String.format("  withdrawal %1$s%n", toDollars(t.amount));
             } else {
-                s += String.format("  deposit %1$s\n", toDollars(t.amount));
+                s += String.format("  deposit %1$s%n", toDollars(t.amount));
             }
             total += t.amount;
         }
