@@ -55,37 +55,37 @@ public class Account {
         }
     }
     
-    protected BigDecimal sumTransactions() {
+    protected double sumTransactions() {
        return checkIfTransactionsExist(true);
     }
 
-    protected BigDecimal interestEarned() {
+    protected double interestEarned() {
         double amount = sumTransactions();
         BigDecimal convertedAmount = BigDecimal.valueof(amount);
         BigDecimal roundedAmount = convertedAmount.setScale(2, RoundingMode.HALF_EVEN);
         switch(this.accountType) {
             case SAVINGS:
                 if (amount <= 1000) {
-                    return roundedAmount.multiply(BigDecimal.valueOf(0.001));
+                    return roundedAmount.multiply(BigDecimal.valueOf(0.001)).doubleValue();
                 }
                 else {
-                    return BigDecimal.ONE.add((roundedAmount.subtract(BigDecimal.valueOf(1000))).multiply(BigDecimal.valueOf(0.002);
+                    return BigDecimal.ONE.add((roundedAmount.subtract(BigDecimal.valueOf(1000))).multiply(BigDecimal.valueOf(0.002).doubleValue();
                 }
 //            case SUPER_SAVINGS:
 //                if (amount <= 4000)
 //                    return 20;
             case MAXI_SAVINGS:
                 if (amount <= 1000) {
-                    return roundedAmount.multiply(BigDecimal.valueOf(0.02));
+                    return roundedAmount.multiply(BigDecimal.valueOf(0.02)).doubleValue();
                 }
                 else if (amount <= 2000) {
-                    return BigDecimal.valueOf(20).add(roundedAmount.subtract(BigDecimal.valueOf(1000))).multiply(BigDecimal.valueOf(0.05));
+                    return BigDecimal.valueOf(20).add(roundedAmount.subtract(BigDecimal.valueOf(1000))).multiply(BigDecimal.valueOf(0.05)).doubleValue();
                 }
                 else {
-                    return BigDecimal.valueOf(70).add(roundedAmount.subtract(BigDecimal.valueOf(2000))).multiply(BigDecimal.valueOf(0.1));
+                    return BigDecimal.valueOf(70).add(roundedAmount.subtract(BigDecimal.valueOf(2000))).multiply(BigDecimal.valueOf(0.1)).doubleValue();
                 }
             default:
-                return roundedAmount.multiply(BigDecimal.valueOf(0.001));
+                return roundedAmount.multiply(BigDecimal.valueOf(0.001)).doubleValue();
         }
     }
 }
