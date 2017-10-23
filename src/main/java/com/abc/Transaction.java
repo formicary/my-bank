@@ -7,7 +7,7 @@ public class Transaction {
     protected final double amount;
     private Date transactionDate;
 
-    protected Transaction (double amount) {
+    protected Transaction(double amount) {
         this.amount = amount;
         this.transactionDate = DateProvider.getInstance().now();
     }
