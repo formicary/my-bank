@@ -58,7 +58,7 @@ public class Account {
                     return exactAmount.multiply(BigDecimal.valueOf(0.001);
                 }
                 else {
-                    return BigDecimal.ONE.add((exactAmount.minus(BigDecimal.valueOf(1000))).multiply(BigDecimal.valueOf(0.002);
+                    return BigDecimal.ONE.add((exactAmount.subtract(BigDecimal.valueOf(1000))).multiply(BigDecimal.valueOf(0.002);
                 }
 //            case SUPER_SAVINGS:
 //                if (amount <= 4000)
@@ -68,10 +68,10 @@ public class Account {
                     return exactAmount.multiply(BigDecimal.valueOf(0.02));
                 }
                 else if (exactAmount <= 2000) {
-                    return BigDecimal.valueOf(20).add(exactAmount.minus(BigDecimal.valueOf(1000))).multiply(BigDecimal.valueOf(0.05));
+                    return BigDecimal.valueOf(20).add(exactAmount.subtract(BigDecimal.valueOf(1000))).multiply(BigDecimal.valueOf(0.05));
                 }
                 else {
-                    return BigDecimal.valueOf(70).add(exactAmount.minusBigDecimal.valueOf(2000)).multiply(BigDecimal.valueOf(0.1));
+                    return BigDecimal.valueOf(70).add(exactAmount.subtract(BigDecimal.valueOf(2000))).multiply(BigDecimal.valueOf(0.1));
                 }
             default:
                 return exactAmount.multiply(BigDecimal.valueOf(0.001));
