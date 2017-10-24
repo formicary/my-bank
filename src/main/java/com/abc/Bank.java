@@ -1,13 +1,26 @@
 package com.abc;
 
+import jdk.nashorn.internal.codegen.CompilerConstants;
+
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.math.BigDecimal;
 
 public class Bank {
     private List<Customer> customers;
 
+    private Calendar now;
+
     public Bank() {
+        this.customers = new ArrayList<Customer>();
+        this.now = Calendar.getInstance();
+        this.now.setTimeInMillis(System.currentTimeMillis());
+    }
+
+    public Bank(Calendar date){
         customers = new ArrayList<Customer>();
+        now = date;
     }
 
     public void addCustomer(Customer customer) {
@@ -27,10 +40,10 @@ public class Bank {
         return number + " " + (number == 1 ? word : word + "s");
     }
 
-    public double totalInterestPaid() {
-        double total = 0;
+    public BigDecimal totalInterestPaid(boolean realtime) {
+        BigDecimal total = BigDecimal.ZERO;
         for(Customer c: customers)
-            total += c.totalInterestEarned();
+            total = total.add(c.totalInterestEarned(realtime));
         return total;
     }
 
@@ -41,6 +54,13 @@ public class Bank {
         } catch (Exception e){
             e.printStackTrace();
             return "Error";
+        }
+    }
+
+    public void setDate(Calendar date){
+        this.now = date;
+        for (Customer c: customers){
+            c.setDate(date);
         }
     }
 }
