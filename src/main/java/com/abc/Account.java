@@ -1,6 +1,7 @@
 package com.abc;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -19,22 +20,22 @@ public class Account {
     }
 
     protected void deposit(double amount) {
-        BigDecimal d = BigDecimal.valueOf(amount);
-        BigDecimal exactAmount.setScale(2, RoundingMode.DOWN);
+        BigDecimal convertedAmount = BigDecimal.valueOf(amount);
+        BigDecimal roundedAmount = convertedAmount.setScale(2, RoundingMode.DOWN);
         if (amount <= 0.00) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
-            transactions.add(new Transaction(exactAmount.doubleValue()));
+            transactions.add(new Transaction(roundedAmount.doubleValue()));
         }
     }
 
     protected void withdraw(double amount) {
-        BigDecimal d = BigDecimal.ZERO.subtract(BigDecimal.valueOf(amount));
-        BigDecimal exactAmount.setScale(2, RoundingMode.DOWN);
+        BigDecimal convertedAmount = BigDecimal.ZERO.subtract(BigDecimal.valueOf(amount));
+        BigDecimal roundedAmount = convertedAmount.setScale(2, RoundingMode.DOWN);
         if (amount <= 0.00) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
-            transactions.add(new Transaction(exactAmount.doubleValue()));
+            transactions.add(new Transaction(roundedAmount.doubleValue()));
         }
     }
     
@@ -44,13 +45,14 @@ public class Account {
     
     private double checkIfTransactionsExist(boolean checkAll) {
         double total = 0.00;
+        BigDecimal convertedTotal;
         BigDecimal roundedTotal;
         if (checkAll) {
             for (Transaction t: transactions) {
                 total+=t.amount;
             }
         convertedTotal = BigDecimal.valueOf(total);
-        BigDecimal roundedTotal = convertedTotal.setScale(2, RoundingMode.HALF_EVEN);
+        roundedTotal = convertedTotal.setScale(2, RoundingMode.HALF_EVEN);
         return roundedTotal.doubleValue();
         }
     }
@@ -72,7 +74,7 @@ public class Account {
 
     protected double interestEarned() {
         double amount = sumTransactions();
-        BigDecimal convertedAmount = BigDecimal.valueof(amount);
+        BigDecimal convertedAmount = BigDecimal.valueOf(amount);
         BigDecimal roundedAmount = convertedAmount.setScale(2, RoundingMode.HALF_EVEN);
         switch(this.accountType) {
             case SAVINGS:
@@ -80,7 +82,7 @@ public class Account {
                     return roundedAmount.multiply(BigDecimal.valueOf(0.001)).doubleValue();
                 }
                 else {
-                    return BigDecimal.ONE.add((roundedAmount.subtract(BigDecimal.valueOf(1000))).multiply(BigDecimal.valueOf(0.002).doubleValue();
+                    return BigDecimal.ONE.add(roundedAmount.subtract(BigDecimal.valueOf(1000))).multiply(BigDecimal.valueOf(0.002)).doubleValue();
                 }
             case MAXI_SAVINGS:
                 if (daysSinceLastWithdrawal() > 10) {
