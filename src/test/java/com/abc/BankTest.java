@@ -40,7 +40,6 @@ public class BankTest {
         Account checkingAccount = new Account(Account.CHECKING);
         Customer bill = new Customer("Bill").openAccount(checkingAccount);
         bank.addCustomer(bill);
-
         checkingAccount.deposit(100.0);
 
         assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
@@ -48,7 +47,6 @@ public class BankTest {
         assertNotNull("should not be null", checkingAccount);
         assertNotNull("should not be null", bank);
         assertNotNull("should not be null", bill);
-        
     }
 
     @Test
@@ -56,9 +54,8 @@ public class BankTest {
         Bank bank = new Bank();
         Account checkingAccount = new Account(Account.SAVINGS);
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
-
         checkingAccount.deposit(1500.0);
-
+        
         assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
@@ -67,10 +64,8 @@ public class BankTest {
         Bank bank = new Bank();
         Account checkingAccount = new Account(Account.MAXI_SAVINGS);
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
-
         checkingAccount.deposit(3000.0);
 
         assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
-
 }
