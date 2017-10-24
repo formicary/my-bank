@@ -54,8 +54,8 @@ public class Customer {
     protected String getStatement() {
         String statement;
         double total = 0.00;
-        BigDecimal roundedTotal;
         BigDecimal convertedTotal;
+        BigDecimal roundedTotal;
         statement = String.format("Statement for %1$s%n", name);
         for (Account a : accounts) {
             statement += String.format("%n%1$s%n", statementForAccount(a));
@@ -69,6 +69,8 @@ public class Customer {
 
     private String statementForAccount(Account a) {
         double total = 0.00;
+        BigDecimal convertedTotal;
+        BigDecimal roundedTotal;
         String s;
         switch (a.getAccountType()) {
             case Account.CHECKING:
@@ -91,6 +93,8 @@ public class Customer {
             }
             total += t.amount;
         }
+        roundedTotal = convertedTotal.setScale(2, RoundingMode.HALF_EVEN);
+        statement += String.format("%nTotal In All Accounts %1$s", toDollars(roundedTotal.doubleValue()));
         s += String.format("Total %1$s", toDollars(total));
         return s;
     }
