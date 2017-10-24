@@ -50,11 +50,11 @@ public class Account {
         if (checkAll) {
             for (Transaction t: transactions) {
                 total+=t.amount;
-            }
+            }       
+        }
         convertedTotal = BigDecimal.valueOf(total);
         roundedTotal = convertedTotal.setScale(2, RoundingMode.HALF_EVEN);
         return roundedTotal.doubleValue();
-        }
     }
     
     protected double sumTransactions() {
@@ -62,14 +62,20 @@ public class Account {
     }
     
     private int daysSinceLastWithdrawal() {
-        Date now = DateProvider.getInstance.now();
-        Date last;
+        Date now = DateProvider.getInstance().now();
+        Date last = now;
         for (int i = transactions.size()-1; i>=0; i--) {
             if (transactions.get(i).amount>0) {
                 last = transactions.get(i).transactionDate;
-            }
+                break;
+            } 
         }
+        if (last!=now) {
         return (int)((now.getTime() - last.getTime()) / (1000 * 60 * 60 * 24));
+        }
+        else {
+        	return 0;
+        }       
     }
 
     protected double interestEarned() {
