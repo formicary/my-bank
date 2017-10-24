@@ -3,6 +3,8 @@ package com.abc;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 
 public class BankTest {
     private static final double DOUBLE_DELTA = 1e-15;
@@ -16,6 +18,21 @@ public class BankTest {
 
         assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
     }
+    
+    @Test
+    public void getFirstCustomer() {
+        Bank bank = new Bank();
+        Bank emptyBank = new Bank();
+        Customer john = new Customer("John");
+        Customer sarah = new Customer("Sarah");
+        john.openAccount(new Account(Account.CHECKING));
+        bank.addCustomer(john);
+
+        assertEquals(john.getName(), bank.getFirstCustomer());
+        bank.addCustomer(john);
+        assertEquals(john.getName(), bank.getFirstCustomer());
+        assertEquals("No customer found", emptyBank.getFirstCustomer());
+    }
 
     @Test
     public void checkingAccount() {
@@ -27,6 +44,11 @@ public class BankTest {
         checkingAccount.deposit(100.0);
 
         assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertFalse(0.2 == bank.totalInterestPaid());
+        assertNotNull("should not be null", checkingAccount);
+        assertNotNull("should not be null", bank);
+        assertNotNull("should not be null", bill);
+        
     }
 
     @Test
