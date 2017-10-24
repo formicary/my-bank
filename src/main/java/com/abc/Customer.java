@@ -2,7 +2,8 @@ package com.abc;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.math.RoundingMode;
+import java.math.RoundingMode;
+import java.math.BigDecimal;
 
 import static java.lang.Math.abs;
 
@@ -62,7 +63,7 @@ public class Customer {
         }
         convertedTotal = BigDecimal.valueOf(total);
         roundedTotal = convertedTotal.setScale(2, RoundingMode.HALF_EVEN);
-        statement += String.format("%nTotal In All Accounts %1$s", toDollars(roundedTotal));
+        statement += String.format("%nTotal In All Accounts %1$s", toDollars(roundedTotal.doubleValue()));
         return statement;
     }
 
