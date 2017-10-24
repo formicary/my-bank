@@ -14,7 +14,7 @@ public class BankTest {
 
 
     @Test
-    public void customerSummary() {
+    protected void customerSummary() {
         Bank bank = new Bank();
         Customer john = new Customer("John");
         john.openAccount(new Account(Account.CHECKING));
@@ -24,7 +24,7 @@ public class BankTest {
     }
     
     @Test
-    public void getFirstCustomer() {
+    protected void getFirstCustomer() {
         Bank bank = new Bank();
         Bank emptyBank = new Bank();
         Customer john = new Customer("John");
@@ -39,7 +39,7 @@ public class BankTest {
     }
 
     @Test
-    public void checkingAccount() {
+    protected void checkingAccount() {
         Bank bank = new Bank();
         Account checkingAccount = new Account(Account.CHECKING);
         Customer bill = new Customer("Bill").openAccount(checkingAccount);
@@ -56,7 +56,7 @@ public class BankTest {
     }
 
     @Test
-    public void savings_account() {
+    protected void savings_account() {
         Bank bank = new Bank();
         Account checkingAccount = new Account(Account.SAVINGS);
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
@@ -68,7 +68,7 @@ public class BankTest {
     }
 
     @Test
-    public void maxi_savings_account() {
+    protected void maxi_savings_account() {
         Bank bank = new Bank();
         Account checkingAccount = new Account(Account.MAXI_SAVINGS);
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
