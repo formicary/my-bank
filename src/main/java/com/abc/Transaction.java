@@ -1,16 +1,23 @@
 package com.abc;
 
 import java.util.Calendar;
-import java.util.Date;
+import java.math.BigDecimal;
 
 public class Transaction {
-    public final double amount;
+    public final BigDecimal amount;
+	public final boolean interest;
 
-    private Date transactionDate;
-
-    public Transaction(double amount) {
+    private Calendar transactionDate;
+    
+    public Transaction(BigDecimal amount, boolean interest, Calendar date) {
         this.amount = amount;
-        this.transactionDate = DateProvider.getInstance().now();
+		this.interest = interest;
+        this.transactionDate = (Calendar) date.clone();
     }
+
+
+	public Calendar getDate(){
+		return this.transactionDate;
+	}
 
 }

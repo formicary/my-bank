@@ -3,6 +3,9 @@ package com.abc;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.math.BigDecimal;
+import java.util.Calendar;
+
 import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
@@ -15,43 +18,65 @@ public class CustomerTest {
 
         Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
 
-        checkingAccount.deposit(100.0);
-        savingsAccount.deposit(4000.0);
-        savingsAccount.withdraw(200.0);
+        checkingAccount.deposit(new BigDecimal(100.0),true);
+        savingsAccount.deposit(new BigDecimal(4000.0),true);
+        savingsAccount.withdraw(new BigDecimal(200.0),true);
 
         assertEquals("Statement for Henry\n" +
                 "\n" +
                 "Checking Account\n" +
-                "  deposit $100.00\n" +
+                "  deposit    $100.00\n" +
+                "  total interest $0.00\n" +
                 "Total $100.00\n" +
                 "\n" +
                 "Savings Account\n" +
-                "  deposit $4,000.00\n" +
+                "  deposit    $4,000.00\n" +
                 "  withdrawal $200.00\n" +
+                "  total interest $0.00\n" +
                 "Total $3,800.00\n" +
                 "\n" +
-                "Total In All Accounts $3,900.00", henry.getStatement());
+                "Total In All Accounts $3,900.00", henry.getStatement(true,true));
     }
 
     @Test
     public void testOneAccount(){
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
+        Account checkingAccount = new Account(Account.CHECKING);
+        Customer oscar = new Customer("Oscar");
+        oscar.openAccount(checkingAccount);
         assertEquals(1, oscar.getNumberOfAccounts());
+
+        checkingAccount.deposit(new BigDecimal(1000),true);
+
+        Calendar date = Calendar.getInstance();
+        date.setTimeInMillis(System.currentTimeMillis());
+        date.add(Calendar.YEAR,1);
+        oscar.setDate(date);
+
+        System.out.println(oscar.getStatement(false,true));
+        assertEquals("Statement for Oscar\n" +
+                "\n" +
+                "Checking Account\n" +
+                "  deposit    $1,000.00\n" +
+                "  total interest $1.00\n" +
+                "Total $1,001.00\n" +
+                "\n" +
+                "Total In All Accounts $1,001.00", oscar.getStatement(true,true));
     }
 
     @Test
     public void testTwoAccount(){
-        Customer oscar = new Customer("Oscar")
+        Customer bob = new Customer("Bob")
                 .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
-        assertEquals(2, oscar.getNumberOfAccounts());
+        bob.openAccount(new Account(Account.CHECKING));
+        assertEquals(2, bob.getNumberOfAccounts());
     }
 
-    @Ignore
+    @Test
     public void testThreeAcounts() {
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
-        assertEquals(3, oscar.getNumberOfAccounts());
+        Customer charlie = new Customer("Charlie");
+        charlie.openAccount(new Account(Account.SAVINGS));
+        charlie.openAccount(new Account(Account.CHECKING));
+        charlie.openAccount(new Account(Account.MAXI_SAVINGS));
+        assertEquals(3, charlie.getNumberOfAccounts());
     }
 }
