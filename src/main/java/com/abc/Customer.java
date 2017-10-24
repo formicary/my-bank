@@ -30,6 +30,7 @@ public class Customer {
         return accounts.size();
     }
 
+    
     protected double totalInterestEarned() {
         double total = 0.00;
         BigDecimal roundedTotal;
@@ -48,7 +49,7 @@ public class Customer {
     }
         
     private String toDollars(double d) {
-        return String.format("%1$.2f", abs(d));
+        return String.format("$%1$,.2f", abs(d));
     }
     
     protected String getStatement() {
@@ -71,31 +72,31 @@ public class Customer {
         double total = 0.00;
         BigDecimal convertedTotal;
         BigDecimal roundedTotal;
-        String s;
+        String statement;
         switch (a.getAccountType()) {
             case Account.CHECKING:
-                s = "Checking Account\n";
+                statement = "Checking Account\n";
                 break;
             case Account.SAVINGS:
-                s = "Savings Account\n";
+            		statement = "Savings Account\n";
                 break;
             case Account.MAXI_SAVINGS:
-                s = "Maxi Savings Account\n";
+            		statement = "Maxi Savings Account\n";
                 break;
             default:
                 throw new IllegalArgumentException("Invalid account type");
         }
         for (Transaction t : a.transactions) {
             if (t.amount < 0) {
-                s += String.format("  withdrawal %1$s%n", toDollars(t.amount));
+            		statement += String.format("  withdrawal %1$s%n", toDollars(t.amount));
             } else {
-                s += String.format("  deposit %1$s%n", toDollars(t.amount));
+            		statement += String.format("  deposit %1$s%n", toDollars(t.amount));
             }
             total += t.amount;
         }
+        convertedTotal = BigDecimal.valueOf(total);
         roundedTotal = convertedTotal.setScale(2, RoundingMode.HALF_EVEN);
-        statement += String.format("%nTotal In All Accounts %1$s", toDollars(roundedTotal.doubleValue()));
-        s += String.format("Total %1$s", toDollars(total));
-        return s;
+        statement += String.format("Total %1$s", toDollars(roundedTotal.doubleValue()));
+        return statement;
     }
 }
