@@ -69,14 +69,14 @@ public class Account {
     }
 
     public BigDecimal sumTransactions() {
-       return checkIfTransactionsExist(true);
-    }
-
-    private BigDecimal checkIfTransactionsExist(boolean checkAll) {
-        BigDecimal amount = BigDecimal.ZERO;
+       BigDecimal amount = BigDecimal.ZERO;
         for (Transaction t: transactions)
             amount = amount.add(t.amount);
         return amount;
+    }
+
+    private Boolean checkIfTransactionsExist() {
+        return !transactions.isEmpty();
     }
 
     public AccountType getAccountType() {
