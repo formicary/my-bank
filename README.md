@@ -3,20 +3,20 @@ Programming Test
 
 This is a dummy application to be used as part of a software development interview.
 
-instructions
+Instructions
 --------
 
-* Treat this code as if you owned this application, do whatever you feel is necessary to make this your own.
-* There are several deliberate design, code quality and test issues that should be identified and resolved.
-* Below is a list of the current features supported by the application; as well as some additional features that have been requested by the business owner.
+* Treat this code as if you owned this application, do whatever you feel is necessary to make this your own
+* There are several deliberate design, code quality and test issues that should be identified and resolved
+* Below is a list of the current features supported by the application; as well as some additional features that have been requested by the business owner
 * In order to work on this take a fork into your own GitHub area; make whatever changes you feel are necessary and when you are satisfied submit back via a pull request. See details on GitHub's [Fork & Pull](https://help.github.com/articles/using-pull-requests) model
-* Be sure to put your name in the pull request comment so your work can be easily identied.
-* The project uses maven to resolve dependencies however if you want to avoid maven configuration the only external JAR that's required is junit-4.11.
-* Refactor and add features (from the below list) as you see fit; there is no need to add all the features in order to "complete" the exercise. Keep in mind that code quality is the critical measure and there should be an obvious focus on testing.
-* You'll notice there is no database or UI; these are not needed - the exercise deliberately avoids these requirements.
-* REMEMBER: this is YOUR code, make any changes you feel are necessary.
-* You're welcome to spend as much time as you like.
-* The code will be a representation of your work, so it's important that all the code--new and pre-existing--is how you want your work to be seen.  Please make sure that you are happy with ALL the code.
+* Be sure to put your name in the pull request comment so your work can be easily identified
+* The project uses maven to resolve dependencies however if you want to avoid maven configuration the only external JAR that's required is junit-4.11
+* Refactor and add features (from the below list) as you see fit; there is no need to add all the features in order to "complete" the exercise. Keep in mind that code quality is the critical measure and there should be an obvious focus on testing
+* You'll notice there is no database or UI; these are not needed - the exercise deliberately avoids these requirements
+* REMEMBER: this is YOUR code, make any changes you feel are necessary
+* You're welcome to spend as much time as you like
+* The code will be a representation of your work, so it's important that all the code--new and pre-existing--is how you want your work to be seen.  Please make sure that you are happy with ALL the code
 
 abc-bank
 --------
