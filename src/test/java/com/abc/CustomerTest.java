@@ -1,5 +1,6 @@
 package com.abc;
 
+import java.math.BigDecimal;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -10,14 +11,14 @@ public class CustomerTest {
     @Test //Test customer statement generation
     public void testApp(){
 
-        Account checkingAccount = new Account(Account.CHECKING);
-        Account savingsAccount = new Account(Account.SAVINGS);
+        Account checkingAccount = new Account(Account.AccountType.CHECKING);
+        Account savingsAccount = new Account(Account.AccountType.SAVINGS);
 
         Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
 
-        checkingAccount.deposit(100.0);
-        savingsAccount.deposit(4000.0);
-        savingsAccount.withdraw(200.0);
+        checkingAccount.deposit(new BigDecimal(100));
+        savingsAccount.deposit(new BigDecimal(4000));
+        savingsAccount.withdraw(new BigDecimal(200));
 
         assertEquals("Statement for Henry\n" +
                 "\n" +
@@ -35,23 +36,23 @@ public class CustomerTest {
 
     @Test
     public void testOneAccount(){
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
+        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.AccountType.SAVINGS));
         assertEquals(1, oscar.getNumberOfAccounts());
     }
 
     @Test
     public void testTwoAccount(){
         Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
+                .openAccount(new Account(Account.AccountType.SAVINGS));
+        oscar.openAccount(new Account(Account.AccountType.CHECKING));
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
     @Ignore
     public void testThreeAcounts() {
         Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
+                .openAccount(new Account(Account.AccountType.SAVINGS));
+        oscar.openAccount(new Account(Account.AccountType.CHECKING));
         assertEquals(3, oscar.getNumberOfAccounts());
     }
 }
