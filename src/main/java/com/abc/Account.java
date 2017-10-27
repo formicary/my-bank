@@ -14,10 +14,12 @@ public class Account {
     
     private final AccountType accountType;
     public List<Transaction> transactions;
+    private BigDecimal sum;
 
     public Account(AccountType accountType) {
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
+        sum = BigDecimal.ZERO;
     }
 
     public void deposit(BigDecimal amount) {
@@ -25,6 +27,7 @@ public class Account {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
             transactions.add(new Transaction(amount));
+            sum = sum.add(amount);
         }
     }
 
@@ -33,6 +36,7 @@ public class Account {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
             transactions.add(new Transaction(amount.negate()));
+            sum = sum.add(amount.negate());
         }
     }
 
@@ -69,14 +73,11 @@ public class Account {
     }
 
     public BigDecimal sumTransactions() {
-       return checkIfTransactionsExist(true);
+       return sum;
     }
 
-    private BigDecimal checkIfTransactionsExist(boolean checkAll) {
-        BigDecimal amount = BigDecimal.ZERO;
-        for (Transaction t: transactions)
-            amount = amount.add(t.amount);
-        return amount;
+    private Boolean checkIfTransactionsExist() {
+        return !transactions.isEmpty();
     }
 
     public AccountType getAccountType() {

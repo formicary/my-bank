@@ -14,7 +14,9 @@ public class CustomerTest {
         Account checkingAccount = new Account(Account.AccountType.CHECKING);
         Account savingsAccount = new Account(Account.AccountType.SAVINGS);
 
-        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
+        Customer henry = new Customer("Henry");
+        henry.openAccount(checkingAccount);
+        henry.openAccount(savingsAccount);
 
         checkingAccount.deposit(new BigDecimal(100));
         savingsAccount.deposit(new BigDecimal(4000));
@@ -36,22 +38,23 @@ public class CustomerTest {
 
     @Test
     public void testOneAccount(){
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.AccountType.SAVINGS));
+        Customer oscar = new Customer("Oscar");
+        oscar.openAccount(new Account(Account.AccountType.SAVINGS));
         assertEquals(1, oscar.getNumberOfAccounts());
     }
 
     @Test
     public void testTwoAccount(){
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.AccountType.SAVINGS));
+        Customer oscar = new Customer("Oscar");
+        oscar.openAccount(new Account(Account.AccountType.SAVINGS));
         oscar.openAccount(new Account(Account.AccountType.CHECKING));
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
     @Ignore
     public void testThreeAcounts() {
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.AccountType.SAVINGS));
+        Customer oscar = new Customer("Oscar");
+        oscar.openAccount(new Account(Account.AccountType.SAVINGS));
         oscar.openAccount(new Account(Account.AccountType.CHECKING));
         assertEquals(3, oscar.getNumberOfAccounts());
     }

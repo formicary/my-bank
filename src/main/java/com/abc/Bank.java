@@ -16,10 +16,17 @@ public class Bank {
     }
 
     public String customerSummary() {
-        String summary = "Customer Summary";
-        for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-        return summary;
+        
+        StringBuilder summary = new StringBuilder();
+        summary.append("Customer Summary");
+        for (Customer c : customers) {
+            summary.append("\n - ");
+            summary.append(c.getName());
+            summary.append(" (");
+            summary.append(format(c.getNumberOfAccounts(), "account"));
+            summary.append(")");
+        }
+        return summary.toString();
     }
 
     //Make sure correct plural of word is created based on the number passed in:
@@ -36,12 +43,11 @@ public class Bank {
     }
 
     public String getFirstCustomer() {
-        try {
-            customers = null;
+        
+        if(customers.isEmpty()) {
+            return null;
+        } else {
             return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
         }
     }
 }
