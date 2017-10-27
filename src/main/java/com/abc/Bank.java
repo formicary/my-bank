@@ -1,5 +1,6 @@
 package com.abc;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,10 +28,10 @@ public class Bank {
         return number + " " + (number == 1 ? word : word + "s");
     }
 
-    public double totalInterestPaid() {
-        double total = 0;
+    public BigDecimal totalInterestPaid() {
+        BigDecimal total = BigDecimal.ZERO;
         for(Customer c: customers)
-            total += c.totalInterestEarned();
+            total = total.add(c.totalInterestEarned());
         return total;
     }
 

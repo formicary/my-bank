@@ -1,5 +1,6 @@
 package com.abc;
 
+import java.math.BigDecimal;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -15,9 +16,9 @@ public class CustomerTest {
 
         Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
 
-        checkingAccount.deposit(100.0);
-        savingsAccount.deposit(4000.0);
-        savingsAccount.withdraw(200.0);
+        checkingAccount.deposit(new BigDecimal(100));
+        savingsAccount.deposit(new BigDecimal(4000));
+        savingsAccount.withdraw(new BigDecimal(200));
 
         assertEquals("Statement for Henry\n" +
                 "\n" +
