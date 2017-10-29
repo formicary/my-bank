@@ -114,7 +114,7 @@ public class Account {
        return sum;
     }
 
-    private Boolean checkIfTransactionsExist() {
+    public Boolean checkIfTransactionsExist() {
         return !transactions.isEmpty();
     }
 
