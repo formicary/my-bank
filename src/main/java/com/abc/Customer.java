@@ -2,14 +2,12 @@ package com.abc;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.lang.Math.abs;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 public class Customer {
-    private String name;
-    private List<Account> accounts;
+    private final String name;
+    private final List<Account> accounts;
 
     public Customer(String name) {
         this.name = name;
