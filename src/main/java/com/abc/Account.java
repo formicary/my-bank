@@ -1,6 +1,7 @@
 package com.abc;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +14,7 @@ public class Account {
     }
     
     private final AccountType accountType;
-    public List<Transaction> transactions;
+    private final List<Transaction> transactions;
     private BigDecimal sum;
 
     public Account(AccountType accountType) {
@@ -70,6 +71,43 @@ public class Account {
             default:
                 return amount.multiply(BigDecimal.valueOf(0.001));
         }
+    }
+    
+    public String statementForAccount() {
+        
+        StringBuilder s = new StringBuilder();
+
+       //Translate to pretty account type
+       
+        switch(getAccountType()){
+            case CHECKING:
+                s.append("Checking Account\n");
+                break;
+            case SAVINGS:
+                s.append("Savings Account\n");
+                break;
+            case MAXI_SAVINGS:
+                s.append("Maxi Savings Account\n");
+                break;
+        }
+
+        //Now total up all the transactions
+        BigDecimal total = BigDecimal.ZERO;
+        for (Transaction t : transactions) {
+            s.append("  ");
+            s.append((t.amount.compareTo(BigDecimal.ZERO) < 0 ? "withdrawal" : "deposit"));
+            s.append(" ");
+            s.append(toDollars(t.amount));
+            s.append("\n");
+            total = total.add(t.amount);
+        }
+        s.append("Total ");
+        s.append(toDollars(total));
+        return s.toString();
+    }
+    
+    public static String toDollars(BigDecimal d) {       
+        return String.format("$%,.2f", d.abs().setScale(2, RoundingMode.DOWN)); 
     }
 
     public BigDecimal sumTransactions() {
