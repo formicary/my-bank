@@ -3,12 +3,14 @@ package com.abc;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import org.joda.time.LocalDateTime;
 
+/** Represents a bank account.
+ * @author James Rogers
+ * @version 1.0
+ * @since 1.0
+*/
 public class Account {
 
     public enum AccountType {
@@ -17,20 +19,40 @@ public class Account {
         MAXI_SAVINGS;
     }
     
+    /** Represents the checking rate percentage. */
     private static final BigDecimal CHECKING_RATE = new BigDecimal("0.001");
     
+    /** Represents the savings rate lower percentage. */
     private static final BigDecimal SAVINGS_RATE_ONE = new BigDecimal("0.001");
+    
+    /** Represents the savings rate lower limit. */
     private static final BigDecimal SAVINGS_RATE_LIMIT_ONE = new BigDecimal("1000.00");
+    
+    /** Represents the savings rate upper percentage. */
     private static final BigDecimal SAVINGS_RATE_TWO = new BigDecimal("0.002");
     
+    /** Represents the maxi savings rate upper percentage. */
     private static final BigDecimal MAXI_SAVINGS_RATE_ONE = new BigDecimal("0.05");
+    
+    /** Represents the maxi savings rate lower percentage. */
     private static final BigDecimal MAXI_SAVINGS_RATE_TWO = new BigDecimal("0.001");
     
+    /** Type of account. */
     private final AccountType accountType;
+    
+    /** Transactions in account. */
     private final List<Transaction> transactions;
+    
+    /** Balance of account. */
     private BigDecimal balance;
+    
+    /** Last withdrawal of account. */
     private Transaction lastWithdrawal;
 
+    /** 
+    * Creates an account of specified account.
+    * @param accountType The type of account to create.
+    */
     public Account(AccountType accountType) {
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
@@ -38,6 +60,11 @@ public class Account {
         this.lastWithdrawal = null;
     }
 
+   /**
+   * Deposits money into the account.
+   * @param amount Amount of money to deposit.
+   * @throws IllegalArgumentException if amount is smaller or equal to zero.
+   */
     public void deposit(BigDecimal amount) {
         if (amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
@@ -47,6 +74,12 @@ public class Account {
         }
     }
 
+   /**
+   * Withdraws money from the account.
+   * @param amount Amount of money to withdraw.
+   * @throws InsufficientFundsException if the account has insufficient funds.
+   * @throws IllegalArgumentException if amount is smaller or equal to zero.
+   */
     public void withdraw(BigDecimal amount) throws InsufficientFundsException {
         if (amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
@@ -59,6 +92,10 @@ public class Account {
         }
     }
 
+   /**
+   * Calculates the amount of interest earned.
+   * @return The interest earned.
+   */
     public BigDecimal interestEarned() {
         
         switch(accountType){
@@ -74,6 +111,10 @@ public class Account {
         }
     }
     
+   /**
+   * Produces a statement of the account.
+   * @return The statement as a formatted string.
+   */
     public String statementForAccount() {
         
         StringBuilder s = new StringBuilder();
@@ -107,27 +148,52 @@ public class Account {
         return s.toString();
     }
     
+   /**
+   * Creates a formatted string of a given amount.
+   * @param d the amount to be formatted to a string.
+   * @return The formatted string.
+   */
     public static String toDollars(BigDecimal d) {       
         return String.format("$%,.2f", d.abs().setScale(2, RoundingMode.DOWN)); 
     }
 
+    /**
+   * Returns the balance of the account.
+   * @return The balance.
+   */
     public BigDecimal sumTransactions() {
        return balance;
     }
 
+   /**
+   * Checks if the account has any transactions.
+   * @return A boolean signalling if any transactions exist.
+   */
     public Boolean checkIfTransactionsExist() {
         return !transactions.isEmpty();
     }
 
+   /**
+   * Gets the account type.
+   * @return The account type.
+   */
     public AccountType getAccountType() {
         return accountType;
     }
 
+   /**
+   * Gets the interest for the checking account type.
+   * @return The amount of interest earned.
+   */
     private BigDecimal getCheckingInterest() {
         BigDecimal amount = sumTransactions();
         return amount.multiply(CHECKING_RATE);
     }
     
+   /**
+   * Gets the interest for the savings account type.
+   * @return The amount of interest earned.
+   */
     private BigDecimal getSavingsInterest() {
         BigDecimal amount = sumTransactions();
         
@@ -142,6 +208,10 @@ public class Account {
         }
     }
     
+   /**
+   * Gets the interest for the maxi savings account type.
+   * @return The amount of interest earned.
+   */
     private BigDecimal getMaxiSavingsInterest() {
         
         BigDecimal amount = sumTransactions();
@@ -155,24 +225,5 @@ public class Account {
         } else {
             return amount.multiply(MAXI_SAVINGS_RATE_TWO);
         }
-        
-        /*if (amount.compareTo(MAXI_SAVINGS_RATE_LIMIT_ONE) <= 0)
-            return amount.multiply(MAXI_SAVINGS_RATE_ONE);
-        else if (amount.compareTo(MAXI_SAVINGS_RATE_LIMIT_TWO) <= 0) {
-            BigDecimal a = amount.subtract(MAXI_SAVINGS_RATE_LIMIT_ONE);
-            BigDecimal b = a.multiply(MAXI_SAVINGS_RATE_TWO);
-            BigDecimal c = MAXI_SAVINGS_RATE_LIMIT_ONE.multiply(MAXI_SAVINGS_RATE_ONE);
-            return c.add(b);
-        }
-        else {
-            BigDecimal a = amount.subtract(MAXI_SAVINGS_RATE_LIMIT_TWO);
-            BigDecimal b = a.multiply(MAXI_SAVINGS_RATE_THREE);
-
-            BigDecimal c = MAXI_SAVINGS_RATE_LIMIT_ONE.multiply(MAXI_SAVINGS_RATE_ONE);
-            BigDecimal d = MAXI_SAVINGS_RATE_LIMIT_TWO
-                        .subtract(MAXI_SAVINGS_RATE_LIMIT_ONE)
-                        .multiply(MAXI_SAVINGS_RATE_TWO);
-            return c.add(d).add(b);
-        }*/
     }
 }

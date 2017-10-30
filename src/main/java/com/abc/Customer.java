@@ -3,19 +3,42 @@ package com.abc;
 import java.math.BigDecimal;
 import java.util.HashMap;
 
+/** Represents a bank customer.
+ * @author James Rogers
+ * @version 1.0
+ * @since 1.0
+*/
 public class Customer {
+    
+    /** Name of customer. */
     private final String name;
+    
+    /** Accounts opened by the customer. */
     private final HashMap<Account.AccountType, Account> accounts;
 
+    /** 
+    * Creates a customer with specified name.
+    * @param name The name of the customer.
+    */
     public Customer(String name) {
         this.name = name;
         this.accounts = new HashMap<Account.AccountType, Account>() {};
     }
 
+    /**
+    * Gets the name of the customer. 
+     * @return The name
+    */
     public String getName() {
         return name;
     }
 
+    /**
+    * Opens an account for the customer. 
+    * The customer can only have one account of each type.
+    * @param accountType the type of account to open.
+    * @throws IllegalAccountException if an account of this type already exists.
+    */
     public void openAccount(Account.AccountType accountType) throws IllegalAccountException {
         
         if(accounts.containsKey(accountType)) {
@@ -39,14 +62,29 @@ public class Customer {
         } 
     }
     
+    /**
+    * Gets the account of the specified type. 
+    * @param accountType the type of account to get.
+    * @return If the account exists, returns the account. If the account does
+    * exist, returns null.
+    */
     public Account getAccount(Account.AccountType accountType) {
         return accounts.get(accountType);
     }
 
+    /**
+    * Gets the number of open accounts.
+    * @return If the account exists, returns the account. If the account does
+    * exist, returns null.
+    */
     public int getNumberOfAccounts() {
         return accounts.size();
     }
 
+    /**
+    * Gets the total interest earned for all open accounts.
+    * @return The total amount of interest earned.
+    */
     public BigDecimal totalInterestEarned() {
         BigDecimal total = BigDecimal.ZERO;
         for (Account a : accounts.values())
@@ -54,6 +92,10 @@ public class Customer {
         return total;
     }
 
+    /**
+    * Gets the statement for the customer.
+    * @return The statement as a formatted string.
+    */
     public String getStatement() {
         StringBuilder statement = new StringBuilder();
         
@@ -73,6 +115,10 @@ public class Customer {
         return statement.toString();
     }
     
+    /**
+    * Gets the summary of the customer.
+    * @return The formatted string of the customers summary.
+    */
     public String getSummary() {
         return "\n - " + name + " (" + format(getNumberOfAccounts(), "account") + ")";
     }
@@ -83,6 +129,14 @@ public class Customer {
         return number + " " + (number == 1 ? word : word + "s");
     }
     
+    /**
+    * Transfers money from one account to another.
+    * @param amount The amount of money to transfer.
+    * @param from The Account to withdraw money from.
+    * @param to The account to deposit money in to.
+    * @throws InsufficientFundsException if there are insufficient funds in the from account.
+    * @throws IllegalAccountException if the two accounts equal each other or the customer does not own one of the accounts. 
+    */
     public void transfer(BigDecimal amount, Account.AccountType from, Account.AccountType to) throws InsufficientFundsException, IllegalAccountException {
         
         // Check if these accounts are the same
