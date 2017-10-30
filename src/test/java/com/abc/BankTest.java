@@ -10,7 +10,7 @@ public class BankTest {
     private static final double DOUBLE_DELTA = 1e-15;
 
     @Test
-    public void customerSummary() {
+    public void customerSummary() throws IllegalAccountException {
         Bank bank = new Bank();
         Customer john = new Customer("John");
         john.openAccount(Account.AccountType.CHECKING);
@@ -20,7 +20,7 @@ public class BankTest {
     }
 
     @Test
-    public void checkingAccount() {
+    public void checkingAccount() throws IllegalAccountException {
         Bank bank = new Bank();
         //Account checkingAccount = new Account(Account.AccountType.CHECKING);
         Customer bill = new Customer("Bill");
@@ -34,7 +34,7 @@ public class BankTest {
     }
 
     @Test
-    public void savingsAccount() {
+    public void savingsAccount() throws IllegalAccountException {
         Bank bank = new Bank();
         Customer bill = new Customer("Bill");
         bill.openAccount(Account.AccountType.SAVINGS);
@@ -46,7 +46,7 @@ public class BankTest {
     }
 
     @Test
-    public void maxiSavingsAccount() {
+    public void maxiSavingsAccount() throws IllegalAccountException {
         Bank bank = new Bank();
         Customer bill = new Customer("Bill");
         bill.openAccount(Account.AccountType.MAXI_SAVINGS);

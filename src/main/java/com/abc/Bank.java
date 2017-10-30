@@ -20,19 +20,9 @@ public class Bank {
         StringBuilder summary = new StringBuilder();
         summary.append("Customer Summary");
         for (Customer c : customers) {
-            summary.append("\n - ");
-            summary.append(c.getName());
-            summary.append(" (");
-            summary.append(format(c.getNumberOfAccounts(), "account"));
-            summary.append(")");
+            summary.append(c.getSummary());
         }
         return summary.toString();
-    }
-
-    //Make sure correct plural of word is created based on the number passed in:
-    //If number passed in is 1 just return the word otherwise add an 's' at the end
-    private String format(int number, String word) {
-        return number + " " + (number == 1 ? word : word + "s");
     }
 
     public BigDecimal totalInterestPaid() {

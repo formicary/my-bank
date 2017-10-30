@@ -9,10 +9,7 @@ import static org.junit.Assert.assertEquals;
 public class CustomerTest {
 
     @Test //Test customer statement generation
-    public void testApp(){
-
-        //Account checkingAccount = new Account(Account.AccountType.CHECKING);
-        //Account savingsAccount = new Account(Account.AccountType.SAVINGS);
+    public void testApp() throws IllegalAccountException {
 
         Customer henry = new Customer("Henry");
         henry.openAccount(Account.AccountType.CHECKING);
@@ -37,25 +34,64 @@ public class CustomerTest {
     }
 
     @Test
-    public void testOneAccount(){
+    public void testOneAccount() throws IllegalAccountException {
         Customer oscar = new Customer("Oscar");
         oscar.openAccount(Account.AccountType.SAVINGS);
         assertEquals(1, oscar.getNumberOfAccounts());
     }
 
     @Test
-    public void testTwoAccount(){
+    public void testTwoAccounts() throws IllegalAccountException {
+        
         Customer oscar = new Customer("Oscar");
         oscar.openAccount(Account.AccountType.SAVINGS);
         oscar.openAccount(Account.AccountType.CHECKING);
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
-    @Ignore
-    public void testThreeAcounts() {
+    @Test
+    public void testThreeAccounts() throws IllegalAccountException {
+        
         Customer oscar = new Customer("Oscar");
         oscar.openAccount(Account.AccountType.SAVINGS);
         oscar.openAccount(Account.AccountType.CHECKING);
+        oscar.openAccount(Account.AccountType.MAXI_SAVINGS);
         assertEquals(3, oscar.getNumberOfAccounts());
     }
+    
+    @Test(expected=IllegalAccountException.class)
+    public void testDuplicateAccountsSavings() throws IllegalAccountException {
+        
+        Customer oscar = new Customer("Oscar");
+        oscar.openAccount(Account.AccountType.SAVINGS);
+        oscar.openAccount(Account.AccountType.SAVINGS);
+    }
+    
+    @Test(expected=IllegalAccountException.class)
+    public void testDuplicateAccountsMaxiSavings() throws IllegalAccountException {
+        
+        Customer oscar = new Customer("Oscar");
+        oscar.openAccount(Account.AccountType.MAXI_SAVINGS);
+        oscar.openAccount(Account.AccountType.MAXI_SAVINGS);
+    }
+    
+    @Test(expected=IllegalAccountException.class)
+    public void testDuplicateAccountsChecking() throws IllegalAccountException {
+        
+        Customer oscar = new Customer("Oscar");
+        oscar.openAccount(Account.AccountType.CHECKING);
+        oscar.openAccount(Account.AccountType.CHECKING);
+    }
+    
+    @Test
+    public void testNonExistentAccountAccess() throws IllegalAccountException {
+        
+        Customer oscar = new Customer("Oscar");
+        oscar.openAccount(Account.AccountType.CHECKING);
+        Account a = oscar.getAccount(Account.AccountType.SAVINGS);
+        
+        assertEquals(null, a);
+    }
+    
+    
 }
