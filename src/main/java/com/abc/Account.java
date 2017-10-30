@@ -13,6 +13,18 @@ public class Account {
         MAXI_SAVINGS;
     }
     
+    private static final BigDecimal CHECKING_RATE = new BigDecimal("0.001");
+    
+    private static final BigDecimal SAVINGS_RATE_ONE = new BigDecimal("0.001");
+    private static final BigDecimal SAVINGS_RATE_LIMIT_ONE = new BigDecimal("1000.00");
+    private static final BigDecimal SAVINGS_RATE_TWO = new BigDecimal("0.002");
+    
+    private static final BigDecimal MAXI_SAVINGS_RATE_ONE = new BigDecimal("0.02");
+    private static final BigDecimal MAXI_SAVINGS_RATE_LIMIT_ONE = new BigDecimal("1000.00");
+    private static final BigDecimal MAXI_SAVINGS_RATE_TWO = new BigDecimal("0.05");
+    private static final BigDecimal MAXI_SAVINGS_RATE_LIMIT_TWO = new BigDecimal("2000.00");
+    private static final BigDecimal MAXI_SAVINGS_RATE_THREE = new BigDecimal("0.1");
+    
     private final AccountType accountType;
     private final List<Transaction> transactions;
     private BigDecimal sum;
@@ -45,31 +57,39 @@ public class Account {
         BigDecimal amount = sumTransactions();
         switch(accountType){
             case SAVINGS:
-                if (amount.compareTo(BigDecimal.valueOf(1000)) <= 0)
-                    return amount.multiply(BigDecimal.valueOf(0.001));
+                if (amount.compareTo(SAVINGS_RATE_LIMIT_ONE) <= 0)
+                    return amount.multiply(SAVINGS_RATE_ONE);
                 else {
-                    BigDecimal a = amount.subtract(BigDecimal.valueOf(1000));
-                    BigDecimal b = a.multiply(BigDecimal.valueOf(0.002));
-                    return BigDecimal.ONE.add(b);
+                    BigDecimal a = amount.subtract(SAVINGS_RATE_LIMIT_ONE);
+                    BigDecimal b = a.multiply(SAVINGS_RATE_TWO);
+                    
+                    BigDecimal c = SAVINGS_RATE_LIMIT_ONE.multiply(SAVINGS_RATE_ONE);
+                    return c.add(b);
                 }
 //            case SUPER_SAVINGS:
 //                if (amount <= 4000)
 //                    return 20;
             case MAXI_SAVINGS:
-                if (amount.compareTo(BigDecimal.valueOf(1000)) <= 0)
-                    return amount.multiply(BigDecimal.valueOf(0.02));
-                else if (amount.compareTo(BigDecimal.valueOf(2000)) <= 0) {
-                    BigDecimal a = amount.subtract(BigDecimal.valueOf(1000));
-                    BigDecimal b = a.multiply(BigDecimal.valueOf(0.05));
-                    return BigDecimal.valueOf(20).add(b);
+                if (amount.compareTo(MAXI_SAVINGS_RATE_LIMIT_ONE) <= 0)
+                    return amount.multiply(MAXI_SAVINGS_RATE_ONE);
+                else if (amount.compareTo(MAXI_SAVINGS_RATE_LIMIT_TWO) <= 0) {
+                    BigDecimal a = amount.subtract(MAXI_SAVINGS_RATE_LIMIT_ONE);
+                    BigDecimal b = a.multiply(MAXI_SAVINGS_RATE_TWO);
+                    BigDecimal c = MAXI_SAVINGS_RATE_LIMIT_ONE.multiply(MAXI_SAVINGS_RATE_ONE);
+                    return c.add(b);
                 }
                 else {
-                    BigDecimal a = amount.subtract(BigDecimal.valueOf(2000));
-                    BigDecimal b = a.multiply(BigDecimal.valueOf(0.1));
-                    return BigDecimal.valueOf(70).add(b);
+                    BigDecimal a = amount.subtract(MAXI_SAVINGS_RATE_LIMIT_TWO);
+                    BigDecimal b = a.multiply(MAXI_SAVINGS_RATE_THREE);
+                    
+                    BigDecimal c = MAXI_SAVINGS_RATE_LIMIT_ONE.multiply(MAXI_SAVINGS_RATE_ONE);
+                    BigDecimal d = MAXI_SAVINGS_RATE_LIMIT_TWO
+                            .subtract(MAXI_SAVINGS_RATE_LIMIT_ONE)
+                            .multiply(MAXI_SAVINGS_RATE_TWO);
+                    return c.add(d).add(b);
                 }
             default:
-                return amount.multiply(BigDecimal.valueOf(0.001));
+                return amount.multiply(CHECKING_RATE);
         }
     }
     
