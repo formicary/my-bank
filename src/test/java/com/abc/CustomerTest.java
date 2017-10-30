@@ -10,7 +10,7 @@ import static org.junit.Assert.assertTrue;
 public class CustomerTest {
 
     @Test //Test customer statement generation
-    public void testApp() throws IllegalAccountException {
+    public void testStatement() throws IllegalAccountException, InsufficientFundsException {
 
         Customer henry = new Customer("Henry");
         henry.openAccount(Account.AccountType.CHECKING);
@@ -190,5 +190,49 @@ public class CustomerTest {
         assertEquals(null, a);
     }
     
+    @Test
+    public void testTransferBetweenAccountsOne() throws IllegalAccountException, InsufficientFundsException {
+        
+        Customer oscar = new Customer("Oscar");
+        oscar.openAccount(Account.AccountType.CHECKING);
+        oscar.openAccount(Account.AccountType.SAVINGS);
+        
+        // Deposit 1000.00 in Checking
+        oscar.getAccount(Account.AccountType.CHECKING).deposit(new BigDecimal("1000.00"));
+        
+        // Transfer 500.00 from checking to savings
+        oscar.transfer(new BigDecimal("500.00"), Account.AccountType.CHECKING, Account.AccountType.SAVINGS);
+        
+        Boolean checkingBalance = new BigDecimal("500.00").compareTo(oscar.getAccount(Account.AccountType.CHECKING).sumTransactions()) == 0;
+        Boolean savingsBalance = new BigDecimal("500.00").compareTo(oscar.getAccount(Account.AccountType.SAVINGS).sumTransactions()) == 0;
+        
+        assertTrue(checkingBalance && savingsBalance);
+    }
     
+    @Test(expected=InsufficientFundsException.class)
+    public void testTransferBetweenAccountsTwo() throws IllegalAccountException, InsufficientFundsException {
+    
+        Customer oscar = new Customer("Oscar");
+        oscar.openAccount(Account.AccountType.CHECKING);
+        oscar.openAccount(Account.AccountType.SAVINGS);
+        
+        // Deposit 500.00 in Checking
+        oscar.getAccount(Account.AccountType.CHECKING).deposit(new BigDecimal("500.00"));
+        
+        // Transfer 1000.00 from checking to savings
+        oscar.transfer(new BigDecimal("1000.00"), Account.AccountType.CHECKING, Account.AccountType.SAVINGS);
+    }
+    
+    @Test(expected=IllegalAccountException.class)
+    public void testTransferBetweenAccountsThree() throws IllegalAccountException, InsufficientFundsException {
+    
+        Customer oscar = new Customer("Oscar");
+        oscar.openAccount(Account.AccountType.CHECKING);
+        
+        // Deposit 1000.00 in Checking
+        oscar.getAccount(Account.AccountType.CHECKING).deposit(new BigDecimal("1000.00"));
+        
+        // Transfer 500.00 from checking to savings
+        oscar.transfer(new BigDecimal("500.00"), Account.AccountType.CHECKING, Account.AccountType.SAVINGS);
+    }
 }

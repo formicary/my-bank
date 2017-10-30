@@ -27,12 +27,12 @@ public class Account {
     
     private final AccountType accountType;
     private final List<Transaction> transactions;
-    private BigDecimal sum;
+    private BigDecimal balance;
 
     public Account(AccountType accountType) {
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
-        sum = BigDecimal.ZERO;
+        balance = BigDecimal.ZERO;
     }
 
     public void deposit(BigDecimal amount) {
@@ -40,16 +40,19 @@ public class Account {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
             transactions.add(new Transaction(amount));
-            sum = sum.add(amount);
+            balance = balance.add(amount);
         }
     }
 
-    public void withdraw(BigDecimal amount) {
+    public void withdraw(BigDecimal amount) throws InsufficientFundsException {
         if (amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
+        } else if(balance.compareTo(amount) < 0) {
+            // Throw Exception
+            throw new InsufficientFundsException("Withdrawal amount must be lower or equal to balance");
         } else {
             transactions.add(new Transaction(amount.negate()));
-            sum = sum.add(amount.negate());
+            balance = balance.add(amount.negate());
         }
     }
 
@@ -131,7 +134,7 @@ public class Account {
     }
 
     public BigDecimal sumTransactions() {
-       return sum;
+       return balance;
     }
 
     public Boolean checkIfTransactionsExist() {

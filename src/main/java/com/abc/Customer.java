@@ -82,4 +82,23 @@ public class Customer {
     private String format(int number, String word) {
         return number + " " + (number == 1 ? word : word + "s");
     }
+    
+    public void transfer(BigDecimal amount, Account.AccountType from, Account.AccountType to) throws InsufficientFundsException, IllegalAccountException {
+        
+        // Check if these accounts are the same
+        if(from.equals(to)) {
+            // Throw Exception
+            throw new IllegalArgumentException("Cannot transfer between the same account.");
+        }
+        
+        // Check if customer has accounts
+        if(!accounts.containsKey(from) || !accounts.containsKey(to)) {
+            // Throw Exception
+            throw new IllegalAccountException("Customer does not have both accounts.");
+        }
+        
+        // Make transaction
+        accounts.get(from).withdraw(amount);
+        accounts.get(to).deposit(amount);  
+    }
 }
