@@ -54,7 +54,7 @@ public class BankTest {
 
         bill.getAccount(Account.AccountType.MAXI_SAVINGS).deposit(BigDecimal.valueOf(3000));
 
-        assertTrue(BigDecimal.valueOf(170).compareTo(bank.totalInterestPaid()) == 0);
+        assertTrue(BigDecimal.valueOf(150).compareTo(bank.totalInterestPaid()) == 0);
         
     }
 

@@ -1,6 +1,10 @@
 package com.abc;
 
 import java.math.BigDecimal;
+import org.joda.time.DateTimeUtils;
+import org.joda.time.LocalDateTime;
+import org.joda.time.Period;
+import org.joda.time.PeriodType;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -22,14 +26,14 @@ public class CustomerTest {
         
         assertEquals("Statement for Henry\n" +
                 "\n" +
+                "Checking Account\n" +
+                "  deposit $100.00\n" +
+                "Total $100.00\n" +
+                "\n" +
                 "Savings Account\n" +
                 "  deposit $4,000.00\n" +
                 "  withdrawal $200.00\n" +
                 "Total $3,800.00\n" +
-                "\n" +
-                "Checking Account\n" +
-                "  deposit $100.00\n" +
-                "Total $100.00\n" +
                 "\n" +
                 "Total In All Accounts $3,900.00", henry.getStatement());
     }
@@ -114,29 +118,53 @@ public class CustomerTest {
         // Deposit 1000.00
         oscar.getAccount(Account.AccountType.MAXI_SAVINGS).deposit(new BigDecimal("1000.00"));
         
-        // Should gain 2.0% interest
-        BigDecimal d = new BigDecimal("20.0");
-        assertTrue(d.compareTo(oscar.totalInterestEarned()) == 0);
+        // Should gain 5.0% interest
+        BigDecimal d = new BigDecimal("50.0");
+        BigDecimal a = oscar.totalInterestEarned();
+        assertTrue(d.compareTo(a) == 0);
     }
     
     @Test
-    public void testInterestEarnedMaxiSavingsTwo() throws IllegalAccountException {
+    public void testInterestEarnedMaxiSavingsTwo() throws IllegalAccountException, InsufficientFundsException {
         
         Customer oscar = new Customer("Oscar");
         oscar.openAccount(Account.AccountType.MAXI_SAVINGS);
         
         // Deposit 1000.00
         oscar.getAccount(Account.AccountType.MAXI_SAVINGS).deposit(new BigDecimal("1000.00"));
+        oscar.getAccount(Account.AccountType.MAXI_SAVINGS).withdraw(new BigDecimal("500.00"));
         
-        // Deposit another 1000.00
-        oscar.getAccount(Account.AccountType.MAXI_SAVINGS).deposit(new BigDecimal("1000.00"));
-        
-        // Should gain 2.0% for first 1000.00, then 5.0 for remaining 1000.00
-        BigDecimal d = new BigDecimal("70.0");
-        assertTrue(d.compareTo(oscar.totalInterestEarned()) == 0);
+        // Should gain 0.1% interest
+        BigDecimal d = new BigDecimal("0.5");
+        BigDecimal a = oscar.totalInterestEarned();
+        assertTrue(d.compareTo(a) == 0);
     }
     
-        @Test
+    @Test
+    public void testInterestEarnedMaxiSavingsThree() throws IllegalAccountException, InsufficientFundsException {
+        
+        Customer oscar = new Customer("Oscar");
+        oscar.openAccount(Account.AccountType.MAXI_SAVINGS);
+        
+        // Deposit 1000.00
+        oscar.getAccount(Account.AccountType.MAXI_SAVINGS).deposit(new BigDecimal("1000.00"));
+        oscar.getAccount(Account.AccountType.MAXI_SAVINGS).withdraw(new BigDecimal("500.00"));
+        
+        // Advance time by 20 days
+        LocalDateTime t1 = LocalDateTime.now();
+        LocalDateTime t2 = t1.plusDays(20);
+        Period p = new Period(t1, t2, PeriodType.millis());
+        DateTimeUtils.setCurrentMillisOffset(p.getMillis());
+        
+        // Should gain 5.0% interest, because time has progressed 20 days
+        BigDecimal d = new BigDecimal("25.0");
+        BigDecimal a = oscar.totalInterestEarned();
+        assertTrue(d.compareTo(a) == 0);
+        
+        DateTimeUtils.setCurrentMillisSystem();
+    }
+    
+    /*@Test
     public void testInterestEarnedMaxiSavingsThree() throws IllegalAccountException {
         
         Customer oscar = new Customer("Oscar");
@@ -154,7 +182,7 @@ public class CustomerTest {
         // Should gain 2.0% for first 1000.00, then 5.0% for next 1000.00, then 10.0% for remaining 1000.00
         BigDecimal d = new BigDecimal("170.0");
         assertTrue(d.compareTo(oscar.totalInterestEarned()) == 0);
-    }
+    }*/
     
     @Test(expected=IllegalAccountException.class)
     public void testDuplicateAccountsSavings() throws IllegalAccountException {
