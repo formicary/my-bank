@@ -57,7 +57,7 @@ public class Account {
 //                    return 20;
             case MAXI_SAVINGS:
                 if (amount.compareTo(BigDecimal.valueOf(1000)) <= 0)
-                    return amount.multiply(BigDecimal.valueOf(0.002));
+                    return amount.multiply(BigDecimal.valueOf(0.02));
                 else if (amount.compareTo(BigDecimal.valueOf(2000)) <= 0) {
                     BigDecimal a = amount.subtract(BigDecimal.valueOf(1000));
                     BigDecimal b = a.multiply(BigDecimal.valueOf(0.05));
