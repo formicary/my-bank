@@ -5,7 +5,6 @@ import java.util.HashMap;
 
 public class Customer {
     private final String name;
-    //private final List<Account> accounts;
     private final HashMap<Account.AccountType, Account> accounts;
 
     public Customer(String name) {
@@ -17,10 +16,10 @@ public class Customer {
         return name;
     }
 
-    public void openAccount(Account.AccountType accountType) {
+    public void openAccount(Account.AccountType accountType) throws IllegalAccountException {
         
         if(accounts.containsKey(accountType)) {
-            throw new IllegalArgumentException("Cannot open multiple accounts of the same type.");
+            throw new IllegalAccountException("Cannot open multiple accounts of the same type.");
         }
         
         switch(accountType) {
