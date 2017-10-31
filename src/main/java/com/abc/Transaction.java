@@ -1,16 +1,43 @@
 package com.abc;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.math.BigDecimal;
+import org.joda.time.LocalDateTime;
 
+/** Represents an account transaction.
+ * @author James Rogers
+ * @version 1.0
+ * @since 1.0
+*/
 public class Transaction {
-    public final double amount;
+    
+    /** Amount for this transaction. */
+    private final BigDecimal amount;
 
-    private Date transactionDate;
+    /** Date for this transaction. */
+    private final LocalDateTime date;
 
-    public Transaction(double amount) {
+    /** 
+    * Creates a transaction with specified amount.
+    * @param amount The amount for this transaction.
+    */
+    public Transaction(BigDecimal amount) {
         this.amount = amount;
-        this.transactionDate = DateProvider.getInstance().now();
+        this.date = new LocalDateTime();
     }
 
+    /**
+    * Gets the amount for this transaction.
+    * @return The amount.
+    */
+    public BigDecimal getAmount() {
+        return amount;
+    }
+    
+    /**
+    * Gets the date for this transaction.
+    * @return The date.
+    */
+    public LocalDateTime getDate() {
+        return date;
+    }
 }

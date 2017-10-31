@@ -1,46 +1,56 @@
 package com.abc;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Represents a bank.
+ * @author James Rogers
+ * @version 1.0
+ * @since 1.0
+*/
 public class Bank {
-    private List<Customer> customers;
+    
+    /** Customers in bank account. */
+    private final List<Customer> customers;
 
+    /** 
+    * Creates a bank.
+    */
     public Bank() {
         customers = new ArrayList<Customer>();
     }
 
+    /**
+    * Adds a customer to the bank.
+    * @param customer The customer to be added.
+    */
     public void addCustomer(Customer customer) {
         customers.add(customer);
     }
 
+    /**
+    * Gets the summary from all of the customers.
+    * @return The formatted string of the customers summaries.
+    */
     public String customerSummary() {
-        String summary = "Customer Summary";
-        for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-        return summary;
-    }
-
-    //Make sure correct plural of word is created based on the number passed in:
-    //If number passed in is 1 just return the word otherwise add an 's' at the end
-    private String format(int number, String word) {
-        return number + " " + (number == 1 ? word : word + "s");
-    }
-
-    public double totalInterestPaid() {
-        double total = 0;
-        for(Customer c: customers)
-            total += c.totalInterestEarned();
-        return total;
-    }
-
-    public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
+        
+        StringBuilder summary = new StringBuilder();
+        summary.append("Customer Summary");
+        for (Customer c : customers) {
+            summary.append(c.getSummary());
         }
+        return summary.toString();
+    }
+
+    /**
+    * Gets the total interest paid to all of the customers.
+    * @return The total interest amount.
+    */
+    public BigDecimal totalInterestPaid() {
+        BigDecimal total = BigDecimal.ZERO;
+        for(Customer c: customers)
+            total = total.add(c.totalInterestEarned());
+        return total;
     }
 }
