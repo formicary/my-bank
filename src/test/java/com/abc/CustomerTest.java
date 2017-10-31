@@ -1,13 +1,15 @@
 package com.abc;
 
-import org.junit.Ignore;
+//Imports
 import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
+	//Constant for assertEquals method used on double data types
+	private static final double DOUBLE_DELTA = 1e-15;
 
-    @Test //Test customer statement generation
+	//Test to assert that a customer bank statement produces the correct string when the customer has a number of transactions over two accounts
+    @Test
     public void testApp(){
 
         Account checkingAccount = new Account(Account.CHECKING);
@@ -33,25 +35,24 @@ public class CustomerTest {
                 "Total In All Accounts $3,900.00", henry.getStatement());
     }
 
+    //(I see no point in testing getter methods)
+    
+    //Test to assert that a transfer between a customer's accounts returns the correct end amount for both of their respective accounts involved in the transferral
     @Test
-    public void testOneAccount(){
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
-        assertEquals(1, oscar.getNumberOfAccounts());
-    }
-
-    @Test
-    public void testTwoAccount(){
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
-        assertEquals(2, oscar.getNumberOfAccounts());
-    }
-
-    @Ignore
-    public void testThreeAcounts() {
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
-        assertEquals(3, oscar.getNumberOfAccounts());
+    public void testTransfer() {
+    	Customer oscar = new Customer("Oscar");
+    	Account savingsAccount = new Account(Account.SAVINGS);
+    	Account checkingAccount = new Account(Account.CHECKING);
+    	
+    	savingsAccount.deposit(3000.0);
+    	checkingAccount.deposit(2000.0);
+    	
+    	oscar.openAccount(savingsAccount);
+    	oscar.openAccount(checkingAccount);
+    	
+    	oscar.transferBetweenAccounts(savingsAccount, checkingAccount, 1000.0);
+    	
+    	assertEquals(2000.0, savingsAccount.sumTransactions(), DOUBLE_DELTA);
+    	assertEquals(3000.0, checkingAccount.sumTransactions(), DOUBLE_DELTA);
     }
 }

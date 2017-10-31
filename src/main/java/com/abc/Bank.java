@@ -1,19 +1,24 @@
 package com.abc;
 
+//Imports
 import java.util.ArrayList;
 import java.util.List;
 
 public class Bank {
+	//Variable defining customers within the bank
     private List<Customer> customers;
 
+    //Constructor
     public Bank() {
         customers = new ArrayList<Customer>();
     }
 
+    //Method to add a customer to a bank
     public void addCustomer(Customer customer) {
         customers.add(customer);
     }
 
+    //Method to provide the summary of all customers within a bank
     public String customerSummary() {
         String summary = "Customer Summary";
         for (Customer c : customers)
@@ -27,20 +32,11 @@ public class Bank {
         return number + " " + (number == 1 ? word : word + "s");
     }
 
+    //Method to determine the interest the bank has to pay for all accounts for all customers within a bank
     public double totalInterestPaid() {
-        double total = 0;
+        double total = 0.0;
         for(Customer c: customers)
             total += c.totalInterestEarned();
         return total;
-    }
-
-    public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
-        }
     }
 }
