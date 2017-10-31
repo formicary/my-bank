@@ -10,53 +10,51 @@ public class BankTest {
     private static final double DOUBLE_DELTA = 1e-15;
 
     @Test
-    public void customerSummary() {
+    public void customerSummary() throws IllegalAccountException {
         Bank bank = new Bank();
         Customer john = new Customer("John");
-        john.openAccount(new Account(Account.AccountType.CHECKING));
+        john.openAccount(Account.AccountType.CHECKING);
         bank.addCustomer(john);
 
         assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
     }
 
     @Test
-    public void checkingAccount() {
+    public void checkingAccount() throws IllegalAccountException {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.AccountType.CHECKING);
+        //Account checkingAccount = new Account(Account.AccountType.CHECKING);
         Customer bill = new Customer("Bill");
-        bill.openAccount(checkingAccount);
+        bill.openAccount(Account.AccountType.CHECKING);
         bank.addCustomer(bill);
 
-        checkingAccount.deposit(BigDecimal.valueOf(100));
+        bill.getAccount(Account.AccountType.CHECKING).deposit(BigDecimal.valueOf(100));
         
         BigDecimal d = BigDecimal.valueOf(0.1);
         assertTrue(d.compareTo(bank.totalInterestPaid()) == 0);
     }
 
     @Test
-    public void savingsAccount() {
+    public void savingsAccount() throws IllegalAccountException {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.AccountType.SAVINGS);
         Customer bill = new Customer("Bill");
-        bill.openAccount(checkingAccount);
+        bill.openAccount(Account.AccountType.SAVINGS);
         bank.addCustomer(bill);
 
-        checkingAccount.deposit(BigDecimal.valueOf(1500));
+        bill.getAccount(Account.AccountType.SAVINGS).deposit(BigDecimal.valueOf(1500));
 
         assertTrue(BigDecimal.valueOf(2.0).compareTo(bank.totalInterestPaid()) == 0);
     }
 
     @Test
-    public void maxiSavingsAccount() {
+    public void maxiSavingsAccount() throws IllegalAccountException {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.AccountType.MAXI_SAVINGS);
         Customer bill = new Customer("Bill");
-        bill.openAccount(checkingAccount);
+        bill.openAccount(Account.AccountType.MAXI_SAVINGS);
         bank.addCustomer(bill);
 
-        checkingAccount.deposit(BigDecimal.valueOf(3000));
+        bill.getAccount(Account.AccountType.MAXI_SAVINGS).deposit(BigDecimal.valueOf(3000));
 
-        assertTrue(BigDecimal.valueOf(170).compareTo(bank.totalInterestPaid()) == 0);
+        assertTrue(BigDecimal.valueOf(150).compareTo(bank.totalInterestPaid()) == 0);
         
     }
 
