@@ -1,9 +1,10 @@
 package com.abc;
 
-import org.junit.Ignore;
+//import org.junit.Ignore;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
+import java.text.NumberFormat;
 import java.util.Locale;
 
 public class CustomerTest {
@@ -33,6 +34,32 @@ public class CustomerTest {
                 "\n" +
                 "=== Total In All Accounts: $3,900.00\n", henry.getStatement());
     }
+    
+    @Test
+    public void testGetFullName() {
+    	Customer brian = new Customer("Brian Example", Locale.UK);
+    	assertEquals("Brian Example", brian.getFullName());
+    }
+    
+    @Test
+    public void testSetFullName() {
+    	Customer brian = new Customer("Brian Example", Locale.UK);
+    	brian.setFullName("Brian Newlastname");
+    	assertEquals("Brian Newlastname", brian.getFullName());
+    }
+    
+    @Test
+    public void testGetLocale() {
+    	Customer jill = new Customer("Jill", Locale.UK);
+    	assertEquals(Locale.UK, jill.getLocale());
+    }
+    
+    @Test
+    public void testSetLocale() {
+    	Customer jill = new Customer("Jill", Locale.UK);
+    	jill.setLocale(Locale.US);
+    	assertEquals(Locale.US, jill.getLocale());
+    }
 
     @Test
     public void testOneAccount(){
@@ -48,11 +75,27 @@ public class CustomerTest {
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
-    @Ignore
+    @Test
     public void testThreeAcounts() {
         Customer oscar = new Customer("Oscar", Locale.US)
                 .openAccount(new Account(Account.SAVINGS));
         oscar.openAccount(new Account(Account.CHECKING));
+        oscar.openAccount(new Account(Account.MAXI_SAVINGS));
         assertEquals(3, oscar.getNumberOfAccounts());
     }
+    
+    @Test
+    public void testTotalInterestEarned() {
+    	Account checking = new Account(Account.CHECKING);
+    	Account maxiSavings = new Account(Account.MAXI_SAVINGS);
+    	Customer bill = new Customer("Bill", Locale.US)
+    			.openAccount(checking);
+    	bill.openAccount(maxiSavings);
+    	checking.deposit(1000.0);
+    	maxiSavings.deposit(5000);
+    	checking.withdraw(50.0);
+    	
+    	assertEquals("$370.95", NumberFormat.getCurrencyInstance(bill.getLocale()).format(bill.totalInterestEarned()));
+    }
+
 }
