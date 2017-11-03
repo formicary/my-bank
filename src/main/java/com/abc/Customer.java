@@ -2,31 +2,50 @@ package com.abc;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.lang.Math.abs;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 public class Customer {
-    private String name;
+    private String fullName;
     private List<Account> accounts;
+    private Locale locale;
 
-    public Customer(String name) {
-        this.name = name;
+    //customer constructor
+    public Customer(String fullName, Locale locale) {
+        this.fullName = fullName;
         this.accounts = new ArrayList<Account>();
+        this.locale = locale;
+    }
+    
+    //getter methods
+    public String getFullName() {
+        return fullName;
+    }
+    
+    public Locale getLocale() {
+    	return locale;
+    }
+    
+    public int getNumberOfAccounts() {
+        return accounts.size();
     }
 
-    public String getName() {
-        return name;
+    //setter method for change of name (e.g. customer gets married and last name changes)
+    public void setFullName(String fullName) {
+    	this.fullName = fullName;
     }
-
+    //setter method for change of region (locale)
+    public void setLocale(Locale locale) {
+    	this.locale = locale;
+    }
+    
+    //open a new account method
     public Customer openAccount(Account account) {
         accounts.add(account);
         return this;
     }
 
-    public int getNumberOfAccounts() {
-        return accounts.size();
-    }
-
+    //'counter' for all interest earned across all accounts
     public double totalInterestEarned() {
         double total = 0;
         for (Account a : accounts)
@@ -34,15 +53,16 @@ public class Customer {
         return total;
     }
 
+    //returns summary of ALL accounts
     public String getStatement() {
-        String statement = null;
-        statement = "Statement for " + name + "\n";
+        String statement = "=== Statement for " + fullName + " ===\n";
         double total = 0.0;
         for (Account a : accounts) {
             statement += "\n" + statementForAccount(a) + "\n";
             total += a.sumTransactions();
         }
-        statement += "\nTotal In All Accounts " + toDollars(total);
+        statement += "\n=== Total In All Accounts: " + NumberFormat.getCurrencyInstance(locale).format(total) + "\n"; //put currencies in required currency (based on locale)
+        
         return statement;
     }
 
@@ -60,19 +80,19 @@ public class Customer {
             case Account.MAXI_SAVINGS:
                 s += "Maxi Savings Account\n";
                 break;
+            default:
+            	s += "Oops! That's not a valid Account Type.";
+            	break;
         }
 
         //Now total up all the transactions
         double total = 0.0;
         for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
+            s += "\t" + (t.amount < 0 ? "Withdrawal" : "Deposit") + ": " + NumberFormat.getCurrencyInstance(locale).format(Math.abs(t.amount)) + "\n";
             total += t.amount;
         }
-        s += "Total " + toDollars(total);
+        s += "Total: " + NumberFormat.getCurrencyInstance(locale).format(total);
         return s;
     }
-
-    private String toDollars(double d){
-        return String.format("$%,.2f", abs(d));
-    }
+    
 }

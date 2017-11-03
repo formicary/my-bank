@@ -17,7 +17,7 @@ public class Bank {
     public String customerSummary() {
         String summary = "Customer Summary";
         for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
+            summary += "\n - " + c.getFullName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
         return summary;
     }
 
@@ -37,7 +37,7 @@ public class Bank {
     public String getFirstCustomer() {
         try {
             customers = null;
-            return customers.get(0).getName();
+            return customers.get(0).getFullName();
         } catch (Exception e){
             e.printStackTrace();
             return "Error";
