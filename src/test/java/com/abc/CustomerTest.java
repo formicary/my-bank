@@ -95,7 +95,7 @@ public class CustomerTest {
     	checking.withdraw(50.0);
     	maxiSavings.withdraw(10.0);
     	
-    	assertEquals("$370.95", NumberFormat.getCurrencyInstance(bill.getLocale()).format(bill.totalInterestEarned()));
+    	assertEquals("$5.94", NumberFormat.getCurrencyInstance(bill.getLocale()).format(bill.totalInterestEarned()));
     }
 
 }
