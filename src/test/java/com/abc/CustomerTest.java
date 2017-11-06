@@ -11,7 +11,6 @@ public class CustomerTest {
 
     @Test //Test customer statement generation
     public void testApp(){
-
         Account checkingAccount = new Account(Account.CHECKING);
         Account savingsAccount = new Account(Account.SAVINGS);
 
@@ -94,6 +93,7 @@ public class CustomerTest {
     	checking.deposit(1000.0);
     	maxiSavings.deposit(5000);
     	checking.withdraw(50.0);
+    	maxiSavings.withdraw(10.0);
     	
     	assertEquals("$370.95", NumberFormat.getCurrencyInstance(bill.getLocale()).format(bill.totalInterestEarned()));
     }
