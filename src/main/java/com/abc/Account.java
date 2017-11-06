@@ -1,8 +1,10 @@
 package com.abc;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Calendar;
+import java.time.temporal.ChronoUnit;
 
 public class Account {
 	//accountType options
@@ -13,9 +15,9 @@ public class Account {
 	private double checkingInterest = 0.001;
 	private double lowSavingsInterest = 0.001;
 	private double highSavingsInterest = 0.002;
-	//private double lowMaxiSavingsInterest = 0.02;
+	private double lowMaxiSavingsInterest = 0.001;
 	//private double midMaxiSavingsInterest = 0.05;
-	//private double highMaxiSavingsInterest = 0.1;
+	private double highMaxiSavingsInterest = 0.05;
 
     //account type variable and list of transactions
     private final int accountType;
@@ -25,9 +27,9 @@ public class Account {
     public void setCheckingInterestRate(double checkingInterest) { this.checkingInterest = checkingInterest; }
     public void setLowSavingsInterestRate(double lowSavingsInterest) { this.lowSavingsInterest = lowSavingsInterest; }
     public void setHighSavingsInterestRate(double highSavingsInterest) { this.highSavingsInterest = highSavingsInterest; }
-    //public void setLowMaxiSavingsInterestRate(double lowMaxiSavingsInterest) { this.lowMaxiSavingsInterest = lowMaxiSavingsInterest; }
+    public void setLowMaxiSavingsInterestRate(double lowMaxiSavingsInterest) { this.lowMaxiSavingsInterest = lowMaxiSavingsInterest; }
     //public void setMidMaxiSavingsInterestRate(double midMaxiSavingsInterest) { this.midMaxiSavingsInterest = midMaxiSavingsInterest; }
-    //public void setHighMaxiSavingsInterestRate(double highMaxiSavingsInterest) { this.highMaxiSavingsInterest = highMaxiSavingsInterest; }
+    public void setHighMaxiSavingsInterestRate(double highMaxiSavingsInterest) { this.highMaxiSavingsInterest = highMaxiSavingsInterest; }
     
     //setter for account type
     public Account(int accountType) {
@@ -53,22 +55,34 @@ public class Account {
     }
 
     public double interestEarned() {
-    	double interest = 0.0;
+    	double newAmount = 0;
+    	double interest = 0;
         double amount = sumTransactions();
+        Calendar firstTransactionDate = transactions.get(0).getTransactionDate();
+        Calendar lastTransactionDate = transactions.get(transactions.size()-1).getTransactionDate();
+        
         //Checking Account Interest
         if (accountType == Account.CHECKING) {
-        	interest = amount * checkingInterest;
+        	newAmount = amount * dailyCompoundInterest(checkingInterest,daysBetween(firstTransactionDate,lastTransactionDate));
         }
         //Savings Account Interest
         else if (accountType == Account.SAVINGS) {
         	if (amount <= 1000) {
-        		interest = amount * lowSavingsInterest;
+        		newAmount = amount * dailyCompoundInterest(lowSavingsInterest, daysBetween(firstTransactionDate,lastTransactionDate));
         	} else {
-        		interest = 1 /*(1000 * 0.001)*/ + (amount - 1000) * highSavingsInterest;
+        		newAmount = (1000 * dailyCompoundInterest(lowSavingsInterest, daysBetween(firstTransactionDate,lastTransactionDate)) + (amount - 1000) * dailyCompoundInterest(highSavingsInterest,daysBetween(firstTransactionDate,lastTransactionDate)));
         	}
         }
         //Max-Savings Account Interest
         else if (accountType == Account.MAXI_SAVINGS) {
+        	//additional feature
+        	//interest rate is 5% if the difference between WITHDRAWAL dates is more than 10 days
+        	if (isLastWithdrawal10DaysAfter()) {
+        		newAmount = amount * dailyCompoundInterest(highMaxiSavingsInterest,daysBetween(firstTransactionDate,lastTransactionDate));
+        	} else {
+        		newAmount = amount * dailyCompoundInterest(lowMaxiSavingsInterest,daysBetween(firstTransactionDate,lastTransactionDate));
+        	}
+        	
         	//Original interest rate calculations
     		//if (amount <= 1000) {
     			//interest = amount * lowMaxiSavingsInterest;
@@ -78,15 +92,9 @@ public class Account {
     		//if (amount > 2000) {
     			//interest = 70 /*(1000 * 0.02) + (1000 * 0.05)*/ + (amount - 2000) * highMaxiSavingsInterest;
     		//}
-        	
-        	//additional feature
-        	//interest rate is 5% if the difference between transaction dates is more than 10 days
-        	if (isLastTransaction10DaysAfter()) {
-        		interest = amount * 0.05;
-        	} else {
-        		interest = amount * 0.001;
-        	}
+       	
         }
+        interest = newAmount - amount;
         return interest;
     }
 
@@ -105,27 +113,39 @@ public class Account {
         return accountType;
     }
     
-  //compare dates
-    public boolean isLastTransaction10DaysAfter() {
-    	boolean flag = false;
+    public boolean isLastWithdrawal10DaysAfter() {
+    	boolean flag = true;
     	if (transactions.size() >= 2) { //avoid out of bounds exception
-    		Calendar lastTransaction = transactions.get(transactions.size()-1).getTransactionDate();
-    		Calendar secondLastTransaction = transactions.get(transactions.size()-2).getTransactionDate();
+    		Transaction lastTransaction = transactions.get(transactions.size()-1);
+    		Transaction secondLastTransaction = transactions.get(transactions.size()-2);
+    		Calendar lastTransactionDate = lastTransaction.getTransactionDate();
+    		Calendar secondLastTransactionDate = secondLastTransaction.getTransactionDate();
     		
-    		//add 10 days to the second to last transaction
-    		secondLastTransaction.add(Calendar.DATE, 10);
-    		//if the last transaction is now before the second to last transaction 
-    		if(lastTransaction.before(secondLastTransaction)) {
-    			//then there are less than 10 days between the transactions
-    			flag = false;
+    		//check if the lastTransaction was a withdrawal
+    		if (lastTransaction.getAmount() < 0) {
+    			//add 10 days to the second to last transaction
+    			secondLastTransactionDate.add(Calendar.DATE, 10);
+    			//if the last transaction is now before the second to last transaction 
+    			if(lastTransactionDate.before(secondLastTransactionDate)) {
+    				//then there are less than 10 days between the transactions
+    				flag = false;
+    			}
     		}
-    		else {
-    			flag = true;
-    		}
-    	} else {
-    		flag = true;
+
     	}
     	return flag;
     }
-
+    
+    public double daysBetween(Calendar startDate, Calendar endDate) {
+    	return ChronoUnit.DAYS.between(startDate.toInstant(), endDate.toInstant());
+    }
+    
+    public double dailyCompoundInterest(double interestRate, double days) {
+    	double dailyInterestRate = Math.pow(1+(interestRate/365), days);
+    	if (days < 2) { //avoids weird power of 0 calculations
+    		dailyInterestRate = 1+(interestRate/365);
+    	}
+    	return dailyInterestRate;
+    }
+    
 }

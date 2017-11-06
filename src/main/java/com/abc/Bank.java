@@ -39,7 +39,7 @@ public class Bank {
         	totalAsString = getCurrencyForUnknownLocale(c, total);
         	s += "\n" + c.getFullName()+ ": " + getCurrencyForUnknownLocale(c, customerIndividualInterest);
         }
-        s += "\n=== Total Interest Paid Out: " + totalAsString;
+        s += "\n=== Total Interest Paid Out: " + totalAsString + "\n*N.B. These figures are rounded to 2 decimal places.";
         return s;
     }
 
