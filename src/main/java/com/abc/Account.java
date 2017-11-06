@@ -11,10 +11,14 @@ public class Account {
 
     private final int accountType;
     public List<Transaction> transactions;
+    //added double to check account amount
+    private double AccountTotal;
 
     public Account(int accountType) {
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
+        //added
+        AccountTotal = 0;
     }
 
     public void deposit(double amount) {
@@ -22,6 +26,7 @@ public class Account {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
             transactions.add(new Transaction(amount));
+            AccountTotal = AccountTotal + amount;
         }
     }
 
@@ -30,6 +35,7 @@ public void withdraw(double amount) {
         throw new IllegalArgumentException("amount must be greater than zero");
     } else {
         transactions.add(new Transaction(-amount));
+        AccountTotal = AccountTotal - amount;
     }
 }
 
@@ -56,14 +62,31 @@ public void withdraw(double amount) {
     }
 
     public double sumTransactions() {
-       return checkIfTransactionsExist(true);
+//if statement added
+
+    if(!transactions.isEmpty()) {
+
+        return checkIfTransactionsExist(true);
     }
+    else
+
+         System.out.println("No Transaction available");
+        return  0;
+
+    }
+
+
 
     private double checkIfTransactionsExist(boolean checkAll) {
         double amount = 0.0;
         for (Transaction t: transactions)
             amount += t.amount;
         return amount;
+    }
+
+    //added to return accont amount etc
+    public double getAccountTotal(){
+        return AccountTotal;
     }
 
     public int getAccountType() {
