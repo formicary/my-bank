@@ -2,6 +2,7 @@ package com.abc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Calendar;
 
 public class Account {
 	//accountType options
@@ -12,11 +13,11 @@ public class Account {
 	private double checkingInterest = 0.001;
 	private double lowSavingsInterest = 0.001;
 	private double highSavingsInterest = 0.002;
-	private double lowMaxiSavingsInterest = 0.02;
-	private double midMaxiSavingsInterest = 0.05;
-	private double highMaxiSavingsInterest = 0.1;
+	//private double lowMaxiSavingsInterest = 0.02;
+	//private double midMaxiSavingsInterest = 0.05;
+	//private double highMaxiSavingsInterest = 0.1;
 
-    //account type varible
+    //account type variable and list of transactions
     private final int accountType;
     public List<Transaction> transactions;
     
@@ -24,14 +25,16 @@ public class Account {
     public void setCheckingInterestRate(double checkingInterest) { this.checkingInterest = checkingInterest; }
     public void setLowSavingsInterestRate(double lowSavingsInterest) { this.lowSavingsInterest = lowSavingsInterest; }
     public void setHighSavingsInterestRate(double highSavingsInterest) { this.highSavingsInterest = highSavingsInterest; }
-    public void setLowMaxiSavingsInterestRate(double lowMaxiSavingsInterest) { this.lowMaxiSavingsInterest = lowMaxiSavingsInterest; }
-    public void setMidMaxiSavingsInterestRate(double midMaxiSavingsInterest) { this.midMaxiSavingsInterest = midMaxiSavingsInterest; }
-    public void setHighMaxiSavingsInterestRate(double highMaxiSavingsInterest) { this.highMaxiSavingsInterest = highMaxiSavingsInterest; }
+    //public void setLowMaxiSavingsInterestRate(double lowMaxiSavingsInterest) { this.lowMaxiSavingsInterest = lowMaxiSavingsInterest; }
+    //public void setMidMaxiSavingsInterestRate(double midMaxiSavingsInterest) { this.midMaxiSavingsInterest = midMaxiSavingsInterest; }
+    //public void setHighMaxiSavingsInterestRate(double highMaxiSavingsInterest) { this.highMaxiSavingsInterest = highMaxiSavingsInterest; }
+    
     //setter for account type
     public Account(int accountType) {
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
     }
+    
 
     public void deposit(double amount) {
         if (amount <= 0) {
@@ -52,23 +55,36 @@ public class Account {
     public double interestEarned() {
     	double interest = 0.0;
         double amount = sumTransactions();
+        //Checking Account Interest
         if (accountType == Account.CHECKING) {
         	interest = amount * checkingInterest;
-        } else if (accountType == Account.SAVINGS) {
+        }
+        //Savings Account Interest
+        else if (accountType == Account.SAVINGS) {
         	if (amount <= 1000) {
         		interest = amount * lowSavingsInterest;
         	} else {
         		interest = 1 /*(1000 * 0.001)*/ + (amount - 1000) * highSavingsInterest;
         	}
-        } else if (accountType == Account.MAXI_SAVINGS) {
-        	if (amount <= 1000) {
-        		interest = amount * lowMaxiSavingsInterest;
-        	}
-        	if (amount <= 2000) {
-        		interest = 20 /*1000 * 0.02*/ + (amount - 1000) * midMaxiSavingsInterest;
-        	}
-        	if (amount > 2000) {
-        		interest = 70 /*(1000 * 0.02) + (1000 * 0.05)*/ + (amount - 2000) * highMaxiSavingsInterest;
+        }
+        //Max-Savings Account Interest
+        else if (accountType == Account.MAXI_SAVINGS) {
+        	//Original interest rate calculations
+    		//if (amount <= 1000) {
+    			//interest = amount * lowMaxiSavingsInterest;
+    		//} else if (amount <= 2000) {
+    			//interest = 20 /*1000 * 0.02*/ + (amount - 1000) * midMaxiSavingsInterest;
+    		//}
+    		//if (amount > 2000) {
+    			//interest = 70 /*(1000 * 0.02) + (1000 * 0.05)*/ + (amount - 2000) * highMaxiSavingsInterest;
+    		//}
+        	
+        	//additional feature
+        	//interest rate is 5% if the difference between transaction dates is more than 10 days
+        	if (isLastTransaction10DaysAfter()) {
+        		interest = amount * 0.05;
+        	} else {
+        		interest = amount * 0.001;
         	}
         }
         return interest;
@@ -81,12 +97,35 @@ public class Account {
     private double checkIfTransactionsExist(boolean checkAll) {
         double amount = 0.0;
         for (Transaction t: transactions)
-            amount += t.amount;
+            amount += t.getAmount();
         return amount;
     }
 
     public int getAccountType() {
         return accountType;
+    }
+    
+  //compare dates
+    public boolean isLastTransaction10DaysAfter() {
+    	boolean flag = false;
+    	if (transactions.size() >= 2) { //avoid out of bounds exception
+    		Calendar lastTransaction = transactions.get(transactions.size()-1).getTransactionDate();
+    		Calendar secondLastTransaction = transactions.get(transactions.size()-2).getTransactionDate();
+    		
+    		//add 10 days to the second to last transaction
+    		secondLastTransaction.add(Calendar.DATE, 10);
+    		//if the last transaction is now before the second to last transaction 
+    		if(lastTransaction.before(secondLastTransaction)) {
+    			//then there are less than 10 days between the transactions
+    			flag = false;
+    		}
+    		else {
+    			flag = true;
+    		}
+    	} else {
+    		flag = true;
+    	}
+    	return flag;
     }
 
 }

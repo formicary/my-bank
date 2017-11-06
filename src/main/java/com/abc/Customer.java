@@ -61,7 +61,7 @@ public class Customer {
             statement += "\n" + statementForAccount(a) + "\n";
             total += a.sumTransactions();
         }
-        statement += "\n=== Total In All Accounts: " + NumberFormat.getCurrencyInstance(locale).format(total) + "\n"; //put currencies in required currency (based on locale)
+        statement += "\n=== Total In All Accounts: " + getCurrencyForKnownLocale(total) + "\n"; //put currencies in required currency (based on locale)
         
         return statement;
     }
@@ -81,18 +81,30 @@ public class Customer {
                 s += "Maxi Savings Account\n";
                 break;
             default:
-            	s += "Oops! That's not a valid Account Type.";
+            	s += "There is no Account of that type.\n";
             	break;
         }
 
         //Now total up all the transactions
         double total = 0.0;
         for (Transaction t : a.transactions) {
-            s += "\t" + (t.amount < 0 ? "Withdrawal" : "Deposit") + ": " + NumberFormat.getCurrencyInstance(locale).format(Math.abs(t.amount)) + "\n";
-            total += t.amount;
+            s += "\t" + (t.getAmount() < 0 ? "Withdrawal" : "Deposit") + ": " + getCurrencyForKnownLocale(Math.abs(t.getAmount())) + "\n";
+            total += t.getAmount();
         }
-        s += "Total: " + NumberFormat.getCurrencyInstance(locale).format(total);
+        s += "Total: " + getCurrencyForKnownLocale(total);
         return s;
     }
     
+    //Customer can transfer between their accounts
+    public void transferBetweenAccounts(double amount, Account fromAccount, Account toAccount) {
+    	fromAccount.withdraw(amount);
+    	toAccount.deposit(amount);
+    }
+    
+    //formatting currency for known customer
+    public String getCurrencyForKnownLocale(double amount) {
+    	String stringAmount;
+    	stringAmount = NumberFormat.getCurrencyInstance(locale).format(amount);
+    	return stringAmount;
+    }
 }
