@@ -72,6 +72,17 @@ public class Customer {
         return s;
     }
 
+    //added to move money from one of the customers accounts to the others
+    public void AccountTransaction (int amount, Account a, Account b){
+        if (a.getAccountTotal() > amount){
+            a.withdraw(amount);
+            b.deposit(amount);
+        }else {
+            System.out.println("Insufficent money in account; please add money and try again");
+        }
+
+    }
+
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
     }
