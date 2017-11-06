@@ -28,11 +28,12 @@ public class BankTest {
         Customer bill = new Customer("Bill", Locale.US).openAccount(checkingAccount);
         bank.addCustomer(bill);
 
-        checkingAccount.deposit(1000.0);
+        checkingAccount.deposit(1000000.0); //big enough to see interest in 1 day
 
         assertEquals("=== Statement for Total Interest Earned Across all Accounts ===" +
-        		"\nBill: $1.00" + 
-        		"\n=== Total Interest Paid Out: $1.00", bank.totalInterestPaid());
+        		"\nBill: $2.74" + 
+        		"\n=== Total Interest Paid Out: $2.74" +
+        		"\n*N.B. These figures are rounded to 2 decimal places.", bank.totalInterestPaid());
     }
 
     @Test
@@ -41,11 +42,12 @@ public class BankTest {
         Account savingsAccount = new Account(Account.SAVINGS);
         bank.addCustomer(new Customer("Bill", Locale.US).openAccount(savingsAccount));
 
-        savingsAccount.deposit(1500.0);
+        savingsAccount.deposit(1000000.0);
 
         assertEquals("=== Statement for Total Interest Earned Across all Accounts ===" +
-        		"\nBill: $2.00" + 
-        		"\n=== Total Interest Paid Out: $2.00", bank.totalInterestPaid());
+        		"\nBill: $5.48" + 
+        		"\n=== Total Interest Paid Out: $5.48" +
+        		"\n*N.B. These figures are rounded to 2 decimal places.", bank.totalInterestPaid());
     }
 
     @Test
@@ -57,8 +59,9 @@ public class BankTest {
         maxiSavingsAccount.deposit(3000.0);
 
         assertEquals("=== Statement for Total Interest Earned Across all Accounts ===" +
-        		"\nBill: $150.00" + 
-        		"\n=== Total Interest Paid Out: $150.00", bank.totalInterestPaid());
+        		"\nBill: $0.41" + 
+        		"\n=== Total Interest Paid Out: $0.41" +
+        		"\n*N.B. These figures are rounded to 2 decimal places.", bank.totalInterestPaid());
     }
     
     @Test
@@ -78,9 +81,10 @@ public class BankTest {
     	janeMaxiSavings.deposit(1000);
     	
     	assertEquals("=== Statement for Total Interest Earned Across all Accounts ===" +
-        		"\nBob: £3.00" + 
-    			"\nJane: £53.00" +
-        		"\n=== Total Interest Paid Out: £56.00", bank.totalInterestPaid());
+        		"\nBob: £0.01" + 
+    			"\nJane: £0.15" +
+        		"\n=== Total Interest Paid Out: £0.15" +
+        		"\n*N.B. These figures are rounded to 2 decimal places.", bank.totalInterestPaid());
     }
     
     @Test

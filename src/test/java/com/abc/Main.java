@@ -1,5 +1,6 @@
 /*
  * Test file for printed outputs
+ * Ignore this file for application
  */
 
 package com.abc;
@@ -118,7 +119,7 @@ public class Main {
     	helenSavings.deposit(4000);
     	System.out.println(helen.getStatement());
     	
-    	System.out.println(helenSavings.isLastTransaction10DaysAfter());
+    	System.out.println(helenSavings.isLastWithdrawal10DaysAfter());
     	
     	//Customer Interest Test
     	Account billyChecking = new Account(Account.CHECKING);
@@ -133,7 +134,7 @@ public class Main {
     	
     	
     	System.out.println();
-    	System.out.println(billyMaxiSavings.isLastTransaction10DaysAfter());
+    	System.out.println(billyMaxiSavings.isLastWithdrawal10DaysAfter());
     	System.out.println(NumberFormat.getCurrencyInstance(billy.getLocale()).format(billy.totalInterestEarned()));
 	}
 
