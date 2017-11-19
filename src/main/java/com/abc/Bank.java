@@ -4,11 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Bank {
-    private List<Customer> customers;
+    private List<Customer> customers = new ArrayList<>();
 
-    public Bank() {
-        customers = new ArrayList<Customer>();
-    }
+    
 
     public void addCustomer(Customer customer) {
         customers.add(customer);
@@ -28,10 +26,11 @@ public class Bank {
     }
 
     public double totalInterestPaid() {
-        double total = 0;
-        for(Customer c: customers)
-            total += c.totalInterestEarned();
-        return total;
+//        double total = 0;
+        return customers.stream().mapToDouble(e->e.totalInterestEarned()).sum();
+//        for(Customer c: customers)
+//            total += c.totalInterestEarned();
+//        return total;
     }
 
     public String getFirstCustomer() {
