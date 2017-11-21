@@ -14,12 +14,14 @@ public class Customer {
         this.accounts = new ArrayList<Account>();
     }
 
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
 
     public Customer openAccount(Account account) {
         accounts.add(account);
+        System.out.println("You have successfully opened an account")
         return this;
     }
 
@@ -49,17 +51,17 @@ public class Customer {
     private String statementForAccount(Account a) {
         String s = "";
 
-       //Translate to pretty account type
-        switch(a.getAccountType()){
-            case Account.CHECKING:
-                s += "Checking Account\n";
-                break;
-            case Account.SAVINGS:
-                s += "Savings Account\n";
-                break;
-            case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
-                break;
+//       //Translate to pretty account type
+//        switch(a.getAccountType()){
+//            case Account.CHECKING:
+//                s += "Checking Account\n";
+//                break;
+//            case Account.SAVINGS:
+//                s += "Savings Account\n";
+//                break;
+//            case Account.MAXI_SAVINGS:
+//                s += "Maxi Savings Account\n";
+//                break;
         }
 
         //Now total up all the transactions
