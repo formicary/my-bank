@@ -3,7 +3,7 @@ package com.abc;
 import java.util.Calendar;
 import java.util.Date;
 
-public class DateProvider {
+public final class DateProvider {
     private static DateProvider instance = null;
 
     public static DateProvider getInstance() {
@@ -14,5 +14,12 @@ public class DateProvider {
 
     public Date now() {
         return Calendar.getInstance().getTime();
+    }
+
+    public int differentDays(Date from, Date to)
+    {
+        int days = (int) (diff/(1000 * 60 * 60 * 24));
+        return days;
+
     }
 }
