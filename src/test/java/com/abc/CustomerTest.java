@@ -10,14 +10,15 @@ public class CustomerTest {
     @Test //Test customer statement generation
     public void testApp(){
 
-        Account checkingAccount = new Account(Account.CHECKING);
-        Account savingsAccount = new Account(Account.SAVINGS);
+    	Account checkingAccount = new CheckingsAccount();
+    	 Account maxiSavingAccount = new MaxiSavingsAccount();
+    	 Account savingAccount = new SavingsAccount();
 
-        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
+        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingAccount);
 
         checkingAccount.deposit(100.0);
-        savingsAccount.deposit(4000.0);
-        savingsAccount.withdraw(200.0);
+        savingAccount.deposit(4000.0);
+        savingAccount.withdraw(200.0);
 
         assertEquals("Statement for Henry\n" +
                 "\n" +
@@ -35,23 +36,23 @@ public class CustomerTest {
 
     @Test
     public void testOneAccount(){
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
+        Customer oscar = new Customer("Oscar").openAccount(new SavingsAccount());
         assertEquals(1, oscar.getNumberOfAccounts());
     }
 
     @Test
     public void testTwoAccount(){
         Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
+                .openAccount(new SavingsAccount());
+        oscar.openAccount(new CheckingsAccount());
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
     @Ignore
     public void testThreeAcounts() {
         Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
+        		.openAccount(new SavingsAccount());
+        oscar.openAccount(new CheckingsAccount());
         assertEquals(3, oscar.getNumberOfAccounts());
     }
 }
