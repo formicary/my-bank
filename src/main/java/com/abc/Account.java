@@ -2,72 +2,85 @@ package com.abc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
 
 public class Account {
 
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
+    private List<Transaction> transactions;
+    private static final double INTEREST_RATE = 0.001;
 
-    private final int accountType;
-    public List<Transaction> transactions;
-
-    public Account(int accountType) {
-        this.accountType = accountType;
+    /**
+     * Account Constructor
+     */
+    public Account(){
         this.transactions = new ArrayList<Transaction>();
     }
 
+    /**
+     * Deposit method adds the amount passed as a parameter to the account.
+     * @param amount Amount to be deposited.
+     */
     public void deposit(double amount) {
         if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
+            throw new IllegalArgumentException("Amount must be greater than zero");
         } else {
-            transactions.add(new Transaction(amount));
+            transactions.add(new Transaction(amount, TransactionType.DEPOSIT));
         }
     }
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
+    /**
+     * Withdraw method creates a new withdraw transaction that negates the amount passed as the parameter.
+     * @param amount Amount to be withdrawn.
+     */
+    public void withdraw(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Amount must be greater than zero");
+        } else {
+            transactions.add(new Transaction(-amount, TransactionType.WITHDRAW));
+        }
     }
-}
 
+    /**
+     * InterestEarned method calculates the interest earned.
+     * @return Returns the interest earned.
+     */
     public double interestEarned() {
-        double amount = sumTransactions();
-        switch(accountType){
-            case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
-            case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
-            default:
-                return amount * 0.001;
-        }
+        return sumOfAllTransactions() * INTEREST_RATE;
     }
 
-    public double sumTransactions() {
-       return checkIfTransactionsExist(true);
-    }
-
-    private double checkIfTransactionsExist(boolean checkAll) {
+    protected double sumOfAllTransactions() {
         double amount = 0.0;
         for (Transaction t: transactions)
-            amount += t.amount;
+            amount += t.getAmount();
         return amount;
     }
 
-    public int getAccountType() {
-        return accountType;
+    /**
+     * GetTransactions method gets the list of transactions made in the account.
+     * @return Returns the list of transactions made in the account.
+     */
+    public List<Transaction> getTransactions() {
+        return transactions;
     }
 
+    /**
+     * CheckTWithdrawTransactionForLast10Days checks if a withdrawal is done within the last 10 days.
+     * @return Returns true if there has been a withdrawal in the last 10 days, or false otherwise.
+     */
+    public boolean checkWithdrawTransactionForLast10Days() {
+
+        DateProvider date = new DateProvider();
+        Date dateNow = date.now();
+        Date date10DaysAgo = date.getDateFromPast(10);
+        Date transactionDate;
+
+        for(Transaction t: transactions){
+             transactionDate = t.getTransactionDate();
+            if(!((transactionDate.before(date10DaysAgo)) || (transactionDate.after(dateNow)))
+                    && (t.getTransactionType().equals(TransactionType.WITHDRAW))){
+                return true;
+            }
+        }
+        return false;
+    }
 }
