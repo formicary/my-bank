@@ -30,7 +30,7 @@ public class Customer {
     public double totalInterestEarned() {
         double total = 0;
         for (Account a : accounts)
-            total += a.interestEarned();
+            total += a.interestEarned(a);
         return total;
     }
 
@@ -75,4 +75,10 @@ public class Customer {
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
     }
+    
+    public synchronized void transferBetweenAccount(Account from, Account to,
+			double amount) {
+		from.withdraw(amount);
+		to.deposit(amount);
+	}
 }
