@@ -1,0 +1,5 @@
+${accountTypeName}
+#foreach($transaction in $transactions)
+ ${transaction.date}   ${transaction.type}   ${transaction.amount}
+#end
+Total ${accountTotal}
