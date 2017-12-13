@@ -13,7 +13,7 @@ import com.abc.banking.exceptions.TransactionException;
 
 public final class Customer {
     private String name;
-    private final Collection<Account> accounts = new LinkedHashSet<>(); // one customer can have the same account only once
+    private final Collection<Account> accounts = new LinkedHashSet<>();
     private final long uniqueId = UniqueIdGenerator.getNext();
     
     protected Customer(String name) {

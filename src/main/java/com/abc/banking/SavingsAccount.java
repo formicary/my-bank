@@ -7,9 +7,9 @@ import com.abc.banking.config.ApplicationConfig;
 
 public final class SavingsAccount extends AbstractAccount {
 
-	public final BigDecimal INTEREST_RATE_PER_ANNUM_FIRST_AMOUNT = new BigDecimal("0.01");
-	public final BigDecimal INTEREST_RATE_PER_ANNUM_REST_AMOUNT = new BigDecimal("0.02");
-	public final BigDecimal INTEREST_RATE_THRESHOLD = new BigDecimal("1000.00");
+	private static final BigDecimal INTEREST_RATE_PER_ANNUM_FIRST_AMOUNT = new BigDecimal("0.01");
+	private static final BigDecimal INTEREST_RATE_PER_ANNUM_REST_AMOUNT = new BigDecimal("0.02");
+	private static final BigDecimal INTEREST_RATE_THRESHOLD = new BigDecimal("1000.00");
 	
 	protected SavingsAccount() {
 		super();
@@ -29,8 +29,8 @@ public final class SavingsAccount extends AbstractAccount {
         			.min(INTEREST_RATE_THRESHOLD)
         			.multiply(INTEREST_RATE_PER_ANNUM_FIRST_AMOUNT)
         			.divide(new BigDecimal(day.lengthOfYear()), 
-        					ApplicationConfig.monetaryDecimalPlacesAllowed*3, 
-        					ApplicationConfig.monetaryRoundingMode);
+        					ApplicationConfig.MONETARY_DECIMAL_PLACES_ALLOWED*3, 
+        					ApplicationConfig.MONETARY_ROUNDING_MODE);
 
         
         BigDecimal restInterest = 
@@ -39,11 +39,11 @@ public final class SavingsAccount extends AbstractAccount {
         			.max(BigDecimal.ZERO)
         			.multiply(INTEREST_RATE_PER_ANNUM_REST_AMOUNT)
         			.divide(new BigDecimal(day.lengthOfYear()), 
-        					ApplicationConfig.monetaryDecimalPlacesAllowed*3, 
-        					ApplicationConfig.monetaryRoundingMode);
+        					ApplicationConfig.MONETARY_DECIMAL_PLACES_ALLOWED*3, 
+        					ApplicationConfig.MONETARY_ROUNDING_MODE);
         
 		return firstInterest.add(restInterest)
-				.setScale(ApplicationConfig.monetaryDecimalPlacesAllowed, 
-        					ApplicationConfig.monetaryRoundingMode);
+				.setScale(ApplicationConfig.MONETARY_DECIMAL_PLACES_ALLOWED, 
+        					ApplicationConfig.MONETARY_ROUNDING_MODE);
 	}
 }

@@ -6,10 +6,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 public final class ApplicationConfig {
-	public static final NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
-	public static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-	public static final int monetaryDecimalPlacesAllowed = 2;
-	public static final RoundingMode monetaryRoundingMode = RoundingMode.HALF_UP;
+	public static final NumberFormat CURRENCY_FORMAT = NumberFormat.getCurrencyInstance(Locale.US);
+	public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	public static final int MONETARY_DECIMAL_PLACES_ALLOWED = 2;
+	public static final RoundingMode MONETARY_ROUNDING_MODE = RoundingMode.HALF_UP;
 
 	private ApplicationConfig() {}
 

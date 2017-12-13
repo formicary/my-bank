@@ -6,7 +6,7 @@ import java.util.Collection;
 
 import com.abc.banking.exceptions.TransactionException;
 
-public interface Account /*extends Comparable<Account>*/ {
+public interface Account {
 	
 	Transaction deposit(BigDecimal amount);
 

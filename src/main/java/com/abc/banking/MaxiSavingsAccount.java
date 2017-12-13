@@ -7,9 +7,9 @@ import com.abc.banking.config.ApplicationConfig;
 
 public final class MaxiSavingsAccount extends AbstractAccount {
 
-	public final BigDecimal DEFAULT_INTEREST_RATE_PER_ANNUM = new BigDecimal("0.01");
-	public final BigDecimal SPECIAL_INTEREST_RATE_PER_ANNUM = new BigDecimal("0.05");
-	public final int DAYS_BALANCE_FOR_SPECIAL_INTEREST_RATE = 10;
+	private static final BigDecimal DEFAULT_INTEREST_RATE_PER_ANNUM = new BigDecimal("0.01");
+	private static final BigDecimal SPECIAL_INTEREST_RATE_PER_ANNUM = new BigDecimal("0.05");
+	private static final int DAYS_BALANCE_FOR_SPECIAL_INTEREST_RATE = 10;
 	
 	protected MaxiSavingsAccount() {
 		super();
@@ -28,7 +28,6 @@ public final class MaxiSavingsAccount extends AbstractAccount {
 		
 		// day parameter is regarded as one of 10 past days, as interest shall be accrued at the end of the day
 		// start of testing period is not included
-		
 		boolean foundWithdrawals = 
 			getTransactions()
 			.stream()
@@ -45,7 +44,7 @@ public final class MaxiSavingsAccount extends AbstractAccount {
 		 return balance
         			.multiply(interestRate)
         			.divide(new BigDecimal(day.lengthOfYear()), 
-        					ApplicationConfig.monetaryDecimalPlacesAllowed, 
-        					ApplicationConfig.monetaryRoundingMode);
+        					ApplicationConfig.MONETARY_DECIMAL_PLACES_ALLOWED, 
+        					ApplicationConfig.MONETARY_ROUNDING_MODE);
 	}
 }

@@ -7,7 +7,7 @@ import com.abc.banking.config.ApplicationConfig;
 
 public final class Transaction implements Comparable<Transaction> {
     private final BigDecimal amount;
-    private final LocalDate transactionDate; // should be rather Temporal/Instant
+    private final LocalDate transactionDate;
     private final boolean accruedInterest;
     private final long uniqueId;
 
@@ -19,7 +19,7 @@ public final class Transaction implements Comparable<Transaction> {
     	if(transactionDate == null)
     		throw new IllegalArgumentException("transactionDate cannot be null");
     	
-    	this.amount = amount.setScale(ApplicationConfig.monetaryDecimalPlacesAllowed, ApplicationConfig.monetaryRoundingMode);
+    	this.amount = amount.setScale(ApplicationConfig.MONETARY_DECIMAL_PLACES_ALLOWED, ApplicationConfig.MONETARY_ROUNDING_MODE);
         this.transactionDate = transactionDate;
         this.accruedInterest = accruedInterest;
         this.uniqueId = UniqueIdGenerator.getNext();
@@ -34,11 +34,11 @@ public final class Transaction implements Comparable<Transaction> {
 	}
 
 	public BigDecimal getAmount() {
-		return amount; // BigDecimal is immutable, so no point to return a clone
+		return amount;
 	}
 
 	public LocalDate getTransactionDate() {
-		return transactionDate; // LocalDate is immutable, so no point to return a clone
+		return transactionDate;
 	}
 	
 	@Override
@@ -78,4 +78,9 @@ public final class Transaction implements Comparable<Transaction> {
 				this.accruedInterest == ((Transaction)obj).accruedInterest &&
 				this.uniqueId == ((Transaction)obj).uniqueId;
 	}
+	
+    @Override
+    public int hashCode() {
+    	return Long.hashCode(uniqueId);
+    }
 }

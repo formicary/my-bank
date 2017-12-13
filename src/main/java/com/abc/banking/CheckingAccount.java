@@ -7,7 +7,7 @@ import com.abc.banking.config.ApplicationConfig;
 
 public final class CheckingAccount extends AbstractAccount {
 
-	public final BigDecimal FLAT_INTEREST_RATE_PER_ANNUM = new BigDecimal("0.01");
+	private static final BigDecimal FLAT_INTEREST_RATE_PER_ANNUM = new BigDecimal("0.01");
 	
 	protected CheckingAccount() {
 		super();
@@ -25,7 +25,7 @@ public final class CheckingAccount extends AbstractAccount {
         return balance
         			.multiply(FLAT_INTEREST_RATE_PER_ANNUM)
         			.divide(new BigDecimal(day.lengthOfYear()), 
-        					ApplicationConfig.monetaryDecimalPlacesAllowed, 
-        					ApplicationConfig.monetaryRoundingMode);
+        					ApplicationConfig.MONETARY_DECIMAL_PLACES_ALLOWED, 
+        					ApplicationConfig.MONETARY_ROUNDING_MODE);
 	}
 }

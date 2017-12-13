@@ -10,7 +10,6 @@ import com.abc.banking.exceptions.TransactionException;
 
 public abstract class AbstractAccount implements Account {
 
-    // transactions are unique
 	private final Collection<Transaction> transactions = new TreeSet<>();
 	
 	private final long uniqueId = UniqueIdGenerator.getNext();
@@ -78,7 +77,7 @@ public abstract class AbstractAccount implements Account {
     	return transactions.stream()
 					.filter(transaction -> transaction.isAccruedInterest())
 					.map(transaction -> transaction.getTransactionDate())
-					.max(LocalDate::compareTo) //
+					.max(LocalDate::compareTo)
 					.orElse(LocalDate.MIN);
     }
     

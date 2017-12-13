@@ -385,4 +385,14 @@ public class AccountTest {
 		
 		Assert.assertEquals(formerSize, newSize);
 	}
+	
+    @Test
+    public void sameInstanceShallHaveSameHashCode() throws Exception  {
+    	Bank bank = new Bank();
+    	Customer johnny = bank.newCustomer("Johnny");
+    	Account account = johnny.openAccount(SavingsAccount.class);
+    	
+    	Assert.assertEquals(account.hashCode(), account.hashCode());
+    }
+
 }

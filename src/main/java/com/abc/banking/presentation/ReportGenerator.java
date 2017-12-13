@@ -82,9 +82,9 @@ public final class ReportGenerator {
 			
 			Map<String, String> transactionView = new HashMap<>();
 			
-			transactionView.put("date", ApplicationConfig.dateFormat.format(transaction.getTransactionDate()));
+			transactionView.put("date", ApplicationConfig.DATE_FORMAT.format(transaction.getTransactionDate()));
 			transactionView.put("type", transactionVerbose(transaction));
-			transactionView.put("amount", ApplicationConfig.currencyFormat.format(transaction.getAmount().abs()));
+			transactionView.put("amount", ApplicationConfig.CURRENCY_FORMAT.format(transaction.getAmount().abs()));
 			
 			transactions.add(transactionView);
 		}
@@ -93,8 +93,8 @@ public final class ReportGenerator {
 		
 		ctx.put("accountTypeName", account.getAccountTypeName());
 		ctx.put("transactions", transactions);
-		ctx.put("accountTotal", ApplicationConfig.currencyFormat.format(account.getBalance()));
-		ctx.put("currencyFormat", ApplicationConfig.currencyFormat);
+		ctx.put("accountTotal", ApplicationConfig.CURRENCY_FORMAT.format(account.getBalance()));
+		ctx.put("currencyFormat", ApplicationConfig.CURRENCY_FORMAT);
 		
 		return generateReport(ACCOUNT_STATEMENT_TEMPLATE_PATH, ctx);
 	}
@@ -121,7 +121,7 @@ public final class ReportGenerator {
 		
 		ctx.put("customerName", customer.getName());
 		ctx.put("accountReports", accountReports);
-		ctx.put("totalInAllAccounts", ApplicationConfig.currencyFormat.format(totalInAllAccounts));
+		ctx.put("totalInAllAccounts", ApplicationConfig.CURRENCY_FORMAT.format(totalInAllAccounts));
 		
 		return generateReport(CUSTOMER_STATEMENT_TEMPLATE_PATH, ctx);
 	}

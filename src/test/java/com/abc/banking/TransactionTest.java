@@ -153,5 +153,12 @@ public class TransactionTest {
 		
 		Assert.assertEquals(t, t);
 	}
+    
+	@Test
+    public void sameInstanceShallHaveSameHashCode() throws Exception  {
+		Transaction t = new Transaction(new BigDecimal("500.00"));
+		
+    	Assert.assertEquals(t.hashCode(), t.hashCode());
+    }
 
 }
