@@ -1,0 +1,6 @@
+Savings Account
+ 2017-11-01   deposit      $200,000.00
+ 2017-11-02   withdrawal   $1.00
+ 2017-11-12   deposit      $14.00
+ 2017-11-13   withdrawal   $198,000.00
+Total $2,013.00
