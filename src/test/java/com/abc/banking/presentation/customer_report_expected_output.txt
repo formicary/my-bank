@@ -1,0 +1,12 @@
+Statement for Henry
+
+Checking Account
+ 2017-12-12   deposit      $100.00
+Total $100.00
+
+Savings Account
+ 2017-12-12   deposit      $4,000.00
+ 2017-12-12   withdrawal   $200.00
+Total $3,800.00
+
+Total In All Accounts $3,900.00

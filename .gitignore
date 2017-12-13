@@ -1,4 +1,8 @@
 .idea/
+.settings/
 target/
 bin/
 *.iml
+.classpath
+.gitignore
+.project

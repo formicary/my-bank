@@ -1,0 +1,3 @@
+Customer Summary
+ - John (1 account)
+ - Mark (3 accounts)
