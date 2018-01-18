@@ -8,16 +8,25 @@ import static java.lang.Math.abs;
 public class Customer {
     private String name;
     private List<Account> accounts;
-
+    private final int customerID;
+    
+    private static int nextCustomerID;
+    
     public Customer(String name) {
         this.name = name;
         this.accounts = new ArrayList<Account>();
+        this.customerID=nextCustomerID;
+        nextCustomerID++;
     }
 
     public String getName() {
         return name;
     }
-
+    
+    public int getID() { 
+        return customerID;
+    }
+    
     public Customer openAccount(Account account) {
         accounts.add(account);
         return this;
@@ -30,49 +39,51 @@ public class Customer {
     public double totalInterestEarned() {
         double total = 0;
         for (Account a : accounts)
-            total += a.interestEarned();
+            total += a.totalInterestAccrued();
+        return total;
+    }
+    
+    public double totalBalance() {
+        double total = 0;
+        for (Account a : accounts)
+            total += a.getBalance();
         return total;
     }
 
     public String getStatement() {
         String statement = null;
         statement = "Statement for " + name + "\n";
-        double total = 0.0;
         for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+            statement += "\n" + a.getStatement() + "\n";
         }
-        statement += "\nTotal In All Accounts " + toDollars(total);
+        statement += "\nTotal In All Accounts: " + HelperMethods.toDollars(totalBalance());
         return statement;
     }
-
-    private String statementForAccount(Account a) {
-        String s = "";
-
-       //Translate to pretty account type
-        switch(a.getAccountType()){
-            case Account.CHECKING:
-                s += "Checking Account\n";
-                break;
-            case Account.SAVINGS:
-                s += "Savings Account\n";
-                break;
-            case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
-                break;
+    
+    public List<Integer> getAccountIDs()
+    {
+        List<Integer> accountIDs = new ArrayList<>();
+        for (Account a : accounts) {
+            accountIDs.add(a.getAccountID());
         }
-
-        //Now total up all the transactions
-        double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
-        }
-        s += "Total " + toDollars(total);
-        return s;
+        return accountIDs;
     }
-
-    private String toDollars(double d){
-        return String.format("$%,.2f", abs(d));
+    
+    //returns null if no account found with that ID;
+    public Account getAccountByID(int accountID){
+        for (Account a : accounts) {
+            if (accountID==a.getAccountID()) return a;
+        }
+        return null;
+    }
+    
+    //returns false if not enough money in account
+    public Boolean transferBetweenAccounts(double amount, Account fromAccount, Account toAccount){
+        if (amount<0) throw new IllegalArgumentException("amount must be greater than zero");
+        if (fromAccount==null || toAccount==null) throw new IllegalArgumentException("Accounts cannot be null");
+        Boolean success =fromAccount.withdraw(amount);
+        if (!success) return false;
+        toAccount.deposit(amount);
+        return true;
     }
 }
