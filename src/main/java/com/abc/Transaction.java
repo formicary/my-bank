@@ -13,6 +13,10 @@ public class Transaction {
     //TODO: create a retrieval function for this, atm its useless
     private Date transactionDate;
 
+    public Date getTransactionDate(){
+        return(transactionDate);
+    }
+
     public Transaction(double amount) {
         this.amount = amount;
         this.transactionDate = DateProvider.getInstance().now();

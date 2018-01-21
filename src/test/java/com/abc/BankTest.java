@@ -25,7 +25,6 @@ public class BankTest {
         bank.addCustomer(bill);
 
         checkingAccount.deposit(100.0);
-
         assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 

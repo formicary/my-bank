@@ -11,11 +11,12 @@ import java.util.List;
  */
 
 public class Account {
-    //TODO: CHECKING is never used??
     //TODO: change these to be enums
     public static final int CHECKING = 0;
     public static final int SAVINGS = 1;
     public static final int MAXI_SAVINGS = 2;
+
+    private double balance = 0.0;
 
     private final int accountType;
     public List<Transaction> transactions;
@@ -30,6 +31,7 @@ public class Account {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
             transactions.add(new Transaction(amount));
+            balance += amount;
         }
     }
 
@@ -38,30 +40,40 @@ public class Account {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
             transactions.add(new Transaction(-amount));
+            balance -= amount;
         }
     }
 
+    /* Matt is floating this idea about
+    public double getBalance(){
+        return balance;
+    }
+
+    public double getBalanceWithInterest(){
+        return balance + interestEarned();
+    }
+    */
+
     public double interestEarned() {
-        double amount = sumTransactions();
         switch(accountType){
-            //TODO: Add CHECKING functionality
             case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
+                if (balance <= 1000)
+                    return balance * 0.001;
                 else
-                    return 1 + (amount-1000) * 0.002;
+                    return 1 + (balance-1000) * 0.002;
                 //TODO: this came commented out, whats that about?
 //            case SUPER_SAVINGS:
-//                if (amount <= 4000)
+//                if (balance <= 4000)
 //                    return 20;
             case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
+                if (balance <= 1000)
+                    return balance * 0.02;
+                if (balance <= 2000)
+                    return 20 + (balance-1000) * 0.05;
+                return 70 + (balance-2000) * 0.1;
+            //the default state of the account is CHECKING however this isn't immediately clear
             default:
-                return amount * 0.001;
+                return balance * 0.001;
         }
     }
 

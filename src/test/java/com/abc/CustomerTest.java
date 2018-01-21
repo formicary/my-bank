@@ -33,6 +33,21 @@ public class CustomerTest {
                 "Total In All Accounts $3,900.00", henry.getStatement());
     }
 
+    @Test //Test customer statement generation
+    public void testAppOverdrawn(){
+
+        Account checkingAccount = new Account(Account.CHECKING);
+        Account savingsAccount = new Account(Account.SAVINGS);
+
+        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
+
+        checkingAccount.deposit(100.0);
+        checkingAccount.withdraw(200.0);
+        savingsAccount.withdraw(200.0);
+        System.out.println(henry.getStatement());
+
+    }
+
     @Test
     public void testOneAccount(){
         Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
