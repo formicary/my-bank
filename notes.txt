@@ -1,5 +1,9 @@
-I'm going to start with the styling. That way I can begin making improvements as I get used to the code.
+This file notes.txt will act as a sort of blog of my thought processes as I make changes to the program.
+This will help justify and explain why I make the changes I do and also give you, the reader, an insight into my development process.
+It is also a useful reference material for me while developing to keep track of what I have done and what I have to do.
 
+
+I'm going to start with the styling. That way I can begin making improvements as I get used to the code.
 
 -Added JavaDoc style commenting for the class (github says to treat the code like my own so "@author" is Matthew Howard)
 ----As I will likely edit the methods later, I'll JavaDoc them later
@@ -24,3 +28,8 @@ I also notice a lack of features handling overdraft / overdrawn account
 -Changed Customer.getStatement() to initialise statement with a value rather than initialise and then declare value
 
 -The test in TransactionTest is silly and doesn't test anything
+
+It seems daft to me the current way Object Orientation is handling the relationship between the Bank, the Customer and the Accounts.
+At the moment you create an account which you then pass through to the Customer in a function that returns the Customer to the caller.
+I believe it makes more sense for the Account creation to be handled entirely within the Customer class.
+The downside to this is that you cannot have shared accounts however this behaviour is not accounted for anywhere else in the code (nor the spec given to me), and I imagine is not important for the abc-bank program.
