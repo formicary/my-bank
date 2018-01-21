@@ -5,10 +5,11 @@ import java.util.List;
 
 /**
  * This is the object for the Account.
- * It contains an ArrayList of Transactions which can be summed to find the current total.
- * Functions for deposit and withdraw add new transactions
+ * It contains an ArrayList of Transactions which describe the activity inside the account.
+ * Functions for deposit and withdraw add new transactions.
  * @author Matthew Howard
  */
+
 public class Account {
     //TODO: CHECKING is never used??
     //TODO: change these to be enums

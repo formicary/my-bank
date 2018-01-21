@@ -5,6 +5,12 @@ import java.util.List;
 
 import static java.lang.Math.abs;
 
+/**
+ * This is the class for the Customer.
+ * It contains an ArrayList of the Accounts held by the customer.
+ * @author Matthew Howard
+ */
+
 public class Customer {
     private String name;
     private List<Account> accounts;

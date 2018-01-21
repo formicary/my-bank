@@ -7,3 +7,4 @@ I'm going to start with the styling. That way I can begin making improvements as
 -Fixed inconsistent spacing, indentation and comment style
 -This is more personal preference but I added braces on single line 'for' loops to make it more explicit, especially given that single line functions have been written with braces
 -During this time I've been adding "to do" notes for myself marking out things I've identified as odd or needing attention later
+-Transaction did not need to import Calendar so I removed that
