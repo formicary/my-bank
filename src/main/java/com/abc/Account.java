@@ -1,72 +1,145 @@
 package com.abc;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-public class Account {
-
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
-
-    private final int accountType;
-    public List<Transaction> transactions;
-
-    public Account(int accountType) {
+public class Account {    
+    private AccountType accountType;
+    protected List<Transaction> transactions;
+    
+    protected Account(AccountType accountType) {
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
     }
-
-    public void deposit(double amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
-        } else {
-            transactions.add(new Transaction(amount));
-        }
+    
+    // Allowing only positive amounts to be deposited.
+    // Returns True/False depending on Success/Failure
+    protected boolean deposit(double amount) {
+    	try {
+    		if (amount <= 0)
+    			throw new IllegalArgumentException("Amount must be greater than zero");    			
+    		else {
+    			// if not empty, Adding interest earned since last transaction before depositing
+    			if(!transactions.isEmpty())
+    				updateAmount();
+    			transactions.add(new Transaction(amount, TransactionType.DEPOSIT));
+    			return true;
+    		}
+    			
+    	}
+    	catch(Exception e) {
+    		System.out.println(e);
+    		return false;
+    	}
     }
-
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
+    
+    // helper method for testing
+    protected boolean depositWithdraw(Transaction t) {
+    	transactions.add(t);
+    	return true;
     }
-}
-
-    public double interestEarned() {
-        double amount = sumTransactions();
-        switch(accountType){
-            case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
-            case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
-            default:
-                return amount * 0.001;
-        }
+    
+    // Only positive amounts or amounts less/equal to account balance can be withdrawn   
+    // Returns True/False depending on Success/Failure
+    protected boolean withdraw(double amount) {
+    	try {
+    		if (amount <= 0) 
+    			throw new IllegalArgumentException("Amount must be greater than zero");
+    		else {
+    			// if not empty, Adding interest earned since last transaction before withdrawing
+    			if(!transactions.isEmpty())
+    				updateAmount();
+    			if(sumTransactions() - amount < 0.0)
+    				throw new Exception("Specified amount cannot be withdrawn. Insufficient Balance");
+    			else {
+    				transactions.add(new Transaction(-amount, TransactionType.WITHDRAW));
+    				return true;
+    			}    				
+    		}
+    	} 
+    	catch(Exception e) {
+    		System.out.println(e);
+    		return false;
+    	}
     }
-
-    public double sumTransactions() {
-       return checkIfTransactionsExist(true);
+    
+    // to add to transaction if interest > 0 
+    // called before withdraw, deposit, and when displaying interest earned to update the amount after compounding daily
+    protected void updateAmount() {
+    	double amount = sumTransactions();
+    	double interest = 0.0;
+    	
+    	switch(accountType) {
+        case SAVINGS: 									// rate of 0.1% for first 1000 then 0.2%
+            if (amount <= 1000)
+                interest = compoundInterest(amount, 0.001);
+            else
+                interest = compoundInterest(amount, 0.002);
+            break;
+            
+        case MAXI_SAVINGS: 								// 5% assuming no withdrawals in the past 10 days otherwise 0.1%
+            if (DateProvider.daysTillNow(lastWithdrawalDate()) < 10)
+            	interest = compoundInterest(amount, 0.001);
+            else
+            	interest = compoundInterest(amount, 0.05);
+            break;
+        default:										// basic rate of 0.1% for Checking Account
+            interest = compoundInterest(amount, 0.001);
+    	}
+        if (interest > 0.0)
+        	transactions.add(new Transaction(interest, TransactionType.ADDEDINTEREST));
     }
-
-    private double checkIfTransactionsExist(boolean checkAll) {
+    	
+    // calculating total interest earned for the account from list of transactions
+    protected double interestEarned() {
+        double interest = 0.0;
+        if(!transactions.isEmpty())
+			updateAmount();
+        for (Transaction t: transactions)
+        	if(t.getTransactionType() == TransactionType.ADDEDINTEREST)
+        		interest += t.getAmount();
+        return interest;
+    }
+    
+    // to calculate the compound interest since last transaction 
+    protected double compoundInterest(double present, double interest) {
+    	double ci = 0.0;
+    	// since compounded daily, n = number of days since last transaction, interest/365
+    	long n = daysSinceLastTransaction();
+    	ci = present * (Math.pow((1 + interest/365), n) - 1);
+    	return ci;
+    }
+    
+    protected long daysSinceLastTransaction() {
+    	if(!transactions.isEmpty())
+    		return DateProvider.daysTillNow(transactions.get(transactions.size()-1).getDate());
+    	else
+    		return 0;
+    }
+    
+    // returns last date of withdrawal if withdrawn, otherwise first deposit. 
+    protected Date lastWithdrawalDate() {
+    	int i = transactions.size() - 1;
+    	while(i >= 0) {
+    		// if withdrawn then, return last withdraw date else return first deposit date
+    		if(transactions.get(i).getTransactionType() == TransactionType.WITHDRAW)
+    			return transactions.get(i).getDate();
+    		if(i == 0)
+    			break;
+    		i--;
+    	}
+    	return transactions.get(i).getDate(); 
+    }
+    
+    // TOTAL account balance
+    protected double sumTransactions() { 
         double amount = 0.0;
         for (Transaction t: transactions)
-            amount += t.amount;
+            amount += t.getAmount();
         return amount;
     }
-
-    public int getAccountType() {
+    
+    // getter method to access account type.
+    public AccountType getAccountType() {
         return accountType;
     }
 
