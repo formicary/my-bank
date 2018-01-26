@@ -1,5 +1,7 @@
 package com.abc;
 
+import com.sun.xml.internal.ws.api.message.ExceptionHasMessage;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,15 +17,15 @@ public class Customer {
     private String name;
     private List<Account> accounts;
 
-    public Customer(String name) {
+    public Customer(String name, Bank bank) {
         this.name = name;
         this.accounts = new ArrayList<Account>();
+        bank.addCustomer(this);
     }
 
     public String getName() {
         return name;
     }
-
 
     public Account openAccount(int accountType) {
         Account newAcc = new Account(accountType);

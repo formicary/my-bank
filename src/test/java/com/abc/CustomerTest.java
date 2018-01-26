@@ -12,8 +12,8 @@ public class CustomerTest {
     public void testApp(){
 
 
-
-        Customer henry = new Customer("Henry");
+        Bank bank = new Bank();
+        Customer henry = new Customer("Henry", bank);
         Account checkingAccount = henry.openAccount(Account.CHECKING);
         Account savingsAccount = henry.openAccount(Account.SAVINGS);
 
@@ -37,8 +37,9 @@ public class CustomerTest {
 
     @Test //Test customer statement generation
     public void testAppOverdrawn(){
+        Bank bank = new Bank();
 
-        Customer henry = new Customer("Henry");
+        Customer henry = new Customer("Henry", bank);
         Account checkingAccount = henry.openAccount(Account.CHECKING);
         Account savingsAccount = henry.openAccount(Account.SAVINGS);
 
@@ -51,14 +52,18 @@ public class CustomerTest {
 
     @Test
     public void testOneAccount(){
-        Customer oscar = new Customer("Oscar");
+        Bank bank = new Bank();
+
+        Customer oscar = new Customer("Oscar", bank);
         oscar.openAccount(Account.SAVINGS);
         assertEquals(1, oscar.getNumberOfAccounts());
     }
 
     @Test
     public void testTwoAccount(){
-        Customer oscar = new Customer("Oscar");
+        Bank bank = new Bank();
+
+        Customer oscar = new Customer("Oscar", bank);
         oscar.openAccount(Account.SAVINGS);
         oscar.openAccount(Account.CHECKING);
         assertEquals(2, oscar.getNumberOfAccounts());
@@ -66,7 +71,9 @@ public class CustomerTest {
 
     @Test
     public void testThreeAcounts() {
-        Customer oscar = new Customer("Oscar");
+        Bank bank = new Bank();
+
+        Customer oscar = new Customer("Oscar", bank);
         oscar.openAccount(Account.SAVINGS);
         oscar.openAccount(Account.CHECKING);
         oscar.openAccount(Account.MAXI_SAVINGS);

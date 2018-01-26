@@ -36,4 +36,7 @@ The downside to this is that you cannot have shared accounts however this behavi
 
 After implementing this the neatness is evident when comparing the CustomerTest.java code
 
-Similarly I think that the Bank should "create" the customer. This prevents the customer from having an Account when they don't have a bank
+Similarly I think that the Bank should "create" the customer. This prevents the customer from having an Account when they don't have a bank.
+On second thought it makes more sense for the bank to be given a customer rather than the customer being materialised from the bank.
+It occurs to me that at the moment a Customer can have an account without being a member of being of a bank.
+I have added the requirement in the constructor of a Customer that a bank must be passed as an argument, and then I call addCustomer() on that bank. This means that all customers are registered with a bank, making this more accurate.

@@ -20,6 +20,16 @@ public class Bank {
         customers.add(customer);
     }
 
+    //this is useful
+    public boolean checkCustomerExists(Customer customer){
+        for(int i = 0; i<customers.size();i++){
+            if(customers.get(i).equals(customer)){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public String customerSummary() {
         String summary = "Customer Summary";
         for (Customer c : customers) {
