@@ -1,7 +1,6 @@
 package com.abc;
 
 import org.junit.Test;
-
 import java.util.Calendar;
 
 import static org.junit.Assert.assertEquals;
