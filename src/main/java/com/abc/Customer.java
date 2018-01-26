@@ -24,10 +24,11 @@ public class Customer {
         return name;
     }
 
-    //Why is this returning itself?
-    public Customer openAccount(Account account) {
-        accounts.add(account);
-        return this;
+
+    public Account openAccount(int accountType) {
+        Account newAcc = new Account(accountType);
+        accounts.add(newAcc);
+        return newAcc;
     }
 
     public int getNumberOfAccounts() {
