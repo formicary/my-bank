@@ -32,7 +32,7 @@ public class BankTest {
         Bank bank = new Bank();
         Customer bill = new Customer("Bill", bank);
 
-        Account checkingAccount = bill.openAccount(Account.SAVINGS);;
+        Account checkingAccount = bill.openAccount(Account.SAVINGS);
 
         checkingAccount.deposit(1500.0);
 
