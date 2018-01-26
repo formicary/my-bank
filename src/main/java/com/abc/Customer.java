@@ -56,6 +56,25 @@ public class Customer {
         return statement;
     }
 
+    public void transferFundsBetweenAccounts(Account from, Account to, double amount){
+        boolean fromExists = false;
+        boolean toExists = false;
+        for (int i = 0; i< accounts.size();i++){
+            if (accounts.get(i) == from) {
+                fromExists = true;
+            }
+            if(accounts.get(i) == to){
+                toExists= true;
+            }
+        }
+        if(fromExists&&toExists){
+            from.withdraw(amount);
+            to.deposit(amount);
+        } else{
+            throw new IllegalArgumentException("both accounts must belong to this customer");
+        }
+    }
+
     private String statementForAccount(Account a) {
         String s = "";
 

@@ -7,6 +7,7 @@ import org.omg.PortableInterceptor.ACTIVE;
 import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
+    private static final double DOUBLE_DELTA = 1e-15;
 
     @Test //Test customer statement generation
     public void testApp(){
@@ -60,7 +61,33 @@ public class CustomerTest {
             checkingAccount.withdraw(0.01);
         }
         System.out.println(henry.getStatement());
+    }
 
+    @Test
+    public void testTransferFunds(){
+        Bank bank = new Bank();
+
+        Customer henry = new Customer("Henry", bank);
+        Account checkingAccount = henry.openAccount(Account.CHECKING);
+        Account savingsAccount = henry.openAccount(Account.SAVINGS);
+        checkingAccount.deposit(100.00);
+        henry.transferFundsBetweenAccounts(checkingAccount,savingsAccount,50.00);
+        assertEquals(savingsAccount.getBalance(),50.00,DOUBLE_DELTA);
+        assertEquals(checkingAccount.getBalance(),50.00,DOUBLE_DELTA);
+    }
+
+    @Test
+    public void testTransferFundsBetweenTwoDifferentCustomers(){ //this should fail because it is not allowed by design
+        Bank bank = new Bank();
+
+        Customer henry = new Customer("Henry", bank);
+        Customer hacker = new Customer("hacker", bank);
+        Account checkingAccount = henry.openAccount(Account.CHECKING);
+        Account savingsAccount = hacker.openAccount(Account.SAVINGS);
+        checkingAccount.deposit(100.00);
+        henry.transferFundsBetweenAccounts(checkingAccount,savingsAccount,50.00);
+        assertEquals(savingsAccount.getBalance(),50.00,DOUBLE_DELTA);
+        assertEquals(checkingAccount.getBalance(),50.00,DOUBLE_DELTA);
     }
 
     @Test

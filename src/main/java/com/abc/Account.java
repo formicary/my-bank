@@ -54,15 +54,9 @@ public class Account {
         }
     }
 
-    /* Matt is floating this idea about
     public double getBalance(){
         return balance;
     }
-
-    public double getBalanceWithInterest(){
-        return balance + interestEarned();
-    }
-    */
 
     public double interestEarned() {
         switch(accountType){

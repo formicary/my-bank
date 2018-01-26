@@ -51,3 +51,5 @@ In fact to take this further I will disallow transactions with more than 2 decim
 Renamed Bank.format() to Bank.pluraliseString() because format() was a very ambiguous name
 
 Removed Bank,getFirstCustomer() because it was poorly programmed and unused, and you should only program getters and setters that you will use.
+
+Added the ability to move funds between two accounts owned by the same customer
