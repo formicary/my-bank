@@ -17,6 +17,7 @@ public class Customer {
     private String name;
     private List<Account> accounts;
 
+
     public Customer(String name, Bank bank) {
         this.name = name;
         this.accounts = new ArrayList<Account>();

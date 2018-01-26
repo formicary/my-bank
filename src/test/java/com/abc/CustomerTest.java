@@ -41,11 +41,9 @@ public class CustomerTest {
 
         Customer henry = new Customer("Henry", bank);
         Account checkingAccount = henry.openAccount(Account.CHECKING);
-        Account savingsAccount = henry.openAccount(Account.SAVINGS);
 
         checkingAccount.deposit(100.0);
-        checkingAccount.withdraw(200.0);
-        savingsAccount.withdraw(200.0);
+        checkingAccount.withdraw(100.0);
         System.out.println(henry.getStatement());
 
     }
