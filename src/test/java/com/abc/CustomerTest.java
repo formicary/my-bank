@@ -2,6 +2,7 @@ package com.abc;
 
 import org.junit.Ignore;
 import org.junit.Test;
+import org.omg.PortableInterceptor.ACTIVE;
 
 import static org.junit.Assert.assertEquals;
 
@@ -63,11 +64,12 @@ public class CustomerTest {
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
-    @Ignore
+    @Test
     public void testThreeAcounts() {
         Customer oscar = new Customer("Oscar");
         oscar.openAccount(Account.SAVINGS);
         oscar.openAccount(Account.CHECKING);
+        oscar.openAccount(Account.MAXI_SAVINGS);
         assertEquals(3, oscar.getNumberOfAccounts());
     }
 }
