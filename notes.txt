@@ -40,3 +40,10 @@ Similarly I think that the Bank should "create" the customer. This prevents the 
 On second thought it makes more sense for the bank to be given a customer rather than the customer being materialised from the bank.
 It occurs to me that at the moment a Customer can have an account without being a member of being of a bank.
 I have added the requirement in the constructor of a Customer that a bank must be passed as an argument, and then I call addCustomer() on that bank. This means that all customers are registered with a bank, making this more accurate.
+
+I changed the code to disallow entry into an overdraft.
+
+Withdrawals and deposits of less than 0.01 work as intended in the code, but causes the statement printed to have an odd behaviour. The transactions are listed as $0.00 despite changes happening.
+I will prevent withdrawals and deposits of less than 0.01 as this will more accurately model the behaviour of a real bank.
+
+In fact to take this further I will disallow transactions with more than 2 decimal places.

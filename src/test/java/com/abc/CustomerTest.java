@@ -49,6 +49,21 @@ public class CustomerTest {
     }
 
     @Test
+    public void testWithdrawLessThanOne(){
+        Bank bank = new Bank();
+
+        Customer henry = new Customer("Henry", bank);
+        Account checkingAccount = henry.openAccount(Account.CHECKING);
+
+        checkingAccount.deposit(100.00);
+        for(int i =0;i<100;i++){
+            checkingAccount.withdraw(0.01);
+        }
+        System.out.println(henry.getStatement());
+
+    }
+
+    @Test
     public void testOneAccount(){
         Bank bank = new Bank();
 

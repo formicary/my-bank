@@ -1,5 +1,7 @@
 package com.abc;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,8 +29,11 @@ public class Account {
     }
 
     public void deposit(double amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
+        if(Double.toString(amount).length() - Double.toString(amount).indexOf('.') - 1 > 2){
+            throw new IllegalArgumentException("Transactions with more than 2 decimal points are disallowed");
+        }
+        if (amount < 0.01) {
+            throw new IllegalArgumentException("amount must be at least 0.01");
         } else {
             transactions.add(new Transaction(amount));
             balance += amount;
@@ -36,8 +41,11 @@ public class Account {
     }
 
     public void withdraw(double amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
+        if(Double.toString(amount).length() - Double.toString(amount).indexOf('.') - 1 > 2){
+            throw new IllegalArgumentException("Transactions with more than 2 decimal points are disallowed");
+        }
+        if (amount < 0.01) {
+            throw new IllegalArgumentException("amount must be at least 0.01");
         } else if (balance-amount<0.0) {
             throw new IllegalArgumentException("insufficient funds");
         }else {
@@ -94,5 +102,7 @@ public class Account {
     public int getAccountType() {
         return accountType;
     }
+
+
 
 }
