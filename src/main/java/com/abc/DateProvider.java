@@ -2,6 +2,7 @@ package com.abc;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * This is a static object that exists to provide the Date to timestamp Transactions.
@@ -17,7 +18,12 @@ public class DateProvider {
         return instance;
     }
 
-    //TODO: should this be static?
+    public Date getTenDaysAgo(){
+        Calendar cal = new GregorianCalendar();
+        cal.add(Calendar.DAY_OF_MONTH, -10);
+        return cal.getTime();
+    }
+
     public Date now() {
         return Calendar.getInstance().getTime();
     }

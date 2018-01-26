@@ -3,6 +3,7 @@ package com.abc;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -61,24 +62,29 @@ public class Account {
     public double interestEarned() {
         switch(accountType){
             case SAVINGS:
-                if (balance <= 1000)
+                if (balance <= 1000) {
                     return balance * 0.001;
-                else
-                    return 1 + (balance-1000) * 0.002;
-                //TODO: this came commented out, whats that about?
-//            case SUPER_SAVINGS:
-//                if (balance <= 4000)
-//                    return 20;
+                }
+                else {
+                    return 1 + (balance - 1000) * 0.002;
+                }
             case MAXI_SAVINGS:
-                if (balance <= 1000)
-                    return balance * 0.02;
-                if (balance <= 2000)
+                if (checkTenDaysBack()) {
+                    //TODO: test the 10 days functionality
                     return 20 + (balance-1000) * 0.05;
-                return 70 + (balance-2000) * 0.1;
-            //the default state of the account is CHECKING however this isn't immediately clear
+                }else {
+                    return balance * 0.001;
+                }
+
+            //the default state of the account is CHECKING
             default:
                 return balance * 0.001;
         }
+    }
+
+    public boolean checkTenDaysBack(){
+        Date transactionDate = transactions.get(transactions.size()-1).getTransactionDate();
+        return DateProvider.getInstance().getTenDaysAgo().after(transactionDate);
     }
 
     public double sumTransactions() {
@@ -96,7 +102,5 @@ public class Account {
     public int getAccountType() {
         return accountType;
     }
-
-
 
 }
