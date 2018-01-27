@@ -4,7 +4,7 @@ import java.util.Date;
 
 /**
  * This is a Transaction object which is used to record the activity inside an Account.
- * @author Matthew Howard
+ * @author Matthew Howard - <a href="mailto:m.o.howard@outlook.com">m.o.howard@outlook.com</a>
  */
 
 public class Transaction {

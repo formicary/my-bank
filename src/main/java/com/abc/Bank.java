@@ -6,16 +6,23 @@ import java.util.List;
 /**
  * This is the object for the Bank.
  * It contains an ArrayList of the customers.
- * @author Matthew Howard
+ * @author Matthew Howard - <a href="mailto:m.o.howard@outlook.com">m.o.howard@outlook.com</a>
  */
 
 public class Bank {
     private List<Customer> customers;
 
+    /**
+     *This is the constructor it initialises the ArrayList of customers to be empty
+    */
     public Bank() {
         customers = new ArrayList<Customer>();
     }
 
+    /**
+     *
+     * @param customer
+     */
     public void addCustomer(Customer customer) {
         customers.add(customer);
     }

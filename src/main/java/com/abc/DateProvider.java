@@ -6,7 +6,7 @@ import java.util.GregorianCalendar;
 
 /**
  * This is a static object that exists to provide the Date to timestamp Transactions.
- * @author Matthew Howard
+ * @author Matthew Howard - <a href="mailto:m.o.howard@outlook.com">m.o.howard@outlook.com</a>
  */
 
 public class DateProvider {

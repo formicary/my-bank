@@ -10,7 +10,7 @@ import java.util.List;
  * This is the object for the Account.
  * It contains an ArrayList of Transactions which describe the activity inside the account.
  * Functions for deposit and withdraw add new transactions.
- * @author Matthew Howard
+ * @author Matthew Howard - <a href="mailto:m.o.howard@outlook.com">m.o.howard@outlook.com</a>
  */
 
 public class Account {
