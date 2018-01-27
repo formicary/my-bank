@@ -20,15 +20,6 @@ public class Bank {
         customers.add(customer);
     }
 
-    //this is useful
-    public boolean checkCustomerExists(Customer customer){
-        for(int i = 0; i<customers.size();i++){
-            if(customers.get(i).equals(customer)){
-                return true;
-            }
-        }
-        return false;
-    }
 
     public String customerSummary() {
         String summary = "Customer Summary";
@@ -40,7 +31,6 @@ public class Bank {
 
     //Make sure correct plural of word is created based on the number passed in:
     //If number passed in is 1 just return the word otherwise add an 's' at the end
-    //TODO: probably just inline this in the above function
     private String pluraliseString(int number, String word) {
         return number + " " + (number == 1 ? word : word + "s");
     }

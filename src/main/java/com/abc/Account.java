@@ -66,12 +66,12 @@ public class Account {
                     return balance * 0.001;
                 }
                 else {
-                    return 1 + (balance - 1000) * 0.002;
+                    //1 is the 0.1% interest on the 1000 and then work out 0.2% times however much is after 1000
+                    return 1 + ((balance - 1000) * 0.002);
                 }
             case MAXI_SAVINGS:
                 if (checkTenDaysBack()) {
-                    //TODO: test the 10 days functionality
-                    return 20 + (balance-1000) * 0.05;
+                    return balance* 0.05;
                 }else {
                     return balance * 0.001;
                 }
@@ -88,11 +88,6 @@ public class Account {
     }
 
     public double sumTransactions() {
-        return checkIfTransactionsExist(true);
-    }
-
-    private double checkIfTransactionsExist(boolean checkAll) {
-        //TODO: checkAll never used ??
         double amount = 0.0;
         for (Transaction t: transactions)
             amount += t.amount;

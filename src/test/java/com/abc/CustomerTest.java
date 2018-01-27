@@ -77,7 +77,7 @@ public class CustomerTest {
     }
 
     @Test
-    public void testTransferFundsBetweenTwoDifferentCustomers(){ //this should fail because it is not allowed by design
+    public void testTransferFundsBetweenTwoDifferentCustomers(){
         Bank bank = new Bank();
 
         Customer henry = new Customer("Henry", bank);
@@ -85,9 +85,13 @@ public class CustomerTest {
         Account checkingAccount = henry.openAccount(Account.CHECKING);
         Account savingsAccount = hacker.openAccount(Account.SAVINGS);
         checkingAccount.deposit(100.00);
-        henry.transferFundsBetweenAccounts(checkingAccount,savingsAccount,50.00);
-        assertEquals(savingsAccount.getBalance(),50.00,DOUBLE_DELTA);
-        assertEquals(checkingAccount.getBalance(),50.00,DOUBLE_DELTA);
+        try {
+            henry.transferFundsBetweenAccounts(checkingAccount, savingsAccount, 50.00);
+        }catch (IllegalArgumentException e){
+            e.printStackTrace();
+        }
+        assertEquals(savingsAccount.getBalance(),0.00,DOUBLE_DELTA);
+        assertEquals(checkingAccount.getBalance(),100.00,DOUBLE_DELTA);
     }
 
     @Test
@@ -100,7 +104,7 @@ public class CustomerTest {
     }
 
     @Test
-    public void testTwoAccount(){
+    public void testTwoAccounts(){
         Bank bank = new Bank();
 
         Customer oscar = new Customer("Oscar", bank);
@@ -110,7 +114,7 @@ public class CustomerTest {
     }
 
     @Test
-    public void testThreeAcounts() {
+    public void testThreeAccounts() {
         Bank bank = new Bank();
 
         Customer oscar = new Customer("Oscar", bank);

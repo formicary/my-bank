@@ -59,7 +59,7 @@ public class Customer {
     public void transferFundsBetweenAccounts(Account from, Account to, double amount){
         boolean fromExists = false;
         boolean toExists = false;
-        for (int i = 0; i< accounts.size();i++){
+        for(int i = 0; i< accounts.size();i++){
             if (accounts.get(i) == from) {
                 fromExists = true;
             }

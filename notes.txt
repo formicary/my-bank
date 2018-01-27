@@ -57,3 +57,6 @@ Added the ability to move funds between two accounts owned by the same customer
 Created a function to check for whether or not the most recent transaction in an account happened 10 days ago or not
 Used that function to implement the desired changes to the MAXI_SAVINGS account interest calculation
 
+Removed redundant and incorrectly named function Account.checkIfTransactionExists() and merged functionality with Account.sumTransactions() which did the same thing
+
+Fixed a couple of tests

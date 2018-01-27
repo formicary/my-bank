@@ -10,7 +10,7 @@ import java.util.Date;
 public class Transaction {
     public final double amount;
 
-    //TODO: create a retrieval function for this, atm its useless
+
     private Date transactionDate;
 
     public Date getTransactionDate(){
