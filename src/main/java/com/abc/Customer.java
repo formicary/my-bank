@@ -59,9 +59,19 @@ public class Customer {
      */
     public double totalInterestEarned() {
         double total = 0;
-        for (Account a: accounts)
-            total += a.interestEarned();
+        for (Account a: accounts) {
+            total += a.interestEarnedPerYear();
+        }
         return total;
+    }
+
+    /**
+     * This function adds the daily interest to all of the Accounts held by this Customer
+     */
+    public void addDailyInterest(){
+        for (Account a: accounts) {
+           a.addDailyInterest();
+        }
     }
 
     /**

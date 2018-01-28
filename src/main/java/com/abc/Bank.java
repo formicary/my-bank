@@ -61,4 +61,13 @@ public class Bank {
   return total;
  }
 
+    /**
+     * This function will update all the accounts held by all of the Customers at this bank and add their daily interest..
+     */
+ public void payDailyInterest() {
+     for (Customer c : customers) {
+         c.addDailyInterest();
+     }
+ }
+
 }

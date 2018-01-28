@@ -84,7 +84,7 @@ public class Account {
      * This function calculates the amount of interest that will be generated per year given the type of account this is and the amount of money deposited.
      * @return A double representing the amount of interest that will be generated per year given the type of account and amount of money deposited
      */
-    public double interestEarned() {
+    public double interestEarnedPerYear() {
         switch (accountType) {
             case SAVINGS:
                 if (balance <= 1000) {
@@ -105,6 +105,15 @@ public class Account {
             default:
                 return balance * 0.001;
         }
+    }
+
+    /**
+     * This function automatically calculates and adds the correct amount of interest for that day
+     */
+    public void addDailyInterest(){
+        double interest = interestEarnedPerYear() /365;
+        transactions.add(new Transaction(interest));
+        balance += interest;
     }
 
     /**

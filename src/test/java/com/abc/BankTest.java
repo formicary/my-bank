@@ -63,4 +63,17 @@ public class BankTest {
         assertEquals(3.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
+    @Test
+    public void testMaxiSavingsDailyInterest() {
+        Bank bank = new Bank();
+
+        Customer bill = new Customer("Bill", bank);
+        Account checkingAccount = bill.openAccount(Account.MAXI_SAVINGS);
+
+        checkingAccount.deposit(3000.0);
+        bank.payDailyInterest();
+
+        assertEquals((3000.0 + (3.0/365.0)), checkingAccount.getBalance(), DOUBLE_DELTA);
+    }
+
 }
