@@ -67,3 +67,7 @@ Created AccountTest.java and appropriate tests
 
 I noticed that Transaction.amount was public which meant it could be edited after it was created which is not secure. I fixed this
 Also gave the TransactionTest a use to test this feature
+
+Finished JavaDoc
+
+Made sure spacing and indentation was consistent

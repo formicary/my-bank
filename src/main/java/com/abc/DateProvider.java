@@ -26,7 +26,7 @@ public class DateProvider {
      * This function returns a Date object that is set 10 days before the time this function was called.
      * @return  A Date object that is set 10 days before the time this function was called.
      */
-    public Date getTenDaysAgo(){
+    public Date getTenDaysAgo() {
         Calendar cal = new GregorianCalendar();
         cal.add(Calendar.DAY_OF_MONTH, -10);
         return cal.getTime();
@@ -39,4 +39,5 @@ public class DateProvider {
     public Date now() {
         return Calendar.getInstance().getTime();
     }
+
 }

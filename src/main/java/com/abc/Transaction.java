@@ -24,15 +24,15 @@ public class Transaction {
      * This function returns the Date that this Transaction occurred
      * @return A Date object timestamping when this Transaction occurred
      */
-    public Date getTransactionDate(){
-        return(transactionDate);
+    public Date getTransactionDate() {
+        return (transactionDate);
     }
 
     /**
      * This function returns the amount that was processed during this Transaction
      * @return A double representing the amount of money that was processed during this Transaction
      */
-    public double getAmount(){
+    public double getAmount() {
         return amount;
     }
 

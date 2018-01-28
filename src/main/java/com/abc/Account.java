@@ -19,7 +19,7 @@ public class Account {
     private double balance = 0.0;
 
     private final int accountType;
-    public List<Transaction> transactions;
+    public List < Transaction > transactions;
 
     /**
      * The constructor for an Account. It takes an integer representing which type of Account it should be.
@@ -27,11 +27,11 @@ public class Account {
      *                    Any other value will default to {@value #CHECKING}.
      */
     public Account(int accountType) {
-        if(accountType<0||accountType>2){
-            accountType=CHECKING;
+        if (accountType < 0 || accountType > 2) {
+            accountType = CHECKING;
         }
         this.accountType = accountType;
-        this.transactions = new ArrayList<Transaction>();
+        this.transactions = new ArrayList < Transaction > ();
     }
 
     /**
@@ -41,7 +41,7 @@ public class Account {
      *                  This value is not allowed to have more than 2 decimal places as it is impossible to have 0.001 dollars, for example.
      */
     public void deposit(double amount) {
-        if(Double.toString(amount).length() - Double.toString(amount).indexOf('.') - 1 > 2){
+        if (Double.toString(amount).length() - Double.toString(amount).indexOf('.') - 1 > 2) {
             throw new IllegalArgumentException("Transactions with more than 2 decimal points are disallowed");
         }
         if (amount < 0.01) {
@@ -59,14 +59,14 @@ public class Account {
      *                  This value is not allowed to have more than 2 decimal places as it is impossible to have 0.001 dollars, for example.
      */
     public void withdraw(double amount) {
-        if(Double.toString(amount).length() - Double.toString(amount).indexOf('.') - 1 > 2){
+        if (Double.toString(amount).length() - Double.toString(amount).indexOf('.') - 1 > 2) {
             throw new IllegalArgumentException("Transactions with more than 2 decimal points are disallowed");
         }
         if (amount < 0.01) {
             throw new IllegalArgumentException("amount must be at least 0.01");
-        } else if (balance-amount<0.0) {
+        } else if (balance - amount < 0.0) {
             throw new IllegalArgumentException("insufficient funds");
-        }else {
+        } else {
             transactions.add(new Transaction(-amount));
             balance -= amount;
         }
@@ -76,7 +76,7 @@ public class Account {
      * This function returns the balance of this account.
      * @return A double representing the amount of money in this account.
      */
-    public double getBalance(){
+    public double getBalance() {
         return balance;
     }
 
@@ -85,24 +85,23 @@ public class Account {
      * @return A double representing the amount of interest that will be generated per year given the type of account and amount of money deposited
      */
     public double interestEarned() {
-        switch(accountType){
+        switch (accountType) {
             case SAVINGS:
                 if (balance <= 1000) {
                     return balance * 0.001; //0.1% interest
-                }
-                else {
+                } else {
                     //1 is the 0.1% interest on the 1000 and then work out 0.2% times however much is after 1000
                     return 1 + ((balance - 1000) * 0.002);
                 }
             case MAXI_SAVINGS:
                 //check if the last transaction happened 10 days ago
                 if (checkTenDaysBack()) {
-                    return balance* 0.05; //5% interest
-                }else {
+                    return balance * 0.05; //5% interest
+                } else {
                     return balance * 0.001; // 0.1% interest
                 }
 
-            //the default state of the account is CHECKING
+                //the default state of the account is CHECKING
             default:
                 return balance * 0.001;
         }
@@ -112,8 +111,8 @@ public class Account {
      * This function returns true if the most recent transaction happened more than 10 days ago.
      * @return A boolean value representing whether or not the most recent transaction happened more than 10 days ago or not
      */
-    public boolean checkTenDaysBack(){
-        Date transactionDate = transactions.get(transactions.size()-1).getTransactionDate();
+    public boolean checkTenDaysBack() {
+        Date transactionDate = transactions.get(transactions.size() - 1).getTransactionDate();
         return DateProvider.getInstance().getTenDaysAgo().after(transactionDate);
     }
 

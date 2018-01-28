@@ -13,7 +13,7 @@ import static java.lang.Math.abs;
 
 public class Customer {
     private String name;
-    private List<Account> accounts;
+    private List < Account > accounts;
 
     /**
      * This is the constructor for the Customer class. It takes a name to give the customer and a Bank to register the customer with.
@@ -22,7 +22,7 @@ public class Customer {
      */
     public Customer(String name, Bank bank) {
         this.name = name;
-        this.accounts = new ArrayList<Account>();
+        this.accounts = new ArrayList < Account > ();
         bank.addCustomer(this);
     }
 
@@ -59,7 +59,7 @@ public class Customer {
      */
     public double totalInterestEarned() {
         double total = 0;
-        for (Account a : accounts)
+        for (Account a: accounts)
             total += a.interestEarned();
         return total;
     }
@@ -71,7 +71,7 @@ public class Customer {
     public String getStatement() {
         String statement = "Statement for " + name + "\n";
         double total = 0.0;
-        for (Account a : accounts) {
+        for (Account a: accounts) {
             statement += "\n" + statementForAccount(a) + "\n";
             total += a.sumTransactions();
         }
@@ -91,21 +91,21 @@ public class Customer {
      *               The double must not have more than 2 decimal places as it is impossible to have 0.001 dollars
      *               The double must not be negative
      */
-    public void transferFundsBetweenAccounts(Account from, Account to, double amount){
+    public void transferFundsBetweenAccounts(Account from, Account to, double amount) {
         boolean fromExists = false;
         boolean toExists = false;
-        for(int i = 0; i< accounts.size();i++){
+        for (int i = 0; i < accounts.size(); i++) {
             if (accounts.get(i) == from) {
                 fromExists = true;
             }
-            if(accounts.get(i) == to){
-                toExists= true;
+            if (accounts.get(i) == to) {
+                toExists = true;
             }
         }
-        if(fromExists&&toExists){
+        if (fromExists && toExists) {
             from.withdraw(amount);
             to.deposit(amount);
-        } else{
+        } else {
             throw new IllegalArgumentException("both accounts must belong to this customer");
         }
     }
@@ -119,7 +119,7 @@ public class Customer {
         String s = "";
 
         //Translate to pretty account type
-        switch(a.getAccountType()){
+        switch (a.getAccountType()) {
             case Account.CHECKING:
                 s += "Checking Account\n";
                 break;
@@ -133,7 +133,7 @@ public class Customer {
 
         //Now total up all the transactions
         double total = 0.0;
-        for (Transaction t : a.transactions) {
+        for (Transaction t: a.transactions) {
             s += "  " + (t.getAmount() < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.getAmount()) + "\n";
             total += t.getAmount();
         }
@@ -146,7 +146,8 @@ public class Customer {
      * @param d A double to be converted into a String representing dollars
      * @return  A String representing the given amount with a dollar sign and rounded to 2 decimal places
      */
-    private String toDollars(double d){
+    private String toDollars(double d) {
         return String.format("$%,.2f", abs(d));
     }
+
 }

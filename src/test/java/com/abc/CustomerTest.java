@@ -1,7 +1,6 @@
 package com.abc;
 
 import org.junit.Test;
-import org.omg.PortableInterceptor.ACTIVE;
 
 import static org.junit.Assert.assertEquals;
 
@@ -9,7 +8,7 @@ public class CustomerTest {
     private static final double DOUBLE_DELTA = 1e-15;
 
     @Test //Test customer statement generation
-    public void testCustomerStatementGeneration(){
+    public void testCustomerStatementGeneration() {
         Bank bank = new Bank();
         Customer henry = new Customer("Henry", bank);
         Account checkingAccount = henry.openAccount(Account.CHECKING);
@@ -34,20 +33,20 @@ public class CustomerTest {
     }
 
     @Test
-    public void testTransferFunds(){
+    public void testTransferFunds() {
         Bank bank = new Bank();
 
         Customer henry = new Customer("Henry", bank);
         Account checkingAccount = henry.openAccount(Account.CHECKING);
         Account savingsAccount = henry.openAccount(Account.SAVINGS);
         checkingAccount.deposit(100.00);
-        henry.transferFundsBetweenAccounts(checkingAccount,savingsAccount,50.00);
-        assertEquals(savingsAccount.getBalance(),50.00,DOUBLE_DELTA);
-        assertEquals(checkingAccount.getBalance(),50.00,DOUBLE_DELTA);
+        henry.transferFundsBetweenAccounts(checkingAccount, savingsAccount, 50.00);
+        assertEquals(savingsAccount.getBalance(), 50.00, DOUBLE_DELTA);
+        assertEquals(checkingAccount.getBalance(), 50.00, DOUBLE_DELTA);
     }
 
     @Test
-    public void testTransferFundsBetweenTwoDifferentCustomers(){
+    public void testTransferFundsBetweenTwoDifferentCustomers() {
         Bank bank = new Bank();
 
         Customer henry = new Customer("Henry", bank);
@@ -57,15 +56,15 @@ public class CustomerTest {
         checkingAccount.deposit(100.00);
         try {
             henry.transferFundsBetweenAccounts(checkingAccount, savingsAccount, 50.00);
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
-        assertEquals(savingsAccount.getBalance(),0.00,DOUBLE_DELTA);
-        assertEquals(checkingAccount.getBalance(),100.00,DOUBLE_DELTA);
+        assertEquals(savingsAccount.getBalance(), 0.00, DOUBLE_DELTA);
+        assertEquals(checkingAccount.getBalance(), 100.00, DOUBLE_DELTA);
     }
 
     @Test
-    public void testTransferInsufficientFunds(){
+    public void testTransferInsufficientFunds() {
         Bank bank = new Bank();
 
         Customer henry = new Customer("Henry", bank);
@@ -74,16 +73,16 @@ public class CustomerTest {
         checkingAccount.deposit(100.00);
         try {
             henry.transferFundsBetweenAccounts(checkingAccount, savingsAccount, 150.00);
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
-        assertEquals(savingsAccount.getBalance(),0.00,DOUBLE_DELTA);
-        assertEquals(checkingAccount.getBalance(),100.00,DOUBLE_DELTA);
+        assertEquals(savingsAccount.getBalance(), 0.00, DOUBLE_DELTA);
+        assertEquals(checkingAccount.getBalance(), 100.00, DOUBLE_DELTA);
     }
 
 
     @Test
-    public void testOneAccount(){
+    public void testOneAccount() {
         Bank bank = new Bank();
 
         Customer oscar = new Customer("Oscar", bank);
@@ -92,7 +91,7 @@ public class CustomerTest {
     }
 
     @Test
-    public void testTwoAccounts(){
+    public void testTwoAccounts() {
         Bank bank = new Bank();
 
         Customer oscar = new Customer("Oscar", bank);

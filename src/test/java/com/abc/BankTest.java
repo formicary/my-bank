@@ -21,10 +21,10 @@ public class BankTest {
         Bank bank = new Bank();
         Customer john = new Customer("John", bank);
         john.openAccount(Account.CHECKING);
-        Customer tim = new Customer("Tim",bank);
+        Customer tim = new Customer("Tim", bank);
         tim.openAccount(Account.SAVINGS);
         tim.openAccount(Account.SAVINGS);
-        Customer gary = new Customer("Gary",bank);
+        Customer gary = new Customer("Gary", bank);
         String expected = "Customer Summary\n - John (1 account)\n - Tim (2 accounts)\n - Gary (0 accounts)";
         assertEquals(expected, bank.customerSummary());
     }
