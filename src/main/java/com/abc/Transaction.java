@@ -8,13 +8,17 @@ import java.util.Date;
  */
 
 public class Transaction {
-    public final double amount;
+    private final double amount;
 
 
     private Date transactionDate;
 
     public Date getTransactionDate(){
         return(transactionDate);
+    }
+
+    public double getAmount(){
+        return amount;
     }
 
     public Transaction(double amount) {

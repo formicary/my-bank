@@ -1,6 +1,5 @@
 package com.abc;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.omg.PortableInterceptor.ACTIVE;
 
@@ -10,9 +9,7 @@ public class CustomerTest {
     private static final double DOUBLE_DELTA = 1e-15;
 
     @Test //Test customer statement generation
-    public void testApp(){
-
-
+    public void testCustomerStatementGeneration(){
         Bank bank = new Bank();
         Customer henry = new Customer("Henry", bank);
         Account checkingAccount = henry.openAccount(Account.CHECKING);
@@ -34,33 +31,6 @@ public class CustomerTest {
                 "Total $3,800.00\n" +
                 "\n" +
                 "Total In All Accounts $3,900.00", henry.getStatement());
-    }
-
-    @Test //Test customer statement generation
-    public void testAppOverdrawn(){
-        Bank bank = new Bank();
-
-        Customer henry = new Customer("Henry", bank);
-        Account checkingAccount = henry.openAccount(Account.CHECKING);
-
-        checkingAccount.deposit(100.0);
-        checkingAccount.withdraw(100.0);
-        System.out.println(henry.getStatement());
-
-    }
-
-    @Test
-    public void testWithdrawLessThanOne(){
-        Bank bank = new Bank();
-
-        Customer henry = new Customer("Henry", bank);
-        Account checkingAccount = henry.openAccount(Account.CHECKING);
-
-        checkingAccount.deposit(100.00);
-        for(int i =0;i<100;i++){
-            checkingAccount.withdraw(0.01);
-        }
-        System.out.println(henry.getStatement());
     }
 
     @Test
@@ -93,6 +63,24 @@ public class CustomerTest {
         assertEquals(savingsAccount.getBalance(),0.00,DOUBLE_DELTA);
         assertEquals(checkingAccount.getBalance(),100.00,DOUBLE_DELTA);
     }
+
+    @Test
+    public void testTransferInsufficientFunds(){
+        Bank bank = new Bank();
+
+        Customer henry = new Customer("Henry", bank);
+        Account checkingAccount = henry.openAccount(Account.CHECKING);
+        Account savingsAccount = henry.openAccount(Account.SAVINGS);
+        checkingAccount.deposit(100.00);
+        try {
+            henry.transferFundsBetweenAccounts(checkingAccount, savingsAccount, 150.00);
+        } catch (IllegalArgumentException e){
+            e.printStackTrace();
+        }
+        assertEquals(savingsAccount.getBalance(),0.00,DOUBLE_DELTA);
+        assertEquals(checkingAccount.getBalance(),100.00,DOUBLE_DELTA);
+    }
+
 
     @Test
     public void testOneAccount(){

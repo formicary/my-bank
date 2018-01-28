@@ -60,3 +60,10 @@ Used that function to implement the desired changes to the MAXI_SAVINGS account 
 Removed redundant and incorrectly named function Account.checkIfTransactionExists() and merged functionality with Account.sumTransactions() which did the same thing
 
 Fixed a couple of tests
+
+Noticed that the BankTest Unit tests were not in camel case so I fixed that
+
+Created AccountTest.java and appropriate tests
+
+I noticed that Transaction.amount was public which meant it could be edited after it was created which is not secure. I fixed this
+Also gave the TransactionTest a use to test this feature

@@ -14,7 +14,6 @@ import java.util.List;
  */
 
 public class Account {
-    //TODO: change these to be enums
     public static final int CHECKING = 0;
     public static final int SAVINGS = 1;
     public static final int MAXI_SAVINGS = 2;
@@ -24,11 +23,25 @@ public class Account {
     private final int accountType;
     public List<Transaction> transactions;
 
+    /**
+     * The constructor for an Account. It takes an integer representing which type of Account it should be.
+     * @param accountType An integer representing one of either {@value #CHECKING} ,{@value #SAVINGS}  or {@value #MAXI_SAVINGS}.
+     *                    Any other value will default to {@value #CHECKING}.
+     */
     public Account(int accountType) {
+        if(accountType<0||accountType>2){
+            accountType=CHECKING;
+        }
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
     }
 
+    /**
+     * This function creates a new transaction adding a double representing money to the Account's balance..
+     * The balance is also updated during this process.
+     * @param amount    The amount of money to be deposited into the Account.
+     *                  This value is not allowed to have more than 2 decimal places as it is impossible to have 0.001 dollars, for example.
+     */
     public void deposit(double amount) {
         if(Double.toString(amount).length() - Double.toString(amount).indexOf('.') - 1 > 2){
             throw new IllegalArgumentException("Transactions with more than 2 decimal points are disallowed");
@@ -41,6 +54,12 @@ public class Account {
         }
     }
 
+    /**
+     * This function creates a new transaction removing a given double representing money from the Account's balance.
+     * It is not possible to use this function to go below 0.00 balance
+     * @param amount The amount of money to be withdrawn from the Account.
+     *                  This value is not allowed to have more than 2 decimal places as it is impossible to have 0.001 dollars, for example.
+     */
     public void withdraw(double amount) {
         if(Double.toString(amount).length() - Double.toString(amount).indexOf('.') - 1 > 2){
             throw new IllegalArgumentException("Transactions with more than 2 decimal points are disallowed");
@@ -55,25 +74,34 @@ public class Account {
         }
     }
 
+    /**
+     * This function returns the balance of this account.
+     * @return A double representing the amount of money in this account.
+     */
     public double getBalance(){
         return balance;
     }
 
+    /**
+     * This function calculates the amount of interest that will be generated per year given the type of account this is and the amount of money deposited.
+     * @return A double representing the amount of interest that will be generated per year given the type of account and amount of money deposited
+     */
     public double interestEarned() {
         switch(accountType){
             case SAVINGS:
                 if (balance <= 1000) {
-                    return balance * 0.001;
+                    return balance * 0.001; //0.1% interest
                 }
                 else {
                     //1 is the 0.1% interest on the 1000 and then work out 0.2% times however much is after 1000
                     return 1 + ((balance - 1000) * 0.002);
                 }
             case MAXI_SAVINGS:
+                //check if the last transaction happened 10 days ago
                 if (checkTenDaysBack()) {
-                    return balance* 0.05;
+                    return balance* 0.05; //5% interest
                 }else {
-                    return balance * 0.001;
+                    return balance * 0.001; // 0.1% interest
                 }
 
             //the default state of the account is CHECKING
@@ -90,7 +118,7 @@ public class Account {
     public double sumTransactions() {
         double amount = 0.0;
         for (Transaction t: transactions)
-            amount += t.amount;
+            amount += t.getAmount();
         return amount;
     }
 
