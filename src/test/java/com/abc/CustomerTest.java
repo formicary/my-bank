@@ -1,19 +1,18 @@
 package com.abc;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
+    private static final double DOUBLE_DELTA = 1e-15;
 
     @Test //Test customer statement generation
-    public void testApp(){
-
-        Account checkingAccount = new Account(Account.CHECKING);
-        Account savingsAccount = new Account(Account.SAVINGS);
-
-        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
+    public void testCustomerStatementGeneration() {
+        Bank bank = new Bank();
+        Customer henry = new Customer("Henry", bank);
+        Account checkingAccount = henry.openAccount(Account.CHECKING);
+        Account savingsAccount = henry.openAccount(Account.SAVINGS);
 
         checkingAccount.deposit(100.0);
         savingsAccount.deposit(4000.0);
@@ -34,24 +33,81 @@ public class CustomerTest {
     }
 
     @Test
-    public void testOneAccount(){
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
+    public void testTransferFunds() {
+        Bank bank = new Bank();
+
+        Customer henry = new Customer("Henry", bank);
+        Account checkingAccount = henry.openAccount(Account.CHECKING);
+        Account savingsAccount = henry.openAccount(Account.SAVINGS);
+        checkingAccount.deposit(100.00);
+        henry.transferFundsBetweenAccounts(checkingAccount, savingsAccount, 50.00);
+        assertEquals(savingsAccount.getBalance(), 50.00, DOUBLE_DELTA);
+        assertEquals(checkingAccount.getBalance(), 50.00, DOUBLE_DELTA);
+    }
+
+    @Test
+    public void testTransferFundsBetweenTwoDifferentCustomers() {
+        Bank bank = new Bank();
+
+        Customer henry = new Customer("Henry", bank);
+        Customer hacker = new Customer("hacker", bank);
+        Account checkingAccount = henry.openAccount(Account.CHECKING);
+        Account savingsAccount = hacker.openAccount(Account.SAVINGS);
+        checkingAccount.deposit(100.00);
+        try {
+            henry.transferFundsBetweenAccounts(checkingAccount, savingsAccount, 50.00);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+        assertEquals(savingsAccount.getBalance(), 0.00, DOUBLE_DELTA);
+        assertEquals(checkingAccount.getBalance(), 100.00, DOUBLE_DELTA);
+    }
+
+    @Test
+    public void testTransferInsufficientFunds() {
+        Bank bank = new Bank();
+
+        Customer henry = new Customer("Henry", bank);
+        Account checkingAccount = henry.openAccount(Account.CHECKING);
+        Account savingsAccount = henry.openAccount(Account.SAVINGS);
+        checkingAccount.deposit(100.00);
+        try {
+            henry.transferFundsBetweenAccounts(checkingAccount, savingsAccount, 150.00);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+        assertEquals(savingsAccount.getBalance(), 0.00, DOUBLE_DELTA);
+        assertEquals(checkingAccount.getBalance(), 100.00, DOUBLE_DELTA);
+    }
+
+
+    @Test
+    public void testOneAccount() {
+        Bank bank = new Bank();
+
+        Customer oscar = new Customer("Oscar", bank);
+        oscar.openAccount(Account.SAVINGS);
         assertEquals(1, oscar.getNumberOfAccounts());
     }
 
     @Test
-    public void testTwoAccount(){
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
+    public void testTwoAccounts() {
+        Bank bank = new Bank();
+
+        Customer oscar = new Customer("Oscar", bank);
+        oscar.openAccount(Account.SAVINGS);
+        oscar.openAccount(Account.CHECKING);
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
-    @Ignore
-    public void testThreeAcounts() {
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
+    @Test
+    public void testThreeAccounts() {
+        Bank bank = new Bank();
+
+        Customer oscar = new Customer("Oscar", bank);
+        oscar.openAccount(Account.SAVINGS);
+        oscar.openAccount(Account.CHECKING);
+        oscar.openAccount(Account.MAXI_SAVINGS);
         assertEquals(3, oscar.getNumberOfAccounts());
     }
 }

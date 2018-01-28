@@ -3,44 +3,71 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This is the object for the Bank.
+ * It contains an ArrayList of the customers.
+ * @author Matthew Howard - <a href="mailto:m.o.howard@outlook.com">m.o.howard@outlook.com</a>
+ */
+
 public class Bank {
-    private List<Customer> customers;
+ private List < Customer > customers;
 
-    public Bank() {
-        customers = new ArrayList<Customer>();
-    }
+ /**
+  * This is the constructor it initialises the ArrayList of customers to be empty
+  */
+ public Bank() {
+  customers = new ArrayList < Customer > ();
+ }
 
-    public void addCustomer(Customer customer) {
-        customers.add(customer);
-    }
+ /**
+  * This function takes a Customer object and adds it the LinkedList of Customers that the bank holds
+  * @param customer  This is the Customer to be added to the Bank's list of Customers
+  */
+ public void addCustomer(Customer customer) {
+  customers.add(customer);
+ }
 
-    public String customerSummary() {
-        String summary = "Customer Summary";
-        for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-        return summary;
-    }
+ /**
+  * This function returns a neatly formatted String detailing the Customers at the bank
+  * @return  A String containing a neatly formatted summary of all of the customers in the LinkedList
+  */
+ public String customerSummary() {
+  String summary = "Customer Summary";
+  for (Customer c: customers) {
+   summary += "\n - " + c.getName() + " (" + pluraliseString(c.getNumberOfAccounts(), "account") + ")";
+  }
+  return summary;
+ }
 
-    //Make sure correct plural of word is created based on the number passed in:
-    //If number passed in is 1 just return the word otherwise add an 's' at the end
-    private String format(int number, String word) {
-        return number + " " + (number == 1 ? word : word + "s");
-    }
+ /**
+  * This is a function that works out whether or not to pluralise a given String and returns a correctly formatted version
+  * @param number    An integer that will be used when deciding whether to pluralise or not
+  * @param word  The string that will be formatted correctly
+  * @return  A String containing the correct formatting for pluralisation
+  */
+ private String pluraliseString(int number, String word) {
+  return number + " " + (number == 1 ? word : word + "s");
+ }
 
-    public double totalInterestPaid() {
-        double total = 0;
-        for(Customer c: customers)
-            total += c.totalInterestEarned();
-        return total;
-    }
+ /**
+  * This function works out the total amount of interest paid out by the bank to all customers across all accounts
+  * @return  A double representing the amount of money to be paid in interest by the bank (per annum using the current amounts in the accounts)
+  */
+ public double totalInterestPaid() {
+  double total = 0;
+  for (Customer c: customers) {
+   total += c.totalInterestEarned();
+  }
+  return total;
+ }
 
-    public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
-        }
-    }
+    /**
+     * This function will update all the accounts held by all of the Customers at this bank and add their daily interest..
+     */
+ public void payDailyInterest() {
+     for (Customer c : customers) {
+         c.addDailyInterest();
+     }
+ }
+
 }
