@@ -1,7 +1,5 @@
 package com.abc;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,7 +23,7 @@ public class Account {
 
     /**
      * The constructor for an Account. It takes an integer representing which type of Account it should be.
-     * @param accountType An integer representing one of either {@value #CHECKING} ,{@value #SAVINGS}  or {@value #MAXI_SAVINGS}.
+     * @param accountType An integer representing one of {@value #CHECKING} ,{@value #SAVINGS}  or {@value #MAXI_SAVINGS}.
      *                    Any other value will default to {@value #CHECKING}.
      */
     public Account(int accountType) {
@@ -110,11 +108,19 @@ public class Account {
         }
     }
 
+    /**
+     * This function returns true if the most recent transaction happened more than 10 days ago.
+     * @return A boolean value representing whether or not the most recent transaction happened more than 10 days ago or not
+     */
     public boolean checkTenDaysBack(){
         Date transactionDate = transactions.get(transactions.size()-1).getTransactionDate();
         return DateProvider.getInstance().getTenDaysAgo().after(transactionDate);
     }
 
+    /**
+     * This function loops through the LinkedList of Transactions and returns the sum.
+     * @return  A double representing the sum of all Transactions. This is effectively the same as the balance.
+     */
     public double sumTransactions() {
         double amount = 0.0;
         for (Transaction t: transactions)
@@ -122,6 +128,10 @@ public class Account {
         return amount;
     }
 
+    /**
+     * A function to get the Account's type
+     * @return An integer representing one of {@value #CHECKING} ,{@value #SAVINGS}  or {@value #MAXI_SAVINGS}
+     */
     public int getAccountType() {
         return accountType;
     }
