@@ -1,5 +1,6 @@
 package com.abc;
 
+import main.java.com.abc.*;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;

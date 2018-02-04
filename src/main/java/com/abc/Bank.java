@@ -13,7 +13,10 @@ public class Bank {
     public void addCustomer(Customer customer) {
         customers.add(customer);
     }
-
+    /**
+     * A customer summary builder with information about the name and number of accounts of the customers
+     * @return String summary
+     */
     public String customerSummary() {
         String summary = "Customer Summary";
         for (Customer c : customers)
@@ -21,26 +24,39 @@ public class Bank {
         return summary;
     }
 
-    //Make sure correct plural of word is created based on the number passed in:
-    //If number passed in is 1 just return the word otherwise add an 's' at the end
+    /**
+     * Method to make sure correct plural of word is created based on the number passed in:
+     * If number passed in is 1 just return the word otherwise add an 's' at the end
+     * @param number
+     * @param word
+     * @return
+     */
+
     private String format(int number, String word) {
         return number + " " + (number == 1 ? word : word + "s");
     }
-
+    /**
+     * Method to calculate the total interest paid by all customers.
+     * @return double total (interest paid)
+     */
     public double totalInterestPaid() {
         double total = 0;
         for(Customer c: customers)
             total += c.totalInterestEarned();
         return total;
     }
-
+    /**
+     * Method to return the first customer of the bank.
+     * @return
+     */
     public String getFirstCustomer() {
         try {
-            customers = null;
             return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
+        } catch (ArrayIndexOutOfBoundsException e){
+            return "There are currently no customers in this Bank";
+        } catch(Exception e) {
+        	 e.printStackTrace();
+        	 return " There has been an unknown error with retrieving the first customer.";
         }
     }
 }
