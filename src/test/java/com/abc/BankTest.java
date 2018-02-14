@@ -16,6 +16,17 @@ public class BankTest {
 
         assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
     }
+    
+    @Test
+    public void testFirstCustomer() {
+    	Bank bank = new Bank();
+        Customer john = new Customer("John");
+        Customer billy = new Customer("Billy");
+        bank.addCustomer(john);
+        bank.addCustomer(billy);
+        
+        assertEquals(bank.getFirstCustomer(), "John");
+    }
 
     @Test
     public void checkingAccount() {
@@ -48,7 +59,62 @@ public class BankTest {
 
         checkingAccount.deposit(3000.0);
 
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(3.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+    }
+    
+    @Test
+    public void dailyInterestChecking() {
+    	Bank bank = new Bank();
+    	Account account = new Account(Account.CHECKING);
+        bank.addCustomer(new Customer("Bill").openAccount(account));
+        
+        account.deposit(100.0);
+        account.dailyInterestAddition();
+        
+        double expected = 100.0 + (0.1/365.0);
+        assertEquals(expected, account.sumTransactions(), DOUBLE_DELTA);
+    }
+    
+    @Test
+    public void dailyInterestSavings() {
+    	Bank bank = new Bank();
+    	Account account = new Account(Account.SAVINGS);
+        bank.addCustomer(new Customer("Bill").openAccount(account));
+        
+        account.deposit(10000.0);
+        account.dailyInterestAddition();
+        
+        double expected = 10000.0 + (19.0/365.0);
+        assertEquals(expected, account.sumTransactions(), DOUBLE_DELTA);
+    }
+    
+    @Test
+    public void dailyInterestMaxi() {
+    	Bank bank = new Bank();
+    	Account account = new Account(Account.MAXI_SAVINGS);
+        bank.addCustomer(new Customer("Bill").openAccount(account));
+        
+        account.deposit(100.0);
+        account.dailyInterestAddition();
+        
+        double expected = 100.0 + (0.1/365.0);
+        assertEquals(expected, account.sumTransactions(), DOUBLE_DELTA);
+    }
+    
+    @Test
+    public void multipleDailyInterestChecking() {
+    	Bank bank = new Bank();
+    	Account account = new Account(Account.CHECKING);
+        bank.addCustomer(new Customer("Bill").openAccount(account));
+        
+        account.deposit(1000.0);
+        account.dailyInterestAddition();
+        account.dailyInterestAddition();
+        
+        double totalAfterFirst = 1000.0 + (1.0/365.0);
+        double expected = 1000.0 + (1.0/365.0) + ((totalAfterFirst * 0.001)/365.0);
+        
+        assertEquals(expected, account.sumTransactions(), DOUBLE_DELTA);
     }
 
 }
