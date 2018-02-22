@@ -55,9 +55,9 @@ public class BankTest {
     	Bank bank = new Bank();
         Customer john = new Customer("John");
         Customer bill = new Customer("Bill");
-        
-        bank.addCustomer(bill);
         bank.addCustomer(john);
+        bank.addCustomer(bill);
+        
         
         assertEquals("John",bank.getFirstCustomer());
     }
