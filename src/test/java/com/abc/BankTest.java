@@ -48,16 +48,16 @@ public class BankTest {
 
         checkingAccount.deposit(3000.0);
 
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(3.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
     @Test
     public void first_customer() {
     	Bank bank = new Bank();
         Customer john = new Customer("John");
         Customer bill = new Customer("Bill");
-        
-        bank.addCustomer(bill);
         bank.addCustomer(john);
+        bank.addCustomer(bill);
+        
         
         assertEquals("John",bank.getFirstCustomer());
     }

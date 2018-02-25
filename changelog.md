@@ -4,7 +4,7 @@
 
 - Class into an abstract class for different types of Accounts to be extended.
 - Changed withdraw method to include a check to make sure the account have enough money (sum of transactions > withdrawal amount)
-- Changed interestEarned to be an abstract class.
+- Changed interestEarned to be an abstract method.
 - Added getTransaction and changed transactions to be private.
 - Edited sumTransactions and checkIfTransactionsExist method to perform the correct task given their names.
 - Added HasWithdrawnPast10days method to check if a withdrawal has taken place within the past 10 days.
