@@ -1,73 +1,130 @@
 package com.abc;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+/*An abstract class to contain Account details : list of transactions 
+ * 	See CheckingAccount.java for an example.
 
-public class Account {
 
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
+@author Hans-Wai Chan
 
-    private final int accountType;
-    public List<Transaction> transactions;
+*/
 
-    public Account(int accountType) {
-        this.accountType = accountType;
+public abstract class Account {
+
+    private List<Transaction> transactions;
+
+    public Account() {
         this.transactions = new ArrayList<Transaction>();
     }
 
+    
+    /**
+     * Method to add a transaction with positive amount. For depositing money into bank account.
+     * 
+     * @param amount
+     * 		double: amount of the transaction
+     */
     public void deposit(double amount) {
         if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
+            throw new IllegalArgumentException("Amount must be greater than zero. Not deposited");
         } else {
             transactions.add(new Transaction(amount));
         }
     }
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
+    /**
+     * Method to add a transaction with a negative amount. For withdrawing money from bank account.
+     * @param amount
+     */
+	public void withdraw(double amount) {
+	    if (amount <= 0) {
+	        throw new IllegalArgumentException("Amount must be greater than zero. Not withdrawn");
+	    } else {
+	    	if (sumTransactions() >= amount) {
+	    		transactions.add(new Transaction(-amount));
+	    	}else {
+	    		throw new IllegalArgumentException("Amount is greater than balance (total of account transactions). Not withdrawn");
+	    		}
+	    	}
+	    
+	}
+	
+	/**
+	 * Method to get transactions of this account
+	 * @return
+	 * 		List <Transactions> : list of transactions of this account
+	 */
+    public List<Transaction> getTransaction() {
+    	return transactions;
     }
-}
-
-    public double interestEarned() {
-        double amount = sumTransactions();
-        switch(accountType){
-            case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
-            case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
-            default:
-                return amount * 0.001;
-        }
+	
+	public abstract double interestEarned();
+    
+    
+    /**
+     * Method to calculate the effective daily interest from AER
+     * @return
+     * 		double: daily interest rate
+     */
+    public double interestEarnedDaily() {
+    	return interestEarned()/365.0;
     }
-
+    
+    
+    
+    
+    /**
+     * Method to calculate the balance by adding up all the transactions on account
+     * 
+     * @return 
+     * 		double: sum of all the transactions in account, balance. 
+     */
     public double sumTransactions() {
-       return checkIfTransactionsExist(true);
+		double amount = 0.0;
+		if (checkIfTransactionsExist()) {
+			for (Transaction t : transactions)
+				amount += t.getAmount();
+		}
+		return amount;
     }
 
-    private double checkIfTransactionsExist(boolean checkAll) {
-        double amount = 0.0;
-        for (Transaction t: transactions)
-            amount += t.amount;
-        return amount;
+    private boolean checkIfTransactionsExist() {
+		if (transactions.isEmpty()) {
+				return false;
+		}
+		return true;
     }
 
-    public int getAccountType() {
-        return accountType;
+    /**
+     * Method to check to any withdrawals within the past 10 days
+     * @return 
+     * 		boolean: has the account made a withdrawal in the past 10 days?
+     */
+    public boolean HasWithdrawnPast10days() {
+    		
+    	
+			DateProvider dateProv = new DateProvider();
+			Date date10DaysAgo = dateProv.datePast(10); 
+			int index = indexofLastWithdrawal();
+	    	Date dateLastWithdrawal = transactions.get(index).getTransactionDate();
+	    	
+	    	if(dateLastWithdrawal.after(date10DaysAgo)) {
+	    		return true;
+	    	} else {
+	    		return false;
+	    	}
+	}
+    
+    public int indexofLastWithdrawal() {
+    	
+    	List<Transaction> transactions = getTransaction(); 
+		for (int index = transactions.size() - 1; index >= 0; index--) {
+			if (transactions.get(index).getAmount() < 0) {
+				return index;
+			}
+		}
+		return 0; 
     }
-
 }
