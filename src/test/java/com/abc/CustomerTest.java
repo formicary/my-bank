@@ -2,9 +2,7 @@ package com.abc;
 
 import org.junit.Test;
 
-import static com.abc.AccountType.CHECKING;
-import static com.abc.AccountType.MAXI_SAVINGS;
-import static com.abc.AccountType.SAVINGS;
+import static com.abc.AccountType.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
@@ -92,6 +90,27 @@ public class CustomerTest extends TestBase {
     }
 
     @Test
+    public void shouldDisplayInterestAdditionInStatements() {
+        Account checkingAccount = new Account(CHECKING);
+
+
+        Customer henry = new Customer("Henry")
+                .openAccount(checkingAccount);
+        checkingAccount.deposit(100.0);
+        checkingAccount.calculateInterest();
+
+
+        assertEquals("Statement for Henry\n" +
+                "\n" +
+                "Checking Account\n" +
+                "  deposit $100.00\n" +
+                "  interest $0.10\n" +
+                "Total $100.10\n" +
+                "\n" +
+                "Total In All Accounts $100.10", henry.getStatement());
+    }
+
+    @Test
     public void shouldTransferFunds() {
         Account checkingAccount = new Account(CHECKING);
         Account savingsAccount = new Account(SAVINGS);
@@ -101,8 +120,8 @@ public class CustomerTest extends TestBase {
 
         henry.transfer(0, 1, 100.0);
 
-        assertEquals(-100.0, checkingAccount.sumTransactions(), DOUBLE_DELTA);
-        assertEquals(100.0, savingsAccount.sumTransactions(), DOUBLE_DELTA);
+        assertEquals(-100.0, checkingAccount.getBalance(), DOUBLE_DELTA);
+        assertEquals(100.0, savingsAccount.getBalance(), DOUBLE_DELTA);
     }
 
     @Test

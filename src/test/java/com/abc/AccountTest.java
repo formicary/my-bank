@@ -38,9 +38,9 @@ public class AccountTest extends TestBase {
         acc.deposit(3);
         List<Transaction> transactions = acc.getTransactions();
         assertEquals(3, transactions.size());
-        assertEquals(1, transactions.get(0).amount, DOUBLE_DELTA);
-        assertEquals(2, transactions.get(1).amount, DOUBLE_DELTA);
-        assertEquals(3, transactions.get(2).amount, DOUBLE_DELTA);
+        assertEquals(1, transactions.get(0).getAmount(), DOUBLE_DELTA);
+        assertEquals(2, transactions.get(1).getAmount(), DOUBLE_DELTA);
+        assertEquals(3, transactions.get(2).getAmount(), DOUBLE_DELTA);
     }
 
     @Test
@@ -50,12 +50,14 @@ public class AccountTest extends TestBase {
             acc.deposit(0);
             fail("Depositing 0 should throw IllegalArgumentException");
         } catch (IllegalArgumentException e) {
+            assertEquals("amount must be greater than zero", e.getMessage());
         }
 
         try {
             acc.deposit(-1);
             fail("Depositing -1 should throw IllegalArgumentException");
         } catch (IllegalArgumentException e) {
+            assertEquals("amount must be greater than zero", e.getMessage());
         }
     }
 
@@ -67,9 +69,9 @@ public class AccountTest extends TestBase {
         acc.withdraw(3);
         List<Transaction> transactions = acc.getTransactions();
         assertEquals(3, transactions.size());
-        assertEquals(-1, transactions.get(0).amount, DOUBLE_DELTA);
-        assertEquals(-2, transactions.get(1).amount, DOUBLE_DELTA);
-        assertEquals(-3, transactions.get(2).amount, DOUBLE_DELTA);
+        assertEquals(-1, transactions.get(0).getAmount(), DOUBLE_DELTA);
+        assertEquals(-2, transactions.get(1).getAmount(), DOUBLE_DELTA);
+        assertEquals(-3, transactions.get(2).getAmount(), DOUBLE_DELTA);
     }
 
     @Test
@@ -79,75 +81,118 @@ public class AccountTest extends TestBase {
             acc.withdraw(0);
             fail("Withdrawing 0 should throw IllegalArgumentException");
         } catch (IllegalArgumentException e) {
+            assertEquals("amount must be greater than zero", e.getMessage());
         }
 
         try {
             acc.withdraw(-1);
             fail("Withdrawing -1 should throw IllegalArgumentException");
         } catch (IllegalArgumentException e) {
+            assertEquals("amount must be greater than zero", e.getMessage());
         }
     }
 
-    @Test
-    public void shouldCalculateInterestForSavingsAccount() {
-        Account acc = new Account(SAVINGS);
-        // Less than 0
-        acc.withdraw(10.0);
-        assertEquals(0.0, acc.interestEarned(), DOUBLE_DELTA);
-        acc.deposit(10.0);
-        // 0
-        assertEquals(0.0, acc.interestEarned(), DOUBLE_DELTA);
-        // Less than 1000
-        acc.deposit(55.55);
-        assertEquals(55.55 * 0.001, acc.interestEarned(), DOUBLE_DELTA);
-        // 1000
-        acc.deposit(944.45);
-        assertEquals(1.0, acc.interestEarned(), DOUBLE_DELTA);
-        // More than 1000
-        acc.deposit(55.55);
-        assertEquals(1 + 55.55 * 0.002, acc.interestEarned(), DOUBLE_DELTA);
+
+    public static class SavingsAccount {
+        @Test
+        public void shouldCalculateInterestForNegativeBalance() {
+            Account acc = new Account(SAVINGS);
+            acc.withdraw(10.0);
+            acc.calculateInterest();
+            assertEquals(0.0, acc.getInterestEarned(), DOUBLE_DELTA);
+        }
+
+        @Test
+        public void shouldCalculateInterestForZeroBalance() {
+            Account acc = new Account(SAVINGS);
+            acc.calculateInterest();
+            assertEquals(0.0, acc.getInterestEarned(), DOUBLE_DELTA);
+        }
+
+        @Test
+        public void shouldCalculateInterestForFirstTier() {
+            Account acc = new Account(SAVINGS);
+            acc.deposit(55.55);
+            acc.calculateInterest();
+            assertEquals(55.55 * 0.001, acc.getInterestEarned(), DOUBLE_DELTA);
+        }
+
+        @Test
+        public void shouldCalculateInterestForSecondTier() {
+            Account acc = new Account(SAVINGS);
+            acc.deposit(1055.55);
+            acc.calculateInterest();
+            assertEquals(1 + 55.55 * 0.002, acc.getInterestEarned(), DOUBLE_DELTA);
+        }
+
     }
 
-    @Test
-    public void shouldCalculateInterestForMaxiSavingsAccount() {
-        Account acc = new Account(MAXI_SAVINGS);
-        // Less than 0
-        acc.withdraw(10.0);
-        assertEquals(0.0, acc.interestEarned(), DOUBLE_DELTA);
-        acc.deposit(10.0);
-        // 0
-        assertEquals(0.0, acc.interestEarned(), DOUBLE_DELTA);
-        // Less than 1000
-        acc.deposit(55.55);
-        assertEquals(55.55 * 0.02, acc.interestEarned(), DOUBLE_DELTA);
-        // 1000
-        acc.deposit(944.45);
-        assertEquals(20.0, acc.interestEarned(), DOUBLE_DELTA);
-        // More than 1000
-        acc.deposit(55.55);
-        assertEquals(20.0 + 55.55 * 0.05, acc.interestEarned(), DOUBLE_DELTA);
-        // 2000
-        acc.deposit(944.45);
-        assertEquals(70.0, acc.interestEarned(), DOUBLE_DELTA);
-        // More than 2000
-        acc.deposit(55.55);
-        assertEquals(70.0 + 55.55 * 0.1, acc.interestEarned(), DOUBLE_DELTA);
+    public static class MaxiSavings {
+        @Test
+        public void shouldCalculateInterestForNegativeBalance() {
+            Account acc = new Account(MAXI_SAVINGS);
+            acc.withdraw(10.0);
+            acc.calculateInterest();
+            assertEquals(0.0, acc.getInterestEarned(), DOUBLE_DELTA);
+        }
+
+        @Test
+        public void shouldCalculateInterestForZeroBalance() {
+            Account acc = new Account(MAXI_SAVINGS);
+            acc.calculateInterest();
+            assertEquals(0.0, acc.getInterestEarned(), DOUBLE_DELTA);
+        }
+
+        @Test
+        public void shouldCalculateInterestForFirstTier() {
+            Account acc = new Account(MAXI_SAVINGS);
+            acc.deposit(55.55);
+            acc.calculateInterest();
+            assertEquals(55.55 * 0.02, acc.getInterestEarned(), DOUBLE_DELTA);
+        }
+
+        @Test
+        public void shouldCalculateInterestForSecondTier() {
+            Account acc = new Account(MAXI_SAVINGS);
+            acc.deposit(1055.55);
+            acc.calculateInterest();
+            assertEquals(20.0 + 55.55 * 0.05, acc.getInterestEarned(), DOUBLE_DELTA);
+        }
+
+        @Test
+        public void shouldCalculateInterestForThirdTier() {
+            Account acc = new Account(MAXI_SAVINGS);
+            acc.deposit(2055.55);
+            acc.calculateInterest();
+            assertEquals(70.0 + 55.55 * 0.1, acc.getInterestEarned(), DOUBLE_DELTA);
+        }
+
     }
 
-    @Test
-    public void shouldCalculateInterestForCheckingAccount() {
-        Account acc = new Account(CHECKING);
-        // Less than 0
-        acc.withdraw(10.0);
-        assertEquals(0.0, acc.interestEarned(), DOUBLE_DELTA);
-        acc.deposit(10.0);
-        // 0
-        assertEquals(0.0, acc.interestEarned(), DOUBLE_DELTA);
-        // Less than 1000
-        acc.deposit(55.55);
-        assertEquals(55.55 * 0.001, acc.interestEarned(), DOUBLE_DELTA);
-        // 1000
-        acc.deposit(944.45);
-        assertEquals(1.0, acc.interestEarned(), DOUBLE_DELTA);
+
+    public static class CheckingAccount {
+        @Test
+        public void shouldCalculateInterestForNegativeBalance() {
+            Account acc = new Account(CHECKING);
+            acc.withdraw(10.0);
+            acc.calculateInterest();
+            assertEquals(0.0, acc.getInterestEarned(), DOUBLE_DELTA);
+        }
+
+        @Test
+        public void shouldCalculateInterestForZeroBalance() {
+            Account acc = new Account(CHECKING);
+            acc.calculateInterest();
+            assertEquals(0.0, acc.getInterestEarned(), DOUBLE_DELTA);
+        }
+
+        @Test
+        public void shouldCalculateInterestForFirstTier() {
+            Account acc = new Account(CHECKING);
+            acc.deposit(55.55);
+            acc.calculateInterest();
+            assertEquals(55.55 * 0.001, acc.getInterestEarned(), DOUBLE_DELTA);
+        }
+
     }
 }

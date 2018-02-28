@@ -3,8 +3,6 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Math.abs;
-
 public class Customer {
     private String name;
     private List<Account> accounts;
@@ -27,10 +25,11 @@ public class Customer {
         return accounts.size();
     }
 
-    public double totalInterestEarned() {
+    public double getTotalInterestEarned() {
         double total = 0;
-        for (Account a : accounts)
-            total += a.interestEarned();
+        for (Account a : accounts) {
+            total += a.getInterestEarned();
+        }
         return total;
     }
 
@@ -41,10 +40,10 @@ public class Customer {
             sb.append("\n");
             sb.append(statementForAccount(a));
             sb.append("\n");
-            total += a.sumTransactions();
+            total += a.getBalance();
         }
         sb.append("\nTotal In All Accounts ");
-        sb.append(FormatUtils.toDollars(total));
+        sb.append(Utils.toDollars(total));
         return sb.toString();
     }
 
@@ -68,12 +67,12 @@ public class Customer {
         double total = 0.0;
         for (Transaction t : a.getTransactions()) {
             sb.append(
-                    String.format("  %s %s\n", t.amount < 0 ? "withdrawal" : "deposit", FormatUtils.toDollars(Math.abs(t.amount)))
+                    String.format("  %s %s\n", t.getTransactionType().toString(), Utils.toDollars(t.getAbsAmount()))
             );
-            total += t.amount;
+            total += t.getAmount();
         }
         sb.append("Total ");
-        sb.append(FormatUtils.toDollars(total));
+        sb.append(Utils.toDollars(total));
         return sb.toString();
     }
 
@@ -83,15 +82,15 @@ public class Customer {
         }
         if (origin < 0 || origin >= accounts.size()) {
             throw new IllegalArgumentException(
-                String.format("Index of origin account must be in range [%d, %d)", 0, accounts.size())
+                    String.format("Index of origin account must be in range [%d, %d)", 0, accounts.size())
             );
         }
         if (destination < 0 || destination >= accounts.size()) {
             throw new IllegalArgumentException(
-                String.format("Index of destination account must be in range [%d, %d)", 0, accounts.size())
+                    String.format("Index of destination account must be in range [%d, %d)", 0, accounts.size())
             );
         }
-        if (origin == destination)  {
+        if (origin == destination) {
             throw new IllegalArgumentException("Origin and destination accounts must not be the same");
         }
         Account from = accounts.get(origin);

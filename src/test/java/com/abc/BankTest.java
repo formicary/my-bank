@@ -35,8 +35,8 @@ public class BankTest {
         checkingAccount.deposit(45.55);
         savingsAccount.deposit(55.55);
         bank.addCustomer(bill);
-        assertEquals(savingsAccount.interestEarned() + checkingAccount.interestEarned(),
-                        bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(savingsAccount.getInterestEarned() + checkingAccount.getInterestEarned(),
+                bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test

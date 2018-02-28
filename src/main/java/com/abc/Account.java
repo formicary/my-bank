@@ -3,6 +3,8 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.abc.TransactionType.*;
+
 public class Account {
     private final AccountType accountType;
     private List<Transaction> transactions;
@@ -12,11 +14,19 @@ public class Account {
         this.transactions = new ArrayList<Transaction>();
     }
 
+    private void addTransAction(Transaction t) {
+        if (t != null) {
+            transactions.add(t);
+        } else {
+            throw new IllegalArgumentException("Transaction must not be null!");
+        }
+    }
+
     public void deposit(double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
-            transactions.add(new Transaction(amount));
+            addTransAction(new Transaction(amount, DEPOSIT));
         }
     }
 
@@ -24,12 +34,41 @@ public class Account {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
-            transactions.add(new Transaction(-amount));
+            addTransAction(new Transaction(amount, WITHDRAW));
         }
     }
 
-    public double interestEarned() {
-        double amount = sumTransactions();
+    public void interest(double amount) {
+        if (amount < 0) {
+            throw new IllegalArgumentException("amount must not be negative");
+        } else {
+            addTransAction(new Transaction(amount, INTEREST));
+        }
+    }
+
+    public double getInterestEarned() {
+        double interestEarned = 0.0;
+        for (Transaction t : transactions) {
+            if (t.getTransactionType() == INTEREST)
+                interestEarned += t.getAmount();
+        }
+        return interestEarned;
+    }
+
+    public double getBalance() {
+        double balance = 0.0;
+        for (Transaction t : transactions) {
+            balance += t.getAmount();
+        }
+        return balance;
+    }
+
+    public void calculateInterest() {
+        // Should be called at the end of the day
+        interest(getInterest(getBalance()));
+    }
+
+    private double getInterest(double amount) {
         if (amount <= 0.0) {
             return 0.0;
         } else {
@@ -49,13 +88,6 @@ public class Account {
                     return amount * 0.001;
             }
         }
-    }
-
-    public double sumTransactions() {
-        double amount = 0.0;
-        for (Transaction t : transactions)
-            amount += t.amount;
-        return amount;
     }
 
     public AccountType getAccountType() {

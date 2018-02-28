@@ -17,14 +17,14 @@ public class Bank {
     public String customerSummary() {
         StringBuilder sb = new StringBuilder("Customer Summary");
         for (Customer c : customers)
-            sb.append(String.format("\n - %s (%s)", c.getName(), FormatUtils.toPlural(c.getNumberOfAccounts(), "account")));
+            sb.append(String.format("\n - %s (%s)", c.getName(), Utils.toPlural(c.getNumberOfAccounts(), "account")));
         return sb.toString();
     }
 
     public double totalInterestPaid() {
         double total = 0;
         for (Customer c : customers)
-            total += c.totalInterestEarned();
+            total += c.getTotalInterestEarned();
         return total;
     }
 
