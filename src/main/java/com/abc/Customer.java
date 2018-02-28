@@ -18,9 +18,9 @@ public class Customer {
         return name;
     }
 
-    public void transferMoney(double amount, Account A, Account B){
-        A.withdraw(amount);
-        B.deposit(amount);
+    public void transferMoney(double amount, Account fromAccount, Account toAccount){
+        fromAccount.withdraw(amount);
+        toAccount.deposit(amount);
     }
 
     public Customer openAccount(Account account) {

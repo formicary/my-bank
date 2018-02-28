@@ -34,12 +34,12 @@ public class Bank {
         return total;
     }
 
-    public String getFirstCustomer() {
+    public Customer getFirstCustomer() {
         try {
-            return customers.get(0).getName();
+            return customers.get(0);
         } catch (Exception e){
             e.printStackTrace();
-            return "Error";
+            return null;
         }
     }
 }
