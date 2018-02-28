@@ -68,7 +68,7 @@ public class Customer {
         double total = 0.0;
         for (Transaction t : a.getTransactions()) {
             sb.append(
-                    String.format("  %s %s\n", t.amount < 0 ? "withdrawal" : "deposit", FormatUtils.toDollars(t.amount))
+                    String.format("  %s %s\n", t.amount < 0 ? "withdrawal" : "deposit", FormatUtils.toDollars(Math.abs(t.amount)))
             );
             total += t.amount;
         }
