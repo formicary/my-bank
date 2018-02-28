@@ -2,6 +2,7 @@ package com.abc;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class Account {
@@ -13,7 +14,10 @@ public class Account {
     private final int accountType;
     public List<Transaction> transactions;
 
+    public Date openingDate;
+
     public Account(int accountType) {
+        this.openingDate = DateProvider.getInstance().now();
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
     }
@@ -22,7 +26,7 @@ public class Account {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
-            transactions.add(new Transaction(amount));
+            transactions.add(new Transaction(amount,"deposit"));
         }
     }
 
@@ -30,7 +34,7 @@ public class Account {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
-            transactions.add(new Transaction(-amount));
+            transactions.add(new Transaction(-amount,"withdraw"));
         }
     }
 
@@ -65,10 +69,9 @@ public class Account {
     //Return true if transaction was made in last 10 days, else returns true
     public boolean withdrawLastTenDays(){
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -7);
+        cal.add(Calendar.DATE, -10);
         for (Transaction t: transactions)
             if (t.amount < 0 && t.getTransactionDate().after(cal.getTime())){
-                System.out.println("Bol");
                 return true;
             }
         return false;
