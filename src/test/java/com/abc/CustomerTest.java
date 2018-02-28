@@ -4,8 +4,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-
 public class CustomerTest {
+    private static final double DOUBLE_DELTA = 1e-15;
 
     @Test //Test customer statement generation
     public void testApp(){
@@ -97,7 +97,7 @@ public class CustomerTest {
         savingaccount.deposit(3000);
         maxisavingaccount.deposit(5000);
         assertEquals(2, johnny.getNumberOfAccounts());
-        assertEquals(255.2,johnny.totalInterestEarned(),0);
+        assertEquals(255.2,johnny.totalInterestEarned(),DOUBLE_DELTA);
 
 
     }
