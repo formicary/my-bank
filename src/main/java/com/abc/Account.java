@@ -1,6 +1,7 @@
 package com.abc;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static com.abc.TransactionType.*;
@@ -8,6 +9,8 @@ import static com.abc.TransactionType.*;
 public class Account {
     private final AccountType accountType;
     private List<Transaction> transactions;
+    private Date lastWithdrawal = null;
+    private boolean moreThanTenDaysSinceLastWithdrawal = true;
 
     public Account(AccountType accountType) {
         this.accountType = accountType;
@@ -16,6 +19,10 @@ public class Account {
 
     private void addTransAction(Transaction t) {
         if (t != null) {
+            if(t.getTransactionType() == WITHDRAW) {
+                lastWithdrawal = t.getTransactionDate();
+            }
+            moreThanTenDaysSinceLastWithdrawal = Utils.moreThanTenDays(lastWithdrawal, t.getTransactionDate());
             transactions.add(t);
         } else {
             throw new IllegalArgumentException("Transaction must not be null!");
@@ -79,11 +86,11 @@ public class Account {
                     else
                         return 1.0 + (amount - 1000.0) * 0.002;
                 case MAXI_SAVINGS:
-                    if (amount <= 1000)
-                        return amount * 0.02;
-                    if (amount <= 2000)
-                        return 20.0 + (amount - 1000.0) * 0.05;
-                    return 70.0 + (amount - 2000.0) * 0.1;
+                    if (moreThanTenDaysSinceLastWithdrawal) {
+                        return amount * 0.05;
+                    } else {
+                        return amount * 0.0001;
+                    }
                 default:
                     return amount * 0.001;
             }

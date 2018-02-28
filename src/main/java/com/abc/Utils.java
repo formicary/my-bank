@@ -1,6 +1,5 @@
 package com.abc;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Utils {
@@ -14,10 +13,7 @@ public class Utils {
         return String.format("$%,.2f", d);
     }
 
-    public static boolean isSameDay(Date date1, Date date2) {
-        if (date1 == null || date2 == null)
-            return true;
-        SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
-        return fmt.format(date1).equals(fmt.format(date2));
+    public static boolean moreThanTenDays(Date d1, Date d2) {
+        return d1 == null || d2 == null || (d1.getTime() - d2.getTime()) * (1000 * 60 * 60 * 24) > 10;
     }
 }

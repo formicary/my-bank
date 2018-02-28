@@ -144,27 +144,20 @@ public class AccountTest extends TestBase {
         }
 
         @Test
-        public void shouldCalculateInterestForFirstTier() {
+        public void shouldCalculateInterestIfNoWithdrawalsMadeIn10Days() {
             Account acc = new Account(MAXI_SAVINGS);
             acc.deposit(55.55);
             acc.calculateInterest();
-            assertEquals(55.55 * 0.02, acc.getInterestEarned(), DOUBLE_DELTA);
+            assertEquals(55.55 * 0.05, acc.getInterestEarned(), DOUBLE_DELTA);
         }
 
         @Test
-        public void shouldCalculateInterestForSecondTier() {
+        public void shouldCalculateInterestIfWithdrawalsMadeIn10Days() {
             Account acc = new Account(MAXI_SAVINGS);
-            acc.deposit(1055.55);
+            acc.withdraw(1.0);
+            acc.deposit(1056.55);
             acc.calculateInterest();
-            assertEquals(20.0 + 55.55 * 0.05, acc.getInterestEarned(), DOUBLE_DELTA);
-        }
-
-        @Test
-        public void shouldCalculateInterestForThirdTier() {
-            Account acc = new Account(MAXI_SAVINGS);
-            acc.deposit(2055.55);
-            acc.calculateInterest();
-            assertEquals(70.0 + 55.55 * 0.1, acc.getInterestEarned(), DOUBLE_DELTA);
+            assertEquals(1055.55 * 0.0001, acc.getInterestEarned(), DOUBLE_DELTA);
         }
 
     }
