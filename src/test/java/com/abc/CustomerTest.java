@@ -1,6 +1,5 @@
 package com.abc;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static com.abc.AccountType.CHECKING;
@@ -8,7 +7,7 @@ import static com.abc.AccountType.MAXI_SAVINGS;
 import static com.abc.AccountType.SAVINGS;
 import static org.junit.Assert.assertEquals;
 
-public class CustomerTest {
+public class CustomerTest extends TestBase {
 
     @Test
     public void shouldCreateNewCustomerWithoutAnyAccounts() {

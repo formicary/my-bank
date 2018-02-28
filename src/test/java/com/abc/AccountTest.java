@@ -12,22 +12,22 @@ public class AccountTest extends TestBase {
     @Test
     public void shouldEmptyCreateSavingsAccount() {
         Account acc = new Account(SAVINGS);
-        assertEquals(acc.getAccountType(), SAVINGS);
-        assertEquals(acc.getTransactions().size(), 0);
+        assertEquals(SAVINGS, acc.getAccountType());
+        assertEquals(0, acc.getTransactions().size());
     }
 
     @Test
     public void shouldEmptyCreateMaxiSavingsAccount() {
         Account acc = new Account(MAXI_SAVINGS);
-        assertEquals(acc.getAccountType(), MAXI_SAVINGS);
-        assertEquals(acc.getTransactions().size(), 0);
+        assertEquals(MAXI_SAVINGS, acc.getAccountType());
+        assertEquals(0, acc.getTransactions().size());
     }
 
     @Test
     public void shouldEmptyCreateCheckingAccount() {
         Account acc = new Account(CHECKING);
-        assertEquals(acc.getAccountType(), CHECKING);
-        assertEquals(acc.getTransactions().size(), 0);
+        assertEquals(CHECKING, acc.getAccountType());
+        assertEquals(0, acc.getTransactions().size());
     }
 
     @Test
@@ -37,10 +37,10 @@ public class AccountTest extends TestBase {
         acc.deposit(2);
         acc.deposit(3);
         List<Transaction> transactions = acc.getTransactions();
-        assertEquals(transactions.size(), 3);
-        assertEquals(transactions.get(0).amount, 1, DOUBLE_DELTA);
-        assertEquals(transactions.get(1).amount, 2, DOUBLE_DELTA);
-        assertEquals(transactions.get(2).amount, 3, DOUBLE_DELTA);
+        assertEquals(3, transactions.size());
+        assertEquals(1, transactions.get(0).amount, DOUBLE_DELTA);
+        assertEquals(2, transactions.get(1).amount, DOUBLE_DELTA);
+        assertEquals(3, transactions.get(2).amount, DOUBLE_DELTA);
     }
 
     @Test
@@ -66,10 +66,10 @@ public class AccountTest extends TestBase {
         acc.withdraw(2);
         acc.withdraw(3);
         List<Transaction> transactions = acc.getTransactions();
-        assertEquals(transactions.size(), 3);
-        assertEquals(transactions.get(0).amount, -1, DOUBLE_DELTA);
-        assertEquals(transactions.get(1).amount, -2, DOUBLE_DELTA);
-        assertEquals(transactions.get(2).amount, -3, DOUBLE_DELTA);
+        assertEquals(3, transactions.size());
+        assertEquals(-1, transactions.get(0).amount, DOUBLE_DELTA);
+        assertEquals(-2, transactions.get(1).amount, DOUBLE_DELTA);
+        assertEquals(-3, transactions.get(2).amount, DOUBLE_DELTA);
     }
 
     @Test
@@ -93,19 +93,19 @@ public class AccountTest extends TestBase {
         Account acc = new Account(SAVINGS);
         // Less than 0
         acc.withdraw(10.0);
-        assertEquals(acc.interestEarned(), 0.0, DOUBLE_DELTA);
+        assertEquals(0.0, acc.interestEarned(), DOUBLE_DELTA);
         acc.deposit(10.0);
         // 0
-        assertEquals(acc.interestEarned(), 0.0, DOUBLE_DELTA);
+        assertEquals(0.0, acc.interestEarned(), DOUBLE_DELTA);
         // Less than 1000
         acc.deposit(55.55);
-        assertEquals(acc.interestEarned(), 55.55 * 0.001, DOUBLE_DELTA);
+        assertEquals(55.55 * 0.001, acc.interestEarned(), DOUBLE_DELTA);
         // 1000
         acc.deposit(944.45);
-        assertEquals(acc.interestEarned(), 1.0, DOUBLE_DELTA);
+        assertEquals(1.0, acc.interestEarned(), DOUBLE_DELTA);
         // More than 1000
         acc.deposit(55.55);
-        assertEquals(acc.interestEarned(), 1 + 55.55 * 0.002, DOUBLE_DELTA);
+        assertEquals(1 + 55.55 * 0.002, acc.interestEarned(), DOUBLE_DELTA);
     }
 
     @Test
@@ -113,25 +113,25 @@ public class AccountTest extends TestBase {
         Account acc = new Account(MAXI_SAVINGS);
         // Less than 0
         acc.withdraw(10.0);
-        assertEquals(acc.interestEarned(), 0.0, DOUBLE_DELTA);
+        assertEquals(0.0, acc.interestEarned(), DOUBLE_DELTA);
         acc.deposit(10.0);
         // 0
-        assertEquals(acc.interestEarned(), 0.0, DOUBLE_DELTA);
+        assertEquals(0.0, acc.interestEarned(), DOUBLE_DELTA);
         // Less than 1000
         acc.deposit(55.55);
-        assertEquals(acc.interestEarned(), 55.55 * 0.02, DOUBLE_DELTA);
+        assertEquals(55.55 * 0.02, acc.interestEarned(), DOUBLE_DELTA);
         // 1000
         acc.deposit(944.45);
-        assertEquals(acc.interestEarned(), 20.0, DOUBLE_DELTA);
+        assertEquals(20.0, acc.interestEarned(), DOUBLE_DELTA);
         // More than 1000
         acc.deposit(55.55);
-        assertEquals(acc.interestEarned(), 20.0 + 55.55 * 0.05, DOUBLE_DELTA);
+        assertEquals(20.0 + 55.55 * 0.05, acc.interestEarned(), DOUBLE_DELTA);
         // 2000
         acc.deposit(944.45);
-        assertEquals(acc.interestEarned(), 70.0, DOUBLE_DELTA);
+        assertEquals(70.0, acc.interestEarned(), DOUBLE_DELTA);
         // More than 2000
         acc.deposit(55.55);
-        assertEquals(acc.interestEarned(), 70.0 + 55.55 * 0.1, DOUBLE_DELTA);
+        assertEquals(70.0 + 55.55 * 0.1, acc.interestEarned(), DOUBLE_DELTA);
     }
 
     @Test
@@ -139,15 +139,15 @@ public class AccountTest extends TestBase {
         Account acc = new Account(CHECKING);
         // Less than 0
         acc.withdraw(10.0);
-        assertEquals(acc.interestEarned(), 0.0, DOUBLE_DELTA);
+        assertEquals(0.0, acc.interestEarned(), DOUBLE_DELTA);
         acc.deposit(10.0);
         // 0
-        assertEquals(acc.interestEarned(), 0.0, DOUBLE_DELTA);
+        assertEquals(0.0, acc.interestEarned(), DOUBLE_DELTA);
         // Less than 1000
         acc.deposit(55.55);
-        assertEquals(acc.interestEarned(), 55.55 * 0.001, DOUBLE_DELTA);
+        assertEquals(55.55 * 0.001, acc.interestEarned(), DOUBLE_DELTA);
         // 1000
         acc.deposit(944.45);
-        assertEquals(acc.interestEarned(), 1.0, DOUBLE_DELTA);
+        assertEquals(1.0, acc.interestEarned(), DOUBLE_DELTA);
     }
 }
