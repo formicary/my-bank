@@ -42,7 +42,7 @@ public class Customer {
             statement += "\n" + statementForAccount(a) + "\n";
             total += a.sumTransactions();
         }
-        statement += "\nTotal In All Accounts " + toDollars(total);
+        statement += "\nTotal In All Accounts " + FormatUtils.toDollars(total);
         return statement;
     }
 
@@ -65,14 +65,10 @@ public class Customer {
         //Now total up all the transactions
         double total = 0.0;
         for (Transaction t : a.getTransactions()) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
+            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + FormatUtils.toDollars(t.amount) + "\n";
             total += t.amount;
         }
-        s += "Total " + toDollars(total);
+        s += "Total " + FormatUtils.toDollars(total);
         return s;
-    }
-
-    private String toDollars(double d) {
-        return String.format("$%,.2f", abs(d));
     }
 }
