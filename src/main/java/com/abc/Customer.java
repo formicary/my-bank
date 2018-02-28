@@ -76,4 +76,28 @@ public class Customer {
         sb.append(FormatUtils.toDollars(total));
         return sb.toString();
     }
+
+    public void transfer(int origin, int destination, double amount) {
+        if (accounts.size() < 2) {
+            throw new IllegalArgumentException("Must have at least 2 accounts to transfer money");
+        }
+        if (origin < 0 || origin >= accounts.size()) {
+            throw new IllegalArgumentException(
+                String.format("Index of origin account must be in range [%d, %d)", 0, accounts.size())
+            );
+        }
+        if (destination < 0 || destination >= accounts.size()) {
+            throw new IllegalArgumentException(
+                String.format("Index of destination account must be in range [%d, %d)", 0, accounts.size())
+            );
+        }
+        if (origin == destination)  {
+            throw new IllegalArgumentException("Origin and destination accounts must not be the same");
+        }
+        Account from = accounts.get(origin);
+        // If there was a negative limit, check should be made to check whether account has enough funds
+        Account to = accounts.get(destination);
+        from.withdraw(amount);
+        to.deposit(amount);
+    }
 }
