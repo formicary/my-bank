@@ -89,8 +89,12 @@ public class AccountTest extends TestBase {
     }
 
     @Test
-    public void shouldCorrectlyCalculateInterestForSavingsAccount() {
+    public void shouldCalculateInterestForSavingsAccount() {
         Account acc = new Account(SAVINGS);
+        // Less than 0
+        acc.withdraw(10.0);
+        assertEquals(acc.interestEarned(), 0.0, DOUBLE_DELTA);
+        acc.deposit(10.0);
         // 0
         assertEquals(acc.interestEarned(), 0.0, DOUBLE_DELTA);
         // Less than 1000
@@ -105,8 +109,12 @@ public class AccountTest extends TestBase {
     }
 
     @Test
-    public void shouldCorrectlyCalculateInterestForMaxiSavingsAccount() {
+    public void shouldCalculateInterestForMaxiSavingsAccount() {
         Account acc = new Account(MAXI_SAVINGS);
+        // Less than 0
+        acc.withdraw(10.0);
+        assertEquals(acc.interestEarned(), 0.0, DOUBLE_DELTA);
+        acc.deposit(10.0);
         // 0
         assertEquals(acc.interestEarned(), 0.0, DOUBLE_DELTA);
         // Less than 1000
@@ -127,8 +135,12 @@ public class AccountTest extends TestBase {
     }
 
     @Test
-    public void shouldCorrectlyCalculateInterestForCheckingAccount() {
+    public void shouldCalculateInterestForCheckingAccount() {
         Account acc = new Account(CHECKING);
+        // Less than 0
+        acc.withdraw(10.0);
+        assertEquals(acc.interestEarned(), 0.0, DOUBLE_DELTA);
+        acc.deposit(10.0);
         // 0
         assertEquals(acc.interestEarned(), 0.0, DOUBLE_DELTA);
         // Less than 1000
