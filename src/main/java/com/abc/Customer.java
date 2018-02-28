@@ -3,8 +3,6 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Math.abs;
-
 public class Customer {
     private String name;
     private List<Account> accounts;
@@ -27,52 +25,78 @@ public class Customer {
         return accounts.size();
     }
 
-    public double totalInterestEarned() {
+    public double getTotalInterestEarned() {
         double total = 0;
-        for (Account a : accounts)
-            total += a.interestEarned();
+        for (Account a : accounts) {
+            total += a.getInterestEarned();
+        }
         return total;
     }
 
     public String getStatement() {
-        String statement = null;
-        statement = "Statement for " + name + "\n";
+        StringBuilder sb = new StringBuilder("Statement for " + name + "\n");
         double total = 0.0;
         for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+            sb.append("\n");
+            sb.append(statementForAccount(a));
+            sb.append("\n");
+            total += a.getBalance();
         }
-        statement += "\nTotal In All Accounts " + toDollars(total);
-        return statement;
+        sb.append("\nTotal In All Accounts ");
+        sb.append(Utils.toDollars(total));
+        return sb.toString();
     }
 
     private String statementForAccount(Account a) {
-        String s = "";
+        StringBuilder sb = new StringBuilder();
 
-       //Translate to pretty account type
-        switch(a.getAccountType()){
-            case Account.CHECKING:
-                s += "Checking Account\n";
+        //Translate to pretty account type
+        switch (a.getAccountType()) {
+            case CHECKING:
+                sb.append("Checking Account\n");
                 break;
-            case Account.SAVINGS:
-                s += "Savings Account\n";
+            case SAVINGS:
+                sb.append("Savings Account\n");
                 break;
-            case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
+            case MAXI_SAVINGS:
+                sb.append("Maxi Savings Account\n");
                 break;
         }
 
         //Now total up all the transactions
         double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
+        for (Transaction t : a.getTransactions()) {
+            sb.append(
+                    String.format("  %s %s\n", t.getTransactionType().toString(), Utils.toDollars(t.getAbsAmount()))
+            );
+            total += t.getAmount();
         }
-        s += "Total " + toDollars(total);
-        return s;
+        sb.append("Total ");
+        sb.append(Utils.toDollars(total));
+        return sb.toString();
     }
 
-    private String toDollars(double d){
-        return String.format("$%,.2f", abs(d));
+    public void transfer(int origin, int destination, double amount) {
+        if (accounts.size() < 2) {
+            throw new IllegalArgumentException("Must have at least 2 accounts to transfer money");
+        }
+        if (origin < 0 || origin >= accounts.size()) {
+            throw new IllegalArgumentException(
+                    String.format("Index of origin account must be in range [%d, %d)", 0, accounts.size())
+            );
+        }
+        if (destination < 0 || destination >= accounts.size()) {
+            throw new IllegalArgumentException(
+                    String.format("Index of destination account must be in range [%d, %d)", 0, accounts.size())
+            );
+        }
+        if (origin == destination) {
+            throw new IllegalArgumentException("Origin and destination accounts must not be the same");
+        }
+        Account from = accounts.get(origin);
+        // If there was a negative limit, check should be made to check whether account has enough funds
+        Account to = accounts.get(destination);
+        from.withdraw(amount);
+        to.deposit(amount);
     }
 }

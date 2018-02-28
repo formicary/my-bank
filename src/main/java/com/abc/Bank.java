@@ -15,32 +15,24 @@ public class Bank {
     }
 
     public String customerSummary() {
-        String summary = "Customer Summary";
+        StringBuilder sb = new StringBuilder("Customer Summary");
         for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-        return summary;
-    }
-
-    //Make sure correct plural of word is created based on the number passed in:
-    //If number passed in is 1 just return the word otherwise add an 's' at the end
-    private String format(int number, String word) {
-        return number + " " + (number == 1 ? word : word + "s");
+            sb.append(String.format("\n - %s (%s)", c.getName(), Utils.toPlural(c.getNumberOfAccounts(), "account")));
+        return sb.toString();
     }
 
     public double totalInterestPaid() {
         double total = 0;
-        for(Customer c: customers)
-            total += c.totalInterestEarned();
+        for (Customer c : customers)
+            total += c.getTotalInterestEarned();
         return total;
     }
 
-    public String getFirstCustomer() {
+    public Customer getFirstCustomer() {
         try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
+            return customers.get(0);
+        } catch (IndexOutOfBoundsException e) {
+            return null;
         }
     }
 }
