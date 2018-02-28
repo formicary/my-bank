@@ -18,6 +18,11 @@ public class Customer {
         return name;
     }
 
+    public void transferMoney(double amount, Account A, Account B){
+        A.withdraw(amount);
+        B.deposit(amount);
+    }
+
     public Customer openAccount(Account account) {
         accounts.add(account);
         return this;
@@ -49,7 +54,7 @@ public class Customer {
     private String statementForAccount(Account a) {
         String s = "";
 
-       //Translate to pretty account type
+        //Translate to pretty account type
         switch(a.getAccountType()){
             case Account.CHECKING:
                 s += "Checking Account\n";
@@ -63,12 +68,12 @@ public class Customer {
         }
 
         //Now total up all the transactions
-        double total = 0.0;
+        //double total = a.sumTransactions();
         for (Transaction t : a.transactions) {
             s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
         }
-        s += "Total " + toDollars(total);
+
+        s += "Total " + toDollars(a.sumTransactions());
         return s;
     }
 

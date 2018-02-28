@@ -1,6 +1,7 @@
 package com.abc;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class Account {
@@ -45,25 +46,32 @@ public void withdraw(double amount) {
 //                if (amount <= 4000)
 //                    return 20;
             case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
+                if (withdrawLastTenDays())
+                    return amount *0.001;
+                else
+                    return amount*0.05;
             default:
                 return amount * 0.001;
         }
     }
 
     public double sumTransactions() {
-       return checkIfTransactionsExist(true);
-    }
-
-    private double checkIfTransactionsExist(boolean checkAll) {
         double amount = 0.0;
         for (Transaction t: transactions)
             amount += t.amount;
         return amount;
+    }
+
+    //Return true if transaction was made in last 10 days, else returns true
+    public boolean withdrawLastTenDays(){
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -7);
+        for (Transaction t: transactions)
+            if (t.amount < 0 && t.getTransactionDate().after(cal.getTime())){
+                System.out.println("Bol");
+                return true;
+            }
+        return false;
     }
 
     public int getAccountType() {
