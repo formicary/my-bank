@@ -34,10 +34,10 @@ public class Bank {
         return total;
     }
 
-    public String getFirstCustomer() {
+    public Customer getFirstCustomer() {
         try {
-            return customers.get(0).getName();
-        } catch (NullPointerException e) {
+            return customers.get(0);
+        } catch (IndexOutOfBoundsException e) {
             return null;
         }
     }
