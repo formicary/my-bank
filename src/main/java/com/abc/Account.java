@@ -7,16 +7,26 @@ import java.util.List;
 
 public class Account {
 
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
+    //Account types as enumeration
+    public enum AccountType {
+        CHECKING("CHECKING") , SAVINGS("SAVINGS"), MAXI_SAVINGS("MAXI_SAVINGS");
 
-    private final int accountType;
+        private String value;
+        private AccountType(String value){
+            this.value = value;
+        }
+
+        public String getAccountType(){
+            return value;
+        }
+    }
+
+    private final AccountType accountType;
     public List<Transaction> transactions;
 
     public Date openingDate;
 
-    public Account(int accountType) {
+    public Account(AccountType accountType) {
         this.openingDate = DateProvider.getInstance().now();
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
@@ -77,7 +87,7 @@ public class Account {
         return false;
     }
 
-    public int getAccountType() {
+    public AccountType getAccountType() {
         return accountType;
     }
 
