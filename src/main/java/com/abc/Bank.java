@@ -3,6 +3,7 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
+/* Written by Tunc Demircan */
 public class Bank {
     private List<Customer> customers;
 

@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+/* Written by Tunc Demircan */
 public class CustomerTest {
 
     @Test

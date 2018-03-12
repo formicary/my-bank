@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
 
-
+/* Written by Tunc Demircan */
 public class Account {
 
     private final int accountType; // 0 = Checking, 1 = Savings, 2 = Maxi

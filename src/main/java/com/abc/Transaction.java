@@ -2,6 +2,7 @@ package com.abc;
 
 import java.util.Date;
 
+/* Written by Tunc Demircan */
 public class Transaction {
 
     private final String transactionDate;
