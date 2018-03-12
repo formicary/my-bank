@@ -3,76 +3,62 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Math.abs;
-
+/* Written by Tunc Demircan */
 public class Customer {
+
     private String name;
     private List<Account> accounts;
+    private int numberOfAccounts;
 
-    public Customer(String name) {
+    public Customer(String name){
         this.name = name;
         this.accounts = new ArrayList<Account>();
+        this.numberOfAccounts = 0;
     }
+
+    // Returns a String statement. Usable even if the customer has no accounts/transactions
+    public String getStatement(){
+        String fullStatement = "Statement for " + name;
+        double total = 0.0;
+
+        if(accounts.isEmpty()){
+            fullStatement += "\nNo accounts to display.";
+            return fullStatement;
+        }
+
+        for (Account account : accounts) {
+            String statement = "";
+            statement += "\n\n" + account.accountTypeName() + "\nBalance: " +
+                    String.format("$%,.2f", account.getBalance()) + "\nTransactions:";
+            if(account.getTransactions().isEmpty()){
+                statement += "\nNo transactions to display";
+            } else {
+                for (Transaction transaction : account.getTransactions()) {
+                    statement += "\n" + String.format("$%,.2f", transaction.getAmount()) + " " + transaction.getType();
+                }
+            }
+            fullStatement += statement + "\n\n";
+        }
+        return fullStatement;
+    }
+
+
+    public void incrementNumberOfAccounts(){
+        numberOfAccounts += 1;
+    }
+
+    // Getters
 
     public String getName() {
         return name;
     }
 
-    public Customer openAccount(Account account) {
-        accounts.add(account);
-        return this;
-    }
-
     public int getNumberOfAccounts() {
-        return accounts.size();
+        return numberOfAccounts;
     }
 
-    public double totalInterestEarned() {
-        double total = 0;
-        for (Account a : accounts)
-            total += a.interestEarned();
-        return total;
+    public List<Account> getAccounts() {
+        return accounts;
     }
 
-    public String getStatement() {
-        String statement = null;
-        statement = "Statement for " + name + "\n";
-        double total = 0.0;
-        for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
-        }
-        statement += "\nTotal In All Accounts " + toDollars(total);
-        return statement;
-    }
-
-    private String statementForAccount(Account a) {
-        String s = "";
-
-       //Translate to pretty account type
-        switch(a.getAccountType()){
-            case Account.CHECKING:
-                s += "Checking Account\n";
-                break;
-            case Account.SAVINGS:
-                s += "Savings Account\n";
-                break;
-            case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
-                break;
-        }
-
-        //Now total up all the transactions
-        double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
-        }
-        s += "Total " + toDollars(total);
-        return s;
-    }
-
-    private String toDollars(double d){
-        return String.format("$%,.2f", abs(d));
-    }
 }
