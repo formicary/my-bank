@@ -1,18 +1,33 @@
 package com.abc;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class Account {
 
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
+    //Account types as enumeration
+    public enum AccountType {
+        CHECKING("CHECKING") , SAVINGS("SAVINGS"), MAXI_SAVINGS("MAXI_SAVINGS");
 
-    private final int accountType;
+        private String value;
+        private AccountType(String value){
+            this.value = value;
+        }
+
+        public String getAccountType(){
+            return value;
+        }
+    }
+
+    private final AccountType accountType;
     public List<Transaction> transactions;
 
-    public Account(int accountType) {
+    public Date openingDate;
+
+    public Account(AccountType accountType) {
+        this.openingDate = DateProvider.getInstance().now();
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
     }
@@ -21,17 +36,17 @@ public class Account {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
-            transactions.add(new Transaction(amount));
+            transactions.add(new Transaction(amount,"deposit"));
         }
     }
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
+    public void withdraw(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        } else {
+            transactions.add(new Transaction(-amount,"withdraw"));
+        }
     }
-}
 
     public double interestEarned() {
         double amount = sumTransactions();
@@ -45,28 +60,34 @@ public void withdraw(double amount) {
 //                if (amount <= 4000)
 //                    return 20;
             case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
+                if (withdrawLastTenDays())
+                    return amount *0.001;
+                else
+                    return amount*0.05;
             default:
                 return amount * 0.001;
         }
     }
 
     public double sumTransactions() {
-       return checkIfTransactionsExist(true);
-    }
-
-    private double checkIfTransactionsExist(boolean checkAll) {
         double amount = 0.0;
         for (Transaction t: transactions)
             amount += t.amount;
         return amount;
     }
 
-    public int getAccountType() {
+    //Return true if transaction was made in last 10 days, else returns true
+    public boolean withdrawLastTenDays(){
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -10);
+        for (Transaction t: transactions)
+            if (t.amount < 0 && t.getTransactionDate().after(cal.getTime())){
+                return true;
+            }
+        return false;
+    }
+
+    public AccountType getAccountType() {
         return accountType;
     }
 

@@ -7,7 +7,7 @@ public class Bank {
     private List<Customer> customers;
 
     public Bank() {
-        customers = new ArrayList<Customer>();
+        this.customers = new ArrayList<Customer>();
     }
 
     public void addCustomer(Customer customer) {
@@ -34,13 +34,12 @@ public class Bank {
         return total;
     }
 
-    public String getFirstCustomer() {
+    public Customer getFirstCustomer() {
         try {
-            customers = null;
-            return customers.get(0).getName();
+            return customers.get(0);
         } catch (Exception e){
             e.printStackTrace();
-            return "Error";
+            return null;
         }
     }
 }
