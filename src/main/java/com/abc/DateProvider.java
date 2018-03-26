@@ -1,18 +1,18 @@
 package com.abc;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class DateProvider {
     private static DateProvider instance = null;
 
+    // Singleton to ensure only one instance
     public static DateProvider getInstance() {
         if (instance == null)
             instance = new DateProvider();
         return instance;
     }
 
-    public Date now() {
-        return Calendar.getInstance().getTime();
+    public static LocalDateTime now() {
+        return LocalDateTime.now();
     }
 }

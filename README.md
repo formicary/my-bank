@@ -40,3 +40,13 @@ A dummy application for a bank; should provide various functions of a retail ban
 * A customer can transfer between their accounts
 * Change **Maxi-Savings accounts** to have an interest rate of 5% assuming no withdrawals in the past 10 days otherwise 0.1%
 * Interest rates should accrue and compound daily (incl. weekends), rates above are per-annum
+
+### Changes Made
+
+* Made Account an abstract class
+* CheckingAccount, SavingsAccount and MaxiSavingsAccount now expand Account class to separate business logic
+* Implemented feature allowing customers to send money between their accounts or their business partners
+* Expanded test coverage
+* Refactored code, solved bugs, cleaned code
+* MaxiSavings interest schedule changed as per new policy
+* Interest now accrues daily across all the bank
