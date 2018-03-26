@@ -7,40 +7,54 @@ public class Bank {
     private List<Customer> customers;
 
     public Bank() {
-        customers = new ArrayList<Customer>();
+        customers = new ArrayList<>();
     }
 
+    /**
+     * Adds new customer to the ArrayList storing all bank customers
+     * @param customer object to be added to the ArrayList of bank customers
+     */
     public void addCustomer(Customer customer) {
         customers.add(customer);
     }
 
+    /**
+     * Generates a summary of customer names and the number of accounts opened under their name
+     * @return a string of all customers and the bank accounts
+     */
     public String customerSummary() {
         String summary = "Customer Summary";
-        for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
+        for (Customer customer : customers)
+            summary += "\n - " + customer.getName() + " (" + format(customer.getNumberOfAccounts(), "account") + ")";
         return summary;
     }
 
-    //Make sure correct plural of word is created based on the number passed in:
-    //If number passed in is 1 just return the word otherwise add an 's' at the end
+    /**
+     * Adds the correct suffix for plural to a given word depending on the quantity involved
+     * @param number the number of account(s) involved
+     * @param word a countable noun that needs a plural suffix, example: account to be turned into accounts
+     * @return a string that has the correct plural ending depending on the number
+     */
     private String format(int number, String word) {
-        return number + " " + (number == 1 ? word : word + "s");
+        String outputString;
+
+        if (number == 1) {
+            outputString = String.format("%1$d %2$s", number, word);
+        } else {
+            outputString = String.format("%1$d %2$s", number, word + "s");
+        }
+
+        return outputString;
     }
 
+    /**
+     * Calculates the total amount of interest that was paid to the customers of the bank
+     * @return value of total amount of interest paid
+     */
     public double totalInterestPaid() {
         double total = 0;
-        for(Customer c: customers)
-            total += c.totalInterestEarned();
+        for(Customer customer: customers)
+            total += customer.totalInterestEarned();
         return total;
-    }
-
-    public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
-        }
     }
 }
