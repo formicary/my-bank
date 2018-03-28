@@ -1,8 +1,5 @@
-package test.java.com.abc;
+package com.abc;
 
-import main.java.com.abc.Account;
-import main.java.com.abc.Bank;
-import main.java.com.abc.Customer;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -11,7 +8,7 @@ public class BankTest {
     private static final double DOUBLE_DELTA = 1e-15;
 
     @Test
-    public void testCustomerSummary() {
+    public void testCustomerSummarySingleAccount() {
         Bank bank = new Bank();
         Account checkingAccount = new Account(Account.CHECKING);
         Customer john = new Customer("John");
@@ -22,7 +19,20 @@ public class BankTest {
     }
 
     @Test
-    public void testCheckingAccount() {
+    public void testCustomerSummaryTwoAccount() {
+        Bank bank = new Bank();
+        Account checkingAccount = new Account(Account.CHECKING);
+        Account savingAccount = new Account(Account.SAVINGS);
+        Customer john = new Customer("John");
+        john.openAccount(checkingAccount);
+        john.openAccount(savingAccount);
+        bank.addCustomer(john);
+
+        assertEquals("Customer Summary\n - John (2 accounts)", bank.customerSummary());
+    }
+
+    @Test
+    public void testCheckingAccountInterest() {
         Bank bank = new Bank();
         Account checkingAccount = new Account(Account.CHECKING);
         Customer bill = new Customer("Bill");
@@ -35,7 +45,7 @@ public class BankTest {
     }
 
     @Test
-    public void testSavingsAccount() {
+    public void testSavingsAccountInterest() {
         Bank bank = new Bank();
         Account savingsAccount = new Account(Account.SAVINGS);
         Customer bill = new Customer("Bill");
@@ -48,7 +58,7 @@ public class BankTest {
     }
 
     @Test
-    public void testMaxiSavingsAccount() {
+    public void testMaxiSavingsAccountInterest() {
         Bank bank = new Bank();
         Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
         Customer bill = new Customer("Bill");
@@ -57,6 +67,6 @@ public class BankTest {
 
         maxiSavingsAccount.deposit(3000.0);
 
-        assertEquals(170.0, bank.totalInterestPaid(1), DOUBLE_DELTA);
+        assertEquals(176.7, bank.totalInterestPaid(1), DOUBLE_DELTA);
     }
 }

@@ -1,7 +1,5 @@
-package test.java.com.abc;
+package com.abc;
 
-import main.java.com.abc.DateProvider;
-import main.java.com.abc.Transaction;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

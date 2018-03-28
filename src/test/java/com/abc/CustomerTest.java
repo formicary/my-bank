@@ -1,8 +1,5 @@
-package test.java.com.abc;
+package com.abc;
 
-import main.java.com.abc.Account;
-import main.java.com.abc.Customer;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -48,7 +45,7 @@ public class CustomerTest {
     }
 
     @Test //Test opening Savings and Checking Account
-    public void testTwoAccount(){
+    public void testTwoAccounts(){
         Account savingsAccount = new Account(Account.SAVINGS);
         Account checkingAccount = new Account(Account.CHECKING);
         Customer oscar = new Customer("Oscar");
@@ -74,7 +71,7 @@ public class CustomerTest {
     }
 
     @Test //Test transferring money between Accounts
-    public void testAccountTransfer() {
+    public void testAccountTransferSuccessful() {
         Account savingsAccount = new Account(Account.SAVINGS);
         Account checkingAccount = new Account(Account.CHECKING);
         Customer oscar = new Customer("Oscar");
@@ -89,4 +86,5 @@ public class CustomerTest {
         assertEquals(0.0, savingsAccount.sumTransactions(), DOUBLE_DELTA);
         assertEquals(100.0, checkingAccount.sumTransactions(), DOUBLE_DELTA);
     }
+
 }

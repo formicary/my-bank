@@ -1,4 +1,4 @@
-package main.java.com.abc;
+package com.abc;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ public class Account {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
             if(accountValue - amount < 0) {
-                throw new IllegalArgumentException("account does not contain enough money");
+                throw new ArithmeticException("account does not contain enough money");
             } else {
                 transactions.add(new Transaction(-amount));
             }
@@ -79,21 +79,22 @@ public class Account {
 
     //Checks if Account has at least one transaction
     private boolean checkIfTransactionsExist() {
-        if(transactions.size() >= 1){
-            return true;
-        }
-        return false;
+        return (transactions.size() >= 1);
     }
 
+    //Returns the Account type as an int
     public int getAccountType() {
         return accountType;
     }
 
+    //Calculates daily compound interest amount
     public double getInterestAmount(double amount, double interest, double years){
-        double compoundInterest = Math.pow((1 + (interest / 100) / 365), 365 * years);
+        double compoundInterest = Math.pow((1 + ((interest / 100) / 365)), 365 * years);
+        compoundInterest = roundDouble(compoundInterest, 4);
         return (amount * compoundInterest) - amount;
     }
 
+    //Calculates days since the last transaction
     public int lastTransactionDate(){
         if(checkIfTransactionsExist()) {
             long millisecondDifference = Math.abs(DateProvider.getInstance().now().getTime() - transactions.get(transactions.size()-1).getDate().getTime());
@@ -103,6 +104,7 @@ public class Account {
         return 0;
     }
 
+    //Rudimentary function to round a double to a set number of decimal places
     public double roundDouble(double amount, int dp){
         return Math.round(amount*Math.pow(10,dp))/Math.pow(10,dp);
     }

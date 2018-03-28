@@ -1,4 +1,4 @@
-package main.java.com.abc;
+package com.abc;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,11 @@ public class Customer {
 
     //Create a new account for the customer
     public Customer openAccount(Account account) {
-        accounts.add(account);
+        if(accounts.contains(account)){
+            throw new IllegalArgumentException("account already opened by this customer");
+        } else {
+            accounts.add(account);
+        }
         return this;
     }
 
@@ -84,16 +88,19 @@ public class Customer {
         return String.format("$%,.2f", abs(d));
     }
 
-
+    //Transfers an amount between two Accounts
     public String transfer(Account fromAccount, Account toAccount, double amount){
-        try{
-            fromAccount.withdraw(amount);
-        } catch (Error e){
-            e.printStackTrace();
-            return "Error";
+        if(accounts.contains(fromAccount) && accounts.contains(toAccount)) {
+            try {
+                fromAccount.withdraw(amount);
+                toAccount.deposit(amount);
+                return "Transfer successful!";
+            } catch (Error e) {
+                e.printStackTrace();
+                return "Error";
+            }
+        } else {
+            throw new IllegalArgumentException("both accounts must be open by the customer");
         }
-
-        toAccount.deposit(amount);
-        return "Transfer successful!";
     }
 }

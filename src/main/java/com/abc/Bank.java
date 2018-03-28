@@ -1,4 +1,4 @@
-package main.java.com.abc;
+package com.abc;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +25,9 @@ public class Bank {
     }
 
     //Make sure correct plural of word is created based on the number passed in:
-    //If number passed in is 1 just return the word otherwise add an 's at the end
+    //If number passed in is 1 just return the word otherwise add an 's' at the end
     private String format(int number, String word) {
-        return number + " " + (number == 1 ? word : word + "'s");
+        return number + " " + (number == 1 ? word : word + "s");
     }
 
     //Calculate total interest paid to all customers
