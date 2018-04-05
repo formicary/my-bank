@@ -34,6 +34,13 @@ public class Customer {
         return total;
     }
 
+    public void interestPlus(){
+        for(Account a : accounts) {
+            a.transactions.add(new Transaction(a.interestEarned()));
+        }
+
+    }
+
     public String getStatement() {
         String statement = null;
         statement = "Statement for " + name + "\n";
@@ -75,4 +82,5 @@ public class Customer {
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
     }
+
 }

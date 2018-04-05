@@ -25,13 +25,23 @@ public class Account {
         }
     }
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
+    public void withdraw(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        } else {
+            transactions.add(new Transaction(-amount));
+        }
     }
-}
+
+    public void transfer(Account account, double amount){
+        if (amount <= 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        } else {
+            transactions.add(new Transaction(-amount));
+            account.transactions.add(new Transaction(amount));
+        }
+    }
+
 
     public double interestEarned() {
         double amount = sumTransactions();
@@ -41,15 +51,11 @@ public void withdraw(double amount) {
                     return amount * 0.001;
                 else
                     return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
             case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
+                if(chcekIfNoWithdrawals() == true)
+                    return (amount) * 0.05;
+                else
+                    return amount * 0.001;
             default:
                 return amount * 0.001;
         }
@@ -57,6 +63,10 @@ public void withdraw(double amount) {
 
     public double sumTransactions() {
        return checkIfTransactionsExist(true);
+    }
+
+    private boolean chcekIfNoWithdrawals(){
+        return true;
     }
 
     private double checkIfTransactionsExist(boolean checkAll) {
