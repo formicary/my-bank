@@ -1,5 +1,6 @@
 package com.abc;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,16 +12,15 @@ public class Customer {
 
     public Customer(String name) {
         this.name = name;
-        this.accounts = new ArrayList<Account>();
+        this.accounts = new ArrayList<>();
     }
 
     public String getName() {
         return name;
     }
 
-    public Customer openAccount(Account account) {
+    public void openAccount(Account account) {
         accounts.add(account);
-        return this;
     }
 
     public int getNumberOfAccounts() {
@@ -35,44 +35,36 @@ public class Customer {
     }
 
     public String getStatement() {
-        String statement = null;
-        statement = "Statement for " + name + "\n";
+        StringBuilder statement = new StringBuilder("Statement for " + name + "\n");
         double total = 0.0;
         for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+            statement.append("\n").append(statementForAccount(a)).append("\n");
+            total += a.getBalance();
         }
-        statement += "\nTotal In All Accounts " + toDollars(total);
-        return statement;
+        statement.append("\nTotal In All Accounts ").append(toDollars(total));
+        return statement.toString();
     }
 
-    private String statementForAccount(Account a) {
-        String s = "";
-
-       //Translate to pretty account type
-        switch(a.getAccountType()){
-            case Account.CHECKING:
-                s += "Checking Account\n";
-                break;
-            case Account.SAVINGS:
-                s += "Savings Account\n";
-                break;
-            case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
-                break;
-        }
-
+    private String statementForAccount(Account account ) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(account.getAccountName() + "\n");
         //Now total up all the transactions
-        double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
+        for (Transaction t : account.getTransactions()) {
+            stringBuilder.append("\t");
+
+            if (t.getAmount() < 0)
+                stringBuilder.append("withdrawal");
+            else
+                stringBuilder.append("deposit");
+
+            stringBuilder.append(" " + toDollars(t.getAmount()) + "\n");
         }
-        s += "Total " + toDollars(total);
-        return s;
+        stringBuilder.append("Total " + toDollars(account.getBalance()));
+
+        return stringBuilder.toString();
     }
 
-    private String toDollars(double d){
+    private String toDollars(double d) {
         return String.format("$%,.2f", abs(d));
     }
 }

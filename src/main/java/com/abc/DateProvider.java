@@ -1,18 +1,17 @@
 package com.abc;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDateTime;
 
-public class DateProvider {
-    private static DateProvider instance = null;
+public final class DateProvider {
 
-    public static DateProvider getInstance() {
-        if (instance == null)
-            instance = new DateProvider();
-        return instance;
+    private DateProvider() {
     }
 
-    public Date now() {
-        return Calendar.getInstance().getTime();
+    public static LocalDateTime getNow(){
+        return LocalDateTime.now();
+    }
+    // day is day of month
+    public static LocalDateTime getNow(int month, int day, int hour, int minute){
+        return LocalDateTime.of(2018, month, day, hour, minute);
     }
 }

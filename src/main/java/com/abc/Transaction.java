@@ -1,16 +1,35 @@
 package com.abc;
 
-import java.util.Calendar;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class Transaction {
-    public final double amount;
+    private final double amount;
+    // balance after this transaction
+    private final double balance;
+    private final LocalDateTime transactionDate;
 
-    private Date transactionDate;
-
-    public Transaction(double amount) {
+    public Transaction(double amount, double balance, LocalDateTime time) {
         this.amount = amount;
-        this.transactionDate = DateProvider.getInstance().now();
+        this.balance = balance;
+        //this.transactionDate = DateProvider.getNow();
+        // used for testing
+        this.transactionDate = time;
     }
 
+    public double getAmount() {
+        return amount;
+    }
+
+    public LocalDateTime getDate() {
+        return transactionDate;
+    }
+
+    public int getDay(){
+        return transactionDate.getDayOfYear();
+    }
+
+    public double getBalance() {
+        return balance;
+    }
 }
