@@ -1,5 +1,6 @@
 package com.abc;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +8,7 @@ public class Bank {
     private List<Customer> customers;
 
     public Bank() {
-        customers = new ArrayList<Customer>();
+        customers = new ArrayList<>();
     }
 
     public void addCustomer(Customer customer) {
@@ -15,10 +16,14 @@ public class Bank {
     }
 
     public String customerSummary() {
-        String summary = "Customer Summary";
+        if(customers.isEmpty()){
+            return "No accounts in the bank.";
+        }
+        StringBuilder summary = new StringBuilder("Customer Summary");
         for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-        return summary;
+            summary.append("\n - ").append(c.getName())
+                    .append(" (").append(format(c.getNumberOfAccounts(), "account")).append(")");
+        return summary.toString();
     }
 
     //Make sure correct plural of word is created based on the number passed in:
@@ -27,6 +32,11 @@ public class Bank {
         return number + " " + (number == 1 ? word : word + "s");
     }
 
+    // interest paid till date
+
+    /**
+     * @return total interest paid till last transaction
+     */
     public double totalInterestPaid() {
         double total = 0;
         for(Customer c: customers)
@@ -34,13 +44,4 @@ public class Bank {
         return total;
     }
 
-    public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
-        }
-    }
 }
