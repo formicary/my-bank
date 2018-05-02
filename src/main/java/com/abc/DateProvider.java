@@ -15,4 +15,15 @@ public class DateProvider {
     public Date now() {
         return Calendar.getInstance().getTime();
     }
+    
+    public Date past(int days) {
+    		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DATE, -days);
+		Date past = cal.getTime();
+		
+		return past;
+		
+    }
+    
+    
 }

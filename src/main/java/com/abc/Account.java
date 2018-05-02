@@ -1,73 +1,87 @@
 package com.abc;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-public class Account {
-
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
-
-    private final int accountType;
-    public List<Transaction> transactions;
-
-    public Account(int accountType) {
-        this.accountType = accountType;
-        this.transactions = new ArrayList<Transaction>();
-    }
-
-    public void deposit(double amount) {
-        if (amount <= 0) {
+public abstract class Account {
+	
+	private List<Transaction> transactions = new ArrayList<Transaction>();
+    private double balance = 0.00;
+    protected Customer account_holder;
+    private final Date account_opendate = DateProvider.getInstance().past(365);
+    protected Date latest_interestdate = account_opendate;
+    private double earned_interest = 0.00;
+    
+    public boolean deposit(double amount) {
+    		if (transactions.size() != 0) updateBalance();
+    		
+    		if (amount <= 0) { 		
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
+        		balance += amount;
             transactions.add(new Transaction(amount));
+            return true;
         }
     }
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
-    }
-}
+	public boolean withdraw(double amount) {
+		updateBalance();
+	    if (amount <= 0) {
+	        throw new IllegalArgumentException("amount must be greater than zero");
+	    } else {
+	    		if(balance>=amount) {
+	    			balance -= amount;
+	    			transactions.add(new Transaction(-amount));
+	    			return true;
+	    		}else {
+	    			return false;
+	    		} 		
+	    }
+	}
 
-    public double interestEarned() {
-        double amount = sumTransactions();
-        switch(accountType){
-            case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
-            case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
-            default:
-                return amount * 0.001;
-        }
-    }
+	protected abstract double interestEarned();
 
-    public double sumTransactions() {
-       return checkIfTransactionsExist(true);
+    public boolean checkIfTransactionsExist(Transaction transaction) {
+    		for (Transaction t :transactions) {
+    			if(t == transaction) return true;
+    		}
+    		return false;
     }
-
-    private double checkIfTransactionsExist(boolean checkAll) {
-        double amount = 0.0;
-        for (Transaction t: transactions)
-            amount += t.amount;
-        return amount;
+    
+    public void updateBalance() {
+    		double temp_int = interestEarned();
+    		balance += temp_int;
+    		earned_interest += temp_int;
     }
-
-    public int getAccountType() {
-        return accountType;
+    
+    public double getAccountBalance() {
+    		return balance;
+    }
+    
+    public String getAccountHolder() {
+    		return account_holder.getName();
+    }
+    
+    public List<Transaction> getTransactions(){
+    		return transactions;
+    }
+    
+    public double getinterest() {
+    		updateBalance();
+    		return earned_interest;
+    }
+    
+    protected boolean checkwithdrawlinpasttendays() {
+    		Date now = DateProvider.getInstance().now();
+    		
+    		for (Transaction t: transactions){
+    			if (t.getamount()<0 && now.getTime()-t.getTransactionDate().getTime()<864000000) {
+    				return true;
+    			}else continue;
+    		}
+    		
+    		return false;
     }
 
 }

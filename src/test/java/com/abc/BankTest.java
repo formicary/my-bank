@@ -5,50 +5,102 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class BankTest {
-    private static final double DOUBLE_DELTA = 1e-15;
+    private static final double DOUBLE_DELTA = 1e-2;
 
     @Test
     public void customerSummary() {
         Bank bank = new Bank();
         Customer john = new Customer("John");
-        john.openAccount(new Account(Account.CHECKING));
         bank.addCustomer(john);
-
+        john.openAccount(new checkingAccount(john), bank);
         assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
     }
 
     @Test
-    public void checkingAccount() {
+    public void checkingAccount() {	
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.CHECKING);
-        Customer bill = new Customer("Bill").openAccount(checkingAccount);
+        Customer bill = new Customer("Bill");
         bank.addCustomer(bill);
-
-        checkingAccount.deposit(100.0);
-
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+        checkingAccount billAccount = new checkingAccount (bill);
+        bill.openAccount(billAccount, bank);
+        
+        Customer john = new Customer("John");
+        bank.addCustomer(john);  
+        checkingAccount johnAccount = new checkingAccount(john);
+        john.openAccount(johnAccount, bank);
+             
+        billAccount.deposit(100.0);
+        johnAccount.deposit(100.0);
+ 
+        assertEquals(0.2, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
     public void savings_account() {
-        Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+    		Bank bank = new Bank();
+        Customer bill = new Customer("Bill");
+        bank.addCustomer(bill);
+        savingsAccount billAccount = new savingsAccount(bill);
+        bill.openAccount(billAccount, bank);
+               
+        Customer john = new Customer("John");
+        bank.addCustomer(john);     
+        savingsAccount johnAccount = new savingsAccount(john);
+        john.openAccount(johnAccount, bank);
+                 
+        billAccount.deposit(1500.0);
+        johnAccount.deposit(1500.0);
 
-        checkingAccount.deposit(1500.0);
-
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(3.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
     public void maxi_savings_account() {
+    		Bank bank = new Bank();
+        Customer bill = new Customer("Bill");
+        bank.addCustomer(bill);
+        maxisavingsAccount billAccount = new maxisavingsAccount(bill);
+        bill.openAccount(billAccount, bank);
+     
+        billAccount.deposit(3000.0);    
+
+        assertEquals(153.8, bank.totalInterestPaid(), DOUBLE_DELTA);
+        
+        billAccount.withdraw(10.0);
+        assertEquals(153.8, bank.totalInterestPaid(), DOUBLE_DELTA);
+    }
+    
+    @Test
+    public void getfirstcustomer() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+        Customer john = new Customer("John");
+        bank.addCustomer(john);
+        john.openAccount(new checkingAccount(john), bank);
 
-        checkingAccount.deposit(3000.0);
+        Customer bill = new Customer("Bill");
+        bank.addCustomer(bill);
+        bill.openAccount(new checkingAccount(bill), bank);
+                
+        assertEquals("John", bank.getFirstCustomer());        
+    }
 
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+	@Test
+    public void deposit_withdrawl() {
+    		Bank bank = new Bank();
+    		Customer bill = new Customer("Bill");
+    		bank.addCustomer(bill);
+        Account billAccount = new checkingAccount(bill);
+        bill.openAccount(billAccount, bank);
+               
+        assertEquals(true, billAccount.deposit(100.0));
+        assertEquals(100.0, billAccount.getAccountBalance(), DOUBLE_DELTA);
+        
+        billAccount.withdraw(50.0);      
+        assertEquals(50.1, billAccount.getAccountBalance(), DOUBLE_DELTA);
+        
+        assertEquals(false, billAccount.withdraw(100.0));
+        
+        assertEquals(50.1, billAccount.getAccountBalance(), DOUBLE_DELTA);  		
     }
 
 }
