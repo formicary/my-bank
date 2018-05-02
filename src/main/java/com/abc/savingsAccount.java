@@ -4,6 +4,7 @@ public class savingsAccount extends Account {
 
 	public savingsAccount(Customer accountholder) {
 		this.account_holder = accountholder;
+		this.account_type = "Savings Account";
 	}
 	
 	protected double interestEarned() {

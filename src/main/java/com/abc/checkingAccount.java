@@ -2,9 +2,12 @@ package com.abc;
 
 public class checkingAccount extends Account {
 	
+	
+	
 	public checkingAccount(Customer accountholder) {
 		super();
 		this.account_holder = accountholder;
+		this.account_type = "Checking Account";
 	}
 	
 	

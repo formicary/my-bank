@@ -12,6 +12,7 @@ public abstract class Account {
     private final Date account_opendate = DateProvider.getInstance().past(365);
     protected Date latest_interestdate = account_opendate;
     private double earned_interest = 0.00;
+    protected String account_type; 
     
     public boolean deposit(double amount) {
     		if (transactions.size() != 0) updateBalance();
@@ -82,6 +83,10 @@ public abstract class Account {
     		}
     		
     		return false;
+    }
+    
+    public String get_accountType() {
+    		return account_type;
     }
 
 }

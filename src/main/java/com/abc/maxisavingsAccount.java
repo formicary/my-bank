@@ -5,6 +5,7 @@ public class maxisavingsAccount extends Account {
 	public maxisavingsAccount(Customer accountholder) {
 		super();
 		this.account_holder = accountholder;
+		this.account_type = "Maxi Savings Account";
 	}
 	
 	protected double interestEarned() {

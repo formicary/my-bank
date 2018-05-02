@@ -57,12 +57,7 @@ public class Customer {
         String s = "";
 
        //Translate to pretty account type
-        if(a instanceof checkingAccount)
- 	       s += "Checking Account\n";
- 	    else if(a instanceof savingsAccount)
- 	        s += "Savings Account\n";
- 	    else if(a instanceof maxisavingsAccount)
- 	        s += "Maxi Savings Account\n";
+        s += a.get_accountType()+"\n";
 
         //Now total up all the transactions
         double total = 0.0;
