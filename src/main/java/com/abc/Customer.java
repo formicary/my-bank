@@ -14,6 +14,34 @@ public class Customer {
         this.accounts = new ArrayList<Account>();
     }
 
+    //my addition
+    public List<Account> getAccounts() {
+        return accounts;
+    }
+
+    //my addition
+    public void transferBetweenAccounts(Account a, Account b, double amount) {
+
+        if (amount < a.sumTransactions()) {
+            a.withdraw(amount);
+            b.deposit(amount);
+        } else {
+            System.out.println("insufficient fund");
+        }
+
+    }
+
+    //my additon
+    public int totalSaving(){
+        int totalSaving = 0;
+        for (int i = 0; i < accounts.size(); i++) {
+            for (int j = 0; j < accounts.get(i).transactions.size(); j++) {
+                totalSaving += accounts.get(i).transactions.get(j).amount;
+            }
+        }
+        return totalSaving;
+    }
+
     public String getName() {
         return name;
     }

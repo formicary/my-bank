@@ -1,7 +1,9 @@
 package com.abc;
 
+
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class Transaction {
     public final double amount;
@@ -13,4 +15,14 @@ public class Transaction {
         this.transactionDate = DateProvider.getInstance().now();
     }
 
+    public Date getTransactionDate() {
+        return transactionDate;
+    }
+
+    public Date getTransactionDatePlus10Days(){
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTime(transactionDate);
+        cal.add(Calendar.DATE, 10);
+        return cal.getTime();
+    }
 }

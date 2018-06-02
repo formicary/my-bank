@@ -3,9 +3,12 @@ package com.abc;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.awt.event.ActionListener;
+
 import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
+    private static final double DOUBLE_DELTA = 1e-15;
 
     @Test //Test customer statement generation
     public void testApp(){
@@ -31,6 +34,40 @@ public class CustomerTest {
                 "Total $3,800.00\n" +
                 "\n" +
                 "Total In All Accounts $3,900.00", henry.getStatement());
+    }
+
+    //my addtion
+    @Test
+    public void testTotalSaving() {
+        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
+        oscar.openAccount(new Account(Account.CHECKING));
+        for (int i = 0; i < oscar.getAccounts().size(); i++) {
+            if (oscar.getAccounts().get(i).getAccountType() == 0) {
+                oscar.getAccounts().get(i).deposit(10000.0);
+            }
+        }
+
+        assertEquals(10000.0, oscar.totalSaving(), DOUBLE_DELTA);
+
+    }
+
+    //my addtion
+    @Test
+    public void testTransferBetweenAccounts() {
+        Customer oscar = new Customer("Oscar");
+        oscar.openAccount(new Account(Account.SAVINGS));
+        oscar.openAccount(new Account(Account.CHECKING));
+
+        for (int i = 0; i < oscar.getAccounts().size(); i++) {
+            if (oscar.getAccounts().get(i).getAccountType() == 0) {
+                oscar.getAccounts().get(i).deposit(10000);
+            }
+        }
+
+        oscar.transferBetweenAccounts(oscar.getAccounts().get(1), oscar.getAccounts().get(0), 10.0);
+
+        assertEquals(10.0, oscar.getAccounts().get(0).sumTransactions(), DOUBLE_DELTA);
+
     }
 
     @Test

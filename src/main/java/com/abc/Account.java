@@ -1,6 +1,7 @@
 package com.abc;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Account {
@@ -16,6 +17,7 @@ public class Account {
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
     }
+
 
     public void deposit(double amount) {
         if (amount <= 0) {
@@ -34,33 +36,58 @@ public void withdraw(double amount) {
 }
 
     public double interestEarned() {
-        double amount = sumTransactions();
+
+        double amount = 0;
+        double totalInterest = 0;
+
         switch(accountType){
             case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
+
+                for (int i = 0; i < transactions.size(); i++) {
+                    amount += transactions.get(i).amount;
+                    if (amount <= 1000) {
+                        totalInterest += amount * daysBetween(transactions.get(i).getTransactionDate(), transactions.get(0).getTransactionDate()) * (0.001 / 360);
+                    } else {
+                        totalInterest += amount * daysBetween(transactions.get(i).getTransactionDate(), transactions.get(0).getTransactionDate()) * (0.002 / 360);
+                    }
+                }
+                return totalInterest;
+
             case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
+
+                for (int i = 0; i < transactions.size(); i++) {
+                    if (DateProvider.getInstance().now().compareTo(transactions.get(i).getTransactionDatePlus10Days()) < 0) {
+                        amount += transactions.get(i).amount;
+                        totalInterest += amount * daysBetween(transactions.get(i).getTransactionDate(), transactions.get(0).getTransactionDate()) * (0.05 / 360);
+                    } else
+                        amount += transactions.get(i).amount;
+                        totalInterest += daysBetween(transactions.get(i).getTransactionDate(), transactions.get(0).getTransactionDate()) * (0.001 / 360);
+                }
+                return totalInterest;
+
             default:
-                return amount * 0.001;
+
+                for (int i = 0; i < transactions.size(); i++) {
+                        amount += transactions.get(i).amount;
+                        totalInterest += amount * daysBetween(transactions.get(i).getTransactionDate(), transactions.get(0).getTransactionDate()) * (0.001 / 360);
+                }
+                return totalInterest;
+
         }
     }
+
+    public int daysBetween(Date d1, Date d2){
+        return (int)( (d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
+    }
+
 
     public double sumTransactions() {
        return checkIfTransactionsExist(true);
     }
 
+
     private double checkIfTransactionsExist(boolean checkAll) {
-        double amount = 0.0;
+        double amount = 0;
         for (Transaction t: transactions)
             amount += t.amount;
         return amount;
