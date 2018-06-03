@@ -6,6 +6,11 @@ import java.util.List;
 
 import static java.lang.Math.abs;
 
+/**
+ * This is a class for Customer. It contains a list of accounts belongs to the customer and the customer's name.
+ * @author Peng Shao. Modifed based on the exercise provided by Accenture.
+ * @version   03/05/2018
+ */
 public class Customer {
 
     private String name;
@@ -16,41 +21,51 @@ public class Customer {
         this.accounts = new ArrayList<Account>();
     }
 
-    //my addition
+    /**
+     * This is a getter for the accounts.
+     * @return A list of accounts.
+     */
     public List<Account> getAccounts() {
         return accounts;
     }
 
-    //my addition
+    /**
+     * This is a method for transfer funds between two accounts of the same customer.
+     * @param a The account to be withdrawn.
+     * @param b The account to be deposited.
+     * @param amount The amount of money to be transferred.
+     */
     public void transferBetweenAccounts(Account a, Account b, double amount) {
         if (amount < a.sumTransactions().doubleValue()) {
             a.withdraw(new BigDecimal(amount));
             b.deposit(new BigDecimal(amount));
         } else {
-            System.out.println("insufficient fund");
+            System.out.println("insufficient fund in the account");
         }
     }
 
-    //my additon
-    public BigDecimal totalSaving(){
-        BigDecimal totalSaving = new BigDecimal(0);
-        for (int i = 0; i < accounts.size(); i++) {
-            for (int j = 0; j < accounts.get(i).getTransactions().size(); j++) {
-                totalSaving = totalSaving.add(accounts.get(i).getTransactions().get(j).getAmount());
-            }
-        }
-        return totalSaving;
-    }
-
+    /**
+     * This method gets the name of the customer
+     * @return The name of the customer
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * This method allows the customer to open an account
+     * @param account An account
+     * @return The customer
+     */
     public Customer openAccount(Account account) {
         accounts.add(account);
         return this;
     }
 
+    /**
+     * This methods gets the number of accounts the customer has.
+     * @return The total number of accounts.
+     */
     public int getNumberOfAccounts() {
         return accounts.size();
     }
@@ -62,6 +77,10 @@ public class Customer {
         return total;
     }
 
+    /**
+     * This method returns a statement of the customer.
+     * @return A statement of the customer.
+     */
     public String getStatement() {
         String statement = null;
         statement = "Statement for " + name + "\n";
@@ -74,6 +93,11 @@ public class Customer {
         return statement;
     }
 
+    /**
+     * This method returns a statement of an account.
+     * @param a An account
+     * @return A statement of the account.
+     */
     private String statementForAccount(Account a) {
         String s = "";
 
@@ -100,21 +124,13 @@ public class Customer {
         return s;
     }
 
+    /**
+     * This method formatted the dollar.
+     * @param d the amount of money.
+     * @return Formatted dollar.
+     */
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
-    }
-
-    public static void main(String[] args){
-        Account checkingAccount = new Account(Account.CHECKING);
-        Account savingsAccount = new Account(Account.SAVINGS);
-
-        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
-
-        checkingAccount.deposit(new BigDecimal(100.0));
-        savingsAccount.deposit(new BigDecimal(4000.0));
-        savingsAccount.withdraw(new BigDecimal(200.0));
-
-        System.out.println(henry.getStatement());
     }
 
 }
