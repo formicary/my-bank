@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class DateProvider {
+
     private static DateProvider instance = null;
 
     public static DateProvider getInstance() {
@@ -15,4 +16,5 @@ public class DateProvider {
     public Date now() {
         return Calendar.getInstance().getTime();
     }
+
 }

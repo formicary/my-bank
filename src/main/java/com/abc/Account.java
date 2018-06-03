@@ -10,11 +10,15 @@ public class Account {
     public static final int MAXI_SAVINGS = 2;
 
     private final int accountType;
-    public List<Transaction> transactions;
+    private List<Transaction> transactions;
 
     public Account(int accountType) {
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
     }
 
     public void deposit(BigDecimal amount) {
@@ -50,12 +54,10 @@ public class Account {
 
                 for (int i = 0; i < transactions.size(); i++) {
 
-//                    amount += transactions.get(i).amount;
-                    amount = amount.add(transactions.get(i).amount);
+                    amount = amount.add(transactions.get(i).getAmount());
 
                     if (i == transactions.size() - 1) {
                         if (amount.doubleValue() <= 1000) {
-//                            totalInterest += amount * daysBetween(transactions.get(i).getTransactionDate(), now) * (0.001 / 360);
                             totalInterest = totalInterest.add(amount.multiply(new BigDecimal(daysBetween(transactions.get(i).getTransactionDate(), now))).multiply(new BigDecimal((0.001 / 360))));
                         } else {
                             totalInterest = totalInterest.add(amount.multiply(new BigDecimal(daysBetween(transactions.get(i).getTransactionDate(), now))).multiply(new BigDecimal((0.002 / 360))));
@@ -75,7 +77,7 @@ public class Account {
 
                 for (int i = 0; i < transactions.size(); i++) {
 
-                    amount = amount.add(transactions.get(i).amount);
+                    amount = amount.add(transactions.get(i).getAmount());
 
                     if (i == transactions.size() - 1) {
                         if (DateProvider.getInstance().now().compareTo(transactions.get(i).getTransactionDatePlus10Days()) >= 0) {
@@ -95,7 +97,7 @@ public class Account {
 
                 for (int i = 0; i < transactions.size(); i++) {
 
-                    amount = amount.add(transactions.get(i).amount);
+                    amount = amount.add(transactions.get(i).getAmount());
 
                     if (i == transactions.size() - 1) {
                         totalInterest = totalInterest.add(amount.multiply(new BigDecimal(daysBetween(transactions.get(i).getTransactionDate(), now))).multiply(new BigDecimal((0.001 / 360))));
@@ -121,13 +123,12 @@ public class Account {
     private BigDecimal checkIfTransactionsExist(boolean checkAll) {
         BigDecimal amount = new BigDecimal(0);
         for (Transaction t: transactions)
-            amount = amount.add(t.amount);
+            amount = amount.add(t.getAmount());
         return amount;
     }
 
     public int getAccountType() {
         return accountType;
     }
-
 
 }

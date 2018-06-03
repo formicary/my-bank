@@ -10,7 +10,6 @@ import java.util.GregorianCalendar;
 import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
-    private static final double DOUBLE_DELTA = 1e-15;
 
     @Test //Test customer statement generation
     public void testApp(){

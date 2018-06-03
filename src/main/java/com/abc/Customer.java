@@ -7,6 +7,7 @@ import java.util.List;
 import static java.lang.Math.abs;
 
 public class Customer {
+
     private String name;
     private List<Account> accounts;
 
@@ -22,22 +23,20 @@ public class Customer {
 
     //my addition
     public void transferBetweenAccounts(Account a, Account b, double amount) {
-
         if (amount < a.sumTransactions().doubleValue()) {
             a.withdraw(new BigDecimal(amount));
             b.deposit(new BigDecimal(amount));
         } else {
             System.out.println("insufficient fund");
         }
-
     }
 
     //my additon
     public BigDecimal totalSaving(){
         BigDecimal totalSaving = new BigDecimal(0);
         for (int i = 0; i < accounts.size(); i++) {
-            for (int j = 0; j < accounts.get(i).transactions.size(); j++) {
-                totalSaving = totalSaving.add(accounts.get(i).transactions.get(j).amount);
+            for (int j = 0; j < accounts.get(i).getTransactions().size(); j++) {
+                totalSaving = totalSaving.add(accounts.get(i).getTransactions().get(j).getAmount());
             }
         }
         return totalSaving;
@@ -93,9 +92,9 @@ public class Customer {
 
         //Now total up all the transactions
         BigDecimal total = new BigDecimal(0);
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount.doubleValue() < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount.doubleValue()) + "\n";
-            total = total.add(t.amount);
+        for (Transaction t : a.getTransactions()) {
+            s += "  " + (t.getAmount().doubleValue() < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.getAmount().doubleValue()) + "\n";
+            total = total.add(t.getAmount());
         }
         s += "Total " + toDollars(total.doubleValue());
         return s;
@@ -117,4 +116,5 @@ public class Customer {
 
         System.out.println(henry.getStatement());
     }
+
 }

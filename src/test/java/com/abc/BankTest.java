@@ -64,10 +64,10 @@ public class BankTest {
         checkingAccount.deposit(new BigDecimal(2000));
         checkingAccount.deposit(new BigDecimal(1000));
 
-        cal.setTime(checkingAccount.transactions.get(0).getTransactionDate());
+        cal.setTime(checkingAccount.getTransactions().get(0).getTransactionDate());
         cal.add(Calendar.DATE, -360);
 
-        checkingAccount.transactions.get(0).setTransactionDate(cal.getTime());
+        checkingAccount.getTransactions().get(0).setTransactionDate(cal.getTime());
 
         assertEquals(new BigDecimal(100).setScale(2, BigDecimal.ROUND_HALF_UP), bank.totalInterestPaid());
     }
@@ -84,13 +84,13 @@ public class BankTest {
         checkingAccount.deposit(new BigDecimal(2000));
         checkingAccount.withdraw(new BigDecimal(1000));
 
-        cal.setTime(checkingAccount.transactions.get(0).getTransactionDate());
+        cal.setTime(checkingAccount.getTransactions().get(0).getTransactionDate());
         cal.add(Calendar.DATE, -369);
-        cal2.setTime(checkingAccount.transactions.get(1).getTransactionDate());
+        cal2.setTime(checkingAccount.getTransactions().get(1).getTransactionDate());
         cal2.add(Calendar.DATE, -9);
 
-        checkingAccount.transactions.get(0).setTransactionDate(cal.getTime());
-        checkingAccount.transactions.get(1).setTransactionDate(cal2.getTime());
+        checkingAccount.getTransactions().get(0).setTransactionDate(cal.getTime());
+        checkingAccount.getTransactions().get(1).setTransactionDate(cal2.getTime());
 
         assertEquals(new BigDecimal(100.02).setScale(2, BigDecimal.ROUND_HALF_UP), bank.totalInterestPaid());
     }
@@ -106,10 +106,10 @@ public class BankTest {
         checkingAccount.deposit(new BigDecimal(5000.0));
         checkingAccount.deposit(new BigDecimal(0.1));
 
-        cal.setTime(checkingAccount.transactions.get(0).getTransactionDate());
+        cal.setTime(checkingAccount.getTransactions().get(0).getTransactionDate());
         cal.add(Calendar.DATE, -360);
 
-        checkingAccount.transactions.get(0).setTransactionDate(cal.getTime());
+        checkingAccount.getTransactions().get(0).setTransactionDate(cal.getTime());
 
         assertEquals(new BigDecimal(5).setScale(2, BigDecimal.ROUND_HALF_UP), bank.totalInterestPaid());
     }
@@ -129,16 +129,16 @@ public class BankTest {
         checkingAccount.deposit(new BigDecimal(1100));
         checkingAccount.withdraw(new BigDecimal(1000));
 
-        cal.setTime(checkingAccount.transactions.get(0).getTransactionDate());
+        cal.setTime(checkingAccount.getTransactions().get(0).getTransactionDate());
         cal.add(Calendar.DATE, -720);
-        cal2.setTime(checkingAccount.transactions.get(1).getTransactionDate());
+        cal2.setTime(checkingAccount.getTransactions().get(1).getTransactionDate());
         cal2.add(Calendar.DATE, -360);
-        cal3.setTime(checkingAccount.transactions.get(2).getTransactionDate());
+        cal3.setTime(checkingAccount.getTransactions().get(2).getTransactionDate());
         cal3.add(Calendar.DATE, -180);
 
-        checkingAccount.transactions.get(0).setTransactionDate(cal.getTime());
-        checkingAccount.transactions.get(1).setTransactionDate(cal2.getTime());
-        checkingAccount.transactions.get(2).setTransactionDate(cal3.getTime());
+        checkingAccount.getTransactions().get(0).setTransactionDate(cal.getTime());
+        checkingAccount.getTransactions().get(1).setTransactionDate(cal2.getTime());
+        checkingAccount.getTransactions().get(2).setTransactionDate(cal3.getTime());
 
         assertEquals(new BigDecimal(3.4).setScale(2, BigDecimal.ROUND_HALF_UP), bank.totalInterestPaid());
     }
