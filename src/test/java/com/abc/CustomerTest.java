@@ -3,7 +3,9 @@ package com.abc;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.awt.event.ActionListener;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 
 import static org.junit.Assert.assertEquals;
 
@@ -91,4 +93,15 @@ public class CustomerTest {
         oscar.openAccount(new Account(Account.CHECKING));
         assertEquals(3, oscar.getNumberOfAccounts());
     }
-}
+
+    @Test
+    public void testDaysBetween2Dates(){
+
+        GregorianCalendar cal = new GregorianCalendar();
+
+        cal.setTime(Calendar.getInstance().getTime());
+        cal.add(Calendar.DATE, -360);
+
+        assertEquals(360, Account.daysBetween(cal.getTime(), Calendar.getInstance().getTime()));
+    }
+ }

@@ -19,6 +19,10 @@ public class Transaction {
         return transactionDate;
     }
 
+    public void setTransactionDate(Date transactionDate) {
+        this.transactionDate = transactionDate;
+    }
+
     public Date getTransactionDatePlus10Days(){
         GregorianCalendar cal = new GregorianCalendar();
         cal.setTime(transactionDate);
