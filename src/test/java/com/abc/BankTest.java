@@ -2,13 +2,13 @@ package com.abc;
 
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import static org.junit.Assert.assertEquals;
 
 public class BankTest {
-    private static final double DOUBLE_DELTA = 1e-15;
 
     @Test
     public void customerSummary() {
@@ -27,9 +27,9 @@ public class BankTest {
         Customer bill = new Customer("Bill").openAccount(checkingAccount);
         bank.addCustomer(bill);
 
-        checkingAccount.deposit(100.0);
+        checkingAccount.deposit(new BigDecimal(100));
 
-        assertEquals(0.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(new BigDecimal(0).setScale(2, BigDecimal.ROUND_HALF_UP), bank.totalInterestPaid());
     }
 
     @Test
@@ -38,9 +38,9 @@ public class BankTest {
         Account checkingAccount = new Account(Account.SAVINGS);
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
-        checkingAccount.deposit(1500.0);
+        checkingAccount.deposit(new BigDecimal(1500));
 
-        assertEquals(0.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(new BigDecimal(0).setScale(2, BigDecimal.ROUND_HALF_UP), bank.totalInterestPaid());
     }
 
     @Test
@@ -49,9 +49,9 @@ public class BankTest {
         Account checkingAccount = new Account(Account.MAXI_SAVINGS);
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
-        checkingAccount.deposit(3000.0);
+        checkingAccount.deposit(new BigDecimal(3000));
 
-        assertEquals(0.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(new BigDecimal(0).setScale(2, BigDecimal.ROUND_HALF_UP), bank.totalInterestPaid());
     }
 
     @Test
@@ -61,15 +61,15 @@ public class BankTest {
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
         GregorianCalendar cal = new GregorianCalendar();
-        checkingAccount.deposit(2000);
-        checkingAccount.deposit(1000);
+        checkingAccount.deposit(new BigDecimal(2000));
+        checkingAccount.deposit(new BigDecimal(1000));
 
         cal.setTime(checkingAccount.transactions.get(0).getTransactionDate());
         cal.add(Calendar.DATE, -360);
 
         checkingAccount.transactions.get(0).setTransactionDate(cal.getTime());
 
-        assertEquals(100, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(new BigDecimal(100).setScale(2, BigDecimal.ROUND_HALF_UP), bank.totalInterestPaid());
     }
 
     @Test
@@ -81,8 +81,8 @@ public class BankTest {
         GregorianCalendar cal = new GregorianCalendar();
         GregorianCalendar cal2 = new GregorianCalendar();
 
-        checkingAccount.deposit(2000);
-        checkingAccount.withdraw(1000);
+        checkingAccount.deposit(new BigDecimal(2000));
+        checkingAccount.withdraw(new BigDecimal(1000));
 
         cal.setTime(checkingAccount.transactions.get(0).getTransactionDate());
         cal.add(Calendar.DATE, -369);
@@ -92,7 +92,7 @@ public class BankTest {
         checkingAccount.transactions.get(0).setTransactionDate(cal.getTime());
         checkingAccount.transactions.get(1).setTransactionDate(cal2.getTime());
 
-        assertEquals(100.025, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(new BigDecimal(100.02).setScale(2, BigDecimal.ROUND_HALF_UP), bank.totalInterestPaid());
     }
 
 
@@ -103,15 +103,15 @@ public class BankTest {
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
         GregorianCalendar cal = new GregorianCalendar();
-        checkingAccount.deposit(5000.0);
-        checkingAccount.deposit(0.1);
+        checkingAccount.deposit(new BigDecimal(5000.0));
+        checkingAccount.deposit(new BigDecimal(0.1));
 
         cal.setTime(checkingAccount.transactions.get(0).getTransactionDate());
         cal.add(Calendar.DATE, -360);
 
         checkingAccount.transactions.get(0).setTransactionDate(cal.getTime());
 
-        assertEquals(5, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(new BigDecimal(5).setScale(2, BigDecimal.ROUND_HALF_UP), bank.totalInterestPaid());
     }
 
 
@@ -125,9 +125,9 @@ public class BankTest {
         GregorianCalendar cal2 = new GregorianCalendar();
         GregorianCalendar cal3 = new GregorianCalendar();
 
-        checkingAccount.deposit(900.0);
-        checkingAccount.deposit(1100.0);
-        checkingAccount.withdraw(1000.0);
+        checkingAccount.deposit(new BigDecimal(900));
+        checkingAccount.deposit(new BigDecimal(1100));
+        checkingAccount.withdraw(new BigDecimal(1000));
 
         cal.setTime(checkingAccount.transactions.get(0).getTransactionDate());
         cal.add(Calendar.DATE, -720);
@@ -136,16 +136,11 @@ public class BankTest {
         cal3.setTime(checkingAccount.transactions.get(2).getTransactionDate());
         cal3.add(Calendar.DATE, -180);
 
-        System.out.println(cal.getTime());
-        System.out.println(cal2.getTime());
-        System.out.println(cal3.getTime());
-        System.out.println(DateProvider.getInstance().now());
-
         checkingAccount.transactions.get(0).setTransactionDate(cal.getTime());
         checkingAccount.transactions.get(1).setTransactionDate(cal2.getTime());
         checkingAccount.transactions.get(2).setTransactionDate(cal3.getTime());
 
-        assertEquals(3.4, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(new BigDecimal(3.4).setScale(2, BigDecimal.ROUND_HALF_UP), bank.totalInterestPaid());
     }
 
 }

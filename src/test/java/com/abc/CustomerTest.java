@@ -1,8 +1,8 @@
 package com.abc;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -20,9 +20,9 @@ public class CustomerTest {
 
         Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
 
-        checkingAccount.deposit(100.0);
-        savingsAccount.deposit(4000.0);
-        savingsAccount.withdraw(200.0);
+        checkingAccount.deposit(new BigDecimal(100.0));
+        savingsAccount.deposit(new BigDecimal(4000.0));
+        savingsAccount.withdraw(new BigDecimal(200.0));
 
         assertEquals("Statement for Henry\n" +
                 "\n" +
@@ -45,11 +45,11 @@ public class CustomerTest {
         oscar.openAccount(new Account(Account.CHECKING));
         for (int i = 0; i < oscar.getAccounts().size(); i++) {
             if (oscar.getAccounts().get(i).getAccountType() == 0) {
-                oscar.getAccounts().get(i).deposit(10000.0);
+                oscar.getAccounts().get(i).deposit(new BigDecimal(10000.0));
             }
         }
 
-        assertEquals(10000.0, oscar.totalSaving(), DOUBLE_DELTA);
+        assertEquals(new BigDecimal(10000.0), oscar.totalSaving());
 
     }
 
@@ -62,13 +62,13 @@ public class CustomerTest {
 
         for (int i = 0; i < oscar.getAccounts().size(); i++) {
             if (oscar.getAccounts().get(i).getAccountType() == 0) {
-                oscar.getAccounts().get(i).deposit(10000);
+                oscar.getAccounts().get(i).deposit(new BigDecimal(10000));
             }
         }
 
         oscar.transferBetweenAccounts(oscar.getAccounts().get(1), oscar.getAccounts().get(0), 10.0);
 
-        assertEquals(10.0, oscar.getAccounts().get(0).sumTransactions(), DOUBLE_DELTA);
+        assertEquals(new BigDecimal(10.0), oscar.getAccounts().get(0).sumTransactions());
 
     }
 
@@ -86,11 +86,12 @@ public class CustomerTest {
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
-    @Ignore
+    @Test
     public void testThreeAcounts() {
         Customer oscar = new Customer("Oscar")
                 .openAccount(new Account(Account.SAVINGS));
         oscar.openAccount(new Account(Account.CHECKING));
+        oscar.openAccount(new Account(Account.MAXI_SAVINGS));
         assertEquals(3, oscar.getNumberOfAccounts());
     }
 

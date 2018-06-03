@@ -1,5 +1,6 @@
 package com.abc;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 public class Account {
@@ -16,27 +17,31 @@ public class Account {
         this.transactions = new ArrayList<Transaction>();
     }
 
-    public void deposit(double amount) {
-        if (amount <= 0) {
+    public void deposit(BigDecimal amount) {
+        if (amount.doubleValue() <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
             transactions.add(new Transaction(amount));
         }
     }
 
-    public void withdraw(double amount) {
-        if (amount <= 0) {
+    public void withdraw(BigDecimal amount) {
+        if (amount.doubleValue() <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
-            transactions.add(new Transaction(-amount));
+            if (sumTransactions().doubleValue() > amount.doubleValue()) {
+                transactions.add(new Transaction(amount.negate()));
+            } else {
+                throw new IllegalArgumentException("Insufficient funds in this account");
+            }
         }
     }
 
     //days used 360 for financial market
-    public double interestEarned() {
+    public BigDecimal interestEarned() {
 
-        double amount = 0;
-        double totalInterest = 0;
+        BigDecimal amount = new BigDecimal(0);
+        BigDecimal totalInterest = new BigDecimal(0);
         Date now = DateProvider.getInstance().now();
 
         switch(accountType){
@@ -45,19 +50,21 @@ public class Account {
 
                 for (int i = 0; i < transactions.size(); i++) {
 
-                    amount += transactions.get(i).amount;
+//                    amount += transactions.get(i).amount;
+                    amount = amount.add(transactions.get(i).amount);
 
                     if (i == transactions.size() - 1) {
-                        if (amount <= 1000) {
-                            totalInterest += amount * daysBetween(transactions.get(i).getTransactionDate(), now) * (0.001 / 360);
+                        if (amount.doubleValue() <= 1000) {
+//                            totalInterest += amount * daysBetween(transactions.get(i).getTransactionDate(), now) * (0.001 / 360);
+                            totalInterest = totalInterest.add(amount.multiply(new BigDecimal(daysBetween(transactions.get(i).getTransactionDate(), now))).multiply(new BigDecimal((0.001 / 360))));
                         } else {
-                            totalInterest += amount * daysBetween(transactions.get(i).getTransactionDate(), now) * (0.002 / 360);
+                            totalInterest = totalInterest.add(amount.multiply(new BigDecimal(daysBetween(transactions.get(i).getTransactionDate(), now))).multiply(new BigDecimal((0.002 / 360))));
                         }
                     } else {
-                        if (amount <= 1000) {
-                            totalInterest += amount * daysBetween(transactions.get(i).getTransactionDate(), transactions.get(i + 1).getTransactionDate()) * (0.001 / 360);
+                        if (amount.doubleValue() <= 1000) {
+                            totalInterest = totalInterest.add(amount.multiply(new BigDecimal(daysBetween(transactions.get(i).getTransactionDate(), transactions.get(i + 1).getTransactionDate()))).multiply(new BigDecimal((0.001 / 360))));
                         } else {
-                            totalInterest += amount * daysBetween(transactions.get(i).getTransactionDate(), transactions.get(i + 1).getTransactionDate()) * (0.002 / 360);
+                            totalInterest = totalInterest.add(amount.multiply(new BigDecimal(daysBetween(transactions.get(i).getTransactionDate(), transactions.get(i + 1).getTransactionDate()))).multiply(new BigDecimal((0.002 / 360))));
                         }
                     }
                 }
@@ -68,18 +75,18 @@ public class Account {
 
                 for (int i = 0; i < transactions.size(); i++) {
 
-                    amount += transactions.get(i).amount;
+                    amount = amount.add(transactions.get(i).amount);
 
                     if (i == transactions.size() - 1) {
                         if (DateProvider.getInstance().now().compareTo(transactions.get(i).getTransactionDatePlus10Days()) >= 0) {
-                            totalInterest += amount * daysBetween(transactions.get(i).getTransactionDate(), now) * (0.05 / 360);
+                            totalInterest = totalInterest.add(amount.multiply(new BigDecimal(daysBetween(transactions.get(i).getTransactionDate(), now))).multiply(new BigDecimal(0.05 / 360)));
                         } else
-                            totalInterest += amount * daysBetween(transactions.get(i).getTransactionDate(), now) * (0.001 / 360);
+                            totalInterest = totalInterest.add(amount.multiply(new BigDecimal(daysBetween(transactions.get(i).getTransactionDate(), now))).multiply(new BigDecimal(0.001 / 360)));
                     } else {
                         if (transactions.get(i).getTransactionDate().compareTo(transactions.get(i + 1).getTransactionDatePlus10Days()) < 0) {
-                            totalInterest += amount * daysBetween(transactions.get(i).getTransactionDate(), transactions.get(i + 1).getTransactionDate()) * (0.05 / 360);
+                            totalInterest = totalInterest.add(amount.multiply(new BigDecimal(daysBetween(transactions.get(i).getTransactionDate(), transactions.get(i + 1).getTransactionDate()))).multiply(new BigDecimal(0.05 / 360)));
                         } else
-                            totalInterest += amount * daysBetween(transactions.get(i).getTransactionDate(), transactions.get(i + 1).getTransactionDate()) * (0.001 / 360);
+                            totalInterest = totalInterest.add(amount.multiply(new BigDecimal(daysBetween(transactions.get(i).getTransactionDate(), transactions.get(i + 1).getTransactionDate()))).multiply(new BigDecimal(0.001 / 360)));
                     }
                 }
                 return totalInterest;
@@ -88,8 +95,13 @@ public class Account {
 
                 for (int i = 0; i < transactions.size(); i++) {
 
-                    amount += transactions.get(i).amount;
-                    totalInterest += amount * daysBetween(transactions.get(i).getTransactionDate(), now) * (0.001 / 360);
+                    amount = amount.add(transactions.get(i).amount);
+
+                    if (i == transactions.size() - 1) {
+                        totalInterest = totalInterest.add(amount.multiply(new BigDecimal(daysBetween(transactions.get(i).getTransactionDate(), now))).multiply(new BigDecimal((0.001 / 360))));
+                    } else {
+                        totalInterest = totalInterest.add(amount.multiply(new BigDecimal(daysBetween(transactions.get(i).getTransactionDate(), transactions.get(i + 1).getTransactionDate()))).multiply(new BigDecimal((0.001 / 360))));
+                    }
 
                 }
                 return totalInterest;
@@ -101,15 +113,15 @@ public class Account {
     }
 
 
-    public double sumTransactions() {
+    public BigDecimal sumTransactions() {
        return checkIfTransactionsExist(true);
     }
 
 
-    private double checkIfTransactionsExist(boolean checkAll) {
-        double amount = 0;
+    private BigDecimal checkIfTransactionsExist(boolean checkAll) {
+        BigDecimal amount = new BigDecimal(0);
         for (Transaction t: transactions)
-            amount += t.amount;
+            amount = amount.add(t.amount);
         return amount;
     }
 

@@ -1,16 +1,19 @@
 package com.abc;
 
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class Transaction {
-    public final double amount;
+
+    //changed the data type to big decimal from double
+    public final BigDecimal amount;
 
     private Date transactionDate;
 
-    public Transaction(double amount) {
+    public Transaction(BigDecimal amount) {
         this.amount = amount;
         this.transactionDate = DateProvider.getInstance().now();
     }
