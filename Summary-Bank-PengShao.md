@@ -2,7 +2,7 @@
 
 ***Version: 04/05/2018***
 
-#Major Refactoring of the Code#
+##Major Refactoring of the Code
 
 **Assumption: 360 days is used for a year**
 
