@@ -1,8 +1,13 @@
 package com.abc;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.*;
 
+/**
+ * This is a class for Account. It contains the its account type and a list of transactions.
+ * @author Peng Shao. Modifed based on the exercise provided by Accenture.
+ * @version  03/05/2018
+ */
 public class Account {
 
     public static final int CHECKING = 0;
@@ -10,62 +15,181 @@ public class Account {
     public static final int MAXI_SAVINGS = 2;
 
     private final int accountType;
-    public List<Transaction> transactions;
+    private List<Transaction> transactions;
 
+    /**
+     * A defensive constructor that allows the creation of 3 different type of accounts
+     * @param accountType The account type of the account.
+     */
     public Account(int accountType) {
-        this.accountType = accountType;
-        this.transactions = new ArrayList<Transaction>();
+        if (accountType != 0 && accountType != 1 && accountType != 2) {
+            throw new IllegalArgumentException("The chosen account type does not exits");
+        } else {
+            this.accountType = accountType;
+            this.transactions = new ArrayList<Transaction>();
+        }
     }
 
-    public void deposit(double amount) {
-        if (amount <= 0) {
+    /**
+     * A getter for a list of transactions
+     * @return A list of transactions.
+     */
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    /**
+     * A method for depositing fund into the account.
+     * @param amount The amount of money to be deposited.
+     */
+    public void deposit(BigDecimal amount) {
+        if (amount.doubleValue() <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
             transactions.add(new Transaction(amount));
         }
     }
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
-    }
-}
-
-    public double interestEarned() {
-        double amount = sumTransactions();
-        switch(accountType){
-            case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
-            case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
-            default:
-                return amount * 0.001;
+    /**
+     * A method for withdrawing fund from the account.
+     * @param amount The amount of money to be withdrawn.
+     */
+    public void withdraw(BigDecimal amount) {
+        if (amount.doubleValue() <= 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        } else {
+            if (sumTransactions().doubleValue() > amount.doubleValue()) {
+                transactions.add(new Transaction(amount.negate()));
+            } else {
+                throw new IllegalArgumentException("Insufficient funds in this account");
+            }
         }
     }
 
-    public double sumTransactions() {
+    /**
+     * This is a method for calculating the amount of interest earned in this account.
+     * Assumption: For financial calculation, 360 days is used as a year.
+     * Checking account have a flat rate of 0.1%
+     * Savings account have a rate of 0.1% for the first $1,000 then 0.2%
+     * Maxi-Savings account have an interest rate of 5% assuming no withdrawals in the past 10 days otherwise 0.1%
+     * Interest rates is accrue and compound daily (incl. weekends).
+     * @return The total amount of interest earned.
+     */
+    public BigDecimal interestEarned() {
+
+        BigDecimal amount = new BigDecimal(0);
+        BigDecimal totalInterest = new BigDecimal(0);
+        Date now = DateProvider.getInstance().now();
+        BigDecimal interest = new BigDecimal(0);
+
+        switch(accountType){
+
+            case SAVINGS:
+
+                for (int i = 0; i < transactions.size(); i++) {
+                    //total up the amount of transactions from 0 to i in the transaction list
+                    amount = amount.add(transactions.get(i).getAmount()).add(interest);
+
+                    if (i == transactions.size() - 1) {
+                        if (amount.doubleValue() <= 1000) {
+                            interest = amount.multiply((new BigDecimal(1 + (0.001 / 360)).pow(daysBetween(transactions.get(i).getTransactionDate(), now))).subtract(new BigDecimal(1)));
+                            totalInterest = totalInterest.add(interest);
+                        } else {
+                            interest = amount.multiply((new BigDecimal(1 + (0.002 / 360)).pow(daysBetween(transactions.get(i).getTransactionDate(), now))).subtract(new BigDecimal(1)));
+                            totalInterest = totalInterest.add(interest);
+                        }
+                    } else {
+                        if (amount.doubleValue() <= 1000) {
+                            interest = amount.multiply((new BigDecimal(1 + (0.001 / 360)).pow(daysBetween(transactions.get(i).getTransactionDate(), transactions.get(i + 1).getTransactionDate()))).subtract(new BigDecimal(1)));
+                            totalInterest = totalInterest.add(interest);
+                        } else {
+                            interest = amount.multiply((new BigDecimal(1 + (0.002 / 360)).pow(daysBetween(transactions.get(i).getTransactionDate(), transactions.get(i + 1).getTransactionDate()))).subtract(new BigDecimal(1)));
+                            totalInterest = totalInterest.add(interest);
+                        }
+                    }
+                }
+
+                return totalInterest;
+
+            case MAXI_SAVINGS:
+
+                for (int i = 0; i < transactions.size(); i++) {
+                    amount = amount.add(transactions.get(i).getAmount()).add(interest);
+                    if (i == transactions.size() - 1) {
+
+                        //test if the next transaction is within 10 days.
+                        int dateCompare = DateProvider.getInstance().now().compareTo(transactions.get(i).getTransactionDatePlus10Days());
+                        if (dateCompare > 0) {
+                            interest = amount.multiply((new BigDecimal(1 + (0.05 / 360)).pow(daysBetween(transactions.get(i).getTransactionDate(), now))).subtract(new BigDecimal(1)));
+                            totalInterest = totalInterest.add(interest);
+                        } else {
+                            interest = amount.multiply((new BigDecimal(1 + (0.001 / 360)).pow(daysBetween(transactions.get(i).getTransactionDate(), now))).subtract(new BigDecimal(1)));
+                            totalInterest = totalInterest.add(interest);
+                        }
+                    } else {
+                        int dateCompare = transactions.get(i + 1).getTransactionDate().compareTo(transactions.get(i).getTransactionDatePlus10Days());
+                        if (dateCompare > 0) {
+                            interest = amount.multiply((new BigDecimal(1 + (0.05 / 360)).pow(daysBetween(transactions.get(i).getTransactionDate(), transactions.get(i + 1).getTransactionDate()))).subtract(new BigDecimal(1)));
+                            totalInterest = totalInterest.add(interest);
+                        } else {
+                            interest = amount.multiply((new BigDecimal(1 + (0.001 / 360)).pow(daysBetween(transactions.get(i).getTransactionDate(), transactions.get(i + 1).getTransactionDate()))).subtract(new BigDecimal(1)));
+                            totalInterest = totalInterest.add(interest);
+                        }
+                    }
+                }
+                return totalInterest;
+
+            default:
+
+                for (int i = 0; i < transactions.size(); i++) {
+                    amount = amount.add(transactions.get(i).getAmount()).add(totalInterest);
+                    if (i == transactions.size() - 1) {
+                        interest = amount.multiply((new BigDecimal(1 + (0.001 / 360)).pow(daysBetween(transactions.get(i).getTransactionDate(), now))).subtract(new BigDecimal(1)));
+                        totalInterest = totalInterest.add(interest);
+                    } else {
+                        interest = amount.multiply((new BigDecimal(1 + (0.001 / 360)).pow(daysBetween(transactions.get(i).getTransactionDate(), transactions.get(i + 1).getTransactionDate()))).subtract(new BigDecimal(1)));
+                        totalInterest = totalInterest.add(interest);
+                    }
+                }
+                return totalInterest;
+        }
+    }
+
+    /**
+     * This is a method for calculating the number of days between two dates.
+     * The second date should be greater or equal to the first date.
+     * @param d1 The first date
+     * @param d2 The second date
+     * @return The number of dates between two dates.
+     */
+    public static int daysBetween(Date d1, Date d2){
+        return (int)( (d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
+    }
+
+    /**
+     * This method works out the total saving of the account.
+     * @return The total saving.
+     */
+    public BigDecimal sumTransactions() {
        return checkIfTransactionsExist(true);
     }
 
-    private double checkIfTransactionsExist(boolean checkAll) {
-        double amount = 0.0;
+    /**
+     * This is a helper method for sumTransactions
+     * @param checkAll checks if transactions exist.
+     * @return the total amount of saving.
+     */
+    private BigDecimal checkIfTransactionsExist(boolean checkAll) {
+        BigDecimal amount = new BigDecimal(0);
         for (Transaction t: transactions)
-            amount += t.amount;
+            amount = amount.add(t.getAmount());
         return amount;
     }
 
+    /**
+     * A getter for the account type.
+     * @return The account type.
+     */
     public int getAccountType() {
         return accountType;
     }
