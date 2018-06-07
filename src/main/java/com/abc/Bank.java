@@ -6,14 +6,17 @@ import java.util.List;
 public class Bank {
     private List<Customer> customers;
 
+    //Bank Constructor
     public Bank() {
         customers = new ArrayList<Customer>();
     }
-
+    
+    //Add a new customer to the Bank
     public void addCustomer(Customer customer) {
         customers.add(customer);
     }
 
+    //Return list of customers along with number of accounts for each
     public String customerSummary() {
         String summary = "Customer Summary";
         for (Customer c : customers)
@@ -27,20 +30,20 @@ public class Bank {
         return number + " " + (number == 1 ? word : word + "s");
     }
 
+    //Return the total amount of interest paid out to customers
     public double totalInterestPaid() {
         double total = 0;
-        for(Customer c: customers)
-            total += c.totalInterestEarned();
+        for(Customer customer: customers)
+            total += customer.totalInterestEarned();
         return total;
     }
 
+    //Return Name of First Customer
     public String getFirstCustomer() {
         try {
-            customers = null;
             return customers.get(0).getName();
         } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
+            return "No Customers";
         }
     }
 }
