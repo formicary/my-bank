@@ -3,52 +3,117 @@ package com.abc;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class BankTest {
     private static final double DOUBLE_DELTA = 1e-15;
 
-    @Test
-    public void customerSummary() {
+    @Test //Test Constructor
+    public void bank_TestConstructor_NewBankCreated() {
+    	Bank bank = new Bank();
+    	assertTrue(bank instanceof Bank);
+    }
+    
+    @Test //Test customerSummary method with no customers
+    public void customerSummary_NoCustomers_ReturnEmptySummary() {
+        Bank bank = new Bank();
+        assertEquals("Customer Summary", bank.customerSummary());
+    }
+    
+    @Test //Test customerSummary method with one customer
+    public void customerSummary_OneCustomer_ReturnCustomerAndAccounts() {
         Bank bank = new Bank();
         Customer john = new Customer("John");
-        john.openAccount(new Account(Account.CHECKING));
+        john.openAccount(new Account(Account.Type.CHECKING));
         bank.addCustomer(john);
-
         assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
     }
+    
+    @Test //Test customerSummary method with two customers
+    public void customerSummary_TwoCustomers_ReturnCustomersAndAccounts() {
+    	Bank bank = new Bank();
+        Customer john = new Customer("John");
+        john.openAccount(new Account(Account.Type.CHECKING));
+        Customer mary = new Customer("Mary");
+        mary.openAccount(new Account(Account.Type.SAVINGS));
+        mary.openAccount(new Account(Account.Type.MAXI_SAVINGS));
+        bank.addCustomer(john);
+        bank.addCustomer(mary);
+        assertEquals("Customer Summary\n - John (1 account)\n - Mary (2 accounts)", bank.customerSummary());
+    }
+    
+    @Test //Test getFirstCustomer method with no customers
+    public void getFirstCustomer_NoCustomer_ErrorReturned() {
+    	Bank bank = new Bank();
+    	assertEquals("No Customers", bank.getFirstCustomer());
+    }
 
-    @Test
-    public void checkingAccount() {
+    @Test //Test totalInterestPaid method with one checking account
+    public void totalInterestPaid_CheckingAccount_ReturnCheckingInterest() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.CHECKING);
+        Account checkingAccount = new Account(Account.Type.CHECKING);
         Customer bill = new Customer("Bill").openAccount(checkingAccount);
         bank.addCustomer(bill);
 
         checkingAccount.deposit(100.0);
 
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(checkingAccount.totalInterest(), bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
-    @Test
-    public void savings_account() {
+    @Test //Test totalInterestPaid method with one savings account
+    public void totalInterestPaid_SavingsAccount_ReturnSavingsInterest() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+        Account savingsAccount = new Account(Account.Type.SAVINGS);
+        Customer bill = new Customer("Bill").openAccount(savingsAccount);
+        bank.addCustomer(bill);
 
-        checkingAccount.deposit(1500.0);
+        savingsAccount.deposit(100.0);
 
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(savingsAccount.totalInterest(), bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
-    @Test
-    public void maxi_savings_account() {
+    @Test //Test totalInterestPaid method with one maxi-savings account
+    public void totalInterestPaid_MaxiSavingsAccount_ReturnMaxiSavingsInterest() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+        Account maxiSavingsAccount = new Account(Account.Type.MAXI_SAVINGS);
+        Customer bill = new Customer("Bill").openAccount(maxiSavingsAccount);
+        bank.addCustomer(bill);
 
-        checkingAccount.deposit(3000.0);
+        maxiSavingsAccount.deposit(100.0);
 
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(maxiSavingsAccount.totalInterest(), bank.totalInterestPaid(), DOUBLE_DELTA);
+    }
+    
+    @Test //Test totalInterestPaid method with multiple customers
+    public void totalInterestPaid_MultipleCustomers_ReturnTotalofInterests() {
+        Bank bank = new Bank();
+        Account maxiSavingsAccount = new Account(Account.Type.MAXI_SAVINGS);
+        Customer bill = new Customer("Bill").openAccount(maxiSavingsAccount);
+        Account checkingAccount = new Account(Account.Type.CHECKING);
+        Customer ben = new Customer("Ben").openAccount(checkingAccount);
+        bank.addCustomer(bill);
+        bank.addCustomer(ben);
+
+        maxiSavingsAccount.deposit(100.0);
+        checkingAccount.deposit(500.0);
+
+        double expectedInterest = maxiSavingsAccount.totalInterest() + checkingAccount.totalInterest();
+        assertEquals(expectedInterest, bank.totalInterestPaid(), DOUBLE_DELTA);
+    }
+    
+    @Test //Test totalInterestPaid method with multiple accounts
+    public void totalInterestPaid_MultipleAccounts_ReturnTotalofInterests() {
+        Bank bank = new Bank();
+        Account maxiSavingsAccount = new Account(Account.Type.MAXI_SAVINGS);
+        Account checkingAccount = new Account(Account.Type.CHECKING);
+        Customer bill = new Customer("Bill").openAccount(maxiSavingsAccount).openAccount(checkingAccount);;
+        bank.addCustomer(bill);
+
+        maxiSavingsAccount.deposit(1000.0);
+        checkingAccount.deposit(500.0);
+
+        double expectedInterest = maxiSavingsAccount.totalInterest() + checkingAccount.totalInterest();
+        assertEquals(expectedInterest, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
 }
