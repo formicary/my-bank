@@ -94,4 +94,38 @@ public class CustomerTest {
 
         assertEquals(2.1, bill.totalInterestEarned(), DOUBLE_DELTA);
     }
+    
+	@Test
+	public void testTransferFromAccount() {
+		Bank bank = new Bank();
+        Account savingsAccount = new Account(Account.accountType.SAVINGS);
+        Account checkingAccount = new Account(Account.accountType.CHECKING);
+        Customer bill = new Customer("Bill").openAccount(savingsAccount);
+        bill.openAccount(checkingAccount);
+        bank.addCustomer(bill);
+        	
+        savingsAccount.deposit(1500.0);
+        checkingAccount.deposit(100.0);
+        
+        bill.transferfunds(savingsAccount, checkingAccount, 500.0);
+
+        assertEquals(1000.0, savingsAccount.sumTransactions(), DOUBLE_DELTA);
+	}
+	
+	@Test
+	public void testTransferToAccount() {
+		Bank bank = new Bank();
+        Account savingsAccount = new Account(Account.accountType.SAVINGS);
+        Account checkingAccount = new Account(Account.accountType.CHECKING);
+        Customer bill = new Customer("Bill").openAccount(savingsAccount);
+        bill.openAccount(checkingAccount);
+        bank.addCustomer(bill);
+        	
+        savingsAccount.deposit(1500.0);
+        checkingAccount.deposit(100.0);
+        
+        bill.transferfunds(savingsAccount, checkingAccount, 500.0);
+
+        assertEquals(600.0, checkingAccount.sumTransactions(), DOUBLE_DELTA);
+	}
 }
