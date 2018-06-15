@@ -13,7 +13,7 @@ public class AccountTest {
     public void testWithdrawZero() {
 		
 		thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("amount must be greater than zero");
+        thrown.expectMessage("Amount must be greater than zero");
 		
         Account testAccount = new Account(Account.accountType.CHECKING);
 
@@ -24,7 +24,7 @@ public class AccountTest {
     public void testWithdrawLessZero() {
 		
 		thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("amount must be greater than zero");
+        thrown.expectMessage("Amount must be greater than zero");
 		
         Account testAccount = new Account(Account.accountType.CHECKING);
 
@@ -35,7 +35,7 @@ public class AccountTest {
     public void testDepositZero() {
 		
 		thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("amount must be greater than zero");
+        thrown.expectMessage("Amount must be greater than zero");
 		
         Account testAccount = new Account(Account.accountType.CHECKING);
 
@@ -46,7 +46,7 @@ public class AccountTest {
     public void testDepositLessZero() {
 		
 		thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("amount must be greater than zero");
+        thrown.expectMessage("Amount must be greater than zero");
 		
         Account testAccount = new Account(Account.accountType.CHECKING);
 
