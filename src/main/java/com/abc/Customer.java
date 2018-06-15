@@ -54,7 +54,7 @@ public class Customer {
     private String statementForAccount(Account a) {
         String s = "";
 
-       //Translate to pretty account type
+       //Translate to string account type
         switch(a.getAccountType()){
             case CHECKING:
                 s += "Checking Account\n";
@@ -65,14 +65,13 @@ public class Customer {
             case MAXI_SAVINGS:
                 s += "Maxi Savings Account\n";
                 break;
-            //TODO: Add default
         }
 
         //Now total up all the transactions
         double total = 0.0;
         for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
+            s += "  " + (t.getAmount() < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.getAmount()) + "\n";
+            total += t.getAmount();
         }
         s += "Total " + toDollars(total);
         return s;

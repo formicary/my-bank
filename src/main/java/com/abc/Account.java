@@ -55,6 +55,8 @@ public class Account {
             return 1 + (amount-1000) * 0.002;
     }
     
+
+    
     private double maxiSavingsInterest(double amount) {
     	if (amount <= 1000) {
             return amount * 0.02;
@@ -76,7 +78,7 @@ public class Account {
     private double checkIfTransactionsExist(boolean checkAll) {
         double amount = 0.0;
         for (Transaction t: transactions)
-            amount += t.amount;
+            amount += t.getAmount();
         return amount;
     }
 
