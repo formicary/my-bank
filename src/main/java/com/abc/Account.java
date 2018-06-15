@@ -3,12 +3,13 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class Account {
 
 	public enum accountType {
 		CHECKING, SAVINGS, MAXI_SAVINGS;
 	}
-
+	
     private final accountType accountType;
     public List<Transaction> transactions;
 
@@ -48,25 +49,24 @@ public class Account {
     }
     
     private double savingsInterest(double amount) {
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
+    	if (amount <= 1000)
+            return amount * 0.001;
+        else
+            return 1 + (amount-1000) * 0.002;
     }
     
     private double maxiSavingsInterest(double amount) {
-                if (amount <= 1000) {
-                    return amount * 0.02;
-                }else if (amount <= 2000) {
-                    return 20 + (amount-1000) * 0.05;
-                }else {
-                	return 70 + (amount-2000) * 0.1;
-                }
+    	if (amount <= 1000) {
+            return amount * 0.02;
+        }else if (amount <= 2000) {
+            return 20 + (amount-1000) * 0.05;
+        }else {
+        	return 70 + (amount-2000) * 0.1;
+        }
     }
     
     private double checkingInterest(double amount) {
-                return amount * 0.001;
-        }
+    	return amount * 0.001;
     }
 
     public double sumTransactions() {
