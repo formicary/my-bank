@@ -19,7 +19,7 @@ public class Account {
 
     public void deposit(double amount) {
         if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
+            throw new IllegalArgumentException("Amount must be greater than zero");
         } else {
             transactions.add(new Transaction(amount));
         }
@@ -27,7 +27,7 @@ public class Account {
 
 	public void withdraw(double amount) {
 	    if (amount <= 0) {
-	        throw new IllegalArgumentException("amount must be greater than zero");
+	        throw new IllegalArgumentException("Amount must be greater than zero");
 	    } else {
 	        transactions.add(new Transaction(-amount));
 	    }
@@ -36,12 +36,25 @@ public class Account {
     public double interestEarned() {
         double amount = sumTransactions();
         switch(accountType){
+	        case CHECKING:
+	            return checkingInterest(amount);
             case SAVINGS:
+            	return savingsInterest(amount);
+            case MAXI_SAVINGS:
+            	return maxiSavingsInterest(amount);
+            default:
+            	throw new IllegalArgumentException("Account type not recognised");
+        }
+    }
+    
+    private double savingsInterest(double amount) {
                 if (amount <= 1000)
                     return amount * 0.001;
                 else
                     return 1 + (amount-1000) * 0.002;
-            case MAXI_SAVINGS:
+    }
+    
+    private double maxiSavingsInterest(double amount) {
                 if (amount <= 1000) {
                     return amount * 0.02;
                 }else if (amount <= 2000) {
@@ -49,7 +62,9 @@ public class Account {
                 }else {
                 	return 70 + (amount-2000) * 0.1;
                 }
-            default:
+    }
+    
+    private double checkingInterest(double amount) {
                 return amount * 0.001;
         }
     }
