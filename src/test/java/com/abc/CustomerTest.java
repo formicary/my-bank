@@ -75,9 +75,9 @@ public class CustomerTest {
         Customer bill = new Customer("Bill").openAccount(checkingAccount);
         bank.addCustomer(bill);
 
-        checkingAccount.deposit(100.0);
+        checkingAccount.deposit(365.0);
 
-        assertEquals(0.1, bill.totalInterestEarned(), DOUBLE_DELTA);
+        assertEquals(0.001, bill.totalInterestEarned(), DOUBLE_DELTA);
     }
     
     @Test
@@ -92,7 +92,7 @@ public class CustomerTest {
         savingsAccount.deposit(1500.0);
         checkingAccount.deposit(100.0);
 
-        assertEquals(2.1, bill.totalInterestEarned(), DOUBLE_DELTA);
+        assertEquals(0.0057534246575344247, bill.totalInterestEarned(), DOUBLE_DELTA);
     }
     
 	@Test

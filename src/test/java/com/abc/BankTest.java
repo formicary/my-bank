@@ -42,9 +42,9 @@ public class BankTest {
         Customer bill = new Customer("Bill").openAccount(checkingAccount);
         bank.addCustomer(bill);
 
-        checkingAccount.deposit(100.0);
+        checkingAccount.deposit(365.0);
 
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(0.001, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
@@ -53,9 +53,9 @@ public class BankTest {
         Account savingsAccount = new Account(Account.accountType.SAVINGS);
         bank.addCustomer(new Customer("Bill").openAccount(savingsAccount));
 
-        savingsAccount.deposit(100.0);
+        savingsAccount.deposit(365.0);
 
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(0.001, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
     
     @Test
@@ -64,42 +64,22 @@ public class BankTest {
         Account savingsAccount = new Account(Account.accountType.SAVINGS);
         bank.addCustomer(new Customer("Bill").openAccount(savingsAccount));
 
-        savingsAccount.deposit(1500.0);
-
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        savingsAccount.deposit(3000.0);
+        
+        assertEquals(0.0136986301369863, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
-    public void testMaxiSavingsAccountLessOneThousandInterest() {
+    public void testMaxiSavingsAccountLessThanTenDays() {
         Bank bank = new Bank();
         Account maxiSavingsAccount = new Account(Account.accountType.MAXI_SAVINGS);
         bank.addCustomer(new Customer("Bill").openAccount(maxiSavingsAccount));
 
-        maxiSavingsAccount.deposit(100.0);
+        maxiSavingsAccount.deposit(365.0);
 
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(0.001, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
     
-    @Test
-    public void testMaxiSavingsAccountLessTwoThousandInterest() {
-        Bank bank = new Bank();
-        Account maxiSavingsAccount = new Account(Account.accountType.MAXI_SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(maxiSavingsAccount));
-
-        maxiSavingsAccount.deposit(1500.0);
-
-        assertEquals(45.0, bank.totalInterestPaid(), DOUBLE_DELTA);
-    }
-    @Test
-    public void testMaxiSavingsAccountMoreTwoThousandInterest() {
-        Bank bank = new Bank();
-        Account maxiSavingsAccount = new Account(Account.accountType.MAXI_SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(maxiSavingsAccount));
-
-        maxiSavingsAccount.deposit(3000.0);
-
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
-    }
     
     @Test
     public void testFirstCustomer() {
