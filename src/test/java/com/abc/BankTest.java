@@ -11,7 +11,7 @@ public class BankTest {
     public void testCustomerSummary() {
         Bank bank = new Bank();
         Customer john = new Customer("John");
-        john.openAccount(new Account(Account.CHECKING));
+        john.openAccount(new Account(Account.accountType.CHECKING));
         bank.addCustomer(john);
 
         assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
@@ -20,7 +20,7 @@ public class BankTest {
     @Test
     public void testCheckingAccountInterest() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.CHECKING);
+        Account checkingAccount = new Account(Account.accountType.CHECKING);
         Customer bill = new Customer("Bill").openAccount(checkingAccount);
         bank.addCustomer(bill);
 
@@ -32,7 +32,7 @@ public class BankTest {
     @Test
     public void testSavingsAccountInterest() {
         Bank bank = new Bank();
-        Account savingsAccount = new Account(Account.SAVINGS);
+        Account savingsAccount = new Account(Account.accountType.SAVINGS);
         bank.addCustomer(new Customer("Bill").openAccount(savingsAccount));
 
         savingsAccount.deposit(1500.0);
@@ -43,7 +43,7 @@ public class BankTest {
     @Test
     public void testMaxiSavingsAccountInterest() {
         Bank bank = new Bank();
-        Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
+        Account maxiSavingsAccount = new Account(Account.accountType.MAXI_SAVINGS);
         bank.addCustomer(new Customer("Bill").openAccount(maxiSavingsAccount));
 
         maxiSavingsAccount.deposit(3000.0);
@@ -54,9 +54,9 @@ public class BankTest {
     @Test
     public void testFirstCustomer() {
         Bank bank = new Bank();
-        bank.addCustomer(new Customer("Bill").openAccount(new Account(Account.SAVINGS)));
-        bank.addCustomer(new Customer("Tom").openAccount(new Account(Account.SAVINGS)));
-        bank.addCustomer(new Customer("Fred").openAccount(new Account(Account.SAVINGS)));
+        bank.addCustomer(new Customer("Bill").openAccount(new Account(Account.accountType.SAVINGS)));
+        bank.addCustomer(new Customer("Tom").openAccount(new Account(Account.accountType.SAVINGS)));
+        bank.addCustomer(new Customer("Fred").openAccount(new Account(Account.accountType.SAVINGS)));
 
         assertEquals("Bill", bank.getFirstCustomer());
     }
