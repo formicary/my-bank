@@ -18,13 +18,13 @@ public class Customer {
         return name;
     }
 
+    public int getNumberOfAccounts() {
+        return accounts.size();
+    }
+    
     public Customer openAccount(Account account) {
         accounts.add(account);
         return this;
-    }
-
-    public int getNumberOfAccounts() {
-        return accounts.size();
     }
 
     public double totalInterestEarned() {
@@ -60,6 +60,7 @@ public class Customer {
             case Account.MAXI_SAVINGS:
                 s += "Maxi Savings Account\n";
                 break;
+            //TODO: Add default
         }
 
         //Now total up all the transactions
