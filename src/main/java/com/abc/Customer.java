@@ -18,13 +18,13 @@ public class Customer {
         return name;
     }
 
+    public int getNumberOfAccounts() {
+        return accounts.size();
+    }
+    
     public Customer openAccount(Account account) {
         accounts.add(account);
         return this;
-    }
-
-    public int getNumberOfAccounts() {
-        return accounts.size();
     }
 
     public double totalInterestEarned() {
@@ -45,19 +45,24 @@ public class Customer {
         statement += "\nTotal In All Accounts " + toDollars(total);
         return statement;
     }
+    
+    public void transferfunds(Account accountFrom, Account accountTo, double amount) {
+    	accountFrom.withdraw(amount);
+    	accountTo.deposit(amount);
+    }
 
     private String statementForAccount(Account a) {
         String s = "";
 
-       //Translate to pretty account type
+       //Translate to string account type
         switch(a.getAccountType()){
-            case Account.CHECKING:
+            case CHECKING:
                 s += "Checking Account\n";
                 break;
-            case Account.SAVINGS:
+            case SAVINGS:
                 s += "Savings Account\n";
                 break;
-            case Account.MAXI_SAVINGS:
+            case MAXI_SAVINGS:
                 s += "Maxi Savings Account\n";
                 break;
         }
@@ -65,8 +70,8 @@ public class Customer {
         //Now total up all the transactions
         double total = 0.0;
         for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
+            s += "  " + (t.getAmount() < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.getAmount()) + "\n";
+            total += t.getAmount();
         }
         s += "Total " + toDollars(total);
         return s;
