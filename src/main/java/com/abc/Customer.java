@@ -45,6 +45,11 @@ public class Customer {
         statement += "\nTotal In All Accounts " + toDollars(total);
         return statement;
     }
+    
+    public void transferfunds(Account accountFrom, Account accountTo, double amount) {
+    	accountFrom.withdraw(amount);
+    	accountTo.deposit(amount);
+    }
 
     private String statementForAccount(Account a) {
         String s = "";
