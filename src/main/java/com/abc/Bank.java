@@ -2,6 +2,7 @@ package com.abc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Bank {
 	private List<Customer> customers;
@@ -17,7 +18,7 @@ public class Bank {
 	public String customerSummary() {
 		String summary = "Customer Summary";
 		for (Customer c : customers)
-			summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
+			summary += "\n - " + c.getFullName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
 		return summary;
 	}
 
@@ -27,20 +28,33 @@ public class Bank {
 		return number + " " + (number == 1 ? word : word + "s");
 	}
 
-//    public double totalInterestPaid() {
-//        double total = 0;
-//        for(Customer c: customers)
-//            total += c.totalInterestEarned();
-//        return total;
-//    }
+    public double totalInterestPaid() {
+        double total = 0;
+        for(Customer c: customers)
+            total += c.totalInterestEarned();
+        return total;
+    }
 
 	public String getFirstCustomer() {
 		try {
 			customers = null;
-			return customers.get(0).getName();
+			return customers.get(0).getFullName();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return "Error";
 		}
 	}
+	
+	public void transfer(Account from, Account to,double amount) {
+		ReentrantLock lock = new ReentrantLock();
+		lock.lock();
+		try {
+			from.withdraw(amount);
+			to.deposit(amount);
+		} finally {
+			lock.unlock();
+		}
+		
+	}
+	
 }

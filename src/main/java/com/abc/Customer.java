@@ -6,17 +6,39 @@ import java.util.List;
 import static java.lang.Math.abs;
 
 public class Customer {
-	private String name;
+	private String firstName;
+	private String lastName;
 	private List<Account> accounts;
 
-	public Customer(String name) {
-		this.name = name;
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+	
+	public String getFullName() {
+		return firstName +" " + lastName;
+	}
+
+	
+
+	public Customer(String firstName,String lasttName) {
+		this.setFirstName(firstName);
+		this.setLastName(lastName);
 		this.accounts = new ArrayList<Account>();
 	}
 
-	public String getName() {
-		return name;
-	}
+
 
 	public Customer openAccount(Account account) {
 		accounts.add(account);
@@ -36,11 +58,11 @@ public class Customer {
 
 	public String getStatement() {
 		String statement = null;
-		statement = "Statement for " + name + "\n";
+		statement = String.format("Statement for %s %s /n", firstName,lastName);
 		double total = 0.0;
 		for (Account a : accounts) {
 			statement += "\n" + statementForAccount(a) + "\n";
-			total += a.sumTransactions();
+			total += a.getBalance();
 		}
 		statement += "\nTotal In All Accounts " + toDollars(total);
 		return statement;
@@ -62,13 +84,10 @@ public class Customer {
 			break;
 		}
 
-		// Now total up all the transactions
-		double total = 0.0;
-//        for (Transaction t : a.transactions) {
-//            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-//            total += t.amount;
-//        }
-		s += "Total " + toDollars(total);
+        for (Transaction t : a.transactions) {
+            s += "  " + (t.getAmount() < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.getAmount()) + "\n";
+        }
+		s += "Total " + toDollars(a.getBalance());
 		return s;
 	}
 
