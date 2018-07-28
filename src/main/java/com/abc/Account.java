@@ -62,7 +62,7 @@ public class Account {
                 }
                 Date now = DateProvider.getInstance().now();
                 Date lastTransaction = transactions.get(lastWithdrawalIndex).transactionDate;
-                // if there have been no withdrawals or more than 10 days since last withdrawal
+                // if there have been no withdrawals or it has been more than 10 days since last withdrawal
                 if (lastWithdrawalIndex == 0 || getDaysSinceLastTransaction(lastTransaction, now, TimeUnit.DAYS) > 10)
                     return amount * 0.05;
                 else

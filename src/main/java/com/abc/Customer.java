@@ -23,6 +23,14 @@ public class Customer {
         return this;
     }
 
+    public void transfer(Account out, Account in, int amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        }
+        out.withdraw(amount);
+        in.deposit(amount);
+    }
+
     public int getNumberOfAccounts() {
         return accounts.size();
     }
@@ -35,8 +43,7 @@ public class Customer {
     }
 
     public String getStatement() {
-        String statement = null;
-        statement = "Statement for " + name + "\n";
+        String statement = "Statement for " + name + "\n";
         double total = 0.0;
         for (Account a : accounts) {
             statement += "\n" + statementForAccount(a) + "\n";
@@ -49,7 +56,7 @@ public class Customer {
     private String statementForAccount(Account a) {
         String s = "";
 
-       //Translate to pretty account type
+        //Translate to pretty account type
         switch(a.getAccountType()){
             case Account.CHECKING:
                 s += "Checking Account\n";
