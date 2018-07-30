@@ -58,7 +58,7 @@ public class CustomerTest {
     }
 
     @Test
-    public void transfer() {
+    public void testTransfer() {
         Account checkingAccount = new Account(Account.CHECKING);
         Account savingsAccount = new Account(Account.SAVINGS);
         Customer john = new Customer("John")
@@ -67,7 +67,7 @@ public class CustomerTest {
         checkingAccount.deposit(2000);
         savingsAccount.deposit(500);
         john.transfer(checkingAccount, savingsAccount, 1000);
-        assertEquals(1000, checkingAccount.sumTransactions(), DOUBLE_DELTA);
-        assertEquals(1500, savingsAccount.sumTransactions(), DOUBLE_DELTA);
+        assertEquals(1000, checkingAccount.getAccountTotal(), DOUBLE_DELTA);
+        assertEquals(1500, savingsAccount.getAccountTotal(), DOUBLE_DELTA);
     }
 }

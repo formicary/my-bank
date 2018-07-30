@@ -49,6 +49,23 @@ public class BankTest {
         maxiSavingsAccount.deposit(3000.0);
 
         assertEquals(150.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        maxiSavingsAccount.deposit(200.0);
+        maxiSavingsAccount.withdraw(200.0);
+        assertEquals(3.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+
+    }
+
+    @Test
+    public void testDailyInterestRate() {
+        Bank bank = new Bank();
+        Account checkingAccount = new Account(Account.CHECKING);
+        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+
+        checkingAccount.deposit(3000.0);
+        assertEquals(3000.0, checkingAccount.getAccountTotal(), DOUBLE_DELTA);
+
+        checkingAccount.creditDailyInterestRate();
+        assertEquals(3000.0 + ((3000.0*0.001)/365), checkingAccount.getAccountTotal(), DOUBLE_DELTA);
     }
 
 }
