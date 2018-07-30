@@ -18,13 +18,21 @@ public class Customer {
         return name;
     }
 
+    public int getNumberOfAccounts() {
+        return accounts.size();
+    }
+
     public Customer openAccount(Account account) {
         accounts.add(account);
         return this;
     }
 
-    public int getNumberOfAccounts() {
-        return accounts.size();
+    public void transfer(Account out, Account in, int amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        }
+        out.withdraw(amount);
+        in.deposit(amount);
     }
 
     public double totalInterestEarned() {
@@ -35,12 +43,11 @@ public class Customer {
     }
 
     public String getStatement() {
-        String statement = null;
-        statement = "Statement for " + name + "\n";
+        String statement = "Statement for " + name + "\n";
         double total = 0.0;
         for (Account a : accounts) {
             statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+            total += a.getAccountTotal();
         }
         statement += "\nTotal In All Accounts " + toDollars(total);
         return statement;
@@ -49,7 +56,7 @@ public class Customer {
     private String statementForAccount(Account a) {
         String s = "";
 
-       //Translate to pretty account type
+        //Translate to pretty account type
         switch(a.getAccountType()){
             case Account.CHECKING:
                 s += "Checking Account\n";

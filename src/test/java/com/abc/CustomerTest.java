@@ -6,9 +6,10 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
+    private static final double DOUBLE_DELTA = 1e-15;
 
     @Test //Test customer statement generation
-    public void testApp(){
+    public void testStatementGeneration(){
 
         Account checkingAccount = new Account(Account.CHECKING);
         Account savingsAccount = new Account(Account.SAVINGS);
@@ -40,18 +41,33 @@ public class CustomerTest {
     }
 
     @Test
-    public void testTwoAccount(){
+    public void testTwoAccounts(){
         Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
+                .openAccount(new Account(Account.SAVINGS))
+                .openAccount(new Account(Account.CHECKING));
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
-    @Ignore
-    public void testThreeAcounts() {
+    @Test
+    public void testThreeAccounts() {
         Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
+                .openAccount(new Account(Account.SAVINGS))
+                .openAccount(new Account(Account.CHECKING))
+                .openAccount(new Account(Account.MAXI_SAVINGS));
         assertEquals(3, oscar.getNumberOfAccounts());
+    }
+
+    @Test
+    public void testTransfer() {
+        Account checkingAccount = new Account(Account.CHECKING);
+        Account savingsAccount = new Account(Account.SAVINGS);
+        Customer john = new Customer("John")
+                .openAccount(checkingAccount)
+                .openAccount(savingsAccount);
+        checkingAccount.deposit(2000);
+        savingsAccount.deposit(500);
+        john.transfer(checkingAccount, savingsAccount, 1000);
+        assertEquals(1000, checkingAccount.getAccountTotal(), DOUBLE_DELTA);
+        assertEquals(1500, savingsAccount.getAccountTotal(), DOUBLE_DELTA);
     }
 }
