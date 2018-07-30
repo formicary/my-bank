@@ -18,6 +18,10 @@ public class Customer {
         return name;
     }
 
+    public int getNumberOfAccounts() {
+        return accounts.size();
+    }
+
     public Customer openAccount(Account account) {
         accounts.add(account);
         return this;
@@ -29,10 +33,6 @@ public class Customer {
         }
         out.withdraw(amount);
         in.deposit(amount);
-    }
-
-    public int getNumberOfAccounts() {
-        return accounts.size();
     }
 
     public double totalInterestEarned() {

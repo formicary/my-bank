@@ -81,7 +81,7 @@ public class Account {
 
     public static long getDaysSinceLastTransaction(Date lastTrans, Date now, TimeUnit timeUnit){
         long timeDiff = now.getTime() - lastTrans.getTime();
-        return timeUnit.convert(timeDiff,TimeUnit.MILLISECONDS);
+        return timeUnit.convert(timeDiff,TimeUnit.MILLISECONDS); // convert time difference to DAYS
     }
 
 }
