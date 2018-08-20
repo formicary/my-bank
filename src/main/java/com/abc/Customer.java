@@ -27,6 +27,18 @@ public class Customer {
         return accounts.size();
     }
 
+    
+    public void transferAmount(Account accFrom, Account accTo, double amount) {
+        if (amount <=0){
+            throw new IllegalArgumentException("amount must be greater than zero");
+        }
+        else{
+            accFrom.withdraw(amount);
+            accTo.deposit(amount);
+        }
+    }
+    
+    
     public double totalInterestEarned() {
         double total = 0;
         for (Account a : accounts)
@@ -64,9 +76,9 @@ public class Customer {
 
         //Now total up all the transactions
         double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
+        for (Transaction t : a.getTransactions()) {
+            s += "  " + (t.getAmount() < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.getAmount()) + "\n";
+            total += t.getAmount();
         }
         s += "Total " + toDollars(total);
         return s;
