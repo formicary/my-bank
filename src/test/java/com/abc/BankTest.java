@@ -1,54 +1,72 @@
 package com.abc;
 
+import com.abc.account.CheckingAccount;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
+
+import java.math.BigDecimal;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 
+@RunWith(MockitoJUnitRunner.class)
 public class BankTest {
-    private static final double DOUBLE_DELTA = 1e-15;
+
+    @Mock
+    private Customer customerOne = new Customer("CustomerOne");
+    @Mock
+    private Customer customerTwo = new Customer("CustomerTwo");
+    @Mock
+    private Customer customerThree = new Customer("CustomerThree");
 
     @Test
-    public void customerSummary() {
-        Bank bank = new Bank();
-        Customer john = new Customer("John");
-        john.openAccount(new Account(Account.CHECKING));
-        bank.addCustomer(john);
-
-        assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
+    public void customerSummaryWithOneCustomer() {
+        final Bank bank = new Bank();
+        customerOne = new Customer("CustomerOne");
+        customerOne.openAccount("id", new CheckingAccount());
+        bank.addCustomer(customerOne);
+        assertEquals("Customer Summary\n - CustomerOne (1 account)", bank.getCustomersSummary());
     }
 
     @Test
-    public void checkingAccount() {
-        Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.CHECKING);
-        Customer bill = new Customer("Bill").openAccount(checkingAccount);
-        bank.addCustomer(bill);
-
-        checkingAccount.deposit(100.0);
-
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+    public void customerSummaryWithMultipleCustomers() {
+        final Bank bank = new Bank();
+        customerOne = new Customer("CustomerOne");
+        customerTwo = new Customer("CustomerTwo");
+        customerThree = new Customer("CustomerThree");
+        bank.addCustomer(customerOne);
+        bank.addCustomer(customerTwo);
+        bank.addCustomer(customerThree);
+        assertEquals(
+                "Customer Summary\n - CustomerOne (0 accounts)"
+                        + "\n - CustomerTwo (0 accounts)"
+                        + "\n - CustomerThree (0 accounts)",
+                bank.getCustomersSummary());
     }
 
     @Test
-    public void savings_account() {
-        Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
-
-        checkingAccount.deposit(1500.0);
-
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+    public void getFirstCustomerName() {
+        final Bank bank = new Bank();
+        customerOne = new Customer("CustomerOne");
+        customerTwo = new Customer("CustomerTwo");
+        customerThree = new Customer("CustomerThree");
+        bank.addCustomer(customerOne);
+        bank.addCustomer(customerTwo);
+        bank.addCustomer(customerThree);
+        assertEquals(customerOne.getName(), bank.getFirstCustomerName());
     }
 
     @Test
-    public void maxi_savings_account() {
-        Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
-
-        checkingAccount.deposit(3000.0);
-
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+    public void getTotalInterestPaid() {
+        final Bank bank = new Bank();
+        bank.addCustomer(customerOne);
+        bank.addCustomer(customerTwo);
+        bank.addCustomer(customerThree);
+        when(customerOne.getTotalInterestEarned()).thenReturn(BigDecimal.ZERO);
+        when(customerTwo.getTotalInterestEarned()).thenReturn(BigDecimal.ONE);
+        when(customerThree.getTotalInterestEarned()).thenReturn(BigDecimal.TEN);
+        assertEquals(BigDecimal.valueOf(11), bank.getTotalInterestPaid());
     }
-
 }
