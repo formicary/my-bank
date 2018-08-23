@@ -1,46 +1,62 @@
 package com.abc;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+/** The class {@code Bank} represents a bank. */
 public class Bank {
-    private List<Customer> customers;
 
-    public Bank() {
-        customers = new ArrayList<Customer>();
-    }
+    private final List<Customer> customers = new ArrayList<>();
 
+    /** Initialise a Bank. */
+    public Bank() {}
+
+    /**
+     * Add a customer to the bank.
+     *
+     * @param customer The customer
+     */
     public void addCustomer(Customer customer) {
         customers.add(customer);
     }
 
-    public String customerSummary() {
-        String summary = "Customer Summary";
-        for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-        return summary;
+    /**
+     * Get the summary of all the customers related to the bank.
+     *
+     * @return The customers summary
+     */
+    public String getCustomersSummary() {
+        return "Customer Summary"
+                + customers
+                .stream()
+                .map(customer -> "\n - " + customer.getSummary())
+                .collect(Collectors.joining());
     }
 
-    //Make sure correct plural of word is created based on the number passed in:
-    //If number passed in is 1 just return the word otherwise add an 's' at the end
-    private String format(int number, String word) {
-        return number + " " + (number == 1 ? word : word + "s");
+    /**
+     * Get the total interest paid by customers that are related to the bank.
+     *
+     * @return The total interest paid
+     */
+    public BigDecimal getTotalInterestPaid() {
+        return customers
+                .stream()
+                .map(Customer::getTotalInterestEarned)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    public double totalInterestPaid() {
-        double total = 0;
-        for(Customer c: customers)
-            total += c.totalInterestEarned();
-        return total;
-    }
-
-    public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
+    /**
+     * Get the name of the first customer. Returns "No Customers" if there are no customers related to
+     * the bank.
+     *
+     * @return The name of the first customer or "No Customers"
+     */
+    public String getFirstCustomerName() {
+        if (customers.isEmpty()) {
+            return "No Customers";
         }
+        return customers.get(0).getName();
     }
 }
