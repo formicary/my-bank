@@ -1,6 +1,10 @@
 package com.abc.account;
 
 import com.abc.branch.Customer;
+import com.abc.transaction.TransactionFactory;
+import com.abc.transaction.TransactionType;
+import com.abc.util.ZeroAmountException;
+import com.abc.transaction.Transaction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +39,7 @@ public abstract class Account {
         if (amount <= 0) {
             throw new ZeroAmountException("amount must be greater than zero");
         } else {
-            transactions.add(new Transaction(amount));
+            transactions.add(new TransactionFactory().createTransaction(TransactionType.CREDIT, amount));
             this.updateBalance();
         }
     }
@@ -49,18 +53,26 @@ public abstract class Account {
         if (amount <= 0) {
             throw new ZeroAmountException("amount must be greater than zero");
         } else {
-            transactions.add(new Transaction(-amount));
+            transactions.add(new TransactionFactory().createTransaction(TransactionType.DEBIT, amount));
             this.updateBalance();
         }
     }
 
     /**
-     * Computes sum total of all transactions under this account
+     * Adds to balance if transaction type is <code>CREDIT</code>
+     * subtracts from balance if transaction type is <code>DEBIT</code>.
      */
     private void updateBalance() {
         double bal = 0.0;
         for (Transaction transaction : transactions) {
-            bal += transaction.amount;
+            switch (transaction.getType()) {
+                case CREDIT:
+                    bal += transaction.getAmount();
+                    break;
+                case DEBIT:
+                    bal -= transaction.getAmount();
+                    break;
+            }
         }
         this.balance = bal;
     }

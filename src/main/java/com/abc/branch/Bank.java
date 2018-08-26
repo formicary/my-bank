@@ -4,10 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Bank {
+
+    private static Bank instance;
     private List<Customer> customers;
 
-    public Bank() {
+    private Bank() {
         customers = new ArrayList<Customer>();
+    }
+
+    public static Bank getInstance() {
+        if (instance == null) {
+            instance = new Bank();
+        }
+        return instance;
     }
 
     public void addCustomer(Customer customer) {

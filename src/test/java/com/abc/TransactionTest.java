@@ -1,6 +1,6 @@
 package com.abc;
 
-import com.abc.account.Transaction;
+import com.abc.transaction.Transaction;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
