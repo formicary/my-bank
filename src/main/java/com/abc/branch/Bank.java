@@ -52,4 +52,11 @@ public class Bank {
             return "Error";
         }
     }
+
+    @Override
+    public String toString() {
+        return "Bank{" +
+                "customers=" + customers +
+                '}';
+    }
 }

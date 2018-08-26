@@ -3,10 +3,12 @@ package com.abc.account;
 import com.abc.branch.Customer;
 import com.abc.transaction.TransactionFactory;
 import com.abc.transaction.TransactionType;
+import com.abc.util.DateProvider;
 import com.abc.util.ZeroAmountException;
 import com.abc.transaction.Transaction;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public abstract class Account {
@@ -14,6 +16,7 @@ public abstract class Account {
     private Customer owner; // an account must belong to a customer
     private double balance; // holds the current balance
     private List<Transaction> transactions; // holds all transaction made under this account
+    private Date lastWithdrawal;
 
     // An account must be opened an account holder (owner) and an opening balance
     public Account(Customer owner, double openingBalance) {
@@ -54,6 +57,7 @@ public abstract class Account {
             throw new ZeroAmountException("amount must be greater than zero");
         } else {
             transactions.add(new TransactionFactory().createTransaction(TransactionType.DEBIT, amount));
+            lastWithdrawal = DateProvider.getInstance().now();
             this.updateBalance();
         }
     }
@@ -87,5 +91,9 @@ public abstract class Account {
 
     public List<Transaction> getTransactions() {
         return transactions;
+    }
+
+    public Date getLastWithdrawal() {
+        return lastWithdrawal;
     }
 }

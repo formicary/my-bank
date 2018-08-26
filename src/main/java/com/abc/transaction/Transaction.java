@@ -54,4 +54,13 @@ public abstract class Transaction {
         result = 31 * result + transactionDate.hashCode();
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "type=" + type +
+                ", amount=" + amount +
+                ", transactionDate=" + transactionDate +
+                '}';
+    }
 }
