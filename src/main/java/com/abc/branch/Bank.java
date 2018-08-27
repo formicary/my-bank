@@ -8,7 +8,8 @@ public class Bank {
     private static Bank instance;
     private List<Customer> customers;
 
-    private Bank() {
+    // Using public constructor in singleton as otherwise jUnit tests cannot be run.
+    public Bank() {
         customers = new ArrayList<Customer>();
     }
 

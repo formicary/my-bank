@@ -8,6 +8,7 @@ import com.abc.util.ZeroAmountException;
 import com.abc.transaction.Transaction;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -21,21 +22,22 @@ public abstract class Account {
     // An account must be opened an account holder (owner) and an opening balance
     public Account(Customer owner, double openingBalance) {
         this.owner = owner;
-        try {
-            this.deposit(openingBalance);
-        } catch (ZeroAmountException e) {
-            e.printStackTrace();
-            System.err.println("Opening balance of account must be greater than zero!");
-        }
         this.transactions = new ArrayList<Transaction>();
+        this.balance = openingBalance;
+        this.lastWithdrawal = DateProvider.getInstance().now();
     }
 
+    /**
+     * Calculates the interest for this account.
+     * Note: Interest earned is variable, it is dependant upon account type.
+     * @return amount earned
+     */
     abstract public double interestEarned();
     abstract public AccountType getAccountType();
 
     /**
-     * Add given amount of money to this account.
-     * @param amount
+     * Add amount to this account's balance.
+     * @param amount in GBP
      * @throws ZeroAmountException
      */
     public void deposit(double amount) throws ZeroAmountException {
@@ -48,8 +50,8 @@ public abstract class Account {
     }
 
     /**
-     * Subtract given amount of money from this account.
-     * @param amount
+     * Subtract amount this account's balance.
+     * @param amount in GBP
      * @throws ZeroAmountException
      */
     public void withdraw(double amount) throws ZeroAmountException {
@@ -79,6 +81,34 @@ public abstract class Account {
             }
         }
         this.balance = bal;
+    }
+
+    /**
+     * Computes the difference in days since date this method was invoked
+     * and date of last withdrawal.
+     * @return days since last withdrawal was made from this account
+     */
+    public long daysElapsed() {
+        Date endDate = DateProvider.getInstance().now();
+        long endTime = endDate.getTime();
+        long startTime = this.lastWithdrawal.getTime();
+        long diffTime = endTime - startTime;
+        long diffDays = diffTime / (1000 * 60 * 60 * 24);
+        return diffDays;
+    }
+
+    /**
+     * Computes the difference in days since date this method was invoked
+     * and date of last withdrawal.
+     * @return days since last withdrawal was made from this account
+     */
+    public long daysElapsed(Date startDate) {
+        Date endDate = DateProvider.getInstance().now();
+        long endTime = endDate.getTime();
+        long startTime = startDate.getTime();
+        long diffTime = endTime - startTime;
+        long diffDays = diffTime / (1000 * 60 * 60 * 24);
+        return diffDays;
     }
 
     public Customer getOwner() {

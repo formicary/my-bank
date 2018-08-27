@@ -1,6 +1,7 @@
 package com.abc.account;
 
 import com.abc.branch.Customer;
+import com.abc.util.ZeroAmountException;
 
 /**
  * Created by sameen on 24/08/2018.
@@ -12,12 +13,16 @@ public class MaxiSavingsAccount extends Account {
     }
 
     public double interestEarned() {
+        // 5% if no withdrawals in the past 10 days, otherwise 0.1%
+
         double amount = this.getBalance();
-        if (amount <= 1000)
-            return amount * 0.02;
-        if (amount <= 2000)
-            return 20 + (amount-1000) * 0.05;
-        return 70 + (amount-2000) * 0.1;
+
+        long daysElapsed = this.daysElapsed();
+        if (daysElapsed > 10) {
+            return amount * 0.05;
+        }
+
+        return amount * 0.001;
     }
 
     @Override

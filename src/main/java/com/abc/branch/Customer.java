@@ -1,6 +1,9 @@
 package com.abc.branch;
 
 import com.abc.account.Account;
+import com.abc.account.MaxiSavingsAccount;
+import com.abc.transaction.Transaction;
+import com.abc.transaction.TransactionType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +23,7 @@ public class Customer {
         return name;
     }
 
-    public Customer openAccount(Account account) {
+    public Customer addAccount(Account account) {
         accounts.add(account);
         return this;
     }
@@ -51,7 +54,7 @@ public class Customer {
     private String statementForAccount(Account a) {
         String s = "";
 
-       //Translate to pretty account type
+       // Translate to pretty account type
         switch(a.getAccountType()){
             case CHECKING:
                 s += "Checking Account\n";
@@ -64,13 +67,17 @@ public class Customer {
                 break;
         }
 
-        //Now total up all the transactions
+        // Now total up all the transactions
         double total = 0.0;
-//        for (Transaction t : a.transactions) {
-//            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-//            total += t.amount;
-//        }
-        s += "Total " + toDollars(total);
+        for (Transaction t : a.getTransactions()) {
+            if (t.getType() == TransactionType.CREDIT) {
+                s += "  " + "deposit" + " " + toDollars(t.getAmount()) + "\n";
+            }
+            if (t.getType() == TransactionType.DEBIT) {
+                s += "  " + "withdrawal" + " " + toDollars(t.getAmount()) + "\n";
+            }
+        }
+        s += "Total " + toDollars(a.getBalance());
         return s;
     }
 

@@ -14,10 +14,11 @@ public class SavingsAccount extends Account {
     public double interestEarned() {
         double amount = this.getBalance();
         if (amount <= 1000) {
-            return amount * 0.001;
+            return amount * 0.001; // 0.1% for the first $1000
         }
         else {
-            return 1 + (amount-1000) * 0.002;
+            double enhancedInterestAmount = amount-1000;
+            return 1 + enhancedInterestAmount * 0.002;
         }
     }
 

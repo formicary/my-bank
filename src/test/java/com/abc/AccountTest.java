@@ -5,8 +5,8 @@ import com.abc.account.AccountFactory;
 import com.abc.account.AccountType;
 
 import com.abc.branch.Customer;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import com.abc.util.ZeroAmountException;
+import org.junit.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -14,36 +14,43 @@ import static org.junit.Assert.assertEquals;
  * Created by sameen on 24/08/2018.
  */
 public class AccountTest {
-
+    private static final double DOUBLE_DELTA = 1e-15;
     private AccountFactory factory;
 
-    @BeforeClass
+    @Before
     public void setUp() {
-        factory = new AccountFactory();
+        this.factory = new AccountFactory();
+    }
+
+    @After
+    public void tearDown() {
+        this.factory = null;
     }
 
     @Test
     public void testCheckingAccount() {
-        Account checkingAccount = factory.createAccount(new Customer("John"),
+        Account checkingAccount = null;
+        checkingAccount = factory.createAccount(new Customer("John"),
                 AccountType.CHECKING, 50.00);
 
-        assertEquals(50.00, checkingAccount.getBalance(), 0.001);
+        assertEquals(50.00, checkingAccount.getBalance(), DOUBLE_DELTA);
     }
 
     @Test
     public void testSavingsAccount() {
-        Account savingsAccount = factory.createAccount(new Customer("John"),
+        Account savingsAccount = null;
+        savingsAccount = factory.createAccount(new Customer("John"),
                 AccountType.SAVINGS, 50.00);
 
-        assertEquals(50.00, savingsAccount.getBalance(), 0.001);
+        assertEquals(50.00, savingsAccount.getBalance(), DOUBLE_DELTA);
     }
 
     @Test
     public void testMaxiSavingsAccount() {
-        Account maxiSavingsAccount = factory.createAccount(new Customer("John"),
+        Account maxiSavingsAccount = null;
+        maxiSavingsAccount = factory.createAccount(new Customer("John"),
                 AccountType.MAXI_SAVINGS, 50.00);
 
-        assertEquals(50.00, maxiSavingsAccount.getBalance(), 0.001);
-
+        assertEquals(50.00, maxiSavingsAccount.getBalance(), DOUBLE_DELTA);
     }
 }
