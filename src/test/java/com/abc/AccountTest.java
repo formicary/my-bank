@@ -9,6 +9,7 @@ import com.abc.util.ZeroAmountException;
 import org.junit.*;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 /**
  * Created by sameen on 24/08/2018.
@@ -52,5 +53,14 @@ public class AccountTest {
                 AccountType.MAXI_SAVINGS, 50.00);
 
         assertEquals(50.00, maxiSavingsAccount.getBalance(), DOUBLE_DELTA);
+    }
+
+    @Test
+    public void testId() {
+        Customer bill = new Customer("Bill");
+        Account checkingAccountA = factory.createAccount(bill, AccountType.CHECKING, 250.00);
+        Account checkingAccountB = factory.createAccount(bill, AccountType.CHECKING, 250.00);
+
+        assertNotEquals(checkingAccountA.getId(), checkingAccountB.getId());
     }
 }

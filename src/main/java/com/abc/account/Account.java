@@ -7,13 +7,14 @@ import com.abc.util.DateProvider;
 import com.abc.util.ZeroAmountException;
 import com.abc.transaction.Transaction;
 
+import java.rmi.server.UID;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 public abstract class Account {
 
+    private String id;
     private Customer owner; // an account must belong to a customer
     private double balance; // holds the current balance
     private List<Transaction> transactions; // holds all transaction made under this account
@@ -21,6 +22,7 @@ public abstract class Account {
 
     // An account must be opened an account holder (owner) and an opening balance
     public Account(Customer owner, double openingBalance) {
+        this.id = new UID().toString(); // generate a unique id for this account
         this.owner = owner;
         this.transactions = new ArrayList<Transaction>();
         this.balance = openingBalance;
@@ -44,8 +46,8 @@ public abstract class Account {
         if (amount <= 0) {
             throw new ZeroAmountException("amount must be greater than zero");
         } else {
-            transactions.add(new TransactionFactory().createTransaction(TransactionType.CREDIT, amount));
-            this.updateBalance();
+            Transaction t = new TransactionFactory().createTransaction(TransactionType.CREDIT, amount);
+            this.updateBalance(t);
         }
     }
 
@@ -58,29 +60,27 @@ public abstract class Account {
         if (amount <= 0) {
             throw new ZeroAmountException("amount must be greater than zero");
         } else {
-            transactions.add(new TransactionFactory().createTransaction(TransactionType.DEBIT, amount));
+            Transaction t = new TransactionFactory().createTransaction(TransactionType.DEBIT, amount);
             lastWithdrawal = DateProvider.getInstance().now();
-            this.updateBalance();
+            this.updateBalance(t);
         }
     }
 
     /**
      * Adds to balance if transaction type is <code>CREDIT</code>
      * subtracts from balance if transaction type is <code>DEBIT</code>.
+     * @param t the transaction
      */
-    private void updateBalance() {
-        double bal = 0.0;
-        for (Transaction transaction : transactions) {
-            switch (transaction.getType()) {
-                case CREDIT:
-                    bal += transaction.getAmount();
-                    break;
-                case DEBIT:
-                    bal -= transaction.getAmount();
-                    break;
-            }
+    private void updateBalance(Transaction t) {
+        switch (t.getType()) {
+            case CREDIT:
+                this.balance += t.getAmount();
+                break;
+            case DEBIT:
+                this.balance -= t.getAmount();
+                break;
         }
-        this.balance = bal;
+        transactions.add(t);
     }
 
     /**
@@ -109,6 +109,10 @@ public abstract class Account {
         long diffTime = endTime - startTime;
         long diffDays = diffTime / (1000 * 60 * 60 * 24);
         return diffDays;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public Customer getOwner() {

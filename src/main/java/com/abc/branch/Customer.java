@@ -1,9 +1,9 @@
 package com.abc.branch;
 
 import com.abc.account.Account;
-import com.abc.account.MaxiSavingsAccount;
 import com.abc.transaction.Transaction;
 import com.abc.transaction.TransactionType;
+import com.abc.util.ZeroAmountException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +17,40 @@ public class Customer {
     public Customer(String name) {
         this.name = name;
         this.accounts = new ArrayList<Account>();
+    }
+
+    /**
+     * Make a transfer between two <code>Account</code> owned by this <code>Customer</code>.
+     * @param from account id to transfer balance from
+     * @param to account id to transfer balance to
+     * @return <code>true</code> if transfer was successful
+     */
+    public boolean transferByID(double amount, String from, String to) {
+
+        Account acFrom = searchAccount(from);
+        Account acTo = searchAccount(to);
+
+        if( (acFrom != null) && (acTo != null) ) {
+            try {
+                acFrom.withdraw(amount);
+                acTo.deposit(amount);
+                return true;
+            } catch (ZeroAmountException e) {
+                e.printStackTrace();
+            }
+
+        }
+        return false;
+    }
+
+
+    private Account searchAccount(String accountId) {
+        for (Account a : this.accounts) {
+            if (a.getId().equals(accountId)) {
+                return a;
+            }
+        }
+        return null;
     }
 
     public String getName() {

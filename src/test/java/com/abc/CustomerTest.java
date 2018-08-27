@@ -12,6 +12,7 @@ import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
 
+    private static final double DOUBLE_DELTA = 1e-15;
     private AccountFactory accountFactory;
 
     @Before
@@ -30,9 +31,9 @@ public class CustomerTest {
 
         try {
             Account checkingAccount =
-                    accountFactory.createAccount(henry, AccountType.CHECKING, 100.00);
+                    accountFactory.createAccount(henry, AccountType.CHECKING, 0.0);
             Account savingsAccount =
-                    accountFactory.createAccount(henry, AccountType.SAVINGS, 4000.0);
+                    accountFactory.createAccount(henry, AccountType.SAVINGS, 0.0);
 
             checkingAccount.deposit(100.0);
             savingsAccount.deposit(4000.0);
@@ -72,13 +73,26 @@ public class CustomerTest {
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
-    @Ignore
+    @Test
     public void testThreeAcounts() {
         Customer oscar = new Customer("Oscar");
 
         accountFactory.createAccount(oscar, AccountType.SAVINGS, 0.01);
         accountFactory.createAccount(oscar, AccountType.CHECKING, 0.01);
+        accountFactory.createAccount(oscar, AccountType.MAXI_SAVINGS, 0.01);
 
         assertEquals(3, oscar.getNumberOfAccounts());
+    }
+
+    @Test
+    public void testTransferAccount() {
+        Customer oscar = new Customer("Oscar");
+
+        Account from = accountFactory.createAccount(oscar, AccountType.CHECKING, 50.00);
+        Account to = accountFactory.createAccount(oscar, AccountType.SAVINGS, 25.00);
+
+        oscar.transferByID(from.getBalance(), from.getId(), to.getId());
+
+        assertEquals(75.00, to.getBalance(), DOUBLE_DELTA);
     }
 }
