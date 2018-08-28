@@ -1,13 +1,23 @@
-package com.abc;
+package com.abc.branch;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Bank {
+
+    private static Bank instance;
     private List<Customer> customers;
 
+    // Using public constructor in singleton as otherwise jUnit tests cannot be run.
     public Bank() {
         customers = new ArrayList<Customer>();
+    }
+
+    public static Bank getInstance() {
+        if (instance == null) {
+            instance = new Bank();
+        }
+        return instance;
     }
 
     public void addCustomer(Customer customer) {
@@ -42,5 +52,12 @@ public class Bank {
             e.printStackTrace();
             return "Error";
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Bank{" +
+                "customers=" + customers +
+                '}';
     }
 }
