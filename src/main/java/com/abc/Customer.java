@@ -6,16 +6,28 @@ import java.util.List;
 import static java.lang.Math.abs;
 
 public class Customer {
+
     private String name;
+    private static int count;
+    private int id;
     private List<Account> accounts;
 
     public Customer(String name) {
         this.name = name;
+        setID(++count);
         this.accounts = new ArrayList<Account>();
     }
 
     public String getName() {
         return name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setID(int id) {
+        this.id = id;
     }
 
     public Customer openAccount(Account account) {
@@ -29,8 +41,9 @@ public class Customer {
 
     public double totalInterestEarned() {
         double total = 0;
-        for (Account a : accounts)
+        for (Account a : accounts) {
             total += a.interestEarned();
+        }
         return total;
     }
 
@@ -49,8 +62,8 @@ public class Customer {
     private String statementForAccount(Account a) {
         String s = "";
 
-       //Translate to pretty account type
-        switch(a.getAccountType()){
+        //Translate to pretty account type
+        switch (a.getAccountType()) {
             case Account.CHECKING:
                 s += "Checking Account\n";
                 break;
@@ -72,15 +85,21 @@ public class Customer {
         return s;
     }
 
-    private String toDollars(double d){
+    private String toDollars(double d) {
         return String.format("$%,.2f", abs(d));
     }
-    
-    public void transferBetweenAccounts(){
-        
-        
+
+    //Transfer if both accounts belong to same customer, and the outgoing account has enough money to send
+    public void transferBetweenAccounts(Account from, Account to, double amount) {
+        if (amount < 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        } else if (from.getOwnerID() != to.getOwnerID()) {
+            throw new IllegalArgumentException("Both accounts must belong to same customer");
+        } else if (amount >= from.sumTransactions()) {
+            throw new IllegalArgumentException("There are insufficient funds in the account");
+        } else {
+            from.withdraw(amount);
+            to.deposit(amount);
+        }
     }
-    
-    
-    
 }

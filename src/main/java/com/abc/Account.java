@@ -3,17 +3,19 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Account {
+public abstract class Account {
 
     public static final int CHECKING = 0;
     public static final int SAVINGS = 1;
     public static final int MAXI_SAVINGS = 2;
 
+    private Customer owner;
     private final int accountType;
     public List<Transaction> transactions;
 
-    public Account(int accountType) {
+    public Account(Customer owner, int accountType) {
         this.accountType = accountType;
+        this.owner = owner;
         this.transactions = new ArrayList<Transaction>();
     }
 
@@ -64,6 +66,14 @@ public void withdraw(double amount) {
         for (Transaction t: transactions)
             amount += t.amount;
         return amount;
+    }
+    
+    public Customer getOwner(){
+        return owner;
+    }
+    
+    public int getOwnerID(){
+        return owner.getId();
     }
 
     public int getAccountType() {
