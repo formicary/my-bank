@@ -9,7 +9,7 @@ public class Customer {
 
     private String name;
     private static int count;
-    private int id;
+    private int id; //customer id to uniquely identify accounts
     private List<Account> accounts;
 
     public Customer(String name) {
@@ -42,7 +42,7 @@ public class Customer {
     public double totalInterestEarned() {
         double total = 0;
         for (Account a : accounts) {
-            total += a.interestEarned();
+            total += (a.getTotal() - a.sumTransactions());
         }
         return total;
     }

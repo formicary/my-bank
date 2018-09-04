@@ -15,4 +15,13 @@ public class MaxiSavingsAccount extends Account {
         super(owner, accountType);
     }
     
+     @Override
+    public double interestEarned(double amount) {
+        return 0.0;
+    }
+    
+    
+    
+    
+
 }

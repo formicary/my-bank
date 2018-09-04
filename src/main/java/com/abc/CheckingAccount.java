@@ -10,10 +10,14 @@ package com.abc;
  * @author prarthana
  */
 public class CheckingAccount extends Account {
-    
-    public CheckingAccount(Customer owner, int accountType){
+
+    public CheckingAccount(Customer owner, int accountType) {
         super(owner, accountType);
     }
-    
-    
+
+    @Override
+    public double interestEarned(double amount) {
+        return amount * 0.001 / DAYS_IN_A_YEAR;
+    }
+
 }
