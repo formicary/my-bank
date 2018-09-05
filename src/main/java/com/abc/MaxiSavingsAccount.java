@@ -29,14 +29,14 @@ public class MaxiSavingsAccount extends Account {
 
     public double interestEarned(double amount, int days) {
         if (days <= MAX_AMOUNT) {
-            return amount * 0.05 / DAYS_IN_A_YEAR;
-        } else {
             return amount * 0.001 / DAYS_IN_A_YEAR;
+        } else {
+            return amount * 0.05 / DAYS_IN_A_YEAR;
         }
     }
 
     //Add 5% interest with no withdrawals in past 10 days otherwise add 0.1% interest
-    @Override
+      @Override
     public double getTotal() {
         if (transactions.isEmpty()) {
             return 0.0;
@@ -48,7 +48,7 @@ public class MaxiSavingsAccount extends Account {
             }
         });
 
-        int daysSinceWithdrawal = MAX_AMOUNT;
+        int daysSinceWithdrawal = Integer.MAX_VALUE;
         Transaction prevTransaction = transactions.get(0);
         double amount = prevTransaction.amount;
         if (prevTransaction instanceof DebitTransaction) {
@@ -84,5 +84,4 @@ public class MaxiSavingsAccount extends Account {
         }
         return amount;
     }
-
 }

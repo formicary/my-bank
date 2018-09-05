@@ -85,7 +85,7 @@ public class BankTest {
         assertEquals(Math.pow(1 + 0.001 / 365, 15) * 500.0 - 500, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
-      @Test
+    @Test
     //Interest on savings account over $1000
     public void savings_account3() {
         Bank bank = new Bank();
@@ -109,8 +109,8 @@ public class BankTest {
 
         assertEquals(0.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
-   
-    @Test
+
+   @Test
     public void maxi_savings_account2() {
         Bank bank = new Bank();
         Customer bill = new Customer("Bill");
@@ -119,21 +119,20 @@ public class BankTest {
         Transaction t = new CreditTransaction(2000.0);
         t.setTransactionDate(getTestDate(-3));
         maxiAccount.addTransaction(t);
-        Transaction t2 = new DebitTransaction(-1);
+        Transaction t2 = new DebitTransaction(100);
+         t2.setTransactionDate(getTestDate(-1));
         maxiAccount.addTransaction(t2);
-        
-        double a = Math.pow(1+0.05 / 365, 2) *2000 - 2000; //Days 1 & 2 earn 5% interest
-        double b = a -100 * (0.001/365); // Day 3 has withdrawal so earns 1% interest
-        
+
+        double a = Math.pow(1 + 0.05 / 365, 2) * 2000; //Days 1 & 2 earn 5% interest
+        double b = (a - 100) * Math.pow(1+ 0.001 / 365, 1) -1900; // Day 3 has withdrawal so earns 0.1% interest
+
         assertEquals(b, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
     
-
     //Use current day as test date
     private Date getTestDate(int numberOfDays) {
         Calendar c = Calendar.getInstance();
         c.add(Calendar.DATE, numberOfDays);
         return c.getTime();
     }
-
 }
