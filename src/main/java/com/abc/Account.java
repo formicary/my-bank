@@ -66,34 +66,37 @@ public abstract class Account {
         return accountType;
     }
 
-    //acrue interest daily to calculate total amount in account
+    //Acrue interest daily to calculate total amount in account
     public double getTotal() {
 
         if (transactions.isEmpty()) {
             return 0.0;
         }
 
-        //Order transactions from first transaction to last 
+        //Order transactions from first transaction date to last 
         Collections.sort(transactions, new Comparator<Transaction>() {
             public int compare(Transaction t1, Transaction t2) {
                 return t1.getTransactionDate().compareTo(t2.getTransactionDate());
             }
         });
 
-        Transaction prevTransaction = transactions.get(0);
+        Transaction prevTransaction = transactions.get(0); 
         double amount = prevTransaction.amount;
 
         for (int i = 1; i < transactions.size(); i++) {
-            Transaction tmp = prevTransaction;
-            prevTransaction = transactions.get(i);
+            Transaction tmp = prevTransaction; 
+            prevTransaction = transactions.get(i); 
+            //Get difference in days between consecutive transactions
             int dayDiff = getDayDifference(tmp.getTransactionDate(), prevTransaction.getTransactionDate());
 
+            //For each day increment amount by interest rate
             for (int j = 0; j < dayDiff; j++) {
                 amount += interestEarned(amount);
             }
             amount += prevTransaction.amount;
         }
-
+        
+        //Increment amount by interest rate for each day from the last transaction to now
         int daysDiff = getDayDifference(prevTransaction.getTransactionDate(), DateProvider.getInstance().now());
         for (int k = 0; k < daysDiff; k++) {
             amount += interestEarned(amount);
@@ -108,4 +111,7 @@ public abstract class Account {
         return dayDiff;
     }
 
+    protected void addTransaction(Transaction t) {
+        transactions.add(t);
+    }
 }
