@@ -5,8 +5,7 @@ import java.util.Date;
 
 public class Transaction {
     public final double amount;
-
-    private Date transactionDate;
+    private final Date transactionDate;
 
     public Transaction(double amount) 
     {
