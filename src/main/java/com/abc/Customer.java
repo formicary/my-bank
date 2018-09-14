@@ -75,4 +75,16 @@ public class Customer {
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
     }
+    
+    public void internalTransfer(Account a, Account b, double amount) {
+        if (amount <=0)
+        {
+            throw new IllegalArgumentException("Please enter a valid amount to transfer");
+        }
+        else
+        {
+            a.withdraw(amount);
+            b.deposit(amount);
+        }
+    }
 }
