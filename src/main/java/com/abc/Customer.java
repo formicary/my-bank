@@ -3,8 +3,6 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Math.abs;
-
 /**
  * A {@link Customer} represents a customer of the {@link Bank}.
  */
@@ -64,31 +62,6 @@ public class Customer {
      * @return The statement.
      */
     public String getStatement() {
-        String statement = "Statement for " + name + "\n";
-        double total = 0.0;
-        for (Account account : accounts) {
-            statement += "\n" + statementForAccount(account) + "\n";
-            total += account.sumTransactions();
-        }
-        statement += "\nTotal In All Accounts " + toDollars(total);
-        return statement;
-    }
-
-    private String statementForAccount(Account account) {
-    	//Translate to pretty account type
-        String statement = account.getAccountName() + "\n";;
-
-        //Now total up all the transactions
-        double total = 0.0;
-        for (Transaction transaction : account.transactions) {
-            statement += "  " + (transaction.getAmount() < 0 ? "withdrawal" : "deposit") + " " + toDollars(transaction.getAmount()) + "\n";
-            total += transaction.getAmount();
-        }
-        statement += "Total " + toDollars(total);
-        return statement;
-    }
-
-    private String toDollars(double amount) {
-        return String.format("$%,.2f", abs(amount));
+        return new CustomerStatement(name, accounts).build();
     }
 }

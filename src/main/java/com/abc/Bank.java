@@ -32,17 +32,7 @@ public class Bank {
 	 * @return Summary of all customers and their accounts.
 	 */
 	public String customerSummary() {
-		String summary = "Customer Summary";
-		for (Customer customer : customers) {
-			summary += "\n - " + customer.getName() + " (" + format(customer.getNumberOfAccounts(), "account") + ")";
-		}
-		return summary;
-	}
-
-	// Make sure correct plural of word is created based on the number passed in:
-	// If number passed in is 1 just return the word otherwise add an 's' at the end
-	private String format(int number, String word) {
-		return number + " " + (number == 1 ? word : word + "s");
+		return new BankStatement(customers).build();
 	}
 
 	/**
