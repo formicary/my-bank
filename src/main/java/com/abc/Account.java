@@ -3,6 +3,9 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * An {@link Account} records any deposits and withdrawals, and interest earned.
+ */
 public class Account {
 
     public static final int CHECKING = 0;
@@ -11,12 +14,20 @@ public class Account {
 
     private final int accountType;
     public List<Transaction> transactions;
-
+    
+    /**
+     * Constructs a new {@link Account}.
+     * @param accountType The account type.
+     */
     public Account(int accountType) {
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
     }
-
+    
+    /**
+     * Deposits money into the {@link Account}.
+     * @param amount The amount of money to deposit.
+     */
     public void deposit(double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
@@ -24,7 +35,11 @@ public class Account {
             transactions.add(new Transaction(amount));
         }
     }
-
+    
+    /**
+     * Withdraws money from the {@link Account}.
+     * @param amount The amount of money to withdraw.
+     */
 	public void withdraw(double amount) {
 		if (amount <= 0) {
 			throw new IllegalArgumentException("amount must be greater than zero");
@@ -32,7 +47,11 @@ public class Account {
 			transactions.add(new Transaction(-amount));
 		}
 	}
-
+	
+	/**
+	 * Calculates the interest earned by an {@link Account}.
+	 * @return The interest earned.
+	 */
     public double interestEarned() {
         double amount = sumTransactions();
         switch(accountType){
@@ -54,7 +73,11 @@ public class Account {
                 return amount * 0.001;
         }
     }
-
+    
+    /**
+     * Sums the transactions of the {@link Account}.
+     * @return the sum of the transactions.
+     */
     public double sumTransactions() {
        return checkIfTransactionsExist(true);
     }
@@ -65,7 +88,11 @@ public class Account {
             amount += t.getAmount();
         return amount;
     }
-
+    
+    /**
+     * Returns the {@link Account} type.
+     * @return See above.
+     */
     public int getAccountType() {
         return accountType;
     }
