@@ -32,7 +32,7 @@ public class Account {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
-            transactions.add(new Transaction(amount));
+            transactions.add(new Transaction(amount, DateProvider.getInstance().now()));
         }
     }
     
@@ -44,7 +44,7 @@ public class Account {
 		if (amount <= 0) {
 			throw new IllegalArgumentException("amount must be greater than zero");
 		} else {
-			transactions.add(new Transaction(-amount));
+			transactions.add(new Transaction(-amount, DateProvider.getInstance().now()));
 		}
 	}
 	

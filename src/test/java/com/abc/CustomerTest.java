@@ -1,12 +1,60 @@
 package com.abc;
 
+import static org.junit.Assert.*;
+
 import org.junit.Ignore;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-
 public class CustomerTest {
 
+	@Test
+	public void customerReturnsName()
+	{
+		//Given
+		final String expected = "Hello";
+		
+		//When
+		final Customer customer = new Customer(expected);
+		final String actual = customer.getName();
+		
+		//Then
+		assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void customerReturnsNumberOfAccounts()
+	{
+		//Given
+		final String ignore = "Hello";
+		final int expected = 1;
+		
+		//When
+		final Customer customer = new Customer(ignore);
+		customer.openAccount(new Account(0));
+		final int actual = customer.getNumberOfAccounts();
+		
+		//Then
+		assertEquals(expected, actual);
+	}
+	
+	
+	@Test
+	public void customerNoAccountsReturnsZeroTotalInterestEarned()
+	{
+		//Given
+		final String ignore = "Hello";
+		final double expected = 0;
+		
+		//When
+		final Customer customer = new Customer(ignore);
+		final double actual = customer.totalInterestEarned();
+		
+		//Then
+		assertEquals(expected, actual, 0.0d);
+	}
+	
+	
+	
     @Test //Test customer statement generation
     public void testApp(){
 

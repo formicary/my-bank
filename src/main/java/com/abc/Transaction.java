@@ -15,10 +15,12 @@ public class Transaction {
 	 * 
 	 * @param amount
 	 *            The amount to withdraw-from or deposit-to an {@link Account}.
+	 * @param date
+	 *            The date/time at which the transaction was made.
 	 */
-	public Transaction(double amount) {
+	public Transaction(double amount, Date date) {
 		this.amount = amount;
-		this.transactionDate = DateProvider.getInstance().now();
+		this.transactionDate = date;
 	}
 
 	/**
@@ -35,7 +37,7 @@ public class Transaction {
 	 * 
 	 * @return See above.
 	 */
-	public Date getTransactionDate() {
+	public Date getTime() {
 		return transactionDate;
 	}
 }
