@@ -5,7 +5,6 @@ import static java.lang.Math.abs;
 import java.util.List;
 
 public class CustomerStatement implements IReport {
-
 	private final String customerName;
 	private final List<Account> accounts;
 	

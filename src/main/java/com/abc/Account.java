@@ -7,7 +7,8 @@ import java.util.List;
  * An {@link Account} records any deposits and withdrawals, and interest earned.
  */
 public abstract class Account {
-    public List<Transaction> transactions;
+    private static final String ERROR_MESSAGE_AMOUNT_GREATER_THAN_ZERO = "amount must be greater than zero";
+	public List<Transaction> transactions;
     
     /**
      * Constructs a new {@link Account}.
@@ -35,7 +36,7 @@ public abstract class Account {
      */
     public void deposit(double amount) {
         if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
+            throw new IllegalArgumentException(ERROR_MESSAGE_AMOUNT_GREATER_THAN_ZERO);
         } else {
             transactions.add(new Transaction(amount, DateProvider.getInstance().now()));
         }
@@ -47,7 +48,7 @@ public abstract class Account {
      */
 	public void withdraw(double amount) {
 		if (amount <= 0) {
-			throw new IllegalArgumentException("amount must be greater than zero");
+			throw new IllegalArgumentException(ERROR_MESSAGE_AMOUNT_GREATER_THAN_ZERO);
 		} else {
 			transactions.add(new Transaction(-amount, DateProvider.getInstance().now()));
 		}
