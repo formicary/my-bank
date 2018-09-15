@@ -53,8 +53,9 @@ public class Customer {
      */
     public double totalInterestEarned() {
         double total = 0;
-        for (Account a : accounts)
-            total += a.interestEarned();
+        for (Account account : accounts) {
+            total += account.interestEarned();
+        }
         return total;
     }
     
@@ -63,33 +64,31 @@ public class Customer {
      * @return The statement.
      */
     public String getStatement() {
-        String statement = null;
-        statement = "Statement for " + name + "\n";
+        String statement = "Statement for " + name + "\n";
         double total = 0.0;
-        for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+        for (Account account : accounts) {
+            statement += "\n" + statementForAccount(account) + "\n";
+            total += account.sumTransactions();
         }
         statement += "\nTotal In All Accounts " + toDollars(total);
         return statement;
     }
 
-    private String statementForAccount(Account a) {
+    private String statementForAccount(Account account) {
     	//Translate to pretty account type
-        String s = a.getAccountName() + "\n";;
-        
+        String statement = account.getAccountName() + "\n";;
 
         //Now total up all the transactions
         double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.getAmount() < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.getAmount()) + "\n";
-            total += t.getAmount();
+        for (Transaction transaction : account.transactions) {
+            statement += "  " + (transaction.getAmount() < 0 ? "withdrawal" : "deposit") + " " + toDollars(transaction.getAmount()) + "\n";
+            total += transaction.getAmount();
         }
-        s += "Total " + toDollars(total);
-        return s;
+        statement += "Total " + toDollars(total);
+        return statement;
     }
 
-    private String toDollars(double d){
-        return String.format("$%,.2f", abs(d));
+    private String toDollars(double amount) {
+        return String.format("$%,.2f", abs(amount));
     }
 }

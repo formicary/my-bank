@@ -15,8 +15,9 @@ public class DateProvider {
 	 * @return See above.
 	 */
 	public static DateProvider getInstance() {
-		if (instance == null)
+		if (instance == null) {
 			instance = new DateProvider();
+		}
 		return instance;
 	}
 

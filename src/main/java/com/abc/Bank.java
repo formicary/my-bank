@@ -33,8 +33,9 @@ public class Bank {
 	 */
 	public String customerSummary() {
 		String summary = "Customer Summary";
-		for (Customer c : customers)
-			summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
+		for (Customer customer : customers) {
+			summary += "\n - " + customer.getName() + " (" + format(customer.getNumberOfAccounts(), "account") + ")";
+		}
 		return summary;
 	}
 
@@ -53,23 +54,9 @@ public class Bank {
 	 */
 	public double totalInterestPaid() {
 		double total = 0;
-		for (Customer c : customers)
-			total += c.totalInterestEarned();
-		return total;
-	}
-
-	/**
-	 * Returns the first {@link Customer}.
-	 * 
-	 * @return See above.
-	 */
-	public String getFirstCustomer() {
-		try {
-			customers = null;
-			return customers.get(0).getName();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "Error";
+		for (Customer customer : customers) {
+			total += customer.totalInterestEarned();			
 		}
+		return total;
 	}
 }
