@@ -1,8 +1,10 @@
 package com.abc;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-import org.junit.Ignore;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Test;
 
 public class CustomerTest {
@@ -12,9 +14,10 @@ public class CustomerTest {
 	{
 		//Given
 		final String expected = "Hello";
+		final List<Account> accounts = new ArrayList<Account>();
 		
 		//When
-		final Customer customer = new Customer(expected);
+		final Customer customer = new Customer(expected, accounts);
 		final String actual = customer.getName();
 		
 		//Then
@@ -26,11 +29,12 @@ public class CustomerTest {
 	{
 		//Given
 		final String ignore = "Hello";
+		final List<Account> accounts = new ArrayList<Account>();
+		accounts.add(new SavingsAccount());
 		final int expected = 1;
 		
 		//When
-		final Customer customer = new Customer(ignore);
-		customer.openAccount(new SavingsAccount());
+		final Customer customer = new Customer(ignore, accounts);
 		final int actual = customer.getNumberOfAccounts();
 		
 		//Then
@@ -43,10 +47,11 @@ public class CustomerTest {
 	{
 		//Given
 		final String ignore = "Hello";
+		final List<Account> accounts = new ArrayList<Account>();
 		final double expected = 0;
 		
 		//When
-		final Customer customer = new Customer(ignore);
+		final Customer customer = new Customer(ignore, accounts);
 		final double actual = customer.totalInterestEarned();
 		
 		//Then
@@ -60,8 +65,11 @@ public class CustomerTest {
 
         Account checkingAccount = new CheckingAccount();
         Account savingsAccount = new SavingsAccount();
-
-        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
+        final List<Account> accounts = new ArrayList<Account>();
+        accounts.add(checkingAccount);
+        accounts.add(savingsAccount);
+        
+        Customer henry = new Customer("Henry", accounts);
 
         checkingAccount.deposit(100.0);
         savingsAccount.deposit(4000.0);
@@ -83,23 +91,35 @@ public class CustomerTest {
 
     @Test
     public void testOneAccount(){
-        Customer oscar = new Customer("Oscar").openAccount(new SavingsAccount());
+    	Account savingsAccount = new SavingsAccount();
+    	final List<Account> accounts = new ArrayList<Account>();
+        accounts.add(savingsAccount);
+    	Customer oscar = new Customer("Oscar", accounts);
         assertEquals(1, oscar.getNumberOfAccounts());
     }
 
     @Test
     public void testTwoAccount(){
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new SavingsAccount());
-        oscar.openAccount(new CheckingAccount());
+    	Account checkingAccount = new CheckingAccount();
+        Account savingsAccount = new SavingsAccount();
+        final List<Account> accounts = new ArrayList<Account>();
+        accounts.add(checkingAccount);
+        accounts.add(savingsAccount);
+    	Customer oscar = new Customer("Oscar", accounts);
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
-    @Ignore
+    @Test
     public void testThreeAcounts() {
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new SavingsAccount());
-        oscar.openAccount(new CheckingAccount());
+    	Account checkingAccount = new CheckingAccount();
+        Account savingsAccount = new SavingsAccount();
+        Account maxiSavingsAccount = new MaxiSavingsAccount();
+        
+        final List<Account> accounts = new ArrayList<Account>();
+        accounts.add(checkingAccount);
+        accounts.add(savingsAccount);
+        accounts.add(maxiSavingsAccount);
+    	Customer oscar = new Customer("Oscar", accounts);
         assertEquals(3, oscar.getNumberOfAccounts());
     }
 }

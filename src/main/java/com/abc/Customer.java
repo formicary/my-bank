@@ -1,22 +1,22 @@
 package com.abc;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * A {@link Customer} represents a customer of the {@link Bank}.
  */
 public class Customer {
-    private String name;
-    private List<Account> accounts;
+    private final String name;
+    private final List<Account> accounts;
     
     /**
      * Constructs a {@link Customer}.
      * @param name The name of the customer.
+     * @param accounts The customer's accounts.
      */
-    public Customer(String name) {
+    public Customer(String name, List<Account> accounts) {
         this.name = name;
-        this.accounts = new ArrayList<Account>();
+		this.accounts = accounts;
     }
     
     /**
@@ -25,16 +25,6 @@ public class Customer {
      */
     public String getName() {
         return name;
-    }
-    
-    /**
-     * Opens the specified {@link Account} for this {@link Customer}.
-     * @param account The account to open.
-     * @return This {@link Customer}.
-     */
-    public Customer openAccount(Account account) {
-        accounts.add(account);
-        return this;
     }
 
     /**

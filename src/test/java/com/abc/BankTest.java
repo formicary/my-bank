@@ -1,8 +1,8 @@
 package com.abc;
 
-import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
 
 public class BankTest {
     private static final double DOUBLE_DELTA = 1e-15;
@@ -10,9 +10,9 @@ public class BankTest {
     @Test
     public void customerSummary() {
         Bank bank = new Bank();
-        Customer john = new Customer("John");
-        john.openAccount(new CheckingAccount());
-        bank.addCustomer(john);
+        
+        final Customer customer = bank.addCustomer("John");
+        bank.openAccount(customer.getName(), new CheckingAccount());
 
         assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
     }
@@ -21,19 +21,19 @@ public class BankTest {
     public void checkingAccount() {
         Bank bank = new Bank();
         Account checkingAccount = new CheckingAccount();
-        Customer bill = new Customer("Bill").openAccount(checkingAccount);
-        bank.addCustomer(bill);
-
+        Customer customer = bank.addCustomer("Bill");
+        bank.openAccount(customer.getName(), checkingAccount);
         checkingAccount.deposit(100.0);
 
         assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
-    public void savings_account() {
+    public void savingsAccount() {
         Bank bank = new Bank();
         Account checkingAccount = new SavingsAccount();
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+        Customer customer = bank.addCustomer("Bill");
+        bank.openAccount(customer.getName(), checkingAccount);
 
         checkingAccount.deposit(1500.0);
 
@@ -41,10 +41,11 @@ public class BankTest {
     }
 
     @Test
-    public void maxi_savings_account() {
+    public void maxiSavingsAccount() {
         Bank bank = new Bank();
         Account checkingAccount = new MaxiSavingsAccount();
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+        Customer customer = bank.addCustomer("Bill");
+        bank.openAccount(customer.getName(), checkingAccount);
 
         checkingAccount.deposit(3000.0);
 
