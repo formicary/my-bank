@@ -1,78 +1,57 @@
 package com.abc;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Math.abs;
-
+/**
+ * A {@link Customer} represents a customer of the {@link Bank}.
+ */
 public class Customer {
-    private String name;
-    private List<Account> accounts;
-
-    public Customer(String name) {
+    private final String name;
+    private final List<Account> accounts;
+    
+    /**
+     * Constructs a {@link Customer}.
+     * @param name The name of the customer.
+     * @param accounts The customer's accounts.
+     */
+    public Customer(String name, List<Account> accounts) {
         this.name = name;
-        this.accounts = new ArrayList<Account>();
+		this.accounts = accounts;
     }
-
+    
+    /**
+     * Gets the name of the {@link Customer}.
+     * @return See above.
+     */
     public String getName() {
         return name;
     }
 
-    public Customer openAccount(Account account) {
-        accounts.add(account);
-        return this;
-    }
-
+    /**
+     * Returns the number of accounts the {@link Customer} has open.
+     * @return See above.
+     */
     public int getNumberOfAccounts() {
         return accounts.size();
     }
-
+    
+    /**
+     * Calculates the total interest for the {@link Customer} across all of the {@link Account}'s.
+     * @return Total Interest.
+     */
     public double totalInterestEarned() {
         double total = 0;
-        for (Account a : accounts)
-            total += a.interestEarned();
+        for (Account account : accounts) {
+            total += account.interestEarned();
+        }
         return total;
     }
-
+    
+    /**
+     * Creates a statement for the {@link Customer} across all of the {@link Account}'s.
+     * @return The statement.
+     */
     public String getStatement() {
-        String statement = null;
-        statement = "Statement for " + name + "\n";
-        double total = 0.0;
-        for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
-        }
-        statement += "\nTotal In All Accounts " + toDollars(total);
-        return statement;
-    }
-
-    private String statementForAccount(Account a) {
-        String s = "";
-
-       //Translate to pretty account type
-        switch(a.getAccountType()){
-            case Account.CHECKING:
-                s += "Checking Account\n";
-                break;
-            case Account.SAVINGS:
-                s += "Savings Account\n";
-                break;
-            case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
-                break;
-        }
-
-        //Now total up all the transactions
-        double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
-        }
-        s += "Total " + toDollars(total);
-        return s;
-    }
-
-    private String toDollars(double d){
-        return String.format("$%,.2f", abs(d));
+        return new CustomerStatement(name, accounts).build();
     }
 }

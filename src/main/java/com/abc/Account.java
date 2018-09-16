@@ -3,71 +3,104 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Account {
-
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
-
-    private final int accountType;
-    public List<Transaction> transactions;
-
-    public Account(int accountType) {
-        this.accountType = accountType;
-        this.transactions = new ArrayList<Transaction>();
+/**
+ * An {@link Account} records any deposits and withdrawals, and interest earned.
+ */
+public abstract class Account {
+    private static final String ERROR_MESSAGE_AMOUNT_GREATER_THAN_ZERO = "amount must be greater than zero";
+	private List<Transaction> transactions;
+	private final String accountNumber;
+	private ICurrentTimeProvider currentTimeProvider;
+    
+    /**
+     * Constructs a new {@link Account}.
+     * @param accountType The account type.
+     */
+    public Account(String accountNumber) {
+        this.accountNumber = accountNumber;
+		this.transactions = new ArrayList<Transaction>();
     }
-
+    
+	/**
+	 * Calculates the interest earned by an {@link Account}.
+	 * @return The interest earned.
+	 */
+    public abstract double interestEarned();
+    
+    /**
+     * Returns the name of the account type.
+     * @return See above.
+     */
+    public abstract String getAccountName();
+    
+    public void setCurrentTimeProvider(ICurrentTimeProvider currentTimeProvider) {
+		this.currentTimeProvider = currentTimeProvider;
+	}
+    
+    public ICurrentTimeProvider getCurrentTimeProvider() {
+		return currentTimeProvider;
+	}
+    
+    /**
+     * Deposits money into the {@link Account}.
+     * @param amount The amount of money to deposit.
+     */
     public void deposit(double amount) {
         if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
+            throw new IllegalArgumentException(ERROR_MESSAGE_AMOUNT_GREATER_THAN_ZERO);
         } else {
-            transactions.add(new Transaction(amount));
+            transactions.add(new Transaction(amount, currentTimeProvider.now()));
         }
     }
-
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
-    }
-}
-
-    public double interestEarned() {
-        double amount = sumTransactions();
-        switch(accountType){
-            case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
-            case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
-            default:
-                return amount * 0.001;
-        }
-    }
-
-    public double sumTransactions() {
-       return checkIfTransactionsExist(true);
-    }
-
-    private double checkIfTransactionsExist(boolean checkAll) {
-        double amount = 0.0;
-        for (Transaction t: transactions)
-            amount += t.amount;
-        return amount;
-    }
-
-    public int getAccountType() {
-        return accountType;
-    }
-
+    
+    /**
+     * Withdraws money from the {@link Account}.
+     * @param amount The amount of money to withdraw.
+     */
+	public void withdraw(double amount) {
+		if (amount <= 0) {
+			throw new IllegalArgumentException(ERROR_MESSAGE_AMOUNT_GREATER_THAN_ZERO);
+		} else {
+			transactions.add(new Transaction(-amount, currentTimeProvider.now()));
+		}
+	}
+	
+    /**
+     * Sums the transactions of the {@link Account}.
+     * @return the sum of the transactions.
+     */
+	public double sumTransactions() {
+		double amount = 0.0;
+		for (Transaction transaction : transactions) {
+			amount += transaction.getAmount();	
+		}
+		return amount;
+	}
+	
+	/**
+	 * Returns the account number of the {@link Account}.
+	 * @return See above.
+	 */
+	public String getAccountNumber() {
+		return accountNumber;
+	}
+	
+	/**
+	 * Returns all of the transactions of the {@link Account}.
+	 * @return See above.
+	 */
+	public List<Transaction> getTransactions() {
+		return transactions;
+	}
+	
+	/**
+	 * Calculates the daily interest rate using the annum interest rate.
+	 * @param interestRate The annum interest rate.
+	 * @return The daily interest rate.
+	 */
+	protected double calcualteDailyInerestRate(double interestRate) {
+		double dayToYearRatio = 1d/365d;
+		double dailyInterestRate = (Math.pow(1.0d + interestRate, dayToYearRatio) - 1) * 100;
+		return dailyInterestRate;
+	}
 }

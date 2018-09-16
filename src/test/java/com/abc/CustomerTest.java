@@ -1,19 +1,79 @@
 package com.abc;
 
-import org.junit.Ignore;
-import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.Test;
 
 public class CustomerTest {
 
-    @Test //Test customer statement generation
-    public void testApp(){
+	private static final String ACCOUNT_NUMBER_1 = "ABC";
+	private static final String ACCOUNT_NUMBER_2 = "DEF";
+	private static final String ACCOUNT_NUMBER_3 = "GHI";
+	
+	@Test
+	public void customerReturnsName()
+	{
+		//Given
+		final String expected = "Hello";
+		final List<Account> accounts = new ArrayList<Account>();
+		
+		//When
+		final Customer customer = new Customer(expected, accounts);
+		final String actual = customer.getName();
+		
+		//Then
+		assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void customerReturnsNumberOfAccounts()
+	{
+		//Given
+		final String ignore = "Hello";
+		final List<Account> accounts = new ArrayList<Account>();
+		accounts.add(AccountsTestHelper.createSavingsAccount(ACCOUNT_NUMBER_1));
+		final int expected = 1;
+		
+		//When
+		final Customer customer = new Customer(ignore, accounts);
+		final int actual = customer.getNumberOfAccounts();
+		
+		//Then
+		assertEquals(expected, actual);
+	}
+	
+	
+	@Test
+	public void customerNoAccountsReturnsZeroTotalInterestEarned()
+	{
+		//Given
+		final String ignore = "Hello";
+		final List<Account> accounts = new ArrayList<Account>();
+		final double expected = 0;
+		
+		//When
+		final Customer customer = new Customer(ignore, accounts);
+		final double actual = customer.totalInterestEarned();
+		
+		//Then
+		assertEquals(expected, actual, 0.0d);
+	}
+	
+	
+	
+    @Test
+    public void customerStatementGeneration(){
 
-        Account checkingAccount = new Account(Account.CHECKING);
-        Account savingsAccount = new Account(Account.SAVINGS);
-
-        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
+        Account checkingAccount = AccountsTestHelper.createCheckingAcount(ACCOUNT_NUMBER_1);
+        Account savingsAccount = AccountsTestHelper.createSavingsAccount(ACCOUNT_NUMBER_2);
+        final List<Account> accounts = new ArrayList<Account>();
+        accounts.add(checkingAccount);
+        accounts.add(savingsAccount);
+        
+        Customer henry = new Customer("Henry", accounts);
 
         checkingAccount.deposit(100.0);
         savingsAccount.deposit(4000.0);
@@ -35,23 +95,35 @@ public class CustomerTest {
 
     @Test
     public void testOneAccount(){
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
+    	Account savingsAccount = AccountsTestHelper.createSavingsAccount(ACCOUNT_NUMBER_1);
+    	final List<Account> accounts = new ArrayList<Account>();
+        accounts.add(savingsAccount);
+    	Customer oscar = new Customer("Oscar", accounts);
         assertEquals(1, oscar.getNumberOfAccounts());
     }
 
     @Test
     public void testTwoAccount(){
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
+    	Account checkingAccount = AccountsTestHelper.createCheckingAcount(ACCOUNT_NUMBER_1);
+        Account savingsAccount = AccountsTestHelper.createSavingsAccount(ACCOUNT_NUMBER_2);
+        final List<Account> accounts = new ArrayList<Account>();
+        accounts.add(checkingAccount);
+        accounts.add(savingsAccount);
+    	Customer oscar = new Customer("Oscar", accounts);
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
-    @Ignore
+    @Test
     public void testThreeAcounts() {
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
+    	Account checkingAccount = AccountsTestHelper.createCheckingAcount(ACCOUNT_NUMBER_1);
+        Account savingsAccount = AccountsTestHelper.createSavingsAccount(ACCOUNT_NUMBER_2);
+        Account maxiSavingsAccount = AccountsTestHelper.createMaxiSavingsAccount(ACCOUNT_NUMBER_3);
+        
+        final List<Account> accounts = new ArrayList<Account>();
+        accounts.add(checkingAccount);
+        accounts.add(savingsAccount);
+        accounts.add(maxiSavingsAccount);
+    	Customer oscar = new Customer("Oscar", accounts);
         assertEquals(3, oscar.getNumberOfAccounts());
     }
 }
