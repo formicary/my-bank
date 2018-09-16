@@ -64,8 +64,8 @@ public class CustomerTest {
 	
 	
 	
-    @Test //Test customer statement generation
-    public void testApp(){
+    @Test
+    public void customerStatementGeneration(){
 
         Account checkingAccount = AccountsTestHelper.createCheckingAcount(ACCOUNT_NUMBER_1);
         Account savingsAccount = AccountsTestHelper.createSavingsAccount(ACCOUNT_NUMBER_2);

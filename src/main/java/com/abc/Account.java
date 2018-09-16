@@ -76,15 +76,28 @@ public abstract class Account {
 		}
 		return amount;
 	}
-
+	
+	/**
+	 * Returns the account number of the {@link Account}.
+	 * @return See above.
+	 */
 	public String getAccountNumber() {
 		return accountNumber;
 	}
-
+	
+	/**
+	 * Returns all of the transactions of the {@link Account}.
+	 * @return See above.
+	 */
 	public List<Transaction> getTransactions() {
 		return transactions;
 	}
-
+	
+	/**
+	 * Calculates the daily interest rate using the annum interest rate.
+	 * @param interestRate The annum interest rate.
+	 * @return The daily interest rate.
+	 */
 	protected double calcualteDailyInerestRate(double interestRate) {
 		double dayToYearRatio = 1d/365d;
 		double dailyInterestRate = (Math.pow(1.0d + interestRate, dayToYearRatio) - 1) * 100;
