@@ -30,7 +30,7 @@ public class CustomerStatement implements IReport {
 
         //Now total up all the transactions
         double total = 0.0;
-        for (Transaction transaction : account.transactions) {
+        for (Transaction transaction : account.getTransactions()) {
             statement += "  " + (transaction.getAmount() < 0 ? "withdrawal" : "deposit") + " " + toDollars(transaction.getAmount()) + "\n";
             total += transaction.getAmount();
         }

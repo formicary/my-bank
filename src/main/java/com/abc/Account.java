@@ -8,7 +8,7 @@ import java.util.List;
  */
 public abstract class Account {
     private static final String ERROR_MESSAGE_AMOUNT_GREATER_THAN_ZERO = "amount must be greater than zero";
-	public List<Transaction> transactions;
+	private List<Transaction> transactions;
 	private final String accountNumber;
     
     /**
@@ -70,5 +70,9 @@ public abstract class Account {
 
 	public String getAccountNumber() {
 		return accountNumber;
+	}
+
+	public List<Transaction> getTransactions() {
+		return transactions;
 	}
 }
