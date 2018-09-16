@@ -63,7 +63,7 @@ public class CustomerTest {
         assertEquals(3, oscar.getNumberOfAccounts());
     }
     
-    @Ignore
+    @Test
     public void testTransfer() {
     	Account checkingAccount = new Account(Account.CHECKING);
         Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);

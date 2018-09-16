@@ -32,6 +32,17 @@ public class Account {
 	        transactions.add(new Transaction(-amount));
 	    }
 	}
+	
+	public void transfer(double amount, Account account) {
+		// Money goes from the account the transfer method is called on
+		// and moved to the account specified in the method parameters.
+		if (amount <= 0) {
+			throw new IllegalArgumentException("amount must be greater than zero");
+		} else {
+			account.transactions.add(new Transaction(amount));
+			transactions.add(new Transaction(-amount));
+		}
+	}
 
     public double interestEarned() {
         double amount = sumTransactions();
