@@ -10,6 +10,7 @@ public abstract class Account {
     private static final String ERROR_MESSAGE_AMOUNT_GREATER_THAN_ZERO = "amount must be greater than zero";
 	private List<Transaction> transactions;
 	private final String accountNumber;
+	private ICurrentTimeProvider currentTimeProvider;
     
     /**
      * Constructs a new {@link Account}.
@@ -32,6 +33,14 @@ public abstract class Account {
      */
     public abstract String getAccountName();
     
+    public void setCurrentTimeProvider(ICurrentTimeProvider currentTimeProvider) {
+		this.currentTimeProvider = currentTimeProvider;
+	}
+    
+    public ICurrentTimeProvider getCurrentTimeProvider() {
+		return currentTimeProvider;
+	}
+    
     /**
      * Deposits money into the {@link Account}.
      * @param amount The amount of money to deposit.
@@ -40,7 +49,7 @@ public abstract class Account {
         if (amount <= 0) {
             throw new IllegalArgumentException(ERROR_MESSAGE_AMOUNT_GREATER_THAN_ZERO);
         } else {
-            transactions.add(new Transaction(amount, DateProvider.getInstance().now()));
+            transactions.add(new Transaction(amount, currentTimeProvider.now()));
         }
     }
     
@@ -52,7 +61,7 @@ public abstract class Account {
 		if (amount <= 0) {
 			throw new IllegalArgumentException(ERROR_MESSAGE_AMOUNT_GREATER_THAN_ZERO);
 		} else {
-			transactions.add(new Transaction(-amount, DateProvider.getInstance().now()));
+			transactions.add(new Transaction(-amount, currentTimeProvider.now()));
 		}
 	}
 	

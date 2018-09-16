@@ -16,7 +16,7 @@ public class BankTest {
         Bank bank = new Bank();
         
         final Customer customer = bank.addCustomer("John");
-        bank.openAccount(customer.getName(), new CheckingAccount(ACCOUNT_NUMBER_1));
+        bank.openAccount(customer.getName(), AccountsTestHelper.createCheckingAcount(ACCOUNT_NUMBER_1));
 
         assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
     }
@@ -24,7 +24,7 @@ public class BankTest {
     @Test
     public void checkingAccount() {
         Bank bank = new Bank();
-        Account checkingAccount = new CheckingAccount(ACCOUNT_NUMBER_1);
+        Account checkingAccount = AccountsTestHelper.createCheckingAcount(ACCOUNT_NUMBER_1);
         Customer customer = bank.addCustomer(CUSTOMER_NAME);
         bank.openAccount(customer.getName(), checkingAccount);
         checkingAccount.deposit(100.0);
@@ -35,7 +35,7 @@ public class BankTest {
     @Test
     public void savingsAccount() {
         Bank bank = new Bank();
-        Account checkingAccount = new SavingsAccount(ACCOUNT_NUMBER_1);
+        Account checkingAccount = AccountsTestHelper.createSavingsAccount(ACCOUNT_NUMBER_1);
         Customer customer = bank.addCustomer(CUSTOMER_NAME);
         bank.openAccount(customer.getName(), checkingAccount);
 
@@ -47,7 +47,7 @@ public class BankTest {
     @Test
     public void maxiSavingsAccount() {
         Bank bank = new Bank();
-        Account checkingAccount = new MaxiSavingsAccount(ACCOUNT_NUMBER_1);
+        Account checkingAccount = AccountsTestHelper.createMaxiSavingsAccount(ACCOUNT_NUMBER_1);
         Customer customer = bank.addCustomer(CUSTOMER_NAME);
         bank.openAccount(customer.getName(), checkingAccount);
 
@@ -60,8 +60,8 @@ public class BankTest {
     public void transferBetweenAccounts() {
     	//Given
     	Bank bank = new Bank();
-    	Account from = new CheckingAccount(ACCOUNT_NUMBER_1);
-		Account to = new SavingsAccount(ACCOUNT_NUMBER_2);
+    	Account from = AccountsTestHelper.createCheckingAcount(ACCOUNT_NUMBER_1);
+		Account to = AccountsTestHelper.createSavingsAccount(ACCOUNT_NUMBER_2);
 		double amount = 100.00;		
 		from.deposit(amount);
 		
@@ -78,8 +78,8 @@ public class BankTest {
     	//Given
     	Bank bank = new Bank();
     	Customer customer = bank.addCustomer(CUSTOMER_NAME);
-    	Account from = new CheckingAccount(ACCOUNT_NUMBER_1);
-		Account to = new SavingsAccount(ACCOUNT_NUMBER_2);
+    	Account from = AccountsTestHelper.createCheckingAcount(ACCOUNT_NUMBER_1);
+		Account to = AccountsTestHelper.createSavingsAccount(ACCOUNT_NUMBER_2);
 		double amount = 100.00;		
 		from.deposit(amount);
         bank.openAccount(customer.getName(), from);
@@ -100,8 +100,8 @@ public class BankTest {
     	final Customer customer = bank.addCustomer(CUSTOMER_NAME);
 		final double amount = 100.00;		
 		final String noneCustomer = "John";
-        bank.openAccount(customer.getName(), new CheckingAccount(ACCOUNT_NUMBER_1));
-        bank.openAccount(customer.getName(), new CheckingAccount(ACCOUNT_NUMBER_2));
+        bank.openAccount(customer.getName(), AccountsTestHelper.createCheckingAcount(ACCOUNT_NUMBER_1));
+        bank.openAccount(customer.getName(), AccountsTestHelper.createCheckingAcount(ACCOUNT_NUMBER_2));
 
         try {
         	//When
@@ -122,8 +122,8 @@ public class BankTest {
     	final Customer customer = bank.addCustomer(CUSTOMER_NAME);
 		final double amount = 100.00;		
 		final String noneAccountNumber = "John";
-        bank.openAccount(customer.getName(), new CheckingAccount(ACCOUNT_NUMBER_1));
-        bank.openAccount(customer.getName(), new CheckingAccount(ACCOUNT_NUMBER_2));
+        bank.openAccount(customer.getName(), AccountsTestHelper.createCheckingAcount(ACCOUNT_NUMBER_1));
+        bank.openAccount(customer.getName(), AccountsTestHelper.createCheckingAcount(ACCOUNT_NUMBER_2));
 
         try {
         	//When
@@ -144,8 +144,8 @@ public class BankTest {
     	final Customer customer = bank.addCustomer(CUSTOMER_NAME);
 		final double amount = 100.00;		
 		final String noneAccountNumber = "John";
-        bank.openAccount(customer.getName(), new CheckingAccount(ACCOUNT_NUMBER_1));
-        bank.openAccount(customer.getName(), new CheckingAccount(ACCOUNT_NUMBER_2));
+        bank.openAccount(customer.getName(), AccountsTestHelper.createCheckingAcount(ACCOUNT_NUMBER_1));
+        bank.openAccount(customer.getName(), AccountsTestHelper.createCheckingAcount(ACCOUNT_NUMBER_2));
 
         try {
         	//When

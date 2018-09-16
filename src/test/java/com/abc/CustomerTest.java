@@ -34,7 +34,7 @@ public class CustomerTest {
 		//Given
 		final String ignore = "Hello";
 		final List<Account> accounts = new ArrayList<Account>();
-		accounts.add(new SavingsAccount(ACCOUNT_NUMBER_1));
+		accounts.add(AccountsTestHelper.createSavingsAccount(ACCOUNT_NUMBER_1));
 		final int expected = 1;
 		
 		//When
@@ -67,8 +67,8 @@ public class CustomerTest {
     @Test //Test customer statement generation
     public void testApp(){
 
-        Account checkingAccount = new CheckingAccount(ACCOUNT_NUMBER_1);
-        Account savingsAccount = new SavingsAccount(ACCOUNT_NUMBER_2);
+        Account checkingAccount = AccountsTestHelper.createCheckingAcount(ACCOUNT_NUMBER_1);
+        Account savingsAccount = AccountsTestHelper.createSavingsAccount(ACCOUNT_NUMBER_2);
         final List<Account> accounts = new ArrayList<Account>();
         accounts.add(checkingAccount);
         accounts.add(savingsAccount);
@@ -95,7 +95,7 @@ public class CustomerTest {
 
     @Test
     public void testOneAccount(){
-    	Account savingsAccount = new SavingsAccount(ACCOUNT_NUMBER_1);
+    	Account savingsAccount = AccountsTestHelper.createSavingsAccount(ACCOUNT_NUMBER_1);
     	final List<Account> accounts = new ArrayList<Account>();
         accounts.add(savingsAccount);
     	Customer oscar = new Customer("Oscar", accounts);
@@ -104,8 +104,8 @@ public class CustomerTest {
 
     @Test
     public void testTwoAccount(){
-    	Account checkingAccount = new CheckingAccount(ACCOUNT_NUMBER_1);
-        Account savingsAccount = new SavingsAccount(ACCOUNT_NUMBER_2);
+    	Account checkingAccount = AccountsTestHelper.createCheckingAcount(ACCOUNT_NUMBER_1);
+        Account savingsAccount = AccountsTestHelper.createSavingsAccount(ACCOUNT_NUMBER_2);
         final List<Account> accounts = new ArrayList<Account>();
         accounts.add(checkingAccount);
         accounts.add(savingsAccount);
@@ -115,9 +115,9 @@ public class CustomerTest {
 
     @Test
     public void testThreeAcounts() {
-    	Account checkingAccount = new CheckingAccount(ACCOUNT_NUMBER_1);
-        Account savingsAccount = new SavingsAccount(ACCOUNT_NUMBER_2);
-        Account maxiSavingsAccount = new MaxiSavingsAccount(ACCOUNT_NUMBER_3);
+    	Account checkingAccount = AccountsTestHelper.createCheckingAcount(ACCOUNT_NUMBER_1);
+        Account savingsAccount = AccountsTestHelper.createSavingsAccount(ACCOUNT_NUMBER_2);
+        Account maxiSavingsAccount = AccountsTestHelper.createMaxiSavingsAccount(ACCOUNT_NUMBER_3);
         
         final List<Account> accounts = new ArrayList<Account>();
         accounts.add(checkingAccount);

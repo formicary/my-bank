@@ -1,6 +1,6 @@
 package com.abc;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 /**
  * A {@link Transaction} specifies an amount that is withdrawn-from or
@@ -8,7 +8,7 @@ import java.util.Date;
  */
 public class Transaction {
 	private final double amount;
-	private final Date transactionDate;
+	private final LocalDate transactionDate;
 
 	/**
 	 * Constructs a new {@link Transaction}.
@@ -18,7 +18,7 @@ public class Transaction {
 	 * @param date
 	 *            The date/time at which the transaction was made.
 	 */
-	public Transaction(double amount, Date date) {
+	public Transaction(double amount, LocalDate date) {
 		this.amount = amount;
 		this.transactionDate = date;
 	}
@@ -37,7 +37,15 @@ public class Transaction {
 	 * 
 	 * @return See above.
 	 */
-	public Date getTime() {
+	public LocalDate getTime() {
 		return transactionDate;
+	}
+	
+	/**
+	 * Returns true if it is a withdrawal otherwise false.
+	 * @return See above.
+	 */
+	public boolean isWithdrawal() {
+		return amount < 0;
 	}
 }

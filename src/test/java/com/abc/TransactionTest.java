@@ -2,8 +2,7 @@ package com.abc;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
 
 import org.junit.Test;
 
@@ -13,7 +12,7 @@ public class TransactionTest {
     public void transactionReturnsAmount() {
     	//Given
     	final int expected = 5;
-    	final Date ignore = DateProvider.getInstance().now();
+    	final LocalDate ignore = null;
         
     	// When
 		final Transaction transaction = new Transaction(expected, ignore);
@@ -26,12 +25,12 @@ public class TransactionTest {
     @Test
     public void transactionReturnsTransactionTime() {
     	//Given
-    	final Date expected = Calendar.getInstance().getTime();
+    	final LocalDate expected = LocalDate.now();
     	final int ignore = 0;
         
     	// When
 		final Transaction transaction = new Transaction(ignore, expected);
-		final Date actual = transaction.getTime();
+		final LocalDate actual = transaction.getTime();
 		
 		// Then
 		assertEquals(expected, actual);

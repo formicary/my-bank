@@ -1,5 +1,7 @@
 package com.abc;
 
+import java.time.LocalDate;
+
 /**
  * A Checking Account.
  * <p>
@@ -7,6 +9,8 @@ package com.abc;
  * withdrawals in the past 10 days otherwise 0.1%
  */
 public class MaxiSavingsAccount extends Account {
+	private static final int FIVE_PERCENT_AFTER_DAYS_COUNT = 10;
+
 	public MaxiSavingsAccount(String accountNumber) {
 		super(accountNumber);
 	}
@@ -16,15 +20,26 @@ public class MaxiSavingsAccount extends Account {
 	 */
 	public double interestEarned() {
 		double amount = sumTransactions();
-		if (amount <= 1000) {
-			return amount * 0.02;
+		final boolean withdrawlWith10Days = noWithdrawalsWithDays(FIVE_PERCENT_AFTER_DAYS_COUNT);
+		double interest = 0.05;
+		if (withdrawlWith10Days) {
+			interest = 0.001;
 		}
-		if (amount <= 2000) {
-			return 20 + (amount - 1000) * 0.05;
-		}
-		return 70 + (amount - 2000) * 0.1;
+		return amount * interest;
 	}
 
+	private boolean noWithdrawalsWithDays(int days) {
+		final LocalDate now = getCurrentTimeProvider().now();
+		final LocalDate dateBeforeDays = now.minusDays(days + 1);
+		boolean withdrawlWIthinDays = false;
+		for (Transaction transaction : getTransactions()) {
+			if (transaction.getTime().isAfter(dateBeforeDays)) {
+				withdrawlWIthinDays = true;
+			}
+		}
+		return withdrawlWIthinDays;
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
