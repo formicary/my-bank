@@ -12,12 +12,15 @@ public class CustomerTest {
 
         Account checkingAccount = new Account(Account.CHECKING);
         Account savingsAccount = new Account(Account.SAVINGS);
+        Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
 
-        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
+        Customer henry = new Customer("Henry").openAccount(checkingAccount)
+        		.openAccount(savingsAccount).openAccount(maxiSavingsAccount);
 
         checkingAccount.deposit(100.0);
         savingsAccount.deposit(4000.0);
         savingsAccount.withdraw(200.0);
+        maxiSavingsAccount.deposit(2000.0);
 
         assertEquals("Statement for Henry\n" +
                 "\n" +
@@ -30,7 +33,11 @@ public class CustomerTest {
                 "  withdrawal $200.00\n" +
                 "Total $3,800.00\n" +
                 "\n" +
-                "Total In All Accounts $3,900.00", henry.getStatement());
+                "Maxi Savings Account\n" +
+                "  deposit $2,000.00\n" +
+                "Total $2,000.00\n" +
+                "\n" +
+                "Total In All Accounts $5,900.00", henry.getStatement());
     }
 
     @Test
