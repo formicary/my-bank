@@ -65,7 +65,18 @@ public class Customer {
         //Now total up all the transactions
         double total = 0.0;
         for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
+            int transactionType = t.getTransactionType();
+            switch (transactionType) {
+            	case Transaction.DEPOSIT:
+            		s += "  deposit " + toDollars(t.amount) + "\n";
+            		break;
+            	case Transaction.WITHDRAW:
+            		s += "  withdrawal " + toDollars(t.amount) + "\n";
+            		break;
+            	case Transaction.TRANSFER:
+            		s += "  transfer " + toDollars(t.amount) + "\n";
+            		break;
+            }
             total += t.amount;
         }
         s += "Total " + toDollars(total);

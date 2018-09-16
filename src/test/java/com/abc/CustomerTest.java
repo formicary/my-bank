@@ -21,6 +21,7 @@ public class CustomerTest {
         savingsAccount.deposit(4000.0);
         savingsAccount.withdraw(200.0);
         maxiSavingsAccount.deposit(2000.0);
+        savingsAccount.transfer(1000.0, maxiSavingsAccount);
 
         assertEquals("Statement for Henry\n" +
                 "\n" +
@@ -31,11 +32,13 @@ public class CustomerTest {
                 "Savings Account\n" +
                 "  deposit $4,000.00\n" +
                 "  withdrawal $200.00\n" +
-                "Total $3,800.00\n" +
+                "  transfer $1,000.00\n" +
+                "Total $2,800.00\n" +
                 "\n" +
                 "Maxi Savings Account\n" +
                 "  deposit $2,000.00\n" +
-                "Total $2,000.00\n" +
+                "  transfer $1,000.00\n" +
+                "Total $3,000.00\n" +
                 "\n" +
                 "Total In All Accounts $5,900.00", henry.getStatement());
     }
