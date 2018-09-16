@@ -14,9 +14,11 @@ public class CheckingAccount extends Account
 	 */
     public double interestEarned() {
         double amount = sumTransactions();
-        return amount * 0.001;
+        double interestRate = 0.001d;
+		double dailyInterestRate = calcualteDailyInerestRate(interestRate);
+		return amount * dailyInterestRate; 
     }
-    
+
 	/**
 	 * {@inheritDoc}
 	 */

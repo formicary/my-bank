@@ -2,8 +2,8 @@ package com.abc;
 
 public class AccountsTestHelper 
 {
-    public static CheckingAccount createCheckingAcount(String accountNumber) {
-    	final CheckingAccount checkingAccount = new CheckingAccount(accountNumber);
+    public static Account createCheckingAcount(String accountNumber) {
+    	final Account checkingAccount = new CheckingAccount(accountNumber);
     	checkingAccount.setCurrentTimeProvider(new CurrentTimeProvider());
 		return checkingAccount;
     }

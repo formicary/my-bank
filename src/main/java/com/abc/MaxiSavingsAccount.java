@@ -21,9 +21,9 @@ public class MaxiSavingsAccount extends Account {
 	public double interestEarned() {
 		double amount = sumTransactions();
 		final boolean withdrawlWith10Days = noWithdrawalsWithDays(FIVE_PERCENT_AFTER_DAYS_COUNT);
-		double interest = 0.05;
+		double interest = calcualteDailyInerestRate(0.05);
 		if (withdrawlWith10Days) {
-			interest = 0.001;
+			interest = calcualteDailyInerestRate(0.001);
 		}
 		return amount * interest;
 	}

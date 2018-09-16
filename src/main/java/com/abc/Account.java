@@ -84,4 +84,10 @@ public abstract class Account {
 	public List<Transaction> getTransactions() {
 		return transactions;
 	}
+
+	protected double calcualteDailyInerestRate(double interestRate) {
+		double dayToYearRatio = 1d/365d;
+		double dailyInterestRate = (Math.pow(1.0d + interestRate, dayToYearRatio) - 1) * 100;
+		return dailyInterestRate;
+	}
 }

@@ -12,7 +12,7 @@ public class SavingsAccountTest {
 	public void interestEarnedOnLessThan1000ReturnsInterest()
 	{
 		//Given
-		double expected = 0.1;
+		double expected = 0.027;
 		
 		//When
 		SavingsAccount savingsAccount = AccountsTestHelper.createSavingsAccount(ACCOUNT_NUMBER);
@@ -20,14 +20,14 @@ public class SavingsAccountTest {
 		double actual = savingsAccount.interestEarned();
 		
 		//Then
-		assertEquals(expected, actual, 0.0d);
+		assertEquals(expected, actual, 0.001d);
 	}
 	
 	@Test
 	public void interestEarnedOnGreaterThan1000ReturnsInterest()
 	{
 		//Given
-		double expected = 19.0d;
+		double expected = 5.927d;
 		
 		//When
 		SavingsAccount savingsAccount = AccountsTestHelper.createSavingsAccount(ACCOUNT_NUMBER);
@@ -35,6 +35,6 @@ public class SavingsAccountTest {
 		double actual = savingsAccount.interestEarned();
 		
 		//Then
-		assertEquals(expected, actual, 0.0d);
+		assertEquals(expected, actual, 0.001d);
 	}
 }

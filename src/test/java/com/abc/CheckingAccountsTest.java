@@ -9,14 +9,14 @@ public class CheckingAccountsTest {
 	public void interestEarnedReturnsInterest()
 	{
 		//Given
-		double expected = 0.1;
+		double expected = 0.027;
 		
 		//When
-		CheckingAccount checkingAccount = AccountsTestHelper.createCheckingAcount("ABC");
+		Account checkingAccount = AccountsTestHelper.createCheckingAcount("ABC");
 		checkingAccount.deposit(100.00);
 		double actual = checkingAccount.interestEarned();
 		
 		//Then
-		assertEquals(expected, actual, 0.0d);
+		assertEquals(expected, actual, 0.001d);
 	}
 }

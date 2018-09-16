@@ -24,7 +24,7 @@ public class MaxiSavingsAccountTest {
 		final double actual = maxiSavingsAccount.interestEarned();
 		
 		// Then
-		assertEquals(0.1d, actual, 0.0d);
+		assertEquals(0.027d, actual, 0.001d);
 	}
 	
 	@Test
@@ -43,7 +43,7 @@ public class MaxiSavingsAccountTest {
 		final double actual = maxiSavingsAccount.interestEarned();
 		
 		// Then
-		assertEquals(5.0d, actual, 0.0d);
+		assertEquals(1.337d, actual, 0.001d);
 	}
 	
 	@Test
@@ -62,6 +62,6 @@ public class MaxiSavingsAccountTest {
 		final double actual = maxiSavingsAccount.interestEarned();
 		
 		// Then
-		assertEquals(0.1d, actual, 0.0d);
+		assertEquals(0.027d, actual, 0.001d);
 	}
 }
