@@ -9,6 +9,10 @@ import org.junit.Test;
 
 public class CustomerTest {
 
+	private static final String ACCOUNT_NUMBER_1 = "ABC";
+	private static final String ACCOUNT_NUMBER_2 = "DEF";
+	private static final String ACCOUNT_NUMBER_3 = "GHI";
+	
 	@Test
 	public void customerReturnsName()
 	{
@@ -30,7 +34,7 @@ public class CustomerTest {
 		//Given
 		final String ignore = "Hello";
 		final List<Account> accounts = new ArrayList<Account>();
-		accounts.add(new SavingsAccount());
+		accounts.add(new SavingsAccount(ACCOUNT_NUMBER_1));
 		final int expected = 1;
 		
 		//When
@@ -63,8 +67,8 @@ public class CustomerTest {
     @Test //Test customer statement generation
     public void testApp(){
 
-        Account checkingAccount = new CheckingAccount();
-        Account savingsAccount = new SavingsAccount();
+        Account checkingAccount = new CheckingAccount(ACCOUNT_NUMBER_1);
+        Account savingsAccount = new SavingsAccount(ACCOUNT_NUMBER_2);
         final List<Account> accounts = new ArrayList<Account>();
         accounts.add(checkingAccount);
         accounts.add(savingsAccount);
@@ -91,7 +95,7 @@ public class CustomerTest {
 
     @Test
     public void testOneAccount(){
-    	Account savingsAccount = new SavingsAccount();
+    	Account savingsAccount = new SavingsAccount(ACCOUNT_NUMBER_1);
     	final List<Account> accounts = new ArrayList<Account>();
         accounts.add(savingsAccount);
     	Customer oscar = new Customer("Oscar", accounts);
@@ -100,8 +104,8 @@ public class CustomerTest {
 
     @Test
     public void testTwoAccount(){
-    	Account checkingAccount = new CheckingAccount();
-        Account savingsAccount = new SavingsAccount();
+    	Account checkingAccount = new CheckingAccount(ACCOUNT_NUMBER_1);
+        Account savingsAccount = new SavingsAccount(ACCOUNT_NUMBER_2);
         final List<Account> accounts = new ArrayList<Account>();
         accounts.add(checkingAccount);
         accounts.add(savingsAccount);
@@ -111,9 +115,9 @@ public class CustomerTest {
 
     @Test
     public void testThreeAcounts() {
-    	Account checkingAccount = new CheckingAccount();
-        Account savingsAccount = new SavingsAccount();
-        Account maxiSavingsAccount = new MaxiSavingsAccount();
+    	Account checkingAccount = new CheckingAccount(ACCOUNT_NUMBER_1);
+        Account savingsAccount = new SavingsAccount(ACCOUNT_NUMBER_2);
+        Account maxiSavingsAccount = new MaxiSavingsAccount(ACCOUNT_NUMBER_3);
         
         final List<Account> accounts = new ArrayList<Account>();
         accounts.add(checkingAccount);

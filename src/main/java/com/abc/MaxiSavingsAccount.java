@@ -2,9 +2,15 @@ package com.abc;
 
 /**
  * A Checking Account.
+ * <p>
+ * This account pays interest at the rate of 5% assuming no
+ * withdrawals in the past 10 days otherwise 0.1%
  */
-public class MaxiSavingsAccount extends Account 
-{
+public class MaxiSavingsAccount extends Account {
+	public MaxiSavingsAccount(String accountNumber) {
+		super(accountNumber);
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -18,12 +24,12 @@ public class MaxiSavingsAccount extends Account
 		}
 		return 70 + (amount - 2000) * 0.1;
 	}
-    
+
 	/**
 	 * {@inheritDoc}
 	 */
-    @Override
-    public String getAccountName() {
-    	return "Maxi Savings Account";
-    }
+	@Override
+	public String getAccountName() {
+		return "Maxi Savings Account";
+	}
 }

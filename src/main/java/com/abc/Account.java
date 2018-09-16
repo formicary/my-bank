@@ -9,13 +9,15 @@ import java.util.List;
 public abstract class Account {
     private static final String ERROR_MESSAGE_AMOUNT_GREATER_THAN_ZERO = "amount must be greater than zero";
 	public List<Transaction> transactions;
+	private final String accountNumber;
     
     /**
      * Constructs a new {@link Account}.
      * @param accountType The account type.
      */
-    public Account() {
-        this.transactions = new ArrayList<Transaction>();
+    public Account(String accountNumber) {
+        this.accountNumber = accountNumber;
+		this.transactions = new ArrayList<Transaction>();
     }
     
 	/**
@@ -64,5 +66,9 @@ public abstract class Account {
 			amount += transaction.getAmount();	
 		}
 		return amount;
+	}
+
+	public String getAccountNumber() {
+		return accountNumber;
 	}
 }

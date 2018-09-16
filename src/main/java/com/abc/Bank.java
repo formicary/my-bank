@@ -11,6 +11,7 @@ import java.util.Map;
  */
 public class Bank {
 	private static final String ERROR_MESSAGE_TEMPLATE_CUSTOMER_DOES_NOT_EXIST = "Customer {0} does not exist.";
+	private static final String ERROR_MESSAGE_TEMPLATE_ACCOUNT_DOES_NOT_EXIST = "Account {0} does not exist.";
 	private final List<Customer> customers;
 	private final Map<String, List<Account>> customerNameToAccounts;
 	
@@ -74,5 +75,52 @@ public class Bank {
 			total += customer.totalInterestEarned();			
 		}
 		return total;
+	}
+	
+	/**
+	 * Transfers money between two {@link Account}s.
+	 * @param from The account to transfer from.
+	 * @param to The account to transfer to.
+	 * @param amount The amount of money to transfer.
+	 */
+	public void transferBetweenAccounts(Account from, Account to, double amount) {
+		from.withdraw(amount);
+		to.deposit(amount);
+	}
+	
+	/**
+	 * Transfers money between {@link Customer}'s {@link Account}s.
+	 * @param customerName The customers name.
+	 * @param fromAccountNumber The account number of the account to transfer from.
+	 * @param toAccountNumber The account number of the account to transfer to.
+	 * @param amount The amount of money to transfer.
+	 */
+	public void transferBetweenCustomerAccounts(String customerName, String fromAccountNumber, String toAccountNumber, double amount) {
+		if (!customerNameToAccounts.containsKey(customerName)) {
+    		final String message = MessageFormat.format(ERROR_MESSAGE_TEMPLATE_CUSTOMER_DOES_NOT_EXIST, customerName);
+    		throw new IllegalArgumentException(message);
+    	}
+    	final List<Account> customerAccounts = customerNameToAccounts.get(customerName);
+    	Account from = null;
+    	Account to = null;
+    	for (Account account : customerAccounts) {
+			if(account.getAccountNumber().equals(fromAccountNumber)) {
+				from = account;
+			} else if(account.getAccountNumber().equals(toAccountNumber)) {
+				to = account;
+			}
+		}
+    	if (from != null && to != null) {
+    		from.withdraw(amount);
+    		to.deposit(amount);
+    	}
+    	if (from == null) {
+    		final String message = MessageFormat.format(ERROR_MESSAGE_TEMPLATE_ACCOUNT_DOES_NOT_EXIST, fromAccountNumber);
+    		throw new IllegalArgumentException(message);
+    	}
+    	if (to == null) {
+    		final String message = MessageFormat.format(ERROR_MESSAGE_TEMPLATE_ACCOUNT_DOES_NOT_EXIST, toAccountNumber);
+    		throw new IllegalArgumentException(message);
+    	}
 	}
 }
