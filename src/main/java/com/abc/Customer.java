@@ -76,12 +76,6 @@ public class Customer {
             	case Transaction.TRANSFER:
             		Account recipientAccount = t.getRecipientAccount();
             		int accountType = recipientAccount.getAccountType();
-            		/**
-            		if (t.amount >= 0)
-            			s += "  transfer from " + recipientAccount.toString(accountType) + toDollars(t.amount) + "\n";
-            		else
-            			s += "  transfer to " + recipientAccount.toString(accountType) + toDollars(t.amount) + "\n"; 
-            		*/
             		s += "  transfer " + (t.amount >= 0 ? "from " : "to ") + recipientAccount.toString(accountType)
             			+ " " + toDollars(t.amount) + "\n";
             		break;
