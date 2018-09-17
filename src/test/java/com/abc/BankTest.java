@@ -4,6 +4,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 public class BankTest {
     private static final double DOUBLE_DELTA = 1e-15;
 
@@ -32,23 +35,52 @@ public class BankTest {
     @Test
     public void savingsAccount() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+        Account savingsAccount = new Account(Account.SAVINGS);
+        bank.addCustomer(new Customer("Bill").openAccount(savingsAccount));
 
-        checkingAccount.deposit(1500.0);
+        savingsAccount.deposit(1500.0);
 
         assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
-    public void maxiSavingsAccount() {
+    public void maxiAccNoWithdraw() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+        Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
+        bank.addCustomer(new Customer("Bill").openAccount(maxiSavingsAccount));
 
-        checkingAccount.deposit(3000.0);
+        maxiSavingsAccount.deposit(3000.0);
 
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(150.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+    }
+    
+    @Test
+    public void maxiAccWithdraw() {
+    	Bank bank = new Bank();
+    	Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
+        bank.addCustomer(new Customer("Bill").openAccount(maxiSavingsAccount));
+        
+        maxiSavingsAccount.deposit(1000.0);
+        maxiSavingsAccount.withdraw(500.0);
+        
+        assertEquals(0.05, bank.totalInterestPaid(), DOUBLE_DELTA);
+    }
+    
+    @Test
+    public void maxiAccOldWithdraw() {
+    	Bank bank = new Bank();
+    	Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
+        bank.addCustomer(new Customer("Bill").openAccount(maxiSavingsAccount));
+        
+        maxiSavingsAccount.deposit(1000.0);
+        maxiSavingsAccount.withdraw(500.0);
+        
+        for (Transaction t: maxiSavingsAccount.transactions) {
+        	if (t.getTransactionType() == Transaction.WITHDRAW)
+        		t.setTransactionDate(new GregorianCalendar(2018, Calendar.SEPTEMBER, 01).getTime());
+        }
+        
+        assertEquals(25.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
 }

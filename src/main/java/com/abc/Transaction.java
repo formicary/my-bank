@@ -38,5 +38,9 @@ public class Transaction {
     public Account getRecipientAccount() {
     	return recipientAccount;
     }
+    
+    public void setTransactionDate(Date date) {
+    	this.transactionDate = date;
+    }
 
 }
