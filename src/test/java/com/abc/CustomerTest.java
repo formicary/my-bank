@@ -1,6 +1,5 @@
 package com.abc;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -32,12 +31,12 @@ public class CustomerTest {
                 "Savings Account\n" +
                 "  deposit $4,000.00\n" +
                 "  withdrawal $200.00\n" +
-                "  transfer $1,000.00\n" +
+                "  transfer to Maxi Savings Account $1,000.00\n" +
                 "Total $2,800.00\n" +
                 "\n" +
                 "Maxi Savings Account\n" +
                 "  deposit $2,000.00\n" +
-                "  transfer $1,000.00\n" +
+                "  transfer from Savings Account $1,000.00\n" +
                 "Total $3,000.00\n" +
                 "\n" +
                 "Total In All Accounts $5,900.00", henry.getStatement());
@@ -70,9 +69,6 @@ public class CustomerTest {
     public void testTransfer() {
     	Account checkingAccount = new Account(Account.CHECKING);
         Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
-        
-        Customer henry = new Customer("Henry").openAccount(checkingAccount)
-        		.openAccount(maxiSavingsAccount);
         
         checkingAccount.deposit(200.0);
         checkingAccount.transfer(150.0, maxiSavingsAccount);

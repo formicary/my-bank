@@ -39,8 +39,8 @@ public class Account {
 		if (amount <= 0) {
 			throw new IllegalArgumentException("amount must be greater than zero");
 		} else {
-			account.transactions.add(new Transaction(amount, Transaction.TRANSFER));
-			transactions.add(new Transaction(-amount, Transaction.TRANSFER));
+			account.transactions.add(new Transaction(amount, this));
+			transactions.add(new Transaction(-amount, account));
 		}
 	}
 

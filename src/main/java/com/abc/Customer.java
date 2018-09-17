@@ -50,7 +50,7 @@ public class Customer {
         String s = "";
 
        //Translate to pretty account type
-        switch(a.getAccountType()){
+        switch (a.getAccountType()) {
             case Account.CHECKING:
                 s += "Checking Account\n";
                 break;
@@ -74,7 +74,16 @@ public class Customer {
             		s += "  withdrawal " + toDollars(t.amount) + "\n";
             		break;
             	case Transaction.TRANSFER:
-            		s += "  transfer " + toDollars(t.amount) + "\n";
+            		Account recipientAccount = t.getRecipientAccount();
+            		int accountType = recipientAccount.getAccountType();
+            		/**
+            		if (t.amount >= 0)
+            			s += "  transfer from " + recipientAccount.toString(accountType) + toDollars(t.amount) + "\n";
+            		else
+            			s += "  transfer to " + recipientAccount.toString(accountType) + toDollars(t.amount) + "\n"; 
+            		*/
+            		s += "  transfer " + (t.amount >= 0 ? "from " : "to ") + recipientAccount.toString(accountType)
+            			+ " " + toDollars(t.amount) + "\n";
             		break;
             }
             total += t.amount;
