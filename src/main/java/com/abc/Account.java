@@ -21,7 +21,7 @@ public class Account {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
-            transactions.add(new Transaction(amount));
+            transactions.add(new Transaction(amount, Transaction.DEPOSIT));
         }
     }
 
@@ -29,8 +29,19 @@ public class Account {
 	    if (amount <= 0) {
 	        throw new IllegalArgumentException("amount must be greater than zero");
 	    } else {
-	        transactions.add(new Transaction(-amount));
+	        transactions.add(new Transaction(-amount, Transaction.WITHDRAW));
 	    }
+	}
+	
+	public void transfer(double amount, Account account) {
+		// Money goes from the account the transfer method is called on
+		// and moved to the account specified in the method parameters.
+		if (amount <= 0) {
+			throw new IllegalArgumentException("amount must be greater than zero");
+		} else {
+			account.transactions.add(new Transaction(amount, this));
+			transactions.add(new Transaction(-amount, account));
+		}
 	}
 
     public double interestEarned() {
@@ -40,14 +51,14 @@ public class Account {
                 if (amount <= 1000)
                     return amount * 0.001;
                 else
-                    return 1 + (amount-1000) * 0.002;
-            case MAXI_SAVINGS:
+                    return 1 + (amount - 1000) * 0.002;
+		case MAXI_SAVINGS:
                 if (amount <= 1000)
                     return amount * 0.02;
                 if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
-            default:
+                    return 20 + (amount - 1000) * 0.05;
+                return 70 + (amount - 2000) * 0.1;
+		default:
                 return amount * 0.001;
         }
     }
