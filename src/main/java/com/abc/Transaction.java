@@ -40,6 +40,7 @@ public class Transaction {
     }
     
     public void setTransactionDate(Date date) {
+    	// Setter method for testing purposes.
     	this.transactionDate = date;
     }
 
