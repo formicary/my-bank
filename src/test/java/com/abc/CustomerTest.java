@@ -5,6 +5,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
+	private static final double DOUBLE_DELTA = 1e-15;
 
     @Test //Test customer statement generation
     public void testApp(){
@@ -73,8 +74,8 @@ public class CustomerTest {
         checkingAccount.deposit(200.0);
         checkingAccount.transfer(150.0, maxiSavingsAccount);
         
-        assertEquals(checkingAccount.sumTransactions(), 50.0, 0.001);
-        assertEquals(maxiSavingsAccount.sumTransactions(), 150.0, 0.001);
+        assertEquals(checkingAccount.sumTransactions(), 50.0, DOUBLE_DELTA);
+        assertEquals(maxiSavingsAccount.sumTransactions(), 150.0, DOUBLE_DELTA);
         
     }
 }

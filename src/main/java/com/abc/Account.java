@@ -1,7 +1,9 @@
 package com.abc;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class Account {
 
@@ -53,11 +55,19 @@ public class Account {
                 else
                     return 1 + (amount - 1000) * 0.002;
 		case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount - 1000) * 0.05;
-                return 70 + (amount - 2000) * 0.1;
+                for (Transaction t: transactions) {
+                	if (t.getTransactionType() == Transaction.WITHDRAW) {
+                		Date now = DateProvider.getInstance().now();
+                		Date transactionDate = t.getTransactionDate();                
+                		
+                		long msDiff = Math.abs(now.getTime() - transactionDate.getTime());
+                		long daysDiff = TimeUnit.DAYS.convert(msDiff, TimeUnit.MILLISECONDS);
+
+                		if (daysDiff < 10)
+                			return amount * 0.0001;
+                	}
+                }
+                return amount * 0.05;
 		default:
                 return amount * 0.001;
         }

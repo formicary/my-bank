@@ -38,5 +38,10 @@ public class Transaction {
     public Account getRecipientAccount() {
     	return recipientAccount;
     }
+    
+    public void setTransactionDate(Date date) {
+    	// Setter method for testing purposes.
+    	this.transactionDate = date;
+    }
 
 }
