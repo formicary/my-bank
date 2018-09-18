@@ -49,41 +49,19 @@ public class Account {
 
     public double interestEarned() {
         double interestEarned = 0.0;
-        double totalAccrued = 0.0;
+        
         
         Iterator<Transaction> transactionsIterator = transactions.iterator();
         Transaction firstTransaction = transactionsIterator.next();
         
         double amount = firstTransaction.getAmount();
+        double totalAccrued = amount;
         Date prevDate = firstTransaction.getTransactionDate();
         Date secondDate;
         Date now = DateProvider.getInstance().now();
         long daysDiff;
         
         /**
-        while (transactionsIterator.hasNext()) {
-        	Transaction nextTransaction = transactionsIterator.next();
-        	
-        	switch (accountType) {
-	            case SAVINGS:
-	            	double interestRate;
-	                if (amount <= 1000.0) {
-	                	interestRate = 0.001;
-	                	return amount * 0.001;
-	                } else {
-	                	interestRate = 0.002;
-	                	return amount * 0.002;
-	                }
-	                	
-	                
-	                secondDate = nextTransaction.getTransactionDate();
-	                daysDiff = DateProvider.differenceBetweenDays(firstDate, secondDate);
-	                
-	                totalAccrued = amount * Math.pow(1 + interestRate / 365, daysDiff / 365);
-	                interestEarned += totalAccrued - amount;
-	                amount = totalAccrued;
-	                
-        
 	            case MAXI_SAVINGS:
 	                for (Transaction t: transactions) {
 	                	if (t.getTransactionType() == Transaction.WITHDRAW) {
@@ -98,17 +76,7 @@ public class Account {
 	                	}
 	                }
 	                return amount * 0.05;
-	            default:
-	            	secondDate = nextTransaction.getTransactionDate();
-	                daysDiff = DateProvider.differenceBetweenDays(secondDate, prevDate);
-	                System.out.println(daysDiff);
-	                totalAccrued = (amount * Math.pow(1 + 0.001 / 365, daysDiff));
-	                System.out.println("Accrued " + totalAccrued);
-	                interestEarned += totalAccrued - amount;
-	                amount = totalAccrued;
-
-        	}
-       } */
+	       */
         
        switch (accountType) {
        	   case CHECKING:
@@ -126,7 +94,7 @@ public class Account {
     				   
     				   daysDiff--;
 	    			} */
-       			   totalAccrued = totalAccrued * Math.pow((1 + 0.001), daysDiff); 
+       			   totalAccrued *= Math.pow((1 + 0.001), daysDiff); 
        			   
 	       		   interestEarned = totalAccrued - amount;
 	       		   amount = totalAccrued + nextTransaction.getAmount();
@@ -144,52 +112,48 @@ public class Account {
        		   double interestRate;
        		   while (transactionsIterator.hasNext() ) {
        			   Transaction nextTransaction = transactionsIterator.next();
+       			   totalAccrued = amount;
        			   
        			   secondDate = nextTransaction.getTransactionDate();
        			   daysDiff = DateProvider.differenceBetweenDays(secondDate, prevDate);
        			   
        			   
        			   while (daysDiff != 0) {
-       				   if (amount <= 1000)
+       				   if (totalAccrued <= 1000)
        					   interestRate = 0.001;
        				   else
        					   interestRate = 0.002;
        				   
-       				   totalAccrued = amount * (1 + interestRate / 365);
-       				   interestEarned += totalAccrued - amount;
-       				   amount += interestEarned;
-       				   
+       				   totalAccrued *= (1 + interestRate);
+
        				   daysDiff--;
        			   }
        			   
-       			   amount += nextTransaction.getAmount();
+       			   interestEarned = totalAccrued - amount;
+       			   amount = totalAccrued + nextTransaction.getAmount();
        			   prevDate = secondDate;
        		   }
        		   
 	     	   daysDiff = DateProvider.differenceBetweenDays(now, prevDate);
 	     	   
 	     	   while (daysDiff != 0) {
-	     		   if (amount <= 1000)
-	     			   interestRate = 0.001;
-	     		   else
-	     			   interestRate = 0.002;
-	     		   
-	     		   totalAccrued = amount * (1 + interestRate / 365);
-  				   interestEarned += totalAccrued - amount;
-  				   amount += interestEarned;
+  				   if (totalAccrued <= 1000)
+  					   interestRate = 0.001;
+  				   else
+  					   interestRate = 0.002;
   				   
+  				   totalAccrued *= (1 + interestRate);
+
   				   daysDiff--;
-	     	   }
-	     	   System.out.println("Accrued " + totalAccrued + " Amount " + amount);
-	     	   System.out.println("interest " + interestEarned);
+  			   }
+	     	   
+	     	   interestEarned += totalAccrued - amount;
+
 	     	   return interestEarned;
        	   default:
        		   return 0;
-       		   
-       		   
+       		    		   
        }
-       
-	   
     }
 
     public double sumTransactions() {
