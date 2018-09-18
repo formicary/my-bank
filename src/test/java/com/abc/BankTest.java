@@ -60,7 +60,7 @@ public class BankTest {
         maxiSavingsAccount.transactions.get(0)
     		.setTransactionDate(new GregorianCalendar(2017, Calendar.SEPTEMBER, 18).getTime());
         
-        assertEquals(1051.0, bank.totalInterestPaid(), 1);
+        assertEquals(51.27, bank.totalInterestPaid(), 0.1);
     }
     
     @Test
@@ -76,7 +76,7 @@ public class BankTest {
         maxiSavingsAccount.transactions.get(1)
 			.setTransactionDate(new GregorianCalendar(2018, Calendar.SEPTEMBER, 12).getTime());
         
-        assertEquals(1050.57, bank.totalInterestPaid(), 0.1);
+        assertEquals(50.42, bank.totalInterestPaid(), 0.1);
     }
 
 }
