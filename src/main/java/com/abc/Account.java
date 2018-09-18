@@ -2,8 +2,8 @@ package com.abc;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class Account {
 
@@ -47,36 +47,146 @@ public class Account {
 	}
 
     public double interestEarned() {
-        double amount = sumTransactions();
-        switch(accountType) {
-            case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount - 1000) * 0.002;
-		case MAXI_SAVINGS:
-                for (Transaction t: transactions) {
-                	if (t.getTransactionType() == Transaction.WITHDRAW) {
-                		Date now = DateProvider.getInstance().now();
-                		Date transactionDate = t.getTransactionDate();                
-                		
-                		long msDiff = Math.abs(now.getTime() - transactionDate.getTime());
-                		long daysDiff = TimeUnit.DAYS.convert(msDiff, TimeUnit.MILLISECONDS);
+       double interestEarned = 0.0;
+       double interestRate; 
+        
+       Iterator<Transaction> transactionsIterator = transactions.iterator();
+       Transaction firstTransaction = transactionsIterator.next();
+        
+       double amount = firstTransaction.getAmount();
+       double totalAccrued = amount;
+       Date prevDate = firstTransaction.getTransactionDate();
+       Date secondDate;
+       Date now = DateProvider.getInstance().now();
+       long daysDiff;
+        
+       switch (accountType) {
+       	   case SAVINGS:
+       		   while (transactionsIterator.hasNext()) {
+       			   Transaction nextTransaction = transactionsIterator.next();
+       			   totalAccrued = amount;
+       			   
+       			   secondDate = nextTransaction.getTransactionDate();
+       			   daysDiff = DateProvider.differenceBetweenDays(secondDate, prevDate);
+       			     
+       			   while (daysDiff != 0) {
+       				   if (totalAccrued <= 1000)
+       					   interestRate = 0.001;
+       				   else
+       					   interestRate = 0.002;
+       				   
+       				   totalAccrued *= (1 + interestRate / 365);
 
-                		if (daysDiff < 10)
-                			return amount * 0.0001;
-                	}
-                }
-                return amount * 0.05;
-		default:
-                return amount * 0.001;
-        }
+       				   daysDiff--;
+       			   }
+       			   
+       			   interestEarned = totalAccrued - amount;
+       			   amount = totalAccrued + nextTransaction.getAmount();
+       			   prevDate = secondDate;
+       		   }
+       		   
+	     	   daysDiff = DateProvider.differenceBetweenDays(now, prevDate);
+	     	   
+	     	   while (daysDiff != 0) {
+  				   if (totalAccrued <= 1000)
+  					   interestRate = 0.001;
+  				   else
+  					   interestRate = 0.002;
+  				   
+  				   totalAccrued *= (1 + interestRate / 365);
+
+  				   daysDiff--;
+  			   }
+	     	   
+	     	   interestEarned += totalAccrued - amount;
+
+	     	   return interestEarned;
+       	   case MAXI_SAVINGS:
+       		   int daysSinceWithdrawal = 11;
+       		   int transactionType = firstTransaction.getTransactionType();
+       		   if (transactionType == Transaction.WITHDRAW)
+       			   daysSinceWithdrawal = 0;
+   
+       		   while (transactionsIterator.hasNext()) {
+       			   Transaction nextTransaction = transactionsIterator.next();
+       			   totalAccrued = amount;
+       			   
+       			   if (transactionType == Transaction.WITHDRAW)
+        			   daysSinceWithdrawal = 0;
+       			   
+       			   
+       			   
+       			   secondDate = nextTransaction.getTransactionDate();
+       			   daysDiff = DateProvider.differenceBetweenDays(secondDate, prevDate);
+       			   
+       			   while (daysDiff != 0) {
+       				   if (daysSinceWithdrawal <= 10)
+       					   interestRate = 0.001;
+       				   else
+       					   interestRate = 0.05;
+       				   
+       				   totalAccrued *= (1 + interestRate / 365);
+       				   
+       				   daysDiff--;
+       				   daysSinceWithdrawal++;    				  
+       			   }
+       			   
+       			   interestEarned += totalAccrued - amount;
+    			   amount = totalAccrued + nextTransaction.getAmount();
+    			   prevDate = secondDate;
+    			   transactionType = nextTransaction.getTransactionType();
+       		   }
+       		   
+			   if (transactionType == Transaction.WITHDRAW)
+	 			   daysSinceWithdrawal = 0;	   
+			
+			   daysDiff = DateProvider.differenceBetweenDays(now, prevDate);
+			   totalAccrued = amount;
+					   
+			   while (daysDiff != 0) {
+				   if (daysSinceWithdrawal <= 10)
+					   interestRate = 0.001;
+				   else
+					   interestRate = 0.05;
+				   
+				   totalAccrued *= (1 + interestRate / 365);
+				   
+				   daysDiff--;
+				   daysSinceWithdrawal++;
+			   }
+			   
+			   interestEarned += totalAccrued - amount;
+			   
+			   return interestEarned;
+		   default:
+			   while (transactionsIterator.hasNext()) {
+       			   Transaction nextTransaction = transactionsIterator.next();
+       			   totalAccrued = amount;
+       			   
+       			   secondDate = nextTransaction.getTransactionDate();
+       			   daysDiff = DateProvider.differenceBetweenDays(secondDate, prevDate);
+
+       			   totalAccrued *= Math.pow((1 + 0.001 / 365), daysDiff); 
+       			   
+	       		   interestEarned = totalAccrued - amount;
+	       		   amount = totalAccrued + nextTransaction.getAmount();
+	       		   prevDate = secondDate;
+       		   }
+       		 	  
+       		   daysDiff = DateProvider.differenceBetweenDays(now, prevDate);
+	     	   
+       		   totalAccrued = amount * Math.pow((1 + 0.001 / 365), daysDiff); 
+       		   
+	     	   interestEarned += totalAccrued - amount;
+	     	   
+	     	   return interestEarned;
+       }
     }
 
     public double sumTransactions() {
         double amount = 0.0;
         for (Transaction t: transactions)
-            amount += t.amount;
+            amount += t.getAmount();
         return amount;
     }
 
