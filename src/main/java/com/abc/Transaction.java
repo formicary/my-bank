@@ -3,7 +3,7 @@ package com.abc;
 import java.util.Date;
 
 public class Transaction {
-    public final double amount;
+    private final double amount;
     
     public static final int DEPOSIT = 0;
     public static final int WITHDRAW = 1;
@@ -25,6 +25,10 @@ public class Transaction {
     	this.transactionType = TRANSFER;
     	this.transactionDate = DateProvider.getInstance().now();
     	this.recipientAccount = account;
+    }
+    
+    public double getAmount() {
+    	return amount;
     }
     
     public int getTransactionType() {

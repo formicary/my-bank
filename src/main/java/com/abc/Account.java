@@ -2,6 +2,7 @@ package com.abc;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -47,36 +48,154 @@ public class Account {
 	}
 
     public double interestEarned() {
-        double amount = sumTransactions();
-        switch(accountType) {
-            case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount - 1000) * 0.002;
-		case MAXI_SAVINGS:
-                for (Transaction t: transactions) {
-                	if (t.getTransactionType() == Transaction.WITHDRAW) {
-                		Date now = DateProvider.getInstance().now();
-                		Date transactionDate = t.getTransactionDate();                
-                		
-                		long msDiff = Math.abs(now.getTime() - transactionDate.getTime());
-                		long daysDiff = TimeUnit.DAYS.convert(msDiff, TimeUnit.MILLISECONDS);
+        double interestEarned = 0.0;
+        double totalAccrued = 0.0;
+        
+        Iterator<Transaction> transactionsIterator = transactions.iterator();
+        Transaction firstTransaction = transactionsIterator.next();
+        
+        double amount = firstTransaction.getAmount();
+        Date prevDate = firstTransaction.getTransactionDate();
+        Date secondDate;
+        Date now = DateProvider.getInstance().now();
+        long daysDiff;
+        
+        /**
+        while (transactionsIterator.hasNext()) {
+        	Transaction nextTransaction = transactionsIterator.next();
+        	
+        	switch (accountType) {
+	            case SAVINGS:
+	            	double interestRate;
+	                if (amount <= 1000.0) {
+	                	interestRate = 0.001;
+	                	return amount * 0.001;
+	                } else {
+	                	interestRate = 0.002;
+	                	return amount * 0.002;
+	                }
+	                	
+	                
+	                secondDate = nextTransaction.getTransactionDate();
+	                daysDiff = DateProvider.differenceBetweenDays(firstDate, secondDate);
+	                
+	                totalAccrued = amount * Math.pow(1 + interestRate / 365, daysDiff / 365);
+	                interestEarned += totalAccrued - amount;
+	                amount = totalAccrued;
+	                
+        
+	            case MAXI_SAVINGS:
+	                for (Transaction t: transactions) {
+	                	if (t.getTransactionType() == Transaction.WITHDRAW) {
+	                		Date now = DateProvider.getInstance().now();
+	                		Date transactionDate = t.getTransactionDate();                
+	                		
+	                		long msDiff = Math.abs(now.getTime() - transactionDate.getTime());
+	                		daysDiff = TimeUnit.DAYS.convert(msDiff, TimeUnit.MILLISECONDS);
+	
+	                		if (daysDiff <= 10)
+	                			return amount * 0.001;
+	                	}
+	                }
+	                return amount * 0.05;
+	            default:
+	            	secondDate = nextTransaction.getTransactionDate();
+	                daysDiff = DateProvider.differenceBetweenDays(secondDate, prevDate);
+	                System.out.println(daysDiff);
+	                totalAccrued = (amount * Math.pow(1 + 0.001 / 365, daysDiff));
+	                System.out.println("Accrued " + totalAccrued);
+	                interestEarned += totalAccrued - amount;
+	                amount = totalAccrued;
 
-                		if (daysDiff < 10)
-                			return amount * 0.0001;
-                	}
-                }
-                return amount * 0.05;
-		default:
-                return amount * 0.001;
-        }
+        	}
+       } */
+        
+       switch (accountType) {
+       	   case CHECKING:
+       		   
+       		   while (transactionsIterator.hasNext()) {
+       			   Transaction nextTransaction = transactionsIterator.next();
+       			   totalAccrued = amount;
+       			   
+       			   secondDate = nextTransaction.getTransactionDate();
+       			   daysDiff = DateProvider.differenceBetweenDays(secondDate, prevDate);
+
+	       			/** while (daysDiff != 0) {
+    				   double interestRate = 0.001;
+    				   totalAccrued *= (1 + interestRate);
+    				   
+    				   daysDiff--;
+	    			} */
+       			   totalAccrued = totalAccrued * Math.pow((1 + 0.001), daysDiff); 
+       			   
+	       		   interestEarned = totalAccrued - amount;
+	       		   amount = totalAccrued + nextTransaction.getAmount();
+	       		   prevDate = secondDate;
+       		   }
+       		 	  
+       		   daysDiff = DateProvider.differenceBetweenDays(now, prevDate);
+	     	   
+       		   totalAccrued = amount * Math.pow((1 + 0.001), daysDiff); 
+       		   
+	     	   interestEarned += totalAccrued - amount;
+	     	   
+	     	   return interestEarned;
+       	   case SAVINGS:
+       		   double interestRate;
+       		   while (transactionsIterator.hasNext() ) {
+       			   Transaction nextTransaction = transactionsIterator.next();
+       			   
+       			   secondDate = nextTransaction.getTransactionDate();
+       			   daysDiff = DateProvider.differenceBetweenDays(secondDate, prevDate);
+       			   
+       			   
+       			   while (daysDiff != 0) {
+       				   if (amount <= 1000)
+       					   interestRate = 0.001;
+       				   else
+       					   interestRate = 0.002;
+       				   
+       				   totalAccrued = amount * (1 + interestRate / 365);
+       				   interestEarned += totalAccrued - amount;
+       				   amount += interestEarned;
+       				   
+       				   daysDiff--;
+       			   }
+       			   
+       			   amount += nextTransaction.getAmount();
+       			   prevDate = secondDate;
+       		   }
+       		   
+	     	   daysDiff = DateProvider.differenceBetweenDays(now, prevDate);
+	     	   
+	     	   while (daysDiff != 0) {
+	     		   if (amount <= 1000)
+	     			   interestRate = 0.001;
+	     		   else
+	     			   interestRate = 0.002;
+	     		   
+	     		   totalAccrued = amount * (1 + interestRate / 365);
+  				   interestEarned += totalAccrued - amount;
+  				   amount += interestEarned;
+  				   
+  				   daysDiff--;
+	     	   }
+	     	   System.out.println("Accrued " + totalAccrued + " Amount " + amount);
+	     	   System.out.println("interest " + interestEarned);
+	     	   return interestEarned;
+       	   default:
+       		   return 0;
+       		   
+       		   
+       }
+       
+	   
     }
 
     public double sumTransactions() {
         double amount = 0.0;
         for (Transaction t: transactions)
-            amount += t.amount;
+            amount += t.getAmount();
         return amount;
     }
 

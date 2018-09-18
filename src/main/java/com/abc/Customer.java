@@ -68,19 +68,19 @@ public class Customer {
             int transactionType = t.getTransactionType();
             switch (transactionType) {
             	case Transaction.DEPOSIT:
-            		s += "  deposit " + toDollars(t.amount) + "\n";
+            		s += "  deposit " + toDollars(t.getAmount()) + "\n";
             		break;
             	case Transaction.WITHDRAW:
-            		s += "  withdrawal " + toDollars(t.amount) + "\n";
+            		s += "  withdrawal " + toDollars(t.getAmount()) + "\n";
             		break;
             	case Transaction.TRANSFER:
             		Account recipientAccount = t.getRecipientAccount();
             		int accountType = recipientAccount.getAccountType();
-            		s += "  transfer " + (t.amount >= 0 ? "from " : "to ") + recipientAccount.toString(accountType)
-            			+ " " + toDollars(t.amount) + "\n";
+            		s += "  transfer " + (t.getAmount() >= 0 ? "from " : "to ") + recipientAccount.toString(accountType)
+            			+ " " + toDollars(t.getAmount()) + "\n";
             		break;
             }
-            total += t.amount;
+            total += t.getAmount();
         }
         s += "Total " + toDollars(total);
         return s;

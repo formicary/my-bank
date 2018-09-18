@@ -8,7 +8,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class BankTest {
-    private static final double DOUBLE_DELTA = 1e-15;
 
     @Test
     public void customerSummary() {
@@ -22,14 +21,19 @@ public class BankTest {
 
     @Test
     public void checkingAccount() {
-        Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.CHECKING);
+    	Bank bank = new Bank();
+    	Account checkingAccount = new Account(Account.CHECKING);
         Customer bill = new Customer("Bill").openAccount(checkingAccount);
         bank.addCustomer(bill);
+        
+        checkingAccount.deposit(10000.0);
+        checkingAccount.transactions.get(0)
+        	.setTransactionDate(new GregorianCalendar(2016, Calendar.SEPTEMBER, 18).getTime());
+        checkingAccount.withdraw(5000.0);
+        checkingAccount.transactions.get(1)
+    		.setTransactionDate(new GregorianCalendar(2017, Calendar.SEPTEMBER, 18).getTime());
 
-        checkingAccount.deposit(100.0);
-
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(8541, bank.totalInterestPaid(), 1);
     }
 
     @Test
@@ -38,49 +42,12 @@ public class BankTest {
         Account savingsAccount = new Account(Account.SAVINGS);
         bank.addCustomer(new Customer("Bill").openAccount(savingsAccount));
 
-        savingsAccount.deposit(1500.0);
+        savingsAccount.deposit(999);
+        savingsAccount.transactions.get(0)
+    		.setTransactionDate(new GregorianCalendar(2017, Calendar.SEPTEMBER, 18).getTime());
 
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
-    }
-
-    @Test
-    public void maxiAccNoWithdraw() {
-        Bank bank = new Bank();
-        Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(maxiSavingsAccount));
-
-        maxiSavingsAccount.deposit(3000.0);
-
-        assertEquals(150.0, bank.totalInterestPaid(), DOUBLE_DELTA);
-    }
-    
-    @Test
-    public void maxiAccWithdraw() {
-    	Bank bank = new Bank();
-    	Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(maxiSavingsAccount));
-        
-        maxiSavingsAccount.deposit(1000.0);
-        maxiSavingsAccount.withdraw(500.0);
-        
-        assertEquals(0.05, bank.totalInterestPaid(), DOUBLE_DELTA);
-    }
-    
-    @Test
-    public void maxiAccOldWithdraw() {
-    	Bank bank = new Bank();
-    	Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(maxiSavingsAccount));
-        
-        maxiSavingsAccount.deposit(1000.0);
-        maxiSavingsAccount.withdraw(500.0);
-        
-        for (Transaction t: maxiSavingsAccount.transactions) {
-        	if (t.getTransactionType() == Transaction.WITHDRAW)
-        		t.setTransactionDate(new GregorianCalendar(2018, Calendar.SEPTEMBER, 01).getTime());
-        }
-        
-        assertEquals(25.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(1068, bank.totalInterestPaid(), 1);
+     
     }
 
 }
