@@ -88,13 +88,7 @@ public class Account {
        			   secondDate = nextTransaction.getTransactionDate();
        			   daysDiff = DateProvider.differenceBetweenDays(secondDate, prevDate);
 
-	       			/** while (daysDiff != 0) {
-    				   double interestRate = 0.001;
-    				   totalAccrued *= (1 + interestRate);
-    				   
-    				   daysDiff--;
-	    			} */
-       			   totalAccrued *= Math.pow((1 + 0.001), daysDiff); 
+       			   totalAccrued *= Math.pow((1 + 0.001 / 365), daysDiff); 
        			   
 	       		   interestEarned = totalAccrued - amount;
 	       		   amount = totalAccrued + nextTransaction.getAmount();
@@ -103,7 +97,7 @@ public class Account {
        		 	  
        		   daysDiff = DateProvider.differenceBetweenDays(now, prevDate);
 	     	   
-       		   totalAccrued = amount * Math.pow((1 + 0.001), daysDiff); 
+       		   totalAccrued = amount * Math.pow((1 + 0.001 / 365), daysDiff); 
        		   
 	     	   interestEarned += totalAccrued - amount;
 	     	   
@@ -124,7 +118,7 @@ public class Account {
        				   else
        					   interestRate = 0.002;
        				   
-       				   totalAccrued *= (1 + interestRate);
+       				   totalAccrued *= (1 + interestRate / 365);
 
        				   daysDiff--;
        			   }
@@ -142,7 +136,7 @@ public class Account {
   				   else
   					   interestRate = 0.002;
   				   
-  				   totalAccrued *= (1 + interestRate);
+  				   totalAccrued *= (1 + interestRate / 365);
 
   				   daysDiff--;
   			   }

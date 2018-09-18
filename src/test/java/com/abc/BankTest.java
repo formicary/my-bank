@@ -33,7 +33,7 @@ public class BankTest {
         checkingAccount.transactions.get(1)
     		.setTransactionDate(new GregorianCalendar(2017, Calendar.SEPTEMBER, 18).getTime());
 
-        assertEquals(8541, bank.totalInterestPaid(), 1);
+        assertEquals(15.0, bank.totalInterestPaid(), 1);
     }
 
     @Test
@@ -42,12 +42,41 @@ public class BankTest {
         Account savingsAccount = new Account(Account.SAVINGS);
         bank.addCustomer(new Customer("Bill").openAccount(savingsAccount));
 
-        savingsAccount.deposit(999);
+        savingsAccount.deposit(999.9);
         savingsAccount.transactions.get(0)
     		.setTransactionDate(new GregorianCalendar(2017, Calendar.SEPTEMBER, 18).getTime());
 
-        assertEquals(1068, bank.totalInterestPaid(), 1);
+        assertEquals(1.9, bank.totalInterestPaid(), 0.1);
      
+    }
+    
+    @Test
+    public void maxiSavingsAccountNoWithdrawal() {
+    	Bank bank = new Bank();
+    	Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
+    	bank.addCustomer(new Customer("Bill").openAccount(maxiSavingsAccount));
+    	
+    	maxiSavingsAccount.deposit(1000.0);
+        maxiSavingsAccount.transactions.get(0)
+    		.setTransactionDate(new GregorianCalendar(2017, Calendar.SEPTEMBER, 18).getTime());
+        
+        assertEquals(1051.0, bank.totalInterestPaid(), 1);
+    }
+    
+    @Test
+    public void maxiSavingsAccountWithdrawal() {
+    	Bank bank = new Bank();
+    	Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
+    	bank.addCustomer(new Customer("Bill").openAccount(maxiSavingsAccount));
+    	
+    	maxiSavingsAccount.deposit(1000.0);
+        maxiSavingsAccount.transactions.get(0)
+    		.setTransactionDate(new GregorianCalendar(2017, Calendar.SEPTEMBER, 18).getTime());
+        maxiSavingsAccount.withdraw(100.0);
+        maxiSavingsAccount.transactions.get(1)
+			.setTransactionDate(new GregorianCalendar(2018, Calendar.SEPTEMBER, 12).getTime());
+        
+        assertEquals(1050.57, bank.totalInterestPaid(), 0.1);
     }
 
 }
