@@ -1,18 +1,17 @@
 package com.abc;
 
-import java.util.Calendar;
-import java.util.Date;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 
 public class DateProvider {
-    private static DateProvider instance = null;
-
-    public static DateProvider getInstance() {
-        if (instance == null)
-            instance = new DateProvider();
-        return instance;
+	
+	public static LocalDateTime now() {
+        return LocalDateTime.now();
     }
-
-    public Date now() {
-        return Calendar.getInstance().getTime();
-    }
+	
+	public static String formattedDate(LocalDateTime date) {
+		return date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+	}
 }

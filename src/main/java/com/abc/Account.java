@@ -3,71 +3,91 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
+enum AccountType {
+	CHECKING, 
+	SAVINGS,
+	MAXI_SAVINGS
+}
+
 public class Account {
 
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
+    private final AccountType accountType;
+    private List<Transaction> transactions;
 
-    private final int accountType;
-    public List<Transaction> transactions;
-
-    public Account(int accountType) {
+    public Account(AccountType accountType) {
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
+    }
+    
+    public AccountType getAccountType() {
+        return accountType;
+    }
+    
+    public List<Transaction> getTransactions(){
+    	return this.transactions;
+    }
+    
+    public double getBalance() {
+    	double amount = 0.0;
+    	if (transactionsExist() == true) {
+    		for (Transaction t: transactions)
+    			amount += t.getAmount();
+    	}
+        return amount;
     }
 
     public void deposit(double amount) {
         if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
+            throw new IllegalArgumentException("Deposit amount must be greater than zero");
         } else {
             transactions.add(new Transaction(amount));
         }
     }
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
+    public void withdraw(double amount) {
+    	double accountTotal = getBalance();
+    	if (accountTotal - amount < 0){ //condition to catch customers trying to withdraw more than is available in their account
+    		throw new IllegalArgumentException("Insufficient funds. Try to withdraw a smaller amount");
+    	} else {
+    		transactions.add(new Transaction(-amount));
+    	}
     }
-}
 
     public double interestEarned() {
-        double amount = sumTransactions();
+        double amount = getBalance();
+        
+        // if the account total = 0, no interest can be earned so return 0
+        if (amount == 0.0){
+        	return 0.0;
+        }
+        
         switch(accountType){
             case SAVINGS:
                 if (amount <= 1000)
                     return amount * 0.001;
                 else
                     return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
             case MAXI_SAVINGS:
                 if (amount <= 1000)
                     return amount * 0.02;
                 if (amount <= 2000)
                     return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
+                if (amount > 2000)
+                	return 70 + (amount-2000) * 0.1;
             default:
                 return amount * 0.001;
         }
     }
 
-    public double sumTransactions() {
-       return checkIfTransactionsExist(true);
+    //checks if there are any transactions existing 
+    private boolean transactionsExist() {
+        if(transactions.isEmpty()){
+        	return false;
+        } else {
+        	return true;
+        }
     }
 
-    private double checkIfTransactionsExist(boolean checkAll) {
-        double amount = 0.0;
-        for (Transaction t: transactions)
-            amount += t.amount;
-        return amount;
-    }
 
-    public int getAccountType() {
-        return accountType;
-    }
 
 }
