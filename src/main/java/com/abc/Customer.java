@@ -34,7 +34,16 @@ public class Customer {
     private String format(int number, String word) {
     	return number + " " + (number == 1 ? word : word + "s");
     }
-      
+    
+    public void transferBetweenAccounts(int amount, Account accountFrom, Account accountTo){
+    	if (amount <= 0) {
+    		throw new IllegalArgumentException("Transfer amount must be greater than zero");
+    	} else {
+    		accountFrom.withdraw(amount);
+    		accountTo.deposit(amount);
+    	}
+    }
+    
     public String getStatement() {
         String statement = null;
         statement = "Statement for " + name + "\n";
