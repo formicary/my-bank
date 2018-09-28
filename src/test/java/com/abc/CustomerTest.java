@@ -47,12 +47,38 @@ public class CustomerTest {
         Customer oscar = new Customer("Oscar").openAccount(new Account(AccountType.SAVINGS)).openAccount(new Account(AccountType.CHECKING));
         assertEquals(2, oscar.getNumberOfAccounts());
     }
-
+    
     @Test
     public void testThreeAcounts() {
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(AccountType.SAVINGS));
-        oscar.openAccount(new Account(AccountType.CHECKING));
+        Customer oscar = new Customer("Oscar").openAccount(new Account(AccountType.SAVINGS)).openAccount(new Account(AccountType.CHECKING));
         assertEquals(3, oscar.getNumberOfAccounts());
     }
+    
+    @Test
+    public void testTransferBetweenAccounts() {
+        Bank bank = new Bank();
+        Customer john = new Customer("John");
+        Account checkingAccount = new Account(AccountType.CHECKING);
+        Account savingsAccount = new Account(AccountType.SAVINGS);
+
+        john.openAccount(checkingAccount).openAccount(savingsAccount);
+        bank.addCustomer(john);
+        
+        checkingAccount.deposit(100);
+        john.transferBetweenAccounts(50, checkingAccount, savingsAccount);
+
+        assertEquals("Statement for John\n" +
+                "\n" +
+                "Checking Account\n" +
+                "  deposit $100.00 - " + DateProvider.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) + "\n" +
+                "  withdrawal $50.00 - " + DateProvider.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) + "\n" +
+                "Total $50.00\n" +
+                "\n" +
+                "Savings Account\n" +
+                "  deposit $50.00 - " + DateProvider.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) + "\n" +
+                "Total $50.00\n" +
+                "\n" +
+                "Total In All Accounts $100.00", john.getStatement());
+    }
+
 }
