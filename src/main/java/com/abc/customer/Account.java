@@ -11,7 +11,7 @@ import java.util.List;
 public class Account {
 
     private final AccountType accountType;  // the account type enum (used for calculating interest earned)
-    List<Transaction> transactions;  // the collection of transactions
+    private List<Transaction> transactions;  // the collection of transactions
 
     /**
      * Constructor, which simply requires an account type to be defined
@@ -72,4 +72,7 @@ public class Account {
         return accountType;
     }
 
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
 }

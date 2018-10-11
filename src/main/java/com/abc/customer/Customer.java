@@ -22,8 +22,9 @@ public class Customer {
         return name;
     }
 
-    public void openAccount(Account account) {
+    public Customer openAccount(Account account) {
         accounts.add(account);
+        return this;
     }
 
     public int getNumberOfAccounts() {
@@ -38,15 +39,13 @@ public class Customer {
     }
 
     public String getStatement() {
-        String statement = null;
-        statement = "Statement for " + name + "\n";
+        String statement = "Statement for " + name + "\n";
         double total = 0.0;
         for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
+            statement = statement.concat(String.format("\n %s \n", statementForAccount(a)));
             total += a.sumTransactions();
         }
-        statement += "\nTotal In All Accounts " + toDollars(total);
-        return statement;
+        return statement + "\nTotal In All Accounts " + toDollars(total);
     }
 
     private String statementForAccount(Account a) {
@@ -55,7 +54,7 @@ public class Customer {
         //Now total up all the transactions
         double total = 0.0;
 
-        for (Transaction t : a.transactions) {
+        for (Transaction t : a.getTransactions()) {
             s = s.concat(t.toString()) + "\n";
             total += t.amount;
         }
@@ -67,6 +66,6 @@ public class Customer {
 
     @Override
     public String toString() {
-        return String.format("%s (%s)", name, Strings.pluralize(accounts.size(), "account"));
+        return String.format("%s (%d %s)", name, accounts.size(), Strings.pluralize(accounts.size(), "account"));
     }
 }
