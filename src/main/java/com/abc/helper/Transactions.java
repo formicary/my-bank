@@ -2,6 +2,8 @@ package com.abc.helper;
 
 import com.abc.transaction.Transaction;
 
+import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.function.Predicate;
@@ -25,9 +27,19 @@ public class Transactions {
     }
 
     /**
+     * Function for abstracting the sorting of transactions
+     * @param transactions the List of Transactions to sort
+     * @param comparator the Comparator for sorting two given Transactions
+     * @return Transactions sorted
+     */
+    private static List<Transaction> sort(List<Transaction> transactions, Comparator<Transaction> comparator) {
+        return transactions.stream()
+                .sorted(comparator)
+                .collect(Collectors.toList());
+    }
+
+    /**
      * Returns a subset of a List of Transactions, only containing withdrawals
-     * @param transactions the List of Transactions to filter down
-     * @return Transactions with negative amount fields
      */
     public static List<Transaction> findWithdrawals(List<Transaction> transactions) {
         return filter(transactions, transaction -> transaction.amount < 0);
@@ -35,8 +47,6 @@ public class Transactions {
 
     /**
      * Returns a subset of a List of Transactions, only containing deposits
-     * @param transactions the List of Transactions to filter down
-     * @return Transactions with positive amount fields
      */
     public static List<Transaction> findDeposits(List<Transaction> transactions) {
         return filter(transactions, transaction -> transaction.amount > 0);
@@ -44,11 +54,52 @@ public class Transactions {
 
     /**
      * Returns a subset of a List of Transactions, which occurred after a given date
-     * @param transactions the List of Transactions to filter down
      * @param cutoff the Data to search for Transactions following
-     * @return Transactions that came after the cutoff date
      */
     public static List<Transaction> findRecent(List<Transaction> transactions, Date cutoff) {
         return filter(transactions, transaction -> transaction.getDate().after(cutoff));
     }
+
+    /**
+     * Returns a subset of a List of Transactions, which occurred on a given date
+     * @param match the Date to search for Transactions that occurred on the same day of
+     */
+    public static List<Transaction> dateSearch(List<Transaction> transactions,
+                                               Date match) {
+        return filter(transactions, transaction -> {
+            Calendar cal1 = Calendar.getInstance();
+            Calendar cal2 = Calendar.getInstance();
+            cal1.setTime(match);
+            cal2.setTime(transaction.getDate());
+            return cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR) &&
+                    cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR);
+        });
+    }
+
+    /**
+     * Returns a subset of a List of Transactions, which occurred withing a {lower, upper} date range
+     * @param lower the earliest date to accept
+     * @param upper the latest date to accept
+     */
+    public static List<Transaction> dateSearch(List<Transaction> transactions,
+                                               Date lower, Date upper) {
+        return filter(transactions, transaction ->
+                transaction.getDate().after(lower) && transaction.getDate().before(upper)
+        );
+    }
+
+    /**
+     * Sorts a List of Transactions based on the date which they took place, in chronological order
+     */
+    public static List<Transaction> sortByDate(List<Transaction> transactions) {
+        return sort(transactions, new Comparator<Transaction>() {
+            @Override
+            public int compare(Transaction o1, Transaction o2) {
+                if (o1.getDate().before(o2.getDate()))      return -1;
+                if (o1.getDate().after(o2.getDate()))       return 1;
+                return 0;
+            }
+        });
+    }
+
 }
