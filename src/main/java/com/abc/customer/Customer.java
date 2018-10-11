@@ -1,5 +1,6 @@
 package com.abc.customer;
 
+import com.abc.customer.exceptions.NoMatchingAccount;
 import com.abc.helper.Strings;
 import com.abc.transaction.Transaction;
 
@@ -16,6 +17,24 @@ public class Customer {
     public Customer(String name) {
         this.name = name;
         this.accounts = new ArrayList<Account>();
+    }
+
+    /**
+     * Transfers an amount of money from account a, to account b
+     * @param a the first account to withdraw money from
+     * @param b the second account to deposit money into
+     * @param transaction the transaction to be performed
+     */
+    public void transfer(Account a, Account b, Transaction transaction) throws NoMatchingAccount {
+
+        if (!accounts.contains(a)) {
+            throw new NoMatchingAccount(a, this);
+        } if (!accounts.contains(b)) {
+            throw new NoMatchingAccount(b, this);
+        }
+
+        a.addTransaction(transaction.amount);
+        b.addTransaction(-transaction.amount);
     }
 
     public String getName() {
