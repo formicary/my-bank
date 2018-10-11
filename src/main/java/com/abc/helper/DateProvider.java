@@ -1,13 +1,17 @@
 package com.abc.helper;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Static class that returns the current Date
  */
 public class DateProvider {
 
+    // representing the number of milliseconds in a day, used for offsetting Dates
     private static final long DAYS = 1000 * 60 * 60 * 24;
 
     /**
@@ -23,8 +27,37 @@ public class DateProvider {
      * @param days the amount of days to offset the current Date by
      * @return a Date Object for the current time, offset by days
      */
-    public static Date offset(int days) {
+    public static Date offset(long days) {
         return new Date(now().getTime() + (days * DAYS));
+    }
+
+    /**
+     * Returns a List of chronological days, leading to the current Date
+     * @param days the number of days to generate a chronology up to
+     * @return a List of Date Objects in chronological order
+     */
+    public static List<Date> buildChronology(long days){
+
+        List<Date> chronology = new ArrayList<>();
+        for (long i = days; i >= 0; i--) chronology.add(offset(-days));
+        return chronology;
+    }
+
+    public static List<Date> buildChronology(Date start, Date end) {
+        return buildChronology(getOffset(start, end));
+    }
+
+
+
+    /**
+     * Returns the difference, in days, between two dates
+     * @param a the start Date
+     * @param b the end Date
+     * @return the number of days between
+     */
+    public static long getOffset(Date a, Date b) {
+        return TimeUnit.DAYS.convert((b.getTime() - a.getTime()), TimeUnit.MILLISECONDS);
+
     }
 
 }
