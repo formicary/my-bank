@@ -5,11 +5,15 @@ import com.abc.customer.Customer;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Stores a List of Customers, allowing for summaries to be generated of them
+ */
 public class Bank {
+
     private List<Customer> customers;
 
     public Bank() {
-        customers = new ArrayList<Customer>();
+        customers = new ArrayList<>();
     }
 
     public String customerSummary() {
@@ -28,15 +32,5 @@ public class Bank {
         for(Customer c: customers)
             total += c.totalInterestEarned();
         return total;
-    }
-
-    public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
-        }
     }
 }
