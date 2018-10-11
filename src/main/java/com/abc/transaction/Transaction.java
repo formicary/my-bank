@@ -22,6 +22,10 @@ public class Transaction {
         this.date = DateProvider.now();
     }
 
+    public Date getDate() {
+        return date;
+    }
+
     @Override
     public String toString() {
         return String.format("%s %s", Strings.toDollars(amount), amount < 0 ? "withdrawal" : "deposit");
