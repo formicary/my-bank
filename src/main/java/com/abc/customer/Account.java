@@ -1,5 +1,7 @@
 package com.abc.customer;
 
+import com.abc.helper.DateProvider;
+import com.abc.helper.Transactions;
 import com.abc.transaction.Transaction;
 
 import java.util.ArrayList;
@@ -44,12 +46,12 @@ public class Account {
             case SAVINGS:
                 if (amount <= 1000)     return amount * 0.001;
                 else                    return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
 
             case MAXI_SAVINGS:
-                return amount * 0.01;
+                return amount *
+                        (Transactions.findRecent(transactions, DateProvider.offset(-10))
+                                .isEmpty() ? 0.05 : 0.01 );
+
             default:                    return amount * 0.001;
         }
     }
@@ -69,7 +71,18 @@ public class Account {
         return accountType;
     }
 
-    public List<Transaction> getTransactions() {
+    List<Transaction> getTransactions() {
         return transactions;
     }
+
+
+    List<Transaction> getWithdrawals() {
+        List<Transaction> withdrawals = new ArrayList<Transaction>();
+        for (Transaction t : transactions) {
+            if (t.amount < 0)  withdrawals.add(t);
+        }
+        return withdrawals;
+    }
+
+
 }
