@@ -1,11 +1,15 @@
-package com.abc;
+package com.abc.customer;
+
+import com.abc.helper.Strings;
+import com.abc.transaction.Transaction;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Math.abs;
+import static com.abc.helper.Strings.toDollars;
 
 public class Customer {
+
     private String name;
     private List<Account> accounts;
 
@@ -18,9 +22,8 @@ public class Customer {
         return name;
     }
 
-    public Customer openAccount(Account account) {
+    public void openAccount(Account account) {
         accounts.add(account);
-        return this;
     }
 
     public int getNumberOfAccounts() {
@@ -47,32 +50,23 @@ public class Customer {
     }
 
     private String statementForAccount(Account a) {
-        String s = "";
-
-       //Translate to pretty account type
-        switch(a.getAccountType()){
-            case Account.CHECKING:
-                s += "Checking Account\n";
-                break;
-            case Account.SAVINGS:
-                s += "Savings Account\n";
-                break;
-            case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
-                break;
-        }
+        String s = a.getAccountType().toString();
 
         //Now total up all the transactions
         double total = 0.0;
+
         for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
+            s = s.concat(t.toString()) + "\n";
             total += t.amount;
         }
-        s += "Total " + toDollars(total);
-        return s;
+
+        return s + "Total " + toDollars(total);
     }
 
-    private String toDollars(double d){
-        return String.format("$%,.2f", abs(d));
+
+
+    @Override
+    public String toString() {
+        return String.format("%s (%s)", name, Strings.pluralize(accounts.size(), "account"));
     }
 }

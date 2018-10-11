@@ -1,6 +1,6 @@
-package com.abc.account;
+package com.abc.customer;
 
-import com.abc.Transaction;
+import com.abc.transaction.Transaction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
 public class Account {
 
     private final AccountType accountType;  // the account type enum (used for calculating interest earned)
-    public List<Transaction> transactions;  // the collection of transactions
+    List<Transaction> transactions;  // the collection of transactions
 
     /**
      * Constructor, which simply requires an account type to be defined
@@ -36,7 +36,7 @@ public class Account {
      * TODO: may require some checks for negative amounts (as these may not mean interest has been earned)
      * @return the double amount of interest that has been earned
      */
-    public double interestEarned() {
+    double interestEarned() {
         double amount = sumTransactions();
 
         switch(accountType){
@@ -61,14 +61,14 @@ public class Account {
      * Sums over all of the transactions
      * @return the double total of all the transaction amounts
      */
-    public double sumTransactions() {
+    double sumTransactions() {
         double amount = 0.0;
         for (Transaction t: transactions)
             amount += t.amount;
         return amount;
     }
 
-    public AccountType getAccountType() {
+    AccountType getAccountType() {
         return accountType;
     }
 
