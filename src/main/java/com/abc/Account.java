@@ -3,71 +3,59 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Account {
+/**
+ * 
+ * @author Accenture, rrana
+ * @version v2.0
+ *
+ */
+public interface Account {
+	
+	/**
+	 * 
+	 * @return the current balance of this account
+	 */
+	public double getBalance();
+    
+	/**
+	 * Deposit amount
+	 * @param amount the amount to be deposited
+	 */
+    public void deposit(double amount);
 
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
+    /**
+     * Withdraw amount
+     * @param amount the amount to be withdrawn
+     */
+    public void withdraw(double amount);
 
-    private final int accountType;
-    public List<Transaction> transactions;
+    /**
+     * Get interest earned
+     * @return earned the interest earned
+     */
+    public double interestEarned();
 
-    public Account(int accountType) {
-        this.accountType = accountType;
-        this.transactions = new ArrayList<Transaction>();
-    }
+    /**
+     * @return the sum of all transaction
+     */
+    public double sumTransactions();
 
-    public void deposit(double amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
-        } else {
-            transactions.add(new Transaction(amount));
-        }
-    }
+    /**
+     * @return the type of account
+     */
+    public String getAccountType();
+    
+    /**
+     * 
+     * @return The list of transaction on this account
+     */
+    public ArrayList<Transaction> getTransactions();
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
-    }
-}
-
-    public double interestEarned() {
-        double amount = sumTransactions();
-        switch(accountType){
-            case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
-            case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
-            default:
-                return amount * 0.001;
-        }
-    }
-
-    public double sumTransactions() {
-       return checkIfTransactionsExist(true);
-    }
-
-    private double checkIfTransactionsExist(boolean checkAll) {
-        double amount = 0.0;
-        for (Transaction t: transactions)
-            amount += t.amount;
-        return amount;
-    }
-
-    public int getAccountType() {
-        return accountType;
-    }
-
+    /**
+     * Transfer a given amount to any given account or receive an amount 
+     * @param account the account to which to transfer the amount
+     * @param balance the amount to be transferred
+     * @param isSent true if the amount is sent, false if it is received
+     */
+    public boolean transferAmount(Account account, double amount, boolean isSent);
 }

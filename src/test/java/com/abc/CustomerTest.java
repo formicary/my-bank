@@ -6,14 +6,18 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
+	private static final double DOUBLE_DELTA = 1e-15;
+	Factory cf = new CustomerFactory();
+	Factory af = new AccountFactory();
 
     @Test //Test customer statement generation
     public void testApp(){
-
-        Account checkingAccount = new Account(Account.CHECKING);
-        Account savingsAccount = new Account(Account.SAVINGS);
-
-        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
+    	Customer henry = (Customer) cf.create("Henry", DateProvider.getInstance().now());
+    	
+        Account checkingAccount = (Account) af.create(henry, AccountEnum.CHECKINGACCOUNT);
+        Account savingsAccount = (Account) af.create(henry, AccountEnum.SAVINGSACCOUNT);
+        henry.addAccount(checkingAccount);
+        henry.addAccount(savingsAccount);
 
         checkingAccount.deposit(100.0);
         savingsAccount.deposit(4000.0);
@@ -21,37 +25,63 @@ public class CustomerTest {
 
         assertEquals("Statement for Henry\n" +
                 "\n" +
-                "Checking Account\n" +
-                "  deposit $100.00\n" +
-                "Total $100.00\n" +
+                "CHECKING ACCOUNT\n" +
+                "Deposit: $100.00\n" +
+                "Total: $100.00\n" +
                 "\n" +
-                "Savings Account\n" +
-                "  deposit $4,000.00\n" +
-                "  withdrawal $200.00\n" +
-                "Total $3,800.00\n" +
+                "SAVINGS ACCOUNT\n" +
+                "Deposit: $4,000.00\n" +
+                "Withdraw: $200.00\n" +
+                "Total: $3,800.00\n" +
                 "\n" +
-                "Total In All Accounts $3,900.00", henry.getStatement());
+                "Total In All Accounts: $3,900.00", henry.getStatement());
     }
 
     @Test
     public void testOneAccount(){
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
+        Customer oscar = (Customer)cf.create("Oscar", DateProvider.getInstance().now());
+        Account savingsAccount = (Account)af.create(oscar, AccountEnum.SAVINGSACCOUNT);
+        oscar.addAccount(savingsAccount);
         assertEquals(1, oscar.getNumberOfAccounts());
     }
 
     @Test
     public void testTwoAccount(){
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
+        Customer oscar = (Customer)cf.create("Oscar", DateProvider.getInstance().now());
+        Account savingsAccount = (Account) af.create(oscar, AccountEnum.SAVINGSACCOUNT);
+        Account checkingAccount = (Account) af.create(oscar, AccountEnum.CHECKINGACCOUNT);
+        oscar.addAccount(savingsAccount);
+        oscar.addAccount(checkingAccount);
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
-    @Ignore
+    @Test
     public void testThreeAcounts() {
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
+    	Customer oscar = (Customer)cf.create("Oscar", DateProvider.getInstance().now());
+        Account savingsAccount = (Account) af.create(oscar, AccountEnum.SAVINGSACCOUNT);
+        Account checkingAccount = (Account) af.create(oscar, AccountEnum.CHECKINGACCOUNT);
+        Account maxiSavingAccount = (Account) af.create(oscar, AccountEnum.MAXISAVINGACCOUNT);
+        oscar.addAccount(savingsAccount);
+        oscar.addAccount(checkingAccount);
+        oscar.addAccount(maxiSavingAccount);
         assertEquals(3, oscar.getNumberOfAccounts());
+    }
+    
+    @Test
+    public void totalInterestEarned() {
+    	Customer oscar = (Customer)cf.create("Oscar", DateProvider.getInstance().now());
+        Account savingsAccount = (Account) af.create(oscar, AccountEnum.SAVINGSACCOUNT);
+        Account checkingAccount = (Account) af.create(oscar, AccountEnum.CHECKINGACCOUNT);
+        Account maxiSavingAccount = (Account) af.create(oscar, AccountEnum.MAXISAVINGACCOUNT);
+        
+        oscar.addAccount(savingsAccount);
+        oscar.addAccount(checkingAccount);
+        oscar.addAccount(maxiSavingAccount);
+        
+        savingsAccount.deposit(1000);
+        checkingAccount.deposit(2500);
+        maxiSavingAccount.deposit(500);
+        
+        assertEquals(28.5,oscar.totalInterestEarned(),DOUBLE_DELTA);
     }
 }
