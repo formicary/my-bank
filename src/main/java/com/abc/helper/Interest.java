@@ -52,8 +52,10 @@ public class Interest {
 
                 case MAXI_SAVINGS:
                     amount += amount *
-                            (Transactions.findRecent(transactions, DateProvider.offset(-10))
-                                    .isEmpty() ? 0.05 : 0.01 );
+                            (Transactions.findRecent(transactions,
+                                    DateProvider.offset(day, -10),
+                                    day
+                            ).isEmpty() ? 0.05 : 0.01 );
 
                 default:
 

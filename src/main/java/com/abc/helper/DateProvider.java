@@ -22,6 +22,17 @@ public class DateProvider {
         return Calendar.getInstance().getTime();
     }
 
+
+    /**
+     * Returns a copy of a given date, offset by a number of days
+     * @param date the date to apply the offset to
+     * @param days the number of days to offset the date parameter by
+     * @return a Date instance, which is offset from the passed date parameter
+     */
+    public static Date offset(Date date, long days) {
+        return new Date(date.getTime() + (days * DAYS));
+    }
+
     /**
      * Returns the current Date, with an offset in the number of days
      * @param days the amount of days to offset the current Date by

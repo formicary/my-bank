@@ -21,7 +21,7 @@ public class Transactions {
      * @return Transactions satisfying the predicate
      */
     private static List<Transaction> filter(List<Transaction> transactions, Predicate<Transaction> filter) {
-        return transactions.stream()
+        return transactions.parallelStream()
                 .filter(filter)
                 .collect(Collectors.toList());
     }
@@ -33,7 +33,7 @@ public class Transactions {
      * @return Transactions sorted
      */
     private static List<Transaction> sort(List<Transaction> transactions, Comparator<Transaction> comparator) {
-        return transactions.stream()
+        return transactions.parallelStream()
                 .sorted(comparator)
                 .collect(Collectors.toList());
     }
@@ -53,10 +53,24 @@ public class Transactions {
     }
 
     /**
-     * Returns a subset of a List of Transactions, which occurred after a given date
-     * @param cutoff the Data to search for Transactions following
+     * Returns a subset of a List of Transactions, which occurred in a given date range
+     * @param transactions the List of Transactions to search through
+     * @param lower the Date to search for Transactions following
+     * @param higher the Date that returned Dates cannot come after
      */
-    public static List<Transaction> findRecent(List<Transaction> transactions, Date cutoff) {
+    public static List<Transaction> findRecent(List<Transaction> transactions,
+                                               Date lower,
+                                               Date higher) {
+        return filter(transactions, transaction -> transaction.getDate().after(lower) && transaction.getDate().before(higher));
+    }
+
+    /**
+     * Returns a subset of a List of Transactions, which occurred after a given date
+     * @param transactions the List of Transactions to search through
+     * @param cutoff the latest Date to accept (so, returns transactions before this date)
+     */
+    public static List<Transaction> findRecent(List<Transaction> transactions,
+                                               Date cutoff) {
         return filter(transactions, transaction -> transaction.getDate().after(cutoff));
     }
 
