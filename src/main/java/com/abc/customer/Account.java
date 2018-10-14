@@ -1,10 +1,12 @@
 package com.abc.customer;
 
 import com.abc.helper.DateProvider;
+import com.abc.helper.Interest;
 import com.abc.helper.Transactions;
 import com.abc.transaction.Transaction;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,7 +24,7 @@ public class Account {
      */
     public Account(AccountType accountType) {
         this.accountType = accountType;
-        this.transactions = new ArrayList<Transaction>();
+        this.transactions = new ArrayList<>();
     }
 
     /**
@@ -39,21 +41,8 @@ public class Account {
      * @return the double amount of interest that has been earned
      */
     double interestEarned() {
-        double amount = sumTransactions();
-
-        switch(accountType){
-
-            case SAVINGS:
-                if (amount <= 1000)     return amount * 0.001;
-                else                    return 1 + (amount-1000) * 0.002;
-
-            case MAXI_SAVINGS:
-                return amount *
-                        (Transactions.findRecent(transactions, DateProvider.offset(-10))
-                                .isEmpty() ? 0.05 : 0.01 );
-
-            default:                    return amount * 0.001;
-        }
+        List<Transaction> chronologicalTransactions = Transactions.sortByDate(transactions);
+        return Interest.calculateYield(chronologicalTransactions, accountType);
     }
 
     /**
