@@ -1,5 +1,7 @@
 package com.abc.helper;
 
+import com.sun.javaws.exceptions.InvalidArgumentException;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -47,15 +49,22 @@ public class DateProvider {
      * @param days the number of days to generate a chronology up to
      * @return a List of Date Objects in chronological order
      */
-    public static List<Date> buildChronology(long days){
+    public static List<Date> buildChronology(long days) throws InvalidArgumentException {
 
+        if (days <= 0) throw new InvalidArgumentException(new String[]{"days parameter must be positive"});
         List<Date> chronology = new ArrayList<>();
-        for (long i = days; i >= 0; i--) chronology.add(offset(-days));
+        for (long i = days; i >= 0; i--) chronology.add(offset(-i));
         return chronology;
     }
 
-    public static List<Date> buildChronology(Date start, Date end) {
-        return buildChronology(getOffset(start, end));
+    public static List<Date> buildChronology(Date start, Date end){
+        long offset = getOffset(start, end);
+
+
+        List<Date> chronology = new ArrayList<>();
+        for (long i = offset; i != 0; i += offset < 0 ? -1 : 1) chronology.add(offset(-i));
+        return chronology;
+
     }
 
 
