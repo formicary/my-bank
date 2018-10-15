@@ -5,36 +5,52 @@ import java.util.List;
 
 import static java.lang.Math.abs;
 
-public class Customer {
-    private String name;
-    private List<Account> accounts;
+public class Customer 
+{
+    private final String name;
+    private final List<Account> accounts;
 
-    public Customer(String name) {
+    public Customer(String name) 
+    {
         this.name = name;
         this.accounts = new ArrayList<Account>();
     }
 
-    public String getName() {
+    public String getName() 
+    {
         return name;
     }
 
-    public Customer openAccount(Account account) {
+    public Customer openAccount(Account account)
+    {
         accounts.add(account);
         return this;
     }
 
-    public int getNumberOfAccounts() {
+    public int getNumberOfAccounts() 
+    {
         return accounts.size();
     }
 
-    public double totalInterestEarned() {
+    public double totalInterestEarned() 
+    {
         double total = 0;
         for (Account a : accounts)
             total += a.interestEarned();
         return total;
     }
+    
+     //added to transfer between accounts
+    public void transfer(double amount, Account a1, Account a2)
+    {
+       
+        a1.withdraw(amount);
+        a2.deposit(amount);
+               
+    }
 
-    public String getStatement() {
+    public String getStatement() 
+    {
         String statement = null;
         statement = "Statement for " + name + "\n";
         double total = 0.0;
@@ -46,25 +62,29 @@ public class Customer {
         return statement;
     }
 
-    private String statementForAccount(Account a) {
+    private String statementForAccount(Account a) 
+    {
         String s = "";
 
        //Translate to pretty account type
-        switch(a.getAccountType()){
-            case Account.CHECKING:
+        switch(a.getAccountType())
+        {
+            case CHECKING:
                 s += "Checking Account\n";
                 break;
-            case Account.SAVINGS:
+            case SAVINGS:
                 s += "Savings Account\n";
                 break;
-            case Account.MAXI_SAVINGS:
+            case MAXI_SAVINGS:
                 s += "Maxi Savings Account\n";
                 break;
         }
 
         //Now total up all the transactions
         double total = 0.0;
-        for (Transaction t : a.transactions) {
+        
+        for (Transaction t : a.transactions) 
+        {
             s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
             total += t.amount;
         }
@@ -72,7 +92,8 @@ public class Customer {
         return s;
     }
 
-    private String toDollars(double d){
+    private String toDollars(double d)
+    {
         return String.format("$%,.2f", abs(d));
     }
 }
