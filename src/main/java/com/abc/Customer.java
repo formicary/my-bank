@@ -27,6 +27,21 @@ public class Customer {
         return accounts.size();
     }
 
+    public Account getAccount(int index){
+        if (index < getNumberOfAccounts()){
+            return accounts.get(index);
+        }
+        else{
+            System.out.println("Account does not exist");
+            return null;
+        }
+    }
+
+    public void transfer(Account a, Account b, double amount){
+        a.withdraw(amount);
+        b.deposit(amount);
+    }
+
     public double totalInterestEarned() {
         double total = 0;
         for (Account a : accounts)
