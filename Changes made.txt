@@ -1,0 +1,10 @@
+Updated CustomerTest 
+Updated Account 
+Updated Customer 
+Updated Transaction
+Added the additional features:
+ - The ability on transferring between accounts
+ - The ability for Maxi-Savings accounts to have an interest rate of 5% assuming no withdrawals in the
+past 10 days otherwise 0.1%
+
+
