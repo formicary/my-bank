@@ -85,10 +85,10 @@ public class Account {
     }
 
     private BigDecimal getTransactionsSum() {
-        BigDecimal amount = BigDecimal.valueOf(0.00);
+        BigDecimal amount = BigDecimal.valueOf(0);
         for (Transaction t: transactions)
             amount = t.getAmount().add(amount);
-        return amount;
+        return amount.setScale(2, RoundingMode.HALF_UP);
     }
 
     public int getAccountType() {
