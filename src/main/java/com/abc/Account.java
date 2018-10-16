@@ -1,7 +1,11 @@
 package com.abc;
 
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
+import java.math.BigDecimal;
+import java.util.Optional;
+
 
 public class Account {
 
@@ -14,24 +18,24 @@ public class Account {
 
     public Account(int accountType) {
         this.accountType = accountType;
-        this.transactions = new ArrayList<Transaction>();
+        this.transactions = new ArrayList<>();
     }
 
-    public void deposit(double amount) {
-        if (amount <= 0) {
+    public void deposit(BigDecimal amount) {
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
             transactions.add(new Transaction(amount));
         }
     }
 
-    public void withdraw(double amount) {
-        if(amount < sumTransactions()){
-            if(amount <= 0){
+    public void withdraw(BigDecimal amount) {
+        if(amount.compareTo(sumTransactions())<0){
+            if(amount.compareTo(BigDecimal.ZERO) <= 0){
                 throw new IllegalArgumentException("amount must be greater than zero");
             }
             else{
-                transactions.add(new Transaction(-amount));
+                transactions.add(new Transaction(amount.negate()));
             }
         }
         else{
@@ -39,45 +43,53 @@ public class Account {
         }
     }
 
-    public double interestEarned() {
-        double amount = sumTransactions();
+    public BigDecimal interestEarned() {
+        BigDecimal amount = sumTransactions();
+        amount.setScale(2, RoundingMode.HALF_UP);
+        DateProvider date = new DateProvider();
         switch(accountType){
             case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
+                if (amount.compareTo(BigDecimal.valueOf(1000)) <= 0)
+                    return amount.multiply(BigDecimal.valueOf(0.001));
                 else
-                    return 1 + (amount-1000) * 0.002;
+                    return BigDecimal.valueOf(1).add((amount.subtract(BigDecimal.valueOf(1000))).multiply(BigDecimal.valueOf(0.002)));
             case MAXI_SAVINGS:
-                if (!(new DateProvider().tenDayCheck(new DateProvider().now())))
-                    return amount * 0.05;
-                else
-                    return amount * 0.001;
+                if (getLastWithdrawal()!=null){
+                    if (!date.tenDayCheck(getLastWithdrawal().getDate()))
+                        return amount.multiply(BigDecimal.valueOf(0.001));
+                    else
+                        return amount.multiply(BigDecimal.valueOf(0.05));
+                }
+                else{
+                    return amount.multiply(BigDecimal.valueOf(0.05));
+                }
             default:
-                return amount * 0.001;
+                return amount.multiply(BigDecimal.valueOf(0.001));
+
         }
     }
 
-    public Transaction getLastDeposit(){
-        for(Transaction t: transactions)
-            if (t.type==t.DEPOSIT){
+    public Transaction getLastWithdrawal(){
+        for (Transaction t : transactions){
+            if (t.type == t.WITHDRAWAL) {
                 return t;
             }
-        System.out.println("No deposits found");
+        }
         return null;
     }
 
-    public double sumTransactions() {
-       return checkIfTransactionsExist(true);
+    public BigDecimal sumTransactions() {
+       return getTransactionsSum();
     }
 
     public int getNumberOfTransactions() {
         return transactions.size();
     }
 
-    private double checkIfTransactionsExist(boolean checkAll) {
-        double amount = 0.0;
+    private BigDecimal getTransactionsSum() {
+        BigDecimal amount = BigDecimal.valueOf(0.00);
         for (Transaction t: transactions)
-            amount += t.amount;
+            amount = t.amount.add(amount);
         return amount;
     }
 

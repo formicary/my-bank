@@ -3,23 +3,24 @@ package com.abc;
 import java.util.Calendar;
 import java.util.Date;
 
-public class DateProvider {
+class DateProvider {
     private static DateProvider instance = null;
 
-    public static DateProvider getInstance() {
+    static DateProvider getInstance() {
         if (instance == null)
             instance = new DateProvider();
         return instance;
     }
 
-    public Date now() {
+    Date now() {
         return Calendar.getInstance().getTime();
     }
 
-    public boolean tenDayCheck(Date a){
-        long day10 = 0 ;
-        day10 = 10 * 24 * 60 * 60 * 1000;
-        boolean olderThan10 = now().getTime() < ((a.getTime())+day10);
-        return olderThan10;
+    boolean tenDayCheck(Date a){
+        long minus10days = now().getTime() - 10 * 24 * 60 * 60 * 1000;
+        System.out.println("ten days ago:" + minus10days);
+        System.out.println("compare date:" + a.getTime());
+
+        return a.getTime() < minus10days;
     }
 }
