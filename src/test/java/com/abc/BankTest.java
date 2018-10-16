@@ -2,6 +2,8 @@ package com.abc;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.Assert.assertEquals;
 
 public class BankTest {
@@ -49,6 +51,24 @@ public class BankTest {
         checkingAccount.deposit(3000.0);
 
         assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+    }
+
+    @Test
+    public void animal_test() {
+        ArrayList<Animal> animals = new ArrayList<Animal>();
+
+        Dog dog1 = new Dog();
+        Animal dog2 = new Dog();
+
+        Cat cat1 = new Cat();
+
+        animals.add(dog1);
+        animals.add(dog2);
+        animals.add(cat1);
+
+        for (Animal x : animals) {
+            x.make_noise();
+        }
     }
 
 }
