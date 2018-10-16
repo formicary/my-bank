@@ -4,8 +4,6 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.math.BigDecimal;
-import java.util.Optional;
-
 
 public class Account {
 
@@ -71,7 +69,7 @@ public class Account {
 
     public Transaction getLastWithdrawal(){
         for (Transaction t : transactions){
-            if (t.type == t.WITHDRAWAL) {
+            if (t.getType() == t.WITHDRAWAL) {
                 return t;
             }
         }
@@ -89,7 +87,7 @@ public class Account {
     private BigDecimal getTransactionsSum() {
         BigDecimal amount = BigDecimal.valueOf(0.00);
         for (Transaction t: transactions)
-            amount = t.amount.add(amount);
+            amount = t.getAmount().add(amount);
         return amount;
     }
 
