@@ -1,9 +1,7 @@
 package com.abc;
 
-import java.math.RoundingMode;
-import java.util.Calendar;
-import java.util.Date;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 
 public class Transaction {
@@ -14,11 +12,11 @@ public class Transaction {
     private final BigDecimal amount;
     private final int type;
 
-    private Date transactionDate;
+    private LocalDate transactionDate;
 
     public Transaction(BigDecimal amount) {
-        this.amount = amount.setScale(2, RoundingMode.HALF_UP);
-        this.transactionDate = DateProvider.getInstance().now();
+        this.amount = amount;
+        this.transactionDate = LocalDate.now();
         if (amount.compareTo(BigDecimal.ZERO)<0){
             type = WITHDRAWAL;
         }
@@ -32,10 +30,10 @@ public class Transaction {
     }
 
     public BigDecimal getAmount(){
-        return amount.setScale(2, RoundingMode.HALF_UP);
+        return new CurrencyManager().roundBigDecimal(amount);
     }
 
-    public Date getDate(){
+    public LocalDate getDate(){
         return transactionDate;
     }
 

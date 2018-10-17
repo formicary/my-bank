@@ -1,11 +1,11 @@
 package com.abc;
+
 import org.junit.Test;
 
-import java.util.Date;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.time.LocalDate;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 
 public class DateProviderTest {
@@ -13,9 +13,17 @@ public class DateProviderTest {
     @Test
     public void dateTest(){
         DateProvider date = new DateProvider();
-        Date falseDate = new GregorianCalendar(2018, Calendar.OCTOBER, 13).getTime();
-        Date trueDate = new GregorianCalendar(1999, Calendar.OCTOBER, 13).getTime();
-        assertTrue(date.tenDayCheck(falseDate));
-        assertFalse(date.tenDayCheck(trueDate));
+        LocalDate falseDate = LocalDate.of(2018, 10, 13);
+        LocalDate trueDate = LocalDate.of(1999, 10, 13);
+        assertFalse(date.compareOlderThan(falseDate, 10));
+        assertTrue(date.compareOlderThan(trueDate, 10));
+    }
+
+    @Test
+    public void sameDayTest(){
+        DateProvider date = new DateProvider();
+        LocalDate date1 = LocalDate.of(2018, 10, 13);
+        LocalDate date2 = LocalDate.of(2018, 10, 13);
+        assertTrue(date.checkSameDay(date1, date2));
     }
 }

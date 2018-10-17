@@ -1,9 +1,8 @@
 package com.abc;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
 
-class DateProvider {
+public class DateProvider {
     private static DateProvider instance = null;
 
     static DateProvider getInstance() {
@@ -12,15 +11,16 @@ class DateProvider {
         return instance;
     }
 
-    Date now() {
-        return Calendar.getInstance().getTime();
+    static LocalDate now() {
+        return LocalDate.now();
     }
 
-    boolean tenDayCheck(Date a){
-        long minus10days = now().getTime() - 10 * 24 * 60 * 60 * 1000;
-        System.out.println("ten days ago:" + minus10days);
-        System.out.println("compare date:" + a.getTime());
+    public boolean compareOlderThan(LocalDate a, long days){
+        return a.isBefore(LocalDate.now().minusDays(days));
+    }
 
-        return a.getTime() < minus10days;
+    public boolean checkSameDay(LocalDate date1, LocalDate date2){
+        return date1.isEqual(date2);
     }
 }
+

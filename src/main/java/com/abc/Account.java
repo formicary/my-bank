@@ -1,9 +1,9 @@
 package com.abc;
 
-import java.math.RoundingMode;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.math.BigDecimal;
 
 public class Account {
 
@@ -13,10 +13,13 @@ public class Account {
 
     private final int accountType;
     public List<Transaction> transactions;
+    private LocalDate interestLastPaid;
 
     public Account(int accountType) {
         this.accountType = accountType;
         this.transactions = new ArrayList<>();
+        this.interestLastPaid = LocalDate.now();
+
     }
 
     public void deposit(BigDecimal amount) {
@@ -40,10 +43,24 @@ public class Account {
             System.out.println("Not enough funds.");
         }
     }
+//
+//    public BigDecimal interestEarned2() {
+//        BigDecimal amount = BigDecimal.valueOf(0);
+//        if (transactions == null) {
+//            return amount;
+//        }
+//        // Making sure interest is not paid twice if function is called twice in one day.
+//        DateProvider provider = new DateProvider();
+//        for (Transaction transaction : transactions) {
+//            if (provider.compareOlderThan(interestLastPaid, 2)){
+//
+//            }
+//
+//        }
+//    }
 
     public BigDecimal interestEarned() {
         BigDecimal amount = sumTransactions();
-        amount.setScale(2, RoundingMode.HALF_UP);
         DateProvider date = new DateProvider();
         switch(accountType){
             case SAVINGS:
@@ -53,7 +70,7 @@ public class Account {
                     return BigDecimal.valueOf(1).add((amount.subtract(BigDecimal.valueOf(1000))).multiply(BigDecimal.valueOf(0.002)));
             case MAXI_SAVINGS:
                 if (getLastWithdrawal()!=null){
-                    if (!date.tenDayCheck(getLastWithdrawal().getDate()))
+                    if (!date.compareOlderThan(getLastWithdrawal().getDate(), 10))
                         return amount.multiply(BigDecimal.valueOf(0.001));
                     else
                         return amount.multiply(BigDecimal.valueOf(0.05));
@@ -73,11 +90,12 @@ public class Account {
                 return t;
             }
         }
+        System.out.println("No Withdrawals found");
         return null;
     }
 
     public BigDecimal sumTransactions() {
-       return getTransactionsSum();
+       return new CurrencyManager().roundBigDecimal(getTransactionsSum());
     }
 
     public int getNumberOfTransactions() {
@@ -88,7 +106,7 @@ public class Account {
         BigDecimal amount = BigDecimal.valueOf(0);
         for (Transaction t: transactions)
             amount = t.getAmount().add(amount);
-        return amount.setScale(2, RoundingMode.HALF_UP);
+        return amount;
     }
 
     public int getAccountType() {

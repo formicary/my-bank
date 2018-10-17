@@ -1,8 +1,9 @@
 package com.abc;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class Bank {
     private Map<Integer, Customer> customers;
@@ -18,13 +19,11 @@ public class Bank {
 
     public String customerSummary() {
         String summary = "Customer Summary";
-
         Iterator it = customers.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
             Customer c = (Customer) pair.getValue();
             summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-            it.remove(); // avoids a ConcurrentModificationException
         }
         return summary;
     }
@@ -35,17 +34,27 @@ public class Bank {
         return number + " " + (number == 1 ? word : word + "s");
     }
 
+    // Returns the amount of interest due to 2 decimal places.
     public BigDecimal totalInterestPaid() {
-        BigDecimal total = new BigDecimal(0.00);
+        BigDecimal total = new BigDecimal(0);
         Iterator it = customers.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
             Customer c = (Customer) pair.getValue();
             total = c.totalInterestEarned().add(total);
-            it.remove(); // avoids a ConcurrentModificationException
         }
-        return total.setScale(2, RoundingMode.HALF_UP);
+        return new CurrencyManager().roundBigDecimal(total);
     }
+
+//    public payInterest(){
+//
+//        Iterator it = customers.entrySet().iterator();
+//        while (it.hasNext()) {
+//            Map.Entry pair = (Map.Entry)it.next();
+//            Customer c = (Customer) pair.getValue();
+//            total = c.totalInterestEarned().add(total);
+//        }
+//    }
 
     public String getFirstCustomer() {
         try {

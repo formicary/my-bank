@@ -3,6 +3,7 @@ package com.abc;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -63,7 +64,8 @@ public class CustomerTest {
         Customer oscar = new Customer("Oscar")
                 .openAccount(new Account(Account.SAVINGS));
         oscar.openAccount(new Account(Account.CHECKING));
-        oscar.transfer(oscar.getAccount(0), oscar.getAccount(1), BigDecimal.valueOf(50.00));
         assertNull(oscar.getAccount(2));
+        oscar.transfer(oscar.getAccount(0), oscar.getAccount(1), BigDecimal.valueOf(50.00));
+        assertEquals(BigDecimal.valueOf(50).setScale(2, RoundingMode.HALF_UP), oscar.getAccount(1).sumTransactions());
     }
 }

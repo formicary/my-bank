@@ -18,7 +18,7 @@ public class AccountTest {
          account.deposit(BigDecimal.valueOf(100));
          account.withdraw(BigDecimal.valueOf(25));
 
-         assertEquals(account.sumTransactions(), BigDecimal.valueOf(125).setScale(2, RoundingMode.HALF_UP));
+         assertEquals(BigDecimal.valueOf(125).setScale(2, RoundingMode.HALF_UP), account.sumTransactions());
      }
 
     @Test
@@ -40,7 +40,16 @@ public class AccountTest {
         account.deposit(BigDecimal.valueOf(50));
         account.deposit(BigDecimal.valueOf(100));
         account.withdraw(BigDecimal.valueOf(25));
-        assertEquals(account.getLastWithdrawal().getAmount(), BigDecimal.valueOf(-25).setScale(2, RoundingMode.HALF_UP) );
+        assertEquals(BigDecimal.valueOf(-25).setScale(2, RoundingMode.HALF_UP), account.getLastWithdrawal().getAmount() );
+    }
+
+    @Test
+    public void notEnoughFunds(){
+        Account account = new Account(Account.CHECKING);
+
+        account.deposit(BigDecimal.valueOf(50));
+        account.withdraw(BigDecimal.valueOf(200));
+        assertEquals(BigDecimal.valueOf(50).setScale(2, RoundingMode.HALF_UP), account.sumTransactions());
     }
 
 }

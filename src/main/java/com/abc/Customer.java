@@ -1,12 +1,8 @@
 package com.abc;
 
-import java.math.RoundingMode;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.math.BigDecimal;
-
-
-import static java.lang.Math.abs;
 
 public class Customer {
     private static int count = 0;
@@ -53,22 +49,22 @@ public class Customer {
     }
 
     public BigDecimal totalInterestEarned() {
-        BigDecimal total = BigDecimal.valueOf(0.00);
+        BigDecimal total = BigDecimal.valueOf(0);
         for (Account a : accounts) {
             total = a.interestEarned().add(total);
         }
-        return total.setScale(2, RoundingMode.HALF_UP);
+        return total;
     }
 
     public String getStatement() {
-        String statement = null;
+        String statement;
         statement = "Statement for " + name + "\n";
-        BigDecimal total = BigDecimal.valueOf(0.0);
+        BigDecimal total = BigDecimal.valueOf(0);
         for (Account a : accounts) {
             statement += "\n" + statementForAccount(a) + "\n";
             total = a.sumTransactions().add(total);
         }
-        statement += "\nTotal In All Accounts " + toDollars(total);
+        statement += "\nTotal In All Accounts " + new CurrencyManager().toDollarsAbs(total);
         return statement;
     }
 
@@ -89,16 +85,13 @@ public class Customer {
         }
 
         //Now total up all the transactions
-        BigDecimal total = BigDecimal.valueOf(0.0);
+        BigDecimal total = BigDecimal.valueOf(0);
         for (Transaction t : a.transactions) {
-            s += "  " + (t.getAmount().compareTo(BigDecimal.ZERO) < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.getAmount())+ "\n";
+            s += "  " + (t.getAmount().compareTo(BigDecimal.ZERO) < 0 ? "withdrawal" : "deposit") + " " + new CurrencyManager().toDollarsAbs(t.getAmount())+ "\n";
             total = t.getAmount().add(total);
         }
-        s += "Total " + toDollars(total);
+        s += "Total " + new CurrencyManager().toDollarsAbs(total);
         return s;
     }
 
-    private String toDollars(BigDecimal d){
-        return String.format("$%,.2f", d.abs());
-    }
 }
