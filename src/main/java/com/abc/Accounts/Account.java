@@ -54,7 +54,7 @@ abstract public class Account {
 
     public Money sumTransactions() {
 
-        Money amount = (Money) BigDecimal.ZERO;
+        Money amount = Money.ZERO;
 
         for (Transaction t: transactions)
             amount = (Money) amount.add(t.getAmount());

@@ -32,7 +32,7 @@ public class Customer {
     }
 
     public Money totalInterestEarned() {
-        Money total = (Money) BigDecimal.ZERO;
+        Money total = Money.ZERO;
         for (Account a : accounts)
             total = total.add(a.interestEarned());
         return total;
@@ -41,7 +41,7 @@ public class Customer {
     public String getStatement() {
         String statement = null;
         statement = "Statement for " + name + "\n";
-        Money total = (Money) BigDecimal.ZERO;
+        Money total = Money.ZERO;
         for (Account a : accounts) {
             statement += "\n" + statementForAccount(a) + "\n";
             total = total.add( a.sumTransactions());

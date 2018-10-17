@@ -31,7 +31,7 @@ public class Bank {
     }
 
     public Money totalInterestPaid() {
-        Money total = (Money) BigDecimal.ZERO;
+        Money total = Money.ZERO;
         for(Customer c: customers)
             total = total.add((Money) c.totalInterestEarned());
         return total;

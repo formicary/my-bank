@@ -9,7 +9,7 @@ public class Money extends BigDecimal {
     /**
      * for quickly initialising a zero value
      */
-    public static Money ZERO = (Money) BigDecimal.ZERO;
+    public static Money ZERO = new Money("0");
 
 
     /**
@@ -26,7 +26,25 @@ public class Money extends BigDecimal {
      */
     @Override
     public Money add(BigDecimal amount){
-        return (Money) amount.add(this);
+        return new Money(super.add(amount).toString());
+    }
+
+    /**
+     * helper function to reduce the amount of casting of BigDecimal to Money
+     * @return Money
+     */
+    @Override
+    public Money subtract(BigDecimal amount){
+        return new Money(super.subtract(amount).toString());
+    }
+
+    /**
+     * helper function to reduce the amount of casting of BigDecimal to Money
+     * @return Money
+     */
+    @Override
+    public Money multiply(BigDecimal amount){
+        return new Money(super.multiply(amount).toString());
     }
 
     /**
@@ -35,7 +53,7 @@ public class Money extends BigDecimal {
      */
     @Override
     public Money negate(){
-        return (Money) super.negate();
+        return new Money(super.negate().toString());
     }
 
     /**
@@ -44,7 +62,7 @@ public class Money extends BigDecimal {
      */
     @Override
     public Money abs(){
-        return (Money) super.abs();
+        return new Money(super.abs().toString());
     }
 
     /**

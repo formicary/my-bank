@@ -1,19 +1,22 @@
 package com.abc;
 
+import com.abc.Accounts.Account;
+import com.abc.Accounts.CheckingAccount;
+import com.abc.util.Money;
 import org.junit.Test;
 
-import java.util.ArrayList;
+import java.math.BigDecimal;
 
 import static org.junit.Assert.assertEquals;
 
 public class BankTest {
-    private static final double DOUBLE_DELTA = 1e-15;
+    private static final Money DELTA = new Money("1e-15");
 
     @Test
     public void customerSummary() {
         Bank bank = new Bank();
         Customer john = new Customer("John");
-        john.openAccount(new Account(Account.CHECKING));
+        john.openAccount(new CheckingAccount());
         bank.addCustomer(john);
 
         assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
@@ -22,53 +25,44 @@ public class BankTest {
     @Test
     public void checkingAccount() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.CHECKING);
+        Account checkingAccount = new CheckingAccount();
         Customer bill = new Customer("Bill").openAccount(checkingAccount);
         bank.addCustomer(bill);
 
-        checkingAccount.deposit(100.0);
+        checkingAccount.deposit(new Money("100.0"));
 
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+        // value we are aiming to get
+        Money targetValue = new Money("0.1");
+
+        // absolute difference between target value and test value
+        Money difference = targetValue.subtract(bank.totalInterestPaid()).abs();
+
+        // if difference between test and target is less than delta then it is considered accurate
+        boolean lessThanDelta = DELTA.compareTo(difference) >= 0;
+
+        assert(lessThanDelta);
     }
 
-    @Test
-    public void savings_account() {
-        Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
-
-        checkingAccount.deposit(1500.0);
-
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
-    }
-
-    @Test
-    public void maxi_savings_account() {
-        Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
-
-        checkingAccount.deposit(3000.0);
-
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
-    }
-
-    @Test
-    public void animal_test() {
-        ArrayList<Animal> animals = new ArrayList<Animal>();
-
-        Dog dog1 = new Dog();
-        Animal dog2 = new Dog();
-
-        Cat cat1 = new Cat();
-
-        animals.add(dog1);
-        animals.add(dog2);
-        animals.add(cat1);
-
-        for (Animal x : animals) {
-            x.make_noise();
-        }
-    }
+//    @Test
+//    public void savings_account() {
+//        Bank bank = new Bank();
+//        Account checkingAccount = new SavingsAccount();
+//        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+//
+//        checkingAccount.deposit(1500.0);
+//
+//        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+//    }
+//
+//    @Test
+//    public void maxi_savings_account() {
+//        Bank bank = new Bank();
+//        Account checkingAccount = new MaxiSavingsAccount();
+//        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+//
+//        checkingAccount.deposit(3000.0);
+//
+//        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+//    }
 
 }
