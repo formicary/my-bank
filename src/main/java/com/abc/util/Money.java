@@ -2,13 +2,57 @@ package com.abc.util;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.security.PublicKey;
 
 public class Money extends BigDecimal {
+
+    /**
+     * for quickly initialising a zero value
+     */
+    public static Money ZERO = (Money) BigDecimal.ZERO;
+
+
     /**
      * A high accuracy method of storing monetary value that does not suffer from the same errors as double
      * @param val string representation of the monetary value
      */
     public Money(String val) {
         super(val);
+    }
+
+    /**
+     * helper function to reduce the amount of casting of BigDecimal to Money
+     * @return Money
+     */
+    @Override
+    public Money add(BigDecimal amount){
+        return (Money) amount.add(this);
+    }
+
+    /**
+     * helper function to reduce the amount of casting of BigDecimal to Money
+     * @return Money
+     */
+    @Override
+    public Money negate(){
+        return (Money) super.negate();
+    }
+
+    /**
+     * helper function to reduce the amount of casting of BigDecimal to Money
+     * @return Money
+     */
+    @Override
+    public Money abs(){
+        return (Money) super.abs();
+    }
+
+    /**
+     * prints the value exactly
+     * @return
+     */
+    @Override
+    public String toString() {
+        return super.toPlainString();
     }
 }

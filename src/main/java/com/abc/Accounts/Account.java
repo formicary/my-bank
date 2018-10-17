@@ -1,7 +1,9 @@
 package com.abc.Accounts;
 
 import com.abc.Transaction;
+import com.abc.util.Money;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,26 +21,44 @@ abstract public class Account {
         this.transactions = new ArrayList<Transaction>();
     }
 
-    public void deposit(double amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
+    public void deposit(Money amount) {
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) { // if amount deposited is less than/equal to 0
+            throw new IllegalArgumentException("amount deposited must be greater than zero");
         } else {
             transactions.add(new Transaction(amount));
         }
     }
 
-    abstract public void withdraw(double amount);
+    public void withdraw(Money amount){
+
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) { // if amount withdrawn is less than/equal to 0
+            throw new IllegalArgumentException("amount withdrawn must be greater than zero");
+        }
+
+        // check if the customer has enough funds to withdraw
+        Money balance = sumTransactions();
+
+        if (balance.compareTo(amount) < 0) { // the customer dot NOT have enough funds to withdraw
+            throw new IllegalArgumentException("amount withdrawn must be less than or equal to account balance");
+        }
+
+        // customer can withdraw normally
+        transactions.add(new Transaction((Money) amount.negate()));
+    }
 
     public List<Transaction> getTransactions() {
         return transactions;
     }
 
-    abstract public double interestEarned();
+    abstract public Money interestEarned();
 
-    public double sumTransactions() {
-        double amount = 0.0;
+    public Money sumTransactions() {
+
+        Money amount = (Money) BigDecimal.ZERO;
+
         for (Transaction t: transactions)
-            amount += t.getAmount();
+            amount = (Money) amount.add(t.getAmount());
+
         return amount;
     }
 
