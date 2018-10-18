@@ -5,7 +5,7 @@ import java.time.LocalDate;
 public class DateProvider {
 
     // Clock package-private for testing
-    LocalDate date;
+    public LocalDate date;
 
     // Sets date to present time when instantiated.
     public DateProvider(){
@@ -25,8 +25,8 @@ public class DateProvider {
         return date1.isEqual(date2);
     }
 
-    // For testing the date.
-    void setDate(LocalDate newDate){
+    // For testing.
+    public void setDate(LocalDate newDate){
         date = newDate;
     }
 

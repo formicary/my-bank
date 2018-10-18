@@ -1,5 +1,3 @@
-// Manages all currency-related issues, such as rounding, conversion.
-
 package com.abc;
 
 import java.math.BigDecimal;

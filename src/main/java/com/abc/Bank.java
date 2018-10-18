@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class Bank {
+
     private Map<Integer, Customer> customers;
 
     public Bank() {
@@ -34,7 +35,7 @@ public class Bank {
         return number + " " + (number == 1 ? word : word + "s");
     }
 
-    // Returns the amount of interest due to 2 decimal places.
+    // Returns the amount of interest due to all customers.
     public BigDecimal totalInterestPaid() {
         BigDecimal total = new BigDecimal(0);
         Iterator it = customers.entrySet().iterator();
