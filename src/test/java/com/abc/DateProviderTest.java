@@ -3,7 +3,6 @@ package com.abc;
 import org.junit.Test;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -14,9 +13,8 @@ public class DateProviderTest {
     @Test
     public void changeDateTest(){
         DateProvider date = new DateProvider();
-        date.setDateTime(LocalDateTime.of(2018, 10, 17, 12, 0,0));
-        LocalDateTime falseDate = LocalDateTime.of(2018, 10, 13, 12, 0, 0);
-        LocalDateTime trueDate = LocalDateTime.of(1999, 10, 13, 12, 0, 0);
+        LocalDate falseDate = LocalDate.of(2018, 10, 13);
+        LocalDate trueDate = LocalDate.of(1999, 10, 13);
         assertFalse(date.isOlderThan(falseDate, 10));
         assertTrue(date.isOlderThan(trueDate, 10));
     }

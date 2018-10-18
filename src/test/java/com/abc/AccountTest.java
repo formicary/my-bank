@@ -1,17 +1,16 @@
 package com.abc;
 
 import org.junit.Test;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import static org.junit.Assert.*;
 
 
 public class AccountTest {
 
-    // Tests deposits and withdrawals are summed correctly
     @Test
     public void testSum() {
 
@@ -22,7 +21,6 @@ public class AccountTest {
         assertEquals(BigDecimal.valueOf(125).setScale(2, RoundingMode.HALF_UP), account.sumTransactions());
     }
 
-
     @Test
     public void testTransactionNo() {
         Account account = new Account(Account.CHECKING);
@@ -32,7 +30,7 @@ public class AccountTest {
         assertEquals(account.getNumberOfTransactions(), 3);
     }
 
-    // Tests that a withdrawal will be blocked if there are insufficient funds
+    // Tests that a withdrawal will be blocked if there are insufficient funds.
     @Test
     public void notEnoughFunds() {
         Account account = new Account(Account.CHECKING);
@@ -41,7 +39,7 @@ public class AccountTest {
         assertEquals(BigDecimal.valueOf(50).setScale(2, RoundingMode.HALF_UP), account.sumTransactions());
     }
 
-    // Tests the check10DayWithdrawal function
+    // Tests the check10DayWithdrawal function when no withdrawals are made. All transactions occur on same day.
     @Test
     public void testSimple10DayNoWithdrawals() {
         Account account = new Account(Account.MAXI_SAVINGS);
@@ -52,6 +50,7 @@ public class AccountTest {
         assertFalse(account.check10DayWithdraw(3, new DateProvider()));
     }
 
+    // Tests the check10DayWithdrawal function when a withdrawals has been made. All transactions occur on same day.
     @Test
     public void testSimple10DayWithdrawals() {
         Account account = new Account(Account.MAXI_SAVINGS);
@@ -67,28 +66,29 @@ public class AccountTest {
         assertTrue(account.check10DayWithdraw(5, new DateProvider()));
     }
 
+    // Tests the check10DayWithdrawal function when no withdrawals are made. Transactions are made on different days.
     @Test
     public void test10DayDate() {
         Account account = new Account(Account.MAXI_SAVINGS);
         // Deposit and withdraw with mock transaction dates.
-        account.dateProvider.setDateTime(LocalDateTime.of(2018, 12, 12, 12, 0, 0));
+        account.dateProvider.setDate(LocalDate.of(2018, 12, 12));
         account.deposit(BigDecimal.valueOf(60));
-        account.dateProvider.setDateTime(LocalDateTime.of(2018, 12, 12, 12, 0, 1));
+        account.dateProvider.setDate(LocalDate.of(2018, 12, 12));
         account.withdraw(BigDecimal.valueOf(1));
 
         // Assert date and time has been set correctly.
-        assertEquals(account.transactions.get(0).getDateTime(), LocalDateTime.of(2018, 12, 12, 12, 0, 0));
-        assertEquals(account.transactions.get(1).getDateTime(), LocalDateTime.of(2018, 12, 12, 12, 0, 1));
+        assertEquals(account.transactions.get(0).getDate(), LocalDate.of(2018, 12, 12));
+        assertEquals(account.transactions.get(1).getDate(), LocalDate.of(2018, 12, 12));
 
         // Create mock account date, set to a day after the transactions and assert that there has been a
         // withdrawal in the last 10 days.
         DateProvider mockDateProvider = new DateProvider();
-        mockDateProvider.setDateTime(LocalDateTime.of(2018, 12, 13, 12, 0, 0));
+        mockDateProvider.setDate(LocalDate.of(2018, 12, 13));
         assertTrue(account.check10DayWithdraw(1, mockDateProvider));
 
         // Create mock account date, set to 10 days after the withdrawal and assert that there have been
         // no withdrawals in the last 10 days.
-        mockDateProvider.setDateTime(LocalDateTime.of(2018, 12, 30, 12, 0, 0));
+        mockDateProvider.setDate(LocalDate.of(2018, 12, 30));
         assertFalse(account.check10DayWithdraw(1, mockDateProvider));
     }
 

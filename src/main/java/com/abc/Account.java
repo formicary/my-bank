@@ -116,7 +116,7 @@ public class Account {
         ListIterator li = transactions.listIterator(index);
         while(li.hasPrevious()) {
             Transaction t = (Transaction)li.previous();
-            if (dateTime.isOlderThan(t.getDateTime(), 10)){
+            if (dateTime.isOlderThan(t.getDate(), 10)){
                 return false;
             }
             if (t.getType()==Transaction.WITHDRAWAL){

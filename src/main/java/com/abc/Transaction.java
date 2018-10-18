@@ -18,7 +18,6 @@ public class Transaction {
 
     public Transaction(BigDecimal amount, DateProvider dateProvider) {
         this.amount = amount;
-        this.transactionDateTime = dateProvider.getDateTime();
         this.transactionDate = dateProvider.getDate();
         if (amount.compareTo(BigDecimal.ZERO)<0){
             type = WITHDRAWAL;
