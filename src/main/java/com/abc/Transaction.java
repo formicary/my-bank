@@ -7,7 +7,8 @@ import java.util.Date;
 
 public class Transaction {
     public static final int CUSTOMER = 0; // Customer deposited or withdrew money
-    public static final int BANK = 2; // Bank deposited or withdrew money (e.g. deposit money as interest earned)
+    public static final int BANK = 1; // Bank deposited or withdrew money (e.g. deposit money as interest earned)
+    public static final int TRANSFER = 2; // Customer transfers from one account to another
 
 
     private final Money amount;

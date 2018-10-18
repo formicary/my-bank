@@ -79,4 +79,36 @@ public class Customer {
     private String toDollars(Money d){
         return String.format("$%,.2f", d.abs().doubleValue()); // converts BigDecimal back to decimal for displaying values
     }
+
+    /**
+     * transfers funds from one account to another
+     * @param amount amount being transferred
+     * @param from funds being taken from
+     * @param to funds being given to
+     */
+    public void transfer(Money amount , Account from, Account to){
+
+        // if transferring to the same account
+        if (from == to) {
+            throw new IllegalArgumentException("Cannot transfer to the same account");
+        }
+
+        // if one of the accounts is not attached to the customer then throw exception
+        if (!existsAccount(from) || !existsAccount(to)) {
+            throw new IllegalArgumentException("Both accounts must attached to the customer");
+        }
+
+        from.withdraw(amount, Transaction.TRANSFER);// if not enough funds then should throw an exception and not do anything
+        to.deposit(amount, Transaction.TRANSFER);
+
+    }
+
+    /**
+     * helper function to determine if an account is attached to a customer
+     * @param account
+     * @return true if account exists and false if it does not
+     */
+    private boolean existsAccount(Account account){
+        return accounts.contains(account);
+    }
 }
