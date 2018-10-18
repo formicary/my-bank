@@ -2,6 +2,7 @@ package com.abc.util;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.math.RoundingMode;
 import java.security.PublicKey;
 
 public class Money extends BigDecimal {
@@ -18,6 +19,9 @@ public class Money extends BigDecimal {
      */
     public Money(String val) {
         super(val);
+
+        super.setScale(32, RoundingMode.HALF_UP); // 32dp
+
     }
 
     /**
@@ -53,7 +57,7 @@ public class Money extends BigDecimal {
      */
     @Override
     public Money divide(BigDecimal amount){
-        return new Money(super.divide(amount).toString());
+        return new Money(super.divide(amount,32, RoundingMode.HALF_UP).toString());
     }
 
     /**

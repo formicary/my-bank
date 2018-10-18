@@ -7,8 +7,6 @@ import com.abc.Accounts.SavingsAccount;
 import com.abc.util.Money;
 import org.junit.Test;
 
-import java.math.BigDecimal;
-
 import static org.junit.Assert.assertEquals;
 
 public class BankTest {
@@ -45,6 +43,25 @@ public class BankTest {
         boolean lessThanDelta = DELTA.compareTo(difference) >= 0;
 
         assert(lessThanDelta);
+    }
+
+    @Test
+    public void checkingAccountDailyInterest(){
+        Account checkingAccount = new CheckingAccount();
+        Customer bill = new Customer("Bill").openAccount(checkingAccount);
+
+        // amount of money to check daily interest on
+        Money amount = new Money("100");
+
+        checkingAccount.deposit(amount, Transaction.CUSTOMER);
+        Money interestRate = new Money("0.001");
+        final Money days = new Money("365");
+
+        // target result
+        Money target = amount.multiply(interestRate.divide(days)); // amount*(interestRate/days)
+
+
+        assert(target.compareTo(checkingAccount.dailyInterestEarned()) == 0);
     }
 
 

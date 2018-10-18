@@ -71,8 +71,8 @@ abstract public class Account {
      *
      * mainly a helper function to reduce repeated code
      *
-     * @param amount principle amount
-     * @param rate annual interest rate
+     * @param P principle amount
+     * @param r annual interest rate
      * @return
      */
     protected Money dailyInterestAtRate(Money P, Money r){

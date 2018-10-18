@@ -1,14 +1,26 @@
 package com.abc.Accounts;
 
 import com.abc.Transaction;
+import com.abc.util.DateProvider;
 import com.abc.util.Money;
 
 import java.math.BigDecimal;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.Temporal;
+import java.time.temporal.TemporalAmount;
+import java.time.temporal.TemporalUnit;
 import java.util.Date;
 
 public class MaxiSavingsAccount extends Account {
 
-    private Date lastWithdraw = null;
+    /**
+     * stored the last time a customer has withdrawn money in order to incur a penalty interest rate
+     */
+    private Instant lastWithdraw = null;
 
     public MaxiSavingsAccount() {
         super(Account.MAXI_SAVINGS);
@@ -58,7 +70,20 @@ public class MaxiSavingsAccount extends Account {
 
     public Money dailyInterestEarned() {
 
-        long diffInMillies = Math.abs(secondDate.getTime() - lastWithdraw.getTime());
-        long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+        Instant now = Instant.now();
+
+        // check difference in days between now and last withdraw
+        Duration duration = Duration.between(now, lastWithdraw);
+
+
+        Money interestRate = null;
+
+        if (duration.toDays() < 10){ // if still in the penalty period of withdrawn funds within the last 10 days
+            interestRate = new Money("0.001"); // interest rate is 0.1%
+        }else { // else interest rate is normal 5%
+            interestRate = new Money("0.05");
+        }
+
+        return dailyInterestAtRate(sumTransactions(), interestRate);
     }
 }
