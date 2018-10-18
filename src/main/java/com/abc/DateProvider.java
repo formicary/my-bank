@@ -1,18 +1,34 @@
 package com.abc;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
 
 public class DateProvider {
-    private static DateProvider instance = null;
 
-    public static DateProvider getInstance() {
-        if (instance == null)
-            instance = new DateProvider();
-        return instance;
+    // Clock package-private for testing
+    public LocalDate date;
+
+    // Sets date to present time when instantiated.
+    public DateProvider(){
+        date = LocalDate.now();
     }
 
-    public Date now() {
-        return Calendar.getInstance().getTime();
+    LocalDate getDate() {
+        return date;
     }
+
+
+    public boolean isOlderThan(LocalDate a, long days){
+        return a.isBefore(date.minusDays(days));
+    }
+
+    public static boolean isSameDate(LocalDate date1, LocalDate date2){
+        return date1.isEqual(date2);
+    }
+
+    // For testing.
+    public void setDate(LocalDate newDate){
+        date = newDate;
+    }
+
 }
+

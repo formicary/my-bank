@@ -1,23 +1,31 @@
 package com.abc;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class Bank {
-    private List<Customer> customers;
+
+    private Map<Integer, Customer> customers;
 
     public Bank() {
-        customers = new ArrayList<Customer>();
+        customers = new HashMap<>();
     }
 
+    // Adds a customer to the hash map, using their unique ID as a key.
     public void addCustomer(Customer customer) {
-        customers.add(customer);
+        customers.put(customer.getID(), customer);
     }
 
     public String customerSummary() {
         String summary = "Customer Summary";
-        for (Customer c : customers)
+        Iterator it = customers.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            Customer c = (Customer) pair.getValue();
             summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
+        }
         return summary;
     }
 
@@ -27,18 +35,23 @@ public class Bank {
         return number + " " + (number == 1 ? word : word + "s");
     }
 
-    public double totalInterestPaid() {
-        double total = 0;
-        for(Customer c: customers)
-            total += c.totalInterestEarned();
-        return total;
+    // Returns the amount of interest due to all customers.
+    public BigDecimal totalInterestPaid() {
+        BigDecimal total = new BigDecimal(0);
+        Iterator it = customers.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            Customer c = (Customer) pair.getValue();
+            total = c.totalInterestEarned().add(total);
+        }
+        return CurrencyManager.roundBigDecimal(total);
     }
 
     public String getFirstCustomer() {
         try {
-            customers = null;
             return customers.get(0).getName();
-        } catch (Exception e){
+        }
+        catch (Exception e){
             e.printStackTrace();
             return "Error";
         }

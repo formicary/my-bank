@@ -1,9 +1,12 @@
 package com.abc;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class CustomerTest {
 
@@ -15,9 +18,9 @@ public class CustomerTest {
 
         Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
 
-        checkingAccount.deposit(100.0);
-        savingsAccount.deposit(4000.0);
-        savingsAccount.withdraw(200.0);
+        checkingAccount.deposit(BigDecimal.valueOf(100.0));
+        savingsAccount.deposit(BigDecimal.valueOf(4000.0));
+        savingsAccount.withdraw(BigDecimal.valueOf(200.0));
 
         assertEquals("Statement for Henry\n" +
                 "\n" +
@@ -47,11 +50,22 @@ public class CustomerTest {
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
-    @Ignore
+    @Test
     public void testThreeAcounts() {
         Customer oscar = new Customer("Oscar")
                 .openAccount(new Account(Account.SAVINGS));
         oscar.openAccount(new Account(Account.CHECKING));
+        oscar.openAccount(new Account(Account.MAXI_SAVINGS));
         assertEquals(3, oscar.getNumberOfAccounts());
+    }
+
+    @Test
+    public void testTransfer(){
+        Customer oscar = new Customer("Oscar")
+                .openAccount(new Account(Account.SAVINGS));
+        oscar.openAccount(new Account(Account.CHECKING));
+        assertNull(oscar.getAccount(2));
+        oscar.transfer(oscar.getAccount(0), oscar.getAccount(1), BigDecimal.valueOf(50.00));
+        assertEquals(BigDecimal.valueOf(50).setScale(2, RoundingMode.HALF_UP), oscar.getAccount(1).sumTransactions());
     }
 }
