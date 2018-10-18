@@ -10,9 +10,9 @@ public class TransactionTest {
     // Creates transactions and tests that they are correctly labelled as Deposits or Withdrawals
     @Test
     public void transaction() {
-        Transaction t = new Transaction(BigDecimal.valueOf(5));
+        Transaction t = new Transaction(BigDecimal.valueOf(5), new DateProvider());
         assertEquals(t.getType(), Transaction.DEPOSIT);
-        Transaction t2 = new Transaction(BigDecimal.valueOf(-5));
+        Transaction t2 = new Transaction(BigDecimal.valueOf(-5), new DateProvider());
         assertEquals(t2.getType(), Transaction.WITHDRAWAL);
     }
 }
