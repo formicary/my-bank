@@ -7,7 +7,7 @@ public class DateProvider {
     // Clock package-private for testing
     LocalDate date;
 
-    // Sets date and dateTime variables to present time when instantiated.
+    // Sets date to present time when instantiated.
     public DateProvider(){
         date = LocalDate.now();
     }

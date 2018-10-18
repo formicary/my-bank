@@ -47,7 +47,7 @@ public class AccountTest {
         account.deposit(BigDecimal.valueOf(50));
         account.deposit(BigDecimal.valueOf(100));
         account.deposit(BigDecimal.valueOf(50));
-        assertFalse(account.check10DayWithdraw(3, new DateProvider()));
+        assertFalse(account.check10DayWithdrawal(3, new DateProvider()));
     }
 
     // Tests the check10DayWithdrawal function when a withdrawals has been made. All transactions occur on same day.
@@ -61,9 +61,9 @@ public class AccountTest {
         account.deposit(BigDecimal.valueOf(50));
         account.withdraw(BigDecimal.valueOf(50));
 
-        assertTrue(account.check10DayWithdraw(4, new DateProvider()));
-        assertFalse(account.check10DayWithdraw(1, new DateProvider()));
-        assertTrue(account.check10DayWithdraw(5, new DateProvider()));
+        assertTrue(account.check10DayWithdrawal(4, new DateProvider()));
+        assertFalse(account.check10DayWithdrawal(1, new DateProvider()));
+        assertTrue(account.check10DayWithdrawal(5, new DateProvider()));
     }
 
     // Tests the check10DayWithdrawal function when no withdrawals are made. Transactions are made on different days.
@@ -84,12 +84,12 @@ public class AccountTest {
         // withdrawal in the last 10 days.
         DateProvider mockDateProvider = new DateProvider();
         mockDateProvider.setDate(LocalDate.of(2018, 12, 13));
-        assertTrue(account.check10DayWithdraw(1, mockDateProvider));
+        assertTrue(account.check10DayWithdrawal(1, mockDateProvider));
 
         // Create mock account date, set to 10 days after the withdrawal and assert that there have been
         // no withdrawals in the last 10 days.
         mockDateProvider.setDate(LocalDate.of(2018, 12, 30));
-        assertFalse(account.check10DayWithdraw(1, mockDateProvider));
+        assertFalse(account.check10DayWithdrawal(1, mockDateProvider));
     }
 
     @Test

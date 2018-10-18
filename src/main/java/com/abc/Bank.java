@@ -43,18 +43,8 @@ public class Bank {
             Customer c = (Customer) pair.getValue();
             total = c.totalInterestEarned().add(total);
         }
-        return new CurrencyManager().roundBigDecimal(total);
+        return CurrencyManager.roundBigDecimal(total);
     }
-
-//    public payInterest(){
-//
-//        Iterator it = customers.entrySet().iterator();
-//        while (it.hasNext()) {
-//            Map.Entry pair = (Map.Entry)it.next();
-//            Customer c = (Customer) pair.getValue();
-//            total = c.totalInterestEarned().add(total);
-//        }
-//    }
 
     public String getFirstCustomer() {
         try {

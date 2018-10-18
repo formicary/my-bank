@@ -2,7 +2,6 @@ package com.abc;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 
 public class Transaction {
@@ -13,7 +12,6 @@ public class Transaction {
     private final BigDecimal amount;
     private final int type;
 
-    private LocalDateTime transactionDateTime;
     private LocalDate transactionDate;
 
     public Transaction(BigDecimal amount, DateProvider dateProvider) {
@@ -33,10 +31,6 @@ public class Transaction {
 
     public BigDecimal getAmount(){
         return new CurrencyManager().roundBigDecimal(amount);
-    }
-
-    public LocalDateTime getDateTime(){
-        return transactionDateTime;
     }
 
     public LocalDate getDate(){

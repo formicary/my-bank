@@ -1,7 +1,6 @@
 package com.abc;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -44,6 +43,7 @@ public class Account {
         }
     }
 
+    // Gets the total compound interest rate for the account.
     public BigDecimal interestEarned() {
         BigDecimal totalAmount = BigDecimal.valueOf(0);
         BigDecimal totalInterest = BigDecimal.valueOf(0);
@@ -68,7 +68,7 @@ public class Account {
                         dailyInterest = BigDecimal.valueOf(1).add((totalAmount.subtract(BigDecimal.valueOf(1000))).multiply(BigDecimal.valueOf(0.002)));
                         break;
                 case MAXI_SAVINGS:
-                    if (!check10DayWithdraw(checkLastDailyTransaction().get(count), dateProvider)) {
+                    if (!check10DayWithdrawal(checkLastDailyTransaction().get(count), dateProvider)) {
                         dailyInterest = totalAmount.multiply(BigDecimal.valueOf(0.05));
                         break;
                     }
@@ -77,15 +77,14 @@ public class Account {
                     break;
 
             }
-
         totalAmount = totalAmount.add(dailyInterest);
         totalInterest = totalInterest.add(dailyInterest);
 
         }
-        return totalInterest.setScale(2, RoundingMode.HALF_UP);
+        return CurrencyManager.roundBigDecimal(totalInterest);
     }
 
-
+    // Returns a a list with the indexes of each of the last daily transactions for the account.
     public List<Integer> checkLastDailyTransaction() {
         ListIterator<Transaction> it = transactions.listIterator();
         List<Integer> lastDailyTransactions = new ArrayList<Integer>();
@@ -110,13 +109,14 @@ public class Account {
         return lastDailyTransactions;
     }
 
-
-    public boolean check10DayWithdraw(int index, DateProvider dateTime){
+    // Checks whether there has been a withdrawal within 10 days from the account. The index provided must be the index
+    // of the last daily transaction for any given day.
+    public boolean check10DayWithdrawal(int index, DateProvider date){
         index+=1;
         ListIterator li = transactions.listIterator(index);
         while(li.hasPrevious()) {
             Transaction t = (Transaction)li.previous();
-            if (dateTime.isOlderThan(t.getDate(), 10)){
+            if (date.isOlderThan(t.getDate(), 10)){
                 return false;
             }
             if (t.getType()==Transaction.WITHDRAWAL){
@@ -127,6 +127,8 @@ public class Account {
         return false;
     }
 
+    // Returns a list with each element representing the sum total of the transactions on each day where a transaction
+    // was made.
     public List<BigDecimal> sumDailyTransactions() {
         ListIterator<Transaction> it = transactions.listIterator();
         List<BigDecimal> dailysums = new ArrayList<BigDecimal>();
@@ -142,10 +144,12 @@ public class Account {
                 next = it.next();
                 it.previous();
 
+                // If the next date is the same as current, add to current element.
                 if (DateProvider.isSameDate(next.getDate(), current.getDate())) {
                     amount = amount.add(current.getAmount());
                     dailysums.set(count, amount);
                 }
+                // Else add to current element and then create a new element for the next date, increasing the count.
                 else{
                     amount = amount.add(current.getAmount());
                     dailysums.set(count, amount);
@@ -165,7 +169,7 @@ public class Account {
     }
 
     public BigDecimal sumTransactions() {
-       return new CurrencyManager().roundBigDecimal(getTransactionsSum());
+       return CurrencyManager.roundBigDecimal(getTransactionsSum());
     }
 
     public int getNumberOfTransactions() {
