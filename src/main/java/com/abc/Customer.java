@@ -1,13 +1,17 @@
 package com.abc;
 
 import java.util.ArrayList;
+import java.util.Formatter;
 import java.util.List;
+import java.util.Locale;
 
 import static java.lang.Math.abs;
 
 public class Customer {
     private String name;
     private List<Account> accounts;
+    private StringBuilder sb;
+    private Formatter formatter;
 
     public Customer(String name) {
         this.name = name;
@@ -25,6 +29,17 @@ public class Customer {
 
     public int getNumberOfAccounts() {
         return accounts.size();
+    }
+    
+    public void transferMoney(Account from, Account to, double amount) {
+    	if (amount <= 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        } else {
+        	from.withdraw(amount);
+        	to.deposit(amount);
+        }
+    	
+    	
     }
 
     public double totalInterestEarned() {
@@ -73,6 +88,11 @@ public class Customer {
     }
 
     private String toDollars(double d){
-        return String.format("$%,.2f", abs(d));
+    	sb = new StringBuilder();
+    	formatter = new Formatter(sb, Locale.US);
+    	formatter.format("$%,.2f", abs(d));
+    	return sb.toString();
     }
+    
+    
 }
