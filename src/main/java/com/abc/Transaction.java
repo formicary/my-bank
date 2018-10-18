@@ -3,6 +3,7 @@ package com.abc;
 import com.abc.util.DateProvider;
 import com.abc.util.Money;
 
+import java.time.Instant;
 import java.util.Date;
 
 public class Transaction {
@@ -13,13 +14,13 @@ public class Transaction {
 
     private final Money amount;
 
-    private final Date transactionDate;
+    private final Instant transactionDate;
 
     private final int transactionType;
 
     public Transaction(Money amount, int transactionType) {
         this.amount = amount;
-        this.transactionDate = DateProvider.getInstance().now();
+        this.transactionDate = DateProvider.now();
         this.transactionType = transactionType;
     }
 
@@ -27,7 +28,7 @@ public class Transaction {
         return amount;
     }
 
-    public Date getTransactionDate() {
+    public Instant getTransactionDate() {
         return transactionDate;
     }
 
