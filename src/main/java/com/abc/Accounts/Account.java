@@ -52,7 +52,17 @@ abstract public class Account {
     }
 
 
-    abstract public Money interestEarned();
+    public Money interestEarned(){
+        Money interestEarned = Money.ZERO;
+
+        for (Transaction t: transactions) {
+            if (t.getTransactionType() == Transaction.BANK){ // if bank has added money into the account then count as interest earned on account
+                interestEarned = interestEarned.add(t.getAmount());
+            }
+        }
+
+        return interestEarned;
+    }
 
     /**
      *

@@ -8,29 +8,30 @@ public class SavingsAccount extends Account{
         super(Account.SAVINGS);
     }
 
-    public Money interestEarned() {
-        Money amount = sumTransactions();
-
-        if (amount.compareTo(new Money("1000")) <= 0) // if amount is less than or equal to 1000
-            return amount.multiply(new Money("0.001"));
-        else{
-            Money one = new Money("1"); // 1 from 1000*0.001 (interest on the first 1000)
-
-            // difference in amount that exceeds 1000
-            Money amountOver1000 = amount.subtract(new Money("1000"));
-
-            // apply 0.2% interest on the value over 1000
-            Money interestOver1000 = amountOver1000.multiply(new Money("0.002"));
-
-            return one.add(interestOver1000);
-        }
-    }
+    // same as MaxiSavingsAccount interest earned
+//    public Money interestEarned() {
+//        Money amount = sumTransactions();
+//
+//        if (amount.compareTo(new Money("1000")) <= 0) // if amount is less than or equal to 1000
+//            return amount.multiply(new Money("0.001"));
+//        else{
+//            Money one = new Money("1"); // 1 from 1000*0.001 (interest on the first 1000)
+//
+//            // difference in amount that exceeds 1000
+//            Money amountOver1000 = amount.subtract(new Money("1000"));
+//
+//            // apply 0.2% interest on the value over 1000
+//            Money interestOver1000 = amountOver1000.multiply(new Money("0.002"));
+//
+//            return one.add(interestOver1000);
+//        }
+//    }
 
     public Money dailyInterestEarned() {
         Money amount = sumTransactions();
         Money interestEarned = Money.ZERO;
 
-        // NOTE: interest rate is calculated in descending order (starting with interest rate of $1000+ then interest rate of $0-1000)
+        // NOTE: interest rate is calculated in reverse order (starting with interest rate of $1000+ then interest rate of $0-1000)
 
         // interest bracket of 1000+
         Money bracket1Amount = new Money("1000");
