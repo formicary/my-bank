@@ -33,7 +33,7 @@ public class Bank {
     public Money totalInterestPaid() {
         Money total = Money.ZERO;
         for(Customer c: customers)
-            total = total.add((Money) c.totalInterestEarned());
+            total = total.add(c.totalInterestEarned());
         return total;
     }
 

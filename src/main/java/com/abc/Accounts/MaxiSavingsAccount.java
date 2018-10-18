@@ -1,8 +1,14 @@
 package com.abc.Accounts;
 
+import com.abc.Transaction;
 import com.abc.util.Money;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 public class MaxiSavingsAccount extends Account {
+
+    private Date lastWithdraw = null;
 
     public MaxiSavingsAccount() {
         super(Account.MAXI_SAVINGS);
@@ -37,5 +43,22 @@ public class MaxiSavingsAccount extends Account {
             return interestFromFirst2000.add(interestOver2000);
         }
 
+    }
+
+    @Override
+    public void withdraw(Money amount, int transactionType) {
+        super.withdraw(amount, transactionType);
+
+        // if a customer has withdrawn money
+        if (amount.compareTo(Money.ZERO) < 0 && transactionType == Transaction.CUSTOMER){
+            // set last withdraw to time of last transaction
+            lastWithdraw = transactions.get(transactions.size() - 1).getTransactionDate();
+        }
+    }
+
+    public Money dailyInterestEarned() {
+
+        long diffInMillies = Math.abs(secondDate.getTime() - lastWithdraw.getTime());
+        long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
     }
 }

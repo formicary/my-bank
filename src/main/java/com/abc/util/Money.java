@@ -52,6 +52,15 @@ public class Money extends BigDecimal {
      * @return Money
      */
     @Override
+    public Money divide(BigDecimal amount){
+        return new Money(super.divide(amount).toString());
+    }
+
+    /**
+     * helper function to reduce the amount of casting of BigDecimal to Money
+     * @return Money
+     */
+    @Override
     public Money negate(){
         return new Money(super.negate().toString());
     }

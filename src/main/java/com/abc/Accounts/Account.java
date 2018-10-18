@@ -51,7 +51,35 @@ abstract public class Account {
         return transactions;
     }
 
+
     abstract public Money interestEarned();
+
+    /**
+     *
+     * @return amount of interest earned in 1 day
+     */
+    abstract public Money dailyInterestEarned();
+
+    /**
+     * calculates the amount of money an account earns per day
+     * using equation A = P(r/n)
+     * where:
+     * A = interest earned per day
+     * P = principle amount
+     * r = interest rate in decimal
+     * n = number of times per year it will be calculated (constant 365)
+     *
+     * mainly a helper function to reduce repeated code
+     *
+     * @param amount principle amount
+     * @param rate annual interest rate
+     * @return
+     */
+    protected Money dailyInterestAtRate(Money P, Money r){
+        final Money n = new Money("365");
+
+        return P.multiply(r.divide(n));
+    }
 
     public Money sumTransactions() {
 

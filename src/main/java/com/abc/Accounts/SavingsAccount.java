@@ -25,4 +25,30 @@ public class SavingsAccount extends Account{
             return one.add(interestOver1000);
         }
     }
+
+    public Money dailyInterestEarned() {
+        Money amount = sumTransactions();
+        Money interestEarned = Money.ZERO;
+
+        // NOTE: interest rate is calculated in descending order (starting with interest rate of $1000+ then interest rate of $0-1000)
+
+        // interest bracket of 1000+
+        Money bracket1Amount = new Money("1000");
+        if(amount.compareTo(bracket1Amount) > 0){ // if amount is greater than 1000
+            Money interestRate2 = new Money("0.002"); // 0.2% interest
+            Money amountOver1000 = amount.subtract(bracket1Amount); // amount of funds that the second interest will be applied to
+
+            interestEarned = interestEarned.add(dailyInterestAtRate(amountOver1000, interestRate2)); // adds interest earned in this bracket to the total interest rate earned
+
+            // remove the amount that interest was applied to from total amount left
+            amount = amount.subtract(amountOver1000);
+        }
+
+        // interest bracket of 0-1000
+        Money interestRate1 = new Money("0.002"); // 0.1% interest
+
+        interestEarned = interestEarned.add(dailyInterestAtRate(amount, interestRate1)); // adds interest earned in this bracket to the total interest rate earned
+
+        return interestEarned;
+    }
 }
