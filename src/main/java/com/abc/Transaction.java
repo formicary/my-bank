@@ -6,10 +6,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class Transaction {
-    public static final int CUSTOMER_DEPOSIT = 0;
-    public static final int CUSTOMER_WITHDRAW = 1;
-    public static final int BANK_INTEREST_DEPOSIT = 2;
-    public static final int BANK_FEE = 3;
+    public static final int CUSTOMER = 0; // Customer deposited or withdrew money
+    public static final int BANK = 2; // Bank deposited or withdrew money (e.g. deposit money as interest earned)
 
 
     private final Money amount;
@@ -41,23 +39,11 @@ public class Transaction {
      * @return
      */
     public String getTransactionTypeString(){
-        String s = null;
 
-        //Translate to pretty account type
-        switch(transactionType){
-            case CUSTOMER_DEPOSIT:
-                s = "Customer Deposit\n";
-                break;
-            case CUSTOMER_WITHDRAW:
-                s = "Customer Withdraw\n";
-                break;
-            case BANK_INTEREST_DEPOSIT:
-                s = "Bank Interest Deposit\n";
-                break;
-
-            case BANK_FEE:
-                s = "Bank Fee";
+        if (transactionType == CUSTOMER) {
+            return "Customer";
+        }else {
+            return "Bank";
         }
-        return s;
     }
 }

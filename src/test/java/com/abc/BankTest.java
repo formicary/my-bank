@@ -33,7 +33,7 @@ public class BankTest {
         Customer bill = new Customer("Bill").openAccount(checkingAccount);
         bank.addCustomer(bill);
 
-        checkingAccount.deposit(new Money("100.0"));
+        checkingAccount.deposit(new Money("100.0"), Transaction.CUSTOMER);
 
         // value we are aiming to get
         Money targetValue = new Money("0.1");
@@ -56,7 +56,7 @@ public class BankTest {
         Account checkingAccount = new SavingsAccount();
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
-        checkingAccount.deposit(new Money("1500"));
+        checkingAccount.deposit(new Money("1500"), Transaction.CUSTOMER);
 
         // value we are aiming to get
         Money targetValue = new Money("2.0");
@@ -78,7 +78,7 @@ public class BankTest {
         Account checkingAccount = new MaxiSavingsAccount();
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
-        checkingAccount.deposit(new Money("3000.0"));
+        checkingAccount.deposit(new Money("3000.0"), Transaction.CUSTOMER);
 
         // value we are aiming to get
         Money targetValue = new Money("170");

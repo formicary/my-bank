@@ -16,20 +16,21 @@ abstract public class Account {
     protected final int accountType;
     protected List<Transaction> transactions;
 
-    public Account(int accountType) {
+    protected Account(int accountType) {
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
     }
 
-    public void deposit(Money amount) {
+    public void deposit(Money amount, int transactionType) {
         if (amount.compareTo(BigDecimal.ZERO) <= 0) { // if amount deposited is less than/equal to 0
             throw new IllegalArgumentException("amount deposited must be greater than zero");
         } else {
-            transactions.add(new Transaction(amount));
+
+            transactions.add(new Transaction(amount, transactionType));
         }
     }
 
-    public void withdraw(Money amount){
+    public void withdraw(Money amount, int transactionType){
 
         if (amount.compareTo(BigDecimal.ZERO) <= 0) { // if amount withdrawn is less than/equal to 0
             throw new IllegalArgumentException("amount withdrawn must be greater than zero");
@@ -43,7 +44,7 @@ abstract public class Account {
         }
 
         // customer can withdraw normally
-        transactions.add(new Transaction((Money) amount.negate()));
+        transactions.add(new Transaction(amount.negate(), transactionType));
     }
 
     public List<Transaction> getTransactions() {
@@ -57,7 +58,7 @@ abstract public class Account {
         Money amount = Money.ZERO;
 
         for (Transaction t: transactions)
-            amount = (Money) amount.add(t.getAmount());
+            amount = amount.add(t.getAmount());
 
         return amount;
     }
