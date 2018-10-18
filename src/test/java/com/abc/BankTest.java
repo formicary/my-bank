@@ -2,6 +2,7 @@ package com.abc;
 
 import com.abc.Accounts.Account;
 import com.abc.Accounts.CheckingAccount;
+import com.abc.Accounts.MaxiSavingsAccount;
 import com.abc.Accounts.SavingsAccount;
 import com.abc.util.Money;
 import org.junit.Test;
@@ -71,15 +72,24 @@ public class BankTest {
 
     // TODO add extra maxi savings account tests for edge cases
 
-//    @Test
-//    public void maxi_savings_account() {
-//        Bank bank = new Bank();
-//        Account checkingAccount = new MaxiSavingsAccount();
-//        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
-//
-//        checkingAccount.deposit(3000.0);
-//
-//        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
-//    }
+    @Test
+    public void maxi_savings_account() {
+        Bank bank = new Bank();
+        Account checkingAccount = new MaxiSavingsAccount();
+        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+
+        checkingAccount.deposit(new Money("3000.0"));
+
+        // value we are aiming to get
+        Money targetValue = new Money("170");
+
+        // absolute difference between target value and test value
+        Money difference = targetValue.subtract(bank.totalInterestPaid()).abs();
+
+        // if difference between test and target is less than delta then it is considered accurate
+        boolean lessThanDelta = DELTA.compareTo(difference) >= 0;
+
+        assert(lessThanDelta);
+    }
 
 }
