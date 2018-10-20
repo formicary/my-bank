@@ -68,7 +68,7 @@ public class Bank {
     /**
      * interest is paid to the customers at midnight UTC+0 every day
      */
-    public final class InterestPayer extends TimerTask {
+    private final class InterestPayer extends TimerTask {
         @Override
         public void run() {
             Bank.this.payDailyInterest();
@@ -96,7 +96,7 @@ public class Bank {
 
         LocalDateTime currentTime = LocalDateTime.now(); // current date and time
         LocalDateTime midnight = currentTime.toLocalDate().atStartOfDay().plusDays(1); // midnight coming up
-        Instant midnightInstant = midnight.toInstant(OffsetDateTime.now().getOffset());
+        Instant midnightInstant = midnight.toInstant(ZoneOffset.UTC); // convert to UTC+0 midnight
 
         // time until midnight in milliseconds
         return midnightInstant.toEpochMilli() - now.toEpochMilli();
