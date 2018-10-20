@@ -11,22 +11,9 @@ import static org.junit.Assert.assertEquals;
 
 public class AccountTest {
 
-    private static final Money DELTA = new Money("1e-15");
-
-//    // value we are aiming to get
-//    Money targetValue = new Money("0.1");
-//
-//    // absolute difference between target value and test value
-//    Money difference = targetValue.subtract(bank.totalInterestPaid()).abs();
-//
-//    // if difference between test and target is less than delta then it is considered accurate
-//    boolean lessThanDelta = DELTA.compareTo(difference) >= 0;
-//
-//        assert(lessThanDelta);
-
-    // TODO add extra checking account tests for edge cases
-
-
+    /**
+     * checks if daily interest is calculated properly
+     */
     @Test
     public void checkingAccountDailyInterest(){
         Account checkingAccount = new CheckingAccount();
@@ -46,7 +33,6 @@ public class AccountTest {
     }
 
 
-    // TODO add extra savings account tests for edge cases
 
     @Test
     public void savings_accountDailyInterest() {
@@ -60,7 +46,6 @@ public class AccountTest {
         assert(target.compareTo(savingsAccount.dailyInterestEarned()) == 0);
     }
 
-    // TODO add extra maxi savings account tests for edge cases
 
     @Test
     public void maxiSavingsAccountDailyInterest() {
