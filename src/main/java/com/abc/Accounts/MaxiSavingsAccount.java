@@ -75,12 +75,14 @@ public class MaxiSavingsAccount extends Account {
         Instant now = Instant.now();
 
         // check difference in days between now and last withdraw
-        Duration duration = Duration.between(now, lastWithdraw);
-
+        Duration duration = null;
+        if (lastWithdraw != null) { // check if customer has never withdrawn
+             duration = Duration.between(now, lastWithdraw);
+        }
 
         Money interestRate = null;
 
-        if (duration.toDays() < 10){ // if still in the penalty period of withdrawn funds within the last 10 days
+        if (duration != null && duration.toDays() < 10){ // if still in the penalty period of withdrawn funds within the last 10 days
             interestRate = new Money("0.001"); // interest rate is 0.1%
         }else { // else interest rate is normal 5%
             interestRate = new Money("0.05");

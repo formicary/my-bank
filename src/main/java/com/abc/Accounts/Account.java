@@ -14,11 +14,10 @@ abstract public class Account {
     public static final int MAXI_SAVINGS = 2;
 
     protected final int accountType;
-    protected List<Transaction> transactions;
+    protected List<Transaction> transactions = new ArrayList<>();
 
     protected Account(int accountType) {
         this.accountType = accountType;
-        this.transactions = new ArrayList<Transaction>();
     }
 
     public void deposit(Money amount, int transactionType) {

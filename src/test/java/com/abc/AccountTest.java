@@ -13,32 +13,23 @@ public class AccountTest {
 
     private static final Money DELTA = new Money("1e-15");
 
+//    // value we are aiming to get
+//    Money targetValue = new Money("0.1");
+//
+//    // absolute difference between target value and test value
+//    Money difference = targetValue.subtract(bank.totalInterestPaid()).abs();
+//
+//    // if difference between test and target is less than delta then it is considered accurate
+//    boolean lessThanDelta = DELTA.compareTo(difference) >= 0;
+//
+//        assert(lessThanDelta);
+
     // TODO add extra checking account tests for edge cases
-    @Test
-    public void checkingAccount() {
-        Bank bank = new Bank();
-        Account checkingAccount = new CheckingAccount();
-        Customer bill = new Customer("Bill").openAccount(checkingAccount);
-        bank.addCustomer(bill);
 
-        checkingAccount.deposit(new Money("100.0"), Transaction.CUSTOMER);
-
-        // value we are aiming to get
-        Money targetValue = new Money("0.1");
-
-        // absolute difference between target value and test value
-        Money difference = targetValue.subtract(bank.totalInterestPaid()).abs();
-
-        // if difference between test and target is less than delta then it is considered accurate
-        boolean lessThanDelta = DELTA.compareTo(difference) >= 0;
-
-        assert(lessThanDelta);
-    }
 
     @Test
     public void checkingAccountDailyInterest(){
         Account checkingAccount = new CheckingAccount();
-        Customer bill = new Customer("Bill").openAccount(checkingAccount);
 
         // amount of money to check daily interest on
         Money amount = new Money("100");
@@ -58,44 +49,28 @@ public class AccountTest {
     // TODO add extra savings account tests for edge cases
 
     @Test
-    public void savings_account() {
-        Bank bank = new Bank();
-        Account checkingAccount = new SavingsAccount();
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+    public void savings_accountDailyInterest() {
+        Account savingsAccount = new SavingsAccount();
 
-        checkingAccount.deposit(new Money("1500"), Transaction.CUSTOMER);
+        savingsAccount.deposit(new Money("1500"), Transaction.CUSTOMER);
 
         // value we are aiming to get
-        Money targetValue = new Money("2.0");
+        Money target = new Money("0.00821917808219178082191780822000");
 
-        // absolute difference between target value and test value
-        Money difference = targetValue.subtract(bank.totalInterestPaid()).abs();
-
-        // if difference between test and target is less than delta then it is considered accurate
-        boolean lessThanDelta = DELTA.compareTo(difference) >= 0;
-
-        assert(lessThanDelta);
+        assert(target.compareTo(savingsAccount.dailyInterestEarned()) == 0);
     }
 
     // TODO add extra maxi savings account tests for edge cases
 
     @Test
-    public void maxi_savings_account() {
-        Bank bank = new Bank();
-        Account checkingAccount = new MaxiSavingsAccount();
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+    public void maxiSavingsAccountDailyInterest() {
+        Account maxiSavingsAccount = new MaxiSavingsAccount();
 
-        checkingAccount.deposit(new Money("3000.0"), Transaction.CUSTOMER);
+        maxiSavingsAccount.deposit(new Money("3000.0"), Transaction.CUSTOMER);
 
         // value we are aiming to get
-        Money targetValue = new Money("170");
+        Money target = new Money("0.410958904109589041095890410970000");
 
-        // absolute difference between target value and test value
-        Money difference = targetValue.subtract(bank.totalInterestPaid()).abs();
-
-        // if difference between test and target is less than delta then it is considered accurate
-        boolean lessThanDelta = DELTA.compareTo(difference) >= 0;
-
-        assert(lessThanDelta);
+        assert(target.compareTo(maxiSavingsAccount.dailyInterestEarned()) == 0);
     }
 }

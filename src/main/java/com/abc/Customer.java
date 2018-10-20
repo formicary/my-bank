@@ -111,4 +111,8 @@ public class Customer {
     private boolean existsAccount(Account account){
         return accounts.contains(account);
     }
+
+    public List<Account> getAccounts() {
+        return accounts;
+    }
 }

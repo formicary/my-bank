@@ -1,5 +1,6 @@
 package com.abc;
 
+import com.abc.Accounts.Account;
 import com.abc.util.Money;
 
 import java.math.BigDecimal;
@@ -37,13 +38,21 @@ public class Bank {
         return total;
     }
 
-    public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
+    /**
+     * adds the daily interest to every account of each customer
+     */
+    public void payDailyInterest(){
+        for (Customer c: customers) {
+            payDailyInterestToCustomer(c);
+        }
+    }
+    /**
+     * adds the daily interest earned to all of the customers accounts
+     * @param customer
+     */
+    private void payDailyInterestToCustomer(Customer customer){
+        for (Account a : customer.getAccounts()) {
+            a.deposit(a.dailyInterestEarned(), Transaction.BANK);
         }
     }
 }
