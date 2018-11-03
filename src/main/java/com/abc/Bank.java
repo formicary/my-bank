@@ -6,41 +6,65 @@ import java.util.List;
 public class Bank {
     private List<Customer> customers;
 
+    
     public Bank() {
         customers = new ArrayList<Customer>();
     }
+    
 
     public void addCustomer(Customer customer) {
         customers.add(customer);
     }
 
-    public String customerSummary() {
-        String summary = "Customer Summary";
-        for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-        return summary;
-    }
 
-    //Make sure correct plural of word is created based on the number passed in:
-    //If number passed in is 1 just return the word otherwise add an 's' at the end
-    private String format(int number, String word) {
-        return number + " " + (number == 1 ? word : word + "s");
-    }
+	public double totalInterestPaid(InterestCalculator calculator) {
+		double total = 0;
+		for (Customer c : customers)
+			total += c.totalInterestEarned(calculator);
+		return total;
+	}
 
-    public double totalInterestPaid() {
-        double total = 0;
-        for(Customer c: customers)
-            total += c.totalInterestEarned();
-        return total;
-    }
+    //fixed errors in this method to return banks first customer if any customers exist.
+	public String getFirstCustomer() {
+		try {
+			if (customersExist())
+				return customers.get(0).getName();
+			else
+				return "Bank has no customers";
 
-    public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
-        }
-    }
+		} catch (IndexOutOfBoundsException e) {
+			e.printStackTrace();
+			return "Error";
+		}
+	}
+	
+	
+	public String customerSummary() {
+		if(customersExist()) {
+			StringBuilder summary = new StringBuilder("Customer Summary");
+			for (Customer c : customers) {
+			summary.append("\n - ")
+				   .append(c.getName())
+	               .append(" (")
+	               .append(format(c.getNumberOfAccounts()))
+	               .append(")");
+			}
+			return summary.toString();
+
+		} else
+			return "Bank has no customers!";
+	}
+
+	
+	
+	public boolean customersExist() {
+		return !customers.isEmpty();
+	}
+
+	// Make sure correct plural of word is created based on the number passed in:
+	// If number passed in is 1 just return the word otherwise add an 's' at the end
+	private String format(int number) {
+		String accountStr = "account";
+		return number + " " + (number == 1 ? accountStr : accountStr + "s");
+	}
 }
