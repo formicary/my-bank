@@ -17,17 +17,17 @@ public class Bank {
     }
 
 
-	public double totalInterestPaid() {
+	public double totalInterestPaid(InterestCalculator calculator) {
 		double total = 0;
 		for (Customer c : customers)
-			total += c.totalInterestEarned();
+			total += c.totalInterestEarned(calculator);
 		return total;
 	}
 
     //fixed errors in this method to return banks first customer if any customers exist.
 	public String getFirstCustomer() {
 		try {
-			if (!customers.isEmpty())
+			if (customersExist())
 				return customers.get(0).getName();
 			else
 				return "Bank has no customers";
@@ -40,16 +40,26 @@ public class Bank {
 	
 	
 	public String customerSummary() {
-		StringBuilder summary = new StringBuilder("Customer Summary");
-		for (Customer c : customers) {
+		if(customersExist()) {
+			StringBuilder summary = new StringBuilder("Customer Summary");
+			for (Customer c : customers) {
 			summary.append("\n - ")
 				   .append(c.getName())
 	               .append(" (")
 	               .append(format(c.getNumberOfAccounts()))
 	               .append(")");
-	        }
-	        return summary.toString();
-	    }
+			}
+			return summary.toString();
+
+		} else
+			return "Bank has no customers!";
+	}
+
+	
+	
+	public boolean customersExist() {
+		return !customers.isEmpty();
+	}
 
 	// Make sure correct plural of word is created based on the number passed in:
 	// If number passed in is 1 just return the word otherwise add an 's' at the end

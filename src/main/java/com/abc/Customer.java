@@ -45,10 +45,10 @@ public class Customer {
     }
     
    
-    public double totalInterestEarned() {
+    public double totalInterestEarned(InterestCalculator calculator) {
         double total = 0;
         for (Account a : accounts)
-            total += a.interestEarned();
+            total += a.interestEarned(calculator);
         return total;
     }
     

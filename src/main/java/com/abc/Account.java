@@ -44,18 +44,16 @@ public class Account {
 		}
 	}
 	
-    //refactored this method to make it more readable. separated each function into separate methods.
-	public double interestEarned() {
+	
+	public double interestEarned(InterestCalculator calculator) {
 		if (transactionsExist()) {  // if no transactions exist on account return 0 instead of executing other methods.
-			double amount = sumTransactions();
-
 			switch (accountType) {
 			case SAVINGS:
-				return calcSavingsInterest(amount);
+				return calculator.calcSavingsInterest(this);
 			case MAXI_SAVINGS:
-				return calcMaxiSavingsInterest(amount);
+				return calculator.calcMaxiSavingsInterest(this);
 			default:
-				return calcDefaultInterest(amount);
+				return calculator.calcDefaultInterest(this);
 			}
 		}
 		return 0;
@@ -75,20 +73,6 @@ public class Account {
 	}
 	
 	
-	private double calcSavingsInterest(double amount) {
-		if (amount <= 1000)
-            return amount * 0.001;
-        else
-            return 1 + (amount-1000) * 0.002;
-	}
-	
-	//Maxi-Savings accounts to have an interest rate of 5% assuming no withdrawals in the past 10 days otherwise 0.1%
-	private double calcMaxiSavingsInterest(double amount) {
-		if(lastTxGreaterTenDays()) 
-			return amount * 0.05;
-		else
-			return amount * 0.001;
-	}
 
 
 	private boolean lastTxGreaterTenDays() {
@@ -106,10 +90,4 @@ public class Account {
 		}
 		return transactions.get(0); //Return the date of the first transaction if there are no withdrawals on account.
 	}
-
-	
-	private double calcDefaultInterest(double amount) {
-		return amount * 0.001;
-	}
-	
 }
