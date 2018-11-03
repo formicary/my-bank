@@ -1,6 +1,5 @@
 package com.abc;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,24 +69,5 @@ public class Account {
 		for (Transaction t : transactions)
 			amount += t.getAmount();
 		return amount;
-	}
-	
-	
-
-
-	private boolean lastTxGreaterTenDays() {
-		LocalDateTime today = DateProvider.getInstance().now();
-		LocalDateTime lastTransactionDate = getLastWithdrawal().getDate();
-		int diff = (int) (today.getDayOfYear() - lastTransactionDate.getDayOfYear());
-		return diff >= 10 ? true : false;
-	}
-	
-	
-	private Transaction getLastWithdrawal() {
-		for(int i = transactions.size() - 1; i >= 0; i--) {
-			if(transactions.get(i).getAmount() < 0 )
-				return transactions.get(i);
-		}
-		return transactions.get(0); //Return the date of the first transaction if there are no withdrawals on account.
 	}
 }
