@@ -1,0 +1,30 @@
+
+Accenture - Bank Master Test - Ivaan Nagen 
+
+EVERY CHANGE IN CODE THAT I HAVE MADE HAS BEEN TESTED TO MAKE SURE THAT I HAVE NOT BROKEN ANY FUNCTIONALITY. ALL TEST CASES MUST PASS. 
+
+1.) I have firstly fully commented the code and added 'javadoc' where appropriate. This is a coding practice that I have adopted and helps to understand code. 
+2.) Secondly I have changed visibility of fields that were public that needed to be private. This follows the open/closed responsibility that I adopt when writing code. 
+    A good example of this is the List<Transaction> of transactions in the Account class which was public which is now closed to avoid external manipulation. Setters have been 
+    used where appropriate. I have also changed the 'amount' field in Transaction to be private and added an appropriate 'getter' method. 
+3.) Although the function is not in use, the logic in Bank.getFirstCustomer/0 has been refactored so that the first customer is returned if and only if the list of customers is 
+    not empty. Otherwise an error is displayed. 
+4.) The Account class was a bit of a mess and needed some inheritance to avoid so many switch/conditional statements and avoid a need for the argument in its constructor. 
+    I have created three subclasses which extend Account; CheckingAccount, SavingsAccount and MaxiSavingsAccount. These sub-classes share common attributes which can be placed in the Account class to avoid code duplication. Some calculations need to be overridden, such as the implementation of interestEarned() to calculate account interest. 
+    MaxiSavingsAccount inherits attributes from SavingsAccount which are unique from CheckingAccount, this being the different tiers where interest is altered. 
+5.) All occurrences of Account types in the j-unit tests have been changed to the appropriate dynamic types as appose to relying on String equality. I have also created 		    toString() implementations for all of these subtypes to give a title stub when printing out statements.
+6.) In the Account class, the deposit and withdraw functions were not throwing the IllegalArgumentException properly and therefore were not being handled correctly upon method 
+    call. I have created my own custom exception called InvalidAmountException which extends Exception and provides a more accurate response. I have surrounded with try/catch at the client side method calls in the testing environment. 
+7.) I have created a Formatter class that is responsible for displaying numbers in dollar form. This has been taken out of the Customer class to follow the concept of 
+    encapsulation. The functionality of this formatter can be called from a static context. 
+8.) I have also moved the statementForAccount() method from Customer to Account. Now each account has its own String statement and the Customer can still obtain his/her    
+    statements through getStatements().
+9.) Assuming that a negative balance cannot be applied to an account (no mention of overdraft facilities), I have added another condition to the withdraw function. This being  
+    that we cannot withdraw funds that exceed the amount we have available. It is however under the assumption that we can deposit as much funds as we like!
+10.) A function called transfer/3 has been added to the Customer class so that one can transfer funds from one account to another. Test cases have been provided for this. 
+11.) It is to my understanding a new feature would be that interest will compound daily, therefore interest is checked daily and funds are added to the account daily. The 	  percentage interest earned is determined on whether the account has had a withdrawal within the last 10 days or now. 5% annual interest is standard, 0.1% will be imposed if a 
+	 withdrawal has taken place within 10 days and interest will revert back to 5% once the account has 10 days clear of withdrawals. Therefore, the second two tasks of the Additional Features in this exercise seem to work hand in hand. 
+12.) As it stands, the system is set up to calculate interest annually. Once the 'interestEarned' function is called (on any account), a annual interest is set and calculated dependent on the account balance.
+13.) I have created the function 'dailyInterest' to calculate compound interest daily. This will be called daily and will add any interest earned to the balance. The balance is 
+	 updated and the interest is calculated again the next day. Initial annual interest of the account will be 5% and can be set up in the constructor of MaxiSavingsAccount if this feature is to be fully integrated. Every day, the last 10 days of transactions are viewed and if any withdrawals took place, the annual interest rate to calculate is reduced to 0.1%. This lower interest is imposed until there is a 10 day period without withdrawals where annual interest rate is reverted back to 5%. All daily rates are calculated to compensate as a daily percentage rate as appose to yearly. Further information on these calculations has been commented on the code. 
+	 Unfortunately, although this function has been set up and ready to integrate in to the system, I had trouble simulating an environment to test the daily calculations. However, I feel like the work I have done is a suitable attempt to satisfy the additional features. 
