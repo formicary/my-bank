@@ -5,12 +5,16 @@ import java.util.Date;
 
 public class Transaction {
     public final double amount;
+    public final Date transactionDate;
+    public final TransctionType type;
 
-    private Date transactionDate;
-
-    public Transaction(double amount) {
-        this.amount = amount;
-        this.transactionDate = DateProvider.getInstance().now();
+    public enum TransctionType{
+        WITHDRAWAL, DEPOSIT, TRANSFER, INTEREST
     }
 
+    public Transaction(double amount, TransctionType transctionType, Date transactionDate) {
+        this.type = transctionType;
+        this.amount = amount;
+        this.transactionDate = transactionDate;
+    }
 }
