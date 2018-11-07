@@ -3,6 +3,8 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.Math.abs;
+
 public class Bank {
     private List<Customer> customers;
 
@@ -14,11 +16,12 @@ public class Bank {
         customers.add(customer);
     }
 
-    public String customerSummary() {
-        String summary = "Customer Summary";
+    @Override
+    public String toString() {
+        StringBuilder summary = new StringBuilder("Customer Summary");
         for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-        return summary;
+            summary.append("\n - ").append(c.getName()).append(" (").append(format(c.getNumberOfAccounts(), "account")).append(")");
+        return summary.toString();
     }
 
     //Make sure correct plural of word is created based on the number passed in:
@@ -36,11 +39,34 @@ public class Bank {
 
     public String getFirstCustomer() {
         try {
-            customers = null;
             return customers.get(0).getName();
-        } catch (Exception e){
+        } catch (NullPointerException e){
             e.printStackTrace();
             return "Error";
         }
+    }
+
+    public void payInterestToAllCustomers(){
+        for(Customer c : customers){
+            c.accrueInterestForAllAccounts();
+        }
+    }
+
+    public double getTotalBalance(){
+        double total = 0.0;
+        for(Customer c: customers){
+            total+=c.getTotalBalance();
+        }
+        return total;
+    }
+
+    public Customer getCustomer(int index){
+        return customers.get(index);
+    }
+
+    public int getTotalCustomers(){ return customers.size();}
+
+    public static String toDollars(double d){
+        return String.format("$%,.2f", abs(d));
     }
 }
