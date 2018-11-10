@@ -7,9 +7,9 @@ import java.util.List;
 public class Account {
 
     private final AccountTypes accountType;
-    public List<Transaction> transactions;
-    public double balance;
-    public boolean overdrawn;
+    private List<Transaction> transactions;
+    private double balance;
+    private boolean overdrawn;
 
     public Account(AccountTypes accountType) {
         this.accountType = accountType;
@@ -24,6 +24,10 @@ public class Account {
 
     public double getBalance() {
         return balance;
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
     }
 
     public void deposit(double amount) {
@@ -75,7 +79,7 @@ public class Account {
     public double sumTransactions() {
         double amount = 0.0;
         for (Transaction t : transactions)
-            amount += t.amount;
+            amount += t.getAmount();
         return amount;
     }
 
