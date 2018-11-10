@@ -8,10 +8,22 @@ public class Account {
 
     private final AccountTypes accountType;
     public List<Transaction> transactions;
+    public double balance;
+    public boolean overdrawn;
 
     public Account(AccountTypes accountType) {
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
+        this.balance = 0;
+        this.overdrawn = false;
+    }
+
+    public AccountTypes getAccountType() {
+        return accountType;
+    }
+
+    public double getBalance() {
+        return balance;
     }
 
     public void deposit(double amount) {
@@ -19,6 +31,10 @@ public class Account {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
             transactions.add(new Transaction(amount));
+            balance += amount;
+            if (balance >= 0) {
+                overdrawn = false;
+            }
         }
     }
 
@@ -27,6 +43,10 @@ public class Account {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
             transactions.add(new Transaction(-amount));
+            balance -= amount;
+            if (balance < 0) {
+                overdrawn = true;
+            }
         }
     }
 
@@ -53,18 +73,10 @@ public class Account {
     }
 
     public double sumTransactions() {
-        return checkIfTransactionsExist(true);
-    }
-
-    private double checkIfTransactionsExist(boolean checkAll) {
         double amount = 0.0;
         for (Transaction t : transactions)
             amount += t.amount;
         return amount;
-    }
-
-    public AccountTypes getAccountType() {
-        return accountType;
     }
 
 }
