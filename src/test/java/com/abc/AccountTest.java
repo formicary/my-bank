@@ -32,4 +32,24 @@ public class AccountTest {
         checking.withdraw(500);
         assertEquals(-500, checking.getBalance(), DOUBLE_DELTA);
     }
+
+    @Test
+    public void interestEarned(){
+        checking.deposit(500);
+        assertEquals(0.5, checking.interestEarned(), DOUBLE_DELTA);
+
+        Account saving = new Account(AccountTypes.SAVINGS);
+        saving.deposit(500);
+        assertEquals(0.5, saving.interestEarned(), DOUBLE_DELTA);
+        saving.deposit(1000);
+        assertEquals(2, saving.interestEarned(), DOUBLE_DELTA);
+
+        Account maxi = new Account(AccountTypes.MAXI_SAVINGS);
+        maxi.deposit(500);
+        assertEquals(10, maxi.interestEarned(), DOUBLE_DELTA);
+        maxi.deposit(1000);
+        assertEquals(45, maxi.interestEarned(), DOUBLE_DELTA);
+        maxi.deposit(1000);
+        assertEquals(120, maxi.interestEarned(), DOUBLE_DELTA);
+    }
 }
