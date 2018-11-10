@@ -14,7 +14,27 @@ public class BankTest {
         john.openAccount(new Account(AccountTypes.CHECKING));
         bank.addCustomer(john);
 
-        assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
+        Customer henry = new Customer("Henry");
+        henry.openAccount(new Account(AccountTypes.CHECKING));
+        henry.openAccount(new Account(AccountTypes.SAVINGS));
+        bank.addCustomer(henry);
+
+        Customer oscar = new Customer("Oscar");
+        oscar.openAccount(new Account(AccountTypes.CHECKING));
+        oscar.openAccount(new Account(AccountTypes.SAVINGS));
+        oscar.openAccount(new Account(AccountTypes.MAXI_SAVINGS));
+        bank.addCustomer(oscar);
+
+        String expected = "Customer Summary";
+        for (Customer c : bank.getCustomers()) {
+            expected += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
+        }
+        
+        assertEquals(expected, bank.customerSummary());
+    }
+
+    private String format(int number, String word) {
+        return number + " " + (number == 1 ? word : word + "s");
     }
 
     @Test
