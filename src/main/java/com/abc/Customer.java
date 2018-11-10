@@ -18,12 +18,16 @@ public class Customer {
         return name;
     }
 
-    public void openAccount(Account account) {
-        accounts.add(account);
+    public List<Account> getAccounts() {
+        return accounts;
     }
 
     public int getNumberOfAccounts() {
         return accounts.size();
+    }
+
+    public void openAccount(Account account) {
+        accounts.add(account);
     }
 
     public double totalInterestEarned() {
@@ -43,10 +47,6 @@ public class Customer {
         }
         statement += "\nTotal In All Accounts " + toDollars(total);
         return statement;
-    }
-
-    public List<Account> getAccounts() {
-        return accounts;
     }
 
     private String statementForAccount(Account a) {
