@@ -8,6 +8,8 @@ import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
 
+    private static final double DOUBLE_DELTA = 1e-15;
+
     @Test
     public void statementTest() {
         Customer henry = new Customer("Henry");
@@ -67,7 +69,23 @@ public class CustomerTest {
         oscar.openAccount(new Account(AccountTypes.MAXI_SAVINGS));
         assertEquals(AccountTypes.MAXI_SAVINGS, accounts.get(2).getAccountType());
     }
-    
+
+    @Test
+    public void transfer() {
+        Customer bill = new Customer("Bill");
+
+        Account saving = new Account(AccountTypes.SAVINGS);
+        saving.deposit(2000);
+        bill.openAccount(saving);
+
+        Account checking = new Account(AccountTypes.CHECKING);
+        checking.deposit(5000);
+        bill.openAccount(checking);
+
+        bill.transfer(checking, saving, 4000);
+        assertEquals(6000, saving.getBalance(), DOUBLE_DELTA);
+    }
+
     private String toDollars(double d){
         return String.format("$%,.2f", d);
     }

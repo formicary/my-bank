@@ -48,6 +48,11 @@ public class Customer {
         return statement;
     }
 
+    public void transfer(Account initial, Account target, double amount) {
+        initial.withdraw(amount);
+        target.deposit(amount);
+    }
+
     private String statementForAccount(Account a) {
         String s = "";
 
