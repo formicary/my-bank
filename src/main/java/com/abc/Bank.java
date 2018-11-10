@@ -14,6 +14,10 @@ public class Bank {
         customers.add(customer);
     }
 
+    public List<Customer> getCustomers() {
+        return customers;
+    }
+
     public String customerSummary() {
         String summary = "Customer Summary";
         for (Customer c : customers)
