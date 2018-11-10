@@ -45,6 +45,10 @@ public class Customer {
         return statement;
     }
 
+    public List<Account> getAccounts() {
+        return accounts;
+    }
+
     private String statementForAccount(Account a) {
         String s = "";
 
