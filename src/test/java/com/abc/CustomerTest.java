@@ -2,6 +2,8 @@ package com.abc;
 
 import org.junit.Test;
 
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
@@ -35,11 +37,16 @@ public class CustomerTest {
     }
 
     @Test
-    public void testThreeAccounts() {
+    public void testAccountTypes() {
         Customer oscar = new Customer("Oscar");
+        List<Account> accounts = oscar.getAccounts();
         oscar.openAccount(new Account(AccountTypes.SAVINGS));
+        assertEquals(AccountTypes.SAVINGS, accounts.get(0).getAccountType());
+
         oscar.openAccount(new Account(AccountTypes.CHECKING));
+        assertEquals(AccountTypes.CHECKING, accounts.get(1).getAccountType());
+
         oscar.openAccount(new Account(AccountTypes.MAXI_SAVINGS));
-        assertEquals(3, oscar.getNumberOfAccounts());
+        assertEquals(AccountTypes.MAXI_SAVINGS, accounts.get(2).getAccountType());
     }
 }
