@@ -8,32 +8,50 @@ import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
 
-    @Test //Test customer statement generation
-    public void testApp(){
-
-        Account checkingAccount = new Account(AccountTypes.CHECKING);
-        Account savingsAccount = new Account(AccountTypes.SAVINGS);
-
+    @Test
+    public void statementTest() {
         Customer henry = new Customer("Henry");
-        henry.openAccount(checkingAccount);
-        henry.openAccount(savingsAccount);
+        Account checking = new Account(AccountTypes.CHECKING);
+        Account saving = new Account(AccountTypes.SAVINGS);
 
-        checkingAccount.deposit(100.0);
-        savingsAccount.deposit(4000.0);
-        savingsAccount.withdraw(200.0);
+        henry.openAccount(checking);
+        henry.openAccount(saving);
+        checking.deposit(500);
+        checking.withdraw(40);
+        checking.withdraw(20);
+        checking.withdraw(600);
 
-        assertEquals("Statement for Henry\n" +
+        saving.deposit(1000);
+        saving.deposit(1200);
+        saving.withdraw(400);
+
+        List<Transaction> checkingTransactions = checking.getTransactions();
+        List<Transaction> savingTransactions = saving.getTransactions();
+
+        String expected = "Statement for " + henry.getName() + "\n" +
                 "\n" +
-                "Checking Account\n" +
-                "  deposit $100.00\n" +
-                "Total $100.00\n" +
-                "\n" +
-                "Savings Account\n" +
-                "  deposit $4,000.00\n" +
-                "  withdrawal $200.00\n" +
-                "Total $3,800.00\n" +
-                "\n" +
-                "Total In All Accounts $3,900.00", henry.getStatement());
+                "Checking Account\n";
+
+        double checkTotal = 0;
+        for (Transaction t : checkingTransactions) {
+            expected += "  " + (t.getAmount() < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.getAmount()) +
+                    " @ " + t.getTransactionDate() + "\n";
+            checkTotal += t.getAmount();
+        }
+        expected += "Total " + toDollars(checkTotal) + "\n\n";
+
+        expected += "Savings Account\n";
+        double savingTotal = 0;
+        for (Transaction t : savingTransactions) {
+            expected += "  " + (t.getAmount() < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.getAmount()) +
+                    " @ " + t.getTransactionDate() + "\n";
+            savingTotal += t.getAmount();
+        }
+        expected += "Total " + toDollars(savingTotal) + "\n\n";
+
+        expected += "Total In All Accounts " + toDollars(savingTotal + checkTotal);
+
+        assertEquals(expected, henry.getStatement());
     }
 
     @Test
@@ -48,5 +66,9 @@ public class CustomerTest {
 
         oscar.openAccount(new Account(AccountTypes.MAXI_SAVINGS));
         assertEquals(AccountTypes.MAXI_SAVINGS, accounts.get(2).getAccountType());
+    }
+    
+    private String toDollars(double d){
+        return String.format("$%,.2f", d);
     }
 }
