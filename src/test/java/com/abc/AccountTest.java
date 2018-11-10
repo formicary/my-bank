@@ -23,13 +23,13 @@ public class AccountTest {
     @Test
     public void testDeposit() {
         checking.deposit(200);
-        assertEquals(200, checking.sumTransactions(), DOUBLE_DELTA);
+        assertEquals(200, checking.getBalance(), DOUBLE_DELTA);
     }
 
     // Demonstrates customer can be overdrawn
     @Test
     public void testWithdraw() {
         checking.withdraw(500);
-        assertEquals(-500, checking.sumTransactions(), DOUBLE_DELTA);
+        assertEquals(-500, checking.getBalance(), DOUBLE_DELTA);
     }
 }
