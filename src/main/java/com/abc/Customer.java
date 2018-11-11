@@ -49,8 +49,12 @@ public class Customer {
     }
 
     public void transfer(Account initial, Account target, double amount) {
-        initial.withdraw(amount);
-        target.deposit(amount);
+        if (initial.equals(target)) {
+            System.err.println("Two different accounts must be chosen");
+        } else {
+            initial.withdraw(amount);
+            target.deposit(amount);
+        }
     }
 
     private String statementForAccount(Account a) {
