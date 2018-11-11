@@ -1,4 +1,4 @@
-package com.abc;
+package src.main.java.com.abc;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,9 +9,13 @@ public class Bank {
     public Bank() {
         customers = new ArrayList<Customer>();
     }
-
+    
     public void addCustomer(Customer customer) {
         customers.add(customer);
+    }
+    //now CREATES the customer to be added to the system
+    public void addCustomer(String name) {
+        customers.add(new Customer(name));
     }
 
     public String customerSummary() {
@@ -33,10 +37,15 @@ public class Bank {
             total += c.totalInterestEarned();
         return total;
     }
-
+    
+    public double totalInterestPaidTestVer(int days) {
+        double total = 0;
+        for(Customer c: customers)
+            total += c.totalInterestEarnedTestVer(days);
+        return total;
+    }
     public String getFirstCustomer() {
         try {
-            customers = null;
             return customers.get(0).getName();
         } catch (Exception e){
             e.printStackTrace();

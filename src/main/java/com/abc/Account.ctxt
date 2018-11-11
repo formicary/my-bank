@@ -1,0 +1,21 @@
+#BlueJ class context
+comment0.target=Account
+comment1.params=accountType
+comment1.target=Account(int)
+comment2.params=amount
+comment2.target=void\ deposit(double)
+comment3.params=amount
+comment3.target=void\ withdraw(double)
+comment4.params=amount\ rate\ days
+comment4.target=double\ calculateInterest(double,\ double,\ int)
+comment5.params=ageInDays
+comment5.target=double\ interestEarnedTestVer(int)
+comment6.params=
+comment6.target=double\ interestEarned()
+comment7.params=
+comment7.target=double\ sumTransactions()
+comment8.params=checkAll
+comment8.target=double\ checkIfTransactionsExist(boolean)
+comment9.params=
+comment9.target=int\ getAccountType()
+numComments=10

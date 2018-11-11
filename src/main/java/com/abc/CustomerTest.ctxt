@@ -1,0 +1,12 @@
+#BlueJ class context
+comment0.target=CustomerTest
+comment1.params=
+comment1.target=void\ testApp()
+comment1.text=\r\n\ all\ tests\ work\r\n
+comment2.params=
+comment2.target=void\ testOneAccount()
+comment3.params=
+comment3.target=void\ testTwoAccount()
+comment4.params=
+comment4.target=void\ testThreeAcounts()
+numComments=5

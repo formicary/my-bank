@@ -1,0 +1,7 @@
+#BlueJ class context
+comment0.target=Transaction
+comment1.params=amount
+comment1.target=Transaction(double)
+comment2.params=
+comment2.target=java.util.Date\ getDate()
+numComments=3

@@ -1,0 +1,14 @@
+#BlueJ class context
+comment0.target=BankTest
+comment0.text=\r\n\ daily\ interest\ values\ calculated\ using\ the\ Excel\ worksheet\ included\ in\ the\ main\ folder\r\n\ all\ tests\ work\r\n
+comment1.params=
+comment1.target=void\ customerSummary()
+comment2.params=
+comment2.target=void\ checkingAccount()
+comment3.params=
+comment3.target=void\ savings_account()
+comment4.params=
+comment4.target=void\ maxi_savings_account()
+comment5.params=
+comment5.target=void\ maxi_savings_accountWithdrawal()
+numComments=6
