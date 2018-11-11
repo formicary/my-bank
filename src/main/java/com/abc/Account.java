@@ -68,13 +68,6 @@ public class Account {
                     return 1 + (amount - 1000) * 0.002;
                 }
             case MAXI_SAVINGS:
-//                if (amount <= 1000) {
-//                    return amount * 0.02;
-//                } else if (amount <= 2000) {
-//                    return 20 + (amount - 1000) * 0.05;
-//                } else {
-//                    return 70 + (amount - 2000) * 0.1;
-//                }
                 return amount * checkLastTransaction(transactions);
             default:
                 return 0;   // invalid account type
