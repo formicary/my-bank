@@ -32,6 +32,7 @@ public class BankTest {
         oscar.getAccounts().get(1).deposit(1800);
         oscar.openAccount(new Account(AccountTypes.MAXI_SAVINGS));
         oscar.getAccounts().get(2).deposit(2500);
+        oscar.getAccounts().get(2).withdraw(500);
         bank.addCustomer(oscar);
     }
 
@@ -47,7 +48,7 @@ public class BankTest {
 
     @Test
     public void totalInterestPaid() {
-        assertEquals(127.6, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(9.6, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
     private String format(int number, String word) {
