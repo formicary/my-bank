@@ -37,13 +37,4 @@ public class Bank {
             total += c.totalInterestEarned();
         return total;
     }
-
-    public String getFirstCustomer() {
-        try {
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
-        }
-    }
 }
