@@ -1,4 +1,4 @@
-package com.abc;
+package src.main.java.com.abc;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -13,4 +13,7 @@ public class Transaction {
         this.transactionDate = DateProvider.getInstance().now();
     }
 
+    public Date getDate(){
+        return transactionDate;
+    }
 }

@@ -1,0 +1,3 @@
+Major changes made to the default program:
+Changed the package from "package.abc;" to "package src.main.java.com.abc;"
+Moved the (bank, customer, transaction) test modules to the "main" folder.

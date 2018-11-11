@@ -1,0 +1,19 @@
+#BlueJ class context
+comment0.target=Bank
+comment1.params=
+comment1.target=Bank()
+comment2.params=customer
+comment2.target=void\ addCustomer(Customer)
+comment3.params=name
+comment3.target=void\ addCustomer(java.lang.String)
+comment4.params=
+comment4.target=java.lang.String\ customerSummary()
+comment5.params=number\ word
+comment5.target=java.lang.String\ format(int,\ java.lang.String)
+comment6.params=
+comment6.target=double\ totalInterestPaid()
+comment7.params=days
+comment7.target=double\ totalInterestPaidTestVer(int)
+comment8.params=
+comment8.target=java.lang.String\ getFirstCustomer()
+numComments=9

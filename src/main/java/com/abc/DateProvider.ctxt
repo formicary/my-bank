@@ -1,0 +1,7 @@
+#BlueJ class context
+comment0.target=DateProvider
+comment1.params=
+comment1.target=com.abc.DateProvider\ getInstance()
+comment2.params=
+comment2.target=java.util.Date\ now()
+numComments=3
