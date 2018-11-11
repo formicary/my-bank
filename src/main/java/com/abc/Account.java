@@ -90,7 +90,7 @@ public class Account {
         cal.add(Calendar.DAY_OF_YEAR, -10);
         Date tenDays = cal.getTime();
 
-        if (last == null) {
+        if (last == null) {     // No withdrawal on record
             interest = 0.05;
         } else if (last.getTransactionDate().before(tenDays)) {
             interest = 0.05;
