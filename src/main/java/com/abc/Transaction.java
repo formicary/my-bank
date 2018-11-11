@@ -1,11 +1,10 @@
 package com.abc;
 
-import java.util.Calendar;
 import java.util.Date;
 
 public class Transaction {
-    public final double amount;
 
+    private final double amount;
     private Date transactionDate;
 
     public Transaction(double amount) {
@@ -13,4 +12,16 @@ public class Transaction {
         this.transactionDate = DateProvider.getInstance().now();
     }
 
+    public Date getTransactionDate() {
+        return transactionDate;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+//    For testing only
+//    public void setTransactionDate(Date date) {
+//        this.transactionDate = date;
+//    }
 }

@@ -14,6 +14,10 @@ public class Bank {
         customers.add(customer);
     }
 
+    public List<Customer> getCustomers() {
+        return customers;
+    }
+
     public String customerSummary() {
         String summary = "Customer Summary";
         for (Customer c : customers)
@@ -32,15 +36,5 @@ public class Bank {
         for(Customer c: customers)
             total += c.totalInterestEarned();
         return total;
-    }
-
-    public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
-        }
     }
 }
