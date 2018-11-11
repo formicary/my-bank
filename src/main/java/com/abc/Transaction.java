@@ -20,4 +20,9 @@ public class Transaction {
     public double getAmount() {
         return amount;
     }
+
+//    For testing only
+//    public void setTransactionDate(Date date) {
+//        this.transactionDate = date;
+//    }
 }
