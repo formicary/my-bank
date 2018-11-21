@@ -7,20 +7,23 @@ import static java.lang.Math.abs;
 
 public class Customer {
     private String name;
-    private List<Account> accounts;
+    // I don't see the need for this to be initialised in constructor.
+    // So I initialised it here out of the way.
+    private List<Account> accounts = new ArrayList<>();
 
-    public Customer(String name) {
+    public Customer(String name, Account account) {
         this.name = name;
-        this.accounts = new ArrayList<Account>();
+        accounts.add(account);
     }
 
     public String getName() {
         return name;
     }
 
-    public Customer openAccount(Account account) {
+    // Its odd to use return this in this case as
+    // this can easily be a voided method. So I have changed this.
+    public void openAnotherAccount(Account account) {
         accounts.add(account);
-        return this;
     }
 
     public int getNumberOfAccounts() {
@@ -51,13 +54,13 @@ public class Customer {
 
        //Translate to pretty account type
         switch(a.getAccountType()){
-            case Account.CHECKING:
+            case CHECKING:
                 s += "Checking Account\n";
                 break;
-            case Account.SAVINGS:
+            case SAVINGS:
                 s += "Savings Account\n";
                 break;
-            case Account.MAXI_SAVINGS:
+            case MAXI_SAVINGS:
                 s += "Maxi Savings Account\n";
                 break;
         }
@@ -65,8 +68,8 @@ public class Customer {
         //Now total up all the transactions
         double total = 0.0;
         for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
+            s += "  " + (t.getAmount() < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.getAmount()) + "\n";
+            total += t.getAmount();
         }
         s += "Total " + toDollars(total);
         return s;
