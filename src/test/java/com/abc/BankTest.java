@@ -2,6 +2,8 @@ package com.abc;
 
 import org.junit.Test;
 
+import java.math.BigDecimal;
+
 import static org.junit.Assert.assertEquals;
 
 public class BankTest {
@@ -44,10 +46,17 @@ public class BankTest {
         Bank bank = new Bank();
         Account checkingAccount = new Account(AccountTypes.MAXI_SAVINGS);
         bank.addCustomer(new Customer("Bill", checkingAccount));
-
-        checkingAccount.deposit(3000.0);
-
-        assertEquals("170", bank.totalInterestPaid().stripTrailingZeros().toPlainString());
+        Transaction.testing = true;
+        Transaction.daysfromNow = -90;
+        checkingAccount.deposit(BigDecimal.valueOf(2000.0));
+        System.out.println("a "+bank.totalInterestPaid().setScale(2,BigDecimal.ROUND_HALF_EVEN));
+        Transaction.testing = true;
+        Transaction.daysfromNow = -60;
+        checkingAccount.withdraw(BigDecimal.valueOf(50.0));
+        Transaction.testing = true;
+        Transaction.daysfromNow = -30;
+        checkingAccount.withdraw(BigDecimal.valueOf(50.0));
+        assertEquals("16.09", bank.totalInterestPaid().setScale(2,BigDecimal.ROUND_HALF_EVEN).toPlainString());
     }
 
 }

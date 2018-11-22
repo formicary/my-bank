@@ -11,7 +11,7 @@ public class Customer {
 
     // I don't see the need for this to be initialised in constructor.
     // So I initialised it here out of the way.
-    private List<Account> accounts = new ArrayList<>();
+    private List<Account> accounts = new ArrayList<Account>();
 
     public Customer(String name, Account account) {
         this.name = name;

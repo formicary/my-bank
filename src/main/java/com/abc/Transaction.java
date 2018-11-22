@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class Transaction {
+    // TODO remove before launch due to security concerns
+    public static boolean testing = false;
+    public static int daysfromNow = 0;
     // Changed to private for encapsulation and used BigDecimal to avoid
     // problems that come with the double's inability to represent base 10 numbers.
     private final BigDecimal amount;
@@ -13,9 +16,13 @@ public class Transaction {
 
     public Transaction(BigDecimal amount) {
         this.amount = amount;
-        this.transactionDate = DateProvider.getNow();
+        if (testing) {
+            this.transactionDate = DateProvider.getDateFromNow(daysfromNow);
+            testing =false;
+        } else {
+            this.transactionDate = DateProvider.getNow();
+        }
     }
-
     // Added for easier construction with double
     public Transaction(double amount) {
         this.amount = BigDecimal.valueOf(amount);
