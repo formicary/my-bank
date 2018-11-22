@@ -1,5 +1,6 @@
 package com.abc;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +11,6 @@ enum AccountTypes {
 }
 
 public class Account {
-
     private final AccountTypes accountType;
     // I don't see the need for this to be initialised in constructor.
     // So I initialised it here out of the way.
@@ -18,6 +18,18 @@ public class Account {
 
     public Account(AccountTypes accountType) {
         this.accountType = accountType;
+    }
+
+    public void transfer(double amount, Account otherAccount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        } else if ((sumTransactions().doubleValue() - amount) < 0) {
+            // Added to make sure the transfer to makes sense.
+            throw new IllegalArgumentException("not enough money in account");
+        } else {
+            this.transactions.add(new Transaction(-amount));
+            otherAccount.transactions.add(new Transaction(amount));
+        }
     }
 
     public void deposit(double amount) {
@@ -31,13 +43,37 @@ public class Account {
     public void withdraw(double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
+        } else if ((sumTransactions().doubleValue() - amount) < 0.01) {
+            // Can be implemented to run a loan system instead of error here.
+            throw new IllegalArgumentException("not enough money in account");
         } else {
             transactions.add(new Transaction(-amount));
         }
     }
 
+    // If the amount is larger then allowed with double.
+    public void deposit(BigDecimal amount) {
+        if (amount.doubleValue() <= 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        } else {
+            transactions.add(new Transaction(amount));
+        }
+    }
+
+    // If the amount is larger then allowed with double.
+    public void withdraw(BigDecimal amount) {
+        if (amount.doubleValue() <= 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        } else if ((sumTransactions().subtract(amount)).doubleValue() < 0.01) {
+            // Can be implemented to run a loan system instead of error here.
+            throw new IllegalArgumentException("not enough money in account");
+        } else {
+            transactions.add(new Transaction(amount.negate()));
+        }
+    }
+
     public double interestEarned() {
-        double amount = sumTransactions();
+        double amount = sumTransactions().doubleValue();
         switch (accountType) {
             case SAVINGS:
                 if (amount <= 1000)
@@ -58,15 +94,15 @@ public class Account {
         }
     }
 
-    public double sumTransactions() {
+    public BigDecimal sumTransactions() {
         return checkIfTransactionsExist();
     }
 
-    private double checkIfTransactionsExist() {
-        double amount = 0.0;
+    private BigDecimal checkIfTransactionsExist() {
+        BigDecimal amount = new BigDecimal("0.0");
         for (Transaction t : transactions)
-            amount += t.getAmount();
-        return amount;
+            amount = amount.add(t.getAmount());
+        return amount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
     }
 
     public AccountTypes getAccountType() {
