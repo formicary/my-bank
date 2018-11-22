@@ -9,4 +9,10 @@ public class DateProvider {
     public static Date getNow() {
         return Calendar.getInstance().getTime();
     }
+
+    public static Date getDateFromNow(int daysFromNow) {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DAY_OF_MONTH, daysFromNow);
+        return cal.getTime();
+    }
 }

@@ -72,25 +72,35 @@ public class Account {
         }
     }
 
-    public double interestEarned() {
-        double amount = sumTransactions().doubleValue();
+    public BigDecimal interestEarned() {
+        BigDecimal amount = sumTransactions();
         switch (accountType) {
             case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
+                if (amount.doubleValue() <= 1000)
+                    return amount.multiply(BigDecimal.valueOf(0.001));
                 else
-                    return 1 + (amount - 1000) * 0.002;
+                    return (amount.subtract(BigDecimal.valueOf(1000))).multiply(BigDecimal.valueOf(0.002)).add(BigDecimal.valueOf(1));
 //            case SUPER_SAVINGS:
 //                if (amount <= 4000)
 //                    return 20;
             case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount - 1000) * 0.05;
-                return 70 + (amount - 2000) * 0.1;
+                // This goes through all the transactions and can be optimised to start searching from a certain period
+                for (Transaction t : transactions) {
+                    // Checks if the transaction was a withdrawal and if it happened after the date 11 days in the past.
+                    // This means the past 10 days but in a different way.
+                    if (t.getAmount().doubleValue() < 0 && t.getTransactionDate().after(DateProvider.getDateFromNow(-11))) {
+                        // The feature seems to want me to remove the already set interest rate generation method for Maxi-Savings so I removed it
+//                        if (amount.doubleValue() <= 1000)
+//                            return amount.multiply(BigDecimal.valueOf(0.02));
+//                        if (amount.doubleValue() <= 2000)
+//                            return (amount.subtract(BigDecimal.valueOf(1000))).multiply(BigDecimal.valueOf(0.05)).add(BigDecimal.valueOf(20));
+//                        return (amount.subtract(BigDecimal.valueOf(2000))).multiply(BigDecimal.valueOf( 0.1)).add(BigDecimal.valueOf(70));
+                        return amount.multiply(BigDecimal.valueOf(0.01));
+                    }
+                }
+                return amount.multiply(BigDecimal.valueOf(0.05));
             default:
-                return amount * 0.001;
+                return amount.multiply(BigDecimal.valueOf(0.001));
         }
     }
 
@@ -99,7 +109,7 @@ public class Account {
     }
 
     private BigDecimal checkIfTransactionsExist() {
-        BigDecimal amount = new BigDecimal("0.0");
+        BigDecimal amount = BigDecimal.ZERO;
         for (Transaction t : transactions)
             amount = amount.add(t.getAmount());
         return amount.setScale(2, BigDecimal.ROUND_HALF_EVEN);

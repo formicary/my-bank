@@ -22,10 +22,6 @@ public class Customer {
         return accounts.get(i);
     }
 
-    public Account getAccount(Account account) {
-        return accounts.get(accounts.indexOf(account));
-    }
-
     public String getName() {
         return name;
     }
@@ -40,10 +36,10 @@ public class Customer {
         return accounts.size();
     }
 
-    public double totalInterestEarned() {
-        double total = 0;
+    public BigDecimal totalInterestEarned() {
+        BigDecimal total = BigDecimal.ZERO;
         for (Account a : accounts)
-            total += a.interestEarned();
+            total = total.add(a.interestEarned());
         return total;
     }
 

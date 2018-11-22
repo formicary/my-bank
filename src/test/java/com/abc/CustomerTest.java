@@ -10,6 +10,16 @@ public class CustomerTest {
 
     @Test //Test customer statement generation
     public void testStatementGeneration() {
+        // To standardise the test I have brought out the values from the strings and results.
+        // This way the values can be changed or created here without having to go through the entire code and change the statement string.
+        final String newline = "\n";
+        final double deposit1 = 100.0;
+        final double deposit2 = 4000.0;
+        final double withdrawal1 = 200.0;
+        final double totalChecking;
+        totalChecking = deposit1;
+        final double totalSaving;
+        totalSaving = deposit2 - withdrawal1;
 
         Account checkingAccount = new Account(AccountTypes.CHECKING);
         Account savingsAccount = new Account(AccountTypes.SAVINGS);
@@ -17,22 +27,24 @@ public class CustomerTest {
         Customer jill = new Customer("Jill", checkingAccount);
         jill.openAnotherAccount(savingsAccount);
 
-        checkingAccount.deposit(100.0);
-        savingsAccount.deposit(4000.0);
-        savingsAccount.withdraw(200.0);
+        checkingAccount.deposit(deposit1);
+        savingsAccount.deposit(deposit2);
+        savingsAccount.withdraw(withdrawal1);
         System.out.println(jill.getStatement());
-        assertEquals("Statement for Jill\n" +
-                "\n" +
-                "Checking Account\n" +
-                "  deposit $100.00\n" +
-                "Total $100.00\n" +
-                "\n" +
-                "Savings Account\n" +
-                "  deposit $4,000.00\n" +
-                "  withdrawal $200.00\n" +
-                "Total $3,800.00\n" +
-                "\n" +
-                "Total In All Accounts $3,900.00", jill.getStatement());
+        String expectedStatement = String.format("Statement for " + jill.getName() + newline +
+                newline +
+                "Checking Account" + newline +
+                "  deposit $%,.2f" + newline +
+                "Total $%,.2f" + newline +
+                newline +
+                "Savings Account" + newline +
+                "  deposit $%,.2f" + newline +
+                "  withdrawal $%,.2f" + newline +
+                "Total $%,.2f" + newline +
+                newline +
+                "Total In All Accounts $%,.2f", deposit1, totalChecking, deposit2, withdrawal1, totalSaving, totalChecking + totalSaving);
+        System.out.println(expectedStatement);
+        assertEquals(expectedStatement, jill.getStatement());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -82,7 +94,6 @@ public class CustomerTest {
     }
 
     // Added another account creation to make it 3 accounts
-    // and changed name of customer to distinguish from other tests.
     @Test
     public void testThreeAccounts() {
         Customer tom = new Customer("Tom", new Account(AccountTypes.SAVINGS));

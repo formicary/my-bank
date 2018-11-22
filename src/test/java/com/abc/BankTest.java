@@ -25,7 +25,7 @@ public class BankTest {
 
         checkingAccount.deposit(100.0);
 
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals("0.1", bank.totalInterestPaid().stripTrailingZeros().toPlainString());
     }
 
     @Test
@@ -36,7 +36,7 @@ public class BankTest {
 
         checkingAccount.deposit(1500.0);
 
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals("2", bank.totalInterestPaid().stripTrailingZeros().toPlainString());
     }
 
     @Test
@@ -47,7 +47,7 @@ public class BankTest {
 
         checkingAccount.deposit(3000.0);
 
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals("170", bank.totalInterestPaid().stripTrailingZeros().toPlainString());
     }
 
 }
