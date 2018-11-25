@@ -1,6 +1,10 @@
-package com.abc;
+package test.java.com.abc;
 
 import org.junit.Test;
+
+import main.java.com.abc.Account;
+import main.java.com.abc.Bank;
+import main.java.com.abc.Customer;
 
 import static org.junit.Assert.assertEquals;
 
