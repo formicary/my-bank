@@ -17,6 +17,14 @@ public class Customer {
     public String getName() {
         return name;
     }
+    
+    public double getBalance(Account account) {
+    	double total = 0.0;
+        for (Transaction t : account.transactions) {
+        	total += t.amount;
+        }
+        return total;
+    }
 
     public Customer openAccount(Account account) {
         accounts.add(account);
@@ -75,4 +83,18 @@ public class Customer {
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
     }
+    
+    public void moveMoney(Account originAccount, Account destinationAccount, double amount) {
+    	double originTotal = 0.0;
+        for (Transaction t : originAccount.transactions) {
+        	originTotal += t.amount;
+        }
+        
+        if (amount <= originTotal) {
+        	originAccount.withdraw(amount);
+        	destinationAccount.deposit(amount);
+        }
+
+    }
+    
 }

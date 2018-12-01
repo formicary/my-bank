@@ -2,10 +2,12 @@ package com.abc;
 
 import org.junit.Ignore;
 import org.junit.Test;
+import java.util.Calendar;
 
 import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
+	private static final double DOUBLE_DELTA = 1e-15;
 
     @Test //Test customer statement generation
     public void testApp(){
@@ -31,6 +33,46 @@ public class CustomerTest {
                 "Total $3,800.00\n" +
                 "\n" +
                 "Total In All Accounts $3,900.00", henry.getStatement());
+    }
+    
+    @Test //Test Moving Money between accounts
+    public void testMove(){
+
+        Account checkingAccount = new Account(Account.CHECKING);
+        Account savingsAccount = new Account(Account.SAVINGS);
+
+        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
+
+        checkingAccount.deposit(500.0);
+        
+        henry.moveMoney(checkingAccount, savingsAccount, 250);
+        System.out.println("balance: "+henry.getBalance(savingsAccount));
+        System.out.println(System.currentTimeMillis());
+        
+        assertEquals(250, henry.getBalance(savingsAccount), DOUBLE_DELTA);
+    }
+    
+    @Test //Test Date Comparison
+    public void testDate(){
+
+        Account checkingAccount = new Account(Account.CHECKING);
+        Account savingsAccount = new Account(Account.SAVINGS);
+
+        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
+
+        checkingAccount.deposit(500.0);
+        
+        DateProvider oldDate = new DateProvider();
+        
+             
+        System.out.println(oldDate.tenDaysPrior());
+        
+        System.out.println(checkingAccount.transactions.get(0).transactionDate);
+        
+        boolean before = oldDate.tenDaysPrior().before(checkingAccount.transactions.get(0).transactionDate);
+        System.out.println(before);
+        
+        assertEquals(before, true);
     }
 
     @Test
