@@ -1,6 +1,7 @@
 package com.abc;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static java.lang.Math.abs;
@@ -90,11 +91,24 @@ public class Customer {
         	originTotal += t.amount;
         }
         
-        if (amount <= originTotal) {
+        if (amount <= 0) {
+        	throw new IllegalArgumentException("amount must be greater than zero");
+        } else if (amount <= originTotal) {
         	originAccount.withdraw(amount);
         	destinationAccount.deposit(amount);
         }
 
     }
+    
+    public Date lastWithdrawal(Account account) {
+		Date lastWidthDate = null;
+	for (Transaction t: account.transactions) {
+		if (t.amount < 0) {
+			lastWidthDate = t.transactionDate;
+		}
+	}
+	
+	return lastWidthDate;
+	}
     
 }

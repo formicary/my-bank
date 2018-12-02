@@ -4,6 +4,8 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Calendar;
+
 public class BankTest {
     private static final double DOUBLE_DELTA = 1e-15;
 
@@ -47,6 +49,37 @@ public class BankTest {
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
         checkingAccount.deposit(3000.0);
+        
+        
+        assertEquals(150.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+    }
+    
+    @Test
+    public void maxiTest10DayInterest() {
+        Bank bank = new Bank();
+        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
+        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+
+        checkingAccount.deposit(3010.0); // Depositing 3010
+        checkingAccount.withdraw(10); // Widthdrawing 10
+        Calendar currentTime = Calendar.getInstance(); // Getting Current Time
+    	currentTime.add(Calendar.DAY_OF_MONTH, -11); // setting currentTime to -11 days
+        checkingAccount.transactions.get(1).transactionDate = currentTime.getTime(); // Changing Transaction date of widthdraw to 11 days ago
+        
+        assertEquals(150.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+    }
+    
+    @Test
+    public void lastWidthdrawDate() {
+        Bank bank = new Bank();
+        Account maxiSavings = new Account(Account.MAXI_SAVINGS);
+        Customer bill = new Customer("Bill").openAccount(maxiSavings);
+        bank.addCustomer(bill);
+
+        maxiSavings.deposit(3000.0);
+        maxiSavings.withdraw(275.00);
+        
+        System.out.println(bill.lastWithdrawal(maxiSavings));
         
         assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
