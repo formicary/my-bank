@@ -57,15 +57,15 @@ public class Bank {
     }
     
     
-   
+    private LocalDateTime localNow = LocalDateTime.now();
+    private ZoneId currentZone = ZoneId.of("Greenwich");
+    public ZonedDateTime zonedNow = ZonedDateTime.of(localNow, currentZone);
+    public ZonedDateTime zonedNext1AM = zonedNow.withHour(1).withMinute(0).withSecond(0);
+    public int secondsBeforeNextInterest = 24*60*60;
     
     
     public void dailyInterest() {
-    	LocalDateTime localNow = LocalDateTime.now();
-        ZoneId currentZone = ZoneId.of("Greenwich");
-        ZonedDateTime zonedNow = ZonedDateTime.of(localNow, currentZone);
-        ZonedDateTime zonedNext1AM ;
-        zonedNext1AM = zonedNow.withHour(15).withMinute(13).withSecond(50);
+    	
         if(zonedNow.compareTo(zonedNext1AM) > 0)
         	zonedNext1AM = zonedNext1AM.plusDays(1);
 
@@ -73,7 +73,7 @@ public class Bank {
         long initalDelay = duration.getSeconds();
 
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);            
-        scheduler.scheduleAtFixedRate(payDailyInterest, initalDelay, 2, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(payDailyInterest, initalDelay, secondsBeforeNextInterest, TimeUnit.SECONDS);
         System.out.println("we get here");
     	
     		 

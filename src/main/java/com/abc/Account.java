@@ -9,6 +9,7 @@ public class Account {
     public static final int CHECKING = 0;
     public static final int SAVINGS = 1;
     public static final int MAXI_SAVINGS = 2;
+    public double interestEarnedOnAccount = 0;
 
     private final int accountType;
     public List<Transaction> transactions;

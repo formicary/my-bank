@@ -125,14 +125,22 @@ public class BankTest {
         Customer bill = new Customer("Bill").openAccount(maxiSavings);
         bank.addCustomer(bill);
 
-        maxiSavings.deposit(3000.0);
+        maxiSavings.deposit(2000.0);
         System.out.println("Real amount of customers: "+bank.customers.size());
+        
+        System.out.println("Current Hour: "+bank.zonedNow.getHour()+"Current Minute: "+bank.zonedNow.getMinute()+"Current Second: "+bank.zonedNow.getSecond());
+        
+        //Sets interest payout time to 5 seconds from test start
+        bank.zonedNext1AM = bank.zonedNow.withHour(bank.zonedNow.getHour()).withMinute(bank.zonedNow.getMinute()).withSecond(bank.zonedNow.getSecond()+5);
+        
+        //Sets interest delay from once every 24 hours to every 3 seconds
+        bank.secondsBeforeNextInterest = 3;
         bank.dailyInterest();
         
-        Thread.sleep(30000);
+        Thread.sleep(10000);
         System.out.println(bill.getBalance(maxiSavings));
         
-        assertEquals(150.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(2205, bill.getBalance(maxiSavings), DOUBLE_DELTA);
     }
 
 }
