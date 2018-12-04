@@ -15,19 +15,23 @@ public class Customer {
 		this.accounts = new ArrayList<Account>();
 	}
 
+	// Returns customer name
 	public String getName() {
 		return name;
 	}
 
+	// Adds an account to the customer
 	public Customer openAccount(Account account) {
 		accounts.add(account);
 		return this;
 	}
 
+	// Returns number of accounts the customer has
 	public int getNumberOfAccounts() {
 		return accounts.size();
 	}
 
+	// Calculates the total interest earned on the account
 	public double totalInterestEarned() {
 		double total = 0;
 		for (Account a : accounts)
@@ -35,6 +39,7 @@ public class Customer {
 		return total;
 	}
 
+	// Returns account statement
 	public String getStatement() {
 		String statement = null;
 		statement = "Statement for " + name + "\n";
@@ -47,6 +52,7 @@ public class Customer {
 		return statement;
 	}
 
+	
 	private String statementForAccount(Account a) {
 		String s = "";
 
@@ -77,6 +83,7 @@ public class Customer {
 		return String.format("$%,.2f", abs(d));
 	}
 
+	// Additional feature, moving money between accounts
 	public void moveMoney(Account originAccount, Account destinationAccount, double amount) {
 		double originTotal = 0.0;
 		for (Transaction t : originAccount.transactions) {
@@ -92,6 +99,7 @@ public class Customer {
 
 	}
 
+	// Part of an additional feature, allows application to determine last withdrawal date
 	public Date lastWithdrawal(Account account) {
 		Date lastWidthDate = null;
 		for (Transaction t : account.transactions) {

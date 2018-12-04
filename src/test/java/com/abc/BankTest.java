@@ -168,7 +168,7 @@ public class BankTest {
     
     
     // Tests Daily interest payment system, one of the additional features, for testing, instead of interest being paid daily,
-    // it is paid once every 3 seconds. and the first payment is in five seconds.
+    // it is paid once every 3 seconds. and the first payment is in five seconds. Does require 10 seconds to execute.
     @Test
     public void testDailyPayments() throws InterruptedException {
         Bank bank = new Bank();

@@ -71,7 +71,6 @@ public class Bank {
 
 		ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 		scheduler.scheduleAtFixedRate(payDailyInterest, initalDelay, secondsBeforeNextInterest, TimeUnit.SECONDS);
-		System.out.println("we get here");
 
 	}
 
@@ -89,7 +88,6 @@ public class Bank {
 				double interestEarned = a.interestToPay()/365;
 				a.interestEarnedOnAccount += interestEarned;
 				a.deposit(interestEarned);
-				System.out.println("Interest Paid: £" + interestEarned);
 
 			}
 		}

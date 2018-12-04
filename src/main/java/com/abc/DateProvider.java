@@ -16,6 +16,7 @@ public class DateProvider {
 		return Calendar.getInstance().getTime();
 	}
 
+	// Used for an additional feature, returns date of 10 days prior to current time
 	public Date tenDaysPrior() {
 		Calendar currentTime = Calendar.getInstance();
 		currentTime.add(Calendar.DAY_OF_MONTH, -10);

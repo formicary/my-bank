@@ -35,6 +35,7 @@ public class Account {
 		}
 	}
 
+	// Calculates yearly interest
 	public double interestToPay() {
 		double amount = sumTransactions();
 		switch (accountType) {
@@ -69,6 +70,7 @@ public class Account {
 		}
 	}
 
+	// Sums an accounts transactions to give their available balance
 	public double sumTransactions() {
 		return checkIfTransactionsExist(true);
 	}
