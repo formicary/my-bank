@@ -37,7 +37,7 @@ public void withdraw(double amount) {
 
 	
 
-    public double interestEarned() {
+    public double interestToPay() {
         double amount = sumTransactions();
         switch(accountType){
             case SAVINGS:

@@ -93,7 +93,8 @@ public class Bank {
     	
     	for (Customer c: customers) {
     		for (Account a: c.accounts) {
-        		double interestEarned = a.interestEarned();
+        		double interestEarned = a.interestToPay();
+        		a.interestEarnedOnAccount += interestEarned;
         		a.deposit(interestEarned);
         		System.out.println("Interest Paid: £" +interestEarned);
         		

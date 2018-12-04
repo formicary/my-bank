@@ -27,6 +27,7 @@ public class BankTest {
         bank.addCustomer(bill);
 
         checkingAccount.deposit(100.0);
+        bank.payInterest();
 
         assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
@@ -38,6 +39,7 @@ public class BankTest {
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
         checkingAccount.deposit(1500.0);
+        bank.payInterest();
 
         assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
@@ -49,6 +51,7 @@ public class BankTest {
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
         checkingAccount.deposit(3000.0);
+        bank.payInterest();
         
         
         assertEquals(150.0, bank.totalInterestPaid(), DOUBLE_DELTA);
@@ -65,24 +68,26 @@ public class BankTest {
         Calendar currentTime = Calendar.getInstance(); // Getting Current Time
     	currentTime.add(Calendar.DAY_OF_MONTH, -11); // setting currentTime to -11 days
         checkingAccount.transactions.get(1).transactionDate = currentTime.getTime(); // Changing Transaction date of widthdraw to 11 days ago
+        bank.payInterest();
         
         assertEquals(150.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
     
-    @Test
-    public void lastWidthdrawDate() {
-        Bank bank = new Bank();
-        Account maxiSavings = new Account(Account.MAXI_SAVINGS);
-        Customer bill = new Customer("Bill").openAccount(maxiSavings);
-        bank.addCustomer(bill);
-
-        maxiSavings.deposit(3000.0);
-        maxiSavings.withdraw(275.00);
-        
-        System.out.println(bill.lastWithdrawal(maxiSavings));
-        
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
-    }
+//    @Test
+//    public void lastWidthdrawDate() {
+//        Bank bank = new Bank();
+//        Account maxiSavings = new Account(Account.MAXI_SAVINGS);
+//        Customer bill = new Customer("Bill").openAccount(maxiSavings);
+//        bank.addCustomer(bill);
+//
+//        maxiSavings.deposit(3000.0);
+//        maxiSavings.withdraw(275.00);
+//        bank.payInterest();
+//        
+//        System.out.println(bill.lastWithdrawal(maxiSavings));
+//        
+//        assertEquals(bill.lastWithdrawal(maxiSavings), DateProvider.getInstance().now());
+//    }
     
     @Test
     public void payInterest() {
@@ -98,28 +103,11 @@ public class BankTest {
         bank.payInterest();
         System.out.println("balance £"+bill.getBalance(maxiSavings));
         
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
-    }
+        assertEquals(3.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+    }    
     
     @Test
-    public void payInterest2() {
-        Bank bank = new Bank();
-        Account maxiSavings = new Account(Account.MAXI_SAVINGS);
-        Customer bill = new Customer("Bill").openAccount(maxiSavings);
-        bank.addCustomer(bill);
-
-        maxiSavings.deposit(3010.0);
-        maxiSavings.withdraw(10);
-       
-        System.out.println("balance £"+bill.getBalance(maxiSavings));
-        bank.dailyInterest();
-        System.out.println("balance £"+bill.getBalance(maxiSavings));
-        
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
-    }
-    
-    @Test
-    public void test() throws InterruptedException {
+    public void testDailyPayments() throws InterruptedException {
         Bank bank = new Bank();
         Account maxiSavings = new Account(Account.MAXI_SAVINGS);
         Customer bill = new Customer("Bill").openAccount(maxiSavings);
