@@ -83,5 +83,56 @@ public class BankTest {
         
         assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
+    
+    @Test
+    public void payInterest() {
+        Bank bank = new Bank();
+        Account maxiSavings = new Account(Account.MAXI_SAVINGS);
+        Customer bill = new Customer("Bill").openAccount(maxiSavings);
+        bank.addCustomer(bill);
+
+        maxiSavings.deposit(3010.0);
+        maxiSavings.withdraw(10);
+       
+        System.out.println("balance £"+bill.getBalance(maxiSavings));
+        bank.payInterest();
+        System.out.println("balance £"+bill.getBalance(maxiSavings));
+        
+        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+    }
+    
+    @Test
+    public void payInterest2() {
+        Bank bank = new Bank();
+        Account maxiSavings = new Account(Account.MAXI_SAVINGS);
+        Customer bill = new Customer("Bill").openAccount(maxiSavings);
+        bank.addCustomer(bill);
+
+        maxiSavings.deposit(3010.0);
+        maxiSavings.withdraw(10);
+       
+        System.out.println("balance £"+bill.getBalance(maxiSavings));
+        bank.dailyInterest();
+        System.out.println("balance £"+bill.getBalance(maxiSavings));
+        
+        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+    }
+    
+    @Test
+    public void test() throws InterruptedException {
+        Bank bank = new Bank();
+        Account maxiSavings = new Account(Account.MAXI_SAVINGS);
+        Customer bill = new Customer("Bill").openAccount(maxiSavings);
+        bank.addCustomer(bill);
+
+        maxiSavings.deposit(3000.0);
+        System.out.println("Real amount of customers: "+bank.customers.size());
+        bank.dailyInterest();
+        
+        Thread.sleep(30000);
+        System.out.println(bill.getBalance(maxiSavings));
+        
+        assertEquals(150.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+    }
 
 }

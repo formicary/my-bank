@@ -1,10 +1,22 @@
 package com.abc;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 public class Bank {
-    private List<Customer> customers;
+    public List<Customer> customers;
 
     public Bank() {
         customers = new ArrayList<Customer>();
@@ -42,5 +54,52 @@ public class Bank {
             e.printStackTrace();
             return "Error";
         }
+    }
+    
+    
+   
+    
+    
+    public void dailyInterest() {
+    	LocalDateTime localNow = LocalDateTime.now();
+        ZoneId currentZone = ZoneId.of("Greenwich");
+        ZonedDateTime zonedNow = ZonedDateTime.of(localNow, currentZone);
+        ZonedDateTime zonedNext1AM ;
+        zonedNext1AM = zonedNow.withHour(15).withMinute(13).withSecond(50);
+        if(zonedNow.compareTo(zonedNext1AM) > 0)
+        	zonedNext1AM = zonedNext1AM.plusDays(1);
+
+        Duration duration = Duration.between(zonedNow, zonedNext1AM);
+        long initalDelay = duration.getSeconds();
+
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);            
+        scheduler.scheduleAtFixedRate(payDailyInterest, initalDelay, 2, TimeUnit.SECONDS);
+        System.out.println("we get here");
+    	
+    		 
+    	
+    }
+    
+    Runnable payDailyInterest = () -> {
+	    String threadName = Thread.currentThread().getName();
+	    System.out.println("Hello " + threadName);
+	    System.out.println("Count of customers: "+customers.size());
+	    payInterest();
+	};
+    
+    
+    
+    public void payInterest() {
+    	
+    	for (Customer c: customers) {
+    		for (Account a: c.accounts) {
+        		double interestEarned = a.interestEarned();
+        		a.deposit(interestEarned);
+        		System.out.println("Interest Paid: £" +interestEarned);
+        		
+        	}
+    	}
+    	
+    	
     }
 }

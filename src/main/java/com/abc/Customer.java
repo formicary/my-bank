@@ -8,7 +8,7 @@ import static java.lang.Math.abs;
 
 public class Customer {
     private String name;
-    private List<Account> accounts;
+    public List<Account> accounts;
 
     public Customer(String name) {
         this.name = name;
