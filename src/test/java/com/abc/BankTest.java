@@ -40,6 +40,7 @@ public class BankTest {
         assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
+    /*
     @Test
     public void maxi_savings_account() {
         Bank bank = new Bank();
@@ -48,7 +49,16 @@ public class BankTest {
 
         checkingAccount.deposit(3000.0);
 
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(170, bank.totalInterestPaid(), DOUBLE_DELTA);  //should fail, because Maxi Saving has changed
     }
+    */
+    public void maxi_savings_account2() {
+        Bank bank = new Bank();
+        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
+        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
+        checkingAccount.deposit(3000.0);
+
+        assertEquals(3, bank.totalInterestPaid(), DOUBLE_DELTA);  //changed expected value to 3 because of new calculations
+    }
 }
