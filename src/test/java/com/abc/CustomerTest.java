@@ -47,11 +47,29 @@ public class CustomerTest {
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
-    @Ignore
+    //@Ignore
+    @Test
     public void testThreeAcounts() {
         Customer oscar = new Customer("Oscar")
                 .openAccount(new Account(Account.SAVINGS));
         oscar.openAccount(new Account(Account.CHECKING));
-        assertEquals(3, oscar.getNumberOfAccounts());
+        oscar.openAccount(new Account(Account.MAXI_SAVINGS));   //added new account, so we add 3 accounts as intended
+        assertEquals(3, oscar.getNumberOfAccounts());   //test checked for 3 accounts, but only instantiated 2 accounts
+    }
+    
+    @Test
+    public void testTransferBetween(){      // tests the new method of transfering between 2 accounts, and passes!
+        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
+        oscar.openAccount(new Account(Account.CHECKING));
+        
+        Account a = oscar.getAccounts().get(0);
+        Account b = oscar.getAccounts().get(1);
+        
+        a.deposit(2000);
+        b.deposit(3000);
+        
+        oscar.transferBetween(a, b, 1500);
+        assertEquals(4500, b.sumTransactions(),1e-15);  //testing both accounts are working together with expected values
+        assertEquals(500, a.sumTransactions(), 1e-15);
     }
 }
