@@ -33,6 +33,12 @@ public class Customer {
             total += a.interestEarned();
         return total;
     }
+    
+    public Double accountTransfer(Account withdrawalAccount, Account depositingAccount, double amount) { // assert that withdrawal acccount is x
+    	withdrawalAccount.withdraw(amount);
+    	depositingAccount.deposit(amount);
+    	return depositingAccount.sumTransactions(); 
+    }
 
     public String getStatement() {
         String statement = null;
@@ -48,21 +54,20 @@ public class Customer {
 
     private String statementForAccount(Account a) {
         String s = "";
-
-       //Translate to pretty account type
-        switch(a.getAccountType()){
-            case Account.CHECKING:
-                s += "Checking Account\n";
-                break;
-            case Account.SAVINGS:
-                s += "Savings Account\n";
-                break;
-            case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
-                break;
+        MaxiSavingsAccount msa = new MaxiSavingsAccount();
+        CheckingAccount ca = new CheckingAccount();
+        SavingsAccount sa = new SavingsAccount();
+        
+        if (a.getClass().isInstance(ca)) {
+        	s += "Checking Account\n";
+        }
+        else if (a.getClass().isInstance(sa)) {
+        	s += "Savings Account\n";
+        }
+        else if (a.getClass().isInstance(msa)) {
+        	s += "Maxi Savings Account\n";
         }
 
-        //Now total up all the transactions
         double total = 0.0;
         for (Transaction t : a.transactions) {
             s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";

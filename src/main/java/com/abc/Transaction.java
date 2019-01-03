@@ -8,9 +8,20 @@ public class Transaction {
 
     private Date transactionDate;
 
-    public Transaction(double amount) {
+	public Transaction(double amount) {
         this.amount = amount;
         this.transactionDate = DateProvider.getInstance().now();
     }
+
+	public Date getTransactionDate() {
+		return transactionDate;
+	}
+
+	public void setTransactionDate(Date transactionDate) { // for creating a transaction date in MaxiSavingsAccountTest only
+		this.transactionDate = transactionDate;
+	}
+	
+	
+
 
 }

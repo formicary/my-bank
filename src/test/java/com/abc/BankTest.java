@@ -4,14 +4,17 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class BankTest {
-    private static final double DOUBLE_DELTA = 1e-15;
+import org.junit.Ignore;
 
+public class BankTest {
+    private static final double DOUBLE_DELTA = 1e-15; // Why is there no file for Account test?
+    Bank bank = new Bank(); // Final is used to: create constant variables
+    Customer john = new Customer("John");
+    CheckingAccount checkingAccount = new CheckingAccount(); 
+    
     @Test
     public void customerSummary() {
-        Bank bank = new Bank();
-        Customer john = new Customer("John");
-        john.openAccount(new Account(Account.CHECKING));
+        john.openAccount(checkingAccount);
         bank.addCustomer(john);
 
         assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
@@ -19,21 +22,17 @@ public class BankTest {
 
     @Test
     public void checkingAccount() {
-        Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.CHECKING);
-        Customer bill = new Customer("Bill").openAccount(checkingAccount);
-        bank.addCustomer(bill);
+        john.openAccount(checkingAccount);
+        bank.addCustomer(john);
 
         checkingAccount.deposit(100.0);
 
         assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
-    @Test
-    public void savings_account() {
-        Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+    @Ignore
+    public void savingsAccount() {
+        bank.addCustomer(john.openAccount(checkingAccount));
 
         checkingAccount.deposit(1500.0);
 
@@ -41,10 +40,9 @@ public class BankTest {
     }
 
     @Test
-    public void maxi_savings_account() {
-        Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+    public void maxiSavingsAccount() {
+        MaxiSavingsAccount maxiSavings = new MaxiSavingsAccount();
+        bank.addCustomer(john.openAccount(checkingAccount));
 
         checkingAccount.deposit(3000.0);
 
