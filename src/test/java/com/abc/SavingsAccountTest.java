@@ -11,12 +11,14 @@ public class SavingsAccountTest {
 	
 	@Test
 	public void interestEarnedSavingsAccount1() {
+		
 		savingsAccount.deposit(50);
 		assertEquals(0.05, savingsAccount.interestEarned(), DOUBLE_DELTA);
 	}
 	
 	@Test
 	public void interestEarnedSavingsAccount2() {
+		
 		savingsAccount.deposit(1001);
 		assertEquals(1.002, savingsAccount.interestEarned(), DOUBLE_DELTA);
 	}

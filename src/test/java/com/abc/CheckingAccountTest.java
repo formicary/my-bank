@@ -11,8 +11,9 @@ public class CheckingAccountTest {
 
 	@Test
 	public void interestEarnedTest() {
+		
 		checkingAccount.deposit(50);
 		assertEquals(0.05, checkingAccount.interestEarned(), DOUBLE_DELTA);
 	}
-	
+
 }

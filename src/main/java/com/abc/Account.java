@@ -1,11 +1,14 @@
 package com.abc;
 
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
-public abstract class Account {
+public abstract class Account implements Interest {
 	
-    public ArrayList<Transaction> transactions;
+    public List<Transaction> transactions;
     
     public Account() {
         this.transactions = new ArrayList<Transaction>();
@@ -34,7 +37,39 @@ public abstract class Account {
 
     public abstract double interestEarned(); 
     
-    public double sumTransactions() {
+    public double compoundInterest(Date startDate, Date endDate) {
+    	double amount = sumTransactions();
+    	double amount2 = sumTransactions();
+    	
+    	if (startDate.after(endDate) == true) {
+    		throw new IllegalArgumentException("Start date must be before end date.");
+    	}
+    	
+    	else if (startDate.compareTo(endDate) == 0) {
+    		return amount; 
+    	}
+    	 
+    	Calendar startCal = Calendar.getInstance();
+    	Calendar endCal = Calendar.getInstance();
+    	startCal.setTime(startDate);
+    	endCal.setTime(endDate);
+    	
+    	long daysBetween = ChronoUnit.DAYS.between(startCal.toInstant(), endCal.toInstant());
+    	
+    	for(int x = 0; x < daysBetween; x++) {
+   		amount= amount + (amount * 0.01);
+    	}
+	
+    	return interestRounder(amount - amount2); 
+    }
+    
+    	public double interestRounder(double amount) {
+    		amount = amount * 100;
+    		amount = Math.round(amount);
+    		return amount / 100;
+    	}
+
+	public double sumTransactions() {
        return checkIfTransactionsExist(true);
     }
 

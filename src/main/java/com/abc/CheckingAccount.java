@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CheckingAccount extends Account {
-	
+
 	public CheckingAccount() {
 		this.transactions = new ArrayList<Transaction>();
 	}
@@ -12,8 +12,6 @@ public class CheckingAccount extends Account {
 	@Override
 	public double interestEarned() {
 		double amount = sumTransactions();
-		 return amount * 0.001;
+		return amount * 0.001;
 	}
 }
-	
-

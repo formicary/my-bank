@@ -9,7 +9,7 @@ public class MaxiSavingsAccount extends Account {
 	public MaxiSavingsAccount() {
 		this.transactions = new ArrayList<Transaction>();
 	}
-	
+
 	@Override
 	public double interestEarned() {
 		double amount = sumTransactions();
@@ -20,22 +20,20 @@ public class MaxiSavingsAccount extends Account {
 
 		for (Transaction t : transactions) {
 			date1 = t.getTransactionDate();
-			
+
 			if (date1.before(date2) == true || date1.compareTo(date2) == 0) {
 				amount = amount * 0.001;
 				break;
-				
-			} 
-			else { 
+
+			} else {
 				counter++;
 			}
 		}
-		
+
 		if (counter == transactions.size()) {
 			amount = amount * 0.05;
 			return amount;
-		}
-		else {
+		} else {
 			return amount;
 		}
 	}
