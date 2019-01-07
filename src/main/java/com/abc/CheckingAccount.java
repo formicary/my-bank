@@ -1,7 +1,6 @@
 package com.abc;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class CheckingAccount extends Account {
 

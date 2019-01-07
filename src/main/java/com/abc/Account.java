@@ -36,19 +36,18 @@ public abstract class Account implements Interest {
 }
 
     public abstract double interestEarned(); 
-    
-    public double compoundInterest(Date startDate, Date endDate) {
+    	 
+    public double compoundInterest() {
+      	DateProvider dateProvider = new DateProvider();
+    	Date startDate = transactions.get(0).getTransactionDate();
+    	Date endDate = dateProvider.now();
     	double amount = sumTransactions();
-    	double amount2 = sumTransactions();
+    	double originalAmount = sumTransactions();
     	
-    	if (startDate.after(endDate) == true) {
-    		throw new IllegalArgumentException("Start date must be before end date.");
-    	}
-    	
-    	else if (startDate.compareTo(endDate) == 0) {
+    	if (startDate.compareTo(endDate) == 0) {
     		return amount; 
     	}
-    	 
+    	   	
     	Calendar startCal = Calendar.getInstance();
     	Calendar endCal = Calendar.getInstance();
     	startCal.setTime(startDate);
@@ -57,12 +56,13 @@ public abstract class Account implements Interest {
     	long daysBetween = ChronoUnit.DAYS.between(startCal.toInstant(), endCal.toInstant());
     	
     	for(int x = 0; x < daysBetween; x++) {
-   		amount= amount + (amount * 0.01);
+   		amount = amount + (amount * 0.01);
     	}
 	
-    	return interestRounder(amount - amount2); 
+    	return interestRounder(amount - originalAmount); 
     }
     
+  
     	public double interestRounder(double amount) {
     		amount = amount * 100;
     		amount = Math.round(amount);

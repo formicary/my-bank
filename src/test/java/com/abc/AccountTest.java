@@ -33,22 +33,20 @@ public class AccountTest {
 		checkingAccount.withdraw(500);
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
-	public void compoundInterestError1() {
-		checkingAccount.compoundInterest(endDate, startDate);
-	}
-	
 	@Test
 	public void compoundInterestSameDate() {
 		checkingAccount.deposit(500);
-		assertEquals(500,checkingAccount.compoundInterest(startDate, startDate), DOUBLE_DELTA);
+		assertEquals(500,checkingAccount.compoundInterest(), DOUBLE_DELTA);
 	}
 	
 	@Test
 	public void compoundInterest() {
+		DateProvider dateProvider = new DateProvider();
+		Date tenDaysPrior = dateProvider.tenDaysBeforeCurrentDate();
 		checkingAccount.deposit(500);
+		checkingAccount.transactions.get(0).setTransactionDate(tenDaysPrior);
 		
-		assertEquals(52.31,checkingAccount.compoundInterest(startDate, endDate), DOUBLE_DELTA);
+		assertEquals(52.31,checkingAccount.compoundInterest(), DOUBLE_DELTA);
 	}
 	
 	@Test 
