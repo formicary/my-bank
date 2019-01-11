@@ -7,8 +7,9 @@ public class CheckingAccount extends Account {
         return sumTransactions() * 0.001;
     }
 
-    public String statementForAccount() {
-        String s = "Checking Account\n";
-        return s + totalTransactions();
+    public String getAccountType() {
+        return "Checking Account\n";
     }
+
+
 }

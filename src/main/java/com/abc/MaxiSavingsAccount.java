@@ -17,8 +17,8 @@ public class MaxiSavingsAccount extends Account {
         return 70 + (amount - 2000) * 0.1;
     }
 
-    public String statementForAccount() {
-        String s = "Maxi Savings Account\n";
-        return s + totalTransactions();
+    public String getAccountType() {
+        return "Maxi Savings Account\n";
     }
+
 }

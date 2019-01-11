@@ -43,7 +43,11 @@ public abstract class Account {
         return amount;
     }
 
-    public abstract String statementForAccount();
+    public String statementForAccount(){
+        return getAccountType() + totalTransactions();
+    }
+
+    public abstract String getAccountType();
 
     public String totalTransactions(){
         double total = 0.0;

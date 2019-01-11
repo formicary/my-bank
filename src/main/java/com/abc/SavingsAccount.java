@@ -14,8 +14,7 @@ public class SavingsAccount extends Account{
 
     }
 
-    public String statementForAccount() {
-        String s = "Savings Account\n";
-        return s + totalTransactions();
+    public String getAccountType(){
+        return "Savings Account\n";
     }
 }
