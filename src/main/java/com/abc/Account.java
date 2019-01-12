@@ -28,7 +28,7 @@ public abstract class Account {
 
     public abstract double interestEarned();
 
-    public double sumTransactions() {
+    public double getBalance() {
         double amount = 0.0;
         for (Transaction t : transactions)
             amount += t.getAmount();
@@ -37,19 +37,19 @@ public abstract class Account {
     }
 
     public String statementForAccount(){
-        return getAccountType() + totalTransactions();
+        return getAccountType() + transactionHistory();
     }
 
     public abstract String getAccountType();
 
-    public String totalTransactions(){
-        double total = 0.0;
+    private String transactionHistory(){
         String s = "";
         for (Transaction t : transactions){
             s += "  " + t.getTransactionDetails() + "\n";
-            total += t.getAmount();
+
         }
 
+        double total = getBalance();
         s += "Total " + Transaction.toDollars(total);
         return s;
     }

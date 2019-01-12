@@ -67,7 +67,7 @@ public class CustomerTest {
         savingsAccount.deposit(1000.0);
         oscar.transferFunds(savingsAccount, checkingAccount, 100);
 
-        assertEquals(900.0, savingsAccount.sumTransactions(), DOUBLE_DELTA);
+        assertEquals(900.0, savingsAccount.getBalance(), DOUBLE_DELTA);
 
     }
 

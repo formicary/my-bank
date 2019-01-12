@@ -4,7 +4,7 @@ public class SavingsAccount extends Account{
 
 
     public double interestEarned() {
-        double amount = sumTransactions();
+        double amount = getBalance();
 
         if (amount <= 1000){
             return amount * 0.001;
