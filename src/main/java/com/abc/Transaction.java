@@ -5,7 +5,8 @@ import java.util.Date;
 import static java.lang.Math.abs;
 
 public class Transaction {
-    public final double amount;
+
+    private final double amount;
 
     private Date transactionDate;
 
@@ -16,6 +17,10 @@ public class Transaction {
 
     public Date getTransactionDate() {
         return transactionDate;
+    }
+
+    public double getAmount() {
+        return amount;
     }
 
     public static String toDollars(double amount){

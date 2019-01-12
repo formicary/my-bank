@@ -3,10 +3,8 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Math.abs;
-
 public abstract class Account {
-    public List<Transaction> transactions;
+    private List<Transaction> transactions;
 
     public Account() {
         this.transactions = new ArrayList<Transaction>();
@@ -31,15 +29,10 @@ public abstract class Account {
     public abstract double interestEarned();
 
     public double sumTransactions() {
-        return checkIfTransactionsExist(true);
-    }
-
-    private double checkIfTransactionsExist(boolean checkAll) {
         double amount = 0.0;
         for (Transaction t : transactions)
-            amount += t.amount;
+            amount += t.getAmount();
 
-        System.out.println("After deposit: " + amount);
         return amount;
     }
 
@@ -55,7 +48,7 @@ public abstract class Account {
 
         for (Transaction t : transactions){
             s += "  " + t.getTransactionDetails() + "\n";
-            total += t.amount;
+            total += t.getAmount();
         }
 
         s += "Total " + Transaction.toDollars(total);
