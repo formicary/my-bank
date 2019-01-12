@@ -33,8 +33,7 @@ public class Customer {
     }
 
     public String getStatement() {
-        String statement = null;
-        statement = "Statement for " + name + "\n";
+        String statement = "Statement for " + name + "\n";
         double total = 0.0;
         for (Account a : accounts) {
             statement += "\n" + a.statementForAccount() + "\n";
@@ -42,6 +41,17 @@ public class Customer {
         }
         statement += "\nTotal In All Accounts " + Transaction.toDollars(total);
         return statement;
+    }
+
+    public void transferFunds(Account source, Account dest, double amount){
+        // A customer can only withdraw from its own account
+        if (!accounts.contains(source)){
+            throw new IllegalArgumentException("Source account does not belong to customer");
+        }
+
+        source.withdraw(amount);
+        dest.deposit(amount);
+
     }
 
 }

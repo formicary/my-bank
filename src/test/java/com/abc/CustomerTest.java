@@ -1,12 +1,11 @@
 package com.abc;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
-
+    private static final double DOUBLE_DELTA = 1e-15;
     @Test //Test customer statement generation
     public void testApp(){
 
@@ -40,18 +39,49 @@ public class CustomerTest {
     }
 
     @Test
-    public void testTwoAccount(){
+    public void testTwoAccounts(){
         Customer oscar = new Customer("Oscar")
-                .openAccount(new SavingsAccount());
-        oscar.openAccount(new CheckingAccount());
+                .openAccount(new SavingsAccount())
+                .openAccount(new CheckingAccount());
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
-    @Ignore
-    public void testThreeAcounts() {
+    @Test
+    public void testThreeAccounts() {
         Customer oscar = new Customer("Oscar")
-                .openAccount(new SavingsAccount());
-        oscar.openAccount(new CheckingAccount());
+                .openAccount(new SavingsAccount())
+                .openAccount(new CheckingAccount())
+                .openAccount(new MaxiSavingsAccount());
         assertEquals(3, oscar.getNumberOfAccounts());
+    }
+
+    @Test
+    public void testTransferFunds(){
+        Account savingsAccount = new SavingsAccount();
+        Account checkingAccount = new CheckingAccount();
+
+        Customer oscar = new Customer("Oscar")
+                .openAccount(savingsAccount)
+                .openAccount(checkingAccount);
+
+        savingsAccount.deposit(1000.0);
+        oscar.transferFunds(savingsAccount, checkingAccount, 100);
+
+        assertEquals(900.0, savingsAccount.sumTransactions(), DOUBLE_DELTA);
+
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testTransferFundsFail(){
+        Account savingsAccount = new SavingsAccount();
+        Account checkingAccount = new CheckingAccount();
+
+        Customer oscar = new Customer("Oscar")
+                .openAccount(checkingAccount);
+
+        savingsAccount.deposit(1000.0);
+        oscar.transferFunds(savingsAccount, checkingAccount, 100);
+
+
     }
 }

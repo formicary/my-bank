@@ -45,7 +45,6 @@ public abstract class Account {
     public String totalTransactions(){
         double total = 0.0;
         String s = "";
-
         for (Transaction t : transactions){
             s += "  " + t.getTransactionDetails() + "\n";
             total += t.getAmount();
@@ -54,5 +53,6 @@ public abstract class Account {
         s += "Total " + Transaction.toDollars(total);
         return s;
     }
+
 
 }
