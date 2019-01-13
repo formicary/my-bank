@@ -25,6 +25,11 @@ public class Customer {
         return accounts.size();
     }
 
+    public List<Account> getAccounts() {
+        return accounts;
+    }
+
+
     public double totalInterestEarned() {
         double total = 0;
         for (Account a : accounts)
@@ -44,9 +49,14 @@ public class Customer {
     }
 
     public void transferFunds(Account source, Account dest, double amount){
-        // A customer can only withdraw from its own account
+        // A customer must withdraw from their own account
         if (!accounts.contains(source)){
             throw new IllegalArgumentException("Source account does not belong to customer");
+        }
+
+        // A customer can only transfer to their own account
+        if (!accounts.contains(dest)){
+            throw new IllegalArgumentException("Destination account does not belong to customer");
         }
 
         source.withdraw(amount);

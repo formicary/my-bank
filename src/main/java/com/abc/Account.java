@@ -10,6 +10,10 @@ public abstract class Account {
         this.transactions = new ArrayList<Transaction>();
     }
 
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
     public void deposit(double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
@@ -21,8 +25,11 @@ public abstract class Account {
     public void withdraw(double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
+        } else if (amount > getBalance()) {
+            throw new IllegalArgumentException("amount must be less than balance");
         } else {
             transactions.add(new Transaction(-amount));
+
         }
     }
 

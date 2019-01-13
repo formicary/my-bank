@@ -12,7 +12,7 @@ public class Transaction {
 
     public Transaction(double amount) {
         this.amount = amount;
-        this.transactionDate = DateProvider.getInstance().now();
+        this.transactionDate = DateProvider.now();
     }
 
     public Date getTransactionDate() {
