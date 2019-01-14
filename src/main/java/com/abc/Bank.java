@@ -16,7 +16,7 @@ public class Bank {
 
     public String customerSummary() {
         String summary = "Customer Summary";
-        for (Customer c : customers)
+        for (Customer c : customers) //Could use a string builder
             summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
         return summary;
     }
@@ -34,7 +34,7 @@ public class Bank {
         return total;
     }
 
-    public String getFirstCustomer() {
+    public String getFirstCustomer() { //Make a test for it and ensure it is needed for something
         try {
             customers = null;
             return customers.get(0).getName();

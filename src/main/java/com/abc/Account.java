@@ -25,7 +25,7 @@ public class Account {
         }
     }
 
-public void withdraw(double amount) {
+public void withdraw(double amount) { //Can withdraw more than account value. Check the spec for validity or cap at account value
     if (amount <= 0) {
         throw new IllegalArgumentException("amount must be greater than zero");
     } else {
@@ -51,13 +51,14 @@ public void withdraw(double amount) {
                     return 20 + (amount-1000) * 0.05;
                 return 70 + (amount-2000) * 0.1;
             default:
-                return amount * 0.001;
+                return amount * 0.001; //This will execute for checking. May be better to be explicit
         }
     }
 
     public double sumTransactions() {
        return checkIfTransactionsExist(true);
-    }
+    }// Huh? shouldn't the sum also be returned?
+    //I'm not sure I like how these two methods are set out
 
     private double checkIfTransactionsExist(boolean checkAll) {
         double amount = 0.0;
