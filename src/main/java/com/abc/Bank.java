@@ -42,15 +42,4 @@ public class Bank {
             total += c.totalInterestEarned();
         return total;
     }
-
-    //Removed as it was never called and no feature called for its existence.
-    //public String getFirstCustomer() {
-    //    try {
-    //        customers = null;
-    //        return customers.get(0).getName();
-    //    } catch (Exception e){
-    //        e.printStackTrace();
-    //        return "Error";
-    //    }
-    //}
 }

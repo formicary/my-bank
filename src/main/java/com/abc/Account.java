@@ -25,12 +25,14 @@ public class Account {
         }
     }
 
-public void withdraw(double amount) { //Can withdraw more than account value. Check the spec for validity or cap at account value
+public boolean withdraw(double amount) {
     if (amount <= 0) {
         throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
+    } else if(this.sumTransactions() - amount > 0) {//Prevents accounts being overdrawn since this is not a requested feature
         transactions.add(new Transaction(-amount));
+        return true;
     }
+    return false;
 }
 
     public double interestEarned() {
@@ -41,9 +43,6 @@ public void withdraw(double amount) { //Can withdraw more than account value. Ch
                     return amount * 0.001;
                 else
                     return 1 + ((amount-1000) * 0.002);
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
             case MAXI_SAVINGS:
                 if (amount <= 1000)
                     return amount * 0.02;
@@ -58,13 +57,6 @@ public void withdraw(double amount) { //Can withdraw more than account value. Ch
     }
 
     public double sumTransactions() {
-       return checkIfTransactionsExist(true);
-    }
-    //TODO rewrite these two methods.
-    //Huh? shouldn't the sum also be returned?
-    //I'm not sure I like how these two methods are set out
-
-    private double checkIfTransactionsExist(boolean checkAll) {
         double amount = 0.0;
         for (Transaction t: transactions)
             amount += t.amount;
