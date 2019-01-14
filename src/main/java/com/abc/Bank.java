@@ -15,10 +15,19 @@ public class Bank {
     }
 
     public String customerSummary() {
-        String summary = "Customer Summary";
-        for (Customer c : customers) //Could use a string builder
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-        return summary;
+        //StringBuilder is more efficient in a loop.
+        //If it was not in a loop the '+' operator would be just as good as it is converted to a StringBuilder anyway.
+        StringBuilder summary = new StringBuilder();
+        summary.append("Customer Summary");
+        for (Customer c : customers)
+        {
+            summary.append("\n - ");
+            summary.append(c.getName());
+            summary.append(" (");
+            summary.append(format(c.getNumberOfAccounts(), "account"));
+            summary.append(")");
+        }
+        return summary.toString();
     }
 
     //Make sure correct plural of word is created based on the number passed in:
@@ -34,13 +43,14 @@ public class Bank {
         return total;
     }
 
-    public String getFirstCustomer() { //Make a test for it and ensure it is needed for something
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
-        }
-    }
+    //Removed as it was never called and no feature called for its existence.
+    //public String getFirstCustomer() {
+    //    try {
+    //        customers = null;
+    //        return customers.get(0).getName();
+    //    } catch (Exception e){
+    //        e.printStackTrace();
+    //        return "Error";
+    //    }
+    //}
 }

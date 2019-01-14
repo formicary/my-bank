@@ -35,40 +35,48 @@ public class Customer {
     }
 
     public String getStatement() {
-        String statement = null;
-        statement = "Statement for " + name + "\n";
+        StringBuilder statement = new StringBuilder();
+        statement.append("Statement for ");
+        statement.append(name);
+        statement.append("\n");
         double total = 0.0;
         for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
+            statement.append("\n");
+            statement = (statementForAccount(a, statement));
+            statement.append("\n");
             total += a.sumTransactions();
         }
-        statement += "\nTotal In All Accounts " + toDollars(total);
-        return statement;
+        statement.append("\nTotal In All Accounts ");
+        statement.append(toDollars(total));
+        return statement.toString();
     }
 
-    private String statementForAccount(Account a) {
-        String s = "";
-
+    private StringBuilder statementForAccount(Account a, StringBuilder s) {
        //Translate to pretty account type
         switch(a.getAccountType()){
             case Account.CHECKING:
-                s += "Checking Account\n";
+                s.append("Checking Account\n");
                 break;
             case Account.SAVINGS:
-                s += "Savings Account\n";
+                s.append("Savings Account\n");
                 break;
             case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
+                s.append("Maxi Savings Account\n");
                 break;
         }
 
         //Now total up all the transactions
         double total = 0.0;
         for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
+            s.append("  ");
+            s.append((t.amount < 0 ? "withdrawal" : "deposit"));
+            s.append(" ");
+            s.append(toDollars(t.amount));
+            s.append("\n");
             total += t.amount;
         }
-        s += "Total " + toDollars(total);
+        s.append("Total ");
+        s.append(toDollars(total));
         return s;
     }
 

@@ -40,7 +40,7 @@ public void withdraw(double amount) { //Can withdraw more than account value. Ch
                 if (amount <= 1000)
                     return amount * 0.001;
                 else
-                    return 1 + (amount-1000) * 0.002;
+                    return 1 + ((amount-1000) * 0.002);
 //            case SUPER_SAVINGS:
 //                if (amount <= 4000)
 //                    return 20;
@@ -48,16 +48,20 @@ public void withdraw(double amount) { //Can withdraw more than account value. Ch
                 if (amount <= 1000)
                     return amount * 0.02;
                 if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
+                    return 20 + ((amount-1000) * 0.05);
+                return 70 + ((amount-2000) * 0.1);
+            case CHECKING:
+                return amount * 0.001; //Old default. I prefer to be explicit
             default:
-                return amount * 0.001; //This will execute for checking. May be better to be explicit
+                return 0; //Could not id account type so made no changes.
         }
     }
 
     public double sumTransactions() {
        return checkIfTransactionsExist(true);
-    }// Huh? shouldn't the sum also be returned?
+    }
+    //TODO rewrite these two methods.
+    //Huh? shouldn't the sum also be returned?
     //I'm not sure I like how these two methods are set out
 
     private double checkIfTransactionsExist(boolean checkAll) {
