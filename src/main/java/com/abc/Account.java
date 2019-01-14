@@ -21,39 +21,43 @@ public class Account {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
-            transactions.add(new Transaction(amount));
+            transactions.add(new Transaction(amount, "Deposit"));
         }
     }
 
-public boolean withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else if(this.sumTransactions() - amount > 0) {//Prevents accounts being overdrawn since this is not a requested feature
-        transactions.add(new Transaction(-amount));
-        return true;
+    public boolean withdraw(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        } else if(this.sumTransactions() - amount > 0) {//Prevents accounts being overdrawn since this is not a requested feature
+            transactions.add(new Transaction(-amount, "Withdrawal"));
+            return true;
+        }
+        return false;
     }
-    return false;
-}
 
-    public double interestEarned() {
+    public double dailyInterestEarned() {
         double amount = sumTransactions();
         switch(accountType){
             case SAVINGS:
                 if (amount <= 1000)
-                    return amount * 0.001;
+                    return (amount * 0.001)/DateProvider.getInstance().daysThisYear();
                 else
-                    return 1 + ((amount-1000) * 0.002);
+                    return (1+ ((amount-1000) * 0.002))/DateProvider.getInstance().daysThisYear();
             case MAXI_SAVINGS:
                 if (amount <= 1000)
-                    return amount * 0.02;
+                    return (amount * 0.02)/DateProvider.getInstance().daysThisYear();
                 if (amount <= 2000)
-                    return 20 + ((amount-1000) * 0.05);
-                return 70 + ((amount-2000) * 0.1);
+                    return (20 + ((amount-1000) * 0.05))/DateProvider.getInstance().daysThisYear();
+                return (70 + ((amount-2000) * 0.1))/DateProvider.getInstance().daysThisYear();
             case CHECKING:
-                return amount * 0.001; //Old default. I prefer to be explicit
+                return (amount * 0.001)/DateProvider.getInstance().daysThisYear();
             default:
                 return 0; //Could not id account type so made no changes.
         }
+    }
+
+    public void compoundInterest(){
+        transactions.add(new Transaction(dailyInterestEarned(), "Interest Payment"));
     }
 
     public double sumTransactions() {

@@ -12,7 +12,21 @@ public class DateProvider {
         return instance;
     }
 
+    public double daysThisYear() {
+        if ((year() % 4 == 0)) {
+            return 366;
+        }
+        else {
+            return 365;
+        }
+    }
+
     public Date now() {
         return Calendar.getInstance().getTime();
+    }
+
+    public int year() {
+        Calendar now = Calendar.getInstance();
+        return now.get(Calendar.YEAR);
     }
 }

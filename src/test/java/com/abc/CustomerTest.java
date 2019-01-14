@@ -1,6 +1,5 @@
 package com.abc;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -20,19 +19,23 @@ public class CustomerTest {
         checkingAccount.deposit(100.0);
         savingsAccount.deposit(4000.0);
         savingsAccount.withdraw(200.0);
+        checkingAccount.compoundInterest();
+        savingsAccount.compoundInterest();
 
         assertEquals("Statement for Henry\n" +
                 "\n" +
                 "Checking Account\n" +
-                "  deposit $100.00\n" +
+                "  Deposit $100.00\n" +
+                "  Interest Payment $0.00\n" +
                 "Total $100.00\n" +
                 "\n" +
                 "Savings Account\n" +
-                "  deposit $4,000.00\n" +
-                "  withdrawal $200.00\n" +
-                "Total $3,800.00\n" +
+                "  Deposit $4,000.00\n" +
+                "  Withdrawal $200.00\n" +
+                "  Interest Payment $0.02\n" +
+                "Total $3,800.02\n" +
                 "\n" +
-                "Total In All Accounts $3,900.00", henry.getStatement());
+                "Total In All Accounts $3,900.02", henry.getStatement());
     }
 
     @Test
@@ -63,13 +66,6 @@ public class CustomerTest {
         Account checkingAccount = new Account(Account.CHECKING);
 
         Customer henry = new Customer("Henry").openAccount(checkingAccount);
-        assertEquals(0, henry.totalInterestEarned(), DOUBLE_DELTA);
-    }
-
-    @Test
-    public void testOverdraftPrevention(){
-        Account checkingAccount = new Account(Account.CHECKING);
-
-        assertEquals(false, checkingAccount.withdraw(100));
+        assertEquals(0, henry.totalInterestEarnedDaily(), DOUBLE_DELTA);
     }
 }

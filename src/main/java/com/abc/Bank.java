@@ -39,7 +39,7 @@ public class Bank {
     public double totalInterestPaid() {
         double total = 0;
         for(Customer c: customers)
-            total += c.totalInterestEarned();
+            total += c.totalInterestEarnedDaily();
         return total;
     }
 }
