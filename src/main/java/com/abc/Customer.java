@@ -18,7 +18,12 @@ public class Customer {
         return name;
     }
 
-    public Customer openAccount(Account account) {
+    public Customer openAccount(Account account) {//Multiple accounts of the same type
+        for(Account a: this.accounts){
+            if(a.getAccountType() == account.getAccountType()){
+                throw new IllegalArgumentException("Cannot have more than one of each account");
+            }
+        }
         accounts.add(account);
         return this;
     }
