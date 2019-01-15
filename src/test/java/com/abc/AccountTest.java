@@ -1,6 +1,9 @@
 package com.abc;
 
 import org.junit.Test;
+
+import java.util.Date;
+
 import static org.junit.Assert.assertEquals;
 
 public class AccountTest {
@@ -68,7 +71,7 @@ public class AccountTest {
     }
 
     @Test
-    public void testInterestEarnedOnMaxiSavingsAccountWhenWithdrawalIsMadeWithin10Days() {
+    public void testInterestEarnedOnMaxiSavingsAccountWhenWithdrawalIsMadeWithinTenDays() {
         Account maxiSavingsAccount = AccountFactory.createAccount(AccountType.MAXI_SAVINGS);
         maxiSavingsAccount.deposit(3000.0);
         maxiSavingsAccount.withdraw(1000.0);
@@ -77,18 +80,21 @@ public class AccountTest {
 
 
     @Test
-    public void testInterestEarnedOnMaxiSaveAccountWithNoWithdrawals() {
+    public void testInterestEarnedOnMaxiSavingsAccountWithNoWithdrawals() {
         Account maxiSavingsAccount = AccountFactory.createAccount(AccountType.MAXI_SAVINGS);
         maxiSavingsAccount.deposit(2000.0);
         assertEquals(100.0, maxiSavingsAccount.interestEarned(), DOUBLE_DELTA);
     }
 
-
-
-
-
-
-
-
+    @Test
+    public void testInterestEarnedOnMaxiSavingsAccountWithNoWithdrawalsWithinTenDays(){
+        Date date = DateProvider.generateDate(2019, 0, 1);
+        Account maxiSavingsAccount = AccountFactory.createAccount(AccountType.MAXI_SAVINGS);
+        maxiSavingsAccount.deposit(2000.0);
+        maxiSavingsAccount.getTransactions().get(0).setTransactionDate(date);
+        maxiSavingsAccount.withdraw(1000.0);
+        maxiSavingsAccount.getTransactions().get(1).setTransactionDate(date);
+        assertEquals(50.0, maxiSavingsAccount.interestEarned(), DOUBLE_DELTA);
+    }
 
 }

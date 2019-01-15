@@ -2,6 +2,8 @@ package com.abc;
 
 import org.junit.Test;
 
+import java.util.Date;
+
 import static org.junit.Assert.assertEquals;
 
 public class BankTest {
@@ -65,6 +67,19 @@ public class BankTest {
     }
 
     @Test
+    public void testTotalInterestPaidOnMaxiSavingsAccountWithNoWithdrawalsWithinTenDays() {
+        Bank bank = new Bank();
+        Account maxiSavingsAccount = AccountFactory.createAccount(AccountType.MAXI_SAVINGS);
+        bank.addCustomer(new Customer("Bill").openAccount(maxiSavingsAccount));
+        Date date = DateProvider.generateDate(2019, 0, 1);
+        maxiSavingsAccount.deposit(2000.0);
+        maxiSavingsAccount.getTransactions().get(0).setTransactionDate(date);
+        maxiSavingsAccount.withdraw(1000.0);
+        maxiSavingsAccount.getTransactions().get(1).setTransactionDate(date);
+        assertEquals(50.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+    }
+
+    @Test
     public void testTotalInterestPaidOnMaxiSavingsAccountWithWithdrawalsWithinTenDays() {
         Bank bank = new Bank();
         Account maxiSavingsAccount = AccountFactory.createAccount(AccountType.MAXI_SAVINGS);
@@ -78,20 +93,20 @@ public class BankTest {
     @Test
     public void testReportOnTotalInterestPaidByBankOnAllAccounts() {
         Bank bank = new Bank();
-        Account savingAccount_Bill = AccountFactory.createAccount(AccountType.SAVINGS);
-        Account savingAccount_John = AccountFactory.createAccount(AccountType.SAVINGS);
+        Account savingsAccountBill = AccountFactory.createAccount(AccountType.SAVINGS);
+        Account savingsAccountJohn = AccountFactory.createAccount(AccountType.SAVINGS);
 
-        savingAccount_Bill.deposit(1000.0);
-        savingAccount_John.deposit(1000.0);
+        savingsAccountBill.deposit(1000.0);
+        savingsAccountJohn.deposit(1000.0);
 
-        Account checkingAccount_Bill = AccountFactory.createAccount(AccountType.CHECKING);
+        Account checkingAccountBill = AccountFactory.createAccount(AccountType.CHECKING);
         Account checkingAccount_John = AccountFactory.createAccount(AccountType.CHECKING);
 
-        checkingAccount_Bill.deposit(1000.0);
+        checkingAccountBill.deposit(1000.0);
         checkingAccount_John.deposit(1000.0);
 
-        bank.addCustomer(new Customer("Bill").openAccount(savingAccount_Bill).openAccount(checkingAccount_Bill));
-        bank.addCustomer(new Customer("John").openAccount(savingAccount_John).openAccount(checkingAccount_John));
+        bank.addCustomer(new Customer("Bill").openAccount(savingsAccountBill).openAccount(checkingAccountBill));
+        bank.addCustomer(new Customer("John").openAccount(savingsAccountJohn).openAccount(checkingAccount_John));
 
         assertEquals(4.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }

@@ -22,7 +22,7 @@ public class MaxiSavingsAccount extends Account {
             Transaction transaction = transactions.get(i);
 
             if (transaction.getAmount() < 0.0){
-                // a withdrawal
+                // the current transaction is a withdrawal
                 long currentTime = DateProvider.now().getTime();
                 long transactionTime = transaction.getTransactionDate().getTime();
 

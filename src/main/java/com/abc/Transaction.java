@@ -7,12 +7,15 @@ import static java.lang.Math.abs;
 public class Transaction {
 
     private final double amount;
-
     private Date transactionDate;
 
     public Transaction(double amount) {
         this.amount = amount;
         this.transactionDate = DateProvider.now();
+    }
+
+    public void setTransactionDate(Date transactionDate) {
+        this.transactionDate = transactionDate;
     }
 
     public Date getTransactionDate() {
