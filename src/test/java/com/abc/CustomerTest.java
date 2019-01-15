@@ -62,10 +62,44 @@ public class CustomerTest {
     }
 
     @Test
+    public void testFourAccounts() {
+        Customer oscar = new Customer("Oscar");
+        oscar.openAccount(new Account(Account.SAVINGS));
+        oscar.openAccount(new Account(Account.CHECKING));
+        oscar.openAccount(new Account(Account.MAXI_SAVINGS));
+        try{
+            oscar.openAccount(new Account(Account.SAVINGS));
+        }catch (Exception e){
+            assertEquals(3, oscar.getNumberOfAccounts());
+            assertEquals("Cannot have more than one of each account", e.getMessage());
+        }
+    }
+
+    @Test
     public void testNoTransactions(){
         Account checkingAccount = new Account(Account.CHECKING);
 
         Customer henry = new Customer("Henry").openAccount(checkingAccount);
         assertEquals(0, henry.totalInterestEarnedDaily(), DOUBLE_DELTA);
+    }
+
+    @Test
+    public void testTransferValid(){
+        Account checkingAccount = new Account(Account.CHECKING);
+        Account savingsAccount = new Account(Account.SAVINGS);
+
+        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
+        savingsAccount.deposit(100);
+        assert(henry.transferFunds(savingsAccount, checkingAccount, 50.0));
+    }
+
+    @Test
+    public void testTransferInvalid(){
+        Account checkingAccount = new Account(Account.CHECKING);
+        Account savingsAccount = new Account(Account.SAVINGS);
+
+        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
+        savingsAccount.deposit(100);
+        assert(!henry.transferFunds(savingsAccount, checkingAccount, 150.0));
     }
 }

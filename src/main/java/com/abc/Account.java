@@ -36,6 +36,7 @@ public class Account {
     }
 
     public double dailyInterestEarned() {
+        // some of the rates are so low that deposits don't earn interest daily. I haven'd come up with a solution for this yet.
         double amount = sumTransactions();
         switch(accountType){
             case SAVINGS:

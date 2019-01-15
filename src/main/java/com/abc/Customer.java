@@ -1,5 +1,7 @@
 package com.abc;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,6 +56,15 @@ public class Customer {
         statement.append("\nTotal In All Accounts ");
         statement.append(toDollars(total));
         return statement.toString();
+    }
+
+    public Boolean transferFunds(Account transferFrom, Account transferTo, Double amount){
+        if(transferFrom.withdraw(amount)){
+            transferTo.deposit(amount);
+            return true;
+        }else {
+            return false;
+        }
     }
 
     private StringBuilder statementForAccount(Account a, StringBuilder s) {
