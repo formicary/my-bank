@@ -41,14 +41,15 @@ public class BankTest {
     }
 
     @Test
-    public void maxi_savings_account() {
+    public void maxi_savings_accountWithdrawal() { //Last Transaction should be more less 10 days ago.
         Bank bank = new Bank();
         Account checkingAccount = new Account(Account.MAXI_SAVINGS);
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
-        checkingAccount.deposit(3000.0);
+        checkingAccount.deposit(3100.0);
+        checkingAccount.withdraw(100.00);
 
-        assertEquals(0.4657534246575342, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(0.00821917808219178, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
 }

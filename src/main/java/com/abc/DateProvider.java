@@ -25,6 +25,12 @@ public class DateProvider {
         return Calendar.getInstance().getTime();
     }
 
+    public Date tenDaysAgo(){
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE,-10);
+        return  cal.getTime();
+    }
+
     public int year() {
         Calendar now = Calendar.getInstance();
         return now.get(Calendar.YEAR);

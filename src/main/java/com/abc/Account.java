@@ -45,16 +45,33 @@ public class Account {
                 else
                     return (1+ ((amount-1000) * 0.002))/DateProvider.getInstance().daysThisYear();
             case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return (amount * 0.02)/DateProvider.getInstance().daysThisYear();
-                if (amount <= 2000)
-                    return (20 + ((amount-1000) * 0.05))/DateProvider.getInstance().daysThisYear();
-                return (70 + ((amount-2000) * 0.1))/DateProvider.getInstance().daysThisYear();
+                if(lastWithdrawalOlderThan10()){
+                    return (amount * 0.05)/DateProvider.getInstance().daysThisYear();
+                }
+                return  (amount * 0.001)/DateProvider.getInstance().daysThisYear();
+                //if (amount <= 1000)
+                //    return (amount * 0.02)/DateProvider.getInstance().daysThisYear();
+                //if (amount <= 2000)
+                //    return (20 + ((amount-1000) * 0.05))/DateProvider.getInstance().daysThisYear();
+                //return (70 + ((amount-2000) * 0.1))/DateProvider.getInstance().daysThisYear();
             case CHECKING:
                 return (amount * 0.001)/DateProvider.getInstance().daysThisYear();
             default:
-                return 0; //Could not id account type so made no changes.
+                return 0; //Could not id account type so made no changes. Withdrawal
         }
+    }
+
+    private boolean lastWithdrawalOlderThan10(){
+        for (Transaction t:transactions) {
+            if(t.note == "Withdrawal"){
+                if(t.getTransactionDate().before(DateProvider.getInstance().tenDaysAgo())){
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public void compoundInterest(){
