@@ -15,10 +15,19 @@ public class Bank {
     }
 
     public String customerSummary() {
-        String summary = "Customer Summary";
+        //StringBuilder is more efficient in a loop.
+        //If it was not in a loop the '+' operator would be just as good as it is converted to a StringBuilder anyway.
+        StringBuilder summary = new StringBuilder();
+        summary.append("Customer Summary");
         for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-        return summary;
+        {
+            summary.append("\n - ");
+            summary.append(c.getName());
+            summary.append(" (");
+            summary.append(format(c.getNumberOfAccounts(), "account"));
+            summary.append(")");
+        }
+        return summary.toString();
     }
 
     //Make sure correct plural of word is created based on the number passed in:
@@ -30,17 +39,7 @@ public class Bank {
     public double totalInterestPaid() {
         double total = 0;
         for(Customer c: customers)
-            total += c.totalInterestEarned();
+            total += c.totalInterestEarnedDaily();
         return total;
-    }
-
-    public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
-        }
     }
 }
