@@ -88,6 +88,7 @@ public class AccountTest {
 
     @Test
     public void testInterestEarnedOnMaxiSavingsAccountWithNoWithdrawalsWithinTenDays(){
+        // Override the date set on the transaction object to test interest (Maxi Savings Account)
         Date date = DateProvider.generateDate(2019, 0, 1);
         Account maxiSavingsAccount = AccountFactory.createAccount(AccountType.MAXI_SAVINGS);
         maxiSavingsAccount.deposit(2000.0);

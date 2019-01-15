@@ -38,14 +38,14 @@ public class Customer {
     }
 
     public String getStatement() {
-        String statement = "Statement for " + name + "\n";
+        StringBuilder statement = new StringBuilder("Statement for " + name + "\n");
         double total = 0.0;
         for (Account a : accounts) {
-            statement += "\n" + a.statementForAccount() + "\n";
+            statement.append("\n").append(a.statementForAccount()).append("\n");
             total += a.getBalance();
         }
-        statement += "\nTotal In All Accounts " + Transaction.toDollars(total);
-        return statement;
+        statement.append("\nTotal In All Accounts ").append(Transaction.toDollars(total));
+        return statement.toString();
     }
 
     public void transferFunds(Account source, Account dest, double amount){

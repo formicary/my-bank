@@ -50,15 +50,14 @@ public abstract class Account {
     public abstract String getAccountType();
 
     private String transactionHistory(){
-        String s = "";
+        StringBuilder s = new StringBuilder();
         for (Transaction t : transactions){
-            s += "  " + t.getTransactionDetails() + "\n";
-
+            s.append( "  ").append(t.getTransactionDetails()).append("\n");
         }
 
         double total = getBalance();
-        s += "Total " + Transaction.toDollars(total);
-        return s;
+        s.append("Total ").append(Transaction.toDollars(total));
+        return s.toString();
     }
 
 }
