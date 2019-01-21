@@ -11,7 +11,10 @@ public class Account {
 	}
 
     private final AccountType accountType;
+	private long customerID = -1;
     public List<Transaction> transactions;
+	private double balance = 0;
+	private bool hasTransactionsInLast10Days; // for MAXI_SAVINGS accounts
 
     public Account(AccountType accountType) {
         this.accountType = accountType;
@@ -23,6 +26,7 @@ public class Account {
             throw new IllegalArgumentException("Amount deposited must be greater than zero");
         } else {
             transactions.add(new Transaction(amount));
+			balance += amount;
         }
     }
 
@@ -31,6 +35,20 @@ public class Account {
 			throw new IllegalArgumentException("Amount withdrawn must be greater than zero");
 		} else {
 			transactions.add(new Transaction(-amount));
+			balance -= amount;
+		}
+	}
+	
+	public void transfer(double amount, Account otherAccount){
+		if (amount <= 0) {
+			throw new IllegalArgumentException("Amount transferred must be greater than zero");
+		} else {
+			if(customerID == otherAccount.getCustomerID()){
+				withdraw(amount);
+				otherAccount.deposit(amount);
+			} else {
+				throw new IllegalArgumentException("Accounts are owned by two different Customers");
+			}
 		}
 	}
 
@@ -69,5 +87,16 @@ public class Account {
     public AccountType getAccountType() {
         return accountType;
     }
+	
+	public long getCustomerID(){
+		return customerID;
+	}
 
+	public void setCustomerID(long newID){
+		this.customerID = newID;
+	}
+	
+	public void getBalance(){
+		return balance;
+	}
 }

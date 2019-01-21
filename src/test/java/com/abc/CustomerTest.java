@@ -48,7 +48,7 @@ public class CustomerTest {
     }
 
     @Ignore
-    public void testThreeAcounts() {
+    public void testThreeAccounts() {
         Customer oscar = new Customer("Oscar")
                 .openAccount(new Account(Account.AccountType.SAVINGS));
         oscar.openAccount(new Account(Account.AccountType.CHECKING));

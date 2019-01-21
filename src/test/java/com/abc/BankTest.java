@@ -3,12 +3,13 @@ package com.abc;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
-public class BankTest {
+public class BankTest{
     private static final double DOUBLE_DELTA = 1e-15;
 
     @Test
-    public void customerSummary() {
+    public void customerSummary(){
         Bank bank = new Bank();
         Customer john = new Customer("John");
         john.openAccount(new Account(Account.AccountType.CHECKING));
@@ -18,7 +19,7 @@ public class BankTest {
     }
 
     @Test
-    public void checkingAccount() {
+    public void checkingAccount(){
         Bank bank = new Bank();
         Account checkingAccount = new Account(Account.AccountType.CHECKING);
         Customer bill = new Customer("Bill").openAccount(checkingAccount);
@@ -30,7 +31,7 @@ public class BankTest {
     }
 
     @Test
-    public void savings_account() {
+    public void savingsAccount(){
         Bank bank = new Bank();
         Account checkingAccount = new Account(Account.AccountType.SAVINGS);
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
@@ -41,7 +42,7 @@ public class BankTest {
     }
 
     @Test
-    public void maxi_savings_account() {
+    public void maxiSavingsAccount(){
         Bank bank = new Bank();
         Account checkingAccount = new Account(Account.AccountType.MAXI_SAVINGS);
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
@@ -50,5 +51,44 @@ public class BankTest {
 
         assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
+	
+	@Test
+	public void transfer(){
+		Bank bank = new Bank();
+		Account firstAccount = new Account(Account.AccountType.CHECKING);
+		Account secondAccount = new Account(Account.AccountType.CHECKING);
+		
+		Customer jane = new Customer("Jane");
+		jane.openAccount(firstAccount);
+		jane.openAccount(secondAccount);
+		
+		firstAccount.deposit(300.0);
+		firstAccount.transfer(150.0, secondAccount);
+		
+		assertEquals(150.0, firstAccount.getBalance(), DOUBLE_DELTA);
+		assertEquals(150.0, secondAccount.getBalance(), DOUBLE_DELTA);
+	}
 
+	@Test
+	public void attemptTransferBetweenTwoCustomers(){
+		Bank bank = new Bank();
+		Account firstAccount = new Account(Account.AccountType.CHECKING);
+		Account secondAccount = new Account(Account.AccountType.CHECKING);
+		
+		Customer john = new Customer("John");
+		Customer jane = new Customer("Jane");
+		
+		john.openAccount(firstAccount);
+		jane.openAccount(secondAccount);
+		
+		try{
+			firstAccount.deposit(300.0);
+			firstAccount.transfer(150.0, secondAccount);
+			fail("No exception thrown");
+		}catch (Exception e){
+			if(!(e.getMessage().equals("Accounts are owned by two different Customers")){
+				fail("Wrong exception thrown");
+			}
+		}
+	}
 }

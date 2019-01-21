@@ -2,24 +2,43 @@ package com.abc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static java.lang.Math.abs;
 
 public class Customer {
     private String name;
+	private long customerID;
     private List<Account> accounts;
 
     public Customer(String name) {
         this.name = name;
+		generateCustomerID();
         this.accounts = new ArrayList<Account>();
     }
 
     public String getName() {
         return name;
     }
+	
+	private void generateCustomerID(){
+		Random rnd = new Random();
+		rnd.setSeed(System.currentTimeMillis()); 
+		
+		this.customerID = rnd.nextLong();
+	}
+	
+	public long getCustomerID(){
+		return customerID;
+	}
 
     public Customer openAccount(Account account) {
-        accounts.add(account);
+		if(account.getCustomerID == -1){
+			accounts.add(account);
+			account.setCustomerID(this.customerID);
+		} else {
+			throw new Exception("Account is already owned by another customer");
+		}
         return this;
     }
 
