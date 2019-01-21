@@ -51,13 +51,13 @@ public class Customer {
 
        //Translate to pretty account type
         switch(a.getAccountType()){
-            case Account.CHECKING:
+            case Account.AccountType.CHECKING:
                 s += "Checking Account\n";
                 break;
-            case Account.SAVINGS:
+            case Account.AccountType.SAVINGS:
                 s += "Savings Account\n";
                 break;
-            case Account.MAXI_SAVINGS:
+            case Account.AccountType.MAXI_SAVINGS:
                 s += "Maxi Savings Account\n";
                 break;
         }

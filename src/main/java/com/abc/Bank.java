@@ -40,7 +40,7 @@ public class Bank {
             return customers.get(0).getName();
         } catch (Exception e){
             e.printStackTrace();
-            return "Error";
+            throw new Exception("Bank does not have any Customers");
         }
     }
 }
