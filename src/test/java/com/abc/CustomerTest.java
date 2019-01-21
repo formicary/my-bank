@@ -46,12 +46,57 @@ public class CustomerTest {
         oscar.openAccount(new Account(Account.AccountType.CHECKING));
         assertEquals(2, oscar.getNumberOfAccounts());
     }
+	
+	@Test
+	public void testTransfer(){
+		Account firstAccount = new Account(Account.AccountType.CHECKING);
+		Account secondAccount = new Account(Account.AccountType.CHECKING);
+		
+		Customer jane = new Customer("Jane");
+		jane.openAccount(firstAccount);
+		jane.openAccount(secondAccount);
+		
+		firstAccount.deposit(300.0);
+		firstAccount.transfer(150.0, secondAccount);
+		
+		assertEquals(150.0, firstAccount.getBalance(), DOUBLE_DELTA);
+		assertEquals(150.0, secondAccount.getBalance(), DOUBLE_DELTA);
+	}
 
-    @Ignore
-    public void testThreeAccounts() {
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.AccountType.SAVINGS));
-        oscar.openAccount(new Account(Account.AccountType.CHECKING));
-        assertEquals(3, oscar.getNumberOfAccounts());
-    }
+	@Test
+	public void testTransferBetweenTwoCustomers(){
+		Account firstAccount = new Account(Account.AccountType.CHECKING);
+		Account secondAccount = new Account(Account.AccountType.CHECKING);
+		
+		Customer john = new Customer("John");
+		Customer jane = new Customer("Jane");
+		
+		john.openAccount(firstAccount);
+		jane.openAccount(secondAccount);
+		
+		try{
+			firstAccount.deposit(300.0);
+			firstAccount.transfer(150.0, secondAccount);
+			fail("No exception thrown");
+		}catch (Exception e){
+			assertEquals(e.getMessage(), "Accounts are owned by two different customers");
+		}
+	}
+	
+	@Test
+	public void testCustomerOpenTakenAccount(){
+		Account firstAccount = new Account(Account.AccountType.CHECKING);
+		
+		Customer john = new Customer("John");
+		Customer jane = new Customer("Jane");
+		
+		john.openAccount(firstAccount);
+		
+		try{
+			jane.openAccount(firstAccount);
+			fail("No exception thrown");
+		}catch (Exception e){
+			assertEquals(e.getMessage(), "Account is already owned by another customer"));
+		}
+	}
 }

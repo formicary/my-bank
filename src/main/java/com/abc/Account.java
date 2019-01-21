@@ -47,7 +47,7 @@ public class Account {
 				withdraw(amount);
 				otherAccount.deposit(amount);
 			} else {
-				throw new IllegalArgumentException("Accounts are owned by two different Customers");
+				throw new IllegalArgumentException("Accounts are owned by two different customers");
 			}
 		}
 	}

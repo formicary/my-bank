@@ -51,44 +51,4 @@ public class BankTest{
 
         assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
-	
-	@Test
-	public void transfer(){
-		Bank bank = new Bank();
-		Account firstAccount = new Account(Account.AccountType.CHECKING);
-		Account secondAccount = new Account(Account.AccountType.CHECKING);
-		
-		Customer jane = new Customer("Jane");
-		jane.openAccount(firstAccount);
-		jane.openAccount(secondAccount);
-		
-		firstAccount.deposit(300.0);
-		firstAccount.transfer(150.0, secondAccount);
-		
-		assertEquals(150.0, firstAccount.getBalance(), DOUBLE_DELTA);
-		assertEquals(150.0, secondAccount.getBalance(), DOUBLE_DELTA);
-	}
-
-	@Test
-	public void attemptTransferBetweenTwoCustomers(){
-		Bank bank = new Bank();
-		Account firstAccount = new Account(Account.AccountType.CHECKING);
-		Account secondAccount = new Account(Account.AccountType.CHECKING);
-		
-		Customer john = new Customer("John");
-		Customer jane = new Customer("Jane");
-		
-		john.openAccount(firstAccount);
-		jane.openAccount(secondAccount);
-		
-		try{
-			firstAccount.deposit(300.0);
-			firstAccount.transfer(150.0, secondAccount);
-			fail("No exception thrown");
-		}catch (Exception e){
-			if(!(e.getMessage().equals("Accounts are owned by two different Customers")){
-				fail("Wrong exception thrown");
-			}
-		}
-	}
 }
