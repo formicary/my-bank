@@ -12,9 +12,9 @@ public class Account {
 
     private final AccountType accountType;
 	private long customerID = -1;
-    public List<Transaction> transactions;
+    private List<Transaction> transactions;
 	private double balance = 0;
-	private bool hasTransactionsInLast10Days; // for MAXI_SAVINGS accounts
+	private boolean hasTransactionsInLast10Days; // for MAXI_SAVINGS accounts
 
     public Account(AccountType accountType) {
         this.accountType = accountType;
@@ -39,11 +39,11 @@ public class Account {
 		}
 	}
 	
-	public void transfer(double amount, Account otherAccount){
+	public void transfer(double amount, Account otherAccount) {	
 		if (amount <= 0) {
 			throw new IllegalArgumentException("Amount transferred must be greater than zero");
 		} else {
-			if(customerID == otherAccount.getCustomerID()){
+			if(this.customerID == otherAccount.getCustomerID()){
 				withdraw(amount);
 				otherAccount.deposit(amount);
 			} else {
@@ -55,14 +55,14 @@ public class Account {
     public double interestEarned() {
         double amount = sumTransactions();
         switch(accountType){
-			case AccountType.CHECKING:
+			case CHECKING:
 				return amount * 0.001;
-            case AccountType.SAVINGS:
+            case SAVINGS:
                 if (amount <= 1000)
                     return amount * 0.001;
                 else
                     return 1 + (amount-1000) * 0.002;
-            case AccountType.MAXI_SAVINGS:
+            case MAXI_SAVINGS:
                 if (amount <= 1000)
                     return amount * 0.02;
                 if (amount <= 2000)
@@ -80,7 +80,7 @@ public class Account {
     private double checkIfTransactionsExist(boolean checkAll) {
         double amount = 0.0;
         for (Transaction t: transactions)
-            amount += t.amount;
+            amount += t.getAmount();
         return amount;
     }
 
@@ -96,7 +96,11 @@ public class Account {
 		this.customerID = newID;
 	}
 	
-	public void getBalance(){
+	public double getBalance(){
 		return balance;
+	}
+	
+	public List<Transaction> getTransactions(){
+		return transactions;
 	}
 }

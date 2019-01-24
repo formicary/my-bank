@@ -23,7 +23,6 @@ public class Customer {
 	
 	private void generateCustomerID(){
 		Random rnd = new Random();
-		rnd.setSeed(System.currentTimeMillis()); 
 		
 		this.customerID = rnd.nextLong();
 	}
@@ -33,13 +32,14 @@ public class Customer {
 	}
 
     public Customer openAccount(Account account) {
-		if(account.getCustomerID == -1){
+		if(account.getCustomerID() == -1){
 			accounts.add(account);
 			account.setCustomerID(this.customerID);
+			
+			return this;
 		} else {
-			throw new Exception("Account is already owned by another customer");
+			return null;
 		}
-        return this;
     }
 
     public int getNumberOfAccounts() {
@@ -70,22 +70,22 @@ public class Customer {
 
        //Translate to pretty account type
         switch(a.getAccountType()){
-            case Account.AccountType.CHECKING:
+            case CHECKING:
                 s += "Checking Account\n";
                 break;
-            case Account.AccountType.SAVINGS:
+            case SAVINGS:
                 s += "Savings Account\n";
                 break;
-            case Account.AccountType.MAXI_SAVINGS:
+            case MAXI_SAVINGS:
                 s += "Maxi Savings Account\n";
                 break;
         }
 
         //Now total up all the transactions
         double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
+        for (Transaction t : a.getTransactions()) {
+            s += "  " + (t.getAmount() < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.getAmount()) + "\n";
+            total += t.getAmount();
         }
         s += "Total " + toDollars(total);
         return s;

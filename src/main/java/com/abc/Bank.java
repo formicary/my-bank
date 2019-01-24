@@ -32,7 +32,7 @@ public class Bank {
         return total;
     }
 
-    public String getFirstCustomer() {
+    public String getFirstCustomer() throws Exception {
         try {
             return customers.get(0).getName();
         } catch (Exception e){

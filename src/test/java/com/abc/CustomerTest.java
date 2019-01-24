@@ -4,8 +4,10 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class CustomerTest {
+    private static final double DOUBLE_DELTA = 1e-15;
 
     @Test //Test customer statement generation
     public void testApp(){
@@ -13,7 +15,8 @@ public class CustomerTest {
         Account checkingAccount = new Account(Account.AccountType.CHECKING);
         Account savingsAccount = new Account(Account.AccountType.SAVINGS);
 
-        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
+        Customer henry = new Customer("Henry").openAccount(checkingAccount);
+		henry.openAccount(savingsAccount);
 
         checkingAccount.deposit(100.0);
         savingsAccount.deposit(4000.0);
@@ -70,7 +73,7 @@ public class CustomerTest {
 		
 		Customer john = new Customer("John");
 		Customer jane = new Customer("Jane");
-		
+
 		john.openAccount(firstAccount);
 		jane.openAccount(secondAccount);
 		
@@ -91,12 +94,9 @@ public class CustomerTest {
 		Customer jane = new Customer("Jane");
 		
 		john.openAccount(firstAccount);
+
+		Customer result = jane.openAccount(firstAccount);
 		
-		try{
-			jane.openAccount(firstAccount);
-			fail("No exception thrown");
-		}catch (Exception e){
-			assertEquals(e.getMessage(), "Account is already owned by another customer"));
-		}
+		assertEquals(result, null);
 	}
 }
