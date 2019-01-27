@@ -88,7 +88,7 @@ public class Account {
 	}
 
 	public void setCustomerID(long newID){
-		this.customerID = newID;
+		customerID = newID;
 	}
 	
 	public double getBalance(){

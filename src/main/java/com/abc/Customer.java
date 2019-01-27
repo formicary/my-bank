@@ -24,7 +24,7 @@ public class Customer {
 	private void generateCustomerID(){
 		Random rnd = new Random();
 		
-		this.customerID = rnd.nextLong();
+		customerID = rnd.nextLong();
 	}
 	
 	public long getCustomerID(){
@@ -34,7 +34,7 @@ public class Customer {
     public Customer openAccount(Account account) {
 		if(account.getCustomerID() == -1){
 			accounts.add(account);
-			account.setCustomerID(this.customerID);
+			account.setCustomerID(customerID);
 			
 			return this;
 		} else {
@@ -54,8 +54,7 @@ public class Customer {
     }
 
     public String getStatement() {
-        String statement = null;
-        statement = "Statement for " + name + "\n";
+        String statement = "Statement for " + name + "\n";
         double total = 0.0;
         for (Account a : accounts) {
             statement += "\n" + getStatementForAccount(a) + "\n";
