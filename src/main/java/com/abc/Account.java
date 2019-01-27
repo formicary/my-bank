@@ -9,12 +9,18 @@ public class Account {
 			SAVINGS,
 			MAXI_SAVINGS
 	}
-
+	
+	public static final double CHECKING_RATE = 0.001;
+	public static final double SAVINGS_RATE_FIRST_1000 = 0.001;
+	public static final double SAVINGS_RATE_AFTER_1000 = 0.002;
+	public static final double MAXI_RATE_FIRST_1000 = 0.02;
+	public static final double MAXI_RATE_SECOND_1000 = 0.05;
+	public static final double MAXI_RATE_AFTER_2000 = 0.1;
+	
     private final AccountType accountType;
 	private long customerID = -1;
     private List<Transaction> transactions;
 	private double balance = 0;
-	private boolean hasTransactionsInLast10Days; // for MAXI_SAVINGS accounts
 
     public Account(AccountType accountType) {
         this.accountType = accountType;
@@ -53,35 +59,24 @@ public class Account {
 	}
 
     public double interestEarned() {
-        double amount = sumTransactions();
+        double amount = balance;
         switch(accountType){
 			case CHECKING:
-				return amount * 0.001;
+				return amount * CHECKING_RATE;
             case SAVINGS:
                 if (amount <= 1000)
-                    return amount * 0.001;
+                    return amount * SAVINGS_RATE_FIRST_1000;
                 else
-                    return 1 + (amount-1000) * 0.002;
+                    return 1 + (amount - 1000) * SAVINGS_RATE_AFTER_1000;
             case MAXI_SAVINGS:
                 if (amount <= 1000)
-                    return amount * 0.02;
+                    return amount * MAXI_RATE_FIRST_1000;
                 if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
+                    return 20 + (amount - 1000) * MAXI_RATE_SECOND_1000;
+                return 70 + (amount - 2000) * MAXI_RATE_AFTER_2000;
             default:
-                return amount * 0.001;
+                return amount * CHECKING_RATE;
         }
-    }
-
-    public double sumTransactions() {
-       return checkIfTransactionsExist(true);
-    }
-
-    private double checkIfTransactionsExist(boolean checkAll) {
-        double amount = 0.0;
-        for (Transaction t: transactions)
-            amount += t.getAmount();
-        return amount;
     }
 
     public AccountType getAccountType() {

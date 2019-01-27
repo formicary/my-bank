@@ -15,4 +15,8 @@ public class Transaction {
 	public double getAmount(){
 		return this.amount;
 	}
+	
+	public Date getTransactionDate(){
+		return this.transactionDate;
+	}
 }

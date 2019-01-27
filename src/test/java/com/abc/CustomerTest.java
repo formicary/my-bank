@@ -43,7 +43,7 @@ public class CustomerTest {
     }
 
     @Test
-    public void testTwoAccount(){
+    public void testTwoAccounts(){
         Customer oscar = new Customer("Oscar")
                 .openAccount(new Account(Account.AccountType.SAVINGS));
         oscar.openAccount(new Account(Account.AccountType.CHECKING));

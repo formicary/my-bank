@@ -59,7 +59,7 @@ public class Customer {
         double total = 0.0;
         for (Account a : accounts) {
             statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+            total += a.getBalance();
         }
         statement += "\nTotal In All Accounts " + toDollars(total);
         return statement;
@@ -68,7 +68,6 @@ public class Customer {
     private String statementForAccount(Account a) {
         String s = "";
 
-       //Translate to pretty account type
         switch(a.getAccountType()){
             case CHECKING:
                 s += "Checking Account\n";
@@ -81,7 +80,6 @@ public class Customer {
                 break;
         }
 
-        //Now total up all the transactions
         double total = 0.0;
         for (Transaction t : a.getTransactions()) {
             s += "  " + (t.getAmount() < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.getAmount()) + "\n";
