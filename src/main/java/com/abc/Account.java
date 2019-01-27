@@ -58,7 +58,7 @@ public class Account {
 		}
 	}
 
-    public double interestEarned() {
+    public double getInterestEarned() {
         double amount = balance;
         switch(accountType){
 			case CHECKING:

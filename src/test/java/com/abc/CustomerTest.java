@@ -9,8 +9,8 @@ import static org.junit.Assert.fail;
 public class CustomerTest {
     private static final double DOUBLE_DELTA = 1e-15;
 
-    @Test //Test customer statement generation
-    public void testApp(){
+    @Test 
+    public void testCustomerStatement(){
 
         Account checkingAccount = new Account(Account.AccountType.CHECKING);
         Account savingsAccount = new Account(Account.AccountType.SAVINGS);
