@@ -19,7 +19,7 @@ public class Account {
 
     public void deposit(double amount) {
         if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
+            throw new IllegalArgumentException("Deposits must be greater than zero");
         } else {
             transactions.add(new Transaction(amount));
         }
@@ -27,7 +27,7 @@ public class Account {
 
 public void withdraw(double amount) {
     if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
+        throw new IllegalArgumentException("Withdrawals must be greater than zero");
     } else {
         transactions.add(new Transaction(-amount));
     }

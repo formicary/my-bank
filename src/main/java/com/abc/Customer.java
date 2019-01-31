@@ -76,7 +76,16 @@ public class Customer {
         return String.format("$%,.2f", abs(d));
     }
 
-    public List<Account> getAccounts() {
-        return accounts;
+
+    public void transfer(int depositAcc, int withdrawAcc, double amount){
+        if(amount < 0){
+            throw new IllegalArgumentException("Transfers must be greater than zero");
+        }
+        else{
+            this.accounts.get(depositAcc).deposit(amount);
+            this.accounts.get(withdrawAcc).withdraw(amount);
+        }
     }
+
+
 }
