@@ -18,8 +18,9 @@ public class Customer {
         return name;
     }
 
-    public void openAccount(Account account) {
+    public Customer openAccount(Account account) {
         accounts.add(account);
+        return this;
     }
 
     public int getNumberOfAccounts() {
@@ -64,7 +65,7 @@ public class Customer {
         //Now total up all the transactions
         double total = 0.0;
         for (Transaction t : a.getTransactions()) {
-            s.append("  ").append((t.getAmount() < 0 ? "withdrawal" : "deposit ")).append(toDollars(t.getAmount())).append("\n");
+            s.append("  ").append((t.getAmount() < 0 ? "withdrawal " : "deposit ")).append(toDollars(t.getAmount())).append("\n");
             total += t.getAmount();
         }
         s.append("Total ").append(toDollars(total));
