@@ -42,7 +42,7 @@ public class Customer {
             statement.append("\n" + statementForAccount(a) + "\n");
             total += a.sumTransactions();
         }
-        statement.append("\nTotal In All Accounts " + toDollars(total));
+        statement.append("\nTotal In All Accounts " + (total > 0 ? toDollars(total) : "-" + toDollars(total)));
         return statement.toString();
     }
 
@@ -75,4 +75,6 @@ public class Customer {
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
     }
+
+
 }
