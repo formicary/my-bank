@@ -10,7 +10,7 @@ public class Account {
     public static final int MAXI_SAVINGS = 2;
 
     private final int accountType;
-    public List<Transaction> transactions;
+    private List<Transaction> transactions;
 
     public Account(int accountType) {
         this.accountType = accountType;
@@ -62,7 +62,7 @@ public void withdraw(double amount) {
     private double checkIfTransactionsExist(boolean checkAll) {
         double amount = 0.0;
         for (Transaction t: transactions)
-            amount += t.amount;
+            amount += t.getAmount();
         return amount;
     }
 
@@ -70,4 +70,7 @@ public void withdraw(double amount) {
         return accountType;
     }
 
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
 }
