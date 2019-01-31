@@ -76,5 +76,7 @@ public class Customer {
         return String.format("$%,.2f", abs(d));
     }
 
-
+    public List<Account> getAccounts() {
+        return accounts;
+    }
 }
