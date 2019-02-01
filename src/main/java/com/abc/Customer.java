@@ -65,7 +65,7 @@ public class Customer {
         //Now total up all the transactions
         double total = 0.0;
         for (Transaction t : a.getTransactions()) {
-            s.append("  ").append((t.getAmount() < 0 ? "withdrawal " : "deposit ")).append(toDollars(t.getAmount())).append("\n");
+            s.append("  ").append(t.getTransactionType()).append(" ").append(toDollars(t.getAmount())).append("\n");
             total += t.getAmount();
         }
         s.append("Total ").append(toDollars(total));
@@ -78,12 +78,12 @@ public class Customer {
 
 
     public void transfer(int depositAcc, int withdrawAcc, double amount){
-        if(amount < 0){
+        if(amount <= 0){
             throw new IllegalArgumentException("Transfers must be greater than zero");
         }
         else{
-            this.accounts.get(depositAcc).deposit(amount);
-            this.accounts.get(withdrawAcc).withdraw(amount);
+            this.accounts.get(depositAcc).transfer(amount);
+            this.accounts.get(withdrawAcc).transfer(-amount);
         }
     }
 

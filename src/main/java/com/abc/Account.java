@@ -21,7 +21,7 @@ public class Account {
         if (amount <= 0) {
             throw new IllegalArgumentException("Deposits must be greater than zero");
         } else {
-            transactions.add(new Transaction(amount));
+            transactions.add(new Transaction(amount, "deposit"));
         }
     }
 
@@ -29,7 +29,7 @@ public void withdraw(double amount) {
     if (amount <= 0) {
         throw new IllegalArgumentException("Withdrawals must be greater than zero");
     } else {
-        transactions.add(new Transaction(-amount));
+        transactions.add(new Transaction(-amount, "withdrawal"));
     }
 }
 
@@ -64,6 +64,10 @@ public void withdraw(double amount) {
         for (Transaction t: transactions)
             amount += t.getAmount();
         return amount;
+    }
+
+    public void transfer(double amount){
+        transactions.add(new Transaction(amount, "Transfer"));
     }
 
     public int getAccountType() {

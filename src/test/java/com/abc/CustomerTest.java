@@ -58,7 +58,7 @@ public class CustomerTest {
         checkingAccount.deposit(400.0);
         savingsAccount.deposit(400.0);
 
-        henry.transfer(0,1,400);
+        henry.transfer(Account.CHECKING,Account.SAVINGS,400);
         assertEquals(800, checkingAccount.sumTransactions(), DOUBLE_DELTA);
         assertEquals(0, savingsAccount.sumTransactions(), DOUBLE_DELTA);
     }

@@ -6,11 +6,14 @@ import java.util.Date;
 public class Transaction {
     private final double amount;
 
-    private Date transactionDate;
+    private final Date transactionDate;
 
-    public Transaction(double amount) {
+    private final String transactionType;
+
+    public Transaction(double amount, String transType) {
         this.amount = amount;
         this.transactionDate = Calendar.getInstance().getTime();
+        transactionType = transType;
     }
 
     public Date getTransactionDate() {
@@ -19,5 +22,9 @@ public class Transaction {
 
     public double getAmount() {
         return amount;
+    }
+
+    public String getTransactionType() {
+        return transactionType;
     }
 }
