@@ -14,18 +14,11 @@ public class Customer {
         this.accounts = new ArrayList<Account>();
     }
 
-    public String getName() {
-        return name;
-    }
-
     public Customer openAccount(Account account) {
         accounts.add(account);
         return this;
     }
 
-    public int getNumberOfAccounts() {
-        return accounts.size();
-    }
 
     public double totalInterestEarned() {
         double total = 0;
@@ -88,5 +81,12 @@ public class Customer {
     }
 
 
+    public int getNumberOfAccounts() {
+        return accounts.size();
+    }
+
+    public String getName() {
+        return name;
+    }
 
 }
