@@ -126,4 +126,17 @@ public class CustomerTest {
 
         henry.transfer(Account.CHECKING,Account.SAVINGS,1e11);
     }
+
+
+    @Test (expected = IndexOutOfBoundsException.class)
+    public void OutOfBoundTest(){
+        Account checkingAccount = new Account(Account.CHECKING);
+
+        Customer henry = new Customer("Henry");
+        henry.openAccount(checkingAccount);
+
+        checkingAccount.deposit(400.0);
+
+        henry.transfer(Account.CHECKING,Account.SAVINGS,50);
+    }
 }
