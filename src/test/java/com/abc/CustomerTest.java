@@ -1,19 +1,25 @@
 package com.abc;
 
+import com.abc.account.*;
+
 import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
+    private static final double DOUBLE_DELTA = 1e-15;
 
     @Test //Test customer statement generation
-    public void testApp(){
+    public void testGetStatement(){
 
-        Account checkingAccount = new Account(Account.CHECKING);
-        Account savingsAccount = new Account(Account.SAVINGS);
+        Customer henry = new Customer("Henry");
 
-        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
+        Account checkingAccount = new CheckingAccount();
+        Account savingsAccount = new SavingsAccount();
+
+        henry.openAccount(checkingAccount);
+        henry.openAccount(savingsAccount);
 
         checkingAccount.deposit(100.0);
         savingsAccount.deposit(4000.0);
@@ -33,25 +39,28 @@ public class CustomerTest {
                 "Total In All Accounts $3,900.00", henry.getStatement());
     }
 
-    @Test
-    public void testOneAccount(){
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
-        assertEquals(1, oscar.getNumberOfAccounts());
-    }
-
-    @Test
-    public void testTwoAccount(){
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
-        assertEquals(2, oscar.getNumberOfAccounts());
-    }
-
-    @Ignore
-    public void testThreeAcounts() {
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
+    @Test //Test customer's transactions List is being appended
+    public void testOpenAccount() {
+        Customer oscar = new Customer("Oscar");
+        oscar.openAccount(new CheckingAccount());
+        oscar.openAccount(new SavingsAccount());
+        oscar.openAccount(new MaxiSavingsAccount());
         assertEquals(3, oscar.getNumberOfAccounts());
+    }
+
+    @Test //Test the interest from all accounts is correct
+    public void testTotalInterestEarned() {
+        Customer lee = new Customer("Lee");
+        CheckingAccount checkAcc = new CheckingAccount();
+        checkAcc.deposit(3000.0);
+        SavingsAccount savAcc = new SavingsAccount();
+        savAcc.deposit(3000.0);
+        MaxiSavingsAccount maxSavAcc = new MaxiSavingsAccount();
+        maxSavAcc.deposit(3000.0);
+        lee.openAccount(checkAcc);
+        lee.openAccount(savAcc);
+        lee.openAccount(maxSavAcc);
+
+        assertEquals(Math.round(lee.totalInterestEarned()*100)/100.0, 15.01, DOUBLE_DELTA);
     }
 }
