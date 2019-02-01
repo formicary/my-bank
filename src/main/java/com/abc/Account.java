@@ -15,7 +15,7 @@ public class Account {
 
 
 
-    private int accountBalance;
+    private double accountBalance;
     private final int accountType;
     private ArrayList<Transaction> transactions;
 
@@ -122,7 +122,7 @@ public class Account {
     }
 
 
-    public int getAccountBalance() {
+    public double getAccountBalance() {
         return accountBalance;
     }
 

@@ -33,6 +33,8 @@ public class CustomerTest {
                 "Total In All Accounts $3,900.00", henry.getStatement());
     }
 
+    // Test for account creation
+
     @Test
     public void testOneAccount(){
         Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
@@ -46,6 +48,17 @@ public class CustomerTest {
         oscar.openAccount(new Account(Account.CHECKING));
         assertEquals(2, oscar.getNumberOfAccounts());
     }
+
+
+    @Test
+    public void testThreeAccounts() {
+        Customer oscar = new Customer("Oscar")
+                .openAccount(new Account(Account.SAVINGS)).openAccount(new Account(Account.MAXI_SAVINGS));
+        oscar.openAccount(new Account(Account.CHECKING));
+        assertEquals(3, oscar.getNumberOfAccounts());
+    }
+
+    //Test for transfer method
 
     @Test
     public void transferTest(){
@@ -62,11 +75,42 @@ public class CustomerTest {
         assertEquals(0, savingsAccount.getAccountBalance(), DOUBLE_DELTA);
     }
 
-    @Test
-    public void testThreeAccounts() {
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS)).openAccount(new Account(Account.MAXI_SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
-        assertEquals(3, oscar.getNumberOfAccounts());
+    @Test(expected = IllegalArgumentException.class)
+    public void ZeroValueTransferTest(){
+        Account checkingAccount = new Account(Account.CHECKING);
+        Account savingsAccount = new Account(Account.SAVINGS);
+
+        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
+
+        checkingAccount.deposit(400.0);
+        savingsAccount.deposit(400.0);
+
+        henry.transfer(Account.CHECKING,Account.SAVINGS,0);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void NegativeValueTransferTest(){
+        Account checkingAccount = new Account(Account.CHECKING);
+        Account savingsAccount = new Account(Account.SAVINGS);
+
+        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
+
+        checkingAccount.deposit(400.0);
+        savingsAccount.deposit(400.0);
+
+        henry.transfer(Account.CHECKING,Account.SAVINGS,-10);
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void BigValueTransferTest(){
+        Account checkingAccount = new Account(Account.CHECKING);
+        Account savingsAccount = new Account(Account.SAVINGS);
+
+        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
+
+        checkingAccount.deposit(400.0);
+        savingsAccount.deposit(400.0);
+
+        henry.transfer(Account.CHECKING,Account.SAVINGS,1e11);
     }
 }
