@@ -13,7 +13,7 @@ public class Customer {
 
     public Customer(String name) {
         this.name = name;
-        this.accounts = new ArrayList<Account>();
+        this.accounts = new ArrayList<>();
     }
 
     public Customer openAccount(Account account) {
@@ -83,8 +83,13 @@ public class Customer {
             throw new IllegalArgumentException("Transfers cannot be greater than 10000000000");
         }
         else{
-            this.accounts.get(depositAcc).transfer(amount);
-            this.accounts.get(withdrawAcc).transfer(-amount);
+            try {
+                this.accounts.get(depositAcc).transfer(amount);
+                this.accounts.get(withdrawAcc).transfer(-amount);
+            }
+            catch (Exception E){
+                throw new IllegalArgumentException("You can only transfer between your own accounts");
+            }
         }
     }
 

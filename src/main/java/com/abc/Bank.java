@@ -8,6 +8,7 @@ import java.util.List;
 public class Bank {
     private List<Customer> customers;
 
+
     public Bank() {
         customers = new ArrayList<>();
     }
@@ -39,5 +40,11 @@ public class Bank {
         return total;
     }
 
+    public Customer getCustomer(int cusID){
+        return customers.get(cusID);
     }
+
+
+
+}
 

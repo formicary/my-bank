@@ -17,6 +17,8 @@ public class BankTest {
         assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
     }
 
+    // Testing interest earned for individual accounts
+
     @Test
     public void checkingAccount() {
         Bank bank = new Bank();
@@ -42,6 +44,19 @@ public class BankTest {
 
     @Test
     public void maxi_savings_account() {
+        Bank bank = new Bank();
+        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
+        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+
+        checkingAccount.deposit(3000.0);
+
+        assertEquals((3000 * 0.05) / 365, bank.totalInterestPaid(), DOUBLE_DELTA);
+    }
+
+    // Testing interest earned for multiple customers with multiple accounts
+
+    @Test
+    public void MultipleAccountsInterestEarned(){
         Bank bank = new Bank();
         Account checkingAccount = new Account(Account.MAXI_SAVINGS);
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
