@@ -78,6 +78,10 @@ public class Customer {
         if(amount <= 0){
             throw new IllegalArgumentException("Transfers must be greater than zero");
         }
+        // Transfer limit
+        else if(amount > 1e10){
+            throw new IllegalArgumentException("Transfers cannot be greater than 10000000000");
+        }
         else{
             this.accounts.get(depositAcc).transfer(amount);
             this.accounts.get(withdrawAcc).transfer(-amount);
