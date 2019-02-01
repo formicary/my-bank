@@ -15,7 +15,10 @@ public class Bank {
     }
 
     public String customerSummary() {
-        String summary = "Customer Summary";
+        String summary = "Customer Summary:";
+        if (customers.size() < 1) {
+          summary += "\nThere are no customers.";
+        }
         for (Customer c : customers)
             summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
         return summary;
@@ -36,11 +39,9 @@ public class Bank {
 
     public String getFirstCustomer() {
         try {
-            customers = null;
             return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
+        } catch (IndexOutOfBoundsException e){
+            return "There are currently no customers.";
         }
     }
 }
