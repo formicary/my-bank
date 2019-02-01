@@ -40,7 +40,7 @@ public class Customer {
         double total = 0.0;
         for (Account a : accounts) {
             statement.append("\n" + statementForAccount(a) + "\n");
-            total += a.sumTransactions();
+            total += a.getAccountBalance() ;
         }
         statement.append("\nTotal In All Accounts " + (total > 0 ? toDollars(total) : "-" + toDollars(total)));
         return statement.toString();
@@ -86,6 +86,7 @@ public class Customer {
             this.accounts.get(withdrawAcc).transfer(-amount);
         }
     }
+
 
 
 }

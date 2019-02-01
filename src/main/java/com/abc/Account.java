@@ -1,6 +1,7 @@
 package com.abc;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Account {
@@ -9,12 +10,18 @@ public class Account {
     public static final int SAVINGS = 1;
     public static final int MAXI_SAVINGS = 2;
 
+
+
+    private int accountBalance;
     private final int accountType;
     private List<Transaction> transactions;
+    private Date lastWithdrawDate;
 
     public Account(int accountType) {
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
+        this.accountBalance = 0;
+
     }
 
     public void deposit(double amount) {
@@ -22,19 +29,29 @@ public class Account {
             throw new IllegalArgumentException("Deposits must be greater than zero");
         } else {
             transactions.add(new Transaction(amount, "deposit"));
+            accountBalance += amount;
         }
     }
 
-public void withdraw(double amount) {
+    public void withdraw(double amount) {
     if (amount <= 0) {
         throw new IllegalArgumentException("Withdrawals must be greater than zero");
     } else {
-        transactions.add(new Transaction(-amount, "withdrawal"));
+        Transaction trans = new Transaction(-amount, "withdrawal");
+        transactions.add(trans);
+        lastWithdrawDate = trans.getTransactionDate();
+        accountBalance -= amount;
     }
-}
+
+    }
+
+    public void transfer(double amount){
+        transactions.add(new Transaction(amount, "Transfer"));
+        accountBalance += amount;
+    }
 
     public double interestEarned() {
-        double amount = sumTransactions();
+        double amount = accountBalance;
         switch(accountType){
             case SAVINGS:
                 if (amount <= 1000)
@@ -55,20 +72,6 @@ public void withdraw(double amount) {
         }
     }
 
-    public double sumTransactions() {
-       return checkIfTransactionsExist(true);
-    }
-
-    private double checkIfTransactionsExist(boolean checkAll) {
-        double amount = 0.0;
-        for (Transaction t: transactions)
-            amount += t.getAmount();
-        return amount;
-    }
-
-    public void transfer(double amount){
-        transactions.add(new Transaction(amount, "Transfer"));
-    }
 
     public int getAccountType() {
         return accountType;
@@ -76,5 +79,14 @@ public void withdraw(double amount) {
 
     public List<Transaction> getTransactions() {
         return transactions;
+    }
+
+
+    public int getAccountBalance() {
+        return accountBalance;
+    }
+
+    public Date getLastWithdrawDate() {
+        return lastWithdrawDate;
     }
 }
