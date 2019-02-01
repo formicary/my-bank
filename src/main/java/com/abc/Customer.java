@@ -20,12 +20,6 @@ public class Customer {
     }
 
 
-    public double totalInterestEarned() {
-        double total = 0;
-        for (Account a : accounts)
-            total += a.interestEarned();
-        return total;
-    }
 
     public String getStatement() {
         StringBuilder statement = new StringBuilder("");
@@ -68,6 +62,14 @@ public class Customer {
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
     }
+
+    public double totalInterestEarned() {
+        double total = 0;
+        for (Account a : accounts)
+            total += a.interestEarned();
+        return total;
+    }
+
 
 
     public void transfer(int depositAcc, int withdrawAcc, double amount){
