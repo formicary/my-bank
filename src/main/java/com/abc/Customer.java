@@ -16,13 +16,12 @@ public class Customer {
         this.accounts = new ArrayList<>();
     }
 
-    public Customer openAccount(Account account) {
+    public void openAccount(Account account) {
         accounts.add(account);
-        return this;
     }
 
 
-
+    // Retrieves the statement for all accounts
     public String getStatement() {
         StringBuilder statement = new StringBuilder("");
         statement.append("Statement for " + name + "\n");
@@ -87,8 +86,8 @@ public class Customer {
                 this.accounts.get(depositAcc).transfer(amount);
                 this.accounts.get(withdrawAcc).transfer(-amount);
             }
-            catch (Exception E){
-                throw new IllegalArgumentException("You can only transfer between your own accounts");
+            catch (IndexOutOfBoundsException e){
+                throw new IndexOutOfBoundsException("You can only transfer between your own accounts");
             }
         }
     }
