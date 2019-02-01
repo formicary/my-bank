@@ -40,9 +40,6 @@ public class Bank {
         return total;
     }
 
-    public Customer getCustomer(int cusID){
-        return customers.get(cusID);
-    }
 
 
 

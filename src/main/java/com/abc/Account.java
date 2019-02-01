@@ -87,6 +87,12 @@ public class Account {
     // Calculates the daily interest earned on the different accounts
     public double interestEarned() {
         double amount = accountBalance;
+
+        // Can't earn interest if the balance is 0 or negative
+        if(amount <= 0){
+            return 0;
+        }
+
         switch(accountType){
             case CHECKING:
                 return amount * (CHECKING_INTEREST / INTEREST_PERIOD);

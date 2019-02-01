@@ -16,7 +16,7 @@ public class Customer {
         this.accounts = new ArrayList<>();
     }
 
-    public void openAccount(Account account) {
+    public void addAccount(Account account) {
         accounts.add(account);
     }
 

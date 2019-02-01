@@ -5,7 +5,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
-    private static final double DOUBLE_DELTA = 1e-15;
+    private static final double DOUBLE_DELTA = 1e-10;
 
     @Test //Test customer statement generation
     public void testApp(){
@@ -14,8 +14,8 @@ public class CustomerTest {
         Account savingsAccount = new Account(Account.SAVINGS);
 
         Customer henry = new Customer("Henry");
-        henry.openAccount(checkingAccount);
-        henry.openAccount(savingsAccount);
+        henry.addAccount(checkingAccount);
+        henry.addAccount(savingsAccount);
 
 
         checkingAccount.deposit(100.0);
@@ -41,15 +41,15 @@ public class CustomerTest {
     @Test
     public void testOneAccount(){
         Customer oscar = new Customer("Oscar");
-        oscar.openAccount(new Account(Account.SAVINGS));
+        oscar.addAccount(new Account(Account.SAVINGS));
         assertEquals(1, oscar.getNumberOfAccounts());
     }
 
     @Test
     public void testTwoAccount(){
         Customer oscar = new Customer("Oscar");
-        oscar.openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
+        oscar.addAccount(new Account(Account.SAVINGS));
+        oscar.addAccount(new Account(Account.CHECKING));
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
@@ -57,9 +57,9 @@ public class CustomerTest {
     @Test
     public void testThreeAccounts() {
         Customer oscar = new Customer("Oscar");
-        oscar.openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.MAXI_SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
+        oscar.addAccount(new Account(Account.SAVINGS));
+        oscar.addAccount(new Account(Account.MAXI_SAVINGS));
+        oscar.addAccount(new Account(Account.CHECKING));
         assertEquals(3, oscar.getNumberOfAccounts());
     }
 
@@ -71,8 +71,8 @@ public class CustomerTest {
         Account savingsAccount = new Account(Account.SAVINGS);
 
         Customer henry = new Customer("Henry");
-        henry.openAccount(checkingAccount);
-        henry.openAccount(savingsAccount);
+        henry.addAccount(checkingAccount);
+        henry.addAccount(savingsAccount);
 
         checkingAccount.deposit(400.0);
         savingsAccount.deposit(400.0);
@@ -88,8 +88,8 @@ public class CustomerTest {
         Account savingsAccount = new Account(Account.SAVINGS);
 
         Customer henry = new Customer("Henry");
-        henry.openAccount(checkingAccount);
-        henry.openAccount(savingsAccount);
+        henry.addAccount(checkingAccount);
+        henry.addAccount(savingsAccount);
 
         checkingAccount.deposit(400.0);
         savingsAccount.deposit(400.0);
@@ -103,8 +103,8 @@ public class CustomerTest {
         Account savingsAccount = new Account(Account.SAVINGS);
 
         Customer henry = new Customer("Henry");
-        henry.openAccount(checkingAccount);
-        henry.openAccount(savingsAccount);
+        henry.addAccount(checkingAccount);
+        henry.addAccount(savingsAccount);
 
         checkingAccount.deposit(400.0);
         savingsAccount.deposit(400.0);
@@ -118,8 +118,8 @@ public class CustomerTest {
         Account savingsAccount = new Account(Account.SAVINGS);
 
         Customer henry = new Customer("Henry");
-        henry.openAccount(checkingAccount);
-        henry.openAccount(savingsAccount);
+        henry.addAccount(checkingAccount);
+        henry.addAccount(savingsAccount);
 
         checkingAccount.deposit(400.0);
         savingsAccount.deposit(400.0);
@@ -133,7 +133,7 @@ public class CustomerTest {
         Account checkingAccount = new Account(Account.CHECKING);
 
         Customer henry = new Customer("Henry");
-        henry.openAccount(checkingAccount);
+        henry.addAccount(checkingAccount);
 
         checkingAccount.deposit(400.0);
 
