@@ -35,12 +35,11 @@ public class Bank {
     }
 
     public String getFirstCustomer() {
-        try {
-            customers = null;
+        try { // removed unnecessary line of code below
             return customers.get(0).getName();
         } catch (Exception e){
             e.printStackTrace();
-            return "Error";
+            return "No customers found."; // edited error message
         }
     }
 }
