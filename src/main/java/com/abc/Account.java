@@ -1,73 +1,132 @@
 package com.abc;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+
+import org.apache.commons.text.WordUtils;
+
+import com.abc.Transaction.TRANSACTION_TYPE;
 
 public class Account {
+    public enum ACCOUNT_TYPE {
+        CHECKING, SAVINGS, MAXI_SAVINGS;
+    	
+    	public String toString() {
+    		return WordUtils.capitalizeFully(name().replace("_", " "));
+    	}
+    }
+    
+    ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
+    volatile boolean isStopIssued;
+    
 
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
+	private final ACCOUNT_TYPE accountType;
+    private List<Transaction> transactions;
+    private BigDecimal balance;
+    private BigDecimal accruedInterest;
 
-    private final int accountType;
-    public List<Transaction> transactions;
-
-    public Account(int accountType) {
+	public Account(ACCOUNT_TYPE accountType) {
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
+        this.balance = BigDecimal.ZERO;
+        this.accruedInterest = BigDecimal.ZERO;
     }
 
-    public void deposit(double amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
+    public void deposit(BigDecimal amount) {
+        if (amount.compareTo(BigDecimal.ZERO) < 1) {
+            throw new IllegalArgumentException("Amount must be greater than zero");
         } else {
-            transactions.add(new Transaction(amount));
+        	BigDecimal amount2dp = amount.setScale(2, RoundingMode.FLOOR);
+        	addTransaction(new Transaction(amount2dp, TRANSACTION_TYPE.DEPOSIT));
+        	setBalance(balance.add(amount2dp));
         }
     }
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
-    }
-}
-
-    public double interestEarned() {
-        double amount = sumTransactions();
-        switch(accountType){
-            case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
-            case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
-            default:
-                return amount * 0.001;
+    public void withdraw(BigDecimal amount) {
+        if (amount.compareTo(BigDecimal.ZERO) < 1) {
+            throw new IllegalArgumentException("Amount must be greater than zero");
+        } else if (balance.compareTo(amount) < 0){
+        	throw new IllegalArgumentException("Account balance must be greater or equal to the withdrawal amount");
+        } else {
+        	amount = amount.negate();
+        	BigDecimal amount2dp = amount.setScale(2, RoundingMode.FLOOR);
+        	addTransaction(new Transaction(amount2dp, TRANSACTION_TYPE.WITHDRAWAL));
+        	setBalance(balance.add(amount2dp));
         }
     }
 
-    public double sumTransactions() {
-       return checkIfTransactionsExist(true);
+    public void accrueInterest() {
+    	if (balance.compareTo(BigDecimal.ZERO) == 1) {
+	    	BigDecimal interest = BigDecimal.ZERO;
+	        if (accountType == ACCOUNT_TYPE.SAVINGS) {
+	        	if (balance.compareTo(new BigDecimal("1000")) < 1) {
+	        		interest = balance.multiply(new BigDecimal("0.001"));
+	        	} else {
+	        		interest = interest.add(BigDecimal.valueOf(1000 * 0.001));
+	        		BigDecimal remainingBalance = balance.subtract(new BigDecimal("1000"));
+	        		interest = interest.add(remainingBalance.multiply(new BigDecimal("0.002")));
+	        	}
+	        } else if (accountType == ACCOUNT_TYPE.MAXI_SAVINGS) {
+	        	if (!hasWithdrawalsWithinLast10Days()) {
+	        		interest = balance.multiply(new BigDecimal("0.05"));
+	        	} else {
+	        		interest = balance.multiply(new BigDecimal("0.001"));
+	        	}
+	        } else {
+	        	interest = balance.multiply(new BigDecimal("0.001"));
+	        }
+	        
+	        compoundInterest(interest);
+	        setBalance(balance.add(interest));
+    	}
+    }
+    
+    private Boolean hasWithdrawalsWithinLast10Days() {
+    	for (Transaction transaction: transactions) {
+    		if (transaction.getTransactionType() == TRANSACTION_TYPE.WITHDRAWAL && transaction.withinLast10Days()) {
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+    
+    public List<Transaction> getTransactions() {
+		return transactions;
+	}
+
+	public void setTransactions(List<Transaction> transactions) {
+		this.transactions = transactions;
+	}
+	
+    public void addTransaction(Transaction transaction) {
+    	this.transactions.add(transaction);
     }
 
-    private double checkIfTransactionsExist(boolean checkAll) {
-        double amount = 0.0;
-        for (Transaction t: transactions)
-            amount += t.amount;
-        return amount;
-    }
+	public ACCOUNT_TYPE getAccountType() {
+		return accountType;
+	}
+    
+    public BigDecimal getBalance() {
+		return balance;
+	}
 
-    public int getAccountType() {
-        return accountType;
-    }
+	public void setBalance(BigDecimal balance) {
+		this.balance = balance;
+	}
+	
+	public BigDecimal getAccruedInterest() {
+		return accruedInterest;
+	}
 
+	public void setAccruedInterest(BigDecimal accruedInterest) {
+		this.accruedInterest = accruedInterest;
+	}
+	
+	public void compoundInterest(BigDecimal interest) {
+		this.accruedInterest = accruedInterest.add(interest);
+	}
 }

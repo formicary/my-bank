@@ -3,76 +3,91 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Math.abs;
+import java.math.BigDecimal;
 
 public class Customer {
-    private String name;
+	private String name;
     private List<Account> accounts;
 
     public Customer(String name) {
         this.name = name;
         this.accounts = new ArrayList<Account>();
     }
-
-    public String getName() {
-        return name;
+    
+    public void transferAccountFunds(BigDecimal amount, Account fromAccount, Account toAccount) {
+    	BigDecimal fromAccountBalance = fromAccount.getBalance();
+    	
+    	if (amount.compareTo(BigDecimal.ZERO) < 1) {
+            throw new IllegalArgumentException("Amount must be greater than zero");
+        } else if (fromAccountBalance.compareTo(amount) < 0) {
+        	throw new IllegalArgumentException("From account balance must be greater or equal to the amount");
+        } else {
+        	fromAccount.withdraw(amount);
+        	toAccount.deposit(amount);
+        }
     }
 
-    public Customer openAccount(Account account) {
-        accounts.add(account);
-        return this;
-    }
-
-    public int getNumberOfAccounts() {
-        return accounts.size();
-    }
-
-    public double totalInterestEarned() {
-        double total = 0;
-        for (Account a : accounts)
-            total += a.interestEarned();
-        return total;
+    public BigDecimal totalInterestAccrued() {
+        BigDecimal totalInterest = BigDecimal.ZERO;
+        for (Account account : accounts) {
+        	account.accrueInterest();
+        	totalInterest = totalInterest.add(account.getAccruedInterest());
+        }
+        return totalInterest;
     }
 
     public String getStatement() {
         String statement = null;
         statement = "Statement for " + name + "\n";
-        double total = 0.0;
-        for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+        
+        BigDecimal totalBalance = BigDecimal.ZERO;
+        for (Account account : accounts) {
+            statement += "\n" + statementForAccount(account) + "\n";
+            totalBalance = totalBalance.add(account.getBalance());
         }
-        statement += "\nTotal In All Accounts " + toDollars(total);
+        statement += "\nTotal In All Accounts " + toDollars(totalBalance);
+        
         return statement;
     }
 
-    private String statementForAccount(Account a) {
-        String s = "";
+    private String statementForAccount(Account account) {
+        String statement = account.getAccountType().toString() + " Account\n";
 
-       //Translate to pretty account type
-        switch(a.getAccountType()){
-            case Account.CHECKING:
-                s += "Checking Account\n";
-                break;
-            case Account.SAVINGS:
-                s += "Savings Account\n";
-                break;
-            case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
-                break;
+        BigDecimal total = BigDecimal.ZERO;
+        for (Transaction transaction : account.getTransactions()) {
+        	statement += "  " + transaction.getTransactionType().toString() + " " + toDollars(transaction.getAmount()) + "\n";
+            total = total.add(transaction.getAmount());
         }
-
-        //Now total up all the transactions
-        double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
-        }
-        s += "Total " + toDollars(total);
-        return s;
+        statement += "Total " + toDollars(total);
+        
+        return statement;
     }
 
-    private String toDollars(double d){
-        return String.format("$%,.2f", abs(d));
+    private String toDollars(BigDecimal amount){
+        return String.format("$%,.2f", amount.abs());
+    }  
+
+	public void setName(String name) {
+		this.name = name;
+	}
+    
+    public String getName() {
+        return name;
+    }
+    
+    public List<Account> getAccounts() {
+		return accounts;
+	}
+
+	public void setAccounts(List<Account> accounts) {
+		this.accounts = accounts;
+	}
+
+    public void addAccount(Account account) {
+        accounts.add(account);
+    }
+
+    public int getNumberOfAccounts() {
+        return accounts.size();
     }
 }
