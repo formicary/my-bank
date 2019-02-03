@@ -1,23 +1,27 @@
 package com.abc;
 
-import org.junit.Ignore;
 import org.junit.Test;
+
+import com.abc.Account.ACCOUNT_TYPE;
 
 import static org.junit.Assert.assertEquals;
 
+import java.math.BigDecimal;
+
 public class CustomerTest {
 
-    @Test //Test customer statement generation
-    public void testApp(){
+    @Test
+    public void testCustomerStatement(){
+        Account checkingAccount = new Account(ACCOUNT_TYPE.CHECKING);
+        Account savingsAccount = new Account(ACCOUNT_TYPE.SAVINGS);
 
-        Account checkingAccount = new Account(Account.CHECKING);
-        Account savingsAccount = new Account(Account.SAVINGS);
+        Customer henry = new Customer("Henry");
+        henry.addAccount(checkingAccount);
+        henry.addAccount(savingsAccount);
 
-        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
-
-        checkingAccount.deposit(100.0);
-        savingsAccount.deposit(4000.0);
-        savingsAccount.withdraw(200.0);
+        checkingAccount.deposit(BigDecimal.valueOf(100.0));
+        savingsAccount.deposit(BigDecimal.valueOf(4000.0));
+        savingsAccount.withdraw(BigDecimal.valueOf(200.0));
 
         assertEquals("Statement for Henry\n" +
                 "\n" +
@@ -32,26 +36,82 @@ public class CustomerTest {
                 "\n" +
                 "Total In All Accounts $3,900.00", henry.getStatement());
     }
+    
+    @Test
+    public void testCustomerStatementNoAccounts(){
+        Customer henry = new Customer("Henry");
+
+        assertEquals("Statement for Henry\n" +
+                "\n" +
+                "Total In All Accounts $0.00", henry.getStatement());
+    }
 
     @Test
-    public void testOneAccount(){
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
+    public void testOpeningOneAccount(){
+        Customer oscar = new Customer("Oscar");
+        oscar.addAccount(new Account(ACCOUNT_TYPE.SAVINGS));
         assertEquals(1, oscar.getNumberOfAccounts());
     }
 
     @Test
-    public void testTwoAccount(){
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
+    public void testOpeningTwoAccounts(){
+        Customer oscar = new Customer("Oscar");
+        oscar.addAccount(new Account(ACCOUNT_TYPE.SAVINGS));
+        oscar.addAccount(new Account(ACCOUNT_TYPE.CHECKING));
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
-    @Ignore
-    public void testThreeAcounts() {
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
+    @Test
+    public void testOpeningThreeAccounts() {
+        Customer oscar = new Customer("Oscar");
+        oscar.addAccount(new Account(ACCOUNT_TYPE.MAXI_SAVINGS));
+        oscar.addAccount(new Account(ACCOUNT_TYPE.SAVINGS));
+        oscar.addAccount(new Account(ACCOUNT_TYPE.CHECKING));
         assertEquals(3, oscar.getNumberOfAccounts());
+    }
+    
+    @Test
+    public void testFundTransfer() {
+    	Customer oscar = new Customer("Oscar");
+    	Account fromAccount = new Account(ACCOUNT_TYPE.CHECKING);
+    	oscar.addAccount(fromAccount);
+    	Account toAccount = new Account(ACCOUNT_TYPE.CHECKING);
+    	oscar.addAccount(toAccount);
+    	
+    	fromAccount.deposit(new BigDecimal("500"));
+    	oscar.transferAccountFunds(new BigDecimal("200"), fromAccount, toAccount);
+    	
+    	assertEquals(fromAccount.getBalance().compareTo(new BigDecimal("300")), 0);
+    	assertEquals(toAccount.getBalance().compareTo(new BigDecimal("200")), 0);
+    }
+    
+    @Test
+    public void testFundTransferNotEnoughFunds() {
+    	Customer oscar = new Customer("Oscar");
+    	Account fromAccount = new Account(ACCOUNT_TYPE.CHECKING);
+    	oscar.addAccount(fromAccount);
+    	Account toAccount = new Account(ACCOUNT_TYPE.CHECKING);
+    	oscar.addAccount(toAccount);
+    	
+    	try {
+    		oscar.transferAccountFunds(new BigDecimal("200"), fromAccount, toAccount);		
+    	} catch (IllegalArgumentException e){
+    		assertEquals(e.getMessage(), "From account balance must be greater or equal to the amount");
+    	}
+    }
+    
+    @Test
+    public void testFundTransferZeroAmount() {
+    	Customer oscar = new Customer("Oscar");
+    	Account fromAccount = new Account(ACCOUNT_TYPE.CHECKING);
+    	oscar.addAccount(fromAccount);
+    	Account toAccount = new Account(ACCOUNT_TYPE.CHECKING);
+    	oscar.addAccount(toAccount);
+    	
+    	try {
+    		oscar.transferAccountFunds(new BigDecimal("0"), fromAccount, toAccount);		
+    	} catch (IllegalArgumentException e){
+    		assertEquals(e.getMessage(), "Amount must be greater than zero");
+    	}		
     }
 }
