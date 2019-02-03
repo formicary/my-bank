@@ -18,6 +18,15 @@ public class Customer {
         return name;
     }
 
+    // New method to detect if a given Account is held by a Customer
+    public boolean accountPresent(Account account){
+        if (accounts.contains(account)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public Customer openAccount(Account account) {
         accounts.add(account);
         return this;
@@ -59,6 +68,9 @@ public class Customer {
                 break;
             case Account.MAXI_SAVINGS:
                 s += "Maxi Savings Account\n";
+                break;
+            case Account.SUPER_SAVINGS: // added in for new account type
+                s += "Super Savings Account\n";
                 break;
         }
 
