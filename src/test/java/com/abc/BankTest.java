@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+
 public class BankTest {
     private static final double DOUBLE_DELTA = 1e-15;
 
@@ -48,7 +49,7 @@ public class BankTest {
 
         checkingAccount.deposit(3000.0);
 
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(150.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
 }

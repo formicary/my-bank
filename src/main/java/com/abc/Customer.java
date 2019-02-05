@@ -27,10 +27,18 @@ public class Customer {
         return accounts.size();
     }
 
+    public void transferBetweenAccounts(Account fromAccount, Account toAccount, double amount){
+
+        fromAccount.withdraw(amount);
+        toAccount.deposit(amount);
+    }
+
     public double totalInterestEarned() {
         double total = 0;
-        for (Account a : accounts)
-            total += a.interestEarned();
+        for (Account a : accounts) {
+            double amount = a.sumTransactions();
+            total += a.interestEarned(amount);
+        }
         return total;
     }
 
