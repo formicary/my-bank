@@ -1,21 +1,10 @@
 package test.java.com.abc;
 
+import static org.junit.Assert.assertEquals;
+import main.java.com.abc.Account;
 import org.junit.Test;
 
-import main.java.com.abc.Account;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import main.java.com.abc.Transaction;
-
-public class TransactionTest {
-    @Test
-    public void transaction() {
-        Transaction t = new Transaction(5);
-        assertTrue(t instanceof Transaction);
-    }
-    
-    //Below tests should ideally be moved to new AccountTest.java test file
-    
+public class AccountTest{
     
     //Attempt to deposit a negative amount into a checking account
     @Test(expected = IllegalArgumentException.class)
@@ -55,6 +44,4 @@ public class TransactionTest {
     	
     	assertEquals(400, checking.sumTransactions());
     }
-	
-	
 }

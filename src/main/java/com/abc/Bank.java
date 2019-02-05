@@ -1,4 +1,4 @@
-package com.abc;
+package main.java.com.abc;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,11 +13,11 @@ public class Bank {
     public void addCustomer(Customer customer) {
         customers.add(customer);
     }
-
+    //Provides name of customer and the number of accounts belonging to them
     public String customerSummary() {
         String summary = "Customer Summary";
         for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
+        		summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";       
         return summary;
     }
 
@@ -40,7 +40,7 @@ public class Bank {
             return customers.get(0).getName();
         } catch (Exception e){
             e.printStackTrace();
-            return "Error";
+            return "Error: Could not get customer name.";
         }
     }
 }
