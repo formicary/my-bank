@@ -1,7 +1,9 @@
 package com.abc;
 
-import java.util.Calendar;
-import java.util.Date;
+// java.util.Calender a bit outdated, so using LocalDateTime instead
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+
 
 public class DateProvider {
     private static DateProvider instance = null;
@@ -12,7 +14,18 @@ public class DateProvider {
         return instance;
     }
 
-    public Date now() {
-        return Calendar.getInstance().getTime();
+    public LocalDateTime now() {
+        return LocalDateTime.now();
     }
+    
+    /**
+     * Calculates the difference in days between now and the given date
+     * 
+     * @param datetime 
+     * @return absolute difference in days between now and given date.
+     */
+    public int differenceInDays(LocalDateTime datetime){
+        return (int)Math.abs(ChronoUnit.DAYS.between(now().toLocalDate(), datetime.toLocalDate()));
+    }
+
 }
