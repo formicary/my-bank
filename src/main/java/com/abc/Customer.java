@@ -6,6 +6,7 @@ import java.util.List;
 import static java.lang.Math.abs;
 
 public class Customer {
+
     private String name;
     private List<Account> accounts;
 
@@ -27,7 +28,7 @@ public class Customer {
         return accounts.size();
     }
 
-    public void transferBetweenAccounts(Account fromAccount, Account toAccount, double amount){
+    public void transferBetweenAccounts(Account fromAccount, Account toAccount, double amount) {
 
         fromAccount.withdraw(amount);
         toAccount.deposit(amount);
@@ -57,8 +58,8 @@ public class Customer {
     private String statementForAccount(Account a) {
         String s = "";
 
-       //Translate to pretty account type
-        switch(a.getAccountType()){
+        //Translate to pretty account type
+        switch (a.getAccountType()) {
             case Account.CHECKING:
                 s += "Checking Account\n";
                 break;
@@ -72,15 +73,15 @@ public class Customer {
 
         //Now total up all the transactions
         double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
+        for (Transaction t : a.getTransactions()) {
+            s += "  " + (t.getAmount() < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.getAmount()) + "\n";
+            total += t.getAmount();
         }
         s += "Total " + toDollars(total);
         return s;
     }
 
-    private String toDollars(double d){
+    private String toDollars(double d) {
         return String.format("$%,.2f", abs(d));
     }
 }
