@@ -50,7 +50,15 @@ public class CustomerTest {
         oscar.openAccount(new Account(AccountType.CHECKING));
         assertEquals(2, oscar.getNumberOfAccounts());
     }
-    
+    @Test
+    public void testThreeAccount(){
+        Customer oscar = new Customer("Oscar")
+                .openAccount(new Account(AccountType.SAVINGS));
+        oscar.openAccount(new Account(AccountType.CHECKING));
+        oscar.openAccount(new Account(AccountType.MAXI_SAVINGS));
+        assertEquals(3, oscar.getNumberOfAccounts());
+    }
+ 
     @Test
     public void transferBetweenAccounts() throws NotEnoughFundsAvailableException{
         Customer oscar = new Customer("Oscar");

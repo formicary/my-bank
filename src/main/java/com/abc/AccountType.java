@@ -1,6 +1,9 @@
 
 package com.abc;
 
+// File added so account types can be custom and scalable.
+// Abstract method takes in days since withdrawal incase other types of accounts
+// want to take advantage of that feature, or the day changes from just 10.
 
 public enum AccountType {
     CHECKING {
@@ -21,10 +24,12 @@ public enum AccountType {
         }
     },
     MAXI_SAVINGS {
+        
+        private static final int DAYS_UNTIL_WITHDRAWAL_INCREASE = 10;
         @Override
         public double InterestEarned(double amount ,int daysSinceWithdrawal) {
       
-            if(daysSinceWithdrawal >= 10)
+            if(daysSinceWithdrawal >= DAYS_UNTIL_WITHDRAWAL_INCREASE)
                 return amount * 0.05;
             else
                 return amount * 0.001;

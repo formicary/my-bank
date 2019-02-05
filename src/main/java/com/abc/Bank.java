@@ -45,10 +45,7 @@ public class Bank {
         return number + " " + (number == 1 ? word : word + "s");
     }
 
-    /**
-     *
-     * @return double cumulative interested paid to customer.
-     */
+
     public double totalInterestPaid() {
         double total = 0;
         for (Customer c : customers) {

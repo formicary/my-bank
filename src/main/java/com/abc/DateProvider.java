@@ -1,5 +1,6 @@
 package com.abc;
 
+// java.util.Calender a bit outdated, so using LocalDateTime instead
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
@@ -18,6 +19,7 @@ public class DateProvider {
     }
     
     /**
+     * Calculates the difference in days between now and the given date
      * 
      * @param datetime 
      * @return absolute difference in days between now and given date.

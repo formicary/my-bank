@@ -6,54 +6,36 @@ import java.util.List;
 
 import static java.lang.Math.abs;
 
-/**
- *
- * @author t-pizzle
- */
+
 public class Customer {
 
+    // Realistically would incorporate more customer info, but didn't want to
+    // be at risk of over-engineering the solution.
     private String name;
     private List<Account> accounts;
 
-    /**
-     *
-     * @param name
-     */
+   
     public Customer(String name) {
         this.name = name;
         this.accounts = new ArrayList<Account>();
     }
 
-    /**
-     *
-     * @return
-     */
+ 
     public String getName() {
         return name;
     }
 
-    /**
-     *
-     * @param account
-     * @return
-     */
+  
     public Customer openAccount(Account account) {
         accounts.add(account);
         return this;
     }
 
-    /**
-     *
-     * @return
-     */
+
     public int getNumberOfAccounts() {
         return accounts.size();
     }
 
-    /**
-     *
-     * @return
-     */
     public double totalInterestEarned() {
         double total = 0;
         for (Account a : accounts) {
@@ -105,6 +87,9 @@ public class Customer {
     }
 
     /**
+     * Checks the two accounts belong to the same owner, and the one sending
+     * money has enough funds
+     * 
      * 
      * @param from account to send funds from
      * @param to account to funds to

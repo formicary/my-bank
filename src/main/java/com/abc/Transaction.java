@@ -3,23 +3,21 @@ package com.abc;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-
-/**
- *
- * @author t-pizzle
- */
 public class Transaction {
 
  
     private final double amount;
     private LocalDateTime transactionDate;
+    // Could be an enum that has different date formats depending on Locale.
     private final static DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
 
     public Transaction(double amount) {
         this.amount = amount;
-        this.transactionDate = DateProvider.getInstance().now().minusDays(new java.util.Random().nextInt(20)+1);
-        //this.transactionDate = DateProvider.getInstance().now();
+        this.transactionDate = DateProvider.getInstance().now();
+        
+        //Line below was used for testing
+        //this.transactionDate = DateProvider.getInstance().now().minusDays(new java.util.Random().nextInt(20)+1);
     }
     public LocalDateTime getTransactionDate(){
         return transactionDate;

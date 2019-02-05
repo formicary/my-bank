@@ -1,7 +1,6 @@
 package com.abc;
 
 import com.abc.Exceptions.NotEnoughFundsAvailableException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -9,7 +8,9 @@ import java.util.stream.Collectors;
 
 public class Account {
 
+    // Removed static finals for account type, not very scalable.
     private final AccountType accountType;
+    // Transactions now private with a getter
     private List<Transaction> transactions;
 
 
@@ -40,6 +41,8 @@ public class Account {
     }
 
 
+    // Wanted to remove all the calculations from this class. All now done in
+    // AccountType.java
     public double interestEarned() {
         double amount = sumTransactions();
         return accountType.InterestEarned(amount,daysSinceLastWithdrawal());
@@ -74,6 +77,7 @@ public class Account {
         return daysSince;
     }
 
+    // Simply checks if user has enough funds for a withdrawal
     public boolean hasEnoughFunds(double amount){
         return (sumTransactions() > amount);
     }
