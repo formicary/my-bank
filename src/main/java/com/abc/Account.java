@@ -25,13 +25,13 @@ public class Account {
         }
     }
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
+    public void withdraw(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        } else {
+            transactions.add(new Transaction(-amount));
+        }
     }
-}
 
     public double interestEarned() {
         double amount = sumTransactions();
@@ -41,9 +41,9 @@ public void withdraw(double amount) {
                     return amount * 0.001;
                 else
                     return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
+//          case SUPER_SAVINGS:
+//              if (amount <= 4000)
+//                  return 20;
             case MAXI_SAVINGS:
                 if (amount <= 1000)
                     return amount * 0.02;
