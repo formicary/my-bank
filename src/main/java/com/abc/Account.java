@@ -11,10 +11,14 @@ public class Account {
 
     private final int accountType;
     public List<Transaction> transactions;
+    private double money;
+    private double overdraft;
 
     public Account(int accountType) {
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
+        money = 0;
+        overdraft = 100.00;
     }
 
     public void deposit(double amount) {
@@ -22,14 +26,22 @@ public class Account {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
             transactions.add(new Transaction(amount));
+            money += amount;
         }
     }
 
+    //Added overdraft case.
     public void withdraw(double amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
+        if (money - amount < -overdraft){
+            throw new IllegalStateException("not enough money in account to withdraw");
         } else {
-            transactions.add(new Transaction(-amount));
+            if (amount <= 0) {
+                throw new IllegalArgumentException("amount must be greater than zero");
+            } else {
+                transactions.add(new Transaction(-amount));
+                money = newAmount(lastTransaction(), money);
+                money -= amount;
+            }
         }
     }
 
@@ -53,6 +65,40 @@ public class Account {
         }
     }
 
+    //Accrued Interest.
+    private double newAmount(long days, double amount){
+        //Daily interest gain for  annual 0.1%
+        double interestA = 1 + (0.001/365);
+        //Daily interest gain for  annual 0.2%
+        double interestB = 1 + (0.002/365);
+        //Daily interest gain for  annual 5%
+        double interestC = 1 + (0.05/365);
+        if (days == 0){
+            return amount;
+        } else {
+            switch(accountType){
+                case SAVINGS:
+                    if (amount <= 1000)
+                        return newAmount(days - 1,amount * interestA);
+                    else
+                        return newAmount(days - 1, (1000 * interestA) + ((amount - 1000) * interestB));
+                case MAXI_SAVINGS:
+                    if (recentWithdraw())
+                        return newAmount(days - 1,amount * interestA);
+                    return newAmount(days - 1,amount * interestC);
+                default:
+                    return newAmount(days - 1,amount * interestA);
+            }
+        }
+    }
+
+    //Returns how many days ago the most recent transaction is.
+    private long lastTransaction(){
+        Transaction t = transactions.get(transactions.size()-1);
+        return t.getTransactionAge();
+    }
+
+    //Returns true if there has been a withdrawal in the past 10 days
     private boolean recentWithdraw(){
         Transaction t;
         for (int i = transactions.size()-1; i >= 0; i--){
