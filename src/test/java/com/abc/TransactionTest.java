@@ -8,6 +8,7 @@ public class TransactionTest {
     @Test
     public void transaction() {
         Transaction t = new Transaction(5);
+        System.out.println(t.getTransactionAge());
         assertTrue(t instanceof Transaction);
     }
 }

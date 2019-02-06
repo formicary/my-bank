@@ -72,6 +72,17 @@ public class Customer {
         return s;
     }
 
+    //Transfer money from account a to account b.
+    public void transferMoney(Account a, Account b, double amount){
+        if (amount >= 0){
+            a.withdraw(amount);
+            b.deposit(amount);
+        } else {
+            b.withdraw(amount);
+            a.deposit(amount);
+        }
+    }
+
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
     }

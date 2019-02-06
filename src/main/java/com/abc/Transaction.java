@@ -13,4 +13,9 @@ public class Transaction {
         this.transactionDate = DateProvider.getInstance().now();
     }
 
+    public long getTransactionAge() {
+        long diffInMillies = DateProvider.getInstance().now().getTime() - transactionDate.getTime();
+        long diffInDays = (diffInMillies / (60*60*24*1000));
+        return diffInDays;
+    }
 }

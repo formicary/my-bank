@@ -54,4 +54,47 @@ public class CustomerTest {
         oscar.openAccount(new Account(Account.CHECKING));
         assertEquals(3, oscar.getNumberOfAccounts());
     }
+
+    @Test //Test Transfer function
+    public void testTransfer(){
+        Account checking = new Account(Account.CHECKING);
+        Account savings = new Account(Account.SAVINGS);
+        checking.deposit(100);
+        Customer oscar = new Customer("Oscar")
+                .openAccount(checking);
+        oscar.openAccount(savings);
+        oscar.transferMoney(checking,savings,80);
+
+        assertEquals("Statement for Oscar\n" +
+                "\n" +
+                "Checking Account\n" +
+                "  deposit $100.00\n" +
+                "  withdrawal $80.00\n" +
+                "Total $20.00\n" +
+                "\n" +
+                "Savings Account\n" +
+                "  deposit $80.00\n" +
+                "Total $80.00\n" +
+                "\n" +
+                "Total In All Accounts $100.00", oscar.getStatement());
+    }
+
+    @Test //Test new interest rules
+    public void testNewMaxi(){
+        Account withdraw = new Account(Account.MAXI_SAVINGS);
+        Account noWithdraw = new Account(Account.MAXI_SAVINGS);
+        withdraw.deposit(1100);
+        withdraw.withdraw(100);
+        noWithdraw.deposit(100);
+
+        assertEquals(1, withdraw.interestEarned(),0);
+        assertEquals(5, noWithdraw.interestEarned(),0);
+    }
+
+    @Test //Test daily interest growth
+    public void testAccrue(){
+        Account savings = new Account(Account.SAVINGS);
+        double after1Days = savings.newAmount(1, 1000);
+        assertEquals(1000*(1+0.001/365), after1Days,0);
+    }
 }
