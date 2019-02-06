@@ -45,14 +45,26 @@ public class Account {
 //              if (amount <= 4000)
 //                  return 20;
             case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
+                if (recentWithdraw())
+                    return amount * 0.001;
+                return amount * 0.05;
             default:
                 return amount * 0.001;
         }
+    }
+
+    private boolean recentWithdraw(){
+        Transaction t;
+        for (int i = transactions.size()-1; i >= 0; i--){
+            t = transactions.get(i);
+
+            if (t.getTransactionAge() > 10){
+                i = 0;
+            } else if (t.amount < 0){
+                return true;
+            }
+        }
+        return false;
     }
 
     public double sumTransactions() {

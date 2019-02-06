@@ -73,7 +73,7 @@ public class Customer {
     }
 
     //Transfer money from account a to account b.
-    private void transferMoney(Account a, Account b, double amount){
+    public void transferMoney(Account a, Account b, double amount){
         if (amount >= 0){
             a.withdraw(amount);
             b.deposit(amount);
@@ -82,8 +82,6 @@ public class Customer {
             a.deposit(amount);
         }
     }
-
-
 
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
