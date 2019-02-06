@@ -10,6 +10,8 @@ public class Account {
     public static final int MAXI_SAVINGS = 2;
 
     private final int accountType;
+    private double balance;
+
     public List<Transaction> transactions;
 
     public Account(int accountType) {
@@ -26,7 +28,7 @@ public class Account {
     }
 
 public void withdraw(double amount) {
-    if (amount <= 0) {
+    if (amount <= balance) {
         throw new IllegalArgumentException("amount must be greater than zero");
     } else {
         transactions.add(new Transaction(-amount));

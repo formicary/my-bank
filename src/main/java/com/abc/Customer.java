@@ -9,6 +9,7 @@ public class Customer {
     private String name;
     private List<Account> accounts;
 
+
     public Customer(String name) {
         this.name = name;
         this.accounts = new ArrayList<Account>();
@@ -18,9 +19,41 @@ public class Customer {
         return name;
     }
 
-    public Customer openAccount(Account account) {
-        accounts.add(account);
-        return this;
+    public void openAccount(Account account) {
+        if (accounts.contains(account))
+            throw new UnsupportedOperationException("This account has already been added to the list of users' " +
+                    "accounts");
+        else {
+            accounts.add(account);
+        }
+    }
+
+
+    /** This method transfers money from one account to another of a customer.
+     *
+     * @param accountFrom The account we are transferring from.
+     * @param accountTo The account we are transferring to.
+     * @param amount The amount to be transferred between accounts.
+     */
+
+    public void transferBetweenAccount(Account accountFrom, Account accountTo, double amount) {
+        if (accountFrom == accountTo) {
+            throw new IllegalArgumentException("The account from which the amount would be taken is the same" +
+                    "as the account ");
+        }
+
+        else if (!accounts.contains(accountFrom) || !accounts.contains(accountTo)) {
+            throw new IllegalArgumentException("Both accounts need to be held by the same customer");
+        }
+
+        else if (amount <= 0) {
+            throw new IllegalArgumentException("The amount transferred needs to be positive");
+        }
+
+        else {
+
+        }
+
     }
 
     public int getNumberOfAccounts() {
@@ -65,7 +98,7 @@ public class Customer {
         //Now total up all the transactions
         double total = 0.0;
         for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
+            s += "  " + (t.< 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
             total += t.amount;
         }
         s += "Total " + toDollars(total);
