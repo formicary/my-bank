@@ -26,6 +26,8 @@ public class Account {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
             transactions.add(new Transaction(amount));
+            //Calculating money over course of x days with y interest rate
+            money = newAmount(lastTransaction(), money);
             money += amount;
         }
     }
@@ -66,7 +68,7 @@ public class Account {
     }
 
     //Accrued Interest.
-    private double newAmount(long days, double amount){
+    public double newAmount(long days, double amount){
         //Daily interest gain for  annual 0.1%
         double interestA = 1 + (0.001/365);
         //Daily interest gain for  annual 0.2%

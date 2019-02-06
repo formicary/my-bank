@@ -90,4 +90,11 @@ public class CustomerTest {
         assertEquals(1, withdraw.interestEarned(),0);
         assertEquals(5, noWithdraw.interestEarned(),0);
     }
+
+    @Test //Test daily interest growth
+    public void testAccrue(){
+        Account savings = new Account(Account.SAVINGS);
+        double after1Days = savings.newAmount(1, 1000);
+        assertEquals(1000*(1+0.001/365), after1Days,0);
+    }
 }
