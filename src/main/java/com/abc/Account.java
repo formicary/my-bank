@@ -38,7 +38,6 @@ public class Account {
 
     public void withdraw(double amount) {
         basicTransactionChecks(amount);
-
         if (amount >= balance) {
             throw new IllegalArgumentException("The withdraw amount should be less or equal to the balance");
         } else {

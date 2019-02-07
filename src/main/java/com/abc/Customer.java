@@ -51,7 +51,8 @@ public class Customer {
         }
 
         else {
-
+            accountFrom.withdraw(amount);
+            accountTo.deposit(amount);
         }
 
     }
