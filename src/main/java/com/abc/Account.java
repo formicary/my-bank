@@ -40,7 +40,7 @@ public class Account {
         basicTransactionChecks(amount);
 
         if (amount >= balance) {
-            throw new IllegalArgumentException("The amount should be less or equal to the balance");
+            throw new IllegalArgumentException("The withdraw amount should be less or equal to the balance");
         } else {
             finishTransaction(amount, true);
         }
@@ -86,6 +86,10 @@ public class Account {
             //TODO: Delete hardcoded value
             amount += 3;
         return amount;
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
     }
 
     public int getAccountType() {

@@ -7,7 +7,7 @@ public class Bank {
     private List<Customer> customers;
 
     public Bank() {
-        customers = new ArrayList<Customer>();
+        customers = new ArrayList<>();
     }
 
     public void addCustomer(Customer customer) {
@@ -44,8 +44,12 @@ public class Bank {
             customers = null;
             return customers.get(0).getName();
         } catch (Exception e) {
-            e.printStackTrace();
-            return "Error";
+            throw new IndexOutOfBoundsException("The customer is not registered in the bank");
         }
+    }
+
+
+    public int getNumberOfCustomers() {
+        return customers.size();
     }
 }

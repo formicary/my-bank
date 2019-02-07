@@ -39,4 +39,28 @@ public class AccountTest {
         assertEquals(3, sarah.getNumberOfAccounts());
     }
 
+    @Test (expected=IllegalArgumentException.class)
+    public void TestDeposit_NegativeAmount_ShouldThrowException() {
+        Bank bank = new Bank();
+        Customer bill = new Customer("Bill");
+        Account account = new Account(Account.SAVINGS);
+
+        bank.addCustomer(bill);
+        bill.openAccount(account);
+        account.deposit(-300);
+    }
+
+    @Test
+    public void TestDeposit_ValidAmount_ShouldUpdateBalanceCorrectly() {
+        Bank bank = new Bank();
+        Customer sarah = new Customer("Sarah");
+        Account account = new Account(Account.MAXI_SAVINGS);
+
+        bank.addCustomer(sarah);
+        sarah.openAccount(account);
+        account.deposit(800);
+
+        assertEquals(800, account.getBalance());
+    }
+
 }
