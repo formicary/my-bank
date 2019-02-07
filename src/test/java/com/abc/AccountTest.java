@@ -17,8 +17,6 @@ public class AccountTest {
         assertEquals(1, sarah.getNumberOfAccounts());
     }
 
-
-
     @Test
     public void TestOpenTwoAccounts() {
         Bank bank = new Bank();
@@ -27,6 +25,18 @@ public class AccountTest {
         sarah.openAccount(new Account(2));
 
         assertEquals(2, sarah.getNumberOfAccounts());
+    }
+
+
+    @Test
+    public void TestOpenThreeAccounts() {
+        Bank bank = new Bank();
+        Customer sarah = new Customer("Sarah");
+        sarah.openAccount(new Account(1));
+        sarah.openAccount(new Account(2));
+        sarah.openAccount(new Account(3));
+
+        assertEquals(3, sarah.getNumberOfAccounts());
     }
 
 }
