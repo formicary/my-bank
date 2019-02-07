@@ -1,17 +1,18 @@
 package com.abc;
 
-import java.util.Calendar;
 import java.util.Date;
 
 public class Transaction {
 
     private final double amount;
     private Date transactionDate;
+    private boolean isWithdrawable;
 
-    public Transaction(double amount) {
+    public Transaction(double amount, double v, boolean isWithdrawable) {
 
         this.amount = amount;
         this.transactionDate = DateProvider.getInstance().now();
+        this.isWithdrawable = isWithdrawable;
 
     }
 

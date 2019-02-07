@@ -11,7 +11,12 @@ public class Bank {
     }
 
     public void addCustomer(Customer customer) {
-        customers.add(customer);
+
+        if (customers.contains(customer)) {
+            throw new UnsupportedOperationException("The customer is already in the bank register");
+        } else {
+            customers.add(customer);
+        }
     }
 
     public String customerSummary() {
@@ -29,7 +34,7 @@ public class Bank {
 
     public double totalInterestPaid() {
         double total = 0;
-        for(Customer c: customers)
+        for (Customer c : customers)
             total += c.totalInterestEarned();
         return total;
     }
@@ -38,7 +43,7 @@ public class Bank {
         try {
             customers = null;
             return customers.get(0).getName();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return "Error";
         }

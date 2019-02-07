@@ -25,9 +25,9 @@ public class Customer {
                     "accounts");
         else {
             accounts.add(account);
+            account.linkAccWithCustomer();
         }
     }
-
 
     /** This method transfers money from one account to another of a customer.
      *
@@ -96,13 +96,15 @@ public class Customer {
         }
 
         //Now total up all the transactions
-        double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.< 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
-        }
-        s += "Total " + toDollars(total);
-        return s;
+//        double total = 0.0;
+//        for (Transaction t : a.transactions) {
+//            s += "  " + (t.< 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
+//            total += t.amount;
+//        }
+//        s += "Total " + toDollars(total);
+//        return s;
+
+        return "";
     }
 
     private String toDollars(double d){
