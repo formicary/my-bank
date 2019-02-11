@@ -1,46 +1,101 @@
 package com.abc;
 
 import java.util.ArrayList;
-import java.util.List;
 
+/**
+ * A bank class that contains a list of customers.
+ */
 public class Bank {
-    private List<Customer> customers;
 
+    private ArrayList<Customer> customers;
+
+    /**
+     * Constructor for the Bank class, it sets up an array list to store customers.
+     */
     public Bank() {
         customers = new ArrayList<Customer>();
     }
 
-    public void addCustomer(Customer customer) {
-        customers.add(customer);
+    /**
+     * Method to create a new customer to add to the bank.
+     *
+     * @param name       The name of the new customer.
+     * @param customerID A unique ID for that customer.
+     * @throws IllegalArgumentException If a customer with that customer ID already exists.
+     */
+
+    public void newCustomer(String name, int customerID) throws IllegalArgumentException {
+
+        try {
+            getCustomer(customerID);
+            throw new IllegalArgumentException("Customer already exists");
+        } catch (IllegalArgumentException e) {
+            Customer customer = new Customer(name, customerID);
+            customers.add(customer);
+        }
     }
 
+    /**
+     * Method to fetch a customer from the list of banks customers.
+     *
+     * @param customerID CustomerID of customer being fetched
+     * @return THe customer
+     * @throws IllegalArgumentException If the customer doesn't exist.
+     */
+
+    public Customer getCustomer(int customerID) throws IllegalArgumentException {
+
+        for (Customer customer : customers) {
+            if (customer.getCustomerID() == customerID) {
+                return customer;
+            }
+        }
+        throw new IllegalArgumentException("Customer doesn't exist");
+    }
+
+    /**
+     * Method to calculate the total interest paid by the bank
+     *
+     * @return the interest paid.
+     */
+
+    public double totalInterestPaid() {
+
+        double total = 0;
+        for (Customer customer : customers) {
+            total += customer.totalInterestEarned();
+        }
+
+        return Math.round(total * 100.00) / 100.00;
+    }
+
+    /**
+     * Method to view all the bank customers and number of accounts they have open.
+     *
+     * @return Summary of customers in String format.
+     */
     public String customerSummary() {
-        String summary = "Customer Summary";
-        for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
+
+        String summary = "Bank Customers:";
+
+        for (Customer customer : customers)
+            summary += "\n - " + customer.getCustomerID() + " " + customer.getName() + " [Number of accounts: " + customer.getNumberOfAccounts() + "]";
         return summary;
     }
 
-    //Make sure correct plural of word is created based on the number passed in:
-    //If number passed in is 1 just return the word otherwise add an 's' at the end
-    private String format(int number, String word) {
-        return number + " " + (number == 1 ? word : word + "s");
-    }
+    /**
+     * toString method that returns all the information about all the customers.
+     *
+     * @return Customer list in string format
+     */
+    public String toString() {
 
-    public double totalInterestPaid() {
-        double total = 0;
-        for(Customer c: customers)
-            total += c.totalInterestEarned();
-        return total;
-    }
+        String toString = "Full customer information \n";
 
-    public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
+        for (Customer customer : customers) {
+            toString += customer.toString();
         }
+
+        return toString;
     }
 }
