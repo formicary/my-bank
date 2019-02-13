@@ -84,7 +84,7 @@ public class AccountTest {
     }
 
     @Test (expected = IllegalArgumentException.class)
-    public void TestWithdraw_NegativeAmount_ShouldThrowException() {
+    public void TestWithdraw_NegativeAmount() {
         Bank bank = new Bank();
         Customer daniel = new Customer("Daniel");
         Account account = new Account(Account.SAVINGS);
@@ -96,7 +96,7 @@ public class AccountTest {
     }
 
     @Test (expected = IllegalArgumentException.class)
-    public void WithdrawAmountGreaterThanBalance_ShouldThrowException() {
+    public void WithdrawAmountGreaterThanBalance() {
         Bank bank = new Bank();
         Customer saul= new Customer("Saul");
         Account account = new Account(Account.MAXI_SAVINGS);
@@ -105,20 +105,6 @@ public class AccountTest {
         saul.openAccount(account);
         account.deposit(1000);
         account.withdraw(1500);
-    }
-
-    @Test
-    public void TestWithdraw_ValidAmount_ShouldUpdateBalanceCorrectly() {
-        Bank bank = new Bank();
-        Customer nick = new Customer("Nick");
-        Account account = new Account(Account.MAXI_SAVINGS);
-
-        bank.addCustomer(nick);
-        nick.openAccount(account);
-        account.deposit(2000);
-        account.withdraw(500);
-
-        assertEquals(1500.0, account.getBalance(), 0);
     }
 
 
@@ -136,6 +122,127 @@ public class AccountTest {
         account.withdraw(350);
 
         assertEquals(2, account.getTransactions().size());
+    }
+
+
+    @Test (expected=IllegalArgumentException.class)
+    public void TestWithdraw_AmountGreaterThanBalance() {
+        Bank bank = new Bank();
+        Customer kim = new Customer("Kim");
+        Account account = new Account(Account.MAXI_SAVINGS);
+
+        bank.addCustomer(kim);
+        kim.openAccount(account);
+        account.deposit(1000);
+        account.withdraw(1500);
+    }
+
+    @Test
+    public void TestWithdraw_ValidAmount_ShouldUpdateBalanceCorrectly() {
+        Bank bank = new Bank();
+        Customer kim = new Customer("Kim");
+        Account account = new Account(Account.MAXI_SAVINGS);
+
+        bank.addCustomer(kim);
+        kim.openAccount(account);
+        account.deposit(2000);
+        account.withdraw(500);
+
+        assertEquals(1500.0, account.getBalance(), 0);
+    }
+
+    @Test
+    public void TestCheckingAccountEarnedInterest_ShouldBeCorrect() {
+        Bank bank = new Bank();
+        Account checkingAccount = new Account(Account.CHECKING);
+        Customer bill = new Customer("Bill");
+
+        bill.openAccount(checkingAccount);
+        bank.addCustomer(bill);
+
+        checkingAccount.deposit(1500.0);
+
+        GregorianCalendar calendar = new GregorianCalendar();
+        calendar.setTime(new Date());
+
+        int daysInYear = calendar.isLeapYear(calendar.getWeekYear()) ? 366 : 365;
+        int dayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
+        double expected = Double.valueOf(Account.decimalFormatter.format(1.5 / daysInYear * dayOfYear));
+
+        assertEquals(expected, checkingAccount.getEarnedInterest(), 0D);
+    }
+
+    @Test
+    public void TestSavingsAccountEarnedInterest_ShouldBeCorrect() {
+        Bank bank = new Bank();
+        Customer saul = new Customer("Saul");
+        Account savingsAccount = new Account(Account.SAVINGS);
+
+        bank.addCustomer(saul);
+        saul.openAccount(savingsAccount);
+
+        savingsAccount.deposit(2000.0);
+
+        GregorianCalendar calendar = new GregorianCalendar();
+        calendar.setTime(new Date());
+
+        int daysInYear = calendar.isLeapYear(calendar.getWeekYear()) ? 366 : 365;
+        int dayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
+        double expected = Double.valueOf(Account.decimalFormatter.format(3.0 / daysInYear * dayOfYear));
+
+        assertEquals(expected, savingsAccount.getEarnedInterest(), 0D);
+    }
+
+    @Test
+    public void TestMaxiSavingsAccountEarnedInterest_ShouldBeCorrect() {
+        Bank bank = new Bank();
+        Customer saul = new Customer("Saul");
+        Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
+
+        bank.addCustomer(saul);
+        saul.openAccount(maxiSavingsAccount);
+
+        maxiSavingsAccount.deposit(3000.0);
+
+        GregorianCalendar calendar = new GregorianCalendar();
+        calendar.setTime(new Date());
+
+        int daysInYear = calendar.isLeapYear(calendar.getWeekYear()) ? 366 : 365;
+        int dayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
+        double expected = Double.valueOf(Account.decimalFormatter.format(150.0 / daysInYear * dayOfYear));
+
+        assertEquals(expected, maxiSavingsAccount.getEarnedInterest(), 0D);
+    }
+
+    @Test (expected=IllegalArgumentException.class)
+    public void TestAccountHasWithdrawalInPastDays_NegativeNumberOfDays() {
+        Account account = new Account(Account.SAVINGS);
+        account.hasWithdrawInLastNDays((short) -3);
+    }
+
+    @Test
+    public void TestAccountHasWithdrawalInPast10Days_TransactionMadeToday_ShouldReturnTrue() {
+        Customer chuck = new Customer("Chuck");
+        Account account = new Account(Account.SAVINGS);
+
+        chuck.openAccount(account);
+        account.deposit(120);
+        account.withdraw(50);
+
+        assertTrue(account.hasWithdrawInLastNDays((short) 10));
+    }
+
+    @Test
+    public void TestAccountHasWithdrawalInPast10Days_TransactionMade12DaysAgo_ShouldReturnTrue() {
+        Customer jessie = new Customer("Jessie");
+        Account account = new Account(Account.SAVINGS);
+
+        jessie.openAccount(account);
+        account.deposit(120);
+        account.withdraw(50);
+
+        account.getTransactions().get(1).setDateToNDaysAgo((short) 12);
+        assertEquals(false, account.hasWithdrawInLastNDays((short) 10));
     }
 
 }

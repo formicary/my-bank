@@ -1,6 +1,7 @@
 package com.abc;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static java.lang.Math.abs;
@@ -57,58 +58,75 @@ public class Customer {
 
     }
 
-    public int getNumberOfAccounts() {
-        return accounts.size();
-    }
-
-    public double totalInterestEarned() {
-        double total = 0;
-        for (Account a : accounts)
-            total += a.interestEarned();
-        return total;
-    }
 
     public String getStatement() {
         String statement = null;
         statement = "Statement for " + name + "\n";
-        double total = 0.0;
-        for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
-        }
-        statement += "\nTotal In All Accounts " + toDollars(total);
+
+        statement += makeSymbolLine('‾', 30);
+
+        for (Account account : accounts)
+            statement += getStatementForAccount(account);
+
+        statement = statement.replaceAll("\n$", "");
+        statement += "\n" + makeSymbolLine('_', 20);
+
         return statement;
     }
 
-    private String statementForAccount(Account a) {
-        String s = "";
+    private String getStatementForAccount(Account a) {
+        String statement = "";
 
        //Translate to pretty account type
         switch(a.getAccountType()){
             case Account.CHECKING:
-                s += "Checking Account\n";
+                statement += "Checking Account\n";
                 break;
             case Account.SAVINGS:
-                s += "Savings Account\n";
+                statement += "Savings Account\n";
                 break;
             case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
+                statement += "Maxi Savings Account\n";
                 break;
         }
 
-        //Now total up all the transactions
-//        double total = 0.0;
-//        for (Transaction t : a.transactions) {
-//            s += "  " + (t.< 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-//            total += t.amount;
-//        }
-//        s += "Total " + toDollars(total);
-//        return s;
+        statement += "\n" + makeSymbolLine('-', 20);
 
-        return "";
+        //Total up all transactions
+        if (a.getTransactions().size() > 0)
+            for (Transaction t : a.getTransactions())
+                statement += "  *" + (t.isWithdrawable()? "withdrawal" : "deposit")
+                        + " $" + Account.decimalFormatter.format(t.getTransactionAmount()) + " - " +
+                        t.getFormattedTransaction() + "\n";
+        else
+            statement += "  No transactions made to this date\n";
+
+        statement += makeSymbolLine('-', 20);
+
+        statement += "Total: " + Account.decimalFormatter.format(a.getBalance()) + "\n\n";
+
+        return statement;
+    }
+
+    public double getTotalInterestEarned() {
+        double total = 0;
+
+        for (Account a:accounts) {
+            total+=a.getEarnedInterest();
+        }
+
+        return total;
+    }
+
+    public static String makeSymbolLine(char symbol, int numChars) {
+        return String.join("", Collections.nCopies(numChars, Character.toString(symbol))) + "\n";
     }
 
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
+    }
+
+    public int getNumberOfAccounts() {
+        return accounts.size();
     }
 }
