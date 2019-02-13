@@ -9,7 +9,8 @@ public class Customer {
     private String name;
     private List<Account> accounts;
 
-    public Customer(String name) {
+
+    Customer(String name) {
         this.name = name;
         this.accounts = new ArrayList<Account>();
     }
@@ -18,58 +19,85 @@ public class Customer {
         return name;
     }
 
-    public Customer openAccount(Account account) {
-        accounts.add(account);
-        return this;
-    }
-
     public int getNumberOfAccounts() {
         return accounts.size();
     }
 
-    public double totalInterestEarned() {
+    public void openAccount(Account account) {
+        accounts.add(account);
+    }
+
+    public double totalInterestEarned(boolean forYear) {
         double total = 0;
         for (Account a : accounts)
-            total += a.interestEarned();
+            total += a.interestEarned(forYear);
         return total;
     }
 
     public String getStatement() {
-        String statement = null;
-        statement = "Statement for " + name + "\n";
+        StringBuilder statement = new StringBuilder("Statement for " + name + "\n");
         double total = 0.0;
+
         for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+            statement.append("\n");
+            statement.append(statementForAccount(a));
+            statement.append("\n");
+            total += a.getBalance();
         }
-        statement += "\nTotal In All Accounts " + toDollars(total);
-        return statement;
+        statement.append("\n");
+        statement.append("Total In All Accounts ");
+        statement.append(toDollars(total));
+
+        return statement.toString();
     }
 
+    //Build Statement String
     private String statementForAccount(Account a) {
-        String s = "";
+        StringBuilder s = new StringBuilder();
 
-       //Translate to pretty account type
+        //Change to Textual Account Type
         switch(a.getAccountType()){
             case Account.CHECKING:
-                s += "Checking Account\n";
+                s.append("Checking Account\n");
                 break;
             case Account.SAVINGS:
-                s += "Savings Account\n";
+                s.append("Savings Account\n");
                 break;
             case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
+                s.append("Maxi Savings Account\n");
                 break;
         }
 
-        //Now total up all the transactions
         double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
+
+        //Change to Textual Statement
+        for (Transaction t : a.getTransactions()) {
+            double amount = t.getAmount();
+            s.append("  ");
+            s.append(amount < 0 ? "withdrawal" : "deposit");
+            s.append(" ");
+            s.append(toDollars(amount));
+            s.append("\n");
+            total += amount;
         }
-        s += "Total " + toDollars(total);
-        return s;
+        s.append("Total ");
+        s.append(toDollars(total));
+        return s.toString();
+    }
+
+    public boolean transferBetweenAccounts(Account from, Account to, double amount){
+        //Check Customer Owns Both Accounts
+        if(!accounts.contains(from) || !accounts.contains(to))
+            return false;
+
+        //Check Balance
+        if(from.getBalance() < amount)
+            return false;
+
+        //Transfer Funds
+        from.withdraw(amount);
+        to.deposit(amount);
+        return true;
     }
 
     private String toDollars(double d){
