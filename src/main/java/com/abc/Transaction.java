@@ -1,10 +1,9 @@
 package com.abc;
 
-import java.util.Calendar;
 import java.util.Date;
 
 public class Transaction {
-    public final double amount;
+    private final double amount;
 
     private Date transactionDate;
 
@@ -12,5 +11,25 @@ public class Transaction {
         this.amount = amount;
         this.transactionDate = DateProvider.getInstance().now();
     }
+    
+   public Transaction(double amount, Date transactionDate) {
+       this.amount = amount;
+       this.transactionDate = transactionDate;
+   }
+   
+   public double getAmount() {
+	   return amount;
+   }
+   
+   public Date getTransactionDate() {
+	   return transactionDate;
+   }
+   
+   public boolean isWithdraw() {
+	   if (amount < 0) {
+		   return true;
+	   }else 
+		   return false;
+   }
 
 }
