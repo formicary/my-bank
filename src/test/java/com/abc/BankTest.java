@@ -4,6 +4,10 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
 public class BankTest {
     private static final double DOUBLE_DELTA = 1e-15;
 
@@ -46,9 +50,12 @@ public class BankTest {
         Account checkingAccount = new Account(Account.MAXI_SAVINGS);
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
-        checkingAccount.deposit(3000.0);
-
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        checkingAccount.deposit(3000.0);    
+        checkingAccount.withdraw(100);
+//        assertEquals(150.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(2.9, bank.totalInterestPaid(), DOUBLE_DELTA);
+        
     }
+
 
 }
