@@ -56,28 +56,6 @@ public class Account {
         transactions.add(new Transaction(accountType, amount, isWithDrawable));
     }
 
-//    public double interestEarned() {
-//        double amount = sumTransactions();
-//        switch (accountType) {
-//            case SAVINGS:
-//                if (amount <= 1000)
-//                    return amount * 0.001;
-//                else
-//                    return 1 + (amount - 1000) * 0.002;
-////            case SUPER_SAVINGS:
-////                if (amount <= 4000)
-////                    return 20;
-//            case MAXI_SAVINGS:
-//                if (amount <= 1000)
-//                    return amount * 0.02;
-//                if (amount <= 2000)
-//                    return 20 + (amount - 1000) * 0.05;
-//                return 70 + (amount - 2000) * 0.1;
-//            default:
-//                return amount * 0.001;
-//        }
-//    }
-
 
     //Calculate the amount of total interest based on the account type
     public double getEarnedInterest() {
@@ -90,7 +68,7 @@ public class Account {
         switch (accountType) {
             case SAVINGS:
                 if (balance <= limitIncrement) {
-                    earnings = balance * limitIncrement;
+                    earnings = balance * defaultInterest;
                 } else {
                     earnings = 1 + (balance - limitIncrement) * 0.002;
                 }
@@ -133,8 +111,7 @@ public class Account {
 
         final Date fromDate = calendar.getTime();
 
-        List<Transaction> relevantTransactions = transactions.stream()
-                .filter(t -> !t.getTransactionDate().before(fromDate)).collect(Collectors.toList());
+        List<Transaction> relevantTransactions = transactions.stream().filter(t -> !t.getTransactionDate().before(fromDate)).collect(Collectors.toList());
 
         for (Transaction t : relevantTransactions)
             if (t.isWithdrawable()) {
@@ -146,19 +123,6 @@ public class Account {
 
     }
 
-
-    public double sumTransactions() {
-        return checkIfTransactionsExist(true);
-    }
-
-    private double checkIfTransactionsExist(boolean checkAll) {
-        double amount = 0.0;
-        for (Transaction t : transactions)
-
-            //TODO: Delete hardcoded value
-            amount += 3;
-        return amount;
-    }
 
     public List<Transaction> getTransactions() {
         return transactions;

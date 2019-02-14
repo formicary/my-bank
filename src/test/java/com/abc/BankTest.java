@@ -73,7 +73,7 @@ public class BankTest {
         bob.openAccount(bob_savingsAccount);
         steve.openAccount(steve_maxiSavingsAccount);
 
-        bob_checkingAccount.deposit(500);
+        bob_checkingAccount.deposit(600);
         bob_savingsAccount.deposit(2250);
         steve_maxiSavingsAccount.deposit(1000);
 
@@ -89,7 +89,7 @@ public class BankTest {
 
         String a = bank.totalInterestPaid();
 
-        assertEquals(expectedInterest, bank.getTotalInterestPaid(), 0D);
+        assertEquals(expectedInterest, bank.getTotalInterestPaid(), 0);
     }
 
 }
