@@ -17,6 +17,22 @@ public class Customer {
     public String getName() {
         return name;
     }
+    
+    public void transfer(Account account1, Account account2, double amount) {
+    	if(getNumberOfAccounts()>1) {
+    		if(account1.sumTransactions()>0) {
+    			account1.withdraw(amount);
+    			account2.deposit(amount);
+    		}
+    		else {
+    			throw new IllegalArgumentException("not enought money in the acount you are trying to transfer from");
+    		}
+    		
+    	}else {
+    		throw new IllegalArgumentException("must have more than 1 account");
+    	}
+    	
+    }
 
     public Customer openAccount(Account account) {
         accounts.add(account);
