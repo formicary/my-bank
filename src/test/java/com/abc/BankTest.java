@@ -1,54 +1,95 @@
 package com.abc;
 
-import org.junit.Test;
+import org.junit.*;
+
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 
 public class BankTest {
     private static final double DOUBLE_DELTA = 1e-15;
 
-    @Test
-    public void customerSummary() {
-        Bank bank = new Bank();
-        Customer john = new Customer("John");
-        john.openAccount(new Account(Account.CHECKING));
-        bank.addCustomer(john);
 
-        assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
+    @Test
+    public void TestGetFirstCustomer_ShouldBeSame() {
+        String[] customerNames = {"Eric", "Michael", "Don", "Walter", "Skyler"};
+        Collections.shuffle(Arrays.asList(customerNames), new Random(42));
+
+        Bank bank = new Bank();
+
+        List<Customer> customers = new ArrayList<>();
+
+        for (String name : customerNames ) {
+            Customer customer = new Customer(name);
+
+            customers.add(customer);
+            bank.addCustomer(customer);
+        }
+        assertEquals(customers.get(0), bank.getFirstCustomer());
+    }
+
+    @Test (expected=IndexOutOfBoundsException.class)
+    public void TestGetFirstCustomer_NoCustomers() {
+        Bank bank = new Bank();
+        bank.getFirstCustomer();
+    }
+
+    @Test (expected=UnsupportedOperationException.class)
+    public void TestBankAddCustomer_SameCustomer() {
+        Bank bank = new Bank();
+        Customer mark = new Customer("Mark");
+
+        bank.addCustomer(mark);
+        bank.addCustomer(mark);
     }
 
     @Test
-    public void checkingAccount() {
+    public void TestBankAddCustomer_TwoCustomers_ShouldBeCorrect() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.CHECKING);
-        Customer bill = new Customer("Bill").openAccount(checkingAccount);
-        bank.addCustomer(bill);
+        Customer gosho = new Customer("Gosho");
+        Customer pesho = new Customer("Pesho");
 
-        checkingAccount.deposit(100.0);
+        bank.addCustomer(gosho);
+        bank.addCustomer(pesho);
 
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(2, bank.getNumberOfCustomers());
     }
 
     @Test
-    public void savings_account() {
+    public void TestTotalInterestPaid_ShouldBeCorrect() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
-        checkingAccount.deposit(1500.0);
+        Customer bob = new Customer("Bob");
+        Customer steve = new Customer("Steve");
 
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
-    }
+        bank.addCustomer(bob);
+        bank.addCustomer(steve);
 
-    @Test
-    public void maxi_savings_account() {
-        Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+        Account bob_checkingAccount = new Account(Account.CHECKING);
+        Account bob_savingsAccount = new Account(Account.SAVINGS);
+        Account steve_maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
 
-        checkingAccount.deposit(3000.0);
+        bob.openAccount(bob_checkingAccount);
+        bob.openAccount(bob_savingsAccount);
+        steve.openAccount(steve_maxiSavingsAccount);
 
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        bob_checkingAccount.deposit(1000);
+        bob_savingsAccount.deposit(2250);
+        steve_maxiSavingsAccount.deposit(1000);
+
+        double annualInterest = 0.5 + 3.5 + 50.0;
+
+        GregorianCalendar calendar = new GregorianCalendar();
+        calendar.setTime(new Date());
+
+        int days = calendar.get(Calendar.DAY_OF_YEAR);
+        int daysInYear = calendar.isLeapYear(calendar.getWeekYear()) ? 366 : 365;
+
+        double expectedInterest = Double.parseDouble(Account.decimalFormatter.format(annualInterest / daysInYear * days));
+
+        String a = bank.totalInterestPaid();
+
+        assertEquals(expectedInterest, bank.getTotalInterestPaid(), 2);
     }
 
 }
