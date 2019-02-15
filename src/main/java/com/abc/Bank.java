@@ -1,23 +1,38 @@
 package com.abc;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Bank {
-    private List<Customer> customers;
 
+    //Fields to represent a bank
+    private ArrayList<Customer> customers;
+
+    /**
+     * Creates a new instance of a bank
+     *
+     */
     public Bank() {
-        customers = new ArrayList<Customer>();
+        customers = new ArrayList<>();
     }
 
+    /**
+     *
+     * @param customer a customer to be added under this bank
+     */
     public void addCustomer(Customer customer) {
         customers.add(customer);
     }
 
+    /**
+     *
+     * @return A summary of a customer, i.e. their name and the number of
+     * account they own
+     */
     public String customerSummary() {
         String summary = "Customer Summary";
-        for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
+        for (Customer c : customers) {
+            summary += "\n - " + c.getCustomerID() + ": " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
+        }
         return summary;
     }
 
@@ -27,20 +42,29 @@ public class Bank {
         return number + " " + (number == 1 ? word : word + "s");
     }
 
+    /**
+     *
+     * @return The total amount of interest paid to all customer by the bank
+     */
     public double totalInterestPaid() {
         double total = 0;
-        for(Customer c: customers)
+        for (Customer c : customers) {
             total += c.totalInterestEarned();
+        }
         return total;
     }
 
+    /**
+     *
+     * @return The first customer's name in the bank if exists
+     */
     public String getFirstCustomer() {
         try {
             customers = null;
             return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
+        } catch (Exception e) {
+            return "Error: " + e;
         }
     }
+
 }
