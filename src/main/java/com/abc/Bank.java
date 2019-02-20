@@ -1,15 +1,29 @@
 package com.abc;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 public class Bank {
-    private List<Customer> customers;
-
-    public Bank() {
-        customers = new ArrayList<Customer>();
+	private String name;
+    private List<Customer> customers = new ArrayList<Customer>();
+    
+    public Bank(String name) {
+    	this.name = name;
     }
-
+    public Bank(String name, List<Customer> customers) {
+    	this.name = name;
+    	this.customers = customers;
+    }
+    
+    public String getName() {
+    	return name;
+    }
+    public void setName(String name) {
+    	this.name = name;
+    }
+    
     public void addCustomer(Customer customer) {
         customers.add(customer);
     }
@@ -17,30 +31,40 @@ public class Bank {
     public String customerSummary() {
         String summary = "Customer Summary";
         for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
+            summary += "\n - " + c.getFullName() + " (" + 
+            	addSifPlural(c.getNumberOfAccounts(), "account") + ")";
         return summary;
     }
-
-    //Make sure correct plural of word is created based on the number passed in:
-    //If number passed in is 1 just return the word otherwise add an 's' at the end
-    private String format(int number, String word) {
+    
+    private String addSifPlural(int number, String word) {
         return number + " " + (number == 1 ? word : word + "s");
     }
 
-    public double totalInterestPaid() {
-        double total = 0;
-        for(Customer c: customers)
-            total += c.totalInterestEarned();
-        return total;
-    }
-
-    public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
+    // Calculate Total Interest Paid for each currency
+    public String totalInterestPaid() {
+    	HashMap<String, Double> interestDifferentCurrencies = new HashMap<String, Double>();
+        for(Customer c: customers) {
+        	HashMap<String, Double> interestsEarnedCustomer = c.totalInterestEarned();
+        	for(Entry<String, Double> e : interestsEarnedCustomer.entrySet()) {
+        		Double amountValue = interestDifferentCurrencies.getOrDefault(e.getKey(), 0.0);
+        		interestDifferentCurrencies.put( e.getKey(), (amountValue + e.getValue()) );
+            }
         }
+        String statement = "\n"+"Total Interest Paid:\n";
+        for(Entry<String, Double> e : interestDifferentCurrencies.entrySet()) {
+        	statement += "- " + e.getKey() + e.getValue() + "\n";
+        }
+        return statement;
     }
+    
+    
+    public Customer getCustomerByFullName(String fullName) {
+        for (Customer c : customers) {
+        	if (c.getFullName().equals(fullName)) {
+        		return c;
+        	}
+        }
+        return null;
+    }
+    
 }
