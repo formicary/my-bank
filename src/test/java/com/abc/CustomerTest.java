@@ -1,57 +1,82 @@
 package com.abc;
 
-import org.junit.Ignore;
+import org.junit.Before;
 import org.junit.Test;
 
+import consts.Constants;
+
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 public class CustomerTest {
-
-    @Test //Test customer statement generation
-    public void testApp(){
-
-        Account checkingAccount = new Account(Account.CHECKING);
-        Account savingsAccount = new Account(Account.SAVINGS);
-
-        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
-
-        checkingAccount.deposit(100.0);
-        savingsAccount.deposit(4000.0);
-        savingsAccount.withdraw(200.0);
-
-        assertEquals("Statement for Henry\n" +
-                "\n" +
-                "Checking Account\n" +
-                "  deposit $100.00\n" +
-                "Total $100.00\n" +
-                "\n" +
-                "Savings Account\n" +
-                "  deposit $4,000.00\n" +
-                "  withdrawal $200.00\n" +
-                "Total $3,800.00\n" +
-                "\n" +
-                "Total In All Accounts $3,900.00", henry.getStatement());
+	
+	private static final String fullName = "Oscar Wilde";
+	private Customer customer;
+	private Account checkingAccount = new Account(Constants.ACCOUNT_CHECKING_ID, Locale.UK);
+	private Account savingsAccount = new Account(Constants.ACCOUNT_SAVINGS_ID, Locale.UK);
+	private Account maxiSavingsAccount = new Account(Constants.ACCOUNT_MAXI_SAVINGS_ID, Locale.ITALY);
+	
+    @Before
+    public void setUpCustomerWithMultipleAccounts(){
+    	List<Account> accounts = new ArrayList<Account>(); 
+    	accounts.add(checkingAccount); accounts.add(savingsAccount); accounts.add(maxiSavingsAccount);
+    	customer = new Customer(fullName, accounts);
+    	checkingAccount.deposit(1000);
+    	checkingAccount.deposit(300);
+    	savingsAccount.deposit(200);
+    	maxiSavingsAccount.deposit(500);
     }
-
+    
     @Test
-    public void testOneAccount(){
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
+    public void testCreatingCustomerAndOpeningAnAccount(){
+        Customer oscar = new Customer(fullName, checkingAccount);
         assertEquals(1, oscar.getNumberOfAccounts());
+        assertEquals(fullName, oscar.getFullName());
     }
 
     @Test
-    public void testTwoAccount(){
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
-        assertEquals(2, oscar.getNumberOfAccounts());
+    public void testCreatingCustomerAndOpeningMultipleAccounts(){
+        assertEquals(3, customer.getNumberOfAccounts());
     }
-
-    @Ignore
-    public void testThreeAcounts() {
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
-        assertEquals(3, oscar.getNumberOfAccounts());
+    
+    @Test
+    public void testAccountStatements(){
+    	System.out.println(customer.getStatementForAllAccounts());
+    	
+    	String statement = "Statement for "+fullName + "\n\n" + 
+    			checkingAccount.getAccountTypeName() + "\n" +
+    			"\t" + Constants.DEPOSIT +" £1,000.00" + "\n" +
+    			"\t" + Constants.DEPOSIT +" £300.00" + "\n" +
+    			"Total: £1,300.00\n\n" +
+    			savingsAccount.getAccountTypeName() + "\n" +
+    			"\t" + Constants.DEPOSIT +" £200.00" + "\n" +
+    			"Total: £200.00\n\n" +
+    			maxiSavingsAccount.getAccountTypeName() + "\n" +
+    			"\t" + Constants.DEPOSIT +" €500.00" + "\n" +
+    			"Total: €500.00\n\n" +
+    			"Total In All Accounts:\n"+
+    			"- £1500.0\n" + 
+    			"- €500.0\n";
+    	
+        assertEquals(statement, customer.getStatementForAllAccounts());
     }
+    
+    @Test
+    public void testTransferBetweenTwoAccounts(){
+    	double amountToTransfer = 50;
+    	try {
+    		customer.transferBetweenTwoAccounts(amountToTransfer, checkingAccount, checkingAccount);
+    		fail();
+    	} catch (UnsupportedOperationException e) { }
+    	double senderAmount = checkingAccount.getTotalAmount();
+    	double destinationAmount = savingsAccount.getTotalAmount();
+    	customer.transferBetweenTwoAccounts(amountToTransfer, checkingAccount, savingsAccount);
+    	assertEquals((senderAmount-amountToTransfer), checkingAccount.getTotalAmount(), 0);
+    	assertEquals((destinationAmount+amountToTransfer), savingsAccount.getTotalAmount(), 0);
+    }
+    
 }
