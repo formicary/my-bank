@@ -11,11 +11,11 @@ import consts.Constants;
 
 public class Account {
 
-	private final long id;
-	private final int accountType;
-	private List<Transaction> transactions = new ArrayList<Transaction>();
-	private final Date creationDate = new Date();
-	private double interestEarned = 0;
+    private final long id;
+    private final int accountType;
+    private List<Transaction> transactions = new ArrayList<Transaction>();
+    private final Date creationDate = new Date();
+    private double interestEarned = 0;
     private final Locale locale;		// Used for the currency
     private static Integer counter = 0;	// Used to assign a unique ID to accounts
    
