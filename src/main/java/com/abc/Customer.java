@@ -67,12 +67,12 @@ public class Customer {
     private HashMap<String, Double> manageCurrencies(HashMap<String, Double> currencyAmounts, 
     		double total, Account a){
     	// if currency already exists
-		if (currencyAmounts.get(a.getCurrencySymbol()) != null) {
-			total += currencyAmounts.get(a.getCurrencySymbol());
-		}
-		// add total amount into map that contains associated currencies 
-		currencyAmounts.put(a.getCurrencySymbol(), total);
-		return currencyAmounts;
+	if (currencyAmounts.get(a.getCurrencySymbol()) != null) {
+		total += currencyAmounts.get(a.getCurrencySymbol());
+	}
+	// add total amount into map that contains associated currencies 
+	currencyAmounts.put(a.getCurrencySymbol(), total);
+	return currencyAmounts;
     }
     
     public String getInformationOnCustomerAccounts() {
