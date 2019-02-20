@@ -19,5 +19,5 @@ public class Constants {
   public static final double ZERO_ONE_PERCENT = 0.001;
   public static final double ZERO_TWO_PERCENT = 0.002;
   public static final double FIVE_PERCENT = 0.05;
-   	  	
+  
 }
