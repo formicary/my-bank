@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 public class Bank {
-	private String name;
+    private String name;
     private List<Customer> customers = new ArrayList<Customer>();
     
     public Bank(String name) {
