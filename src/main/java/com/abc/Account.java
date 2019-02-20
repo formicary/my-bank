@@ -34,34 +34,32 @@ public class Account {
 	    }
 	}
 	
-	public void transfer(double amount, Account account) {
+	/*public void transfer(double amount, Account account) {
 		if (amount <= 0) {
 			throw new IllegalArgumentException("amount must be greater than zero");
 		} else {
 			this.withdraw(amount);
 			account.deposit(amount);
 		}
-	}
+	}*/
 
     public double interestEarned() {
         double amount = sumTransactions();
+        
         switch(accountType){
             case SAVINGS:
                 if (amount <= 1000)
                     return amount * 0.001;
                 else
                     return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
             case MAXI_SAVINGS:
             	Transaction t = this.getLastWithdrawal();
             	
             	if (t != null) {
-            		if (LocalDateTime.now().minusDays(10).isBefore(t.getTransactionDate())) {
+            		if (LocalDateTime.now().minusDays(10).isBefore(t.getTransactionDate()))
                     	return amount * 0.001;
-                    }
             	}
+            	
                 return amount * 0.05;
             default:
                 return amount * 0.001;

@@ -33,16 +33,29 @@ public class Customer {
             total += a.interestEarned();
         return total;
     }
+    
+    public void transferBetweenAccounts(double amount, Account a1, Account a2) {
+		if (amount <= 0) {
+			throw new IllegalArgumentException("amount must be greater than zero");
+		} else if (!accounts.contains(a1) || !accounts.contains(a2)) {
+			throw new IllegalArgumentException("account does not exist");
+    	} else {
+			a1.withdraw(amount);
+			a2.deposit(amount);
+		}
+	}
 
     public String getStatement() {
-        String statement = null;
-        statement = "Statement for " + name + "\n";
+        String statement = "Statement for " + name + "\n";
         double total = 0.0;
+        
         for (Account a : accounts) {
             statement += "\n" + statementForAccount(a) + "\n";
             total += a.sumTransactions();
         }
+        
         statement += "\nTotal In All Accounts " + toDollars(total);
+        
         return statement;
     }
 
