@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Account {
-
     public static final int CHECKING = 0;
     public static final int SAVINGS = 1;
     public static final int MAXI_SAVINGS = 2;
@@ -33,15 +32,6 @@ public class Account {
 	        transactions.add(new Transaction(-amount));
 	    }
 	}
-	
-	/*public void transfer(double amount, Account account) {
-		if (amount <= 0) {
-			throw new IllegalArgumentException("amount must be greater than zero");
-		} else {
-			this.withdraw(amount);
-			account.deposit(amount);
-		}
-	}*/
 
     public double interestEarned() {
         double amount = sumTransactions();
@@ -72,8 +62,10 @@ public class Account {
 
     private double checkIfTransactionsExist(boolean checkAll) {
         double amount = 0.0;
+        
         for (Transaction t: transactions)
             amount += t.amount;
+        
         return amount;
     }
 
@@ -82,9 +74,8 @@ public class Account {
     }
     
     public Transaction getLastWithdrawal() {
-    	if (transactions.size() < 1) {
+    	if (transactions.size() < 1)
     		throw new IllegalArgumentException("no transactions have been made");
-    	}
     	
     	for (int i = transactions.size() - 1; i > 0; i--) {
     		if (transactions.get(i).amount < 0) {
