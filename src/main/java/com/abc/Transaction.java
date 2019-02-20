@@ -7,7 +7,7 @@ import consts.Constants;
 
 public class Transaction {
 	
-	private final double amount;
+    private final double amount;
     private final Date transactionDate;
     private final String transactionType;
 	
@@ -23,22 +23,22 @@ public class Transaction {
     }
 	
     public Date getTransactionDate() {
-		return transactionDate;
-	}
-	public String getTransactionType() {
-		return transactionType;
-	}
-	public double getAmount() {
-		return amount;
-	}
+        return transactionDate;
+    }
+    public String getTransactionType() {
+        return transactionType;
+    }
+    public double getAmount() {
+        return amount;
+    }
 	
-	public boolean isOlder10Days() {
-		ZonedDateTime tenDaysAgo = ZonedDateTime.now().plusDays(-10);
-		if (transactionDate.toInstant().isBefore(tenDaysAgo.toInstant())) {
-		    return true;
-		} else {
-			return false;
-		}
-	}
+    public boolean isOlder10Days() {
+        ZonedDateTime tenDaysAgo = ZonedDateTime.now().plusDays(-10);
+        if (transactionDate.toInstant().isBefore(tenDaysAgo.toInstant())) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 }
