@@ -13,7 +13,9 @@ public class CustomerTest {
         Account checkingAccount = new Account(Account.CHECKING);
         Account savingsAccount = new Account(Account.SAVINGS);
 
-        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
+        Customer henry = new Customer("Henry");
+        henry.openAccount(checkingAccount);
+        henry.openAccount(savingsAccount);
 
         checkingAccount.deposit(100.0);
         savingsAccount.deposit(4000.0);
@@ -35,22 +37,23 @@ public class CustomerTest {
 
     @Test
     public void testOneAccount(){
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
+        Customer oscar = new Customer("Oscar");
+        oscar.openAccount(new Account(Account.SAVINGS));
         assertEquals(1, oscar.getNumberOfAccounts());
     }
 
     @Test
     public void testTwoAccount(){
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
+        Customer oscar = new Customer("Oscar");
+        oscar.openAccount(new Account(Account.SAVINGS));
         oscar.openAccount(new Account(Account.CHECKING));
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
     @Ignore
     public void testThreeAcounts() {
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
+        Customer oscar = new Customer("Oscar");
+        oscar.openAccount(new Account(Account.SAVINGS));
         oscar.openAccount(new Account(Account.CHECKING));
         assertEquals(3, oscar.getNumberOfAccounts());
     }
@@ -60,8 +63,8 @@ public class CustomerTest {
     	Account checkingAccount = new Account(Account.CHECKING);
         Account savingsAccount = new Account(Account.SAVINGS);
     	
-        Customer oscar = new Customer("Oscar")
-                .openAccount(checkingAccount);
+        Customer oscar = new Customer("Oscar");
+        oscar.openAccount(checkingAccount);
         oscar.openAccount(savingsAccount);
         
         checkingAccount.deposit(400.00);

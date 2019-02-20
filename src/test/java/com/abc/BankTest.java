@@ -58,7 +58,8 @@ public class BankTest {
         Bank bank = new Bank();
         
         Account checkingAccount = new Account(Account.CHECKING);
-        Customer bill = new Customer("Bill").openAccount(checkingAccount);
+        Customer bill = new Customer("Bill");
+        bill.openAccount(checkingAccount);
         bank.addCustomer(bill);
 
         checkingAccount.deposit(100.0);
@@ -70,22 +71,24 @@ public class BankTest {
     public void savingsAccount() {
         Bank bank = new Bank();
         
-        Account checkingAccount = new Account(Account.SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+        Account savingsAccount = new Account(Account.SAVINGS);
+        Customer bill = new Customer("Bill");
+        bill.openAccount(savingsAccount);
+        bank.addCustomer(bill);
 
-        checkingAccount.deposit(1500.0);
+        savingsAccount.deposit(1500.0);
 
         assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
         
-        checkingAccount.withdraw(700.0);
+        savingsAccount.withdraw(700.0);
         
         assertEquals(0.8, bank.totalInterestPaid(), DOUBLE_DELTA);
         
-        checkingAccount.deposit(200.0);
+        savingsAccount.deposit(200.0);
         
         assertEquals(1.0, bank.totalInterestPaid(), DOUBLE_DELTA);
         
-        checkingAccount.deposit(1.0);
+        savingsAccount.deposit(1.0);
         
         assertEquals(1.002, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
@@ -94,14 +97,16 @@ public class BankTest {
     public void maxiSavingsAccount() {
         Bank bank = new Bank();
         
-        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+        Account savingsAccount = new Account(Account.MAXI_SAVINGS);
+        Customer bill = new Customer("Bill");
+        bill.openAccount(savingsAccount);
+        bank.addCustomer(bill);
 
-        checkingAccount.deposit(3000.0);
+        savingsAccount.deposit(3000.0);
 
         assertEquals(150.0, bank.totalInterestPaid(), DOUBLE_DELTA);
         
-        checkingAccount.withdraw(100.0);
+        savingsAccount.withdraw(100.0);
         
         assertEquals(2.9, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
