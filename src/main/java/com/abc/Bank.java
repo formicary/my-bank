@@ -27,20 +27,10 @@ public class Bank {
         return number + " " + (number == 1 ? word : word + "s");
     }
 
-    public double totalInterestPaid() {
+    public double totalInterestPaid(double turnover) {
         double total = 0;
         for(Customer c: customers)
-            total += c.totalInterestEarned();
+            total += c.totalInterestEarned(turnover);
         return total;
-    }
-
-    public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
-        }
     }
 }
