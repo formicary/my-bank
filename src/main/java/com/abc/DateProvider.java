@@ -12,6 +12,9 @@ public class DateProvider {
         return instance;
     }
 
+    // No point in instantiating a DateProvider obj - replacing default ctor with a custom private one
+    private DateProvider(){}
+
     public Date now() {
         return Calendar.getInstance().getTime();
     }
