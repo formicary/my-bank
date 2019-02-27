@@ -11,7 +11,7 @@ public class BankTest {
     public void testCustomerSummary() {
         Bank bank = new Bank();
         Customer john = new Customer("John");
-        john.openAccount(new Account(Account.CHECKING));
+        john.openAccount(new CheckingAccount());
         bank.addCustomer(john);
 
         assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
@@ -21,9 +21,9 @@ public class BankTest {
     public void testCustomerSummaryMultipleAccounts() {
         Bank bank = new Bank();
         Customer john = new Customer("John");
-        john.openAccount(new Account(Account.CHECKING));
-        john.openAccount(new Account(Account.SAVINGS));
-        john.openAccount(new Account(Account.MAXI_SAVINGS));
+        john.openAccount(new CheckingAccount());
+        john.openAccount(new SavingsAccount());
+        john.openAccount(new MaxiSavingsAccount());
         bank.addCustomer(john);
 
         assertEquals("Customer Summary\n - John (3 accounts)", bank.customerSummary());
@@ -33,11 +33,11 @@ public class BankTest {
     public void testCustomerSummaryMultipleCustomers() {
         Bank bank = new Bank();
         Customer john = new Customer("John");
-        john.openAccount(new Account(Account.CHECKING));
+        john.openAccount(new CheckingAccount());
         bank.addCustomer(john);
         Customer jane = new Customer("Jane");
-        jane.openAccount(new Account(Account.SAVINGS));
-        jane.openAccount(new Account(Account.MAXI_SAVINGS));
+        jane.openAccount(new SavingsAccount());
+        jane.openAccount(new MaxiSavingsAccount());
         bank.addCustomer(jane);
 
         assertEquals("Customer Summary\n - John (1 account)\n - Jane (2 accounts)", bank.customerSummary());

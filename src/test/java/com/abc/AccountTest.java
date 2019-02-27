@@ -9,7 +9,7 @@ public class AccountTest {
 
     @Test
     public void testCheckingAccount() {
-        Account account = new Account(Account.CHECKING);
+        Account account = new CheckingAccount();
 
         account.deposit(100.0);
         assertEquals(0.1, account.interestEarned(), DOUBLE_DELTA);
@@ -20,7 +20,7 @@ public class AccountTest {
 
     @Test
     public void testSavingsAccount() {
-        Account account = new Account(Account.SAVINGS);
+        Account account = new SavingsAccount();
 
         account.deposit(500.0);
         assertEquals(0.5, account.interestEarned(), DOUBLE_DELTA);
@@ -34,7 +34,7 @@ public class AccountTest {
 
     @Test
     public void testMaxiSavingsAccount() {
-        Account account = new Account(Account.MAXI_SAVINGS);
+        Account account = new MaxiSavingsAccount();
 
         account.deposit(500.0);
         assertEquals(10.0, account.interestEarned(), DOUBLE_DELTA);
