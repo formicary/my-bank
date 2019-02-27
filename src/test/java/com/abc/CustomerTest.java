@@ -17,7 +17,50 @@ public class CustomerTest {
     }
 
     @Test
-    public void testGetStatement() {
+    public void testGetName( ){
+        Customer annie = new Customer("Annie");
+
+        assertEquals("Annie", annie.getName());
+    }
+
+    @Test
+    public void testOneAccount() {
+        Customer oscar = new Customer("Oscar")
+            .openAccount(new DummyAccount());
+
+        assertEquals(1, oscar.numberOfAccounts());
+    }
+
+    @Test
+    public void testThreeAccounts() {
+        Customer oscar = new Customer("Oscar")
+            .openAccount(new DummyAccount())
+            .openAccount(new DummyAccount())
+            .openAccount(new DummyAccount());
+
+        assertEquals(3, oscar.numberOfAccounts());
+    }
+
+    @Test
+    public void testInterest() {
+        Customer james = new Customer("James")
+            .openAccount(new DummyAccount());
+
+        assertEquals(0.01, james.totalInterestEarned(), DOUBLE_DELTA);
+    }
+
+    @Test
+    public void testInterestMultipleAccounts() {
+        Customer james = new Customer("James")
+            .openAccount(new DummyAccount())
+            .openAccount(new DummyAccount())
+            .openAccount(new DummyAccount());
+
+        assertEquals(0.03, james.totalInterestEarned(), DOUBLE_DELTA);
+    }
+
+    @Test
+    public void testStatement() {
         Customer henry = new Customer("Henry")
             .openAccount(new DummyAccount())
             .openAccount(new DummyAccount());
@@ -32,28 +75,20 @@ public class CustomerTest {
     }
 
     @Test
-    public void testInterestEarned() {
-        Customer james = new Customer("James")
-            .openAccount(new DummyAccount())
+    public void testSummary() {
+        Customer john = new Customer("John")
             .openAccount(new DummyAccount());
 
-        assertEquals(0.02, james.totalInterestEarned(), DOUBLE_DELTA);
+        assertEquals("John (1 account)", john.getSummary());
     }
 
     @Test
-    public void testOneAccount(){
-        Customer oscar = new Customer("Oscar")
-            .openAccount(new DummyAccount());
-
-        assertEquals(1, oscar.getNumberOfAccounts());
-    }
-
-    @Test
-    public void testTwoAccount(){
-        Customer oscar = new Customer("Oscar")
+    public void testSummaryMultipleAccounts() {
+        Customer jane = new Customer("Jane")
+            .openAccount(new DummyAccount())
             .openAccount(new DummyAccount())
             .openAccount(new DummyAccount());
 
-        assertEquals(2, oscar.getNumberOfAccounts());
+        assertEquals("Jane (3 accounts)", jane.getSummary());
     }
 }

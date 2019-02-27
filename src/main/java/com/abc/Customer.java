@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Customer {
+
     private String name;
     private List<Account> accounts;
 
@@ -21,7 +22,7 @@ public class Customer {
         return this;
     }
 
-    public int getNumberOfAccounts() {
+    public int numberOfAccounts() {
         return accounts.size();
     }
 
@@ -45,4 +46,13 @@ public class Customer {
         statement += "Total In All Accounts " + Transaction.toDollars(total);
         return statement;
     }
+
+    private static String formatPlural(int number, String word) {
+        return number + " " + (number == 1 ? word : word + "s");
+    }
+
+    public String getSummary() {
+        return this.name + " (" + formatPlural(this.numberOfAccounts(), "account") + ")";
+    }
+
 }
