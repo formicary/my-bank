@@ -28,10 +28,22 @@ public abstract class Account {
     }
 
     public double getBalance() {
-        double amount = 0.0;
-        for (Transaction t: transactions)
-            amount += t.amount;
-        return amount;
+        double balance = 0.0;
+        for (Transaction tx: transactions) {
+            balance += tx.amount;
+        }
+        return balance;
+    }
+
+    public String getStatement() {
+        String statement = this.accountType() + "\n";
+
+        for (Transaction tx : this.transactions) {
+            statement += "  " + tx + "\n";
+        }
+
+        statement += "Total " + Transaction.toDollars(this.getBalance()) + "\n";
+        return statement;
     }
 
     public abstract double interestEarned();
