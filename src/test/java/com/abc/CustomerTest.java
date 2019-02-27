@@ -9,11 +9,13 @@ public class CustomerTest {
     private static final double DOUBLE_DELTA = 1e-15;
 
     private class DummyAccount extends Account {
+        private double balance = 10.0;
+        public void deposit(double amount) { this.balance += amount; }
+        public void withdraw(double amount) { this.balance -= amount; }
+        public double getBalance() { return this.balance; }
+        public String getStatement() { return "Dummy Account Statement\n"; }
         public double interestEarned() { return 0.01; }
         public String accountType() { return "Dummy Account"; }
-
-        public double getBalance() { return 10.0; }
-        public String getStatement() { return "Dummy Account Statement\n"; }
     }
 
     @Test
@@ -39,6 +41,29 @@ public class CustomerTest {
             .openAccount(new DummyAccount());
 
         assertEquals(3, oscar.numberOfAccounts());
+    }
+
+    @Test
+    public void testGetAccount() {
+        Account account = new DummyAccount();
+        Customer edward = new Customer("Edward")
+            .openAccount(account);
+
+        assertEquals(account, edward.getAccount(0));
+    }
+
+    @Test
+    public void testTransfer() {
+        Account account0 = new DummyAccount();
+        Account account1 = new DummyAccount();
+        Customer felicia = new Customer("Felicia")
+            .openAccount(account0)
+            .openAccount(account1);
+
+        felicia.transfer(0, 1, 10.0);
+
+        assertEquals(0.0, account0.getBalance(), DOUBLE_DELTA);
+        assertEquals(20.0, account1.getBalance(), DOUBLE_DELTA);
     }
 
     @Test
