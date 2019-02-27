@@ -26,6 +26,19 @@ public class Customer {
         return accounts.size();
     }
 
+    public Account getAccount(int accountId) {
+        try {
+            return this.accounts.get(accountId);
+        } catch (IndexOutOfBoundsException e) {
+            throw new IllegalArgumentException("account " + accountId + " does not exist");
+        }
+    }
+
+    public void transfer(int fromAccountId, int toAccountId, double amount) {
+        this.getAccount(fromAccountId).withdraw(amount);
+        this.getAccount(toAccountId).deposit(amount);
+    }
+
     public double totalInterestEarned() {
         double total = 0;
         for (Account acc : accounts) {
