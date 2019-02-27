@@ -9,29 +9,47 @@ public class AccountTest {
 
     @Test
     public void testCheckingAccount() {
-        Account checkingAccount = new Account(Account.CHECKING);
+        Account account = new Account(Account.CHECKING);
 
-        checkingAccount.deposit(100.0);
+        account.deposit(100.0);
+        assertEquals(0.1, account.interestEarned(), DOUBLE_DELTA);
 
-        assertEquals(0.1, checkingAccount.interestEarned(), DOUBLE_DELTA);
+        account.deposit(100.0);
+        assertEquals(0.2, account.interestEarned(), DOUBLE_DELTA);
     }
 
     @Test
     public void testSavingsAccount() {
-        Account savingsAccount = new Account(Account.SAVINGS);
+        Account account = new Account(Account.SAVINGS);
 
-        savingsAccount.deposit(1500.0);
+        account.deposit(500.0);
+        assertEquals(0.5, account.interestEarned(), DOUBLE_DELTA);
 
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        account.deposit(500.0);
+        assertEquals(1.0, account.interestEarned(), DOUBLE_DELTA);
+
+        account.deposit(500.0);
+        assertEquals(2.0, account.interestEarned(), DOUBLE_DELTA);
     }
 
     @Test
     public void testMaxiSavingsAccount() {
-        Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
+        Account account = new Account(Account.MAXI_SAVINGS);
 
-        maxiSavingsAccount.deposit(3000.0);
+        account.deposit(500.0);
+        assertEquals(10.0, account.interestEarned(), DOUBLE_DELTA);
 
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        account.deposit(500.0);
+        assertEquals(20.0, account.interestEarned(), DOUBLE_DELTA);
+
+        account.deposit(500.0);
+        assertEquals(45.0, account.interestEarned(), DOUBLE_DELTA);
+
+        account.deposit(500.0);
+        assertEquals(70.0, account.interestEarned(), DOUBLE_DELTA);
+
+        account.deposit(500.0);
+        assertEquals(120.0, account.interestEarned(), DOUBLE_DELTA);
     }
 
 }
