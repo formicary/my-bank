@@ -93,13 +93,12 @@ public class AccountTest {
         Account account = new MaxiSavingsAccount();
 
         account.deposit(1000.0, LocalDate.now().minusDays(30));
-        assertEquals(1.647, account.interestEarned(), PENNY_DELTA);
+        assertEquals(4.118, account.interestEarned(), PENNY_DELTA);
 
-        account.deposit(1000.0, LocalDate.now().minusDays(20));
-        assertEquals(4.397, account.interestEarned(), PENNY_DELTA);
+        System.out.println("----------");
 
-        account.deposit(1000.0, LocalDate.now().minusDays(10));
-        assertEquals(7.140, account.interestEarned(), PENNY_DELTA);
+        account.withdraw(100.0, LocalDate.now().minusDays(20));
+        assertEquals(2.631, account.interestEarned(), PENNY_DELTA);
     }
 
 }
