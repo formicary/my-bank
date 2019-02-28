@@ -53,7 +53,7 @@ public class Customer {
         double total = 0.0;
         for (Account acc : accounts) {
             statement += acc.getStatement() + "\n";
-            total += acc.getBalance();
+            total += acc.currentBalance();
         }
 
         statement += "Total In All Accounts " + Transaction.toDollars(total);
