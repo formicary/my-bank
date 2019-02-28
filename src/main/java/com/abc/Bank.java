@@ -10,8 +10,21 @@ public class Bank {
         customers = new ArrayList<Customer>();
     }
 
+
     public void addCustomer(Customer customer) {
-        customers.add(customer);
+        if(customers.contains(customer)){
+            throw new IllegalArgumentException("Customer is already a member of the bank");
+        }else{
+            customers.add(customer);
+        }
+    }
+
+    public void removeCustomer(Customer customer){
+        if(customers.contains(customer)){
+            customers.remove(customer);
+        }else{
+            throw new IllegalArgumentException("Customer does not exist");
+        }
     }
 
     public String customerSummary() {
@@ -35,12 +48,10 @@ public class Bank {
     }
 
     public String getFirstCustomer() {
-        try {
-            customers = null;
+        if(customers.size() > 0){
             return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
+        }else{
+            return "No Customers have joined the bank yet.";
         }
     }
 }

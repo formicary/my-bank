@@ -10,7 +10,11 @@ public class Transaction {
 
     public Transaction(double amount) {
         this.amount = amount;
-        this.transactionDate = DateProvider.getInstance().now();
+        transactionDate = DateProvider.getInstance().now();
     }
 
+    public int transactionAge(){
+        long milliseconds = DateProvider.getInstance().now().getTime() - transactionDate.getTime();
+        return (int) (milliseconds / (1000*60*60*24));
+    }
 }
