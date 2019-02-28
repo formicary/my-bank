@@ -11,16 +11,15 @@ public class Customer {
 
     public Customer(String name) {
         this.name = name;
-        this.accounts = new ArrayList<Account>();
+        accounts = new ArrayList<Account>();
     }
 
     public String getName() {
         return name;
     }
 
-    public Customer openAccount(Account account) {
+    public void openAccount(Account account) {
         accounts.add(account);
-        return this;
     }
 
     public int getNumberOfAccounts() {
@@ -48,19 +47,7 @@ public class Customer {
 
     private String statementForAccount(Account a) {
         String s = "";
-
-       //Translate to pretty account type
-        switch(a.getAccountType()){
-            case Account.CHECKING:
-                s += "Checking Account\n";
-                break;
-            case Account.SAVINGS:
-                s += "Savings Account\n";
-                break;
-            case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
-                break;
-        }
+        s += a.getAccountType();
 
         //Now total up all the transactions
         double total = 0.0;
@@ -74,5 +61,19 @@ public class Customer {
 
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
+    }
+
+    public void transfer(Account from, Account to, double amount){
+        if(accounts.contains(from) && accounts.contains(to)){
+            if(amount > 0 && amount <= from.sumTransactions()){
+                from.withdraw(amount);
+                to.deposit(amount);
+            }else{
+                throw new IllegalArgumentException("Illegal amount. Amount should be greater than zero and less than or equal to " +
+                        "balance in the account money is transferring from");
+            }
+        }else{
+            throw new IllegalArgumentException("One or more accounts are not owned by this customer. Cannot perform transfer");
+        }
     }
 }
