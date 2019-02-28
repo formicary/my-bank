@@ -1,18 +1,15 @@
 package com.abc;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class CheckingAccount extends Account {
 
-    public double interestEarned() {
-        double balance = getBalance();
-
-        return balance * 0.001;
-    }
+    public static final double INTEREST_RATE = 0.001;
 
     public String accountType() {
         return "Checking Account";
+    }
+
+    public double dailyInterest(double balance) {
+        return balance * INTEREST_RATE / 365;
     }
 
 }
