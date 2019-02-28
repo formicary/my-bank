@@ -1,5 +1,6 @@
 package com.abc;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +12,7 @@ public abstract class Account {
         this.transactions = new ArrayList<Transaction>();
     }
 
-    public void deposit(double amount) {
+    public void deposit(double amount, LocalDate date) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
@@ -19,12 +20,20 @@ public abstract class Account {
         }
     }
 
-    public void withdraw(double amount) {
+    public void deposit(double amount) {
+        this.deposit(amount, LocalDate.now());
+    }
+
+    public void withdraw(double amount, LocalDate date) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
             transactions.add(new Transaction(-amount));
         }
+    }
+
+    public void withdraw(double amount) {
+        this.withdraw(amount, LocalDate.now());
     }
 
     public double getBalance() {
