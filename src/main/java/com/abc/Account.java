@@ -58,9 +58,13 @@ public abstract class Account {
         for (LocalDate date = tx.date; !date.isAfter(LocalDate.now()); date = date.plusDays(1)) {
             balance += dailyInterest(balance);
 
-            if (date.isEqual(tx.date)) {
+            while (date.isEqual(tx.date)) {
                 balance += tx.amount;
-                if (iter.hasNext()) tx = iter.next();
+                if (iter.hasNext()) {
+                    tx = iter.next();
+                } else {
+                    break;
+                }
             }
         }
 

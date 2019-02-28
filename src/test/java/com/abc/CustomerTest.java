@@ -12,10 +12,11 @@ public class CustomerTest {
         private double balance = 10.0;
         public void deposit(double amount) { this.balance += amount; }
         public void withdraw(double amount) { this.balance -= amount; }
-        public double getBalance() { return this.balance; }
+        public double currentBalance() { return this.balance; }
         public String getStatement() { return "Dummy Account Statement\n"; }
         public double interestEarned() { return 0.01; }
         public String accountType() { return "Dummy Account"; }
+        public double dailyInterest(double balance) { return 0.0; }
     }
 
     @Test
@@ -62,8 +63,8 @@ public class CustomerTest {
 
         felicia.transfer(0, 1, 10.0);
 
-        assertEquals(0.0, account0.getBalance(), DOUBLE_DELTA);
-        assertEquals(20.0, account1.getBalance(), DOUBLE_DELTA);
+        assertEquals(0.0, account0.currentBalance(), DOUBLE_DELTA);
+        assertEquals(20.0, account1.currentBalance(), DOUBLE_DELTA);
     }
 
     @Test
