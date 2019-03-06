@@ -1,9 +1,9 @@
 package com.abc;
 
+import static java.lang.Math.abs;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.lang.Math.abs;
 
 public class Customer {
     private String name;
@@ -17,11 +17,24 @@ public class Customer {
     public String getName() {
         return name;
     }
+    
+    public List<Account> getAccounts() {
+		return accounts;
+	}
 
-    public Customer openAccount(Account account) {
+	public Customer openAccount(Account account) {
         accounts.add(account);
         return this;
     }
+	
+	public void transferFunds(Account accountTransferFrom, Account accountTransferTo, double amount) {
+		if(accountTransferFrom.equals(accountTransferTo)) {
+			throw new IllegalArgumentException("Cannot transfer funds between the same account"); 
+		}
+		
+		accountTransferFrom.withdraw(amount);
+		accountTransferTo.deposit(amount);
+	}
 
     public int getNumberOfAccounts() {
         return accounts.size();

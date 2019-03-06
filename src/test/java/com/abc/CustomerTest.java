@@ -1,14 +1,59 @@
 package com.abc;
 
-import org.junit.Ignore;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-
 public class CustomerTest {
+	
+	@Test
+	public void testOpenAccount() {
+		Account testAccount = new Account(Account.SAVINGS);
+		Customer oscar = new Customer("Oscar")
+        		.openAccount(testAccount);
+		
+		assertTrue("Oscars account list contains the testAccount", oscar.getAccounts().contains(testAccount));
+	}
+	
+	@Test
+	public void testTransferFundsLeaveAccount() {
+		int testDepositAmount = 100;
+		int testTransferAmount = 20;
+		
+		Account testAccountTransferFrom = new Account(Account.SAVINGS);
+		Account testAccountTransferTo = new Account(Account.CHECKING);
+		
+		Customer oscar = new Customer("Oscar")
+        		.openAccount(testAccountTransferFrom).openAccount(testAccountTransferTo);
+		
+		testAccountTransferFrom.deposit(testDepositAmount);
+		
+		oscar.transferFunds(testAccountTransferFrom, testAccountTransferTo, testTransferAmount);
+		
+		assertTrue(testAccountTransferFrom.sumTransactions() == testDepositAmount - testTransferAmount);
+	}
+	
+	@Test
+	public void testTransferFundsReachAccount() {
+		int testDepositAmount = 100;
+		int testTransferAmount = 20;
+		
+		Account testAccountTransferFrom = new Account(Account.SAVINGS);
+		Account testAccountTransferTo = new Account(Account.CHECKING);
+		
+		Customer oscar = new Customer("Oscar")
+				.openAccount(testAccountTransferFrom).openAccount(testAccountTransferTo);
+		
+		testAccountTransferFrom.deposit(testDepositAmount);
+		
+		oscar.transferFunds(testAccountTransferFrom, testAccountTransferTo, testTransferAmount);
+		
+		assertTrue(testAccountTransferTo.sumTransactions() == testTransferAmount);
+	}
 
     @Test //Test customer statement generation
-    public void testApp(){
+    public void testGetStatement(){
 
         Account checkingAccount = new Account(Account.CHECKING);
         Account savingsAccount = new Account(Account.SAVINGS);
@@ -19,6 +64,7 @@ public class CustomerTest {
         savingsAccount.deposit(4000.0);
         savingsAccount.withdraw(200.0);
 
+        // This assert tests whether the two methods, statementForAccount and toDollars correctly function
         assertEquals("Statement for Henry\n" +
                 "\n" +
                 "Checking Account\n" +
@@ -34,24 +80,31 @@ public class CustomerTest {
     }
 
     @Test
-    public void testOneAccount(){
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
+    public void testGetNumberOfAccounts_OneAccount(){
+        Customer oscar = new Customer("Oscar")
+        		.openAccount(new Account(Account.SAVINGS));
+        
         assertEquals(1, oscar.getNumberOfAccounts());
     }
 
     @Test
-    public void testTwoAccount(){
+    public void testGetNumberOfAccounts_TwoAccounts(){
         Customer oscar = new Customer("Oscar")
                 .openAccount(new Account(Account.SAVINGS));
         oscar.openAccount(new Account(Account.CHECKING));
+        
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
-    @Ignore
-    public void testThreeAcounts() {
+    @Test
+    public void testGetNumberOfAccounts_ThreeAcounts() {
         Customer oscar = new Customer("Oscar")
                 .openAccount(new Account(Account.SAVINGS));
         oscar.openAccount(new Account(Account.CHECKING));
+        oscar.openAccount(new Account(Account.MAXI_SAVINGS));;
+        
         assertEquals(3, oscar.getNumberOfAccounts());
     }
+    
+
 }

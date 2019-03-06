@@ -9,7 +9,7 @@ public class BankTest {
     private static final double DOUBLE_DELTA = 1e-15;
     
     @Test
-    public void addCustomer() {
+    public void testAddCustomer() {
         Bank bank = new Bank();
         Customer john = new Customer("John");
         john.openAccount(new Account(Account.CHECKING));
@@ -19,7 +19,7 @@ public class BankTest {
     }
 
     @Test
-    public void customerSummary() {
+    public void testCustomerSummary() {
         Bank bank = new Bank();
         Customer john = new Customer("John");
         john.openAccount(new Account(Account.CHECKING));
@@ -64,7 +64,7 @@ public class BankTest {
     }
     
     @Test
-    public void getCustomerFirst() {
+    public void testGetCustomerFirst() {
     	String customerName = "John";
     	
     	Bank bank = new Bank();
