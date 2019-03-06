@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.google.common.annotations.VisibleForTesting;
+
+/**
+ * The Class Account.
+ */
 public class Account {
 
     public static final int CHECKING = 0;
@@ -11,13 +16,24 @@ public class Account {
     public static final int MAXI_SAVINGS = 2;
 
     private final int accountType;
+    
     public List<Transaction> transactions;
 
+    /**
+     * Instantiates a new account.
+     *
+     * @param accountType the account type
+     */
     public Account(int accountType) {
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
     }
 
+    /**
+     * Deposit specified amount into this account.
+     *
+     * @param amount the amount to deposit
+     */
     public void deposit(double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
@@ -26,6 +42,11 @@ public class Account {
         }
     }
 
+	/**
+	 * Withdraw specified amount from this account.
+	 *
+	 * @param amount the amount to withdraw
+	 */
 	public void withdraw(double amount) {
 	    if (amount <= 0) {
 	        throw new IllegalArgumentException("amount must be greater than zero");
@@ -38,29 +59,39 @@ public class Account {
 	    }
 	}
 
+    /**
+     * Interest earned based on account type, account balance and date since last withdrawal.
+     *
+     * @return the interest earned on account balance
+     */
     public double interestEarned() {
         double amount = sumTransactions();
         switch(accountType){
         	case CHECKING:
-        		return amount * calcualteAccruedIntrestRate(0.001);
+        		return amount * calculateAccruedIntrestRate(0.001);
         		
             case SAVINGS:
                 if (amount <= 1000)
-                    return amount * calcualteAccruedIntrestRate(0.001);
+                    return amount * calculateAccruedIntrestRate(0.001);
                 else
-                    return 1 + (amount-1000) * calcualteAccruedIntrestRate(0.002);
+                    return 1 + (amount-1000) * calculateAccruedIntrestRate(0.002);
                 
             case MAXI_SAVINGS:
                 if (checkNoWithdrawlsWithinTenDays())
-                	return amount * calcualteAccruedIntrestRate(0.005);
+                	return amount * calculateAccruedIntrestRate(0.005);
                 else
-                	return amount * calcualteAccruedIntrestRate(0.001);
+                	return amount * calculateAccruedIntrestRate(0.001);
                 
             default:
             	throw new IllegalArgumentException("Error, invalid account type");
         }
     }
 
+    /**
+     * Sums the accounts transactions.
+     *
+     * @return the double
+     */
     public double sumTransactions() {
        return checkIfTransactionsExist(true);
     }
@@ -72,18 +103,29 @@ public class Account {
         return amount;
     }
 
+    /**
+     * Gets the account type.
+     *
+     * @return the account type
+     */
     public int getAccountType() {
         return accountType;
     }
     
-    private boolean checkNoWithdrawlsWithinTenDays() {
+    /**
+     * Check no withdrawals from account within ten days.
+     *
+     * @return true, if successful
+     */
+    @VisibleForTesting()
+    protected boolean checkNoWithdrawlsWithinTenDays() {
     	Long tenDaysInMs = (long) 8.64e+8;
     	
     	if(transactions.isEmpty())
     		return true;
     	
     	Date dateNow = DateProvider.getInstance().now(); 
-    	Date lastWithdrawlDate = transactions.get(transactions.size()).getTransactionDate();
+    	Date lastWithdrawlDate = transactions.get(transactions.size()-1).getTransactionDate();
     	
     	Long timeBetweenLastWithdrawl = Math.abs(dateNow.getTime() - lastWithdrawlDate.getTime());
     	
@@ -93,10 +135,18 @@ public class Account {
     		return false;
     }
 
-    private double calcualteAccruedIntrestRate(double annualIntrestRate) {
+    /**
+     * Calculate the accrued interest rate over a year long period.
+     * The interest rate is calculated from the accounts first transaction.
+     *
+     * @param annualInterestRate the account type annual interest rate
+     * @return the accrued interest rate 
+     */
+    @VisibleForTesting()
+    protected double calculateAccruedIntrestRate(double annualInterestRate) {
     	Long DayInMs = (long) 8.64e+7;
     	
-    	double dailyIntrestRate = annualIntrestRate / 365;
+    	double dailyIntrestRate = annualInterestRate / 365;
     	
     	Date dateNow = DateProvider.getInstance().now(); 
     	Date firstTransactionDate = transactions.get(0).getTransactionDate();

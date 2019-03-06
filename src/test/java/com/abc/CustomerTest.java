@@ -6,6 +6,8 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 public class CustomerTest {
+    private static final double DOUBLE_DELTA = 1e-15;
+
 	
 	@Test
 	public void testOpenAccount() {
@@ -13,7 +15,8 @@ public class CustomerTest {
 		Customer oscar = new Customer("Oscar")
         		.openAccount(testAccount);
 		
-		assertTrue("Oscars account list contains the testAccount", oscar.getAccounts().contains(testAccount));
+		assertTrue("Oscars account list contains the testAccount"
+				, oscar.getAccounts().contains(testAccount));
 	}
 	
 	@Test
@@ -31,7 +34,8 @@ public class CustomerTest {
 		
 		oscar.transferFunds(testAccountTransferFrom, testAccountTransferTo, testTransferAmount);
 		
-		assertTrue(testAccountTransferFrom.sumTransactions() == testDepositAmount - testTransferAmount);
+		assertEquals("Transfers 20 from savings to checking, savings account must equal 100 - 20"
+				,testAccountTransferFrom.sumTransactions(), testDepositAmount - testTransferAmount, DOUBLE_DELTA);
 	}
 	
 	@Test
@@ -49,7 +53,8 @@ public class CustomerTest {
 		
 		oscar.transferFunds(testAccountTransferFrom, testAccountTransferTo, testTransferAmount);
 		
-		assertTrue(testAccountTransferTo.sumTransactions() == testTransferAmount);
+		assertEquals("Transfers 20 from savings to checking, checking account 20"
+				,testAccountTransferTo.sumTransactions(), testTransferAmount, DOUBLE_DELTA);
 	}
 
     @Test //Test customer statement generation
@@ -64,8 +69,8 @@ public class CustomerTest {
         savingsAccount.deposit(4000.0);
         savingsAccount.withdraw(200.0);
 
-        // This assert tests whether the two methods, statementForAccount and toDollars correctly function
-        assertEquals("Statement for Henry\n" +
+        assertEquals("Statement must match the following format for above transactions"
+        		,"Statement for Henry\n" +
                 "\n" +
                 "Checking Account\n" +
                 "  deposit $100.00\n" +
@@ -84,16 +89,8 @@ public class CustomerTest {
         Customer oscar = new Customer("Oscar")
         		.openAccount(new Account(Account.SAVINGS));
         
-        assertEquals(1, oscar.getNumberOfAccounts());
-    }
-
-    @Test
-    public void testGetNumberOfAccounts_TwoAccounts(){
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
-        
-        assertEquals(2, oscar.getNumberOfAccounts());
+        assertEquals("One account has been open so number of accounts must be 1"
+        		,1, oscar.getNumberOfAccounts());
     }
 
     @Test
@@ -103,7 +100,8 @@ public class CustomerTest {
         oscar.openAccount(new Account(Account.CHECKING));
         oscar.openAccount(new Account(Account.MAXI_SAVINGS));;
         
-        assertEquals(3, oscar.getNumberOfAccounts());
+        assertEquals("Three accounts have been opened so number of accounts must equal 3"
+        		,3, oscar.getNumberOfAccounts());
     }
     
 

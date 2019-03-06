@@ -42,8 +42,8 @@ public class Customer {
 
     public double totalInterestEarned() {
         double total = 0;
-        for (Account a : accounts)
-            total += a.interestEarned();
+        for (Account account : accounts)
+            total += account.interestEarned();
         return total;
     }
 
@@ -51,19 +51,19 @@ public class Customer {
         String statement = null;
         statement = "Statement for " + name + "\n";
         double total = 0.0;
-        for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+        for (Account account : accounts) {
+            statement += "\n" + statementForAccount(account) + "\n";
+            total += account.sumTransactions();
         }
         statement += "\nTotal In All Accounts " + toDollars(total);
         return statement;
     }
 
-    private String statementForAccount(Account a) {
+    private String statementForAccount(Account account) {
         String s = "";
 
        //Translate to pretty account type
-        switch(a.getAccountType()){
+        switch(account.getAccountType()){
             case Account.CHECKING:
                 s += "Checking Account\n";
                 break;
@@ -77,9 +77,9 @@ public class Customer {
 
         //Now total up all the transactions
         double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
+        for (Transaction transaction : account.transactions) {
+            s += "  " + (transaction.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(transaction.amount) + "\n";
+            total += transaction.amount;
         }
         s += "Total " + toDollars(total);
         return s;
