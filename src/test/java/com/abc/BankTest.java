@@ -3,20 +3,28 @@ package com.abc;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 public class BankTest {
-    private static final double DOUBLE_DELTA = 1e-15;
-    
+	
+	private Bank bank;
+	private Customer john;
+	private String customerName = "John";
+	
 	@Rule
 	public final ExpectedException exception = ExpectedException.none();
+	
+	@Before
+	public void init() {
+		bank = new Bank();
+        john = new Customer(customerName);
+	}
     
     @Test
     public void AddCustomer() {
-        Bank bank = new Bank();
-        Customer john = new Customer("John");
         john.openAccount(new Account(Account.CHECKING));
         bank.addCustomer(john);
         
@@ -25,81 +33,75 @@ public class BankTest {
 
     @Test
     public void CustomerSummary() {
-        Bank bank = new Bank();
-        Customer john = new Customer("John");
         john.openAccount(new Account(Account.CHECKING));
         bank.addCustomer(john);
 
-        assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
+        assertEquals("Customer summary must match format with customerName"
+        		,"Customer Summary\n - " + customerName + " (1 account)", bank.customerSummary());
     }
     
     @Test
-    public void CustomerSummary_TowAccounts() {
-    	Bank bank = new Bank();
-    	Customer john = new Customer("John");
+    public void CustomerSummary_TwoAccounts() {
+
     	john.openAccount(new Account(Account.CHECKING));
     	john.openAccount(new Account(Account.SAVINGS));
     	bank.addCustomer(john);
     	
-    	assertEquals("Customer Summary\n - John (2 accounts)", bank.customerSummary());
+    	assertEquals("Customer summary must match following string with name and the word account formatted to accounts"
+    			,"Customer Summary\n - " + customerName + " (2 accounts)", bank.customerSummary());
     }
     
 
     @Test
     public void totalInterestPaid_checkingAccount() {
-        Bank bank = new Bank();
         Account checkingAccount = new Account(Account.CHECKING);
-        Customer bill = new Customer("Bill").openAccount(checkingAccount);
-        bank.addCustomer(bill);
+        john.openAccount(checkingAccount);
+        bank.addCustomer(john);
 
         checkingAccount.deposit(100.0);
 
         assertEquals("Zero days since first transaction so no interest paid"
-        		,0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        		,0, bank.totalInterestPaid(), ConstantsTest.DOUBLE_DELTA);
     }
 
     @Test
     public void totalInterestPaid_savingsAccount_LessThan1000() {
-        Bank bank = new Bank();
         Account checkingAccount = new Account(Account.SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+        john.openAccount(checkingAccount);
+        bank.addCustomer(john);
 
         checkingAccount.deposit(150.0);
 
         assertEquals("Zero days since first transaction so no interest paid\""
-        		,0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        		,0, bank.totalInterestPaid(), ConstantsTest.DOUBLE_DELTA);
     }
 
     @Test
     public void totalInterestPaid_savingsAccount_MoreThan1000() {
-        Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+        Account savingsAccount = new Account(Account.SAVINGS);
+        john.openAccount(savingsAccount);
+        bank.addCustomer(john);
 
-        checkingAccount.deposit(1500.0);
+        savingsAccount.deposit(1500.0);
 
         assertEquals("balance over 1000 so 1 total interest is paid"
-        		,1, bank.totalInterestPaid(), DOUBLE_DELTA);
+        		,1, bank.totalInterestPaid(), ConstantsTest.DOUBLE_DELTA);
     }
 
     @Test
     public void totalInterestPaid_MaxiSavingsAccount() {
-        Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+        Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
+        john.openAccount(maxiSavingsAccount);
+        bank.addCustomer(john);
 
-        checkingAccount.deposit(3000.0);
+        maxiSavingsAccount.deposit(3000.0);
 
         assertEquals("Zero days since first deposit so no interest paid"
-        		,0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        		,0, bank.totalInterestPaid(), ConstantsTest.DOUBLE_DELTA);
     }
     
     @Test
     public void getCustomerFirst() {
-    	String customerName = "John";
-    	
-    	Bank bank = new Bank();
-        Customer john = new Customer(customerName);
         john.openAccount(new Account(Account.CHECKING));
         bank.addCustomer(john);
         
@@ -108,9 +110,6 @@ public class BankTest {
     
     @Test
     public void GetCustomerFirst_WhenNoCustomers() {
-    	
-    	Bank bank = new Bank();
-    	
     	exception.expect(IndexOutOfBoundsException.class);
     	exception.expectMessage("No customers found belonging to this bank");
     	

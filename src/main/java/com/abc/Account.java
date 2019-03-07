@@ -115,14 +115,14 @@ public class Account {
     /**
      * Check no withdrawals from account within ten days.
      *
-     * @return true, if successful
+     * @return true, if no withdrawals
      */
     @VisibleForTesting()
     protected boolean checkNoWithdrawlsWithinTenDays() {
     	Long tenDaysInMs = (long) 8.64e+8;
     	
     	if(transactions.isEmpty())
-    		return true;
+    		return false;
     	
     	Date dateNow = DateProvider.getInstance().now(); 
     	Date lastWithdrawlDate = transactions.get(transactions.size()-1).getTransactionDate();

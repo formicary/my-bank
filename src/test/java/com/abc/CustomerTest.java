@@ -3,14 +3,17 @@ package com.abc;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class CustomerTest {
-    private static final double DOUBLE_DELTA = 1e-15;
-
+	
+	@Rule
+	public final ExpectedException exception = ExpectedException.none();
 	
 	@Test
-	public void testOpenAccount() {
+	public void openAccount() {
 		Account testAccount = new Account(Account.SAVINGS);
 		Customer oscar = new Customer("Oscar")
         		.openAccount(testAccount);
@@ -20,7 +23,7 @@ public class CustomerTest {
 	}
 	
 	@Test
-	public void testTransferFundsLeaveAccount() {
+	public void transferFunds_FundsLeaveAccount() {
 		int testDepositAmount = 100;
 		int testTransferAmount = 20;
 		
@@ -35,11 +38,11 @@ public class CustomerTest {
 		oscar.transferFunds(testAccountTransferFrom, testAccountTransferTo, testTransferAmount);
 		
 		assertEquals("Transfers 20 from savings to checking, savings account must equal 100 - 20"
-				,testAccountTransferFrom.sumTransactions(), testDepositAmount - testTransferAmount, DOUBLE_DELTA);
+				,testAccountTransferFrom.sumTransactions(), testDepositAmount - testTransferAmount, ConstantsTest.DOUBLE_DELTA);
 	}
 	
 	@Test
-	public void testTransferFundsReachAccount() {
+	public void transferFunds_FundsReachAccount() {
 		int testDepositAmount = 100;
 		int testTransferAmount = 20;
 		
@@ -54,11 +57,29 @@ public class CustomerTest {
 		oscar.transferFunds(testAccountTransferFrom, testAccountTransferTo, testTransferAmount);
 		
 		assertEquals("Transfers 20 from savings to checking, checking account 20"
-				,testAccountTransferTo.sumTransactions(), testTransferAmount, DOUBLE_DELTA);
+				,testAccountTransferTo.sumTransactions(), testTransferAmount, ConstantsTest.DOUBLE_DELTA);
+	}
+	
+	@Test
+	public void transferFunds_TransferBetweenSameAccount() {
+		int testDepositAmount = 100;
+		int testTransferAmount = 20;
+		
+		Account testAccount = new Account(Account.SAVINGS);
+		
+		Customer oscar = new Customer("Oscar")
+				.openAccount(testAccount);
+		
+		testAccount.deposit(testDepositAmount);
+		
+		exception.expect(IllegalArgumentException.class);
+		exception.expectMessage("Cannot transfer funds between the same account");
+		
+		oscar.transferFunds(testAccount, testAccount, testTransferAmount);
 	}
 
-    @Test //Test customer statement generation
-    public void testGetStatement(){
+    @Test 
+    public void getStatement(){
 
         Account checkingAccount = new Account(Account.CHECKING);
         Account savingsAccount = new Account(Account.SAVINGS);
@@ -85,7 +106,7 @@ public class CustomerTest {
     }
 
     @Test
-    public void testGetNumberOfAccounts_OneAccount(){
+    public void getNumberOfAccounts_OneAccount(){
         Customer oscar = new Customer("Oscar")
         		.openAccount(new Account(Account.SAVINGS));
         
@@ -94,7 +115,7 @@ public class CustomerTest {
     }
 
     @Test
-    public void testGetNumberOfAccounts_ThreeAcounts() {
+    public void getNumberOfAccounts_ThreeAcounts() {
         Customer oscar = new Customer("Oscar")
                 .openAccount(new Account(Account.SAVINGS));
         oscar.openAccount(new Account(Account.CHECKING));

@@ -21,6 +21,11 @@ public class Transaction {
          this.transactionDate = transactionDate;
     }
 
+	/**
+	 * Gets the transaction date at the date transaction was performed.
+	 *
+	 * @return the transaction date
+	 */
 	public Date getTransactionDate() {
 		return transactionDate;
 	}
