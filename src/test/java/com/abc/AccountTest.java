@@ -20,7 +20,7 @@ public class AccountTest {
 	
 	private static final double checkingIntrest = 0.001;
 	
-	private static final double maxiSavingsIntrestNoWithdrawlsWithintenDays = 0.005;
+	private static final double maxiSavingsIntrestNoWithdrawlsWithintenDays = 0.05;
 	private static final double maxiSavingsIntrestWithdrawlWithinTenDays = 0.001;
 	
 	private static final int depositAmount = 100;

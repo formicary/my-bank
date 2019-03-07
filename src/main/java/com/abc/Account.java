@@ -78,7 +78,7 @@ public class Account {
                 
             case MAXI_SAVINGS:
                 if (checkNoWithdrawlsWithinTenDays())
-                	return amount * calculateAccruedIntrestRate(0.005);
+                	return amount * calculateAccruedIntrestRate(0.05);
                 else
                 	return amount * calculateAccruedIntrestRate(0.001);
                 
