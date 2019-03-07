@@ -3,37 +3,75 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class Account {
 
-    public static final int CHECKING = 0;
+    /*public static final int CHECKING = 0;
     public static final int SAVINGS = 1;
     public static final int MAXI_SAVINGS = 2;
 
-    private final int accountType;
-    public List<Transaction> transactions;
-
-    public Account(int accountType) {
-        this.accountType = accountType;
+    private final int accountType;*/
+	enum accountTypes {CHECKING, SAVINGS, MAXI_SAVINGS};
+	private final accountTypes type;
+    //changed to private
+	private List<Transaction> transactions;
+    
+    public Account(accountTypes mytype) {
+        this.type = mytype;
         this.transactions = new ArrayList<Transaction>();
     }
 
     public void deposit(double amount) {
+    	if (checkpositiveAmount(amount)){
+    		addtransaction(amount);
+    		//transactions.add(new Transaction(amount));
+    	}
+    	/*
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
             transactions.add(new Transaction(amount));
-        }
+        }*/
     }
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
-    }
-}
+	public void withdraw(double amount) {
+		if (checkpositiveAmount(amount)){
+			checkAmountavailable(amount);
+		}
+		/*
+	    if (amount <= 0) {
+	        throw new IllegalArgumentException("Amount withdrawed must be greater than zero.");
+	    } else {
+	    	checkamountavailable(amount);
+	    }*/
+	}
 
-    public double interestEarned() {
+	private boolean checkpositiveAmount(double amount){
+	    if (amount <= 0) {
+	        throw new IllegalArgumentException("Amount inputed must be greater than zero.");
+	    } 
+	    else {
+	    	return true;
+	    }
+	    
+	}
+	
+	private void checkAmountavailable(double amount){
+		double totalamount = sumTransactions();
+    	if (amount > totalamount){
+    		throw new IllegalArgumentException("Amount withdraw is greater than amount in account. \n Total amount = "+Double.toString(totalamount));
+    	}
+    	else{
+    		addtransaction(-amount);
+            //transactions.add(new Transaction(-amount));
+    	}
+	}
+	
+	private void addtransaction(double amount){
+		transactions.add(new Transaction(amount));
+	}
+	
+    /*public double interestEarned() {
         double amount = sumTransactions();
         switch(accountType){
             case SAVINGS:
@@ -53,21 +91,47 @@ public void withdraw(double amount) {
             default:
                 return amount * 0.001;
         }
-    }
+    }*/
 
     public double sumTransactions() {
-       return checkIfTransactionsExist(true);
+        if(checkIfTransactionsExist()){
+        	return totalamount();
+        }else{
+        	double amount = 0.0;
+        	return amount;
+        }
+        	
     }
 
-    private double checkIfTransactionsExist(boolean checkAll) {
-        double amount = 0.0;
+    private boolean checkIfTransactionsExist() {
+    	if (transactions.isEmpty()){
+    		return false;
+    	}
+    	else{
+    		return true;
+    	}
+        /*double amount = 0.0;
         for (Transaction t: transactions)
             amount += t.amount;
+        return amount;*/
+    }
+    
+    private double totalamount(){
+    	double amount = 0.0;
+        for (Transaction t: transactions)
+            amount += t.getTransactionAmount();
         return amount;
     }
 
-    public int getAccountType() {
-        return accountType;
+    public String getAccountType() {
+        return type.toString().toLowerCase();
     }
-
+    
+    public List<Transaction> getTransactions(){
+    	return transactions;
+    }
+    
+	public double interestEarned() {
+		return 0;
+	}
 }

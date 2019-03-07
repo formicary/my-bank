@@ -35,11 +35,11 @@ public class Customer {
     }
 
     public String getStatement() {
-        String statement = null;
-        statement = "Statement for " + name + "\n";
+        String statement = "Statement for " + name + "\n";
         double total = 0.0;
-        for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
+        for (int i = 0; i < accounts.size(); i++) {
+        	Account a = accounts.get(i);
+            statement += "\nNo." +(i+1)+" "+ statementForAccount(a) + "\n";
             total += a.sumTransactions();
         }
         statement += "\nTotal In All Accounts " + toDollars(total);
@@ -47,8 +47,16 @@ public class Customer {
     }
 
     private String statementForAccount(Account a) {
-        String s = "";
-
+        String s = a.getAccountType()+" Account\n";
+        double total = 0.0;
+        
+        for (Transaction t : a.getTransactions()) {
+        	s += printTransaction(t.getTransactionAmount());
+            total += t.getTransactionAmount();
+        }
+        s += "Total " + toDollars(total);
+        return s;
+        /*
        //Translate to pretty account type
         switch(a.getAccountType()){
             case Account.CHECKING:
@@ -70,8 +78,26 @@ public class Customer {
         }
         s += "Total " + toDollars(total);
         return s;
+        */
     }
-
+    
+    private String printTransaction(double amount){
+    	String transactionAmount = toDollars(amount);
+    	String transactionType = typeofTransaction(amount);
+    	return "  " + transactionType + " " + transactionAmount + "\n";
+    }
+    
+    
+    private String typeofTransaction(double amount){
+    	if (amount < 0){
+    		return "withdrawal";
+    	}
+    	else{
+    		return "deposit";
+    	}
+    }
+    
+    
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
     }

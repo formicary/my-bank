@@ -1,0 +1,31 @@
+Used Eclipse IDE to edit and run this solution.
+
+Log of Changes made to files
+
+Account.java
+- Remove int variables CHECKING, SAVINGS, MAXI_SAVINGS, accountType
++ Add enum containing accountTypes
++ Add variable to store accountTypes, modifier = private final 
+> Change modifier to private for transaction list
+> Change Constructors input to enum
++ Add checkpositiveAmount() method
++ Add addtransaction() method
++ Add checkAmountavailable() method to prevent withdrawing amount greater than amount in account.
+> Change checkIfTransactionsExist method to return false if transactions list if empty
+> Change sumTransactions() method
++ Add totalamount() method
+> Change getAccountType method return
++ Add getTransactions() method
++ Add interestEarned() method, which would be override by new CheckingAccount, SavingsAccount, Maxi_SavingAccount classes.
+
+CheckingAccount.java, SavingsAccount.java, Maxi_SavingAccount.java
+These new classes inherit from Account class.
++ Add InteresetEarned() method correspond to each class.
++ Add constructors, which call a superclass constructor with a enum accountTypes parameter.
+
+Customer.java
+> Adapted getStatement(), statementForAccount() methods to work with current changes.
++ Added typeofTransaction() method to return a string of 'withdrawal' or 'deposit'.
+
+Transactions.java
++ Added methods to return transaction date and transaction amount.
