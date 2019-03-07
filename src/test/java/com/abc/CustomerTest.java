@@ -1,14 +1,85 @@
 package com.abc;
 
-import org.junit.Ignore;
-import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class CustomerTest {
+	
+	@Rule
+	public final ExpectedException exception = ExpectedException.none();
+	
+	@Test
+	public void openAccount() {
+		Account testAccount = new Account(Account.SAVINGS);
+		Customer oscar = new Customer("Oscar")
+        		.openAccount(testAccount);
+		
+		assertTrue("Oscars account list contains the testAccount"
+				, oscar.getAccounts().contains(testAccount));
+	}
+	
+	@Test
+	public void transferFunds_FundsLeaveAccount() {
+		int testDepositAmount = 100;
+		int testTransferAmount = 20;
+		
+		Account testAccountTransferFrom = new Account(Account.SAVINGS);
+		Account testAccountTransferTo = new Account(Account.CHECKING);
+		
+		Customer oscar = new Customer("Oscar")
+        		.openAccount(testAccountTransferFrom).openAccount(testAccountTransferTo);
+		
+		testAccountTransferFrom.deposit(testDepositAmount);
+		
+		oscar.transferFunds(testAccountTransferFrom, testAccountTransferTo, testTransferAmount);
+		
+		assertEquals("Transfers 20 from savings to checking, savings account must equal 100 - 20"
+				,testAccountTransferFrom.sumTransactions(), testDepositAmount - testTransferAmount, ConstantsTest.DOUBLE_DELTA);
+	}
+	
+	@Test
+	public void transferFunds_FundsReachAccount() {
+		int testDepositAmount = 100;
+		int testTransferAmount = 20;
+		
+		Account testAccountTransferFrom = new Account(Account.SAVINGS);
+		Account testAccountTransferTo = new Account(Account.CHECKING);
+		
+		Customer oscar = new Customer("Oscar")
+				.openAccount(testAccountTransferFrom).openAccount(testAccountTransferTo);
+		
+		testAccountTransferFrom.deposit(testDepositAmount);
+		
+		oscar.transferFunds(testAccountTransferFrom, testAccountTransferTo, testTransferAmount);
+		
+		assertEquals("Transfers 20 from savings to checking, checking account 20"
+				,testAccountTransferTo.sumTransactions(), testTransferAmount, ConstantsTest.DOUBLE_DELTA);
+	}
+	
+	@Test
+	public void transferFunds_TransferBetweenSameAccount() {
+		int testDepositAmount = 100;
+		int testTransferAmount = 20;
+		
+		Account testAccount = new Account(Account.SAVINGS);
+		
+		Customer oscar = new Customer("Oscar")
+				.openAccount(testAccount);
+		
+		testAccount.deposit(testDepositAmount);
+		
+		exception.expect(IllegalArgumentException.class);
+		exception.expectMessage("Cannot transfer funds between the same account");
+		
+		oscar.transferFunds(testAccount, testAccount, testTransferAmount);
+	}
 
-    @Test //Test customer statement generation
-    public void testApp(){
+    @Test 
+    public void getStatement(){
 
         Account checkingAccount = new Account(Account.CHECKING);
         Account savingsAccount = new Account(Account.SAVINGS);
@@ -19,7 +90,8 @@ public class CustomerTest {
         savingsAccount.deposit(4000.0);
         savingsAccount.withdraw(200.0);
 
-        assertEquals("Statement for Henry\n" +
+        assertEquals("Statement must match the following format for above transactions"
+        		,"Statement for Henry\n" +
                 "\n" +
                 "Checking Account\n" +
                 "  deposit $100.00\n" +
@@ -34,24 +106,24 @@ public class CustomerTest {
     }
 
     @Test
-    public void testOneAccount(){
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
-        assertEquals(1, oscar.getNumberOfAccounts());
+    public void getNumberOfAccounts_OneAccount(){
+        Customer oscar = new Customer("Oscar")
+        		.openAccount(new Account(Account.SAVINGS));
+        
+        assertEquals("One account has been open so number of accounts must be 1"
+        		,1, oscar.getNumberOfAccounts());
     }
 
     @Test
-    public void testTwoAccount(){
+    public void getNumberOfAccounts_ThreeAcounts() {
         Customer oscar = new Customer("Oscar")
                 .openAccount(new Account(Account.SAVINGS));
         oscar.openAccount(new Account(Account.CHECKING));
-        assertEquals(2, oscar.getNumberOfAccounts());
+        oscar.openAccount(new Account(Account.MAXI_SAVINGS));;
+        
+        assertEquals("Three accounts have been opened so number of accounts must equal 3"
+        		,3, oscar.getNumberOfAccounts());
     }
+    
 
-    @Ignore
-    public void testThreeAcounts() {
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
-        assertEquals(3, oscar.getNumberOfAccounts());
-    }
 }
