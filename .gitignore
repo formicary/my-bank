@@ -2,7 +2,3 @@
 target/
 bin/
 *.iml
-.vscode/
-.classpath
-.settings
-.project
