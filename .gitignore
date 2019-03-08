@@ -2,3 +2,5 @@
 target/
 bin/
 *.iml
+.vscode
+.classpath
