@@ -117,9 +117,9 @@ public class CustomerTest {
     }
 
 
-
-    @Test
-    public void testr(){
+    //test to find rate date change for savings account
+    @Ignore
+    public void findRateChangeSavings(){
 
         double x = 999;
         int index = 0;
