@@ -9,6 +9,7 @@ public class Customer {
     private String name;
     private List<Account> accounts;
 
+    //constructor
     public Customer(String name) {
         this.name = name;
         this.accounts = new ArrayList<Account>();
@@ -74,5 +75,17 @@ public class Customer {
 
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
+    }
+
+
+    //make transfer
+    public void transferBetweenAcounts(Account sender, Account target, double amount) {
+        
+        //add to target
+        target.deposit(amount);
+        //remove from sender
+        sender.withdraw(amount);
+
+        //System.out.println("transfered "+amount.toString()+" succesfully");
     }
 }

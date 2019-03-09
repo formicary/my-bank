@@ -6,14 +6,17 @@ import java.util.List;
 public class Bank {
     private List<Customer> customers;
 
+    //Bank Constructor
     public Bank() {
         customers = new ArrayList<Customer>();
     }
 
+    //add customer to bank
     public void addCustomer(Customer customer) {
         customers.add(customer);
     }
 
+    //get all customers
     public String customerSummary() {
         String summary = "Customer Summary";
         for (Customer c : customers)
@@ -27,6 +30,7 @@ public class Bank {
         return number + " " + (number == 1 ? word : word + "s");
     }
 
+    //get total interest paid
     public double totalInterestPaid() {
         double total = 0;
         for(Customer c: customers)
@@ -34,6 +38,7 @@ public class Bank {
         return total;
     }
 
+    //get first customer
     public String getFirstCustomer() {
         try {
             customers = null;
