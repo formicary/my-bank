@@ -1,31 +1,69 @@
 Used Eclipse IDE to edit and run this solution.
+Added additional features
 
 Log of Changes made to files
 
 Account.java
 - Remove int variables CHECKING, SAVINGS, MAXI_SAVINGS, accountType
-+ Add enum containing accountTypes
-+ Add variable to store accountTypes, modifier = private final 
-> Change modifier to private for transaction list
-> Change Constructors input to enum
-+ Add checkpositiveAmount() method
-+ Add addtransaction() method
-+ Add checkAmountavailable() method to prevent withdrawing amount greater than amount in account.
-> Change checkIfTransactionsExist method to return false if transactions list if empty
-> Change sumTransactions() method
-+ Add totalamount() method
-> Change getAccountType method return
-+ Add getTransactions() method
-+ Add interestEarned() method, which would be override by new CheckingAccount, SavingsAccount, Maxi_SavingAccount classes.
++ Added enum containing accountTypes
++ Added variable to store accountTypes, modifier = private final 
+> Changed modifier to private for transaction list
+> Changed Constructors input to enum
++ Added checkpositiveAmount() method to check if input value is positive number
++ Added addtransaction() method to add a transaction to account
++ Added checkAmountavailable() method to prevent withdrawing amount greater than amount in account.
++ Added checkWithdraw() method which combine boolean values from checkpostiveAmount() and checkAmountavailable().
+> Changed checkIfTransactionsExist method to return false if transactions list if empty
+> Changed sumTransactions() method call to start sum up all money in account
++ Added totalamount() method use to sum up all money in account
+> Changed getAccountType method return Account type
++ Added getTransactions() method return list of transaction
++ Added interestEarned() method, which would be override by new CheckingAccount, SavingsAccount, Maxi_SavingAccount classes.
++ Added calcinterest() method to calculate the interest between two different transactions with different dates, 
+since the Additional Feature require to accrue and compound daily interests.
++ Added CalcCompoundInterest() method, which contain the formula = p (1 - r/n)^(n*t) - p 
+where p = principle amount,  r = interest rate per annum, n = number of times the interest is compounded per year, 
+t = the number of years the money is invested.
++ Added getCompoundperiod() method gets the date for next transaction. When it reaches the last transaction, it will return the 
+last transaction date. This will allows calculation of interest in account up to the last transaction date. It can be easily changed
+to the current date by editing this part of the code but for testing purposes, all interests are calculated up to the last transaction date.
++ Added totalinterestEarned() method, to call the procedure to calculate interest in the account.
 
 CheckingAccount.java, SavingsAccount.java, Maxi_SavingAccount.java
 These new classes inherit from Account class.
-+ Add InteresetEarned() method correspond to each class.
-+ Add constructors, which call a superclass constructor with a enum accountTypes parameter.
++ Added InteresetEarned() method correspond to each class along with other method which helps with changing the interest rates
++ Added constructors, which call a superclass constructor with a enum accountTypes parameter.
 
 Customer.java
 > Adapted getStatement(), statementForAccount() methods to work with current changes.
-+ Added typeofTransaction() method to return a string of 'withdrawal' or 'deposit'.
++ Added printTransaction() to return strings of each transactions in account, date is also printed for each transactions.
++ Added typeofTransaction() to return a string of 'withdrawal' or 'deposit'.
++ Added internalTransfer() to allow money to transfer between accounts.
+
+Bank.java
+> Fixed getFirstCustomer()
++ Added checkCustomerSize()
+> Edited totalInterestPaid() to use new methods in Account.
+> Edited customerSummary() and totalInterestPaid() to check for number of customers first.
 
 Transactions.java
 + Added methods to return transaction date and transaction amount.
++ Added method to set the transaction date for testing purposes
+
+DateProvider.java
++ Added currentdate variable and method to get the variable
++ Added method to work out the day difference between two dates.
++ Added method to work out if one date is after the other.
+
+BankTest.java
+> Modified all existing tests to adapt to current code, interest can be calculated from different accounts.
++ Added test to test sum up all interest from all three different account
++ Added test to test getFirstcustomer method.
+
+CustomerTest.java
+> Modified all existing tests to adapt to current code
++ Added test to test get customer name
++ Added test to test transfer money between accounts.
+
+Interfaces are added for Account.java, Bank.java, Customer.java, DateProvider.java and Transaction.java
+Interfaces files all start with a capital I.

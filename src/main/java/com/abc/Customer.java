@@ -1,11 +1,11 @@
 package com.abc;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import java.util.*;
 import static java.lang.Math.abs;
 
-public class Customer {
+import java.text.SimpleDateFormat;
+
+public class Customer implements ICustomer {
     private String name;
     private List<Account> accounts;
 
@@ -18,76 +18,58 @@ public class Customer {
         return name;
     }
 
-    public Customer openAccount(Account account) {
+    public void openAccount(Account account) {
         accounts.add(account);
-        return this;
     }
 
     public int getNumberOfAccounts() {
         return accounts.size();
     }
-
-    public double totalInterestEarned() {
+    
+    //Get the sum of the total interest earned for all accounts
+    public double sumInterestEarned() {
         double total = 0;
-        for (Account a : accounts)
-            total += a.interestEarned();
+        for (IAccount a : accounts)
+            total += a.totalinterestEarned();
         return total;
     }
 
+    //Return the statement for all accounts, each account is labelled with an account number.
     public String getStatement() {
         String statement = "Statement for " + name + "\n";
         double total = 0.0;
         for (int i = 0; i < accounts.size(); i++) {
-        	Account a = accounts.get(i);
-            statement += "\nNo." +(i+1)+" "+ statementForAccount(a) + "\n";
+        	IAccount a = accounts.get(i);
+            statement += "\nAccountNo."+(i+1)+" - "+statementForAccount(a) +"\n";
             total += a.sumTransactions();
         }
         statement += "\nTotal In All Accounts " + toDollars(total);
         return statement;
     }
-
-    private String statementForAccount(Account a) {
+    
+    //Get the string of all transactions of an account
+    private String statementForAccount(IAccount a) {
         String s = a.getAccountType()+" Account\n";
         double total = 0.0;
         
-        for (Transaction t : a.getTransactions()) {
-        	s += printTransaction(t.getTransactionAmount());
+        for (ITransaction t : a.getTransactions()) {
+        	s += printTransaction(t);
             total += t.getTransactionAmount();
         }
         s += "Total " + toDollars(total);
         return s;
-        /*
-       //Translate to pretty account type
-        switch(a.getAccountType()){
-            case Account.CHECKING:
-                s += "Checking Account\n";
-                break;
-            case Account.SAVINGS:
-                s += "Savings Account\n";
-                break;
-            case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
-                break;
-        }
-
-        //Now total up all the transactions
-        double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
-        }
-        s += "Total " + toDollars(total);
-        return s;
-        */
     }
     
-    private String printTransaction(double amount){
-    	String transactionAmount = toDollars(amount);
-    	String transactionType = typeofTransaction(amount);
-    	return "  " + transactionType + " " + transactionAmount + "\n";
+    //Get the string of each individual transaction of an account, includes the date
+    private String printTransaction(ITransaction transaction){
+    	double amount = transaction.getTransactionAmount();
+    	Calendar date = transaction.getTransactionDate();
+    	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    	String output = "  "+typeofTransaction(amount)+" "+toDollars(amount)+" - "+sdf.format(date.getTime())+"\n";
+    	return output;
     }
     
-    
+    //Get the type of transaction in the account
     private String typeofTransaction(double amount){
     	if (amount < 0){
     		return "withdrawal";
@@ -97,8 +79,21 @@ public class Customer {
     	}
     }
     
-    
+    //Add dollars signs and round up to 2 decimal points.
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
     }
+    
+    /*Transfer money between two accounts opened by a customer, 
+     * each account can be referenced by the account number shown in the statement
+     * To transfer, it will withdraw money from one account and deposit the money to 
+     * the other account.  
+    */
+    public void internalTransfer(int fromAccountNo, int toAccountNo, double amount){
+    	IAccount a = accounts.get(fromAccountNo-1);
+    	IAccount b = accounts.get(toAccountNo-1);
+    	a.withdraw(amount);
+    	b.deposit(amount);	
+    }
+    
 }
