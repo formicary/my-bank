@@ -10,7 +10,7 @@ public class Account {
     public static final int MAXI_SAVINGS = 2;
 
     private final int accountType;
-    public List<Transaction> transactions;
+    private List<Transaction> transactions;
 
     public Account(int accountType) {
         this.accountType = accountType;
@@ -68,6 +68,33 @@ public void withdraw(double amount) {
 
     public int getAccountType() {
         return accountType;
+    }
+
+    //Change to a method belonging to Account class
+    public String statementForAccount() {
+        String s = "";
+
+        //Translate to pretty account type
+        switch(this.getAccountType()){
+            case Account.CHECKING:
+                s += "Checking Account\n";
+                break;
+            case Account.SAVINGS:
+                s += "Savings Account\n";
+                break;
+            case Account.MAXI_SAVINGS:
+                s += "Maxi Savings Account\n";
+                break;
+        }
+
+        //Now total up all the transactions
+        double total = 0.0;
+        for (Transaction t : this.transactions) {
+            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + Customer.toDollars(t.amount) + "\n";
+            total += t.amount;
+        }
+        s += "Total " + Customer.toDollars(total);
+        return s;
     }
 
 }
