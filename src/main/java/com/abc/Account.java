@@ -25,13 +25,19 @@ public class Account {
         }
     }
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
+    public void withdraw(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        } else {
+            if(amount <= sumTransactions()) {
+                transactions.add(new Transaction(-amount));
+            }
+            else
+            {
+                throw new IllegalStateException("amount must be less than account total");
+            }
+        }
     }
-}
 
     public double interestEarned() {
         double amount = sumTransactions();
@@ -56,10 +62,6 @@ public void withdraw(double amount) {
     }
 
     public double sumTransactions() {
-       return checkIfTransactionsExist(true);
-    }
-
-    private double checkIfTransactionsExist(boolean checkAll) {
         double amount = 0.0;
         for (Transaction t: transactions)
             amount += t.amount;
@@ -90,10 +92,10 @@ public void withdraw(double amount) {
         //Now total up all the transactions
         double total = 0.0;
         for (Transaction t : this.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + Customer.toDollars(t.amount) + "\n";
+            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + Format.toDollars(t.amount) + "\n";
             total += t.amount;
         }
-        s += "Total " + Customer.toDollars(total);
+        s += "Total " + Format.toDollars(total);
         return s;
     }
 

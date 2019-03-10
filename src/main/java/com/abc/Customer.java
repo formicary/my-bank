@@ -3,8 +3,6 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Math.abs;
-
 public class Customer {
     private String name;
     private List<Account> accounts;
@@ -42,11 +40,7 @@ public class Customer {
             statement += "\n" + a.statementForAccount() + "\n";
             total += a.sumTransactions();
         }
-        statement += "\nTotal In All Accounts " + toDollars(total);
+        statement += "\nTotal In All Accounts " + Format.toDollars(total);
         return statement;
-    }
-
-    public static String toDollars(double d){
-        return String.format("$%,.2f", abs(d));
     }
 }

@@ -30,7 +30,7 @@ public class BankTest {
     }
 
     @Test
-    public void savings_account() {
+    public void savingsAccount() {
         Bank bank = new Bank();
         Account checkingAccount = new Account(Account.SAVINGS);
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
@@ -41,7 +41,7 @@ public class BankTest {
     }
 
     @Test
-    public void maxi_savings_account() {
+    public void maxiSavingsAccount() {
         Bank bank = new Bank();
         Account checkingAccount = new Account(Account.MAXI_SAVINGS);
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
