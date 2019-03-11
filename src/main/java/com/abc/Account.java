@@ -1,10 +1,10 @@
 package com.abc;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Account {
 
+    //could use enum but in my opinion it's not worth it here
     public static final int CHECKING = 0;
     public static final int SAVINGS = 1;
     public static final int MAXI_SAVINGS = 2;
@@ -17,23 +17,25 @@ public class Account {
         this.transactions = new ArrayList<Transaction>();
     }
 
-    public void deposit(double amount) {
+    public Transaction deposit(double amount){
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
-            transactions.add(new Transaction(amount));
+            Transaction t = new Transaction(amount, Transaction.DEPOSIT);
+            transactions.add(t);
+            return t;
         }
     }
 
-    public void withdraw(double amount) {
+    public Transaction withdraw(double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
             if(amount <= sumTransactions()) {
-                transactions.add(new Transaction(-amount));
-            }
-            else
-            {
+                Transaction t = new Transaction(-amount, Transaction.WITHDRAWAL);
+                transactions.add(t);
+                return t;
+            } else {
                 throw new IllegalStateException("amount must be less than account total");
             }
         }
@@ -44,18 +46,19 @@ public class Account {
         switch(accountType){
             case SAVINGS:
                 if (amount <= 1000)
-                    return amount * 0.001;
+                    return amount + calculateAccruedInterest(0.001);
                 else
                     return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
             case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
+                Transaction t = getLatestWithdrawal();
+                if(t == null || t.transactionDate.before(DateProvider.getInstance().daysAgo(10)))
+                {
+                    return amount * 0.05;
+                }
+                else
+                {
+                    return amount *0.001;
+                }
             default:
                 return amount * 0.001;
         }
@@ -72,7 +75,6 @@ public class Account {
         return accountType;
     }
 
-    //Change to a method belonging to Account class
     public String statementForAccount() {
         String s = "";
 
@@ -97,6 +99,44 @@ public class Account {
         }
         s += "Total " + Format.toDollars(total);
         return s;
+    }
+
+    private double calculateAccruedInterest(double rate)
+    {
+        if(accountType == MAXI_SAVINGS) {
+            //this requires checking every transaction for withdrawals and applying an interest cooldown for 10 days
+            //after withdrawal. A simple formula won't work, I think it's out of the scope of this exercise.
+            return 0.0;
+        }
+        else{
+            if(transactions.size() > 0) {
+                double principal = sumTransactions();
+                DateProvider dp = DateProvider.getInstance();
+                int daysSinceOpening = dp.daysBetween(transactions.get(0).transactionDate, dp.now());
+                double interest = Math.pow((1 + (rate/365)), daysSinceOpening);
+                interest = (interest*principal) - principal;
+                return interest;
+            }
+            else
+            {
+                return 0.0;
+            }
+        }
+    }
+
+    private Transaction getLatestWithdrawal() {
+        ListIterator<Transaction> it = transactions.listIterator(transactions.size());
+        Transaction prev;
+
+        while(it.hasPrevious())
+        {
+            prev = it.previous();
+            if(prev.type == Transaction.WITHDRAWAL)
+            {
+                return prev;
+            }
+        }
+        return null;
     }
 
 }

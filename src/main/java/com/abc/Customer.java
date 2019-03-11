@@ -25,6 +25,13 @@ public class Customer {
         return accounts.size();
     }
 
+    public void transfer(Account from, Account to, double amount) {
+        if(from != to) {
+            from.withdraw(amount);
+            to.deposit(amount);
+        }
+    }
+
     public double totalInterestEarned() {
         double total = 0;
         for (Account a : accounts)
