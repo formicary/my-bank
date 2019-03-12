@@ -34,5 +34,12 @@ public class Bank {
         return total;
     }
 
-
+    public Customer getFirstCustomer() {
+        if(!customers.isEmpty()){
+            return customers.get(0);
+        }
+        else{
+            return null;
+        }
+    } //used for testing add customer
 }

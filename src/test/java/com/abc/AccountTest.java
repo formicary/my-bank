@@ -90,5 +90,20 @@ public class AccountTest {
     }
 
 
-    //statementForAccount tests
+    //statementForAccount test
+    @Test
+    public void statementForAccount() throws NoSuchFieldException, IllegalAccessException {
+        Account account = new Account(Account.MAXI_SAVINGS);
+        final Field f = Transaction.class.getDeclaredField("transactionDate");
+        f.setAccessible(true);
+        Transaction t = account.deposit(3000.0);
+        f.set(t, DateProvider.getInstance().daysAgo(376));
+        t = account.withdraw(100.0);
+        f.set(t, DateProvider.getInstance().daysAgo(11));
+        String expected = "Maxi Savings Account\n" +
+                "- 01/03/2018 Deposit $3,000.00\n" +
+                "- 01/03/2019 Withdrawal $100.00\n" +
+                "Total $2,900.00";
+        assertEquals(expected, account.statementForAccount());
+    }
 }

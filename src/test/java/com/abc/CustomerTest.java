@@ -9,7 +9,7 @@ import static org.junit.Assert.assertTrue;
 public class CustomerTest {
 
     @Test //Test customer statement generation
-    public void testApp(){
+    public void getStatement(){
 
         Account checkingAccount = new Account(Account.CHECKING);
         Account savingsAccount = new Account(Account.SAVINGS);
@@ -23,12 +23,11 @@ public class CustomerTest {
         assertEquals("Statement for Henry\n" +
                 "\n" +
                 "Checking Account\n" +
-                "  deposit $100.00\n" +
-                "Total $100.00\n" +
-                "\n" +
+                "- 12/03/2019 Deposit $100.00\n" +
+                "Total $100.00\n\n" +
                 "Savings Account\n" +
-                "  deposit $4,000.00\n" +
-                "  withdrawal $200.00\n" +
+                "- 12/03/2019 Deposit $4,000.00\n" +
+                "- 12/03/2019 Withdrawal $200.00\n" +
                 "Total $3,800.00\n" +
                 "\n" +
                 "Total In All Accounts $3,900.00", henry.getStatement());

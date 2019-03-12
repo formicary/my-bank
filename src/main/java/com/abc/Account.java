@@ -4,7 +4,6 @@ import java.util.*;
 
 public class Account {
 
-    //could use enum but in my opinion it's not worth it here
     public static final int CHECKING = 0;
     public static final int SAVINGS = 1;
     public static final int MAXI_SAVINGS = 2;
@@ -31,7 +30,7 @@ public class Account {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
-            if(amount <= sumTransactions()) {
+            if(amount <= sumTransactions()) { //Make sure the money requested for withdrawal is already in the account. (Earned interest is not included/impossible to withdraw interest - known bug with this implementation)
                 Transaction t = new Transaction(-amount, Transaction.WITHDRAWAL);
                 transactions.add(t);
                 return t;
@@ -42,7 +41,7 @@ public class Account {
     }
 
     public double interestEarned() {
-        if(!transactions.isEmpty()) {
+        if(!transactions.isEmpty()) { //no interest can be earned without depositing first
             return calculateCompoundInterest();
         }
         else {
@@ -61,7 +60,7 @@ public class Account {
         return accountType;
     }
 
-    public String statementForAccount() {
+    public String statementForAccount() { //this statement does not provide interest information
         String s = "";
 
         //Translate to pretty account type
@@ -80,10 +79,13 @@ public class Account {
         //Now total up all the transactions
         double total = 0.0;
         for (Transaction t : this.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + Format.toDollars(t.amount) + "\n";
+            s += "- "+ DateProvider.getInstance().stringify(t.transactionDate) + " " + //Display transaction date
+                    (t.type == Transaction.WITHDRAWAL ? "Withdrawal" : "Deposit") + " " + //Display transaction type
+                    Format.toDollars(t.amount) + "\n"; //Display transaction amount
             total += t.amount;
         }
         s += "Total " + Format.toDollars(total);
+        System.out.println(s);
         return s;
     }
 
@@ -98,14 +100,14 @@ public class Account {
             case MAXI_SAVINGS:
                 for(int i=0; i<transactions.size(); i++) {
                     t1=transactions.get(i);
-                    t2 = (i+1>=transactions.size()) ? (new Transaction(0, Transaction.DEPOSIT)) : transactions.get(i+1); //if loop is at last transaction, create a new 0 transaction that will have todays date for later use
+                    t2 = (i+1>=transactions.size()) ? (new Transaction(0, Transaction.DEPOSIT)) : transactions.get(i+1); //if loop is at last transaction, create a new transaction that will have todays date for later use
                     total+=t1.amount;
-                    if(t1.type==Transaction.WITHDRAWAL) { //used for 10 day cooldown after transaction
-                        Date split = (dp.daysBetween(t1.transactionDate, dp.now())>10) ? dp.addDays(t1.transactionDate, 10) : t2.transactionDate; //if today - last transaction day is less than 10 days, don't split
+                    if(t1.type==Transaction.WITHDRAWAL) { //apply 10 day cooldown to interest rate after withdrawal
+                        Date split = (dp.daysBetween(t1.transactionDate, dp.now())>10) ? dp.addDays(t1.transactionDate, 10) : t2.transactionDate; //if days between today and last transaction day is less than 10 days, don't split
                         interest=calculateAccruedInterest(0.001, total, t1.transactionDate, split);
                         interest+=calculateAccruedInterest(0.05, total, split, t2.transactionDate);
                     }
-                    else {
+                    else { //calculate interest with 5% rate otherwise
                         interest=calculateAccruedInterest(0.05, total, t1.transactionDate, t2.transactionDate);
                     }
                     total+=interest; //compounded daily
@@ -120,7 +122,7 @@ public class Account {
                     if(total<=1000){
                         interest = calculateAccruedInterest(0.001, total, t1.transactionDate, t2.transactionDate);
                     }
-                    else {
+                    else { //if above 1000 calculate the first 1000 at 0.1% and the rest at 0.2%
                         interest = calculateAccruedInterest(0.001, 1000, t1.transactionDate, t2.transactionDate);
                         interest += calculateAccruedInterest(0.002, total-1000, t1.transactionDate, t2.transactionDate);
                     }
@@ -143,7 +145,7 @@ public class Account {
         }
     }
 
-    private double calculateAccruedInterest(double rate, double amount, Date d1, Date d2){
+    private double calculateAccruedInterest(double rate, double amount, Date d1, Date d2){ //calculate total accrued interest for a period between dates d1 and d2
         if(transactions.size() > 0) {
             int nOfDays = DateProvider.getInstance().daysBetween(d1, d2);
             double interest = Math.pow(1 + (rate/365), nOfDays);

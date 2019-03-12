@@ -10,13 +10,40 @@ public class BankTest {
     private static final double DOUBLE_DELTA = 0.01;
 
     @Test
-    public void customerSummary() {
+    public void addCustomer() {
+        Bank bank = new Bank();
+        Customer john = new Customer("John");
+        john.openAccount(new Account(Account.CHECKING));
+        bank.addCustomer(john);
+
+        assertEquals("John", bank.getFirstCustomer().getName());
+    }
+
+    @Test
+    public void customerSummarySingleCustomer() {
         Bank bank = new Bank();
         Customer john = new Customer("John");
         john.openAccount(new Account(Account.CHECKING));
         bank.addCustomer(john);
 
         assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
+    }
+
+    @Test
+    public void customerSummaryMultipleCustomers() {
+        Bank bank = new Bank();
+        Customer john = new Customer("John");
+        john.openAccount(new Account(Account.CHECKING));
+        bank.addCustomer(john);
+        Customer oscar = new Customer("Oscar");
+        oscar.openAccount(new Account(Account.SAVINGS));
+        oscar.openAccount(new Account(Account.CHECKING));
+        bank.addCustomer(oscar);
+        String expected = "Customer Summary\n" +
+                        " - John (1 account)\n" +
+                        " - Oscar (2 accounts)";
+
+        assertEquals(expected, bank.customerSummary());
     }
 
     @Test
