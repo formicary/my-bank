@@ -16,8 +16,14 @@ public class Bank {
 
     public String customerSummary() {
         String summary = "Customer Summary";
-        for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + Format.multiples(c.getNumberOfAccounts(), "account") + ")";
+        if(!customers.isEmpty()) {
+            for (Customer c : customers)
+                summary += "\n - " + c.getName() + " (" + Format.multiples(c.getNumberOfAccounts(), "account") + ")";
+        }
+        else
+        {
+            summary += "\n Bank has no customers";
+        }
         return summary;
     }
 

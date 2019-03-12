@@ -9,26 +9,23 @@ import static org.junit.Assert.assertEquals;
 public class AccountTest {
     private static final double DOUBLE_DELTA = 0.01;
 
-    //deposit
+    //deposit tests
     @Test
-    public void depositPos()
-    {
+    public void depositPos() {
         Account a = new Account(Account.CHECKING);
         a.deposit(100);
         assertEquals(100, a.sumTransactions(), DOUBLE_DELTA);
     }
 
     @Test (expected = IllegalArgumentException.class)
-    public void depositNeg()
-    {
+    public void depositNeg() {
         Account a = new Account(Account.CHECKING);
         a.deposit(-100);
     }
 
-    //withdrawal
+    //withdrawal tests
     @Test
-    public void withdrawPos()
-    {
+    public void withdrawPos() {
         Account a = new Account(Account.CHECKING);
         a.deposit(100);
         a.withdraw(50);
@@ -36,20 +33,18 @@ public class AccountTest {
     }
 
     @Test (expected = IllegalArgumentException.class)
-    public void withdrawNeg()
-    {
+    public void withdrawNeg() {
         Account a = new Account(Account.CHECKING);
         a.withdraw(-100);
     }
 
     @Test (expected = IllegalStateException.class)
-    public void overWithdraw()
-    {
+    public void overWithdraw() {
         Account a = new Account(Account.CHECKING);
         a.withdraw(100);
     }
 
-    //interestEarned
+    //interestEarned tests
     @Test
     public void checkingAccount() throws NoSuchFieldException, IllegalAccessException {
         Account account = new Account(Account.CHECKING);
@@ -73,22 +68,27 @@ public class AccountTest {
     @Test
     public void maxiSavingsAccountBefore10Days() throws NoSuchFieldException, IllegalAccessException {
         Account account = new Account(Account.MAXI_SAVINGS);
-        account.deposit(3000.0);
-        Transaction t = account.withdraw(100.0);
         final Field f = Transaction.class.getDeclaredField("transactionDate");
         f.setAccessible(true);
-        f.set(t, DateProvider.getInstance().daysAgo(15));
-        assertEquals(145.0, account.interestEarned(), DOUBLE_DELTA);
+        Transaction t = account.deposit(3000.0);
+        f.set(t, DateProvider.getInstance().daysAgo(366));
+        t = account.withdraw(100.0);
+        f.set(t, DateProvider.getInstance().daysAgo(1));
+        assertEquals(153.8 + 0.01, account.interestEarned(), DOUBLE_DELTA);
     }
 
     @Test
-    public void maxiSavingsAccountAfter10Days(){
+    public void maxiSavingsAccountAfter10Days() throws NoSuchFieldException, IllegalAccessException {
         Account account = new Account(Account.MAXI_SAVINGS);
-        account.deposit(3000.0);
-        account.withdraw(100.0);
-        assertEquals(2.9, account.interestEarned(), DOUBLE_DELTA);
+        final Field f = Transaction.class.getDeclaredField("transactionDate");
+        f.setAccessible(true);
+        Transaction t = account.deposit(3000.0);
+        f.set(t, DateProvider.getInstance().daysAgo(376));
+        t = account.withdraw(100.0);
+        f.set(t, DateProvider.getInstance().daysAgo(11));
+        assertEquals(153.8 + 0.08 + 0.42, account.interestEarned(), DOUBLE_DELTA);
     }
 
 
-    //statementForAccount
+    //statementForAccount tests
 }

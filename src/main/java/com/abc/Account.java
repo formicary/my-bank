@@ -43,7 +43,7 @@ public class Account {
 
     public double interestEarned() {
         if(!transactions.isEmpty()) {
-            return calculateAccruedInterest();
+            return calculateCompoundInterest();
         }
         else {
             return 0.0;
@@ -87,7 +87,7 @@ public class Account {
         return s;
     }
 
-    private double calculateAccruedInterest() {
+    private double calculateCompoundInterest() {
         double total=0;
         double interest;
         double totalInterest=0;
@@ -98,35 +98,34 @@ public class Account {
             case MAXI_SAVINGS:
                 for(int i=0; i<transactions.size(); i++) {
                     t1=transactions.get(i);
-                    t2 = (i+1>=transactions.size()) ? (new Transaction(0, Transaction.DEPOSIT)) : transactions.get(i+1);
+                    t2 = (i+1>=transactions.size()) ? (new Transaction(0, Transaction.DEPOSIT)) : transactions.get(i+1); //if loop is at last transaction, create a new 0 transaction that will have todays date for later use
                     total+=t1.amount;
-                    if(t1.type==Transaction.WITHDRAWAL) {
-                        Date split = dp.addDays(t1.transactionDate, 10);
-                        interest=calculateCompoundInterest(0.001, total, t1.transactionDate, split);
-                        interest+=calculateCompoundInterest(0.05, total, split, t2.transactionDate);
+                    if(t1.type==Transaction.WITHDRAWAL) { //used for 10 day cooldown after transaction
+                        Date split = (dp.daysBetween(t1.transactionDate, dp.now())>10) ? dp.addDays(t1.transactionDate, 10) : t2.transactionDate; //if today - last transaction day is less than 10 days, don't split
+                        interest=calculateAccruedInterest(0.001, total, t1.transactionDate, split);
+                        interest+=calculateAccruedInterest(0.05, total, split, t2.transactionDate);
                     }
                     else {
-                        interest=calculateCompoundInterest(0.05, total, t1.transactionDate, t2.transactionDate);
+                        interest=calculateAccruedInterest(0.05, total, t1.transactionDate, t2.transactionDate);
                     }
-                    total+=interest;
+                    total+=interest; //compounded daily
                     totalInterest+=interest;
                 }
                 return totalInterest;
             case SAVINGS:
-                double rate;
                 for(int i = 0; i<transactions.size(); i++) {
                     t1 = transactions.get(i);
                     t2 = (i+1>=transactions.size()) ? (new Transaction(0, Transaction.DEPOSIT)) : transactions.get(i+1);
                     total+=t1.amount;
                     if(total<=1000){
-                        interest = calculateCompoundInterest(0.001, total, t1.transactionDate, t2.transactionDate);
+                        interest = calculateAccruedInterest(0.001, total, t1.transactionDate, t2.transactionDate);
                     }
                     else {
-                        interest = calculateCompoundInterest(0.001, 1000, t1.transactionDate, t2.transactionDate);
-                        interest += calculateCompoundInterest(0.002, total-1000, t1.transactionDate, t2.transactionDate);
+                        interest = calculateAccruedInterest(0.001, 1000, t1.transactionDate, t2.transactionDate);
+                        interest += calculateAccruedInterest(0.002, total-1000, t1.transactionDate, t2.transactionDate);
                     }
 
-                    total+=interest;
+                    total+=interest; //compounded daily
                     totalInterest+=interest;
                 }
                 return totalInterest;
@@ -135,8 +134,8 @@ public class Account {
                     t1 = transactions.get(i);
                     t2 = (i+1>=transactions.size()) ? (new Transaction(0, Transaction.DEPOSIT)) : transactions.get(i+1);
                     total+=t1.amount;
-                    interest=calculateCompoundInterest(0.001, total, t1.transactionDate, t2.transactionDate);
-                    total+=interest;
+                    interest=calculateAccruedInterest(0.001, total, t1.transactionDate, t2.transactionDate);
+                    total+=interest; //compounded daily
                     totalInterest+=interest;
                 }
                 return totalInterest;
@@ -144,7 +143,7 @@ public class Account {
         }
     }
 
-    private double calculateCompoundInterest(double rate, double amount, Date d1, Date d2){
+    private double calculateAccruedInterest(double rate, double amount, Date d1, Date d2){
         if(transactions.size() > 0) {
             int nOfDays = DateProvider.getInstance().daysBetween(d1, d2);
             double interest = Math.pow(1 + (rate/365), nOfDays);

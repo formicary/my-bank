@@ -2,10 +2,12 @@ package com.abc;
 
 import org.junit.Test;
 
+import java.lang.reflect.Field;
+
 import static org.junit.Assert.assertEquals;
 
 public class BankTest {
-    private static final double DOUBLE_DELTA = 1e-15;
+    private static final double DOUBLE_DELTA = 0.01;
 
     @Test
     public void customerSummary() {
@@ -18,8 +20,9 @@ public class BankTest {
     }
 
     @Test
-    public void totalInterestPaid() {
+    public void totalInterestPaid() throws NoSuchFieldException, IllegalAccessException {
         Bank bank = new Bank();
+        Transaction t;
         Account account = new Account(Account.CHECKING);
         Account sAccount = new Account(Account.SAVINGS);
         Account mAccount = new Account(Account.MAXI_SAVINGS);
@@ -28,11 +31,16 @@ public class BankTest {
         bill.openAccount(sAccount);
         bill.openAccount(mAccount);
         bank.addCustomer(bill);
-        account.deposit(100.0);
-        sAccount.deposit(1500.0);
-        mAccount.deposit(3000.0);
+        t = account.deposit(100.0);
+        final Field f = Transaction.class.getDeclaredField("transactionDate");
+        f.setAccessible(true);
+        f.set(t, DateProvider.getInstance().daysAgo(365));
+        t = sAccount.deposit(1500.0);
+        f.set(t, DateProvider.getInstance().daysAgo(365));
+        t = mAccount.deposit(3000.0);
+        f.set(t, DateProvider.getInstance().daysAgo(365));
 
-        assertEquals(152.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(0.1 + 2 + 153.8, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
 }
