@@ -42,25 +42,11 @@ public class Account {
     }
 
     public double interestEarned() {
-        double amount = sumTransactions();
-        switch(accountType){
-            case SAVINGS:
-                if (amount <= 1000)
-                    return amount + calculateAccruedInterest(0.001);
-                else
-                    return 1 + (amount-1000) * 0.002;
-            case MAXI_SAVINGS:
-                Transaction t = getLatestWithdrawal();
-                if(t == null || t.transactionDate.before(DateProvider.getInstance().daysAgo(10)))
-                {
-                    return amount * 0.05;
-                }
-                else
-                {
-                    return amount *0.001;
-                }
-            default:
-                return amount * 0.001;
+        if(!transactions.isEmpty()) {
+            return calculateAccruedInterest();
+        }
+        else {
+            return 0.0;
         }
     }
 
@@ -101,42 +87,72 @@ public class Account {
         return s;
     }
 
-    private double calculateAccruedInterest(double rate)
-    {
-        if(accountType == MAXI_SAVINGS) {
-            //this requires checking every transaction for withdrawals and applying an interest cooldown for 10 days
-            //after withdrawal. A simple formula won't work, I think it's out of the scope of this exercise.
-            return 0.0;
-        }
-        else{
-            if(transactions.size() > 0) {
-                double principal = sumTransactions();
-                DateProvider dp = DateProvider.getInstance();
-                int daysSinceOpening = dp.daysBetween(transactions.get(0).transactionDate, dp.now());
-                double interest = Math.pow((1 + (rate/365)), daysSinceOpening);
-                interest = (interest*principal) - principal;
-                return interest;
-            }
-            else
-            {
-                return 0.0;
-            }
+    private double calculateAccruedInterest() {
+        double total=0;
+        double interest;
+        double totalInterest=0;
+        Transaction t1;
+        Transaction t2;
+        DateProvider dp = DateProvider.getInstance();
+        switch (accountType) {
+            case MAXI_SAVINGS:
+                for(int i=0; i<transactions.size(); i++) {
+                    t1=transactions.get(i);
+                    t2 = (i+1>=transactions.size()) ? (new Transaction(0, Transaction.DEPOSIT)) : transactions.get(i+1);
+                    total+=t1.amount;
+                    if(t1.type==Transaction.WITHDRAWAL) {
+                        Date split = dp.addDays(t1.transactionDate, 10);
+                        interest=calculateCompoundInterest(0.001, total, t1.transactionDate, split);
+                        interest+=calculateCompoundInterest(0.05, total, split, t2.transactionDate);
+                    }
+                    else {
+                        interest=calculateCompoundInterest(0.05, total, t1.transactionDate, t2.transactionDate);
+                    }
+                    total+=interest;
+                    totalInterest+=interest;
+                }
+                return totalInterest;
+            case SAVINGS:
+                double rate;
+                for(int i = 0; i<transactions.size(); i++) {
+                    t1 = transactions.get(i);
+                    t2 = (i+1>=transactions.size()) ? (new Transaction(0, Transaction.DEPOSIT)) : transactions.get(i+1);
+                    total+=t1.amount;
+                    if(total<=1000){
+                        interest = calculateCompoundInterest(0.001, total, t1.transactionDate, t2.transactionDate);
+                    }
+                    else {
+                        interest = calculateCompoundInterest(0.001, 1000, t1.transactionDate, t2.transactionDate);
+                        interest += calculateCompoundInterest(0.002, total-1000, t1.transactionDate, t2.transactionDate);
+                    }
+
+                    total+=interest;
+                    totalInterest+=interest;
+                }
+                return totalInterest;
+            default:
+                for(int i = 0; i<transactions.size(); i++) {
+                    t1 = transactions.get(i);
+                    t2 = (i+1>=transactions.size()) ? (new Transaction(0, Transaction.DEPOSIT)) : transactions.get(i+1);
+                    total+=t1.amount;
+                    interest=calculateCompoundInterest(0.001, total, t1.transactionDate, t2.transactionDate);
+                    total+=interest;
+                    totalInterest+=interest;
+                }
+                return totalInterest;
+
         }
     }
 
-    private Transaction getLatestWithdrawal() {
-        ListIterator<Transaction> it = transactions.listIterator(transactions.size());
-        Transaction prev;
-
-        while(it.hasPrevious())
-        {
-            prev = it.previous();
-            if(prev.type == Transaction.WITHDRAWAL)
-            {
-                return prev;
-            }
+    private double calculateCompoundInterest(double rate, double amount, Date d1, Date d2){
+        if(transactions.size() > 0) {
+            int nOfDays = DateProvider.getInstance().daysBetween(d1, d2);
+            double interest = Math.pow(1 + (rate/365), nOfDays);
+            return (interest*amount) - amount;
         }
-        return null;
+        else {
+            return 0.0;
+        }
     }
 
 }

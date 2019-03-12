@@ -7,7 +7,7 @@ import java.lang.reflect.Field;
 import static org.junit.Assert.assertEquals;
 
 public class AccountTest {
-    private static final double DOUBLE_DELTA = 1e-15;
+    private static final double DOUBLE_DELTA = 0.01;
 
     //deposit
     @Test
@@ -51,19 +51,23 @@ public class AccountTest {
 
     //interestEarned
     @Test
-    public void checkingAccount() {
+    public void checkingAccount() throws NoSuchFieldException, IllegalAccessException {
         Account account = new Account(Account.CHECKING);
-        account.deposit(100.0);
-
-        assertEquals(0.1, account.interestEarned(), DOUBLE_DELTA);
+        Transaction t = account.deposit(100.0);
+        final Field f = Transaction.class.getDeclaredField("transactionDate");
+        f.setAccessible(true);
+        f.set(t, DateProvider.getInstance().daysAgo(365));
+        assertEquals(0.1000, account.interestEarned(), DOUBLE_DELTA);
     }
 
     @Test
-    public void savingsAccount() {
+    public void savingsAccount() throws NoSuchFieldException, IllegalAccessException {
         Account account = new Account(Account.SAVINGS);
-        account.deposit(1500.0);
-
-        assertEquals(2.0, account.interestEarned(), DOUBLE_DELTA);
+        Transaction t = account.deposit(1500.0);
+        final Field f = Transaction.class.getDeclaredField("transactionDate");
+        f.setAccessible(true);
+        f.set(t, DateProvider.getInstance().daysAgo(365));
+        assertEquals(1.0+1.0, account.interestEarned(), DOUBLE_DELTA);
     }
 
     @Test

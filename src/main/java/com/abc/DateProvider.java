@@ -16,6 +16,13 @@ public class DateProvider {
         return Calendar.getInstance().getTime();
     }
 
+    public Date addDays(Date date, int days) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.DATE, +days);
+        return cal.getTime();
+    }
+
     public Date daysAgo(int days) {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, -days);
@@ -24,7 +31,7 @@ public class DateProvider {
 
     public int daysBetween(Date d1, Date d2)
     {
-        long difference = d1.getTime() - d2.getTime();
+        long difference = d2.getTime() - d1.getTime();
         return (int)(difference / (1000*60*60*24));
     }
 }
