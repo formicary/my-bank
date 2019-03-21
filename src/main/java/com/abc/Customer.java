@@ -26,6 +26,17 @@ public class Customer {
     public int getNumberOfAccounts() {
         return accounts.size();
     }
+    // make a transfer from one account to the other
+    public void transferFromTo(Account accountOne, Account accountTwo, double amount) {
+    	if (accountOne.sumTransactions() < amount) {
+    	    throw new IllegalArgumentException("not enough money in account to make transfer");
+    	}
+    	else {
+    		accountOne.withdraw(amount);
+    		accountTwo.deposit(amount);
+    	}
+    	
+    }
 
     public double totalInterestEarned() {
         double total = 0;
@@ -35,7 +46,7 @@ public class Customer {
     }
 
     public String getStatement() {
-        String statement = null;
+        String statement = "";
         statement = "Statement for " + name + "\n";
         double total = 0.0;
         for (Account a : accounts) {
@@ -48,8 +59,6 @@ public class Customer {
 
     private String statementForAccount(Account a) {
         String s = "";
-
-       //Translate to pretty account type
         switch(a.getAccountType()){
             case Account.CHECKING:
                 s += "Checking Account\n";
@@ -60,19 +69,25 @@ public class Customer {
             case Account.MAXI_SAVINGS:
                 s += "Maxi Savings Account\n";
                 break;
+            default:
+            	s += "Account\n";
+            	break;
         }
 
         //Now total up all the transactions
         double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
+        for (Transaction t : a.getTransactions()) {
+            s += "  " + (t.getAmount() < 0 ? "withdrawal" : "deposit") + " " + toDollars(abs(t.getAmount())) + "\n";
+            total += t.getAmount();
         }
         s += "Total " + toDollars(total);
         return s;
     }
 
     private String toDollars(double d){
-        return String.format("$%,.2f", abs(d));
+        return String.format("$%,.2f", d);
     }
+    
+    
+    
 }
