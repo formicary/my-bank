@@ -58,12 +58,8 @@ public class Account {
         }
     }
     
-    /**
-     * checksIfWithdrew 
-     * checks for withdrawal in the last number of specified days
-     */
-    // 
-    public boolean checkIfWithdrew(int days, List<Transaction> transactions) {
+    // checks for withdrawal in the last number of specified days
+    private boolean checkIfWithdrew(int days, List<Transaction> transactions) {
     	boolean didWithdraw = false;
     	int numOfTransactions = transactions.size();
     	if (numOfTransactions == 0) {
@@ -73,7 +69,8 @@ public class Account {
     		Date rightNow = DateProvider.getInstance().now();
     		for (int i = (numOfTransactions-1); i < 0; i--) {
     			// checks if money was withdrawn below days threshold
-    			if ((DateProvider.daysDiff(rightNow, transactions.get(i).getDate())) < days){
+    			int dayDiff = (DateProvider.daysDiff(rightNow, transactions.get(i).getDate()));
+    			if (dayDiff < days){
     				if (transactions.get(i).getAmount() < 0) {
     					didWithdraw = true;
     					break;
@@ -95,7 +92,7 @@ public class Account {
        return amount;
     }
 
-    private boolean checkIfTransactionsExist() {
+    public boolean checkIfTransactionsExist() {
         int numberOfTransactions = transactions.size();
         if (numberOfTransactions > 0) {
             return true;

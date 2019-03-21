@@ -24,4 +24,10 @@ public class AccountTest {
 		assertEquals(2, account.getAccountType());
 	}
 
+	@Test
+	public void checkIfTransactionsExistTest() {
+		Account account = new Account(Account.MAXI_SAVINGS);
+		account.deposit(500.0);
+		assertEquals(true, account.checkIfTransactionsExist());
+	}
 }
