@@ -18,16 +18,24 @@ public class Customer {
         return name;
     }
 
-    public Customer openAccount(Account account) {
+    public void openAccount(Account account) {
         accounts.add(account);
-        return this;
     }
 
     public int getNumberOfAccounts() {
         return accounts.size();
     }
-    // make a transfer from one account to the other
-    public void transferFromTo(Account accountOne, Account accountTwo, double amount) {
+    // returns an account
+    public Account getAccount(int i) {
+    	return accounts.get(i);
+    }
+    // returns list of accounts
+    public List<Account> getAccounts(){
+    	return accounts;
+    }
+    
+    // make a transfer from one personal account to another
+    public void intraTransferFromTo(Account accountOne, Account accountTwo, double amount) {
     	if (accountOne.sumTransactions() < amount) {
     	    throw new IllegalArgumentException("not enough money in account to make transfer");
     	}
