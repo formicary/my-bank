@@ -6,6 +6,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
+	private static final double DOUBLE_DELTA = 1e-15;
 
     @Test //Test customer statement generation
     public void testApp(){
@@ -13,7 +14,9 @@ public class CustomerTest {
         Account checkingAccount = new Account(Account.CHECKING);
         Account savingsAccount = new Account(Account.SAVINGS);
 
-        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
+        Customer henry = new Customer("Henry");
+        henry.openAccount(checkingAccount);
+        henry.openAccount(savingsAccount);
 
         checkingAccount.deposit(100.0);
         savingsAccount.deposit(4000.0);
@@ -35,23 +38,35 @@ public class CustomerTest {
 
     @Test
     public void testOneAccount(){
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
+        Customer oscar = new Customer("Oscar");
+        oscar.openAccount(new Account(Account.SAVINGS));
         assertEquals(1, oscar.getNumberOfAccounts());
     }
 
     @Test
     public void testTwoAccount(){
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
+        Customer oscar = new Customer("Oscar");
+        oscar.openAccount(new Account(Account.SAVINGS));
         oscar.openAccount(new Account(Account.CHECKING));
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
-    @Ignore
+    @Test
     public void testThreeAcounts() {
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
+        Customer oscar = new Customer("Oscar");
+        oscar.openAccount(new Account(Account.SAVINGS));
         oscar.openAccount(new Account(Account.CHECKING));
+        oscar.openAccount(new Account(Account.MAXI_SAVINGS));
         assertEquals(3, oscar.getNumberOfAccounts());
+    }
+    
+    @Test
+    public void testIntraTransferFromTo() {
+    	Customer oscar = new Customer("Oscar");
+    	oscar.openAccount(new Account(Account.SAVINGS));
+    	oscar.getAccount(0).deposit(50.0);
+    	oscar.openAccount(new Account(Account.CHECKING));
+    	oscar.intraTransferFromTo(oscar.getAccount(0), oscar.getAccount(1), 10.0);
+    	assertEquals(40.0, (oscar.getAccount(0).sumTransactions()), DOUBLE_DELTA);
     }
 }

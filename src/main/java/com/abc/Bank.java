@@ -13,6 +13,10 @@ public class Bank {
     public void addCustomer(Customer customer) {
         customers.add(customer);
     }
+    
+    public List<Customer> getCustomers() {
+		return customers;
+	}
 
     public String customerSummary() {
         String summary = "Customer Summary";
@@ -36,7 +40,6 @@ public class Bank {
 
     public String getFirstCustomer() {
         try {
-            customers = null;
             return customers.get(0).getName();
         } catch (Exception e){
             e.printStackTrace();
