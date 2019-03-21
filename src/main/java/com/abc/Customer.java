@@ -96,6 +96,4 @@ public class Customer {
         return String.format("$%,.2f", d);
     }
     
-    
-    
 }

@@ -87,9 +87,6 @@ public class Account {
     	return didWithdraw;
     }
     			
-    			
- 
-
     public double sumTransactions() {
        double amount = 0.0;
        for (Transaction t: transactions) {
