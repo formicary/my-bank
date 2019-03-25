@@ -1,46 +1,49 @@
 package com.abc;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Bank {
-    private List<Customer> customers;
+	private List<Customer> customerList;
 
-    public Bank() {
-        customers = new ArrayList<Customer>();
-    }
+	public Bank() {
+		setCustomerList(new ArrayList<Customer>());
+	}
 
-    public void addCustomer(Customer customer) {
-        customers.add(customer);
-    }
+	public void createCustomer(String customerName) {
+		getCustomerList().add(new Customer(customerName));
+	}
 
-    public String customerSummary() {
-        String summary = "Customer Summary";
-        for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-        return summary;
-    }
+	public String customerSummaries() {
+		if (getCustomerList().isEmpty()) {
+			System.out.println(Constants.NO_CUSTOMERS_WITH_BANK);
+			return Constants.NO_CUSTOMERS_WITH_BANK;
+		} else { 
+			String customerSummaries = Constants.EMPTY_STRING;
+			for (Customer c : getCustomerList()) {
+				System.out.println(Constants.NAME + c.getName() + Constants.NUMBER_OF_ACCOUNTS + c.getNumberOfAccounts() + Constants.NEW_LINE);
+				customerSummaries += Constants.NAME + c.getName() + Constants.NUMBER_OF_ACCOUNTS + c.getNumberOfAccounts() + Constants.NEW_LINE;
+			}	
+			return customerSummaries;
+		}
+	}
+;
+	public String totalInterestPaid() {
+		BigDecimal totalInterestPaid = Constants.ZERO_BD;
+		for (Customer c : getCustomerList()) {
+			totalInterestPaid = totalInterestPaid.add(c.totalInterestEarned());
+		}
+		return Constants.TOTAL_INTEREST_PAID + totalInterestPaid.setScale(2, RoundingMode.HALF_UP);
+	}
 
-    //Make sure correct plural of word is created based on the number passed in:
-    //If number passed in is 1 just return the word otherwise add an 's' at the end
-    private String format(int number, String word) {
-        return number + " " + (number == 1 ? word : word + "s");
-    }
+	public List<Customer> getCustomerList() {
+		return customerList;
+	}
 
-    public double totalInterestPaid() {
-        double total = 0;
-        for(Customer c: customers)
-            total += c.totalInterestEarned();
-        return total;
-    }
-
-    public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
-        }
-    }
+	public void setCustomerList(List<Customer> customerList) {
+		this.customerList = customerList;
+	}
 }
+

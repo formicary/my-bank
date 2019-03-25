@@ -1,73 +1,94 @@
 package com.abc;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.List;
 
-public class Account {
+public abstract class Account {
 
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
+	private final String accountType;
+	private final int accountID;
+	private BigDecimal balance = new BigDecimal(0);
+	private ArrayList<Deposit> depositList;
+	private ArrayList<Withdrawal> withdrawalList;
 
-    private final int accountType;
-    public List<Transaction> transactions;
+	public Account(String accountType, int accountID) {
+		this.accountType = accountType;
+		this.accountID = accountID;
+		this.depositList = new ArrayList<Deposit>();
+		this.withdrawalList = new ArrayList<Withdrawal>();
+	}
 
-    public Account(int accountType) {
-        this.accountType = accountType;
-        this.transactions = new ArrayList<Transaction>();
-    }
+	public String deposit(BigDecimal amount) {
+		if (amount.signum() == Constants.ZERO_INT || amount.signum() == Constants.NEGATIVE_ONE) {
+			throw new IllegalArgumentException(Constants.ACCOUNT_DEPOSIT_ILLEGAL_ARGUMENT_EXCEPTION);
+		} else {
+			BigDecimal updatedBalance = getBalance().add(amount);
+			setBalance(updatedBalance.setScale(2, RoundingMode.HALF_UP));
+			recordDeposit(amount);
+			return Constants.SUCCESSFUL_DEPOSIT;
+		}
+	}
 
-    public void deposit(double amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
-        } else {
-            transactions.add(new Transaction(amount));
-        }
-    }
+	public String withdraw(BigDecimal amount) {
+		if (amount.signum() == Constants.ZERO_INT || amount.signum() == Constants.NEGATIVE_ONE) {
+			throw new IllegalArgumentException(Constants.ACCOUNT_WITHDRAW_ILLEGAL_ARGUMENT_EXCEPTION);
+		} else {
+			BigDecimal potentialBalance = getBalance().subtract(amount);
+			if (potentialBalance.signum() == Constants.NEGATIVE_ONE) {
+				return Constants.INSUFFICIENT_FUNDS;
+			}
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
-    }
-}
+			else {
+				BigDecimal updatedBalance = getBalance().subtract(amount);
+				setBalance(updatedBalance.setScale(2, RoundingMode.HALF_UP));
+				recordWithdrawal(amount);
+				return Constants.SUCCESSFUL_WITHDRAWAL;
+			}
+		}
+	}
 
-    public double interestEarned() {
-        double amount = sumTransactions();
-        switch(accountType){
-            case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
-            case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
-            default:
-                return amount * 0.001;
-        }
-    }
+	public void recordDeposit(BigDecimal amount) {
+		getDepositList().add(new Deposit(amount));
+	}
 
-    public double sumTransactions() {
-       return checkIfTransactionsExist(true);
-    }
+	public void recordWithdrawal(BigDecimal amount) {
+		getWithdrawalList().add(new Withdrawal(amount));
+	}
 
-    private double checkIfTransactionsExist(boolean checkAll) {
-        double amount = 0.0;
-        for (Transaction t: transactions)
-            amount += t.amount;
-        return amount;
-    }
+	public BigDecimal interestEarned() {
+		return Constants.INTEREST_EARNED;
+	}
 
-    public int getAccountType() {
-        return accountType;
-    }
+	public BigDecimal getBalance() {
+		return balance;
+	}
 
+	public void setBalance(BigDecimal balance) {
+		this.balance = balance;
+	}
+
+	public ArrayList<Deposit> getDepositList() {
+		return depositList;
+	}
+
+	public void setDepositList(ArrayList<Deposit> deposits) {
+		this.depositList = deposits;
+	}
+
+	public ArrayList<Withdrawal> getWithdrawalList() {
+		return withdrawalList;
+	}
+
+	public void setWithdrawalList(ArrayList<Withdrawal> withdrawals) {
+		this.withdrawalList = withdrawals;
+	}
+
+	public String getAccountType() {
+		return accountType;
+	}
+
+	public int getAccountID() {
+		return accountID;
+	}
 }
