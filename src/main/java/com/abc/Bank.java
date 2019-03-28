@@ -14,10 +14,20 @@ public class Bank {
         customers.add(customer);
     }
 
-    public String customerSummary() {
+    public String getCustomerSummary(Customer customer) {
+        if (customers.contains(customer)) {
+            String summary = "Customer Summary";
+            summary += "\n - " + customer.getName() + " (" + format(customer.getNumberOfAccounts(), "account") + ")";
+            return summary;
+        } else {
+            throw new IllegalArgumentException("couldn't find this customer");
+        }
+    }
+
+    public String getAllCustomersSummary() {
         String summary = "Customer Summary";
-        for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
+        for (Customer customer : customers)
+            summary += "\n - " + customer.getName() + " (" + format(customer.getNumberOfAccounts(), "account") + ")";
         return summary;
     }
 
@@ -27,20 +37,20 @@ public class Bank {
         return number + " " + (number == 1 ? word : word + "s");
     }
 
-    public double totalInterestPaid() {
+    // isShowForTheWHoleYear is used when the Customer wants to see the Interest for the whole year upfront
+    public double totalInterestPaid(Boolean isShowForTheWHoleYear) {
         double total = 0;
-        for(Customer c: customers)
-            total += c.totalInterestEarned();
+        for(Customer customer: customers)
+            total += customer.totalInterestEarned(isShowForTheWHoleYear);
         return total;
     }
 
-    public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
+    public Customer getFirstCustomer() {
+        if (customers.size() > 0) {
+            return customers.get(0);
+        } else {
+            throw new NullPointerException("no customers in the bank");
         }
+
     }
 }
