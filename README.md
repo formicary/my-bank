@@ -40,9 +40,3 @@ A dummy application for a bank; should provide various functions of a retail ban
 * A customer can transfer between their accounts
 * Change **Maxi-Savings accounts** to have an interest rate of 5% assuming no withdrawals in the past 10 days otherwise 0.1%
 * Interest rates should accrue and compound daily (incl. weekends), rates above are per-annum
-
-Samat Alpyssov | Implementation choices described
---------
-1. A customer can transfer between their accounts
-*  There are various ways of implementing this feature, the firts 3 that came to my mind were:
-    1. Implement Transfer as 
