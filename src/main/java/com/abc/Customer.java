@@ -14,23 +14,26 @@ public class Customer {
         this.accounts = new ArrayList<Account>();
     }
 
-    public String getName() {
-        return name;
-    }
-
     public Customer openAccount(Account account) {
-        accounts.add(account);
+        if (!accounts.contains(account)) {
+            accounts.add(account);
+        }
         return this;
     }
 
-    public int getNumberOfAccounts() {
-        return accounts.size();
+    public void transferBetweenAccounts(Account accountFrom, Account accountTo, double amount) {
+        if (accountFrom == null) throw new NullPointerException("Account " + accountFrom + " doesn't exist");
+        if (accountTo == null) throw new NullPointerException("Account " + accountTo + "  doesn't exist");
+        if (!accounts.contains(accountFrom)) throw new IllegalArgumentException("Account " + accountFrom + " is not " + name +"' account");
+        if (!accounts.contains(accountTo)) throw new IllegalArgumentException("Account " + accountFrom + " is not " + name +"' account");
+        accountFrom.withdraw(amount, true);
+        accountTo.deposit(amount);
     }
 
-    public double totalInterestEarned() {
+    public double totalInterestEarned(Boolean isShowForTheWholeYear) {
         double total = 0;
-        for (Account a : accounts)
-            total += a.interestEarned();
+        for (Account account : accounts)
+            total += account.interestEarned(isShowForTheWholeYear);
         return total;
     }
 
@@ -38,41 +41,64 @@ public class Customer {
         String statement = null;
         statement = "Statement for " + name + "\n";
         double total = 0.0;
-        for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+        for (Account account : accounts) {
+            statement += "\n" + statementForAccount(account) + "\n";
+            total += account.sumTransactions();
         }
         statement += "\nTotal In All Accounts " + toDollars(total);
         return statement;
     }
 
-    private String statementForAccount(Account a) {
-        String s = "";
+    private String statementForAccount(Account account) {
+        String statement = "";
 
        //Translate to pretty account type
-        switch(a.getAccountType()){
+        switch(account.getAccountType()){
             case Account.CHECKING:
-                s += "Checking Account\n";
+                statement += "Checking Account\n";
                 break;
             case Account.SAVINGS:
-                s += "Savings Account\n";
+                statement += "Savings Account\n";
                 break;
             case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
+                statement += "Maxi Savings Account\n";
                 break;
         }
 
         //Now total up all the transactions
         double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
+        for (Transaction transaction : account.getAllTransactions()) {
+            switch(transaction.getTransactionType()) {
+                case Transaction.DEPOSIT:
+                    statement += "  " + "deposit";
+                    break;
+                case Transaction.WITHDRAW:
+                    statement += "  " + "withdraw";
+                    break;
+                case Transaction.TRANSFER:
+                    statement += "  " + "transfer";
+                    break;
+            }
+            statement += " " + toDollars(transaction.getTransactionAmount()) + "\n";
+            total += transaction.getTransactionAmount();
         }
-        s += "Total " + toDollars(total);
-        return s;
+        statement += "Total " + toDollars(total);
+        return statement;
     }
 
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getNumberOfAccounts() {
+        return accounts.size();
+    }
+
+    public List<Account> getAllCustomerAccounts() {
+        return this.accounts;
     }
 }
