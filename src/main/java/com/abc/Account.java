@@ -1,5 +1,6 @@
 package com.abc;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,7 +35,7 @@ public class Account {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
             Date currentDate = DateProvider.getInstance().now();
-            transactions.add(new Transaction(amount, currentDate));
+            transactions.add(new Transaction(amount, currentDate, Transaction.Deposit));
         }
     }
 
@@ -47,7 +48,7 @@ public class Account {
         }else if(creationDate.after(transactionDate)) {
             throw new IllegalArgumentException("transactions must be done after the account is created");
         }else{
-            transactions.add(new Transaction(amount, transactionDate));
+            transactions.add(new Transaction(amount, transactionDate, Transaction.Deposit));
         }
     }
 
@@ -58,7 +59,7 @@ public class Account {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
             Date currentDate = DateProvider.getInstance().now();
-            transactions.add(new Transaction(-amount, currentDate));
+            transactions.add(new Transaction(-amount, currentDate, Transaction.Withdrawel));
         }
     }
 
@@ -71,39 +72,69 @@ public class Account {
         }else if(creationDate.after(transactionDate)) {
             throw new IllegalArgumentException("transactions must be done after the account is created");
         }else{
-            transactions.add(new Transaction(-amount, transactionDate));
+            transactions.add(new Transaction(-amount, transactionDate, Transaction.Withdrawel));
         }
     }
 
-    /* Allows the user to check the amount of interest they have earned based on what type of account it is.
+    /* Add and returns daily interest to the users account in the form of a interest transactions.
             Checking accounts have a flat rate of 0.1%
             Savings accounts have a rate of 0.1% for the first $1,000 then 0.2%
             Maxi-Savings accounts have a rate of 5% assuming no withdrawals in the past 10 days otherwise 0.1%
+            Note all above percentages are per annum and to gain daily values divide the values by 365
+            The final amount is rounded to 2 decimal places
      */
-    public double interestEarned() {
-        double amount = sumAllTransactions();
+    public double addInterest() {
+        Double interest = 0.0;
+        Date currentDate = DateProvider.getInstance().now();
+        Double balance = sumAllTransactions();
         switch(accountType){
             case SAVINGS:
-                if (amount <= 1000) {
-                    return amount * 0.001;
+                if (balance <= 1000) {
+                    interest = (balance * (0.001/365));
+                    break;
                 } else {
-                    return 1 + (amount - 1000) * 0.002;
+                    interest = (1/365) + ((balance - 1000) * (0.002/365));
+                    break;
                 }
             case MAXI_SAVINGS:
                 if(lastWithdrawal(10)) {
-                    return amount * 0.05;
+                    interest = balance * (0.05/365);
+                    break;
                 } else {
-                    return amount * 0.001;
+                    interest = balance * (0.001/365);
+                    break;
                 }
             default:
-                return amount * 0.001;
+                interest = balance * (0.001/365);
         }
+        //round interest to 2 decimal places
+        DecimalFormat df = new DecimalFormat("#.##");
+        interest = Double.valueOf(df.format(interest));
+
+        transactions.add(new Transaction(interest, currentDate, Transaction.Interest));
+        return interest;
     }
 
+    /*
+        This method returns the total amounts of interest ever earned on this account
+     */
+    public double interestEarned(){
+        double amount = 0;
+        for(Transaction t : transactions){
+            if ( t.getTransactionType() == Transaction.Interest){
+                amount += t.amount;
+            }
+        }
+        return amount;
+    }
+
+    // This get the sum of all transactions that have occured on this account
+    // Also accounts for the current balance of the account.
     public double sumAllTransactions() {
        double amount = 0.0;
-        for (Transaction t: transactions)
+        for (Transaction t: transactions) {
             amount += t.amount;
+        }
         return amount;
     }
 
@@ -123,7 +154,7 @@ public class Account {
     private boolean lastWithdrawal(int days){
         Date currentDate = DateProvider.getInstance().now();
         for (int i = transactions.size(); i-- > 0; ) {
-            if(transactions.get(i).transactionType()){
+            if(transactions.get(i).getTransactionType() == Transaction.Withdrawel){
                 //difference in milliseconds
                 long diff = currentDate.getTime() - transactions.get(i).getTransactionDate().getTime();
                 long diffDays = diff / (24 * 60 * 60 * 1000);

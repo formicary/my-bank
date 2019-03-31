@@ -2,9 +2,6 @@ package com.abc;
 
 import org.junit.Test;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import static org.junit.Assert.assertEquals;
 
 public class BankTest {
@@ -45,86 +42,52 @@ public class BankTest {
     }
 
     @Test
-    public void checkingAccount() {
+    public void totalInterestOneAccount(){
         Bank bank = new Bank();
         Account checkingAccount = new Account(Account.CHECKING);
         Customer bill = new Customer("Bill").openAccount(checkingAccount);
         bank.addCustomer(bill);
 
-        checkingAccount.deposit(100.0);
+        checkingAccount.deposit(10000.0);
+        checkingAccount.addInterest();
 
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(0.03, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
-    public void savings_account() {
+    public void totalInterestTwoAccounts(){
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+        Account checkingAccount = new Account(Account.CHECKING);
+        Account secondCheckingAccount = new Account(Account.CHECKING);
+        Customer bill = new Customer("Bill").openAccount(checkingAccount);
+        bill.openAccount(secondCheckingAccount);
+        bank.addCustomer(bill);
 
-        checkingAccount.deposit(1500.0);
+        checkingAccount.deposit(10000.0);
+        checkingAccount.addInterest();
 
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        secondCheckingAccount.deposit(10000.0);
+        secondCheckingAccount.addInterest();
+
+        assertEquals(0.06, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
-    @Test
-    public void maxi_savings_account_no_withdrawal() {
+    public void totalInterestTwoCusomtersOneAccount(){
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+        Account checkingAccount = new Account(Account.CHECKING);
+        Account secondCheckingAccount = new Account(Account.CHECKING);
+        Customer bill = new Customer("Bill").openAccount(checkingAccount);
+        Customer bob = new Customer("Bob").openAccount(secondCheckingAccount);
+        bank.addCustomer(bill);
+        bank.addCustomer(bob);
 
-        checkingAccount.deposit(3000.0);
+        checkingAccount.deposit(10000.0);
+        checkingAccount.addInterest();
 
-        assertEquals(150.0, bank.totalInterestPaid(), DOUBLE_DELTA);
-    }
+        secondCheckingAccount.deposit(10000.0);
+        secondCheckingAccount.addInterest();
 
-    @Test
-    public void maxi_savings_account_recent_withdrawal(){
-        String accountCreation = "01/03/2019 09:29:58";
-        String transActionDate = "25/03/2019 10:31:48";
-
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        try {
-            Date d1 = format.parse(accountCreation);
-            Date d2 = format.parse(transActionDate);
-
-            Bank bank = new Bank();
-            Account checkingAccount = new Account(Account.MAXI_SAVINGS, d1);
-            bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
-
-            checkingAccount.deposit(3000.0);
-            checkingAccount.withdraw(1000.0,d2);
-
-            assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    @Test
-    public void maxi_savings_account_not_recent_withdrawal(){
-        String accountCreation = "01/03/2019 09:29:58";
-        String transActionDate = "10/03/2019 10:31:48";
-
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        try {
-            Date d1 = format.parse(accountCreation);
-            Date d2 = format.parse(transActionDate);
-
-            Bank bank = new Bank();
-            Account checkingAccount = new Account(Account.MAXI_SAVINGS, d1);
-            bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
-
-            checkingAccount.deposit(3000.0);
-            checkingAccount.withdraw(1000.0,d2);
-
-            assertEquals(100.0, bank.totalInterestPaid(), DOUBLE_DELTA);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        assertEquals(0.06, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
 }

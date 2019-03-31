@@ -1,6 +1,7 @@
 package com.abc;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static java.lang.Math.abs;
@@ -23,10 +24,12 @@ public class Customer {
         return this;
     }
 
+
     public int getNumberOfAccounts() {
         return accounts.size();
     }
 
+    //Returns the total amount of interest the customer has earned across all its accounts
     public double totalInterestEarned() {
         double total = 0;
         for (Account a : accounts)
@@ -34,6 +37,8 @@ public class Customer {
         return total;
     }
 
+    //Returns a statement that contains a summary of the customers accounts
+    //and the total amount of money they have in all their accounts
     public String getStatement() {
         String statement = null;
         statement = "Statement for " + name + "\n";
@@ -46,6 +51,28 @@ public class Customer {
         return statement;
     }
 
+    /*
+        This method will allow the customer to transfer money from one owned account to another owned account.
+        It will do this by first making a withdrawel from the FIRSTACCOUNT and the a deposit into the SECONDACCOUNT.
+        The AMOUNT withdrawn and deposited into both accounts will be the same.
+        It first checks that both accounts belong to the customer, it does this by checking that both accounts are
+        present in the accounts list
+     */
+    public void transferMoney(Account firstAccount, Account secondAccount, double amount){
+        if(accounts.contains(firstAccount) && accounts.contains(secondAccount)){
+                firstAccount.withdraw(amount);
+                secondAccount.deposit(amount);
+        }else{
+            throw new IllegalArgumentException("One or more the accounts do not belong to this customer");
+        }
+    }
+
+    /*Private method used to generate the statement for an Account,
+        returns a string in the format
+        Account type
+            All transactions
+            Balance in account.
+    */
     private String statementForAccount(Account a) {
         String s = "";
 
@@ -65,8 +92,18 @@ public class Customer {
         //Now total up all the transactions
         double total = 0.0;
         for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
             total += t.amount;
+            switch(t.getTransactionType()){
+                case Transaction.Deposit:
+                    s += "  deposit " + toDollars(t.amount) + "\n";
+                    break;
+                case Transaction.Withdrawel:
+                    s += "  withdrawal " + toDollars(t.amount) + "\n";
+                    break;
+                case Transaction.Interest:
+                    s += "  withdrawal " + toDollars(t.amount) + "\n";
+                    break;
+            }
         }
         s += "Total " + toDollars(total);
         return s;
