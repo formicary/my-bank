@@ -2,31 +2,47 @@ package com.abc;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import lombok.Data;
 import static java.lang.Math.abs;
 
+/**
+ * Class to represent a customer of the bank.
+ */
+@Data
 public class Customer {
     private String name;
-    private List<Account> accounts;
+    private List<Account> accounts = new ArrayList<Account>();
 
+    /**
+     * Creates a new customer record.
+     * @param name the name of the customer
+     */
     public Customer(String name) {
         this.name = name;
-        this.accounts = new ArrayList<Account>();
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public Customer openAccount(Account account) {
-        accounts.add(account);
+    /** Opens an account for the customer.
+     * 
+     * @param account the account type to be opened
+     * @return the customer record
+     */
+    public Customer openAccount(AccountType accountType) {
+        accounts.add(new Account(accountType));
         return this;
     }
 
+    /**
+     * Returns the number of accounts opened for the customer.
+     * @return the number of accounts
+     */
     public int getNumberOfAccounts() {
         return accounts.size();
     }
 
+    /**
+     * Counts the interest earned by the customer.
+     * @return the sum of interests on the customer's accounts
+     */
     public double totalInterestEarned() {
         double total = 0;
         for (Account a : accounts)
@@ -34,6 +50,10 @@ public class Customer {
         return total;
     }
 
+    /**
+     * Gets the statement for all the accounts of the customer.
+     * @return the string representation for the accounts
+     */
     public String getStatement() {
         String statement = null;
         statement = "Statement for " + name + "\n";
@@ -47,32 +67,17 @@ public class Customer {
     }
 
     private String statementForAccount(Account a) {
-        String s = "";
-
-       //Translate to pretty account type
-        switch(a.getAccountType()){
-            case Account.CHECKING:
-                s += "Checking Account\n";
-                break;
-            case Account.SAVINGS:
-                s += "Savings Account\n";
-                break;
-            case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
-                break;
+        StringBuilder s = new StringBuilder();
+        s.append(a.getAccountType().getName()+"\n");
+        for (Transaction t : a.getTransactions()) {
+            s.append("  " + t.getType() + " " + toDollars(t.getAmount()) + "\n");
         }
-
-        //Now total up all the transactions
-        double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
-        }
-        s += "Total " + toDollars(total);
-        return s;
-    }
+        s.append("Total " + toDollars(a.sumTransactions()));
+        return s.toString();
+    }   
 
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
     }
+
 }
