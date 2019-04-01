@@ -80,4 +80,25 @@ public class Customer {
         return String.format("$%,.2f", abs(d));
     }
 
+    /**
+     * Transfers a sum between two accounts of the customer.
+     * @param sourceAccount the source account
+     * @param targetAccount the target account
+     * @param sum the sum to be transferred
+     * @throws IllegalArgumentException if any of the input parameters are incorrect
+     */
+    public void transfer(int sourceAccount, int targetAccount, double sum) throws IllegalArgumentException{
+        if(sourceAccount>=accounts.size() || sourceAccount < 0) {
+            throw new IllegalArgumentException("Invalid source account index!");
+        }
+        if(targetAccount>=accounts.size() || targetAccount < 0) {
+            throw new IllegalArgumentException("Invalid target account index!");
+        }
+        if(sum < 0) {
+            throw new IllegalArgumentException("Only positive values can be transferred!");
+        }
+        accounts.get(sourceAccount).withdraw(sum);
+        accounts.get(targetAccount).deposit(sum);
+    }
+
 }

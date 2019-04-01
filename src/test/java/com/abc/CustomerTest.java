@@ -2,6 +2,7 @@ package com.abc;
 
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class CustomerTest {
 
@@ -54,4 +55,73 @@ public class CustomerTest {
                 .openAccount(AccountType.MAXI_SAVINGS);
         assertEquals(3, oscar.getNumberOfAccounts());
     }
+
+    @Test
+    public void normalTransfer() {
+        Customer cust = new Customer("Test Elek")
+            .openAccount(AccountType.SAVINGS)
+            .openAccount(AccountType.CHECKING);
+        cust.getAccounts().get(0).deposit(5000);
+        cust.getAccounts().get(1).deposit(1000);
+        
+        cust.transfer(0, 1, 500);
+
+        assertTrue(cust.getAccounts().get(0).sumTransactions() == 4500);
+        assertTrue(cust.getAccounts().get(1).sumTransactions() == 1500);        
+    }
+
+    @Test
+    public void transferFromInvalidSourceAccount() {
+        Customer cust = new Customer("Test Elek")
+            .openAccount(AccountType.SAVINGS)
+            .openAccount(AccountType.CHECKING);
+        cust.getAccounts().get(0).deposit(5000);
+        cust.getAccounts().get(1).deposit(1000);
+        
+        String exceptionMessage = "";
+        try {
+            cust.transfer(2, 1, 500);
+        } catch (IllegalArgumentException e) {
+            exceptionMessage = e.getMessage();
+        }
+        
+        assertTrue(exceptionMessage.equals("Invalid source account index!"));
+    }
+
+    @Test
+    public void transferToInvalidTargetAccount() {
+        Customer cust = new Customer("Test Elek")
+            .openAccount(AccountType.SAVINGS)
+            .openAccount(AccountType.CHECKING);
+        cust.getAccounts().get(0).deposit(5000);
+        cust.getAccounts().get(1).deposit(1000);
+        
+        String exceptionMessage = "";
+        try {
+            cust.transfer(0, 2, 500);
+        } catch (IllegalArgumentException e) {
+            exceptionMessage = e.getMessage();
+        }
+        
+        assertTrue(exceptionMessage.equals("Invalid target account index!"));
+    }
+
+    @Test
+    public void transferOfNegativeSum() {
+        Customer cust = new Customer("Test Elek")
+            .openAccount(AccountType.SAVINGS)
+            .openAccount(AccountType.CHECKING);
+        cust.getAccounts().get(0).deposit(5000);
+        cust.getAccounts().get(1).deposit(1000);
+        
+        String exceptionMessage = "";
+        try {
+            cust.transfer(0, 1, -500);
+        } catch (IllegalArgumentException e) {
+            exceptionMessage = e.getMessage();
+        }
+
+        assertTrue(exceptionMessage.equals("Only positive values can be transferred!"));
+    }
+
 }
