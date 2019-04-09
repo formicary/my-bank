@@ -1,16 +1,26 @@
 package com.abc;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
 
-public class Transaction {
-    public final double amount;
+import com.abc.account.CurrencyUtil;
 
-    private Date transactionDate;
+public final class Transaction {
+	public final double amount;
 
-    public Transaction(double amount) {
-        this.amount = amount;
-        this.transactionDate = DateProvider.getInstance().now();
-    }
+	private final LocalDate transactionDate;
+
+	public Transaction(double amount, LocalDate date) {
+		this.amount = amount;
+		this.transactionDate = date;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("%s %s\n", amount < 0 ? "withdrawal" : "deposit", CurrencyUtil.toDollars(amount));
+	}
+
+	public LocalDate getTransactionDate() {
+		return transactionDate;
+	}
 
 }
