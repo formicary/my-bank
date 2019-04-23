@@ -16,11 +16,20 @@ class TransactionTest {
 	}
 
 	/**
-	 * 
+	 * test that t is a valid instance of the Transaciton class
 	 */
 	@Test
     public void transaction() {
         assertTrue(t instanceof Transaction);
     }
+	
+	/**
+	 * test that t is non-null
+	 */
+	@Test 
+	public void testNotNull() {
+		assertNotNull(t);
+	}
+	
 
 }

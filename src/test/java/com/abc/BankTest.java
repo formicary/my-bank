@@ -29,7 +29,7 @@ class BankTest {
 	}
 	
 	/**
-	 * 
+	 * john has one account; summary should reflect this
 	 */
     @Test
     public void customerSummary() {
@@ -40,7 +40,7 @@ class BankTest {
     }
 
     /**
-     * 
+     * test that interest on checkingaccount is being applied correctly
      */
     @Test
     public void checkingAccount() {
@@ -52,7 +52,7 @@ class BankTest {
     }
 
     /**
-     * 
+     * test that interest on savingsaccount is being applied correctly
      */
     @Test
     public void savings_account() {
@@ -64,7 +64,7 @@ class BankTest {
     }
 
     /**
-     * 
+     * test that interest on maxi_savings accounts is being applied correctly
      */
     @Test
     public void maxi_savings_account() {
@@ -77,7 +77,7 @@ class BankTest {
     
     /**
      * @throws Exception 
-     * 
+     * test that getFirstCustomer returns the ame of the first customer
      */
     @Test
     public void first_customer() throws Exception {
@@ -87,7 +87,7 @@ class BankTest {
     }
     
     /**
-     * 
+     * getFirstCustomer should throw an exception if no customers present
      */
     @Test
     public void first_customer_exc() {

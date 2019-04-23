@@ -17,7 +17,7 @@ class AccountTest {
 	}
 
 	/**
-	 * 
+	 * deposit below 0 should throw an exception
 	 */
 	@Test
 	public void testInvalidDeposit() {
@@ -25,7 +25,7 @@ class AccountTest {
 	}
 	
 	/**
-	 * 
+	 * withdrawal below 0 should throw an exception
 	 */
 	@Test
 	public void testInvalidWithdrawal() {
@@ -33,7 +33,7 @@ class AccountTest {
 	}
 
 	/**
-	 * 
+	 * accounts with no deposits made should not accrue interest
 	 */
 	@Test
 	public void testEmptyAccountsInterest() {
@@ -41,7 +41,7 @@ class AccountTest {
 	}
 	
 	/**
-	 * 
+	 * savings accounts with total of less than 1000 should have interest rate 0.1%
 	 */
 	@Test 
 	public void testSmallSavings() {

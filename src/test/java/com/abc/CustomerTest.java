@@ -24,9 +24,9 @@ class CustomerTest {
 	}
 
 	/**
-	 * 
+	 * Test customer statement generation
 	 */
-	@Test //Test customer statement generation
+	@Test 
     public void testApp(){
 
         henry.openAccount(checkingAccount);
@@ -70,7 +70,8 @@ class CustomerTest {
     }
     
     /**
-     * 
+     * test that the transferBetweenAccounts method accurately moves money 
+     * from one account to another
      */
     @Test
     public void testTransferBetweenAccounts() {
