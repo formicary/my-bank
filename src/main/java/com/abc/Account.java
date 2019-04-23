@@ -19,15 +19,18 @@ public class Account {
 
     private final AccountType accountType;
     public List<Transaction> transactions;
+    private double accountBalance;
 
     /**
      * constructor with accountType as argument
      * account transactions are set to a new empty ArrayList of type Transactions
+     * balance defaulted to 0
      * @param accountType
      */
     public Account(AccountType accountType) {
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
+        this.accountBalance = 0;
     }
 
     /**
@@ -40,6 +43,7 @@ public class Account {
         } 
         else {
             transactions.add(new Transaction(amount));
+            accountBalance += amount;
         }
     }
 
@@ -55,6 +59,7 @@ public class Account {
 	    } 
 	    else {
 	        transactions.add(new Transaction(-amount));
+	        accountBalance -= amount;
 	    }
 	}
 
@@ -63,18 +68,16 @@ public class Account {
 	 * @return
 	 */
     public double interestEarned() {
-    	
-        double amount = sumTransactions();
-        
+    	        
         //only calculate interest if the account is in positive balance
-        if(amount > 0) {
+        if(accountBalance > 0) {
         	switch(accountType){
             	case SAVINGS:
-	                if (amount <= 1000) {
-	                    return amount * 0.001;
+	                if (accountBalance <= 1000) {
+	                    return accountBalance * 0.001;
 	                }
 	                else {
-	                    return (1000 * 0.001) + ((amount-1000) * 0.002);
+	                    return (1000 * 0.001) + ((accountBalance-1000) * 0.002);
 	                }
 	                
 	            case MAXI_SAVINGS:
@@ -95,15 +98,15 @@ public class Account {
 	            	
 	            	//if its been more than 10 days since the last transaction then apply 5% rate
 	            	if(diffDays > 10) {
-	            		return amount * 0.05;
+	            		return accountBalance * 0.05;
 	            	}
 	            	else {
-	            		return amount * 0.001;
+	            		return accountBalance * 0.001;
 	            	}
 	            
 	            //default is a checking account
 	            default:
-	                return amount * 0.001;
+	                return accountBalance * 0.001;
 	        }
         }
         //otherwise, no interest accrued
