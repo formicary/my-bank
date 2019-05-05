@@ -23,6 +23,41 @@ public class Customer {
         return this;
     }
 
+    //Transfering amount between two accounts of the customer
+    public void transfer (Account from, Account to, int amount){
+
+        int fromExists = 0, toExists = 0;
+
+        for (Account account : accounts){
+            if (account == from){
+                fromExists = 1;
+                account.withdraw(amount);
+            }
+            if (account == to){
+                toExists = 1;
+                account.deposit(amount);
+            }
+        }
+
+        if (fromExists == 0){
+            for (Account account : accounts){
+                if (account == to){
+                    account.withdraw(amount);
+                }
+            }
+            throw new IllegalArgumentException("Source account does not exist");
+        }
+
+        if (toExists == 0){
+            for (Account account : accounts){
+                if (account == from){
+                    account.deposit(amount);
+                }
+            }
+            throw new IllegalArgumentException("Destination account does not exist");
+        }
+    }
+
     public int getNumberOfAccounts() {
         return accounts.size();
     }

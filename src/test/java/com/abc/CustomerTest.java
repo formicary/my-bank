@@ -7,6 +7,8 @@ import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
 
+    private static final double DOUBLE_DELTA = 1e-15;
+
     @Test //Test customer statement generation
     public void testApp(){
 
@@ -47,11 +49,63 @@ public class CustomerTest {
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
-    @Ignore
+    @Test
     public void testThreeAcounts() {
         Customer oscar = new Customer("Oscar")
                 .openAccount(new Account(Account.SAVINGS));
         oscar.openAccount(new Account(Account.CHECKING));
+        oscar.openAccount(new Account(Account.MAXI_SAVINGS));
         assertEquals(3, oscar.getNumberOfAccounts());
+    }
+
+
+    @Test
+    public void transferSuccess(){
+        Customer oscar = new Customer("Oscar");
+        Account saving = new Account(Account.SAVINGS);
+        saving.deposit(1000);
+        oscar.openAccount(saving);
+
+
+        Account checking = new Account(Account.CHECKING);
+        oscar.openAccount(checking);
+
+        oscar.transfer(saving,checking,500);
+
+        assertEquals(500, saving.sumTransactions(), DOUBLE_DELTA);
+        assertEquals(500, checking.sumTransactions(), DOUBLE_DELTA);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void transferInsuccessAccount(){
+        Customer oscar = new Customer("Oscar");
+        Account saving = new Account(Account.SAVINGS);
+        saving.deposit(1000);
+        oscar.openAccount(saving);
+
+
+        Account checking = new Account(Account.CHECKING);
+
+        oscar.transfer(saving,checking,500);
+
+        assertEquals(500, saving.sumTransactions(), DOUBLE_DELTA);
+        assertEquals(500, checking.sumTransactions(), DOUBLE_DELTA);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void transferInsuccessAmount(){
+        Customer oscar = new Customer("Oscar");
+        Account saving = new Account(Account.SAVINGS);
+        saving.deposit(1000);
+        oscar.openAccount(saving);
+
+
+        Account checking = new Account(Account.CHECKING);
+        oscar.openAccount(checking);
+
+        oscar.transfer(saving,checking,-500);
+
+        assertEquals(500, saving.sumTransactions(), DOUBLE_DELTA);
+        assertEquals(500, checking.sumTransactions(), DOUBLE_DELTA);
     }
 }

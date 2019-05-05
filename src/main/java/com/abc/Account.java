@@ -1,5 +1,7 @@
 package com.abc;
 
+import org.joda.time.DateTimeUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,13 +27,13 @@ public class Account {
         }
     }
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
+    public void withdraw(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        } else {
+            transactions.add(new Transaction(-amount));
+        }
     }
-}
 
     public double interestEarned() {
         double amount = sumTransactions();
@@ -45,14 +47,27 @@ public void withdraw(double amount) {
 //                if (amount <= 4000)
 //                    return 20;
             case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
+                if(lastTransaction())
+                    return amount * 0.05;
+
+                else
+                    return amount * 0.001;
+
             default:
                 return amount * 0.001;
         }
+    }
+
+
+    public boolean lastTransaction(){
+        long last = transactions.get(0).getTransactionDate().getTime();
+        long now = DateTimeUtils.currentTimeMillis();
+        long days = (now - last) / (24 * 60 * 60 * 1000);
+        if(days >= 10){
+            return true;
+        }
+        else
+            return false;
     }
 
     public double sumTransactions() {
