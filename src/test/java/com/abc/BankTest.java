@@ -1,11 +1,16 @@
 package com.abc;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeUtils;
 import org.junit.Test;
+
 
 import static org.junit.Assert.assertEquals;
 
+
 public class BankTest {
     private static final double DOUBLE_DELTA = 1e-15;
+
 
     @Test
     public void customerSummary() {
@@ -46,9 +51,29 @@ public class BankTest {
         Account checkingAccount = new Account(Account.MAXI_SAVINGS);
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
+
         checkingAccount.deposit(3000.0);
 
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+
+        assertEquals(3.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+
     }
+
+    @Test
+    public void maxi_savings_account_10days() {
+        Bank bank = new Bank();
+        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
+        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+
+
+        checkingAccount.deposit(3000.0);
+        DateTimeUtils.setCurrentMillisFixed(DateTime.now().plusDays(10).getMillis());
+
+
+        assertEquals(150.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        DateTimeUtils.setCurrentMillisSystem();
+    }
+
+
 
 }
