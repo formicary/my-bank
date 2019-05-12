@@ -46,6 +46,20 @@ public class Customer {
         return statement;
     }
 
+    /*
+        The following method is used to transfer money between two accounts owned by a customer.
+        If a customer owns both accounts, an 'amount' is withdrawn from the 'fromAccount' and an 'amount' is deposited to the 'toAccount'.
+        If the accounts are not owned by the customer an exception is thrown.
+     */
+    public void transferBetweenAccounts(Account fromAccount, Account toAccount, Double amount){
+        if(accounts.contains(fromAccount) && accounts.contains(toAccount)){
+            fromAccount.withdraw(amount);
+            toAccount.deposit(amount);
+        }else{
+            throw new IllegalArgumentException("The accounts must belong to the same customer!");
+        }
+    }
+
     private String statementForAccount(Account a) {
         String s = "";
 
@@ -75,4 +89,5 @@ public class Customer {
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
     }
+
 }

@@ -6,8 +6,9 @@ import static org.junit.Assert.assertTrue;
 
 public class TransactionTest {
     @Test
-    public void transaction() {
-        Transaction t = new Transaction(5);
+    public void testTransaction() {
+        Transaction t = new Transaction(5, Transaction.WITHDRAWAL);
         assertTrue(t instanceof Transaction);
     }
+
 }
