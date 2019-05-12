@@ -78,6 +78,7 @@ public class BankTest {
         assertEquals(100.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
+
     /*
        The following test is used to see if the correct interest rate is applied for Maxi-Savings account when no withdrawals in the past 10 days.
        The expected interest rate is of 5%.
