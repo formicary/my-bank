@@ -15,4 +15,12 @@ public class DateProvider {
     public Date now() {
         return Calendar.getInstance().getTime();
     }
+
+    //Returns a date 'x' days in the past/present from the input the 'date'
+    public Date oldDate(Date date, int x){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.DATE, x);
+        return calendar.getTime();
+    }
 }
