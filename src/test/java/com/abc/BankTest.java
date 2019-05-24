@@ -1,54 +1,72 @@
 package com.abc;
 
+import com.abc.accounts.Account;
+import com.abc.accounts.AccountFactory;
+import com.abc.util.Money;
+import com.abc.util.USDFactory;
 import org.junit.Test;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Currency;
 
 import static org.junit.Assert.assertEquals;
 
 public class BankTest {
-    private static final double DOUBLE_DELTA = 1e-15;
 
     @Test
     public void customerSummary() {
         Bank bank = new Bank();
         Customer john = new Customer("John");
-        john.openAccount(new Account(Account.CHECKING));
+        john.openAccount((AccountFactory.createAccount(AccountFactory.AccountType.CHECKING)));
         bank.addCustomer(john);
-
         assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
     }
 
     @Test
     public void checkingAccount() {
+        Money.init(Currency.getInstance("USD"), RoundingMode.HALF_EVEN);
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.CHECKING);
+        Account checkingAccount = AccountFactory.createAccount(AccountFactory.AccountType.CHECKING);
         Customer bill = new Customer("Bill").openAccount(checkingAccount);
         bank.addCustomer(bill);
 
-        checkingAccount.deposit(100.0);
+        Money ONE_HUNDRED = USDFactory.DollarToMoney(100L);
+        checkingAccount.deposit(ONE_HUNDRED);
 
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+        Money expectedTotalInterestPaid = new Money(BigDecimal.valueOf(10));
+
+        assertEquals(expectedTotalInterestPaid.getAmount().longValue(), bank.totalInterestPaid().getAmount().longValue());
     }
 
     @Test
     public void savings_account() {
+        Money.init(Currency.getInstance("USD"), RoundingMode.HALF_EVEN);
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.SAVINGS);
+        Account checkingAccount = AccountFactory.createAccount(AccountFactory.AccountType.SAVINGS);
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
-        checkingAccount.deposit(1500.0);
 
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        Money money = USDFactory.DollarToMoney(1500L);
+        checkingAccount.deposit(money);
+
+        Money expectedInterest = USDFactory.DollarToMoney(2L);
+
+        assertEquals(expectedInterest.getAmount().longValue(), bank.totalInterestPaid().getAmount().longValue());
     }
 
     @Test
     public void maxi_savings_account() {
+        Money.init(Currency.getInstance("USD"), RoundingMode.HALF_EVEN);
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
+        Account checkingAccount = AccountFactory.createAccount(AccountFactory.AccountType.MAXI_SAVINGS);
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
-        checkingAccount.deposit(3000.0);
+        checkingAccount.deposit(USDFactory.DollarToMoney(3000L));
 
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        Money expectedInterest = USDFactory.DollarToMoney(170L);
+
+        assertEquals(expectedInterest.getAmount().longValue(), bank.totalInterestPaid().getAmount().longValue());
     }
 
 }

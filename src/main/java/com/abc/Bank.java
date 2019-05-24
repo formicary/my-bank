@@ -1,46 +1,48 @@
 package com.abc;
 
+import com.abc.util.Money;
+
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Bank {
-    private List<Customer> customers;
 
-    public Bank() {
-        customers = new ArrayList<Customer>();
+    private Collection<Customer> customers = Collections.synchronizedCollection(new ArrayList<>());
+
+    public void addCustomer(Customer customer)  {
+
+        boolean customerAlreadyExists = this.customers.stream()
+                .anyMatch(customer1 -> customer1.getID().equals(customer.getID()));
+
+        if (customerAlreadyExists) {
+            throw new IllegalArgumentException("Customer Already Exists");
+        }
+        else {
+            this.customers.add(customer);
+        }
     }
 
-    public void addCustomer(Customer customer) {
-        customers.add(customer);
+    public void deleteCustomer(Customer customer) {
+
     }
 
     public String customerSummary() {
-        String summary = "Customer Summary";
+        StringBuilder summary = new StringBuilder("Customer Summary");
         for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-        return summary;
+            summary.append("\n - ").append(c.toString());
+        return summary.toString();
     }
 
-    //Make sure correct plural of word is created based on the number passed in:
-    //If number passed in is 1 just return the word otherwise add an 's' at the end
-    private String format(int number, String word) {
-        return number + " " + (number == 1 ? word : word + "s");
-    }
-
-    public double totalInterestPaid() {
-        double total = 0;
+    public Money totalInterestPaid() {
+        Money totalInterestPaid = new Money(BigDecimal.ZERO);
         for(Customer c: customers)
-            total += c.totalInterestEarned();
-        return total;
-    }
-
-    public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
-        }
+            totalInterestPaid = totalInterestPaid.plus(c.totalInterestEarned());
+        return totalInterestPaid;
     }
 }
