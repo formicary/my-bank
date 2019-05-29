@@ -2,14 +2,19 @@ package com.abc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static java.lang.Math.abs;
 
 public class Customer {
+	public static int customerIDAssign = 0;
+
+    private int customerID;
     private String name;
     private List<Account> accounts;
 
     public Customer(String name) {
+    	this.customerID = customerIDAssign++;
         this.name = name;
         this.accounts = new ArrayList<Account>();
     }
@@ -40,7 +45,7 @@ public class Customer {
         double total = 0.0;
         for (Account a : accounts) {
             statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+            total += a.getBalance();
         }
         statement += "\nTotal In All Accounts " + toDollars(total);
         return statement;
@@ -64,9 +69,11 @@ public class Customer {
 
         //Now total up all the transactions
         double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
+        List<Transaction> transactions = a.getTransactions();
+        for (Transaction t : transactions) {
+        	double tAmount = t.getAmount();
+            s += "  " + (tAmount < 0 ? "withdrawal" : "deposit") + " " + toDollars(tAmount) + "\n";
+            total += tAmount;
         }
         s += "Total " + toDollars(total);
         return s;

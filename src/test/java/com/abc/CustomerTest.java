@@ -8,8 +8,7 @@ import static org.junit.Assert.assertEquals;
 public class CustomerTest {
 
     @Test //Test customer statement generation
-    public void testApp(){
-
+    public void statementForAccount_TwoAccountsGiven_ShouldReturnStatement(){
         Account checkingAccount = new Account(Account.CHECKING);
         Account savingsAccount = new Account(Account.SAVINGS);
 
@@ -34,24 +33,41 @@ public class CustomerTest {
     }
 
     @Test
-    public void testOneAccount(){
+    public void getNumberOfAccounts_OneAccountGiven_ShouldReturnOne(){
         Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
         assertEquals(1, oscar.getNumberOfAccounts());
     }
 
     @Test
-    public void testTwoAccount(){
+    public void getNumberOfAccounts_TwoAccountGiven_ShouldReturnTwo(){
         Customer oscar = new Customer("Oscar")
                 .openAccount(new Account(Account.SAVINGS));
         oscar.openAccount(new Account(Account.CHECKING));
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
-    @Ignore
-    public void testThreeAcounts() {
+    @Test
+    public void getNumberOfAccounts_ThreeAccountGiven_ShouldReturnThree() {
         Customer oscar = new Customer("Oscar")
                 .openAccount(new Account(Account.SAVINGS));
         oscar.openAccount(new Account(Account.CHECKING));
+        oscar.openAccount(new Account(Account.MAXI_SAVINGS));
         assertEquals(3, oscar.getNumberOfAccounts());
     }
+    
+    @Test
+    public void getNumberOfAccounts_NoAccountGiven_ShouldReturnZero() {
+        Customer oscar = new Customer("Oscar");
+        assertEquals(0, oscar.getNumberOfAccounts());
+    }
+    
+    @Test
+    public void openAccount_DuplicateAccountTypeGiven_ShouldAddTwoAccounts() {
+        Customer oscar = new Customer("Oscar");
+        oscar.openAccount(new Account(Account.CHECKING));
+        oscar.openAccount(new Account(Account.CHECKING));
+        assertEquals(2, oscar.getNumberOfAccounts());
+    }
+    
+    
 }

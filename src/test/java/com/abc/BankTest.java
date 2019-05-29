@@ -30,7 +30,7 @@ public class BankTest {
     }
 
     @Test
-    public void savings_account() {
+    public void savingsAccount() {
         Bank bank = new Bank();
         Account checkingAccount = new Account(Account.SAVINGS);
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
@@ -41,14 +41,44 @@ public class BankTest {
     }
 
     @Test
-    public void maxi_savings_account() {
+    public void maxiSavingsAccount() {
         Bank bank = new Bank();
         Account checkingAccount = new Account(Account.MAXI_SAVINGS);
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
         checkingAccount.deposit(3000.0);
 
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(3.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+    }
+    
+    @Test
+    public void getFirstCustomer_OneCustomerGiven_ShouldReturnJohn() {
+        Bank bank = new Bank();
+        Customer john = new Customer("John");
+        john.openAccount(new Account(Account.CHECKING));
+        bank.addCustomer(john);
+
+        assertEquals("John", bank.getFirstCustomer());
+    }
+    
+    @Test
+    public void getFirstCustomer_TwoCustomersGiven_ShouldReturnJohn() {
+        Bank bank = new Bank();
+        Customer john = new Customer("John");
+        john.openAccount(new Account(Account.CHECKING));
+        bank.addCustomer(john);
+        
+        Customer max = new Customer("Max");
+        john.openAccount(new Account(Account.CHECKING));
+        bank.addCustomer(max);
+
+        assertEquals("John", bank.getFirstCustomer());
+    }
+    
+    @Test
+    public void getFirstCustomer_NoCustomersGiven_ShouldReturnNull() {
+        Bank bank = new Bank();
+        assertEquals(null, bank.getFirstCustomer());
     }
 
 }
