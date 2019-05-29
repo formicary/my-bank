@@ -38,6 +38,17 @@ public class Customer {
             total += a.interestEarned();
         return total;
     }
+    
+    public void transfer(Account acc1, Account acc2, double amount) {
+    	if(!accounts.contains(acc1) || !accounts.contains(acc2)) {
+    		throw new IllegalArgumentException("accounts must belong to customer");
+    	} else if(amount == 0){
+    		throw new IllegalArgumentException("amount must be greater than zero");
+    	} else {
+    		acc1.withdraw(amount);
+    		acc2.deposit(amount);
+    	}
+    }
 
     public String getStatement() {
         String statement = null;

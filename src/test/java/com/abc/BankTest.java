@@ -48,7 +48,8 @@ public class BankTest {
 
         checkingAccount.deposit(3000.0);
 
-        assertEquals(3.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        // Using new MaxiSavings Interest Rate
+        assertEquals(150.0, bank.totalInterestPaid(), DOUBLE_DELTA); 
     }
     
     @Test
