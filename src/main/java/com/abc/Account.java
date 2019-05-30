@@ -38,37 +38,26 @@ public class Account {
 		}
 	}
 
+	/**
+	 * Total interest earned on this account
+	 * @return Total interest
+	 */
 	public double interestEarned() {
 		double balance = getBalance();
 		double balanceMinusInterest = 0.0;
 
 		for (Transaction t : transactions) {
-			balanceMinusInterest+=t.getAmount();
+			balanceMinusInterest += t.getAmount();
 		}
-		
+
 		double res = balance - balanceMinusInterest;
 		return ((double) Math.round(res * 100) / 100);
-//		return balance - balanceMinusInterest;
-//		
-//		switch (accountType) {
-//		case CHECKING:
-//			return balance * 0.001;
-//		case SAVINGS:
-//			if (balance <= 1000)
-//				return balance * 0.001;
-//			else
-//				return 1 + (balance - 1000) * 0.002;
-//		case MAXI_SAVINGS:
-//			if (transactions.size() < 1) {
-//				return balance * 0.05;
-//			} else {
-//				return balance * getCurrentInterestRate(balance);
-//			}
-//		default:
-//			return 0;
-//		}
 	}
 
+	/**
+	 * Return the last Transaction that was a withdrawal
+	 * @return last withdrawal Transaction
+	 */
 	private Transaction getLastWithdrawal() {
 		for (int i = transactions.size() - 1; i > 0; i--) {
 			if (transactions.get(i).getAmount() < 0) {
@@ -80,13 +69,13 @@ public class Account {
 	}
 
 	/**
-	 * Calculate the balance of this account as the sum of all Transactions
-	 * @return balance - sum of all transactions
+	 * Calculate the balance of this account, as the sum of all Transactions
+	 * @return balance Sum of all transactions
 	 */
 	public double getBalance() {
 		if (transactions.size() < 1) {
 			return 0;
-		} 
+		}
 
 		double amount = 0.0;
 		Transaction dummyTransaction = new Transaction(0.0);
@@ -95,15 +84,17 @@ public class Account {
 		for (Transaction t : transactions) {
 			Date tDate = t.getDate();
 			int daysBetweenDates = daysBetween(tDate, currDate);
-
 			if (daysBetweenDates != 0 && amount > 0) { // Calculate accrued compound interest between days
 				currDate = tDate;
 				double currInterestRate = getCurrentInterestRate(amount);
+				System.out.println("Interest Rate: " + currInterestRate * 100);
 				amount = amount * (Math.pow((1 + (currInterestRate / 365)), daysBetweenDates));
+				System.out.println("UPDATE Interest increased AMOUNT TO: " + amount);
 			}
+
 			amount += t.getAmount();
 		}
-		
+
 		transactions.remove(dummyTransaction);
 		return ((double) Math.round(amount * 100) / 100);
 	}
@@ -112,8 +103,8 @@ public class Account {
 	 * For a given balance, calculate the correct interest rate for this account
 	 * 
 	 * @param balance
-	 *            - Sum of all Transactions
-	 * @return interestRate - Correct interest rate for given balance
+	 *            Sum of all Transactions
+	 * @return interestRate Correct interest rate for given balance
 	 */
 	private double getCurrentInterestRate(double balance) {
 		if (accountType == 0) {
@@ -153,6 +144,12 @@ public class Account {
 		return transactions;
 	}
 
+	/**
+	 * Return the number of days between two dates
+	 * @param d1 The start date
+	 * @param d2 The end date
+	 * @return Number of days between the given dates
+	 */
 	private int daysBetween(Date d1, Date d2) {
 		long difference = Math.abs(d1.getTime() - d2.getTime());
 		float daysBetween = (difference / (1000 * 60 * 60 * 24));

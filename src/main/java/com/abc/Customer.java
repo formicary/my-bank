@@ -39,6 +39,14 @@ public class Customer {
         return total;
     }
     
+    /**
+     * Transfer money amount between two owned accounts
+     * If there was a requirement for accounts to have a positive balance, would include a check
+     * however this is not currently a stated requirement
+     * @param acc1 Account to withdraw from
+     * @param acc2 Account to deposit to
+     * @param amount Money amount to transfer
+     */
     public void transfer(Account acc1, Account acc2, double amount) {
     	if(!accounts.contains(acc1) || !accounts.contains(acc2)) {
     		throw new IllegalArgumentException("accounts must belong to customer");
@@ -87,7 +95,6 @@ public class Customer {
             total += tAmount;
         }
         s += "  interest " + toDollars(a.interestEarned()) + "\n";
-//        s += "Total " + toDollars(total);
         s += "Total " + toDollars(a.getBalance());
         return s;
     }

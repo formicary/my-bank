@@ -1,6 +1,7 @@
 package com.abc;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -13,7 +14,7 @@ public class BankTest {
     private static final double DOUBLE_DELTA = 1e-15;
     private static final TestOnlyCurrentTime testOnlyCurrentTime = TestOnlyCurrentTime.getInstance();
     
-    @Before
+    @Test
     public void init() {
 		Date date = Calendar.getInstance().getTime();
 		testOnlyCurrentTime.setDate(date);
@@ -125,6 +126,29 @@ public class BankTest {
 
         assertEquals(5.50, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
+    
+    @Test
+    public void savingsAccount_DepositsAcrossInterestRateBoundary_ReurnCorrectInterest() {
+        Bank bank = new Bank();
+        Account savingsAccount = new Account(Account.SAVINGS);
+        Customer bill = new Customer("Bill").openAccount(savingsAccount);
+        bank.addCustomer(bill);
+        
+        Calendar calendar = new GregorianCalendar(2018, 5, 30);
+        testOnlyCurrentTime.setDate(calendar.getTime());
+
+        savingsAccount.deposit(500.0);
+        
+        calendar = new GregorianCalendar(2018, 7, 30);
+        testOnlyCurrentTime.setDate(calendar.getTime());
+        
+        savingsAccount.deposit(600.0);
+        
+        calendar = new GregorianCalendar(2019, 5, 30);
+        testOnlyCurrentTime.setDate(calendar.getTime());
+
+        assertEquals(1.92, bank.totalInterestPaid(), DOUBLE_DELTA);
+    }
 
     @Test
     public void maxiSavingsAccount_OneDepositYearInterest_ReturnCorrectInterest() {
@@ -143,6 +167,27 @@ public class BankTest {
         // Using new MaxiSavings Interest Rate
         assertEquals(153.8, bank.totalInterestPaid(), DOUBLE_DELTA); 
     }
+    
+    @Test
+    public void maxiSavingsAccount_WithdrawWithin10DaysAgo_ReturnCorrectInterest() {
+        Bank bank = new Bank();
+        Account maxiSavings = new Account(Account.MAXI_SAVINGS);
+        bank.addCustomer(new Customer("Bill").openAccount(maxiSavings));
+        
+        Calendar calendar = new GregorianCalendar(2019, 5, 25);
+        testOnlyCurrentTime.setDate(calendar.getTime());
+
+        maxiSavings.deposit(3000.0);
+        maxiSavings.withdraw(200.0);
+        
+        calendar = new GregorianCalendar(2019, 5, 30);
+        testOnlyCurrentTime.setDate(calendar.getTime());
+
+        // Using new MaxiSavings Interest Rate
+        assertEquals(0.04, bank.totalInterestPaid(), DOUBLE_DELTA); 
+    }
+    
+    
     
     @Test
     public void getFirstCustomer_OneCustomerGiven_ShouldReturnJohn() {

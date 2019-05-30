@@ -12,13 +12,10 @@ public class DateProvider {
 		return instance;
 	}
 
-//	 public Date now() {
-//	 return Calendar.getInstance().getTime();
-//	 }
-
+	// IMPORTANT - Please use 'CurrentTime()' in deployment
+	// 'TestOnlyCurrentTime()' is for testing only
 	public Date now() {
-		// return (new CurrentTime()).now();
-
+		// return (new CurrentTime()).now();  
 		return TestOnlyCurrentTime.getInstance().now();
 	}
 }
