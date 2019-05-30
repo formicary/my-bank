@@ -86,7 +86,9 @@ public class Customer {
             s += "  " + (tAmount < 0 ? "withdrawal" : "deposit") + " " + toDollars(tAmount) + "\n";
             total += tAmount;
         }
-        s += "Total " + toDollars(total);
+        s += "  interest " + toDollars(a.interestEarned()) + "\n";
+//        s += "Total " + toDollars(total);
+        s += "Total " + toDollars(a.getBalance());
         return s;
     }
 

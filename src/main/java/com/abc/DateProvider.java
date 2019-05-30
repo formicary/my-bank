@@ -12,13 +12,13 @@ public class DateProvider {
 		return instance;
 	}
 
-	 public Date now() {
-	 return Calendar.getInstance().getTime();
-	 }
+//	 public Date now() {
+//	 return Calendar.getInstance().getTime();
+//	 }
 
-//	public Date now() {
-//		// return (new CurrentTime()).now();
-//
-//		return TestOnlyCurrentTime.getInstance().now();
-//	}
+	public Date now() {
+		// return (new CurrentTime()).now();
+
+		return TestOnlyCurrentTime.getInstance().now();
+	}
 }
