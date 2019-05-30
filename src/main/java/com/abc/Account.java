@@ -87,9 +87,7 @@ public class Account {
 			if (daysBetweenDates != 0 && amount > 0) { // Calculate accrued compound interest between days
 				currDate = tDate;
 				double currInterestRate = getCurrentInterestRate(amount);
-				System.out.println("Interest Rate: " + currInterestRate * 100);
 				amount = amount * (Math.pow((1 + (currInterestRate / 365)), daysBetweenDates));
-				System.out.println("UPDATE Interest increased AMOUNT TO: " + amount);
 			}
 
 			amount += t.getAmount();
