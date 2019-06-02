@@ -14,7 +14,7 @@ public class MaxiSavingsAccount extends Account{
 				LocalDate limit = LocalDate.now().minusDays(10);
 				if ((lastTransaction.isBefore(limit))) {
 					return balance * 0.05;
-				} else if (t.getAmount() < 0){
+				} else if (t.getAmount() < 0) {
 					return balance * 0.001;
 				}
 			}
