@@ -6,21 +6,31 @@ import java.util.List;
 import static java.lang.Math.abs;
 
 public class Customer {
+	
     private String name;
-    private List<Account> accounts;
+    private List<Account> accounts = new ArrayList<>();
 
     public Customer(String name) {
         this.name = name;
-        this.accounts = new ArrayList<Account>();
     }
 
+    public void openAccount(Account account) {
+        accounts.add(account);
+    }
+    
+    public void transfer(Account accountFrom, Account accountTo, double amount) {
+    	if (amount <= 0) {
+    		throw new IllegalArgumentException("amount must be greater than zero");
+    	} else if (!accounts.contains(accountFrom) || !accounts.contains(accountTo)) {
+    		throw new IllegalArgumentException("customer accounts invalid, customer must transfer between two valid accounts");
+    	} else {
+    		accountFrom.withdraw(amount);
+            accountTo.deposit(amount);
+    	}
+    }
+    
     public String getName() {
         return name;
-    }
-
-    public Customer openAccount(Account account) {
-        accounts.add(account);
-        return this;
     }
 
     public int getNumberOfAccounts() {
@@ -40,7 +50,7 @@ public class Customer {
         double total = 0.0;
         for (Account a : accounts) {
             statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+            total += a.getBalance();
         }
         statement += "\nTotal In All Accounts " + toDollars(total);
         return statement;
@@ -50,23 +60,14 @@ public class Customer {
         String s = "";
 
        //Translate to pretty account type
-        switch(a.getAccountType()){
-            case Account.CHECKING:
-                s += "Checking Account\n";
-                break;
-            case Account.SAVINGS:
-                s += "Savings Account\n";
-                break;
-            case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
-                break;
-        }
+        s += a.getAccountType();
+        s += "\n";
 
         //Now total up all the transactions
         double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
+        for (Transaction t : a.getTransactions()) {
+            s += "  " + (t.getAmount() < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.getAmount()) + "\n";
+            total += t.getAmount();
         }
         s += "Total " + toDollars(total);
         return s;
