@@ -1,5 +1,6 @@
-package com.abc;
+package main.java.com.abc;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,14 +34,15 @@ public class Bank {
             total += c.totalInterestEarned();
         return total;
     }
-
-    public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
-        }
-    }
+    
+    //Unused method
+//    public String getFirstCustomer() {
+//        try {
+//            //customers = null;
+//            return customers.get(0).getName();
+//        } catch (Exception e){
+//            e.printStackTrace();
+//            return "Error";
+//        }
+//    }
 }
