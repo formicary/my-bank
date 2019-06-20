@@ -29,12 +29,20 @@ public class Customer {
 
     public double totalInterestEarned() {
         double total = 0;
-        for (Account a : accounts)
-            total += a.interestEarned();
+        
+        for (Account account : accounts) {
+        	try {
+        		total += account.interestEarned();
+        	}
+        	catch (Exception e) {
+        		System.out.println(e.getMessage());
+        	}
+        }
+        
         return total;
     }
 
-    public String getStatement() {
+	public String getStatement() {
         String statement = "Statement for " + name + "\n";
         
         double total = 0.0;
@@ -47,19 +55,24 @@ public class Customer {
         
         return statement;
     }
-
+	
     private String statementForAccount(Account account) {
         String statement = "";
         
-        statement += getAccountTypeForStatement(account);
-        statement += getTransactionsForStatement(account);
+        try {
+        	statement += getAccountTypeForStatement(account);
+        	statement += getTransactionsForStatement(account);
+        }
+        catch (Exception e) {
+        	return e + "\n";
+        }
         
-        return statement;
+        return statement;        
     }
     
-    private String getAccountTypeForStatement(Account account) {
+    private String getAccountTypeForStatement(Account account) throws Exception {
     	//Translate to readable account type
-        switch(account.getAccountType()){
+        switch(account.getAccountType()) {
             case Account.CHECKING:
                 return "Checking Account\n";
             case Account.SAVINGS:
@@ -67,8 +80,9 @@ public class Customer {
             case Account.MAXI_SAVINGS:
                 return "Maxi Savings Account\n";
         }
-        //TODO - Handle error
-        return null;
+        
+        //If the account type is not one of the predefined values
+        throw new Exception("Invalid account type");
     }
     
     private String getTransactionsForStatement(Account account) {

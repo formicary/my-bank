@@ -1,24 +1,29 @@
 package com.abc;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class CustomerTest {
+	private static final double DOUBLE_DELTA = 1e-15;
 
-    @Test //Test customer statement generation
-    public void testApp(){
-
+    @Test
+    public void testStatementWhenAccountsAreValid() {    	
+    	//Arrange
         Account checkingAccount = new Account(Account.CHECKING);
         Account savingsAccount = new Account(Account.SAVINGS);
-
-        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
-
+        
+        Customer henry = new Customer("Henry")
+        		.openAccount(checkingAccount)
+        		.openAccount(savingsAccount);
+        
+        //Act
         checkingAccount.deposit(100.0);
         savingsAccount.deposit(4000.0);
         savingsAccount.withdraw(200.0);
-
+        
+        //Assert
         assertEquals("Statement for Henry\n" +
                 "\n" +
                 "Checking Account\n" +
@@ -31,6 +36,19 @@ public class CustomerTest {
                 "Total $3,800.00\n" +
                 "\n" +
                 "Total In All Accounts $3,900.00", henry.getStatement());
+    }
+    
+    @Test
+    public void testInvalidAccountThrowsException() {    	
+    	//Arrange
+		try {
+			Account invalidAccount = new Account(3);
+			fail();
+		}
+		catch (IllegalArgumentException e) {
+			//Assert
+			assertEquals("Invalid account type", e.getMessage());
+		}
     }
     
     @Test
@@ -49,49 +67,56 @@ public class CustomerTest {
     public void testCustomerCanDepositFunds() {
     	//Arrange
     	Account checkingAccount = new Account(Account.CHECKING);
-    	Customer george = new Customer("George").openAccount(checkingAccount);
     	
     	//Act
     	checkingAccount.deposit(50.0);
     	
     	//Assert
-    	assertEquals(50.0, checkingAccount.sumTransactions(), 0.001);
+    	assertEquals(50.0, checkingAccount.sumTransactions(), DOUBLE_DELTA);
     }
     
     @Test
     public void testCustomerCanWithdrawFunds() {
     	//Arrange
     	Account checkingAccount = new Account(Account.CHECKING);
-    	Customer george = new Customer("George").openAccount(checkingAccount);
     	
     	//Act
     	checkingAccount.withdraw(50.0);
     	
     	//Assert
-    	assertEquals(-50.0, checkingAccount.sumTransactions(), 0.001);
+    	assertEquals(-50.0, checkingAccount.sumTransactions(), DOUBLE_DELTA);
     }
    
 
     @Test
-    public void testOneAccount(){
+    public void testOneAccount() {
+    	//Arrange
         Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
+        
+        //Assert
         assertEquals(1, oscar.getNumberOfAccounts());
     }
 
     @Test
-    public void testTwoAccounts(){
-        Customer oscar = new Customer("Oscar")
+    public void testTwoAccounts() {
+        //Arrange
+    	Customer oscar = new Customer("Oscar")
+                .openAccount(new Account(Account.CHECKING))
                 .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
+        
+        //Assert
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
     @Test
     public void testThreeAccounts() {
+    	//Arrange
         Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
-        oscar.openAccount(new Account(Account.MAXI_SAVINGS));
+                .openAccount(new Account(Account.CHECKING))
+                .openAccount(new Account(Account.SAVINGS))
+                .openAccount(new Account(Account.MAXI_SAVINGS));
+        
+        //Assert
         assertEquals(3, oscar.getNumberOfAccounts());
     }
 }
