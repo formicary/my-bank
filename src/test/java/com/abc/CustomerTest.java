@@ -81,10 +81,32 @@ public class CustomerTest {
     	Account checkingAccount = new Account(Account.CHECKING);
     	
     	//Act
+    	checkingAccount.deposit(100.0);
     	checkingAccount.withdraw(50.0);
     	
     	//Assert
-    	assertEquals(-50.0, checkingAccount.sumTransactions(), DOUBLE_DELTA);
+    	assertEquals(50.0, checkingAccount.sumTransactions(), DOUBLE_DELTA);
+    }
+    
+    @Test
+    public void testCustomerCanTransferFunds() {
+    	//Arrange
+    	Account checkingAccount = new Account(Account.CHECKING);
+    	Account savingsAccount = new Account(Account.SAVINGS);
+    	
+    	Customer george = new Customer("George")
+    			.openAccount(checkingAccount)
+    			.openAccount(savingsAccount);
+    	
+    	checkingAccount.deposit(50.0);
+    	savingsAccount.deposit(50.0);
+    	
+    	//Act
+    	george.transferFunds(25.0, checkingAccount, savingsAccount);
+    	
+    	//Assert
+    	assertEquals(25.0, checkingAccount.sumTransactions(), DOUBLE_DELTA);
+    	assertEquals(75.0, savingsAccount.sumTransactions(), DOUBLE_DELTA);
     }
    
 

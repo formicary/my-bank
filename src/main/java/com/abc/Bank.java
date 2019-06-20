@@ -19,8 +19,7 @@ public class Bank {
         
         for (Customer c : customers) {
         	summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-        }
-            
+        }    
         
         return summary;
     }
@@ -36,15 +35,5 @@ public class Bank {
         for(Customer c: customers)
             total += c.totalInterestEarned();
         return total;
-    }
-
-    public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
-        }
     }
 }

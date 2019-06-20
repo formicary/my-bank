@@ -25,18 +25,19 @@ public class Account {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         }
-        else {
-            transactions.add(new Transaction(amount));
-        }
+        
+        transactions.add(new Transaction(amount));
     }
 
 	public void withdraw(double amount) {
 	    if (amount <= 0) {
 	        throw new IllegalArgumentException("amount must be greater than zero");
 	    }
-	    else {
-	        transactions.add(new Transaction(-amount));
+	    else if (sumTransactions() <= 0) {
+	    	throw new IllegalArgumentException("not enough in account to make withdrawal");
 	    }
+	    
+        transactions.add(new Transaction(-amount));
 	}
 
     public double interestEarned() throws Exception {
@@ -52,25 +53,42 @@ public class Account {
                 return 1 + (amount-1000) * 0.002;
                 
             case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
+            	if (daysSinceLastWithdrawal() < 10)
+            		return amount * 0.001;
+            	return amount * 0.05;
         }
         //If the account type is not one of the predefined values
         throw new Exception("Invalid account type");
     }
+    
+    public int daysSinceLastWithdrawal() {
+    	long lastWithdrawalTime = 0;
+    	
+    	//For every transaction
+    	for (Transaction transaction : transactions) {
+    		//If it is a withdrawal
+    		if (transaction.amount < 0) {
+    			long transactionTime = transaction.transactionDate.getTime();
+    			
+    			//If it happened more recently than the current most recent transaction
+    			if (transactionTime > lastWithdrawalTime) {
+    				lastWithdrawalTime = transactionTime;
+    			}
+    		}
+    	}
+    	
+    	long currentTime = DateProvider.getInstance().now().getTime();
+    	
+    	return (int) ((currentTime - lastWithdrawalTime) / (24 * 60 * 60 * 1000));
+    }
 
     public double sumTransactions() {
-       return checkIfTransactionsExist(true);
-    }
-    
-    //TODO - Is this necessary? Just put into sumTransactions?
-    private double checkIfTransactionsExist(boolean checkAll) {
-        double amount = 0.0;
-        for (Transaction t: transactions)
-            amount += t.amount;
+    	double amount = 0.0;
+    	
+        for (Transaction transaction: transactions) {
+            amount += transaction.amount;
+        }
+        
         return amount;
     }
 

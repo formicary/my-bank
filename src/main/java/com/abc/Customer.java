@@ -41,6 +41,11 @@ public class Customer {
         
         return total;
     }
+    
+    public void transferFunds(double amount, Account from, Account to) {
+    	from.withdraw(amount);
+    	to.deposit(amount);
+    }
 
 	public String getStatement() {
         String statement = "Statement for " + name + "\n";
