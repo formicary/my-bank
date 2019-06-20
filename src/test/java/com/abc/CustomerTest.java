@@ -32,6 +32,45 @@ public class CustomerTest {
                 "\n" +
                 "Total In All Accounts $3,900.00", henry.getStatement());
     }
+    
+    @Test
+    public void testCustomerCanOpenAccount() {
+    	//Arrange
+    	Customer george = new Customer("George");
+    	
+    	//Act
+    	george.openAccount(new Account(Account.CHECKING));
+    	
+    	//Assert
+    	assertEquals(1, george.getNumberOfAccounts());
+    }
+    
+    @Test
+    public void testCustomerCanDepositFunds() {
+    	//Arrange
+    	Account checkingAccount = new Account(Account.CHECKING);
+    	Customer george = new Customer("George").openAccount(checkingAccount);
+    	
+    	//Act
+    	checkingAccount.deposit(50.0);
+    	
+    	//Assert
+    	assertEquals(50.0, checkingAccount.sumTransactions(), 0.001);
+    }
+    
+    @Test
+    public void testCustomerCanWithdrawFunds() {
+    	//Arrange
+    	Account checkingAccount = new Account(Account.CHECKING);
+    	Customer george = new Customer("George").openAccount(checkingAccount);
+    	
+    	//Act
+    	checkingAccount.withdraw(50.0);
+    	
+    	//Assert
+    	assertEquals(-50.0, checkingAccount.sumTransactions(), 0.001);
+    }
+   
 
     @Test
     public void testOneAccount(){
@@ -40,18 +79,19 @@ public class CustomerTest {
     }
 
     @Test
-    public void testTwoAccount(){
+    public void testTwoAccounts(){
         Customer oscar = new Customer("Oscar")
                 .openAccount(new Account(Account.SAVINGS));
         oscar.openAccount(new Account(Account.CHECKING));
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
-    @Ignore
-    public void testThreeAcounts() {
+    @Test
+    public void testThreeAccounts() {
         Customer oscar = new Customer("Oscar")
                 .openAccount(new Account(Account.SAVINGS));
         oscar.openAccount(new Account(Account.CHECKING));
+        oscar.openAccount(new Account(Account.MAXI_SAVINGS));
         assertEquals(3, oscar.getNumberOfAccounts());
     }
 }

@@ -35,41 +35,54 @@ public class Customer {
     }
 
     public String getStatement() {
-        String statement = null;
-        statement = "Statement for " + name + "\n";
+        String statement = "Statement for " + name + "\n";
+        
         double total = 0.0;
-        for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+        
+        for (Account account : accounts) {
+            statement += "\n" + statementForAccount(account) + "\n";
+            total += account.sumTransactions();
         }
         statement += "\nTotal In All Accounts " + toDollars(total);
+        
         return statement;
     }
 
-    private String statementForAccount(Account a) {
-        String s = "";
-
-       //Translate to pretty account type
-        switch(a.getAccountType()){
+    private String statementForAccount(Account account) {
+        String statement = "";
+        
+        statement += getAccountTypeForStatement(account);
+        statement += getTransactionsForStatement(account);
+        
+        return statement;
+    }
+    
+    private String getAccountTypeForStatement(Account account) {
+    	//Translate to readable account type
+        switch(account.getAccountType()){
             case Account.CHECKING:
-                s += "Checking Account\n";
-                break;
+                return "Checking Account\n";
             case Account.SAVINGS:
-                s += "Savings Account\n";
-                break;
+                return "Savings Account\n";
             case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
-                break;
+                return "Maxi Savings Account\n";
         }
-
-        //Now total up all the transactions
+        //TODO - Handle error
+        return null;
+    }
+    
+    private String getTransactionsForStatement(Account account) {
+    	String formattedTransactions = "";
         double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
-        }
-        s += "Total " + toDollars(total);
-        return s;
+        
+        //Translate each transaction into a readable version
+        for (Transaction transaction : account.transactions) {
+            formattedTransactions += "  " + (transaction.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(transaction.amount) + "\n";
+            total += transaction.amount;
+        }        
+        formattedTransactions += "Total " + toDollars(total);
+        
+        return formattedTransactions;
     }
 
     private String toDollars(double d){

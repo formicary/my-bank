@@ -20,45 +20,50 @@ public class Account {
     public void deposit(double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
-        } else {
+        }
+        else {
             transactions.add(new Transaction(amount));
         }
     }
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
-    }
-}
+	public void withdraw(double amount) {
+	    if (amount <= 0) {
+	        throw new IllegalArgumentException("amount must be greater than zero");
+	    }
+	    else {
+	        transactions.add(new Transaction(-amount));
+	    }
+	}
 
     public double interestEarned() {
         double amount = sumTransactions();
-        switch(accountType){
+        
+        switch(accountType) {        
+	        case CHECKING:
+	        	return amount * 0.001;
             case SAVINGS:
                 if (amount <= 1000)
                     return amount * 0.001;
                 else
+                	//If greater than 1000, return
+                	//Interest for first 1000 = 1 hence 1 +
                     return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
             case MAXI_SAVINGS:
                 if (amount <= 1000)
                     return amount * 0.02;
                 if (amount <= 2000)
                     return 20 + (amount-1000) * 0.05;
                 return 70 + (amount-2000) * 0.1;
-            default:
-                return amount * 0.001;
         }
+        //TODO - Handle error
+        return 0;
     }
 
     public double sumTransactions() {
        return checkIfTransactionsExist(true);
     }
-
+    
+    //Is this necessary? Just put into sumTransactions?
     private double checkIfTransactionsExist(boolean checkAll) {
         double amount = 0.0;
         for (Transaction t: transactions)
