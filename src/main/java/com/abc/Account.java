@@ -1,73 +1,104 @@
 package com.abc;
 
+import static java.lang.Math.abs;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-public class Account {
+public abstract class Account {
+    
+    protected List<Transaction> transactions;
 
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
-
-    private final int accountType;
-    public List<Transaction> transactions;
-
-    public Account(int accountType) {
-        this.accountType = accountType;
+    protected Account() {
         this.transactions = new ArrayList<Transaction>();
     }
 
-    public void deposit(double amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
-        } else {
-            transactions.add(new Transaction(amount));
+    public void deposit(double amount) throws IllegalArgumentException
+    {
+        deposit(amount, DateProvider.now());
+    }
+    public void withdraw(double amount) throws IllegalArgumentException
+    {
+        withdraw(amount, DateProvider.now());
+	}
+    
+    public void deposit(double amount, Date date) throws IllegalArgumentException
+    {
+    	if (amount<0)
+    	{
+    		throw new IllegalArgumentException("Cannot deposit negative amount");
+    	}
+        addTransactionWithDate(amount, date);
+    }
+
+    public void withdraw(double amount, Date date) throws IllegalArgumentException
+    {
+    	if (amount<0)
+    	{
+    		throw new IllegalArgumentException("Cannot withdraw negative amount");
+    	}
+    	if (sumTransactions() - amount <0)
+    	{
+    		throw new IllegalArgumentException("Insufficient funds");
+    	}
+        addTransactionWithDate(-amount, date);
+	}
+    
+    public double sumTransactions() 
+    {
+    	double amount = 0.0;
+    	for (Transaction t: transactions)
+    	{
+    		amount += t.amount;
+    	}
+    	return amount;
+    }
+    public String getStatement()
+    {
+        String s = "";
+        
+        // valid since toString is must be override
+        s += toString();
+        double total = 0.0;
+        for (Transaction t : transactions) {
+            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
+            total += t.amount;
         }
+        s += "Total " + toDollars(total);
+        return s;
+    }
+    
+    
+    public static double getInterestPerDay(double currentSum, int days, double anumRate)
+    {
+    	System.out.println(currentSum * Math.pow( 1 + anumRate/ DateProvider.MEAN_YEAR, days) - currentSum);
+    	return currentSum * Math.pow( 1 + anumRate/ DateProvider.MEAN_YEAR, days) - currentSum;
+    }
+    
+    private void addTransactionWithDate(double amount, Date date) throws IllegalArgumentException
+    {
+    	if (amount == 0.0)
+    	{
+    		throw new IllegalArgumentException("cannot make an empty transaction");
+    	}
+    	if (transactions.size() == 0)
+    	{
+    		transactions.add(new Transaction(amount, date));
+    		return;
+    	}
+    	Date lastTransactionDate = transactions.get(transactions.size()-1).getTransactionDate();
+    	if (DateProvider.getDifferenceDays(lastTransactionDate, date) < 0.0)
+    	{
+    		throw new IllegalArgumentException("The date provided must be after the last transaction date");
+    	}
+    	transactions.add(new Transaction(amount, date));
+    }
+    private String toDollars(double d){
+        return String.format("$%,.2f", abs(d));
     }
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
-    }
-}
-
-    public double interestEarned() {
-        double amount = sumTransactions();
-        switch(accountType){
-            case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
-            case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
-            default:
-                return amount * 0.001;
-        }
-    }
-
-    public double sumTransactions() {
-       return checkIfTransactionsExist(true);
-    }
-
-    private double checkIfTransactionsExist(boolean checkAll) {
-        double amount = 0.0;
-        for (Transaction t: transactions)
-            amount += t.amount;
-        return amount;
-    }
-
-    public int getAccountType() {
-        return accountType;
-    }
-
+    public abstract double dailyInterestEarned();
+    public abstract double interestEarned();
+    public abstract String toString();
 }

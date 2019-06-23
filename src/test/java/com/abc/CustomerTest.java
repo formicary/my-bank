@@ -1,6 +1,5 @@
 package com.abc;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -8,10 +7,10 @@ import static org.junit.Assert.assertEquals;
 public class CustomerTest {
 
     @Test //Test customer statement generation
-    public void testApp(){
+    public void statementGeneration(){
 
-        Account checkingAccount = new Account(Account.CHECKING);
-        Account savingsAccount = new Account(Account.SAVINGS);
+        Account checkingAccount = new CheckingAccount();
+        Account savingsAccount = new SavingsAccount();
 
         Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
 
@@ -33,25 +32,52 @@ public class CustomerTest {
                 "Total In All Accounts $3,900.00", henry.getStatement());
     }
 
+   
     @Test
-    public void testOneAccount(){
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
+    public void openOneAccount(){
+        Customer oscar = new Customer("Oscar").openAccount(new SavingsAccount());
         assertEquals(1, oscar.getNumberOfAccounts());
     }
 
     @Test
-    public void testTwoAccount(){
+    public void openTwoAccounts(){
         Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
+                .openAccount(new SavingsAccount())
+                .openAccount(new CheckingAccount());
         assertEquals(2, oscar.getNumberOfAccounts());
     }
-
-    @Ignore
-    public void testThreeAcounts() {
+    @Test
+    public void transfer()
+    {
+    	Account ac1 = new SavingsAccount();
+    	ac1.deposit(1000.0);
+    	
+    	Account ac2 = new CheckingAccount();
+    	ac2.deposit(5.0);
+    	
         Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
-        assertEquals(3, oscar.getNumberOfAccounts());
+                .openAccount(ac1)
+                .openAccount(ac2);
+        
+        oscar.Transfer(0, 1, 500.0);
+        
+        assertEquals(oscar.getAccount(0).sumTransactions(), 500.0, TestUtils.DELTA_MONEY);
+        assertEquals(oscar.getAccount(1).sumTransactions(), 505.0, TestUtils.DELTA_MONEY);
     }
+    @Test(expected = IllegalArgumentException.class)
+    public void transferToNonExistingAccount()
+    {
+    	Account ac1 = new SavingsAccount();
+    	ac1.deposit(1000.0);
+    	
+    	Account ac2 = new CheckingAccount();
+    	ac2.deposit(5.0);
+    	
+        Customer oscar = new Customer("Oscar")
+                .openAccount(ac1)
+                .openAccount(ac2);
+        
+        oscar.Transfer(0, 5, 500.0);
+    }
+
 }

@@ -13,65 +13,55 @@ public class Customer {
         this.name = name;
         this.accounts = new ArrayList<Account>();
     }
-
     public String getName() {
         return name;
     }
-
     public Customer openAccount(Account account) {
         accounts.add(account);
         return this;
     }
-
     public int getNumberOfAccounts() {
         return accounts.size();
     }
-
     public double totalInterestEarned() {
-        double total = 0;
+        double total = 0.0;
         for (Account a : accounts)
-            total += a.interestEarned();
+            total += a.dailyInterestEarned();
         return total;
     }
-
     public String getStatement() {
-        String statement = null;
-        statement = "Statement for " + name + "\n";
+        String statement = "Statement for " + name + "\n";
         double total = 0.0;
         for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
+            statement += "\n" + a.getStatement() + "\n";
             total += a.sumTransactions();
         }
         statement += "\nTotal In All Accounts " + toDollars(total);
         return statement;
     }
-
-    private String statementForAccount(Account a) {
-        String s = "";
-
-       //Translate to pretty account type
-        switch(a.getAccountType()){
-            case Account.CHECKING:
-                s += "Checking Account\n";
-                break;
-            case Account.SAVINGS:
-                s += "Savings Account\n";
-                break;
-            case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
-                break;
-        }
-
-        //Now total up all the transactions
-        double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
-        }
-        s += "Total " + toDollars(total);
-        return s;
+    
+    public void Transfer(int from, int to, double amount) throws IllegalArgumentException
+    {
+    	if (to>=accounts.size() || from>=accounts.size() ||
+    			to<0 || from <0)
+    	{
+    		throw new IllegalArgumentException("Specified account(s) does not exist");
+    	}
+    	else
+    	{
+    		// if withdrawal fails, no money is transfered, exception is thrown and propagates upwards
+        	accounts.get(from).withdraw(amount);
+    		accounts.get(to).deposit(amount);
+    	}
     }
-
+    public Account getAccount(int index) throws IllegalArgumentException
+    {
+    	if (index<0 || index>=accounts.size())
+    		throw new IllegalArgumentException("Account does not exists");
+    	else
+    		return accounts.get(index);
+    }
+    
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
     }
