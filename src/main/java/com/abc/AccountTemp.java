@@ -10,9 +10,15 @@ public abstract class AccountTemp {
     protected int accountType = 0;
     protected double accountBalance = 0.0;
 
+    protected String accountTypeString;
+
     public AccountTemp(){
         this.transactions = new ArrayList<Transaction>();
     }
+
+    public int getAccountType(){ return accountType; }
+
+    public String getAccountTypeString() { return accountTypeString; }
 
     public double getAccountBalance(){ return accountBalance; }
 
@@ -27,4 +33,5 @@ public abstract class AccountTemp {
 
     public abstract void withdraw(double amount);
 
+    public abstract double interestEarned();
 }

@@ -7,20 +7,33 @@ import static java.lang.Math.abs;
 
 public class Customer {
     private String name;
-    private List<Account> accounts;
+    private List<AccountTemp> accounts;
 
     public Customer(String name) {
         this.name = name;
-        this.accounts = new ArrayList<Account>();
+        this.accounts = new ArrayList<AccountTemp>();
     }
 
     public String getName() {
         return name;
     }
 
-    public Customer openAccount(Account account) {
-        accounts.add(account);
-        return this;
+    public AccountTemp openCheckingAccount(){
+        CheckingAccount acc = new CheckingAccount();
+        accounts.add(acc);
+        return acc;
+    }
+
+    public AccountTemp openMaxiSavingsAccount(){
+        MaxiSavingsAccount acc = new MaxiSavingsAccount();
+        accounts.add(acc);
+        return acc;
+    }
+
+    public AccountTemp openSavingsAccount(){
+        SavingsAccount acc = new SavingsAccount();
+        accounts.add(acc);
+        return acc;
     }
 
     public int getNumberOfAccounts() {
@@ -29,16 +42,15 @@ public class Customer {
 
     public double totalInterestEarned() {
         double total = 0;
-        for (Account a : accounts)
+        for (AccountTemp a : accounts)
             total += a.interestEarned();
         return total;
     }
 
     public String getStatement() {
-        String statement = null;
-        statement = "Statement for " + name + "\n";
+        String statement = "Statement for " + name + "\n";
         double total = 0.0;
-        for (Account a : accounts) {
+        for (AccountTemp a : accounts) {
             statement += "\n" + statementForAccount(a) + "\n";
             total += a.getAccountBalance();
         }
@@ -46,10 +58,11 @@ public class Customer {
         return statement;
     }
 
-    private String statementForAccount(Account a) {
+    private String statementForAccount(AccountTemp a) {
         String s = "";
 
        //Translate to pretty account type
+        /*
         switch(a.getAccountType()){
             case Account.CHECKING:
                 s += "Checking Account\n";
@@ -61,6 +74,9 @@ public class Customer {
                 s += "Maxi Savings Account\n";
                 break;
         }
+         */
+
+        s += a.getAccountTypeString() + " Account\n";
 
         //Now total up all the transactions
         double total = 0.0;

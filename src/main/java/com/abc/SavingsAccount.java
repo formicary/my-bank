@@ -7,6 +7,7 @@ public class SavingsAccount extends AccountTemp {
 
     public SavingsAccount(){
         this.accountType = 1;
+        this.accountTypeString = "Savings";
         this.initialInterestRate = 0.001;
         this.higherInterestRate = 0.002;
     }
@@ -22,4 +23,7 @@ public class SavingsAccount extends AccountTemp {
         }
     }
 
+    public double interestEarned() {
+        return 0;
+    }
 }
