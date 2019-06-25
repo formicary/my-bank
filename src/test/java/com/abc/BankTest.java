@@ -44,7 +44,6 @@ public class BankTest {
     @Test
     public void maxi_savings_account() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
 
         Customer bill = new Customer("Bill");
         AccountTemp maxiSavingsAccount = bill.openMaxiSavingsAccount();

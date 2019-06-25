@@ -59,24 +59,7 @@ public class Customer {
     }
 
     private String statementForAccount(AccountTemp a) {
-        String s = "";
-
-       //Translate to pretty account type
-        /*
-        switch(a.getAccountType()){
-            case Account.CHECKING:
-                s += "Checking Account\n";
-                break;
-            case Account.SAVINGS:
-                s += "Savings Account\n";
-                break;
-            case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
-                break;
-        }
-         */
-
-        s += a.getAccountTypeString() + " Account\n";
+        String s = a.getAccountTypeString() + " Account\n";
 
         //Now total up all the transactions
         double total = 0.0;
