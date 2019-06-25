@@ -12,6 +12,8 @@ public class Account {
     private final int accountType;
     public List<Transaction> transactions;
 
+    private double accountBalance = 0;
+
     public Account(int accountType) {
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
@@ -22,19 +24,21 @@ public class Account {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
             transactions.add(new Transaction(amount));
+            accountBalance += amount;
         }
     }
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
+    public void withdraw(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        } else {
+            transactions.add(new Transaction(-amount));
+            accountBalance -= amount;
+        }
     }
-}
 
     public double interestEarned() {
-        double amount = sumTransactions();
+        double amount = this.accountBalance;
         switch(accountType){
             case SAVINGS:
                 if (amount <= 1000)
@@ -55,19 +59,10 @@ public void withdraw(double amount) {
         }
     }
 
-    public double sumTransactions() {
-       return checkIfTransactionsExist(true);
-    }
-
-    private double checkIfTransactionsExist(boolean checkAll) {
-        double amount = 0.0;
-        for (Transaction t: transactions)
-            amount += t.amount;
-        return amount;
-    }
-
     public int getAccountType() {
         return accountType;
     }
+
+    public double getAccountBalance() { return accountBalance; }
 
 }
