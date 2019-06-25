@@ -22,15 +22,9 @@ public class SavingsAccount extends Account {
             this.accountBalance -= amount;
         }
     }
-    /*
-                case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
-     */
 
     public double interestEarned() {
+
         if(this.accountBalance <= 1000.0){
             return this.accountBalance * this.initialInterestRate;
         }else{

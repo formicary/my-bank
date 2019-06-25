@@ -1,5 +1,6 @@
 package com.abc;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -15,6 +16,32 @@ public class BankTest {
         bank.addCustomer(john);
 
         assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
+    }
+
+    @Test
+    public void customerSummaryMultipleAccounts() {
+        Bank bank = new Bank();
+        Customer john = new Customer("John");
+        john.openCheckingAccount();
+        john.openSavingsAccount();
+        bank.addCustomer(john);
+
+        assertEquals("Customer Summary\n - John (2 accounts)", bank.customerSummary());
+    }
+
+    @Test
+    public void customerSummaryMultipleCustomers(){
+        Bank bank = new Bank();
+        Customer john = new Customer("John");
+        john.openCheckingAccount();
+        bank.addCustomer(john);
+
+        Customer brian = new Customer("Brian");
+        brian.openCheckingAccount();
+        bank.addCustomer(brian);
+
+        assertEquals("Customer Summary\n - John (1 account)\n - Brian (1 account)", bank.customerSummary());
+
     }
 
     @Test

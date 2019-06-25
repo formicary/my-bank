@@ -19,7 +19,7 @@ public class Customer {
     }
 
     public Account openCheckingAccount(){
-        CheckingAccount acc = new CheckingAccount();
+        MaxiSavingAccount acc = new MaxiSavingAccount();
         accounts.add(acc);
         return acc;
     }
@@ -42,20 +42,20 @@ public class Customer {
 
     public double totalInterestEarned() {
         double total = 0;
-        for (Account a : accounts)
-            total += a.interestEarned();
+
+        for (Account a : accounts) total += a.interestEarned();
         return total;
     }
 
     public String getStatement() {
-        String statement = "Statement for " + name + "\n";
+        StringBuilder statement = new StringBuilder("Statement for " + this.name + "\n");
         double total = 0.0;
         for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
+            statement.append("\n").append(statementForAccount(a)).append("\n");
             total += a.getAccountBalance();
         }
-        statement += "\nTotal In All Accounts " + toDollars(total);
-        return statement;
+        statement.append("\nTotal In All Accounts ").append(toDollars(total));
+        return statement.toString();
     }
 
     private String statementForAccount(Account a) {

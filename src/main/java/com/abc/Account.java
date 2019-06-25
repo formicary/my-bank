@@ -3,6 +3,9 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Abstract class for creating the three types of account
+ */
 public abstract class Account {
 
     public List<Transaction> transactions;
@@ -18,16 +21,16 @@ public abstract class Account {
 
     public int getAccountType(){ return accountType; }
 
-    public String getAccountTypeString() { return accountTypeString; }
+    public String getAccountTypeString() { return this.accountTypeString; }
 
-    public double getAccountBalance(){ return accountBalance; }
+    public double getAccountBalance(){ return this.accountBalance; }
 
     public void deposit(double amount) {
         if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
+            throw new IllegalArgumentException("error: amount must be greater than zero");
         } else {
-            transactions.add(new Transaction(amount));
-            accountBalance += amount;
+            this.transactions.add(new Transaction(amount));
+            this.accountBalance += amount;
         }
     }
 
@@ -35,28 +38,3 @@ public abstract class Account {
 
     public abstract double interestEarned();
 }
-
-
-/*
-    public double interestEarned() {
-        double amount = this.accountBalance;
-        switch(accountType){
-            case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
-            case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
-            default:
-                return amount * 0.001;
-        }
-    }
- */
