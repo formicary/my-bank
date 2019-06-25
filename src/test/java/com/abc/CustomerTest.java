@@ -11,8 +11,8 @@ public class CustomerTest {
     public void testApp(){
 
         Customer henry = new Customer("Henry");
-        AccountTemp checkingAccount = henry.openCheckingAccount();
-        AccountTemp savingsAccount = henry.openSavingsAccount();
+        Account checkingAccount = henry.openCheckingAccount();
+        Account savingsAccount = henry.openSavingsAccount();
 
         checkingAccount.deposit(100.0);
         savingsAccount.deposit(4000.0);

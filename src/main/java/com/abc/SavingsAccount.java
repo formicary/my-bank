@@ -1,6 +1,6 @@
 package com.abc;
 
-public class SavingsAccount extends AccountTemp {
+public class SavingsAccount extends Account {
 
     protected final double initialInterestRate;
     protected final double higherInterestRate;
@@ -22,8 +22,19 @@ public class SavingsAccount extends AccountTemp {
             this.accountBalance -= amount;
         }
     }
+    /*
+                case SAVINGS:
+                if (amount <= 1000)
+                    return amount * 0.001;
+                else
+                    return 1 + (amount-1000) * 0.002;
+     */
 
     public double interestEarned() {
-        return 0;
+        if(this.accountBalance <= 1000.0){
+            return this.accountBalance * this.initialInterestRate;
+        }else{
+            return 1 + (this.accountBalance-1000.0) * this.higherInterestRate;
+        }
     }
 }

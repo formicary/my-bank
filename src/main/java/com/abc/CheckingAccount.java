@@ -1,6 +1,6 @@
 package com.abc;
 
-public class CheckingAccount extends AccountTemp {
+public class CheckingAccount extends Account {
 
     private final double interestRate = 0.001;
 
@@ -19,6 +19,6 @@ public class CheckingAccount extends AccountTemp {
     }
 
     public double interestEarned() {
-        return 0;
+        return this.accountBalance * this.interestRate;
     }
 }

@@ -7,30 +7,30 @@ import static java.lang.Math.abs;
 
 public class Customer {
     private String name;
-    private List<AccountTemp> accounts;
+    private List<Account> accounts;
 
     public Customer(String name) {
         this.name = name;
-        this.accounts = new ArrayList<AccountTemp>();
+        this.accounts = new ArrayList<Account>();
     }
 
     public String getName() {
         return name;
     }
 
-    public AccountTemp openCheckingAccount(){
+    public Account openCheckingAccount(){
         CheckingAccount acc = new CheckingAccount();
         accounts.add(acc);
         return acc;
     }
 
-    public AccountTemp openMaxiSavingsAccount(){
+    public Account openMaxiSavingsAccount(){
         MaxiSavingsAccount acc = new MaxiSavingsAccount();
         accounts.add(acc);
         return acc;
     }
 
-    public AccountTemp openSavingsAccount(){
+    public Account openSavingsAccount(){
         SavingsAccount acc = new SavingsAccount();
         accounts.add(acc);
         return acc;
@@ -42,7 +42,7 @@ public class Customer {
 
     public double totalInterestEarned() {
         double total = 0;
-        for (AccountTemp a : accounts)
+        for (Account a : accounts)
             total += a.interestEarned();
         return total;
     }
@@ -50,7 +50,7 @@ public class Customer {
     public String getStatement() {
         String statement = "Statement for " + name + "\n";
         double total = 0.0;
-        for (AccountTemp a : accounts) {
+        for (Account a : accounts) {
             statement += "\n" + statementForAccount(a) + "\n";
             total += a.getAccountBalance();
         }
@@ -58,7 +58,7 @@ public class Customer {
         return statement;
     }
 
-    private String statementForAccount(AccountTemp a) {
+    private String statementForAccount(Account a) {
         String s = a.getAccountTypeString() + " Account\n";
 
         //Now total up all the transactions

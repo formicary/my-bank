@@ -3,7 +3,7 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AccountTemp {
+public abstract class Account {
 
     public List<Transaction> transactions;
 
@@ -12,7 +12,7 @@ public abstract class AccountTemp {
 
     protected String accountTypeString;
 
-    public AccountTemp(){
+    public Account(){
         this.transactions = new ArrayList<Transaction>();
     }
 

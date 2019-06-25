@@ -6,7 +6,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-public class AccountTempTest {
+public class AccountTest {
     private static final double DOUBLE_DELTA = 1e-15;
 
     @Test
