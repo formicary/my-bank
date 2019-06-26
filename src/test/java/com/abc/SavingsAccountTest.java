@@ -11,7 +11,7 @@ public class SavingsAccountTest {
 
     @Test
     public void testDepositValid(){
-        MaxiSavingAccount saver = new MaxiSavingAccount();
+        SavingsAccount saver = new SavingsAccount();
 
         saver.deposit(200.0);
 
@@ -22,7 +22,7 @@ public class SavingsAccountTest {
 
     @Test
     public void testDepositInvalid(){
-        MaxiSavingAccount saver = new MaxiSavingAccount();
+        SavingsAccount saver = new SavingsAccount();
 
         try{
             saver.deposit(-100.0);
@@ -35,7 +35,7 @@ public class SavingsAccountTest {
 
     @Test
     public void testWithdrawValid(){
-        MaxiSavingAccount saver = new MaxiSavingAccount();
+        SavingsAccount saver = new SavingsAccount();
 
         saver.deposit(200.0);
         saver.withdraw(100.0);
@@ -45,7 +45,7 @@ public class SavingsAccountTest {
 
     @Test
     public void testWithdrawInvalid(){
-        MaxiSavingAccount saver = new MaxiSavingAccount();
+        SavingsAccount saver = new SavingsAccount();
 
         saver.deposit(100.0);
 

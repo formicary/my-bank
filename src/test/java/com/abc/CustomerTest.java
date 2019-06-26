@@ -51,9 +51,15 @@ public class CustomerTest {
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
-    @Ignore
+    @Test
     public void testThreeAccounts() {
         Customer oscar = new Customer("Oscar");
+
+        oscar.openSavingsAccount();
+        oscar.openCheckingAccount();
+        oscar.openMaxiSavingsAccount();
+
+
         assertEquals(3, oscar.getNumberOfAccounts());
     }
 }

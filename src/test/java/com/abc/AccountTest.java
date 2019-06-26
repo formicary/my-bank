@@ -14,7 +14,7 @@ public class AccountTest {
 
     @Test
     public void testDeposit(){
-        MaxiSavingAccount cA = new MaxiSavingAccount();
+        CheckingAccount cA = new CheckingAccount();
 
         cA.deposit(200.0);
 
@@ -28,7 +28,7 @@ public class AccountTest {
 
     @Test
     public void testWithdraw(){
-        MaxiSavingAccount cA = new MaxiSavingAccount();
+        CheckingAccount cA = new CheckingAccount();
 
         cA.deposit(1000.0);
         cA.withdraw(250.0);

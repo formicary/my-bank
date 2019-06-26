@@ -1,10 +1,10 @@
 package com.abc;
 
-public class MaxiSavingAccount extends Account {
+public class CheckingAccount extends Account {
 
     private final double interestRate = 0.001;
 
-    public MaxiSavingAccount(){
+    public CheckingAccount(){
         this.accountType = 0;
         this.accountTypeString = "Checking";
     }

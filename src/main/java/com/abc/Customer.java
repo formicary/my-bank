@@ -19,7 +19,7 @@ public class Customer {
     }
 
     public Account openCheckingAccount(){
-        MaxiSavingAccount acc = new MaxiSavingAccount();
+        CheckingAccount acc = new CheckingAccount();
         accounts.add(acc);
         return acc;
     }
@@ -34,6 +34,10 @@ public class Customer {
         SavingsAccount acc = new SavingsAccount();
         accounts.add(acc);
         return acc;
+    }
+
+    public void transferFunds(double amount, Account sender, Account recipient){
+        Transfer.performTransfer(amount, sender, recipient);
     }
 
     public int getNumberOfAccounts() {

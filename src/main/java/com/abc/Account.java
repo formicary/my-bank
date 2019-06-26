@@ -37,4 +37,16 @@ public abstract class Account {
     public abstract void withdraw(double amount);
 
     public abstract double interestEarned();
+
+    public boolean hasValidFunds(double amount){
+        return (this.accountBalance - amount >= 0.00);
+    }
+
+    public void addFunds(double amount){
+        this.accountBalance += amount;
+    }
+
+    public void deductFunds(double amount){
+        this.accountBalance -= amount;
+    }
 }
