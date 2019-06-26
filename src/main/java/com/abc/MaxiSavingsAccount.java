@@ -18,11 +18,11 @@ public class MaxiSavingsAccount extends Account {
     public void withdraw(double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
-        } else if(this.accountBalance - amount < 0.0){
+        } else if(!this.hasSufficientFunds(amount)){
             throw new IllegalArgumentException("error: insufficient funds for withdrawal");
         } else {
-            transactions.add(new Transaction(-amount));
-            this.accountBalance -= amount;
+            transactions.add(new Transaction(-amount, Transaction.WITHDRAWAL));
+            this.deductFunds(amount);
         }
     }
 

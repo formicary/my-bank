@@ -14,18 +14,16 @@ public class CheckingAccount extends Account {
         if (amount <= 0) {
             throw new IllegalArgumentException("error: amount must be greater than zero");
         } else {
-            this.transactions.add(new Transaction(-amount));
-            this.accountBalance -= amount;
+            this.transactions.add(new Transaction(-amount, Transaction.WITHDRAWAL));
+            this.deductFunds(amount);
         }
-
 
     }
 
     public double interestEarned() {
 
-        if(this.accountBalance <= 0){
-            return 0.0;
-        }
+        // balance of
+        if(this.accountBalance <= 0) return 0.0;
 
         return this.accountBalance * this.interestRate;
     }
