@@ -11,7 +11,8 @@ public class SavingsAccountTest {
 
     @Test
     public void testDepositValid(){
-        SavingsAccount saver = new SavingsAccount();
+
+        SavingsAccount saver = new SavingsAccount(new Customer("Bill"));
 
         saver.deposit(200.0);
 
@@ -22,7 +23,7 @@ public class SavingsAccountTest {
 
     @Test
     public void testDepositInvalid(){
-        SavingsAccount saver = new SavingsAccount();
+        SavingsAccount saver = new SavingsAccount(new Customer("Ted"));
 
         try{
             saver.deposit(-100.0);
@@ -35,7 +36,7 @@ public class SavingsAccountTest {
 
     @Test
     public void testWithdrawValid(){
-        SavingsAccount saver = new SavingsAccount();
+        SavingsAccount saver = new SavingsAccount(new Customer("Barry"));
 
         saver.deposit(200.0);
         saver.withdraw(100.0);
@@ -45,7 +46,7 @@ public class SavingsAccountTest {
 
     @Test
     public void testWithdrawInvalid(){
-        SavingsAccount saver = new SavingsAccount();
+        SavingsAccount saver = new SavingsAccount(new Customer("Paul"));
 
         saver.deposit(100.0);
 
@@ -60,7 +61,7 @@ public class SavingsAccountTest {
 
     @Test
     public void testInterestRateUnder1000(){
-        SavingsAccount saver = new SavingsAccount();
+        SavingsAccount saver = new SavingsAccount(new Customer("Fabio"));
 
         saver.deposit(500.00);
 
@@ -69,7 +70,7 @@ public class SavingsAccountTest {
 
     @Test
     public void testInterestRateUnder2000(){
-        SavingsAccount saver = new SavingsAccount();
+        SavingsAccount saver = new SavingsAccount(new Customer("Christof"));
 
         saver.deposit(1500.00);
 

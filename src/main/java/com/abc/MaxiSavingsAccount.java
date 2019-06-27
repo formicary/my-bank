@@ -6,7 +6,8 @@ public class MaxiSavingsAccount extends Account {
     protected final double higherInterestRate = 0.05;
     protected final double topInterestRate = 0.1;
 
-    public MaxiSavingsAccount(){
+    public MaxiSavingsAccount(Customer owner){
+        super(owner);
         this.accountType = 2;
         this.accountTypeString = "Maxi-Savings";
     }

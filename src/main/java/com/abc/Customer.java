@@ -2,6 +2,7 @@ package com.abc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static java.lang.Math.abs;
 
@@ -9,9 +10,12 @@ public class Customer {
     private String name;
     private List<Account> accounts;
 
+    protected final String uniqueID;
+
     public Customer(String name) {
         this.name = name;
         this.accounts = new ArrayList<Account>();
+        this.uniqueID = UUID.randomUUID().toString();
     }
 
     public String getName() {
@@ -19,19 +23,19 @@ public class Customer {
     }
 
     public Account openCheckingAccount(){
-        CheckingAccount acc = new CheckingAccount();
+        CheckingAccount acc = new CheckingAccount(this);
         accounts.add(acc);
         return acc;
     }
 
     public Account openMaxiSavingsAccount(){
-        MaxiSavingsAccount acc = new MaxiSavingsAccount();
+        MaxiSavingsAccount acc = new MaxiSavingsAccount(this);
         accounts.add(acc);
         return acc;
     }
 
     public Account openSavingsAccount(){
-        SavingsAccount acc = new SavingsAccount();
+        SavingsAccount acc = new SavingsAccount(this);
         accounts.add(acc);
         return acc;
     }

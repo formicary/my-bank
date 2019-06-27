@@ -15,8 +15,11 @@ public abstract class Account {
 
     protected String accountTypeString;
 
-    public Account(){
+    protected Customer owner;
+
+    public Account(Customer owner){
         this.transactions = new ArrayList<Transaction>();
+        this.owner = owner;
     }
 
     // public int getAccountType(){ return accountType; }

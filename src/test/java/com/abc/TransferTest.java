@@ -81,4 +81,31 @@ public class TransferTest {
             assertEquals(expected, e.getMessage());
         }
     }
+
+    // "A customer can transfer between their accounts"
+    // - can only transfer money between accounts owned by same person
+    @Test
+    public void differentCustomers(){
+
+        Customer dave = new Customer("Dave");
+        Customer tom  = new Customer("Tom");
+
+        System.out.println(dave.uniqueID);
+        System.out.println(tom.uniqueID);
+
+        CheckingAccount checkDave = new CheckingAccount(dave);
+        CheckingAccount checkTom = new CheckingAccount(tom);
+
+        checkDave.deposit(15.00);
+
+        try {
+            Transfer.newTransfer(10.00, checkDave, checkTom);
+            Assert.fail("fail: invalid transfer (due to differing customers) was accepted");
+        } catch (IllegalArgumentException e){
+            String expected = "error: can only transfer funds between accounts owned by the same customer";
+            assertEquals(expected, e.getMessage());
+        }
+
+
+    }
 }

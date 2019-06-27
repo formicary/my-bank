@@ -5,7 +5,9 @@ public class SavingsAccount extends Account {
     protected final double initialInterestRate;
     protected final double higherInterestRate;
 
-    public SavingsAccount(){
+    public SavingsAccount(Customer owner){
+        super(owner);
+
         this.accountType = 1;
         this.accountTypeString = "Savings";
         this.initialInterestRate = 0.001;

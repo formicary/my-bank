@@ -4,7 +4,9 @@ public class CheckingAccount extends Account {
 
     private final double interestRate = 0.001;
 
-    public CheckingAccount(){
+
+    public CheckingAccount(Customer owner){
+        super(owner);
         this.accountType = 0;
         this.accountTypeString = "Checking";
     }

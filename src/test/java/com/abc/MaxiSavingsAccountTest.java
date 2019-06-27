@@ -11,7 +11,7 @@ public class MaxiSavingsAccountTest {
 
     @Test
     public void testDepositValid(){
-        CheckingAccount maxiSaver = new CheckingAccount();
+        CheckingAccount maxiSaver = new CheckingAccount(new Customer("Bill"));
 
         maxiSaver.deposit(200.0);
 
@@ -21,7 +21,7 @@ public class MaxiSavingsAccountTest {
 
     @Test
     public void testDepositInvalid(){
-        CheckingAccount maxiSaver = new CheckingAccount();
+        CheckingAccount maxiSaver = new CheckingAccount(new Customer("Bill"));
 
         try{
             maxiSaver.deposit(-100.0);
@@ -34,7 +34,7 @@ public class MaxiSavingsAccountTest {
 
     @Test
     public void testWithdrawValid(){
-        CheckingAccount maxiSaver = new CheckingAccount();
+        CheckingAccount maxiSaver = new CheckingAccount(new Customer("Bill"));
 
         maxiSaver.deposit(200.0);
         maxiSaver.withdraw(100.0);
@@ -44,7 +44,7 @@ public class MaxiSavingsAccountTest {
 
     @Test
     public void testWithdrawInvalid(){
-        CheckingAccount maxiSaver = new CheckingAccount();
+        CheckingAccount maxiSaver = new CheckingAccount(new Customer("Bill"));
 
         maxiSaver.deposit(100.0);
 
@@ -59,7 +59,7 @@ public class MaxiSavingsAccountTest {
 
     @Test
     public void testInterestRateUnder1000(){
-        MaxiSavingsAccount maxiSaver = new MaxiSavingsAccount();
+        MaxiSavingsAccount maxiSaver = new MaxiSavingsAccount(new Customer("Bill"));
 
         maxiSaver.deposit(400.00);
 
@@ -68,7 +68,7 @@ public class MaxiSavingsAccountTest {
 
     @Test
     public void testInterestRateUnder2000(){
-        MaxiSavingsAccount maxiSaver = new MaxiSavingsAccount();
+        MaxiSavingsAccount maxiSaver = new MaxiSavingsAccount(new Customer("Bill"));
 
         maxiSaver.deposit(1500.00);
 
@@ -77,7 +77,7 @@ public class MaxiSavingsAccountTest {
 
     @Test
     public void testInterestRateHighest(){
-        MaxiSavingsAccount maxiSaver = new MaxiSavingsAccount();
+        MaxiSavingsAccount maxiSaver = new MaxiSavingsAccount(new Customer("Bill"));
 
         maxiSaver.deposit(2500.00);
 

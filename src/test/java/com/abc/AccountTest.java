@@ -14,7 +14,8 @@ public class AccountTest {
 
     @Test
     public void testDeposit(){
-        CheckingAccount cA = new CheckingAccount();
+
+        CheckingAccount cA = new CheckingAccount(new Customer("Bill"));
 
         cA.deposit(200.0);
 
@@ -28,7 +29,7 @@ public class AccountTest {
 
     @Test
     public void testWithdraw(){
-        CheckingAccount cA = new CheckingAccount();
+        CheckingAccount cA = new CheckingAccount(new Customer("Bill"));
 
         cA.deposit(1000.0);
         cA.withdraw(250.0);
@@ -38,7 +39,7 @@ public class AccountTest {
 
     @Test
     public void testWithdrawInsufficientFunds(){
-        SavingsAccount sA = new SavingsAccount();
+        SavingsAccount sA = new SavingsAccount(new Customer("Bill"));
         sA.deposit(10.0);
 
         try {
@@ -53,7 +54,7 @@ public class AccountTest {
 
     @Test
     public void testWithdrawInsufficientFundsMaxi(){
-        MaxiSavingsAccount maxi = new MaxiSavingsAccount();
+        MaxiSavingsAccount maxi = new MaxiSavingsAccount(new Customer("Bill"));
         maxi.deposit(10.0);
 
         try {

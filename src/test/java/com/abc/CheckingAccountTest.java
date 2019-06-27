@@ -11,7 +11,7 @@ public class CheckingAccountTest {
 
     @Test
     public void testDepositValid(){
-        CheckingAccount check = new CheckingAccount();
+        CheckingAccount check = new CheckingAccount(new Customer("Bill"));
 
         check.deposit(200.0);
 
@@ -22,7 +22,7 @@ public class CheckingAccountTest {
 
     @Test
     public void testDepositInvalid(){
-        CheckingAccount check = new CheckingAccount();
+        CheckingAccount check = new CheckingAccount(new Customer("Bill"));
 
         try{
             check.deposit(-100.0);
@@ -35,7 +35,7 @@ public class CheckingAccountTest {
 
     @Test
     public void testWithdrawValid(){
-        CheckingAccount check = new CheckingAccount();
+        CheckingAccount check = new CheckingAccount(new Customer("Bill"));
 
         check.deposit(200.0);
         check.withdraw(100.0);
@@ -45,7 +45,7 @@ public class CheckingAccountTest {
 
     @Test
     public void testWithdrawInvalid(){
-        CheckingAccount check = new CheckingAccount();
+        CheckingAccount check = new CheckingAccount(new Customer("Bill"));
 
         check.deposit(100.0);
 
