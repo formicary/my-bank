@@ -57,4 +57,22 @@ public class SavingsAccountTest {
             assertEquals(expectedMessage, e.getMessage());
         }
     }
+
+    @Test
+    public void testInterestRateUnder1000(){
+        SavingsAccount saver = new SavingsAccount();
+
+        saver.deposit(500.00);
+
+        assertEquals(0.50, saver.interestEarned(), DOUBLE_DELTA);
+    }
+
+    @Test
+    public void testInterestRateUnder2000(){
+        SavingsAccount saver = new SavingsAccount();
+
+        saver.deposit(1500.00);
+
+        assertEquals(2.00, saver.interestEarned(), DOUBLE_DELTA);
+    }
 }

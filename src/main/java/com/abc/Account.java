@@ -11,7 +11,7 @@ public abstract class Account {
     public List<Transaction> transactions;
 
     protected int accountType = 0;
-    protected double accountBalance = 0.0;
+    private double accountBalance = 0.0;
 
     protected String accountTypeString;
 
@@ -19,7 +19,7 @@ public abstract class Account {
         this.transactions = new ArrayList<Transaction>();
     }
 
-    public int getAccountType(){ return accountType; }
+    // public int getAccountType(){ return accountType; }
 
     public String getAccountTypeString() { return this.accountTypeString; }
 
@@ -35,9 +35,24 @@ public abstract class Account {
         }
     }
 
-    // can't overdraft from savings account but can from checking account, so different implementation needed
-    public abstract void withdraw(double amount);
+    // same process across accounts, so no need for repeated implementations via abstract class
+    // can't go into overdraft on any account (even if in reality you can) for simplicity reasons
+    public void withdraw(double amount) {
 
+        if (amount <= 0.0) {
+
+            throw new IllegalArgumentException("error: amount must be greater than zero");
+
+        } else if(!this.hasSufficientFunds(amount)){
+
+            throw new IllegalArgumentException("error: insufficient funds for withdrawal");
+
+        } else {
+
+            transactions.add(new Transaction(-amount, Transaction.WITHDRAWAL));
+            this.deductFunds(amount);
+        }
+    }
     // interest rate calculation is dependent on the type of account
     public abstract double interestEarned();
 

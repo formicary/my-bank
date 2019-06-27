@@ -12,22 +12,15 @@ public class SavingsAccount extends Account {
         this.higherInterestRate = 0.002;
     }
 
-    public void withdraw(double amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("error: amount must be greater than zero");
-        } else if(!this.hasSufficientFunds(amount)){
-            throw new IllegalArgumentException("error: insufficient funds for withdrawal");
-        } else {
-            transactions.add(new Transaction(-amount, Transaction.WITHDRAWAL));
-            this.deductFunds(amount);
-        }
-    }
-
+    /**
+     * Savings accounts have a rate of 0.1% for the first $1,000 then 0.2%
+     * @return interest earned on balance
+     */
     public double interestEarned() {
 
-        if(this.accountBalance <= 1000.0) return this.accountBalance * this.initialInterestRate;
+        if(this.getAccountBalance() <= 1000.0) return this.getAccountBalance() * this.initialInterestRate;
 
-        return 1 + (this.accountBalance-1000.0) * this.higherInterestRate;
+        return 1 + (this.getAccountBalance()-1000.0) * this.higherInterestRate;
 
     }
 }

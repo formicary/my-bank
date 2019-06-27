@@ -82,4 +82,41 @@ public class BankTest {
         assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
+    @Test
+    public void interestMultipleAccounts(){
+        Bank bank = new Bank();
+
+        Customer bill = new Customer("Bill");
+        Account checking = bill.openCheckingAccount();
+        Account saver = bill.openSavingsAccount();
+        Account maxi = bill.openMaxiSavingsAccount();
+
+        bank.addCustomer(bill);
+
+        checking.deposit(100.00);
+        saver.deposit(1500.00);
+        maxi.deposit(3000.00);
+
+        assertEquals(172.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+    }
+
+    @Test
+    public void interestMultipleCustomers(){
+        Bank bank = new Bank();
+
+        Customer bill = new Customer("Bill");
+        Customer ted = new Customer("Ted");
+
+        Account billSaver = bill.openSavingsAccount();
+        Account tedMaxiSaver = ted.openMaxiSavingsAccount();
+
+        billSaver.deposit(1500.00); // = $2 interest
+        tedMaxiSaver.deposit(2500.00); // = $120 interest
+
+        bank.addCustomer(bill);
+        bank.addCustomer(ted);
+
+        assertEquals(122.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+    }
+
 }

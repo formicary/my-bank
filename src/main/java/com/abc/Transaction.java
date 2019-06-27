@@ -3,6 +3,9 @@ package com.abc;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * Holds the details of a transaction, including its type, amount
+ */
 public class Transaction {
 
     public static final int DEPOSIT = 0;
@@ -39,9 +42,11 @@ public class Transaction {
 
     }
 
+    /*
     public int getType(){
         return this.type;
     }
+     */
 
     public String getTypeString(){
         return this.typeString;

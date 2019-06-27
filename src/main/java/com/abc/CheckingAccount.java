@@ -9,22 +9,11 @@ public class CheckingAccount extends Account {
         this.accountTypeString = "Checking";
     }
 
-    public void withdraw(double amount) {
-
-        if (amount <= 0) {
-            throw new IllegalArgumentException("error: amount must be greater than zero");
-        } else {
-            this.transactions.add(new Transaction(-amount, Transaction.WITHDRAWAL));
-            this.deductFunds(amount);
-        }
-
-    }
-
     public double interestEarned() {
 
         // balance of
-        if(this.accountBalance <= 0) return 0.0;
+        if(this.getAccountBalance() <= 0) return 0.0;
 
-        return this.accountBalance * this.interestRate;
+        return this.getAccountBalance() * this.interestRate;
     }
 }

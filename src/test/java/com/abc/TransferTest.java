@@ -10,16 +10,42 @@ public class TransferTest {
     private static final double DOUBLE_DELTA = 1e-15;
 
     @Test
-    public void validTransfer(){
+    public void fullValidTransfer(){
         Customer dave = new Customer("Dave");
         Account checking = dave.openCheckingAccount();
         Account saver = dave.openSavingsAccount();
 
         checking.deposit(500.00);
 
-        dave.transferFunds(200.00, checking, saver);
+        dave.transferFunds(checking, saver, 200.00);
 
-        assertEquals(200.00, saver.accountBalance, DOUBLE_DELTA);
+        assertEquals(200.00, saver.getAccountBalance(), DOUBLE_DELTA);
+    }
+
+    @Test
+    public void testMoneyArrivesInAccount(){
+        Customer dave = new Customer("Dave");
+        Account checking = dave.openCheckingAccount();
+        Account saver = dave.openSavingsAccount();
+
+        checking.deposit(100.00);
+
+        Transfer.performTransfer(75.00, checking, saver);
+
+        assertEquals(75.00, saver.getAccountBalance(), DOUBLE_DELTA);
+    }
+
+    @Test
+    public void testMoneyLeavesAccount(){
+        Customer dave = new Customer("Dave");
+        Account checking = dave.openCheckingAccount();
+        Account saver = dave.openSavingsAccount();
+
+        checking.deposit(500.00);
+
+        dave.transferFunds(checking, saver, 200.00);
+
+        assertEquals(300.00, checking.getAccountBalance(), DOUBLE_DELTA);
     }
 
     @Test
@@ -31,7 +57,7 @@ public class TransferTest {
         checking.deposit(10.00);
 
         try{
-            dave.transferFunds(20.00, checking, saver);
+            dave.transferFunds(checking, saver, 20.00);
             Assert.fail("Invalid transfer was successful - test has failed");
         }catch (IllegalArgumentException e){
             String expected = "error: insufficient funds for proposed transfer";
@@ -48,7 +74,7 @@ public class TransferTest {
         checking.deposit(1000.00);
 
         try{
-            dave.transferFunds(-20.00, checking, saver);
+            dave.transferFunds(checking, saver, -20.00);
             Assert.fail("Invalid amount was accepted - test has failed");
         } catch (IllegalArgumentException e){
             String expected = "error: invalid amount";

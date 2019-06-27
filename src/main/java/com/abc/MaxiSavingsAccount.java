@@ -2,37 +2,29 @@ package com.abc;
 
 public class MaxiSavingsAccount extends Account {
 
-    protected final double initialInterestRate;
-    protected final double higherInterestRate;
-    protected final double topInterestRate;
+    protected final double initialInterestRate = 0.02;
+    protected final double higherInterestRate = 0.05;
+    protected final double topInterestRate = 0.1;
 
     public MaxiSavingsAccount(){
         this.accountType = 2;
         this.accountTypeString = "Maxi-Savings";
-
-        this.initialInterestRate = 0.02;
-        this.higherInterestRate = 0.05;
-        this.topInterestRate = 0.1;
     }
 
-    public void withdraw(double amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
-        } else if(!this.hasSufficientFunds(amount)){
-            throw new IllegalArgumentException("error: insufficient funds for withdrawal");
-        } else {
-            transactions.add(new Transaction(-amount, Transaction.WITHDRAWAL));
-            this.deductFunds(amount);
-        }
-    }
-
+    /**
+     * Maxi-Savings accounts have a rate of 2% for the first $1,000 then 5% for the next $1,000 then 10%
+     * @return interest earned on money in account
+     */
     public double interestEarned() {
-        if(this.accountBalance <= 1000.0) {
-            return this.accountBalance * this.initialInterestRate;
-        } else if(this.accountBalance <= 2000.0){
-            return 20 + (this.accountBalance-1000.0) * this.higherInterestRate;
+
+        double balance = this.getAccountBalance();
+
+        if(this.getAccountBalance() <= 1000.0) {
+            return balance * this.initialInterestRate;
+        } else if(balance <= 2000.0){
+            return 20 + (balance-1000.0) * this.higherInterestRate;
         }else{
-            return 70 + (this.accountBalance-2000.0) * this.topInterestRate;
+            return 70 + (balance-2000.0) * this.topInterestRate;
         }
     }
 }

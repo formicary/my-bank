@@ -19,7 +19,6 @@ public class MaxiSavingsAccountTest {
 
     }
 
-
     @Test
     public void testDepositInvalid(){
         CheckingAccount maxiSaver = new CheckingAccount();
@@ -56,5 +55,32 @@ public class MaxiSavingsAccountTest {
             String expectedMessage = "error: amount must be greater than zero";
             assertEquals(expectedMessage, e.getMessage());
         }
+    }
+
+    @Test
+    public void testInterestRateUnder1000(){
+        MaxiSavingsAccount maxiSaver = new MaxiSavingsAccount();
+
+        maxiSaver.deposit(400.00);
+
+        assertEquals(8.00, maxiSaver.interestEarned(), DOUBLE_DELTA);
+    }
+
+    @Test
+    public void testInterestRateUnder2000(){
+        MaxiSavingsAccount maxiSaver = new MaxiSavingsAccount();
+
+        maxiSaver.deposit(1500.00);
+
+        assertEquals(45.00, maxiSaver.interestEarned(), DOUBLE_DELTA);
+    }
+
+    @Test
+    public void testInterestRateHighest(){
+        MaxiSavingsAccount maxiSaver = new MaxiSavingsAccount();
+
+        maxiSaver.deposit(2500.00);
+
+        assertEquals(120.00, maxiSaver.interestEarned(), DOUBLE_DELTA);
     }
 }

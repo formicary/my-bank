@@ -36,7 +36,7 @@ public class Customer {
         return acc;
     }
 
-    public void transferFunds(double amount, Account sender, Account recipient){
+    public void transferFunds(Account sender, Account recipient, double amount){
         Transfer.newTransfer(amount, sender, recipient);
     }
 

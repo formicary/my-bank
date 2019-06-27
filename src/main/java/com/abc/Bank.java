@@ -34,6 +34,7 @@ public class Bank {
         return total;
     }
 
+    /*
     public String getFirstCustomer() {
         try {
             customers = null;
@@ -43,4 +44,5 @@ public class Bank {
             return "Error";
         }
     }
+     */
 }
