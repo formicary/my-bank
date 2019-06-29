@@ -1,6 +1,7 @@
 package com.abc;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -53,7 +54,7 @@ public class BankTest {
 
         checkingAccount.deposit(100.0);
 
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(0.1, checkingAccount.interestEarnedAnnum(), DOUBLE_DELTA);
     }
 
     @Test
@@ -65,11 +66,11 @@ public class BankTest {
 
         savingsAccount.deposit(1500.0);
 
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(2.0, savingsAccount.interestEarnedAnnum(), DOUBLE_DELTA);
     }
 
-    @Test
-    public void maxi_savings_account() {
+    @Ignore
+    public void maxi_savings_account_old() {
         Bank bank = new Bank();
 
         Customer bill = new Customer("Bill");
@@ -79,7 +80,7 @@ public class BankTest {
 
         maxiSavingsAccount.deposit(3000.0);
 
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(170.0, maxiSavingsAccount.interestEarnedAnnum(), DOUBLE_DELTA);
     }
 
     @Test
@@ -93,11 +94,11 @@ public class BankTest {
 
         bank.addCustomer(bill);
 
-        checking.deposit(100.00);
-        saver.deposit(1500.00);
-        maxi.deposit(3000.00);
+        checking.deposit(100.00); // earns 0.1 interest
+        saver.deposit(1500.00); // earns 2.0 interest
+        maxi.deposit(3000.00); // earns 150.0 interest
 
-        assertEquals(172.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(152.1, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
@@ -108,15 +109,15 @@ public class BankTest {
         Customer ted = new Customer("Ted");
 
         Account billSaver = bill.openSavingsAccount();
-        Account tedMaxiSaver = ted.openMaxiSavingsAccount();
+        Account tedChecking = ted.openCheckingAccount();
 
         billSaver.deposit(1500.00); // = $2 interest
-        tedMaxiSaver.deposit(2500.00); // = $120 interest
+        tedChecking.deposit(2500.00); // = 2.5 interest
 
         bank.addCustomer(bill);
         bank.addCustomer(ted);
 
-        assertEquals(122.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(4.50, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
 }

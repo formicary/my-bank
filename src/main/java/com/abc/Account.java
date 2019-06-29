@@ -1,7 +1,10 @@
 package com.abc;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import static java.lang.Math.abs;
 
 /**
  * Abstract class for creating the three types of account
@@ -16,6 +19,8 @@ public abstract class Account {
     protected String accountTypeString;
 
     protected Customer owner;
+
+    protected Date lastWithdrawal;
 
     public Account(Customer owner){
         this.transactions = new ArrayList<Transaction>();
@@ -33,7 +38,7 @@ public abstract class Account {
         if (amount <= 0) {
             throw new IllegalArgumentException("error: amount must be greater than zero");
         } else {
-            this.transactions.add(new Transaction(amount, Transaction.DEPOSIT));
+            createNewTransactionRecord(amount, Transaction.DEPOSIT);
             this.addFunds(amount);
         }
     }
@@ -52,22 +57,45 @@ public abstract class Account {
 
         } else {
 
-            transactions.add(new Transaction(-amount, Transaction.WITHDRAWAL));
+            createNewTransactionRecord(-amount, Transaction.WITHDRAWAL);
             this.deductFunds(amount);
         }
     }
+
+    protected void createNewTransactionRecord(double amount, int type){
+        transactions.add(new Transaction(amount, type));
+        if(type == Transaction.WITHDRAWAL) updateLatestWithdrawal();
+    }
+
+    // assumption is that the latest transaction made is also the most recent
+    private void updateLatestWithdrawal() {
+        this.lastWithdrawal = this.transactions.get(this.transactions.size() - 1).transactionDate;
+    }
+
+
+    protected String getAccountStatement(){
+        String s = this.getAccountTypeString() + " Account\n";
+
+        //Now total up all the transactions
+        for (Transaction t : this.transactions) {
+            s += "  " + t.getTypeString() + " " + CurrencyFormat.toDollars(t.amount) + "\n";
+        }
+        s += "Total " + CurrencyFormat.toDollars(this.getAccountBalance());
+        return s;
+    }
+
     // interest rate calculation is dependent on the type of account
-    public abstract double interestEarned();
+    public abstract double interestEarnedAnnum();
 
     public boolean hasSufficientFunds(double amount){
         return (this.accountBalance - amount >= 0.00);
     }
 
-    public void addFunds(double amount){
+    protected void addFunds(double amount){
         this.accountBalance += amount;
     }
 
-    public void deductFunds(double amount){
+    protected void deductFunds(double amount){
         this.accountBalance -= amount;
     }
 }

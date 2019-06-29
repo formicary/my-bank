@@ -49,37 +49,23 @@ public class Customer {
     }
 
     public double totalInterestEarned() {
-        double total = 0;
+        double total = 0.0;
 
-        for (Account a : accounts) total += a.interestEarned();
+        for (Account a : accounts) total += a.interestEarnedAnnum();
         return total;
     }
 
     public String getStatement() {
         StringBuilder statement = new StringBuilder("Statement for " + this.name + "\n");
+
         double total = 0.0;
+
         for (Account a : accounts) {
-            statement.append("\n").append(statementForAccount(a)).append("\n");
+            statement.append("\n").append(a.getAccountStatement()).append("\n");
             total += a.getAccountBalance();
         }
-        statement.append("\nTotal In All Accounts ").append(toDollars(total));
+
+        statement.append("\nTotal In All Accounts ").append(CurrencyFormat.toDollars(total));
         return statement.toString();
-    }
-
-    private String statementForAccount(Account a) {
-        String s = a.getAccountTypeString() + " Account\n";
-
-        //Now total up all the transactions
-        double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + t.getTypeString() + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
-        }
-        s += "Total " + toDollars(total);
-        return s;
-    }
-
-    private String toDollars(double d){
-        return String.format("$%,.2f", abs(d));
     }
 }

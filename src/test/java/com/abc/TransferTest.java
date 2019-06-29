@@ -3,6 +3,12 @@ package com.abc;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
 import static org.junit.Assert.assertEquals;
 
 public class TransferTest {
@@ -89,9 +95,6 @@ public class TransferTest {
 
         Customer dave = new Customer("Dave");
         Customer tom  = new Customer("Tom");
-
-        System.out.println(dave.uniqueID);
-        System.out.println(tom.uniqueID);
 
         CheckingAccount checkDave = new CheckingAccount(dave);
         CheckingAccount checkTom = new CheckingAccount(tom);

@@ -17,12 +17,12 @@ public class Transaction {
     public final String typeString;
     public final double amount;
 
-    private Date transactionDate;
+    protected Date transactionDate;
 
     public Transaction(double amount, int type) {
         this.type = type;
         this.amount = amount;
-        this.transactionDate = DateProvider.getInstance().now();
+        this.transactionDate = Calendar.getInstance().getTime();
 
         this.typeString = determineType(type);
     }
@@ -41,6 +41,8 @@ public class Transaction {
         }
 
     }
+
+    // public Date getTransactionDate(){ return this.transactionDate; }
 
     /*
     public int getType(){
