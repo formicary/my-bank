@@ -45,44 +45,6 @@ public class BankTest {
     }
 
     @Test
-    public void checkingAccount() {
-        Bank bank = new Bank();
-        Customer bill = new Customer("Bill");
-        Account checkingAccount = bill.openCheckingAccount();
-        bank.addCustomer(bill);
-
-        checkingAccount.deposit(100.0);
-
-        assertEquals(0.1, checkingAccount.interestEarned(), DOUBLE_DELTA);
-    }
-
-    @Test
-    public void savings_account() {
-        Bank bank = new Bank();
-        Customer bill = new Customer("Bill");
-        Account savingsAccount = bill.openSavingsAccount();
-        bank.addCustomer(bill);
-
-        savingsAccount.deposit(1500.0);
-
-        assertEquals(2.0, savingsAccount.interestEarned(), DOUBLE_DELTA);
-    }
-
-    @Ignore
-    public void maxi_savings_account_old() {
-        Bank bank = new Bank();
-
-        Customer bill = new Customer("Bill");
-        Account maxiSavingsAccount = bill.openMaxiSavingsAccount();
-
-        bank.addCustomer(bill);
-
-        maxiSavingsAccount.deposit(3000.0);
-
-        assertEquals(170.0, maxiSavingsAccount.interestEarned(), DOUBLE_DELTA);
-    }
-
-    @Test
     public void interestMultipleAccounts(){
         Bank bank = new Bank();
 

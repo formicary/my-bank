@@ -3,12 +3,6 @@ package com.abc;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
-
 import static org.junit.Assert.assertEquals;
 
 public class TransferTest {
@@ -55,7 +49,7 @@ public class TransferTest {
     }
 
     @Test
-    public void insufficientFunds(){
+    public void insufficientFundsForTransfer(){
         Customer dave = new Customer("Dave");
         Account checking = dave.openCheckingAccount();
         Account saver = dave.openSavingsAccount();
@@ -71,8 +65,9 @@ public class TransferTest {
         }
     }
 
+    // invalid amount used - i.e. value > 0 was entered
     @Test
-    public void invalidAmount(){
+    public void invalidAmountForTransfer(){
         Customer dave = new Customer("Dave");
         Account checking = dave.openCheckingAccount();
         Account saver = dave.openSavingsAccount();
@@ -81,7 +76,7 @@ public class TransferTest {
 
         try{
             dave.transferFunds(checking, saver, -20.00);
-            Assert.fail("Invalid amount was accepted - test has failed");
+            Assert.fail("fail: Invalid amount was accepted");
         } catch (IllegalArgumentException e){
             String expected = "error: invalid amount";
             assertEquals(expected, e.getMessage());
@@ -110,5 +105,24 @@ public class TransferTest {
         }
 
 
+    }
+
+    // prevent transfers from happening between a null accounts
+    @Test
+    public void transferNullAccount(){
+        Customer dave = new Customer("Dave");
+        Customer tom  = new Customer("Tom");
+
+        CheckingAccount checkDave = new CheckingAccount(dave);
+
+        checkDave.deposit(15.00);
+
+        try {
+            Transfer.newTransfer(10.00, checkDave, null);
+            Assert.fail("fail: invalid transfer (due to one customer being not specified - NULL) was accepted");
+        } catch (IllegalArgumentException e){
+            String expected = "error: one or more involved in transfer was NULL";
+            assertEquals(expected, e.getMessage());
+        }
     }
 }

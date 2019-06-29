@@ -31,11 +31,17 @@ public class MaxiSavingsAccount extends Account {
         Date now = Calendar.getInstance().getTime();
 
         if(this.lastWithdrawal == null) {
+
             interestRate = 0.05; // no withdrawals have ever taken place, so higher rate is used
+
         } else if(DateManager.daysDifference(now, this.lastWithdrawal) >= 10){
+
             interestRate = 0.05; // withdrawal(s) have been made, but not in the past 10 days
+
         }else{
+
             interestRate = 0.001; // withdrawal has been made in past 10 days, so lower interest rate is used
+
         }
 
         return this.getAccountBalance() * interestRate;

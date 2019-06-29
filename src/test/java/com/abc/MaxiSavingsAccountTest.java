@@ -13,54 +13,6 @@ public class MaxiSavingsAccountTest {
 
     private static final double DOUBLE_DELTA = 1e-15;
 
-    @Test
-    public void testDepositValid(){
-        CheckingAccount maxiSaver = new CheckingAccount(new Customer("Bill"));
-
-        maxiSaver.deposit(200.0);
-
-        assertEquals(200.0, maxiSaver.getAccountBalance(), DOUBLE_DELTA);
-
-    }
-
-    @Test
-    public void testDepositInvalid(){
-        CheckingAccount maxiSaver = new CheckingAccount(new Customer("Bill"));
-
-        try{
-            maxiSaver.deposit(-100.0);
-            Assert.fail("Invalid deposit was accepted.");
-        }catch(IllegalArgumentException e){
-            String expectedMessage = "error: amount must be greater than zero";
-            assertEquals(expectedMessage, e.getMessage());
-        }
-    }
-
-    @Test
-    public void testWithdrawValid(){
-        CheckingAccount maxiSaver = new CheckingAccount(new Customer("Bill"));
-
-        maxiSaver.deposit(200.0);
-        maxiSaver.withdraw(100.0);
-
-        assertEquals(100.0, maxiSaver.getAccountBalance(), DOUBLE_DELTA);
-    }
-
-    @Test
-    public void testWithdrawInvalid(){
-        CheckingAccount maxiSaver = new CheckingAccount(new Customer("Bill"));
-
-        maxiSaver.deposit(100.0);
-
-        try{
-            maxiSaver.withdraw(-100.0);
-            Assert.fail("Invalid withdraw was accepted.");
-        }catch (IllegalArgumentException e){
-            String expectedMessage = "error: amount must be greater than zero";
-            assertEquals(expectedMessage, e.getMessage());
-        }
-    }
-
     // no withdrawals have taken place on account, so interest rate should be high
     @Test
     public void interestRateNoWithdrawals(){
@@ -76,21 +28,7 @@ public class MaxiSavingsAccountTest {
         assertEquals(150.0, maxiSavingsAccount.interestEarned(), DOUBLE_DELTA);
     }
 
-    @Test
-    public void interestRateWithdrawalPast10Days(){
-        Bank bank = new Bank();
-
-        Customer bill = new Customer("Bill");
-        Account maxiSavingsAccount = bill.openMaxiSavingsAccount();
-
-        bank.addCustomer(bill);
-
-        maxiSavingsAccount.deposit(3000.0);
-        maxiSavingsAccount.withdraw(1500.00);
-
-        assertEquals(1.5, maxiSavingsAccount.interestEarned(), DOUBLE_DELTA);
-    }
-
+    // withdrawals have taken place, but over 10 days ago
     @Test
     public void interestRateWithNoRecentWithdrawal(){
 
@@ -107,8 +45,8 @@ public class MaxiSavingsAccountTest {
         Transaction depositTransaction = new Transaction(3000.0, Transaction.DEPOSIT);
         Transaction withdrawalTransaction = new Transaction(1500.0, Transaction.WITHDRAWAL);
 
+        // change the transaction date to one over 10 days ago
         try {
-            depositTransaction.transactionDate = simpleDateFormat.parse("2018-06-15 12:30:01");
             withdrawalTransaction.transactionDate = simpleDateFormat.parse("2019-06-15 12:00:00");
         } catch (ParseException e) {
             Assert.fail("error: parsing failed");
@@ -119,15 +57,36 @@ public class MaxiSavingsAccountTest {
 
         maxiSavingsAccount.addFunds(1500.00);
 
+        // update last withdrawal to match the withdrawal
+        // have to do it like this so that I can manually change the date on the transaction
         maxiSavingsAccount.lastWithdrawal = withdrawalTransaction.transactionDate;
 
+        // interest should be calculated using higher interest rate (5% of 1500.00)
         assertEquals(75.00, maxiSavingsAccount.interestEarned(), DOUBLE_DELTA);
+    }
+
+    // withdrawal has taken place in last 10 days, so lower interest rate (0.1%) should be used
+    @Test
+    public void interestRateWithdrawalPast10Days(){
+        Bank bank = new Bank();
+
+        Customer bill = new Customer("Bill");
+        Account maxiSavingsAccount = bill.openMaxiSavingsAccount();
+
+        bank.addCustomer(bill);
+
+        maxiSavingsAccount.deposit(3000.0);
+        maxiSavingsAccount.withdraw(1500.00); // withdrawal took place today
+
+        // uses lower interest rate (0.1% of $1500.00) as there was a recent transaction
+        assertEquals(1.5, maxiSavingsAccount.interestEarned(), DOUBLE_DELTA);
     }
 
 
 
     // Old Maxi Savings Interest Tests
     //------------------------------------------------------------------------------------------------------------------
+
     @Ignore
     public void testInterestRateUnder1000(){
         MaxiSavingsAccount maxiSaver = new MaxiSavingsAccount(new Customer("Bill"));

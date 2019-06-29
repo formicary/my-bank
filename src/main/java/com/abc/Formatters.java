@@ -8,6 +8,7 @@ import static java.lang.Math.abs;
  */
 public class Formatters {
 
+    // the original toDollars implementation, just placed in this class instead
     public static String toDollars(double d){
         return String.format("$%,.2f", abs(d));
     }

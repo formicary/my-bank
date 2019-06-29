@@ -9,6 +9,7 @@ import java.util.Date;
 
 public class DateManagerTest {
 
+    // for formatting the date (makes things simpler for me)
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Test

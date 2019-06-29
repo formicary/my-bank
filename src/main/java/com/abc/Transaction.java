@@ -36,8 +36,10 @@ public class Transaction {
                 return "withdrawal";
             case TRANSFER_IN:
                 return "transfer-in";
-            default:
+            case TRANSFER_OUT:
                 return "transfer-out";
+            default:
+                throw new IllegalArgumentException("error: invalid transaction type used");
         }
 
     }

@@ -25,11 +25,12 @@ public abstract class Account {
     protected Date lastWithdrawal;
 
     public Account(Customer owner){
-        this.transactions = new ArrayList<Transaction>();
         this.owner = owner;
+        this.transactions = new ArrayList<Transaction>();
     }
 
-    // public int getAccountType(){ return accountType; }
+    // interest rate calculation is dependent on the type of account
+    public abstract double interestEarned();
 
     public String getAccountTypeString() { return this.accountTypeString; }
 
@@ -70,6 +71,7 @@ public abstract class Account {
         }
     }
 
+    // creates transaction record for whatever has just taken place
     protected void createNewTransactionRecord(double amount, int type){
         transactions.add(new Transaction(amount, type));
         if(type == Transaction.WITHDRAWAL) updateLatestWithdrawal();
@@ -81,6 +83,7 @@ public abstract class Account {
     }
 
 
+    // creates a statement for this instance of an account
     protected String getAccountStatement(){
         StringBuilder s = new StringBuilder(this.getAccountTypeString() + " Account\n");
 
@@ -92,9 +95,7 @@ public abstract class Account {
         return s.toString();
     }
 
-    // interest rate calculation is dependent on the type of account
-    public abstract double interestEarned();
-
+    // checks if account has sufficient funds for proposed transaction
     public boolean hasSufficientFunds(double amount){
         return (this.accountBalance - amount >= 0.00);
     }
@@ -106,4 +107,6 @@ public abstract class Account {
     protected void deductFunds(double amount){
         this.accountBalance -= amount;
     }
+
+
 }

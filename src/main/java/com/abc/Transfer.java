@@ -5,7 +5,11 @@ public class Transfer {
     // checks if transfer is valid, if so calls a method to perform the transfer
     public static void newTransfer(double amount, Account sender, Account receiver){
 
-        if(amount <= 0.0) {
+        if(sender == null || receiver == null){
+
+            throw new IllegalArgumentException("error: one or more involved in transfer was NULL");
+
+        } if(amount <= 0.0) {
 
             throw new IllegalArgumentException("error: invalid amount");
 

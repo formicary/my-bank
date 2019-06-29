@@ -1,9 +1,10 @@
 package com.abc;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * for anything that involves comparing dates
+ */
 public class DateManager {
 
     // gets the difference in days between two dates
