@@ -10,6 +10,7 @@ public class Customer {
     private String name;
     private List<Account> accounts;
 
+    // used for determining if two accounts belong to the same customer or not
     protected final String uniqueID;
 
     public Customer(String name) {
@@ -51,7 +52,9 @@ public class Customer {
     public double totalInterestEarned() {
         double total = 0.0;
 
-        for (Account a : accounts) total += a.interestEarnedAnnum();
+        for (Account a : accounts)
+            total += a.interestEarned();
+
         return total;
     }
 
@@ -65,7 +68,7 @@ public class Customer {
             total += a.getAccountBalance();
         }
 
-        statement.append("\nTotal In All Accounts ").append(CurrencyFormat.toDollars(total));
+        statement.append("\nTotal In All Accounts ").append(Formatters.toDollars(total));
         return statement.toString();
     }
 }

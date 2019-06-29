@@ -65,7 +65,7 @@ public class SavingsAccountTest {
 
         saver.deposit(500.00);
 
-        assertEquals(0.50, saver.interestEarnedAnnum(), DOUBLE_DELTA);
+        assertEquals(0.50, saver.interestEarned(), DOUBLE_DELTA);
     }
 
     @Test
@@ -74,6 +74,6 @@ public class SavingsAccountTest {
 
         saver.deposit(1500.00);
 
-        assertEquals(2.00, saver.interestEarnedAnnum(), DOUBLE_DELTA);
+        assertEquals(2.00, saver.interestEarned(), DOUBLE_DELTA);
     }
 }

@@ -13,8 +13,8 @@ public class Transaction {
     public static final int TRANSFER_IN = 2;
     public static final int TRANSFER_OUT = 3;
 
-    public final int type;
-    public final String typeString;
+    private final int type;
+    private final String typeString;
     public final double amount;
 
     protected Date transactionDate;
@@ -42,14 +42,9 @@ public class Transaction {
 
     }
 
-    // public Date getTransactionDate(){ return this.transactionDate; }
+    // public int getType(){ return this.type; }
 
-    /*
-    public int getType(){
-        return this.type;
-    }
-     */
-
+    // returns the type of transaction made (i.e. DEPOSIT, WITHDRAWAL, ETC)
     public String getTypeString(){
         return this.typeString;
     }

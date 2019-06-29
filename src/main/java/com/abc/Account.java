@@ -18,8 +18,10 @@ public abstract class Account {
 
     protected String accountTypeString;
 
+    // keep a reference to the owner of this account
     protected Customer owner;
 
+    // keep a record of the last withdrawal (used for maxi savings account)
     protected Date lastWithdrawal;
 
     public Account(Customer owner){
@@ -35,11 +37,16 @@ public abstract class Account {
 
     // same process across accounts, so no need for repeated implementations via abstract class
     public void deposit(double amount) {
-        if (amount <= 0) {
+
+        if (amount <= 0.0) {
+
             throw new IllegalArgumentException("error: amount must be greater than zero");
+
         } else {
+
             createNewTransactionRecord(amount, Transaction.DEPOSIT);
             this.addFunds(amount);
+
         }
     }
 
@@ -59,6 +66,7 @@ public abstract class Account {
 
             createNewTransactionRecord(-amount, Transaction.WITHDRAWAL);
             this.deductFunds(amount);
+
         }
     }
 
@@ -74,18 +82,18 @@ public abstract class Account {
 
 
     protected String getAccountStatement(){
-        String s = this.getAccountTypeString() + " Account\n";
+        StringBuilder s = new StringBuilder(this.getAccountTypeString() + " Account\n");
 
         //Now total up all the transactions
         for (Transaction t : this.transactions) {
-            s += "  " + t.getTypeString() + " " + CurrencyFormat.toDollars(t.amount) + "\n";
+            s.append("  ").append(t.getTypeString()).append(" ").append(Formatters.toDollars(t.amount)).append("\n");
         }
-        s += "Total " + CurrencyFormat.toDollars(this.getAccountBalance());
-        return s;
+        s.append("Total ").append(Formatters.toDollars(this.getAccountBalance()));
+        return s.toString();
     }
 
     // interest rate calculation is dependent on the type of account
-    public abstract double interestEarnedAnnum();
+    public abstract double interestEarned();
 
     public boolean hasSufficientFunds(double amount){
         return (this.accountBalance - amount >= 0.00);

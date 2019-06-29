@@ -73,7 +73,7 @@ public class MaxiSavingsAccountTest {
 
         maxiSavingsAccount.deposit(3000.0);
 
-        assertEquals(150.0, maxiSavingsAccount.interestEarnedAnnum(), DOUBLE_DELTA);
+        assertEquals(150.0, maxiSavingsAccount.interestEarned(), DOUBLE_DELTA);
     }
 
     @Test
@@ -88,7 +88,7 @@ public class MaxiSavingsAccountTest {
         maxiSavingsAccount.deposit(3000.0);
         maxiSavingsAccount.withdraw(1500.00);
 
-        assertEquals(1.5, maxiSavingsAccount.interestEarnedAnnum(), DOUBLE_DELTA);
+        assertEquals(1.5, maxiSavingsAccount.interestEarned(), DOUBLE_DELTA);
     }
 
     @Test
@@ -121,7 +121,7 @@ public class MaxiSavingsAccountTest {
 
         maxiSavingsAccount.lastWithdrawal = withdrawalTransaction.transactionDate;
 
-        assertEquals(75.00, maxiSavingsAccount.interestEarnedAnnum(), DOUBLE_DELTA);
+        assertEquals(75.00, maxiSavingsAccount.interestEarned(), DOUBLE_DELTA);
     }
 
 
@@ -134,7 +134,7 @@ public class MaxiSavingsAccountTest {
 
         maxiSaver.deposit(400.00);
 
-        assertEquals(8.00, maxiSaver.interestEarnedAnnum(), DOUBLE_DELTA);
+        assertEquals(8.00, maxiSaver.interestEarned(), DOUBLE_DELTA);
     }
 
     @Ignore
@@ -143,7 +143,7 @@ public class MaxiSavingsAccountTest {
 
         maxiSaver.deposit(1500.00);
 
-        assertEquals(45.00, maxiSaver.interestEarnedAnnum(), DOUBLE_DELTA);
+        assertEquals(45.00, maxiSaver.interestEarned(), DOUBLE_DELTA);
     }
 
     @Ignore
@@ -152,6 +152,6 @@ public class MaxiSavingsAccountTest {
 
         maxiSaver.deposit(2500.00);
 
-        assertEquals(120.00, maxiSaver.interestEarnedAnnum(), DOUBLE_DELTA);
+        assertEquals(120.00, maxiSaver.interestEarned(), DOUBLE_DELTA);
     }
 }

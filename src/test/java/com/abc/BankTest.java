@@ -1,6 +1,5 @@
 package com.abc;
 
-import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -54,7 +53,7 @@ public class BankTest {
 
         checkingAccount.deposit(100.0);
 
-        assertEquals(0.1, checkingAccount.interestEarnedAnnum(), DOUBLE_DELTA);
+        assertEquals(0.1, checkingAccount.interestEarned(), DOUBLE_DELTA);
     }
 
     @Test
@@ -66,7 +65,7 @@ public class BankTest {
 
         savingsAccount.deposit(1500.0);
 
-        assertEquals(2.0, savingsAccount.interestEarnedAnnum(), DOUBLE_DELTA);
+        assertEquals(2.0, savingsAccount.interestEarned(), DOUBLE_DELTA);
     }
 
     @Ignore
@@ -80,7 +79,7 @@ public class BankTest {
 
         maxiSavingsAccount.deposit(3000.0);
 
-        assertEquals(170.0, maxiSavingsAccount.interestEarnedAnnum(), DOUBLE_DELTA);
+        assertEquals(170.0, maxiSavingsAccount.interestEarned(), DOUBLE_DELTA);
     }
 
     @Test

@@ -3,11 +3,16 @@ package com.abc;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * Implementation of Account specifically for a Maxi-Savings Account
+ */
 public class MaxiSavingsAccount extends Account {
 
+    /*
     protected final double initialInterestRate = 0.02;
     protected final double higherInterestRate = 0.05;
     protected final double topInterestRate = 0.1;
+     */
 
     public MaxiSavingsAccount(Customer owner){
         super(owner);
@@ -16,32 +21,31 @@ public class MaxiSavingsAccount extends Account {
     }
 
     /**
-     * Maxi-Savings accounts have a rate of 2% for the first $1,000 then 5% for the next $1,000 then 10%
+     * Maxi-Savings accounts have an interest rate of 5% assuming no withdrawals in the past 10 days otherwise 0.1%
      * @return interest earned on money in account
      */
-    // ... an interest rate of 5% assuming no withdrawals in the past 10 days otherwise 0.1%
-    public double interestEarnedAnnum(){
+    public double interestEarned(){
 
         double interestRate;
 
         Date now = Calendar.getInstance().getTime();
 
-        //Date now = DateProvider.getInstance().now();
-
         if(this.lastWithdrawal == null) {
-            interestRate = 0.05;
+            interestRate = 0.05; // no withdrawals have ever taken place, so higher rate is used
         } else if(DateManager.daysDifference(now, this.lastWithdrawal) >= 10){
-            interestRate = 0.05;
+            interestRate = 0.05; // withdrawal(s) have been made, but not in the past 10 days
         }else{
-            interestRate = 0.001;
+            interestRate = 0.001; // withdrawal has been made in past 10 days, so lower interest rate is used
         }
 
         return this.getAccountBalance() * interestRate;
     }
 
 
+    // the old maxi savings calculation technique
+
     /*
-    public double interestEarnedAnnum() {
+    public double interestEarned() {
 
         double balance = this.getAccountBalance();
 

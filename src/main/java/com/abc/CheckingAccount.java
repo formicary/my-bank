@@ -1,11 +1,11 @@
 package com.abc;
 
-import java.util.Date;
-
+/**
+ * Implementation of Account for Checking Accounts
+ */
 public class CheckingAccount extends Account {
 
-    private final double interestRateAnnum = 0.001;
-    private final double interestRateDaily = 0.001 / 365.0;
+    private final double interestRateDaily = 2.7397260273972604E-6;
 
 
     public CheckingAccount(Customer owner){
@@ -14,8 +14,9 @@ public class CheckingAccount extends Account {
         this.accountTypeString = "Checking";
     }
 
-    public double interestEarnedAnnum() {
-        return this.getAccountBalance() * this.interestRateAnnum;
+    public double interestEarned() {
+        double interestRate = 0.001;
+        return this.getAccountBalance() * interestRate;
     }
 
 }
