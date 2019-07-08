@@ -1,9 +1,9 @@
 package com.abc;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class CustomerTest {
 
@@ -47,11 +47,27 @@ public class CustomerTest {
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
-    @Ignore
-    public void testThreeAcounts() {
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
-        assertEquals(3, oscar.getNumberOfAccounts());
+    //Testing transferring between accounts
+    @Test
+    public void testSuccessfulTransferBetweenAccounts() {
+    	
+    	boolean successfulTransfer;
+    	Account checkingAccount = new Account(Account.CHECKING);
+        Account savingsAccount = new Account(Account.SAVINGS);
+
+        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
+
+        checkingAccount.deposit(100.0);	//deposit 100 to checking account
+        henry.transferBetweenAccounts(checkingAccount, savingsAccount, 100);	//transfer it to the saving account
+    	
+        if (checkingAccount.getAccountBalance() == 0 || savingsAccount.getAccountBalance() == 100) {	//checking balance should be 0, savings 100
+        	successfulTransfer = true;
+        } else {
+        	successfulTransfer = false;
+        }
+        
+        assertTrue(successfulTransfer);
     }
+    
+    //@Ignore does nothing, so removed
 }

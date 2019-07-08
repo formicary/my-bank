@@ -6,14 +6,17 @@ import java.util.List;
 public class Bank {
     private List<Customer> customers;
 
+    //Initialise new bank and customer list
     public Bank() {
         customers = new ArrayList<Customer>();
     }
 
+    //add a customer to the customer list
     public void addCustomer(Customer customer) {
         customers.add(customer);
     }
 
+    //Get a summary of the customer list and how many accounts they have
     public String customerSummary() {
         String summary = "Customer Summary";
         for (Customer c : customers)
@@ -27,6 +30,7 @@ public class Bank {
         return number + " " + (number == 1 ? word : word + "s");
     }
 
+    //calculate total interest 
     public double totalInterestPaid() {
         double total = 0;
         for(Customer c: customers)
@@ -34,6 +38,11 @@ public class Bank {
         return total;
     }
 
+    public void dayRollover() {	//Would be called at the beginning of each day
+    	for(Customer c: customers)
+            c.updateInterestForAccounts();
+    }
+    
     public String getFirstCustomer() {
         try {
             customers = null;
