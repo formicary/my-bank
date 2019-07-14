@@ -1,46 +1,62 @@
 package com.abc;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Bank {
+
     private List<Customer> customers;
 
     public Bank() {
-        customers = new ArrayList<Customer>();
+        this.customers = new ArrayList<Customer>();
+
+        // Use a timer with a scheduled operation that will start at the next midnight and
+        // repeat every day to add interest to all of the accounts in the bank
+        Timer dailyTimer = new Timer();
+        dailyTimer.scheduleAtFixedRate(new DailyInterestTask(), Utils.getTomorrowMidnight(), 24 * 60 * 60 * 1000);
     }
 
-    public void addCustomer(Customer customer) {
-        customers.add(customer);
+    public void addCustomer(Customer newCustomer) {
+        this.customers.add(newCustomer);
     }
 
     public String customerSummary() {
-        String summary = "Customer Summary";
-        for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-        return summary;
-    }
+        StringBuilder summary = new StringBuilder();
 
-    //Make sure correct plural of word is created based on the number passed in:
-    //If number passed in is 1 just return the word otherwise add an 's' at the end
-    private String format(int number, String word) {
-        return number + " " + (number == 1 ? word : word + "s");
+        summary.append("Customer Summary:");
+        for (Customer c : this.customers) {
+            summary.append("\n - ").append(c.toString());
+        }
+
+        return summary.toString();
     }
 
     public double totalInterestPaid() {
-        double total = 0;
-        for(Customer c: customers)
+        double total = 0.0;
+
+        for (Customer c : this.customers) {
             total += c.totalInterestEarned();
+        }
+
         return total;
     }
 
-    public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
+    public Customer getFirstCustomer() throws IndexOutOfBoundsException {
+        if (this.customers.isEmpty()) {
+            throw new IndexOutOfBoundsException("No customers found");
+        } else {
+            return this.customers.get(0);
+        }
+    }
+
+    // The scheduled task that will run every day and will add interest to all customer accounts
+    private class DailyInterestTask extends TimerTask {
+        @Override
+        public void run() {
+            for (Customer c : Bank.this.customers) {
+                for (Account a : c.getAccountsList()) {
+                    a.addInterest();
+                }
+            }
         }
     }
 }

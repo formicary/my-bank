@@ -3,71 +3,92 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Account {
+public abstract class Account {
 
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
+    private List<Transaction> transactions;
 
-    private final int accountType;
-    public List<Transaction> transactions;
-
-    public Account(int accountType) {
-        this.accountType = accountType;
+    public Account() {
         this.transactions = new ArrayList<Transaction>();
     }
 
-    public void deposit(double amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
+    public List<Transaction> getTransactions() {
+        // Use deep copy to prevent alteration of original transaction list
+        return new ArrayList<Transaction>(this.transactions);
+    }
+
+    public void deposit(double amount) throws IllegalArgumentException {
+        if (amount <= 0.0) {
+            throw new IllegalArgumentException("Amount to deposit must be greater than zero");
         } else {
-            transactions.add(new Transaction(amount));
+            this.transactions.add(new Transaction(amount, Transaction.TransactionType.MANUAL));
         }
     }
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
+    // Package-private method to be used by child classes
+    void depositInterest(double amount) {
+        this.transactions.add(new Transaction(amount, Transaction.TransactionType.INTEREST));
     }
-}
 
-    public double interestEarned() {
-        double amount = sumTransactions();
-        switch(accountType){
-            case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
-            case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
-            default:
-                return amount * 0.001;
+    public void withdraw(double amount) throws IllegalArgumentException {
+        if (amount <= 0.0) {
+            throw new IllegalArgumentException("Amount to withdraw must be greater than zero");
+        } else if (currentBalance() < amount) {
+            throw new IllegalArgumentException("Withdrawal amount exceeds available funds");
+        } else {
+            this.transactions.add(new Transaction(-amount, Transaction.TransactionType.MANUAL));
         }
     }
 
-    public double sumTransactions() {
-       return checkIfTransactionsExist(true);
-    }
-
-    private double checkIfTransactionsExist(boolean checkAll) {
+    public double currentBalance() {
         double amount = 0.0;
-        for (Transaction t: transactions)
-            amount += t.amount;
+
+        for (Transaction t : this.transactions) {
+            amount += t.getAmount();
+        }
+
         return amount;
     }
 
-    public int getAccountType() {
-        return accountType;
+    public double accountInterestEarned() {
+        double interestAmount = 0.0;
+        for (Transaction t : this.transactions) {
+            if (t.getTransactionType() == Transaction.TransactionType.INTEREST) {
+                interestAmount += t.getAmount();
+            }
+        }
+
+        return interestAmount;
     }
 
+    // To be implemented by child classes
+    public abstract void addInterest();
+
+    @Override
+    public String toString() {
+        StringBuilder accountStatement = new StringBuilder();
+
+        // Translate to pretty account type
+        if (this instanceof CheckingAccount) {
+            accountStatement.append("Checking Account\n");
+        } else if (this instanceof SavingsAccount) {
+            accountStatement.append("Savings Account\n");
+        } else if (this instanceof MaxiSavingsAccount) {
+            accountStatement.append("Maxi Savings Account\n");
+        }
+
+        // List all transactions with their amounts and give the account total
+        for (Transaction t : this.transactions) {
+            double transactionAmount = t.getAmount();
+
+            accountStatement.append("\t")
+                    .append(transactionAmount < 0 ? "withdrawal" : "deposit")
+                    .append(" ")
+                    .append(Utils.toDollars(transactionAmount))
+                    .append("\n");
+        }
+
+        accountStatement.append("\n\tTotal: ").append(Utils.toDollars(this.currentBalance())).append("\n");
+
+        return accountStatement.toString();
+    }
 }

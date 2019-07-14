@@ -1,78 +1,105 @@
 package com.abc;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import static java.lang.Math.abs;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Customer {
-    private String name;
-    private List<Account> accounts;
 
-    public Customer(String name) {
-        this.name = name;
-        this.accounts = new ArrayList<Account>();
+    private String firstName;
+    private String lastName;
+    private Map<Integer, Account> accounts;
+
+    public Customer(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.accounts = new HashMap<Integer, Account>();
     }
 
     public String getName() {
-        return name;
+        return this.firstName + " " + this.lastName;
     }
 
-    public Customer openAccount(Account account) {
-        accounts.add(account);
-        return this;
+    public ArrayList<Account> getAccountsList() {
+        // Return the accounts in the HashMap as an ArrayList that can be iterated through
+        return (ArrayList<Account>) this.accounts.values();
     }
 
     public int getNumberOfAccounts() {
-        return accounts.size();
-    }
-
-    public double totalInterestEarned() {
-        double total = 0;
-        for (Account a : accounts)
-            total += a.interestEarned();
-        return total;
+        return this.accounts.size();
     }
 
     public String getStatement() {
-        String statement = null;
-        statement = "Statement for " + name + "\n";
+        StringBuilder customerStatement = new StringBuilder();
         double total = 0.0;
-        for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+
+        // Start with customer name
+        customerStatement.append("Statement for ")
+                .append(this.firstName)
+                .append(" ")
+                .append(this.lastName)
+                .append(":\n\n");
+
+        if (this.accounts.isEmpty()) {
+            customerStatement.append("No accounts");
+            return customerStatement.toString();
+        } else {
+            // For each account in the HashMap, print the key value and then the account details
+            for (Map.Entry<Integer, Account> mapEntry : this.accounts.entrySet()) {
+                Account currentAccount = mapEntry.getValue();
+                customerStatement.append(mapEntry.getKey())
+                        .append(": ")
+                        .append(currentAccount.toString())
+                        .append("\n");
+
+                // Keep a running total of all accounts
+                total += currentAccount.currentBalance();
+            }
+
+            customerStatement.append("Total In All Accounts: ").append(Utils.toDollars(total));
+            return customerStatement.toString();
         }
-        statement += "\nTotal In All Accounts " + toDollars(total);
-        return statement;
     }
 
-    private String statementForAccount(Account a) {
-        String s = "";
-
-       //Translate to pretty account type
-        switch(a.getAccountType()){
-            case Account.CHECKING:
-                s += "Checking Account\n";
-                break;
-            case Account.SAVINGS:
-                s += "Savings Account\n";
-                break;
-            case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
-                break;
-        }
-
-        //Now total up all the transactions
-        double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
-        }
-        s += "Total " + toDollars(total);
-        return s;
+    public void openAccount(Account account) {
+        // Add the new account to the HashMap and automatically assign its key pair
+        this.accounts.put(this.accounts.size() + 1, account);
     }
 
-    private String toDollars(double d){
-        return String.format("$%,.2f", abs(d));
+    public void transferBetweenAccounts(int withdrawAccountKey, int depositAccountKey, double amount)
+            throws IllegalArgumentException {
+        // Check that the keys for the HashMap are valid
+        if (this.accounts.containsKey(withdrawAccountKey) && this.accounts.containsKey(depositAccountKey)) {
+            Account withdrawAccount = this.accounts.get(withdrawAccountKey);
+            Account depositAccount = this.accounts.get(depositAccountKey);
+
+            // Check that the amount is positive and that the withdrawal account contains the requested funds
+            if (amount <= 0.0 || withdrawAccount.currentBalance() < amount) {
+                throw new IllegalArgumentException("Invalid withdrawal amount; " +
+                        "must be a positive value and funds " +
+                        "must be available in withdrawal account");
+            } else {
+                // If both checks are validated, perform the transaction
+                withdrawAccount.withdraw(amount);
+                depositAccount.deposit(amount);
+            }
+        } else {
+            throw new IllegalArgumentException("Invalid account key was provided");
+        }
+    }
+
+    public double totalInterestEarned() {
+        double total = 0.0;
+
+        for (Account a : this.accounts.values()) {
+            total += a.accountInterestEarned();
+        }
+
+        return total;
+    }
+
+    @Override
+    public String toString() {
+        return this.getName() + " (" + Utils.formatWordPlural(this.getNumberOfAccounts(), "account") + ")";
     }
 }
