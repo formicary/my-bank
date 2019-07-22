@@ -219,6 +219,13 @@ public class BankTest {
         checkingAccount.isLastWithdrawInLastTenDays(transactions);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void getTheLastDepositTransactions_noTransactions() throws Exception {
+        Bank bank = new Bank();
+        Account checkingAccount = new Account(Account.CHECKING);
+        bank.getTheLastDepositTransaction(checkingAccount);
+    }
+
     @Test
     public void savingsAccount_moreThenThousand() {
         Bank bank = new Bank();

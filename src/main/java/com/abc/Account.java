@@ -20,7 +20,7 @@ public class Account {
 
     public void deposit(double amount) {
         if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
+            throw new IllegalArgumentException("Amount must be greater than zero.");
         } else {
             transactions.add(new Transaction(amount));
         }
@@ -28,7 +28,7 @@ public class Account {
 
     public void withdraw(double amount) {
         if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
+            throw new IllegalArgumentException("Amount must be greater than zero.");
         } else {
             transactions.add(new Transaction(-amount));
         }
@@ -62,10 +62,7 @@ public class Account {
     }
 
     private double checkIfTransactionsExist() {
-        double amount = 0.0;
-        for (Transaction t : transactions)
-            amount += t.amount;
-        return amount;
+        return transactions.stream().mapToDouble(transaction -> transaction.amount).sum();
     }
 
     public int getAccountType() {
@@ -74,7 +71,7 @@ public class Account {
 
     public boolean isLastWithdrawInLastTenDays(List<Transaction> transactions) {
         if (transactions.isEmpty()) {
-            throw new IllegalArgumentException("no transactions");
+            throw new IllegalArgumentException("No transactions.");
         }
         Transaction lastTransaction = transactions.get(transactions.size() - 1);
 

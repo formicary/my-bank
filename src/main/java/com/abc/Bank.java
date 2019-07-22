@@ -8,7 +8,7 @@ public class Bank {
     private List<Customer> customers;
 
     public Bank() {
-        customers = new ArrayList<Customer>();
+        customers = new ArrayList<>();
     }
 
     public void addCustomer(Customer customer) {
@@ -29,43 +29,39 @@ public class Bank {
     }
 
     public double totalInterestPaid() {
-        double total = 0;
-        for (Customer c : customers)
-            total += c.totalInterestEarned();
-        return total;
+        return customers.stream().mapToDouble(Customer::totalInterestEarned).sum();
     }
 
     public void addFlatRatePerAnnum(Customer customer) {
-        for (Account account : getAccounts(customer)) {
-            double interestEarned = account.interestEarned();
-            account.deposit(interestEarned);
-        }
+        getAccounts(customer).forEach(account -> {
+            account.deposit(account.interestEarned());
+        });
     }
 
     public Transaction getTheLastDepositTransaction(Account account) {
         List<Transaction> transactions = account.transactions;
-        Transaction lastTransaction = transactions.get(transactions.size() - 1);
-        return lastTransaction;
-    }
-
-    public void addInterestRateDaily(Customer customer) {
-        for (Account account : getAccounts(customer)) {
-            LocalDate lastTransactionDate = getTheLastDepositTransaction(account).transactionDate;
-
-            while (lastTransactionDate.isBefore(LocalDate.now())) {
-                double dailyInterestEarned = account.interestEarned() / 360;
-                account.deposit(dailyInterestEarned);
-                lastTransactionDate = lastTransactionDate.plusDays(1L);
-            }
+        if (transactions == null || transactions.isEmpty()) {
+            throw new IllegalArgumentException("No transactions.");
+        } else {
+            return transactions.get(transactions.size() - 1);
         }
     }
 
+    public void addInterestRateDaily(Customer customer) {
+        getAccounts(customer).forEach(account -> {
+            LocalDate lastTransactionDate = getTheLastDepositTransaction(account).transactionDate;
+            while (lastTransactionDate.isBefore(LocalDate.now())) {
+                account.deposit(account.interestEarned() / 360);
+                lastTransactionDate = lastTransactionDate.plusDays(1L);
+            }
+        });
+    }
 
     private List<Account> getAccounts(Customer customer) {
         List<Account> accounts = customer.getAccounts();
 
         if (accounts == null || accounts.isEmpty()) {
-            throw new IllegalArgumentException("no accounts");
+            throw new IllegalArgumentException("No accounts.");
         } else {
             return accounts;
         }
