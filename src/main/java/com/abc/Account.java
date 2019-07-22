@@ -1,5 +1,6 @@
 package com.abc;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +15,7 @@ public class Account {
 
     public Account(int accountType) {
         this.accountType = accountType;
-        this.transactions = new ArrayList<Transaction>();
+        this.transactions = new ArrayList<>();
     }
 
     public void deposit(double amount) {
@@ -25,49 +26,66 @@ public class Account {
         }
     }
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
+    public void withdraw(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        } else {
+            transactions.add(new Transaction(-amount));
+        }
     }
-}
 
     public double interestEarned() {
         double amount = sumTransactions();
-        switch(accountType){
+        switch (accountType) {
             case SAVINGS:
                 if (amount <= 1000)
                     return amount * 0.001;
                 else
-                    return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
+                    return 1 + (amount - 1000) * 0.002;
             case MAXI_SAVINGS:
                 if (amount <= 1000)
                     return amount * 0.02;
                 if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
+                    if (isLastWithdrawInLastTenDays(transactions)) {
+                        return 20 + (amount - 1000) * 0.001;
+                    } else {
+                        return 20 + (amount - 1000) * 0.05;
+                    }
+                return 70 + (amount - 2000) * 0.1;
             default:
                 return amount * 0.001;
         }
     }
 
     public double sumTransactions() {
-       return checkIfTransactionsExist(true);
+        return checkIfTransactionsExist();
     }
 
-    private double checkIfTransactionsExist(boolean checkAll) {
+    private double checkIfTransactionsExist() {
         double amount = 0.0;
-        for (Transaction t: transactions)
+        for (Transaction t : transactions)
             amount += t.amount;
         return amount;
     }
 
     public int getAccountType() {
         return accountType;
+    }
+
+    public boolean isLastWithdrawInLastTenDays(List<Transaction> transactions) {
+        if (transactions.isEmpty()) {
+            throw new IllegalArgumentException("no transactions");
+        }
+        Transaction lastTransaction = transactions.get(transactions.size() - 1);
+
+        if (lastTransaction.amount < 0) {
+            LocalDate now = LocalDate.now();
+            LocalDate lastTransactionDate = lastTransaction.transactionDate;
+
+            return lastTransactionDate.isAfter(now.minusDays(10L));
+        } else {
+            return false;
+        }
     }
 
 }

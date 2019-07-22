@@ -1,5 +1,6 @@
 package com.abc;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,18 +30,45 @@ public class Bank {
 
     public double totalInterestPaid() {
         double total = 0;
-        for(Customer c: customers)
+        for (Customer c : customers)
             total += c.totalInterestEarned();
         return total;
     }
 
-    public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
+    public void addFlatRatePerAnnum(Customer customer) {
+        for (Account account : getAccounts(customer)) {
+            double interestEarned = account.interestEarned();
+            account.deposit(interestEarned);
         }
     }
+
+    public Transaction getTheLastDepositTransaction(Account account) {
+        List<Transaction> transactions = account.transactions;
+        Transaction lastTransaction = transactions.get(transactions.size() - 1);
+        return lastTransaction;
+    }
+
+    public void addInterestRateDaily(Customer customer) {
+        for (Account account : getAccounts(customer)) {
+            LocalDate lastTransactionDate = getTheLastDepositTransaction(account).transactionDate;
+
+            while (lastTransactionDate.isBefore(LocalDate.now())) {
+                double dailyInterestEarned = account.interestEarned() / 360;
+                account.deposit(dailyInterestEarned);
+                lastTransactionDate = lastTransactionDate.plusDays(1L);
+            }
+        }
+    }
+
+
+    private List<Account> getAccounts(Customer customer) {
+        List<Account> accounts = customer.getAccounts();
+
+        if (accounts == null || accounts.isEmpty()) {
+            throw new IllegalArgumentException("no accounts");
+        } else {
+            return accounts;
+        }
+    }
+
 }

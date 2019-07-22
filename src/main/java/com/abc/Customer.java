@@ -1,7 +1,10 @@
 package com.abc;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static java.lang.Math.abs;
 
@@ -49,8 +52,8 @@ public class Customer {
     private String statementForAccount(Account a) {
         String s = "";
 
-       //Translate to pretty account type
-        switch(a.getAccountType()){
+        //Translate to pretty account type
+        switch (a.getAccountType()) {
             case Account.CHECKING:
                 s += "Checking Account\n";
                 break;
@@ -72,7 +75,29 @@ public class Customer {
         return s;
     }
 
-    private String toDollars(double d){
-        return String.format("$%,.2f", abs(d));
+    private String toDollars(double d) {
+        return toDecimalFormat(abs(d));
+    }
+
+    private String toDecimalFormat(double number) {
+        Locale currentLocale = Locale.getDefault();
+
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(currentLocale);
+        symbols.setDecimalSeparator('.');
+        symbols.setGroupingSeparator(',');
+
+        String pattern = "$###,##0.00";
+        DecimalFormat formatter = new DecimalFormat(pattern, symbols);
+
+        return formatter.format(number);
+    }
+
+    public void transfer(Account from, Account to, double d) {
+        from.withdraw(d);
+        to.deposit(d);
+    }
+
+    public List<Account> getAccounts() {
+        return accounts;
     }
 }
