@@ -7,7 +7,7 @@ public class MaxiSavingsAccount extends Account {
     }
 
     @Override
-    public double addInterestEarned() {
+    public double getInterestEarned() {
 
         double amount = sumTransactions();
 
@@ -21,5 +21,4 @@ public class MaxiSavingsAccount extends Account {
             }
         return 70 + (amount - 2000) * 0.1;
     }
-
 }

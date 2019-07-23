@@ -323,5 +323,4 @@ public class BankTest extends TestUtil {
                 "\n" +
                 "Total In All Accounts $1,745.20", customer.getStatement());
     }
-
 }

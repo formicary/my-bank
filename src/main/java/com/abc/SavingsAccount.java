@@ -1,13 +1,13 @@
 package com.abc;
 
-public class SavingsAccount extends Account{
+public class SavingsAccount extends Account {
 
     public SavingsAccount() {
         super();
     }
 
     @Override
-    public double addInterestEarned(){
+    public double getInterestEarned() {
 
         double amount = sumTransactions();
 
@@ -16,5 +16,4 @@ public class SavingsAccount extends Account{
         else
             return 1 + (amount - 1000) * 0.002;
     }
-
 }

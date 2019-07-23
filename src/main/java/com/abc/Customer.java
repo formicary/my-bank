@@ -3,7 +3,7 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Customer extends TestUtils {
+public class Customer extends Utils {
 
     private final String name;
     private final List<Account> accounts;
@@ -29,12 +29,12 @@ public class Customer extends TestUtils {
     public double totalInterestEarned() {
         double total = 0;
         for (Account a : accounts)
-            total += a.addInterestEarned();
+            total += a.getInterestEarned();
         return total;
     }
 
     public String getStatement() {
-        String statement  = "Statement for " + name + "\n";
+        String statement = "Statement for " + name + "\n";
         double total = 0.0;
         for (Account a : accounts) {
             statement += "\n" + statementForAccount(a) + "\n";
@@ -48,11 +48,11 @@ public class Customer extends TestUtils {
         String s = "";
 
         //Translate to pretty account type
-        if(a instanceof CheckingAccount){
+        if (a instanceof CheckingAccount) {
             s = s.concat("Checking Account\n");
-        } else if(a instanceof SavingsAccount){
+        } else if (a instanceof SavingsAccount) {
             s = s.concat("Savings Account\n");
-        } else if(a instanceof MaxiSavingsAccount){
+        } else if (a instanceof MaxiSavingsAccount) {
             s = s.concat("Maxi Savings Account\n");
         }
 

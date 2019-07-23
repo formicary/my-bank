@@ -9,5 +9,4 @@ public class TestUtil {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
         return LocalDate.parse(dateInString, formatter);
     }
-
 }

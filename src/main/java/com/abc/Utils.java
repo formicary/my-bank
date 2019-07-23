@@ -6,7 +6,7 @@ import java.util.Locale;
 
 import static java.lang.Math.abs;
 
-public class TestUtils {
+public class Utils {
 
     public String toDollars(double d) {
         return toDecimalFormat(abs(d));
@@ -24,5 +24,4 @@ public class TestUtils {
 
         return formatter.format(number);
     }
-
 }

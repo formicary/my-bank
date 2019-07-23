@@ -35,7 +35,7 @@ public class Bank {
 
     // Method should be triggered by job scheduler every year
     public void addInterestRatePerAnnum(Customer customer) {
-        customer.getAccounts().forEach(account -> account.deposit(account.addInterestEarned()));
+        customer.getAccounts().forEach(account -> account.deposit(account.getInterestEarned()));
     }
 
     public void addInterestRateDaily(Customer customer) {
@@ -51,10 +51,9 @@ public class Bank {
             }
 
             while (lastTransactionDate.isBefore(LocalDate.now())) {
-                account.deposit(account.addInterestEarned() / 360);
+                account.deposit(account.getInterestEarned() / 360);
                 lastTransactionDate = lastTransactionDate.plusDays(1L);
             }
         });
     }
-
 }

@@ -12,7 +12,7 @@ public class Transaction {
         this.transactionDate = LocalDate.now();
     }
 
-    public void setTransactionDate(LocalDate transactionDate) {
+    void setTransactionDate(LocalDate transactionDate) {
         this.transactionDate = transactionDate;
     }
 }

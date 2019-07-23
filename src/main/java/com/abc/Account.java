@@ -12,9 +12,7 @@ public abstract class Account {
         this.transactions = new ArrayList<>();
     }
 
-    public double addInterestEarned() {
-        return 0;
-    }
+    public abstract double getInterestEarned();
 
     public void deposit(double amount) {
         if (amount <= 0) {
@@ -33,10 +31,10 @@ public abstract class Account {
     }
 
     public double sumTransactions() {
-        return checkIfTransactionsExist();
+        return getTransactionsAmount();
     }
 
-    private double checkIfTransactionsExist() {
+    private double getTransactionsAmount() {
         return transactions.stream().mapToDouble(transaction -> transaction.amount).sum();
     }
 
@@ -55,5 +53,4 @@ public abstract class Account {
             return false;
         }
     }
-
 }

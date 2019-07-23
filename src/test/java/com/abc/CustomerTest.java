@@ -42,7 +42,7 @@ public class CustomerTest {
     }
 
     @Test
-    public void transferFromCheckingToSavings(){
+    public void transferFromCheckingToSavings() {
         Bank bank = new Bank();
         Account checkingAccount = new CheckingAccount();
         Account savingsAccount = new SavingsAccount();
@@ -72,7 +72,7 @@ public class CustomerTest {
     }
 
     @Test
-    public void transferFromSavingsToChecking(){
+    public void transferFromSavingsToChecking() {
         Bank bank = new Bank();
         Account checkingAccount = new CheckingAccount();
         Account savingsAccount = new SavingsAccount();
@@ -102,7 +102,7 @@ public class CustomerTest {
     }
 
     @Test
-    public void transferFromSavingsToMaxiSavings(){
+    public void transferFromSavingsToMaxiSavings() {
         Bank bank = new Bank();
         Account maxiSavingsAccount = new MaxiSavingsAccount();
         Account savingsAccount = new SavingsAccount();
@@ -132,7 +132,7 @@ public class CustomerTest {
     }
 
     @Test
-    public void transferFromMaxiSavingsToSavings(){
+    public void transferFromMaxiSavingsToSavings() {
         Bank bank = new Bank();
         Account maxiSavingsAccount = new MaxiSavingsAccount();
         Account savingsAccount = new SavingsAccount();
@@ -162,7 +162,7 @@ public class CustomerTest {
     }
 
     @Test
-    public void transferFromMaxiSavingsToChecking(){
+    public void transferFromMaxiSavingsToChecking() {
         Bank bank = new Bank();
         Account maxiSavingsAccount = new MaxiSavingsAccount();
         Account checkingAccount = new CheckingAccount();
@@ -192,7 +192,7 @@ public class CustomerTest {
     }
 
     @Test
-    public void transferFromCheckingToMaxiSavings(){
+    public void transferFromCheckingToMaxiSavings() {
         Bank bank = new Bank();
         Account maxiSavingsAccount = new MaxiSavingsAccount();
         Account checkingAccount = new CheckingAccount();
