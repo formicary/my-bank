@@ -2,28 +2,32 @@ package com.abc;
 
 import org.junit.Test;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class BankTest {
+public class BankTest extends TestUtil {
     private static final double DOUBLE_DELTA = 1e-15;
 
     @Test
     public void customerSummary() {
         Bank bank = new Bank();
+
+        Account checkingAccount = new CheckingAccount();
+        Account savingsAccount = new SavingsAccount();
+        Account maxiSavingsAccount = new MaxiSavingsAccount();
+
         Customer john = new Customer("John");
-        john.openAccount(new Account(Account.CHECKING));
-        john.openAccount(new Account(Account.SAVINGS));
-        john.openAccount(new Account(Account.MAXI_SAVINGS));
+        john.openAccount(checkingAccount);
+        john.openAccount(savingsAccount);
+        john.openAccount(maxiSavingsAccount);
 
         Customer lukas = new Customer("Lukas");
-        lukas.openAccount(new Account(Account.CHECKING));
-        lukas.openAccount(new Account(Account.SAVINGS));
-        lukas.openAccount(new Account(Account.MAXI_SAVINGS));
+        lukas.openAccount(checkingAccount);
+        lukas.openAccount(savingsAccount);
+        lukas.openAccount(maxiSavingsAccount);
+
         bank.addCustomer(john);
         bank.addCustomer(lukas);
 
@@ -31,13 +35,13 @@ public class BankTest {
     }
 
     @Test
-    public void addFlatRatePerAnnum() {
+    public void addInterestRatePerAnnum() {
         Bank bank = new Bank();
         Customer john = new Customer("John");
 
-        Account checkingAccount = new Account(Account.CHECKING);
-        Account savingsAccount = new Account(Account.SAVINGS);
-        Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
+        Account checkingAccount = new CheckingAccount();
+        Account savingsAccount = new SavingsAccount();
+        Account maxiSavingsAccount = new MaxiSavingsAccount();
 
         john.openAccount(checkingAccount);
         john.openAccount(savingsAccount);
@@ -48,7 +52,7 @@ public class BankTest {
         maxiSavingsAccount.deposit(500.0);
 
         // Calculation of flat rate for the first year
-        bank.addFlatRatePerAnnum(john);
+        bank.addInterestRatePerAnnum(john);
 
         assertEquals("Statement for John\n" +
                 "\n" +
@@ -70,7 +74,7 @@ public class BankTest {
                 "Total In All Accounts $810.30", john.getStatement());
 
         // Calculation of flat rate for the second year
-        bank.addFlatRatePerAnnum(john);
+        bank.addInterestRatePerAnnum(john);
 
         assertEquals("Statement for John\n" +
                 "\n" +
@@ -98,7 +102,7 @@ public class BankTest {
     @Test
     public void addInterestRateDaily_lastWithdrawIsInLastTenDays() {
         Bank bank = new Bank();
-        Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
+        Account maxiSavingsAccount = new MaxiSavingsAccount();
         Customer bill = new Customer("Bill").openAccount(maxiSavingsAccount);
         bank.addCustomer(bill);
 
@@ -135,7 +139,7 @@ public class BankTest {
     @Test
     public void addInterestRateDaily_lastWithdrawIsNotInLastTenDays() {
         Bank bank = new Bank();
-        Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
+        Account maxiSavingsAccount = new MaxiSavingsAccount();
         Customer bill = new Customer("Bill").openAccount(maxiSavingsAccount);
         bank.addCustomer(bill);
 
@@ -175,15 +179,16 @@ public class BankTest {
                 "  deposit $0.11\n" +
                 "  deposit $0.11\n" +
                 "  deposit $0.11\n" +
-                "Total $1,402.34\n" +
+                "  deposit $0.11\n" +
+                "Total $1,402.45\n" +
                 "\n" +
-                "Total In All Accounts $1,402.34", bill.getStatement());
+                "Total In All Accounts $1,402.45", bill.getStatement());
     }
 
     @Test
     public void checkingAccount() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.CHECKING);
+        Account checkingAccount = new CheckingAccount();
         Customer bill = new Customer("Bill").openAccount(checkingAccount);
         bank.addCustomer(bill);
 
@@ -195,7 +200,7 @@ public class BankTest {
     @Test(expected = IllegalArgumentException.class)
     public void checkingAccount_depositIsLessThenZero() throws Exception {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.CHECKING);
+        Account checkingAccount = new CheckingAccount();
         Customer bill = new Customer("Bill").openAccount(checkingAccount);
         bank.addCustomer(bill);
 
@@ -205,7 +210,7 @@ public class BankTest {
     @Test(expected = IllegalArgumentException.class)
     public void checkingAccount_withdrawIsLessThenZero() throws Exception {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.CHECKING);
+        Account checkingAccount = new CheckingAccount();
         Customer bill = new Customer("Bill").openAccount(checkingAccount);
         bank.addCustomer(bill);
 
@@ -213,23 +218,16 @@ public class BankTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void noTransactions() throws Exception {
-        Account checkingAccount = new Account(Account.CHECKING);
+    public void isLastWithdrawInLastTenDays_noTransactions() throws Exception {
+        Account checkingAccount = new CheckingAccount();
         List<Transaction> transactions = new ArrayList<Transaction>();
         checkingAccount.isLastWithdrawInLastTenDays(transactions);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void getTheLastDepositTransactions_noTransactions() throws Exception {
-        Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.CHECKING);
-        bank.getTheLastDepositTransaction(checkingAccount);
     }
 
     @Test
     public void savingsAccount_moreThenThousand() {
         Bank bank = new Bank();
-        Account savingsAccount = new Account(Account.SAVINGS);
+        Account savingsAccount = new SavingsAccount();
         bank.addCustomer(new Customer("Bill").openAccount(savingsAccount));
 
         savingsAccount.deposit(1500.0);
@@ -240,7 +238,7 @@ public class BankTest {
     @Test
     public void savingsAccount_lessThenThousand() {
         Bank bank = new Bank();
-        Account savingsAccount = new Account(Account.SAVINGS);
+        Account savingsAccount = new SavingsAccount();
         bank.addCustomer(new Customer("Bill").openAccount(savingsAccount));
 
         savingsAccount.deposit(500.0);
@@ -251,7 +249,7 @@ public class BankTest {
     @Test
     public void maxiSavingsAccount() {
         Bank bank = new Bank();
-        Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
+        Account maxiSavingsAccount = new MaxiSavingsAccount();
         bank.addCustomer(new Customer("Bill").openAccount(maxiSavingsAccount));
 
         maxiSavingsAccount.deposit(3000.0);
@@ -262,7 +260,7 @@ public class BankTest {
     @Test
     public void maxiSavingsAccount_lastWithdrawInLastTenDays() {
         Bank bank = new Bank();
-        Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
+        Account maxiSavingsAccount = new MaxiSavingsAccount();
         bank.addCustomer(new Customer("Bill").openAccount(maxiSavingsAccount));
 
         maxiSavingsAccount.deposit(1600.0);
@@ -274,7 +272,7 @@ public class BankTest {
     @Test
     public void maxiSavingsAccount_lastWithdrawIsNotInLastTenDays() {
         Bank bank = new Bank();
-        Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
+        Account maxiSavingsAccount = new MaxiSavingsAccount();
 
         bank.addCustomer(new Customer("Bill").openAccount(maxiSavingsAccount));
 
@@ -289,11 +287,11 @@ public class BankTest {
     }
 
     @Test
-    public void perAnnum() {
+    public void addInterestRate_everyYear() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.CHECKING);
-        Account savingsAccount = new Account(Account.SAVINGS);
-        Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
+        Account checkingAccount = new CheckingAccount();
+        Account savingsAccount = new SavingsAccount();
+        Account maxiSavingsAccount = new MaxiSavingsAccount();
         Customer customer = new Customer("Bill");
         customer.openAccount(checkingAccount);
         customer.openAccount(savingsAccount);
@@ -304,7 +302,7 @@ public class BankTest {
         savingsAccount.deposit(100.0);
         maxiSavingsAccount.deposit(1500.0);
 
-        bank.addFlatRatePerAnnum(customer);
+        bank.addInterestRatePerAnnum(customer);
 
         assertEquals("Statement for Bill\n" +
                 "\n" +
@@ -324,11 +322,6 @@ public class BankTest {
                 "Total $1,545.00\n" +
                 "\n" +
                 "Total In All Accounts $1,745.20", customer.getStatement());
-    }
-
-    private LocalDate generateDate(String dateInString) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
-        return LocalDate.parse(dateInString, formatter);
     }
 
 }

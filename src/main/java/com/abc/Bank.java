@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Bank {
-    private List<Customer> customers;
+
+    private final List<Customer> customers;
 
     public Bank() {
         customers = new ArrayList<>();
@@ -32,39 +33,28 @@ public class Bank {
         return customers.stream().mapToDouble(Customer::totalInterestEarned).sum();
     }
 
-    public void addFlatRatePerAnnum(Customer customer) {
-        getAccounts(customer).forEach(account -> {
-            account.deposit(account.interestEarned());
-        });
-    }
-
-    public Transaction getTheLastDepositTransaction(Account account) {
-        List<Transaction> transactions = account.transactions;
-        if (transactions == null || transactions.isEmpty()) {
-            throw new IllegalArgumentException("No transactions.");
-        } else {
-            return transactions.get(transactions.size() - 1);
-        }
+    // Method should be triggered by job scheduler every year
+    public void addInterestRatePerAnnum(Customer customer) {
+        customer.getAccounts().forEach(account -> account.deposit(account.addInterestEarned()));
     }
 
     public void addInterestRateDaily(Customer customer) {
-        getAccounts(customer).forEach(account -> {
-            LocalDate lastTransactionDate = getTheLastDepositTransaction(account).transactionDate;
+        customer.getAccounts().forEach(account -> {
+
+            LocalDate lastTransactionDate;
+            List<Transaction> transactions = account.transactions;
+
+            if (transactions == null || transactions.isEmpty()) {
+                throw new IllegalArgumentException("No transactions.");
+            } else {
+                lastTransactionDate = transactions.get(transactions.size() - 1).transactionDate;
+            }
+
             while (lastTransactionDate.isBefore(LocalDate.now())) {
-                account.deposit(account.interestEarned() / 360);
+                account.deposit(account.addInterestEarned() / 360);
                 lastTransactionDate = lastTransactionDate.plusDays(1L);
             }
         });
-    }
-
-    private List<Account> getAccounts(Customer customer) {
-        List<Account> accounts = customer.getAccounts();
-
-        if (accounts == null || accounts.isEmpty()) {
-            throw new IllegalArgumentException("No accounts.");
-        } else {
-            return accounts;
-        }
     }
 
 }

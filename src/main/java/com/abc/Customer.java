@@ -1,20 +1,16 @@
 package com.abc;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
-import static java.lang.Math.abs;
+public class Customer extends TestUtils {
 
-public class Customer {
-    private String name;
-    private List<Account> accounts;
+    private final String name;
+    private final List<Account> accounts;
 
     public Customer(String name) {
         this.name = name;
-        this.accounts = new ArrayList<Account>();
+        this.accounts = new ArrayList<>();
     }
 
     public String getName() {
@@ -33,13 +29,12 @@ public class Customer {
     public double totalInterestEarned() {
         double total = 0;
         for (Account a : accounts)
-            total += a.interestEarned();
+            total += a.addInterestEarned();
         return total;
     }
 
     public String getStatement() {
-        String statement = null;
-        statement = "Statement for " + name + "\n";
+        String statement  = "Statement for " + name + "\n";
         double total = 0.0;
         for (Account a : accounts) {
             statement += "\n" + statementForAccount(a) + "\n";
@@ -53,16 +48,12 @@ public class Customer {
         String s = "";
 
         //Translate to pretty account type
-        switch (a.getAccountType()) {
-            case Account.CHECKING:
-                s += "Checking Account\n";
-                break;
-            case Account.SAVINGS:
-                s += "Savings Account\n";
-                break;
-            case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
-                break;
+        if(a instanceof CheckingAccount){
+            s = s.concat("Checking Account\n");
+        } else if(a instanceof SavingsAccount){
+            s = s.concat("Savings Account\n");
+        } else if(a instanceof MaxiSavingsAccount){
+            s = s.concat("Maxi Savings Account\n");
         }
 
         //Now total up all the transactions
@@ -73,23 +64,6 @@ public class Customer {
         }
         s += "Total " + toDollars(total);
         return s;
-    }
-
-    private String toDollars(double d) {
-        return toDecimalFormat(abs(d));
-    }
-
-    private String toDecimalFormat(double number) {
-        Locale currentLocale = Locale.getDefault();
-
-        DecimalFormatSymbols symbols = new DecimalFormatSymbols(currentLocale);
-        symbols.setDecimalSeparator('.');
-        symbols.setGroupingSeparator(',');
-
-        String pattern = "$###,##0.00";
-        DecimalFormat formatter = new DecimalFormat(pattern, symbols);
-
-        return formatter.format(number);
     }
 
     public void transfer(Account from, Account to, double d) {

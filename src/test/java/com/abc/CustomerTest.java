@@ -10,9 +10,9 @@ public class CustomerTest {
     public void testApp() {
 
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.CHECKING);
-        Account savingsAccount = new Account(Account.SAVINGS);
-        Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
+        Account checkingAccount = new CheckingAccount();
+        Account savingsAccount = new SavingsAccount();
+        Account maxiSavingsAccount = new MaxiSavingsAccount();
 
         Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount).openAccount(maxiSavingsAccount);
 
@@ -39,188 +39,206 @@ public class CustomerTest {
                 "Total $1,000.00\n" +
                 "\n" +
                 "Total In All Accounts $4,900.00", henry.getStatement());
+    }
 
-//      Transfer 50$ from checkingAccount to savingsAccount
-        henry.transfer(checkingAccount, savingsAccount, 50.0);
+    @Test
+    public void transferFromCheckingToSavings(){
+        Bank bank = new Bank();
+        Account checkingAccount = new CheckingAccount();
+        Account savingsAccount = new SavingsAccount();
 
-        assertEquals("Statement for Henry\n" +
-                "\n" +
-                "Checking Account\n" +
-                "  deposit $100.00\n" +
-                "  withdrawal $50.00\n" +
-                "Total $50.00\n" +
-                "\n" +
-                "Savings Account\n" +
-                "  deposit $4,000.00\n" +
-                "  withdrawal $200.00\n" +
-                "  deposit $50.00\n" +
-                "Total $3,850.00\n" +
-                "\n" +
-                "Maxi Savings Account\n" +
-                "  deposit $1,000.00\n" +
-                "Total $1,000.00\n" +
-                "\n" +
-                "Total In All Accounts $4,900.00", henry.getStatement());
+        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
 
-//      Transfer 50$ from savingsAccount to checkingAccount
-        henry.transfer(savingsAccount, checkingAccount, 50.0);
+        bank.addCustomer(henry);
+
+        checkingAccount.deposit(1000.0);
+        savingsAccount.deposit(1000.0);
+
+        henry.transfer(checkingAccount, savingsAccount, 500.0);
 
         assertEquals("Statement for Henry\n" +
                 "\n" +
                 "Checking Account\n" +
-                "  deposit $100.00\n" +
-                "  withdrawal $50.00\n" +
-                "  deposit $50.00\n" +
-                "Total $100.00\n" +
+                "  deposit $1,000.00\n" +
+                "  withdrawal $500.00\n" +
+                "Total $500.00\n" +
                 "\n" +
                 "Savings Account\n" +
-                "  deposit $4,000.00\n" +
-                "  withdrawal $200.00\n" +
-                "  deposit $50.00\n" +
-                "  withdrawal $50.00\n" +
-                "Total $3,800.00\n" +
-                "\n" +
-                "Maxi Savings Account\n" +
                 "  deposit $1,000.00\n" +
-                "Total $1,000.00\n" +
+                "  deposit $500.00\n" +
+                "Total $1,500.00\n" +
                 "\n" +
-                "Total In All Accounts $4,900.00", henry.getStatement());
+                "Total In All Accounts $2,000.00", henry.getStatement());
+    }
 
-//      Transfer 150$ from savingsAccount to maxiSavingsAccount
-        henry.transfer(savingsAccount, maxiSavingsAccount, 150.0);
+    @Test
+    public void transferFromSavingsToChecking(){
+        Bank bank = new Bank();
+        Account checkingAccount = new CheckingAccount();
+        Account savingsAccount = new SavingsAccount();
+
+        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
+
+        bank.addCustomer(henry);
+
+        checkingAccount.deposit(1000.0);
+        savingsAccount.deposit(1000.0);
+
+        henry.transfer(savingsAccount, checkingAccount, 500.0);
 
         assertEquals("Statement for Henry\n" +
                 "\n" +
                 "Checking Account\n" +
-                "  deposit $100.00\n" +
-                "  withdrawal $50.00\n" +
-                "  deposit $50.00\n" +
-                "Total $100.00\n" +
+                "  deposit $1,000.00\n" +
+                "  deposit $500.00\n" +
+                "Total $1,500.00\n" +
                 "\n" +
                 "Savings Account\n" +
-                "  deposit $4,000.00\n" +
-                "  withdrawal $200.00\n" +
-                "  deposit $50.00\n" +
-                "  withdrawal $50.00\n" +
-                "  withdrawal $150.00\n" +
-                "Total $3,650.00\n" +
-                "\n" +
-                "Maxi Savings Account\n" +
                 "  deposit $1,000.00\n" +
-                "  deposit $150.00\n" +
-                "Total $1,150.00\n" +
+                "  withdrawal $500.00\n" +
+                "Total $500.00\n" +
                 "\n" +
-                "Total In All Accounts $4,900.00", henry.getStatement());
+                "Total In All Accounts $2,000.00", henry.getStatement());
+    }
 
-//      Transfer 150$ from maxiSavingsAccount to savingsAccount
-        henry.transfer(maxiSavingsAccount, savingsAccount, 150.0);
+    @Test
+    public void transferFromSavingsToMaxiSavings(){
+        Bank bank = new Bank();
+        Account maxiSavingsAccount = new MaxiSavingsAccount();
+        Account savingsAccount = new SavingsAccount();
+
+        Customer henry = new Customer("Henry").openAccount(maxiSavingsAccount).openAccount(savingsAccount);
+
+        bank.addCustomer(henry);
+
+        savingsAccount.deposit(1000.0);
+        maxiSavingsAccount.deposit(1000.0);
+
+        henry.transfer(savingsAccount, maxiSavingsAccount, 500.0);
 
         assertEquals("Statement for Henry\n" +
                 "\n" +
-                "Checking Account\n" +
-                "  deposit $100.00\n" +
-                "  withdrawal $50.00\n" +
-                "  deposit $50.00\n" +
-                "Total $100.00\n" +
-                "\n" +
-                "Savings Account\n" +
-                "  deposit $4,000.00\n" +
-                "  withdrawal $200.00\n" +
-                "  deposit $50.00\n" +
-                "  withdrawal $50.00\n" +
-                "  withdrawal $150.00\n" +
-                "  deposit $150.00\n" +
-                "Total $3,800.00\n" +
-                "\n" +
                 "Maxi Savings Account\n" +
                 "  deposit $1,000.00\n" +
-                "  deposit $150.00\n" +
-                "  withdrawal $150.00\n" +
-                "Total $1,000.00\n" +
+                "  deposit $500.00\n" +
+                "Total $1,500.00\n" +
                 "\n" +
-                "Total In All Accounts $4,900.00", henry.getStatement());
+                "Savings Account\n" +
+                "  deposit $1,000.00\n" +
+                "  withdrawal $500.00\n" +
+                "Total $500.00\n" +
+                "\n" +
+                "Total In All Accounts $2,000.00", henry.getStatement());
+    }
 
-//      Transfer 300$ from maxiSavingsAccount to checkingAccount
-        henry.transfer(maxiSavingsAccount, checkingAccount, 300.0);
+    @Test
+    public void transferFromMaxiSavingsToSavings(){
+        Bank bank = new Bank();
+        Account maxiSavingsAccount = new MaxiSavingsAccount();
+        Account savingsAccount = new SavingsAccount();
+
+        Customer henry = new Customer("Henry").openAccount(maxiSavingsAccount).openAccount(savingsAccount);
+
+        bank.addCustomer(henry);
+
+        savingsAccount.deposit(1000.0);
+        maxiSavingsAccount.deposit(1000.0);
+
+        henry.transfer(maxiSavingsAccount, savingsAccount, 500.0);
 
         assertEquals("Statement for Henry\n" +
                 "\n" +
-                "Checking Account\n" +
-                "  deposit $100.00\n" +
-                "  withdrawal $50.00\n" +
-                "  deposit $50.00\n" +
-                "  deposit $300.00\n" +
-                "Total $400.00\n" +
-                "\n" +
-                "Savings Account\n" +
-                "  deposit $4,000.00\n" +
-                "  withdrawal $200.00\n" +
-                "  deposit $50.00\n" +
-                "  withdrawal $50.00\n" +
-                "  withdrawal $150.00\n" +
-                "  deposit $150.00\n" +
-                "Total $3,800.00\n" +
-                "\n" +
                 "Maxi Savings Account\n" +
                 "  deposit $1,000.00\n" +
-                "  deposit $150.00\n" +
-                "  withdrawal $150.00\n" +
-                "  withdrawal $300.00\n" +
-                "Total $700.00\n" +
+                "  withdrawal $500.00\n" +
+                "Total $500.00\n" +
                 "\n" +
-                "Total In All Accounts $4,900.00", henry.getStatement());
+                "Savings Account\n" +
+                "  deposit $1,000.00\n" +
+                "  deposit $500.00\n" +
+                "Total $1,500.00\n" +
+                "\n" +
+                "Total In All Accounts $2,000.00", henry.getStatement());
+    }
 
-//      Transfer 300$ from checkingAccount to maxiSavingsAccount
-        henry.transfer(checkingAccount, maxiSavingsAccount, 300.0);
+    @Test
+    public void transferFromMaxiSavingsToChecking(){
+        Bank bank = new Bank();
+        Account maxiSavingsAccount = new MaxiSavingsAccount();
+        Account checkingAccount = new CheckingAccount();
+
+        Customer henry = new Customer("Henry").openAccount(maxiSavingsAccount).openAccount(checkingAccount);
+
+        bank.addCustomer(henry);
+
+        checkingAccount.deposit(1000.0);
+        maxiSavingsAccount.deposit(1000.0);
+
+        henry.transfer(maxiSavingsAccount, checkingAccount, 500.0);
 
         assertEquals("Statement for Henry\n" +
                 "\n" +
-                "Checking Account\n" +
-                "  deposit $100.00\n" +
-                "  withdrawal $50.00\n" +
-                "  deposit $50.00\n" +
-                "  deposit $300.00\n" +
-                "  withdrawal $300.00\n" +
-                "Total $100.00\n" +
+                "Maxi Savings Account\n" +
+                "  deposit $1,000.00\n" +
+                "  withdrawal $500.00\n" +
+                "Total $500.00\n" +
                 "\n" +
-                "Savings Account\n" +
-                "  deposit $4,000.00\n" +
-                "  withdrawal $200.00\n" +
-                "  deposit $50.00\n" +
-                "  withdrawal $50.00\n" +
-                "  withdrawal $150.00\n" +
-                "  deposit $150.00\n" +
-                "Total $3,800.00\n" +
+                "Checking Account\n" +
+                "  deposit $1,000.00\n" +
+                "  deposit $500.00\n" +
+                "Total $1,500.00\n" +
+                "\n" +
+                "Total In All Accounts $2,000.00", henry.getStatement());
+    }
+
+    @Test
+    public void transferFromCheckingToMaxiSavings(){
+        Bank bank = new Bank();
+        Account maxiSavingsAccount = new MaxiSavingsAccount();
+        Account checkingAccount = new CheckingAccount();
+
+        Customer henry = new Customer("Henry").openAccount(maxiSavingsAccount).openAccount(checkingAccount);
+
+        bank.addCustomer(henry);
+
+        checkingAccount.deposit(1000.0);
+        maxiSavingsAccount.deposit(1000.0);
+
+        henry.transfer(checkingAccount, maxiSavingsAccount, 500.0);
+
+        assertEquals("Statement for Henry\n" +
                 "\n" +
                 "Maxi Savings Account\n" +
                 "  deposit $1,000.00\n" +
-                "  deposit $150.00\n" +
-                "  withdrawal $150.00\n" +
-                "  withdrawal $300.00\n" +
-                "  deposit $300.00\n" +
-                "Total $1,000.00\n" +
+                "  deposit $500.00\n" +
+                "Total $1,500.00\n" +
                 "\n" +
-                "Total In All Accounts $4,900.00", henry.getStatement());
+                "Checking Account\n" +
+                "  deposit $1,000.00\n" +
+                "  withdrawal $500.00\n" +
+                "Total $500.00\n" +
+                "\n" +
+                "Total In All Accounts $2,000.00", henry.getStatement());
     }
 
     @Test
     public void testOneAccount() {
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
+        Customer oscar = new Customer("Oscar").openAccount(new SavingsAccount());
         assertEquals(1, oscar.getNumberOfAccounts());
     }
 
     @Test
     public void testTwoAccount() {
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
+        Customer oscar = new Customer("Oscar").openAccount(new SavingsAccount());
+        oscar.openAccount(new CheckingAccount());
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
     @Test
     public void testThreeAccounts() {
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
-        oscar.openAccount(new Account(Account.MAXI_SAVINGS));
+        Customer oscar = new Customer("Oscar").openAccount(new SavingsAccount());
+        oscar.openAccount(new CheckingAccount());
+        oscar.openAccount(new MaxiSavingsAccount());
         assertEquals(3, oscar.getNumberOfAccounts());
     }
 }
