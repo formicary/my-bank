@@ -3,14 +3,31 @@ package com.abc;
 import java.util.Calendar;
 import java.util.Date;
 
+
 public class Transaction {
-    public final double amount;
 
-    private Date transactionDate;
+    private final String title;
+    private final double amount;
+    private final Date transactionDate;
 
-    public Transaction(double amount) {
+    /**
+     * A transaction consists of a title, amount, and a record of the date and time it was created
+     */
+    public Transaction(String title, double amount) {
+        this.title = title;
         this.amount = amount;
-        this.transactionDate = DateProvider.getInstance().now();
+        this.transactionDate = Calendar.getInstance().getTime();
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public Date getTransactionDate() {
+        return transactionDate;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
 }
