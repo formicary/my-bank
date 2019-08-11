@@ -1,10 +1,10 @@
 package com.abc;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Bank {
     private List<Customer> customers;
+    public double interestAdded;
 
     public Bank() {
         customers = new ArrayList<Customer>();
@@ -21,16 +21,17 @@ public class Bank {
         return summary;
     }
 
-    //Make sure correct plural of word is created based on the number passed in:
-    //If number passed in is 1 just return the word otherwise add an 's' at the end
+    // Make sure correct plural of word is created based on the number passed in:
+    // If number passed in is 1 just return the word otherwise add an 's' at the end
     private String format(int number, String word) {
         return number + " " + (number == 1 ? word : word + "s");
     }
 
     public double totalInterestPaid() {
         double total = 0;
-        for(Customer c: customers)
+        for (Customer c : customers) {
             total += c.totalInterestEarned();
+        }
         return total;
     }
 
@@ -38,9 +39,24 @@ public class Bank {
         try {
             customers = null;
             return customers.get(0).getName();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return "Error";
         }
     }
+
+    public double accrueInterestDaily() {
+
+        for (Customer c : customers) {
+            for (Account a : c.getAccounts()) {
+                interestAdded = a.dailyInterestEarned();
+                //input the interest into the correct account
+                a.deposit(interestAdded);
+            }
+        }
+        return interestAdded;
+
+    }
+
 }
+
