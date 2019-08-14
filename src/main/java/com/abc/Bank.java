@@ -27,20 +27,21 @@ public class Bank {
         return number + " " + (number == 1 ? word : word + "s");
     }
 
-    public double totalInterestPaid() {
-        double total = 0;
+    public Money totalInterestPaid() {
+        Money total = new Money("0.00");
         for(Customer c: customers)
-            total += c.totalInterestEarned();
+        	//TODO - Not scalable - needs revision
+            total = new Money(total.getAmount().add(c.totalInterestEarned().getAmount()));
         return total;
     }
 
+    // Note: not 100% sure what this function is supposed to do because of the strange pre-existing code. Changed it to get first cust
+    // if one exists
     public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
+        if(customers.size() > 0)
+        	return customers.get(0).getName();
+        else{
+        	throw new IndexOutOfBoundsException("No customers in list");
         }
     }
 }

@@ -14,65 +14,56 @@ public class Customer {
         this.accounts = new ArrayList<Account>();
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public Customer openAccount(Account account) {
-        accounts.add(account);
-        return this;
+    public void openAccount(Account account) {
+        this.accounts.add(account);
     }
 
     public int getNumberOfAccounts() {
         return accounts.size();
     }
 
-    public double totalInterestEarned() {
-        double total = 0;
+    public Money totalInterestEarned() {
+        Money total = new Money("0.00");
         for (Account a : accounts)
-            total += a.interestEarned();
+        	//TODO - Not scalable - needs revision
+            total = new Money(total.getAmount().add(a.interestEarned().getAmount()));
         return total;
     }
 
     public String getStatement() {
         String statement = null;
         statement = "Statement for " + name + "\n";
-        double total = 0.0;
+        Money total = new Money("0.00");
         for (Account a : accounts) {
             statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+            //TODO - Not scalable - needs revision
+            total = new Money(total.getAmount().add(a.sumTransactions().getAmount()));
         }
-        statement += "\nTotal In All Accounts " + toDollars(total);
+        statement += "\nTotal In All Accounts " + total.getAmount();
         return statement;
     }
 
     private String statementForAccount(Account a) {
         String s = "";
-
-       //Translate to pretty account type
-        switch(a.getAccountType()){
-            case Account.CHECKING:
-                s += "Checking Account\n";
-                break;
-            case Account.SAVINGS:
-                s += "Savings Account\n";
-                break;
-            case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
-                break;
-        }
+        // Get the polymorphic account type from parent class
+        s += a.getAccountType();
 
         //Now total up all the transactions
-        double total = 0.0;
+        Money total = new Money("0.00");
         for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
+            s += "  " + (t.getMoney().getAmount().compareTo(Money.ZERO_VALUE) == -1  ? "withdrawal" : "deposit") + " " + t.getMoney().getAmount() + "\n";
+            //TODO - Not scalable - needs revision
+            total = new Money(total.getAmount().add(t.getMoney().getAmount()));
         }
-        s += "Total " + toDollars(total);
+        s += "Total " + total.getAmount();
         return s;
     }
-
-    private String toDollars(double d){
-        return String.format("$%,.2f", abs(d));
+    
+    public String getName() {
+        return name;
     }
+
+	public List<Account> getAccounts() {
+		return accounts;
+	}
 }

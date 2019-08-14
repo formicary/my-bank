@@ -3,71 +3,66 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Account {
+public abstract class Account {
 
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
-
-    private final int accountType;
-    public List<Transaction> transactions;
-
-    public Account(int accountType) {
-        this.accountType = accountType;
+    protected List<Transaction> transactions;
+    private AccountType accountType;
+    
+    
+    protected Account(AccountType type) {
         this.transactions = new ArrayList<Transaction>();
+        this.accountType = type;
     }
 
-    public void deposit(double amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
-        } else {
-            transactions.add(new Transaction(amount));
+    // Thread safe concrete generic operations for all bank account types using Money type
+
+    public synchronized void deposit(Money money) {
+    	// Check money value is greater than 0 using compareTo
+        if (money.getAmount().compareTo(Money.ZERO_VALUE) == 1) {
+        	transactions.add(new Transaction(money));
+        } else {          
+            throw new IllegalArgumentException("Deposit must be greater than zero");
         }
     }
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
-    }
-}
+    // unsure if going overdrawn is allowed so didn't look for it
+	public synchronized void withdraw(Money money) {
+		if (money.getAmount().compareTo(Money.ZERO_VALUE) == 1) {
+			// Needs to be minus added to tx as withdrawal
+			transactions.add(new Transaction(new Money("-" + money.getAmount())));
+	    } else {
+	    	throw new IllegalArgumentException("Amount must be greater than zero");
+	    }
+	}
+	
+    public synchronized Money sumTransactions() {
+    	Money money = new Money("0.00");
+    	for (Transaction t: transactions){
+    		//TODO - Not scalable - needs revision
+            money = new Money(money.getAmount().add(t.getMoney().getAmount()));
+    	}
+        return money;
+     }
+    
+    // Polymorphic 
+	public AccountType getAccountType() {
+		return accountType;
+	}
+	
+	// Simple utility method to transfer money between customer accounts
+	static void transfer(Customer c, Account a, Account b, Money amount){
+		if(c.getAccounts().contains(a) && c.getAccounts().contains(b)){
+			a.withdraw(amount);
+			b.deposit(amount);
+		}else{
+			throw new IllegalArgumentException("Customer doesn't own both accounts");
+		}
+	}
+    
 
-    public double interestEarned() {
-        double amount = sumTransactions();
-        switch(accountType){
-            case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
-            case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
-            default:
-                return amount * 0.001;
-        }
-    }
+	public abstract Money interestEarned();
 
-    public double sumTransactions() {
-       return checkIfTransactionsExist(true);
-    }
 
-    private double checkIfTransactionsExist(boolean checkAll) {
-        double amount = 0.0;
-        for (Transaction t: transactions)
-            amount += t.amount;
-        return amount;
-    }
 
-    public int getAccountType() {
-        return accountType;
-    }
 
 }
