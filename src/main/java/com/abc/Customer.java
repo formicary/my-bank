@@ -50,7 +50,7 @@ public class Customer {
         StringBuilder statement = new StringBuilder();
         double total = a.getAccountValue();
 
-        statement.append(a.getAccountType());
+        statement.append(a.getAccountType()).append("\n");
 
         for (Transaction t : a.transactions) {
             statement.append("  ").append(t.amount < 0 ? "withdrawal" : "deposit").append(" ").append(toDollars(t.amount)).append("\n");

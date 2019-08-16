@@ -10,7 +10,6 @@ public abstract class Account {
 
     public List<Transaction> transactions = new ArrayList<Transaction>();
     protected double accountValue = 0.0;
-    protected String accountType;
 
     public Account() {
     }
@@ -39,8 +38,6 @@ public abstract class Account {
         return accountValue;
     }
 
-    public String getAccountType() {
-        return accountType;
-    }
+    public abstract String getAccountType();
 
 }
