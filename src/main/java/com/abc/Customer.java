@@ -40,7 +40,7 @@ public class Customer {
         double total = 0.0;
         for (Account a : accounts) {
             statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+            total += a.getAccountValue();
         }
         statement += "\nTotal In All Accounts " + toDollars(total);
         return statement;
@@ -63,11 +63,11 @@ public class Customer {
         }
 
         //Now total up all the transactions
-        double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
-        }
+        double total = a.getAccountValue();
+//        for (Transaction t : a.transactions) {
+//            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
+//            total += t.amount;
+//        }
         s += "Total " + toDollars(total);
         return s;
     }
