@@ -57,6 +57,7 @@ public class Customer {
         }
 
         statement.append("Total ").append(toDollars(total));
+
         return statement.toString();
     }
 
