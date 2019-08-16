@@ -1,8 +1,9 @@
 package com.abc;
 
 public class SavingsAccount extends Account {
-    public SavingsAccount(int accountType) {
-        super(accountType);
+    public SavingsAccount() {
+        super();
+        accountType = "Savings Account\n";
     }
 
     public double interestEarned() {

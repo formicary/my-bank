@@ -8,13 +8,11 @@ public abstract class Account {
     public static final int SAVINGS = 1;
     public static final int MAXI_SAVINGS = 2;
 
-    private List<Transaction> transactions = new ArrayList<Transaction>();
+    public List<Transaction> transactions = new ArrayList<Transaction>();
     protected double accountValue = 0.0;
+    protected String accountType;
 
-    private final int accountType;
-
-    public Account(int accountType) {
-        this.accountType = accountType;
+    public Account() {
     }
 
     public void deposit(double amount) {
@@ -41,8 +39,7 @@ public abstract class Account {
         return accountValue;
     }
 
-    // Check if something is of a certain class.
-    public int getAccountType() {
+    public String getAccountType() {
         return accountType;
     }
 
