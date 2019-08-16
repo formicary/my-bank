@@ -9,7 +9,7 @@ public abstract class Account {
     public static final int MAXI_SAVINGS = 2;
 
     private List<Transaction> transactions = new ArrayList<Transaction>();
-    private double accountValue = 0.0;
+    protected double accountValue = 0.0;
 
     private final int accountType;
 
