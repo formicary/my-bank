@@ -36,30 +36,17 @@ public class CustomerTest {
     }
 
     @Test
-    public void testOneAccount(){
+    public void testNumberOfAccounts(){
         Customer oscar = new Customer("Oscar");
-        oscar.openAccount(new SavingsAccount());
-        assertEquals(1, oscar.getNumberOfAccounts());
+
+        for (int i = 0; i < 100; i++) {
+            oscar.openAccount(new SavingsAccount());
+            assertEquals(i+1, oscar.getNumberOfAccounts());
+        }
     }
 
     @Test
-    public void testTwoAccount(){
-        Customer oscar = new Customer("Oscar");
-        oscar.openAccount(new SavingsAccount());
-        oscar.openAccount(new CheckingAccount());
-        assertEquals(2, oscar.getNumberOfAccounts());
-    }
-
-    @Ignore
-    public void testThreeAcounts() {
-        Customer oscar = new Customer("Oscar");
-        oscar.openAccount(new SavingsAccount());
-        oscar.openAccount(new CheckingAccount());
-        assertEquals(3, oscar.getNumberOfAccounts());
-    }
-
-    @Test
-    public void testTransferLTZero() {
+    public void testTransferLessThanZero() {
         Customer john = new Customer("John");
         Account withdrawAccount = new SavingsAccount();
         Account depositAccount = new SavingsAccount();
@@ -104,7 +91,7 @@ public class CustomerTest {
     }
 
     @Test
-    public void testTransferGTZero() {
+    public void testTransferGreaterThanZero() {
         Customer john = new Customer("John");
         Account withdrawAccount = new SavingsAccount();
         Account depositAccount = new SavingsAccount();
