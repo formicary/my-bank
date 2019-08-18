@@ -4,10 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Account {
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
-
     public List<Transaction> transactions = new ArrayList<Transaction>();
     protected double accountValue = 0.0;
 

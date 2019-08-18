@@ -29,31 +29,35 @@ public class Customer {
 
     public double totalInterestEarned() {
         double total = 0;
-        for (Account a : accounts)
-            total += a.interestEarned();
+
+        for (Account account : accounts)
+            total += account.interestEarned();
+
         return total;
     }
 
     public String getStatement() {
-        String statement = null;
-        statement = "Statement for " + name + "\n";
-        double total = 0.0;
-        for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
-            total += a.getAccountValue();
+        StringBuilder statement = new StringBuilder("Statement for " + name + "\n");
+        double total = 0;
+
+        for (Account account : accounts) {
+            statement.append("\n").append(statementForAccount(account)).append("\n");
+            total += account.getAccountValue();
         }
-        statement += "\nTotal In All Accounts " + toDollars(total);
-        return statement;
+
+        statement.append("\nTotal In All Accounts ").append(toDollars(total));
+
+        return statement.toString();
     }
 
-    private String statementForAccount(Account a) {
+    private String statementForAccount(Account account) {
         StringBuilder statement = new StringBuilder();
-        double total = a.getAccountValue();
+        double total = account.getAccountValue();
 
-        statement.append(a.getAccountType()).append("\n");
+        statement.append(account.getAccountType()).append("\n");
 
-        for (Transaction t : a.transactions) {
-            statement.append("  ").append(t.amount < 0 ? "withdrawal" : "deposit").append(" ").append(toDollars(t.amount)).append("\n");
+        for (Transaction transaction : account.transactions) {
+            statement.append("  ").append(transaction.amount < 0 ? "withdrawal" : "deposit").append(" ").append(toDollars(transaction.amount)).append("\n");
         }
 
         statement.append("Total ").append(toDollars(total));
