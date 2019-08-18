@@ -23,7 +23,7 @@ public abstract class Account {
         } else {
             transactions.add(new Transaction(amount));
             accountValue += amount;
-            accountStatement += String.format("  deposit " + toDollars(amount));
+            accountStatement += String.format("  deposit " + toDollars(amount) + "\n");
         }
     }
 
@@ -33,7 +33,7 @@ public abstract class Account {
         } else {
             transactions.add(new Transaction(-amount));
             accountValue -= amount;
-            accountStatement += String.format("  withdrawal " + toDollars(amount));
+            accountStatement += String.format("  withdrawal " + toDollars(amount) + "\n");
         }
     }
 
