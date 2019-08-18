@@ -3,6 +3,7 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.abc.Utility.toDollars;
 import static java.lang.Math.abs;
 
 public abstract class Account {
@@ -22,7 +23,7 @@ public abstract class Account {
         } else {
             transactions.add(new Transaction(amount));
             accountValue += amount;
-            accountStatement += String.format("  deposit $%,.2f\n", abs(amount));
+            accountStatement += String.format("  deposit " + toDollars(amount));
         }
     }
 
@@ -32,12 +33,12 @@ public abstract class Account {
         } else {
             transactions.add(new Transaction(-amount));
             accountValue -= amount;
-            accountStatement += String.format("  withdrawal $%,.2f\n", abs(amount));
+            accountStatement += String.format("  withdrawal " + toDollars(amount));
         }
     }
 
     public String getAccountStatement() {
-        return accountStatement += String.format("Total $%,.2f", abs(accountValue));
+        return accountStatement += String.format("Total " + toDollars(accountValue));
     }
 
     public abstract double interestEarned();
