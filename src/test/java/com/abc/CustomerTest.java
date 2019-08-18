@@ -57,4 +57,67 @@ public class CustomerTest {
         oscar.openAccount(new CheckingAccount());
         assertEquals(3, oscar.getNumberOfAccounts());
     }
+
+    @Test
+    public void testTransferLTZero() {
+        Customer john = new Customer("John");
+        Account withdrawAccount = new SavingsAccount();
+        Account depositAccount = new SavingsAccount();
+
+        john.openAccount(withdrawAccount);
+        john.openAccount(depositAccount);
+
+        withdrawAccount.deposit(100);
+        depositAccount.deposit(100);
+
+        try {
+            john.transferBetweenAccounts(withdrawAccount, depositAccount, (-0.0));
+        } catch (IllegalArgumentException e) {
+            if (e.getMessage().equals("amount must be greater than zero"))
+                assert(true);
+            else
+                assert(false);
+        }
+    }
+
+    @Test
+    public void testTransferZero() {
+        Customer john = new Customer("John");
+        Account withdrawAccount = new SavingsAccount();
+        Account depositAccount = new SavingsAccount();
+
+        john.openAccount(withdrawAccount);
+        john.openAccount(depositAccount);
+
+        withdrawAccount.deposit(100);
+        depositAccount.deposit(100);
+
+        try {
+
+            john.transferBetweenAccounts(withdrawAccount, depositAccount, 0.0);
+        } catch (IllegalArgumentException e) {
+            if (e.getMessage().equals("amount must be greater than zero"))
+                assert(true);
+            else
+                assert(false);
+        }
+    }
+
+    @Test
+    public void testTransferGTZero() {
+        Customer john = new Customer("John");
+        Account withdrawAccount = new SavingsAccount();
+        Account depositAccount = new SavingsAccount();
+
+        john.openAccount(withdrawAccount);
+        john.openAccount(depositAccount);
+
+        withdrawAccount.deposit(100);
+        depositAccount.deposit(100);
+
+        john.transferBetweenAccounts(withdrawAccount, depositAccount, 1.0);
+
+        assertEquals(withdrawAccount.getAccountValue(), 99.0, 0.001);
+        assertEquals(depositAccount.getAccountValue(), 101.0, 0.001);
+    }
 }

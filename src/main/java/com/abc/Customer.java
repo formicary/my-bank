@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.abc.Utility.toDollars;
-import static java.lang.Math.abs;
 
 public class Customer {
     private String name;
@@ -15,12 +14,21 @@ public class Customer {
         this.accounts = new ArrayList<Account>();
     }
 
-    public String getName() {
-        return name;
-    }
-
     public void openAccount(Account account) {
         accounts.add(account);
+    }
+
+    public void transferBetweenAccounts(Account withdrawAccount, Account depositAccount, Double amount) {
+        try {
+            withdrawAccount.withdraw(amount);
+            depositAccount.deposit(amount);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        }
+    }
+
+    public String getName() {
+        return name;
     }
 
     public int getNumberOfAccounts() {
