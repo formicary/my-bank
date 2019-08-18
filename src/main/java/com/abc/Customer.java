@@ -41,26 +41,11 @@ public class Customer {
         double total = 0;
 
         for (Account account : accounts) {
-            statement.append("\n").append(statementForAccount(account)).append("\n");
+            statement.append("\n").append(account.getAccountStatement()).append("\n");
             total += account.getAccountValue();
         }
 
         statement.append("\nTotal In All Accounts ").append(toDollars(total));
-
-        return statement.toString();
-    }
-
-    private String statementForAccount(Account account) {
-        StringBuilder statement = new StringBuilder();
-        double total = account.getAccountValue();
-
-        statement.append(account.getAccountType()).append("\n");
-
-        for (Transaction transaction : account.transactions) {
-            statement.append("  ").append(transaction.amount < 0 ? "withdrawal" : "deposit").append(" ").append(toDollars(transaction.amount)).append("\n");
-        }
-
-        statement.append("Total ").append(toDollars(total));
 
         return statement.toString();
     }

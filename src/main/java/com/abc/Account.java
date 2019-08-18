@@ -3,11 +3,17 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Account {
-    public List<Transaction> transactions = new ArrayList<Transaction>();
-    protected double accountValue = 0.0;
+import static java.lang.Math.abs;
 
-    public Account() {
+public abstract class Account {
+    private List<Transaction> transactions = new ArrayList<Transaction>();
+    private String accountType;
+    protected double accountValue;
+    private String accountStatement;
+
+    public Account(String accountType) {
+        this.accountType = accountType;
+        this.accountStatement = accountType + "\n";
     }
 
     public void deposit(double amount) {
@@ -16,6 +22,7 @@ public abstract class Account {
         } else {
             transactions.add(new Transaction(amount));
             accountValue += amount;
+            accountStatement += String.format("deposit $%,.2f \n", abs(amount));
         }
     }
 
@@ -25,7 +32,12 @@ public abstract class Account {
         } else {
             transactions.add(new Transaction(-amount));
             accountValue -= amount;
+            accountStatement += String.format("withdrawal $%,.2f \n", abs(amount));
         }
+    }
+
+    public String getAccountStatement() {
+        return accountStatement += String.format("Total $%,.2f \n", abs(accountValue));
     }
 
     public abstract double interestEarned();
@@ -33,7 +45,4 @@ public abstract class Account {
     public double getAccountValue() {
         return accountValue;
     }
-
-    public abstract String getAccountType();
-
 }
