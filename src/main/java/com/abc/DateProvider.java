@@ -14,4 +14,10 @@ public class DateProvider {
     public Date now() {
         return Calendar.getInstance().getTime();
     }
+
+    public Date beforeTenDays() {
+        Calendar newDate = Calendar.getInstance();
+        newDate.add(Calendar.DAY_OF_MONTH, -10);
+        return newDate.getTime();
+    }
 }

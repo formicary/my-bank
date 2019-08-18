@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.abc.Utility.toDollars;
-import static java.lang.Math.abs;
 
 public abstract class Account {
-    private List<Transaction> transactions = new ArrayList<Transaction>();
+    protected List<Transaction> transactions = new ArrayList<Transaction>();
     private String accountType;
     protected double accountValue;
     private String accountStatement;
