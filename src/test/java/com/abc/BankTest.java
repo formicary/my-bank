@@ -44,7 +44,7 @@ public class BankTest {
     }
 
     @Test
-    public void maxi_savings_account() {
+    public void maxiSavingsAccountWithinTenDays() {
         Bank bank = new Bank();
         Account maxiSavingsAccount = new MaxiSavingsAccount();
         Customer bill = new Customer("Bill");
@@ -53,7 +53,20 @@ public class BankTest {
 
         maxiSavingsAccount.deposit(3000.0);
 
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(3, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
+
+    @Test
+    public void maxiSavingsAccountMoreThanTenDays() {
+        Bank bank = new Bank();
+        Account maxiSavingsAccount = new MaxiSavingsAccount();
+        Customer bill = new Customer("Bill");
+        bank.addCustomer(bill);
+        bill.openAccount(maxiSavingsAccount);
+
+        maxiSavingsAccount.deposit(3000.0);
+
+        assertEquals(3, bank.totalInterestPaid(), DOUBLE_DELTA);
+    }
 }
