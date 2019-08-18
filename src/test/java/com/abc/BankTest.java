@@ -21,7 +21,8 @@ public class BankTest {
     public void checkingAccount() {
         Bank bank = new Bank();
         Account checkingAccount = new CheckingAccount();
-        Customer bill = new Customer("Bill").openAccount(checkingAccount);
+        Customer bill = new Customer("Bill");
+        bill.openAccount(checkingAccount);
         bank.addCustomer(bill);
 
         checkingAccount.deposit(100.0);
@@ -32,10 +33,12 @@ public class BankTest {
     @Test
     public void savings_account() {
         Bank bank = new Bank();
-        Account checkingAccount = new SavingsAccount();
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+        Account savingsAccount = new SavingsAccount();
+        Customer bill = new Customer("Bill");
+        bill.openAccount(savingsAccount);
+        bank.addCustomer(bill);
 
-        checkingAccount.deposit(1500.0);
+        savingsAccount.deposit(1500.0);
 
         assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
@@ -43,10 +46,12 @@ public class BankTest {
     @Test
     public void maxi_savings_account() {
         Bank bank = new Bank();
-        Account checkingAccount = new MaxiSavingsAccount();
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+        Account maxiSavingsAccount = new MaxiSavingsAccount();
+        Customer bill = new Customer("Bill");
+        bank.addCustomer(bill);
+        bill.openAccount(maxiSavingsAccount);
 
-        checkingAccount.deposit(3000.0);
+        maxiSavingsAccount.deposit(3000.0);
 
         assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }

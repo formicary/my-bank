@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Bank {
-    private List<Customer> customers;
+    private List<Customer> customers = new ArrayList<Customer>();
 
     public Bank() {
-        customers = new ArrayList<Customer>();
     }
 
     public void addCustomer(Customer customer) {

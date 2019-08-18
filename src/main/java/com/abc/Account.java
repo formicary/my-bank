@@ -23,7 +23,8 @@ public abstract class Account {
         } else {
             transactions.add(new Transaction(amount));
             accountValue += amount;
-            accountStatement += "  deposit " + toDollars(amount) + "\n";
+            accountStatement += "  deposit "
+                    + toDollars(amount) + "\n";
         }
     }
 
