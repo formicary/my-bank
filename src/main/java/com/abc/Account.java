@@ -23,7 +23,7 @@ public abstract class Account {
         } else {
             transactions.add(new Transaction(amount));
             accountValue += amount;
-            accountStatement += String.format("  deposit " + toDollars(amount) + "\n");
+            accountStatement += "  deposit " + toDollars(amount) + "\n";
         }
     }
 
@@ -33,12 +33,12 @@ public abstract class Account {
         } else {
             transactions.add(new Transaction(-amount));
             accountValue -= amount;
-            accountStatement += String.format("  withdrawal " + toDollars(amount) + "\n");
+            accountStatement += "  withdrawal " + toDollars(amount) + "\n";
         }
     }
 
     public String getAccountStatement() {
-        return accountStatement += String.format("Total " + toDollars(accountValue));
+        return accountStatement += "Total " + toDollars(accountValue);
     }
 
     public abstract double interestEarned();
