@@ -28,9 +28,11 @@ public abstract class Account {
     }
 
     public void withdraw(double amount) {
-        if (amount <= 0) {
+        if (amount <= 0)
             throw new IllegalArgumentException("amount must be greater than zero");
-        } else {
+        else if (amount > accountValue)
+            throw new IllegalArgumentException("amount must be less than the total value of the account");
+        else {
             transactions.add(new Transaction(-amount));
             accountValue -= amount;
             accountStatement += "  withdrawal " + toDollars(amount) + "\n";
@@ -45,5 +47,9 @@ public abstract class Account {
 
     public double getAccountValue() {
         return accountValue;
+    }
+
+    public String getAccountType() {
+        return accountType;
     }
 }

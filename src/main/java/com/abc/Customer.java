@@ -7,11 +7,10 @@ import static com.abc.Utility.toDollars;
 
 public class Customer {
     private String name;
-    private List<Account> accounts;
+    protected List<Account> accounts = new ArrayList<Account>();
 
     public Customer(String name) {
         this.name = name;
-        this.accounts = new ArrayList<Account>();
     }
 
     public void openAccount(Account account) {
@@ -23,16 +22,8 @@ public class Customer {
             withdrawAccount.withdraw(amount);
             depositAccount.deposit(amount);
         } catch (Exception e) {
-            throw new IllegalArgumentException("amount must be greater than zero");
+            throw new IllegalArgumentException("amount must be greater than zero and less than or equal to the widthrawing account's value");
         }
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getNumberOfAccounts() {
-        return accounts.size();
     }
 
     public double totalInterestEarned() {
@@ -56,5 +47,13 @@ public class Customer {
         statement.append("\nTotal In All Accounts ").append(toDollars(total));
 
         return statement.toString();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getNumberOfAccounts() {
+        return accounts.size();
     }
 }
