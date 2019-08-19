@@ -2,13 +2,33 @@ package com.abc;
 
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 public class BankTest {
     private static final double DOUBLE_DELTA = 1e-15;
 
+    public class TestBank extends Bank {
+        public String getFirstCustomerName() {
+            if (customers != null) {
+                return customers.get(0).getName();
+            }
+            else return null;
+        }
+    }
+
     @Test
-    public void customerSummary() {
+    public void testAddCustomer() {
+        TestBank bank = new TestBank();
+        Customer customer = new Customer("John");
+        bank.addCustomer(customer);
+
+        assertThat("John", containsString(bank.getFirstCustomerName()));
+    }
+
+    @Test
+    public void testGenerateCustomerSummaryOneAccount() {
         Bank bank = new Bank();
         Customer john = new Customer("John");
         john.openAccount(new CheckingAccount());
@@ -18,55 +38,32 @@ public class BankTest {
     }
 
     @Test
-    public void checkingAccount() {
+    public void testGenerateCustomerSummaryMultipleOneAccount() {
         Bank bank = new Bank();
-        Account checkingAccount = new CheckingAccount();
-        Customer bill = new Customer("Bill");
-        bill.openAccount(checkingAccount);
-        bank.addCustomer(bill);
+        Customer john = new Customer("John");
+        john.openAccount(new CheckingAccount());
+        john.openAccount(new SavingsAccount());
+        bank.addCustomer(john);
 
-        checkingAccount.deposit(100.0);
-
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals("Customer Summary\n - John (2 accounts)", bank.customerSummary());
     }
 
     @Test
-    public void savings_account() {
+    public void testMultipleCustomerTotalInterest() {
         Bank bank = new Bank();
-        Account savingsAccount = new SavingsAccount();
-        Customer bill = new Customer("Bill");
-        bill.openAccount(savingsAccount);
-        bank.addCustomer(bill);
 
-        savingsAccount.deposit(1500.0);
+        SavingsAccount savingsAccount = new SavingsAccount();
+        Customer john = new Customer("John");
+        john.openAccount(savingsAccount);
+        savingsAccount.deposit(100);
+        bank.addCustomer(john);
 
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
-    }
+        CheckingAccount checkingAccount = new CheckingAccount();
+        Customer eve = new Customer("Eve");
+        eve.openAccount(checkingAccount);
+        checkingAccount.deposit(100);
+        bank.addCustomer(eve);
 
-    @Test
-    public void maxiSavingsAccountWithinTenDays() {
-        Bank bank = new Bank();
-        Account maxiSavingsAccount = new MaxiSavingsAccount();
-        Customer bill = new Customer("Bill");
-        bank.addCustomer(bill);
-        bill.openAccount(maxiSavingsAccount);
-
-        maxiSavingsAccount.deposit(3000.0);
-
-        assertEquals(3, bank.totalInterestPaid(), DOUBLE_DELTA);
-    }
-
-
-    @Test
-    public void maxiSavingsAccountMoreThanTenDays() {
-        Bank bank = new Bank();
-        Account maxiSavingsAccount = new MaxiSavingsAccount();
-        Customer bill = new Customer("Bill");
-        bank.addCustomer(bill);
-        bill.openAccount(maxiSavingsAccount);
-
-        maxiSavingsAccount.deposit(3000.0);
-
-        assertEquals(3, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(0.2, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 }

@@ -171,4 +171,17 @@ public class AccountTest {
 
         assertEquals(0.1, savingsAccount.interestEarned(), DOUBLE_DELTA);
     }
+
+    @Test
+    public void testStatementGeneration() {
+        SavingsAccount savingsAccount = new SavingsAccount();
+
+        savingsAccount.deposit(4000.0);
+        savingsAccount.withdraw(200.0);
+
+        assertEquals( "Savings Account\n" +
+                "  deposit $4,000.00\n" +
+                "  withdrawal $200.00\n" +
+                "Total $3,800.00", savingsAccount.getAccountStatement());
+    }
 }
