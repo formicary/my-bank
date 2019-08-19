@@ -74,8 +74,8 @@ public class CustomerTest {
     @Test
     public void testTransferLessThanZero() {
         Customer john = new Customer("John");
-        Account withdrawAccount = new SavingsAccount();
-        Account depositAccount = new SavingsAccount();
+        SavingsAccount withdrawAccount = new SavingsAccount();
+        SavingsAccount depositAccount = new SavingsAccount();
 
         john.openAccount(withdrawAccount);
         john.openAccount(depositAccount);
@@ -94,8 +94,8 @@ public class CustomerTest {
     @Test
     public void testTransferZero() {
         Customer john = new Customer("John");
-        Account withdrawAccount = new SavingsAccount();
-        Account depositAccount = new SavingsAccount();
+        SavingsAccount withdrawAccount = new SavingsAccount();
+        SavingsAccount depositAccount = new SavingsAccount();
 
         john.openAccount(withdrawAccount);
         john.openAccount(depositAccount);
@@ -114,8 +114,8 @@ public class CustomerTest {
     @Test
     public void testTransferGreaterThanZeroLessThanWithdrawAccountValue() {
         Customer john = new Customer("John");
-        Account withdrawAccount = new SavingsAccount();
-        Account depositAccount = new SavingsAccount();
+        SavingsAccount withdrawAccount = new SavingsAccount();
+        SavingsAccount depositAccount = new SavingsAccount();
 
         john.openAccount(withdrawAccount);
         john.openAccount(depositAccount);
@@ -150,17 +150,35 @@ public class CustomerTest {
     }
 
     @Test
+    public void testTotalInterestEarned() {
+        Customer john = new Customer("John");
+        SavingsAccount savingsAccount = new SavingsAccount();
+        CheckingAccount checkingAccount = new CheckingAccount();
+
+        john.openAccount(savingsAccount);
+        john.openAccount(checkingAccount);
+
+        savingsAccount.deposit(100);
+        checkingAccount.deposit(100);
+
+        assertEquals(0.2, john.totalInterestEarned(), DOUBLE_DELTA);
+    }
+
+    @Test
     public void testStatementGeneration(){
-        Account checkingAccount = new CheckingAccount();
-        Account savingsAccount = new SavingsAccount();
+        CheckingAccount checkingAccount = new CheckingAccount();
+        SavingsAccount savingsAccount = new SavingsAccount();
+        MaxiSavingsAccount maxiSavingsAccount = new MaxiSavingsAccount();
 
         Customer henry = new Customer("Henry");
         henry.openAccount(checkingAccount);
         henry.openAccount(savingsAccount);
+        henry.openAccount(maxiSavingsAccount);
 
         checkingAccount.deposit(100.0);
         savingsAccount.deposit(4000.0);
         savingsAccount.withdraw(200.0);
+        maxiSavingsAccount.deposit(100.0);
 
         assertEquals("Statement for Henry\n" +
                 "\n" +
@@ -173,7 +191,11 @@ public class CustomerTest {
                 "  withdrawal $200.00\n" +
                 "Total $3,800.00\n" +
                 "\n" +
-                "Total In All Accounts $3,900.00", henry.getStatement());
+                "Maxi Savings Account\n" +
+                "  deposit $100.00\n" +
+                "Total $100.00\n" +
+                "\n" +
+                "Total In All Accounts $4,000.00", henry.getStatement());
     }
 
 
