@@ -1,4 +1,6 @@
-package com.abc;
+package com.abc.bank;
+
+import com.abc.bank.Account;
 
 public class SavingsAccount extends Account {
     public SavingsAccount() {

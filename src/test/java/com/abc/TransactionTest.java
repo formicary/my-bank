@@ -1,5 +1,7 @@
 package com.abc;
 
+import com.abc.bank.Transaction;
+
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

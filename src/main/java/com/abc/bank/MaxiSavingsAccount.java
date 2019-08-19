@@ -1,4 +1,6 @@
-package com.abc;
+package com.abc.bank;
+
+import com.abc.utility.DateProvider;
 
 import java.util.Date;
 

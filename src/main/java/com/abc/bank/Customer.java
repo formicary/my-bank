@@ -1,9 +1,11 @@
-package com.abc;
+package com.abc.bank;
+
+import com.abc.bank.Account;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.abc.Utility.toDollars;
+import static com.abc.utility.Utility.toDollars;
 
 public class Customer {
     private String name;
@@ -18,11 +20,13 @@ public class Customer {
     }
 
     public void transferBetweenAccounts(Account withdrawAccount, Account depositAccount, Double amount) {
-        try {
-            withdrawAccount.withdraw(amount);
-            depositAccount.deposit(amount);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("amount must be greater than zero and less than or equal to the widthrawing account's value");
+        if (accounts.contains(withdrawAccount) && accounts.contains(depositAccount)) {
+            try {
+                withdrawAccount.withdraw(amount);
+                depositAccount.deposit(amount);
+            } catch (Exception e) {
+                throw new IllegalArgumentException("amount must be greater than zero and less than or equal to the withdrawing account's value");
+            }
         }
     }
 
@@ -35,6 +39,8 @@ public class Customer {
         return total;
     }
 
+    // Returns a string with a statement about all the transactions from all the accounts of a single
+    // customer.
     public String getStatement() {
         StringBuilder statement = new StringBuilder("Statement for " + name + "\n");
         double total = 0;

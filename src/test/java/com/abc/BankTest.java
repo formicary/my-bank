@@ -1,5 +1,10 @@
 package com.abc;
 
+import com.abc.bank.Bank;
+import com.abc.bank.CheckingAccount;
+import com.abc.bank.Customer;
+import com.abc.bank.SavingsAccount;
+
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.containsString;

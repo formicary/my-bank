@@ -1,5 +1,10 @@
 package com.abc;
 
+import com.abc.bank.CheckingAccount;
+import com.abc.bank.MaxiSavingsAccount;
+import com.abc.bank.SavingsAccount;
+import com.abc.bank.Transaction;
+
 import org.junit.Test;
 
 import java.util.Calendar;

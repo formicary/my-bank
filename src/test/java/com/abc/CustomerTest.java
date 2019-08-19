@@ -1,5 +1,11 @@
 package com.abc;
 
+import com.abc.bank.Account;
+import com.abc.bank.CheckingAccount;
+import com.abc.bank.Customer;
+import com.abc.bank.MaxiSavingsAccount;
+import com.abc.bank.SavingsAccount;
+
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.containsString;
@@ -87,7 +93,7 @@ public class CustomerTest {
             john.transferBetweenAccounts(withdrawAccount, depositAccount, (-0.0));
             fail("Expected exception not thrown");
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), containsString("amount must be greater than zero and less than or equal to the widthrawing account's value"));
+            assertThat(e.getMessage(), containsString("amount must be greater than zero and less than or equal to the withdrawing account's value"));
         }
     }
 
@@ -107,7 +113,7 @@ public class CustomerTest {
             john.transferBetweenAccounts(withdrawAccount, depositAccount, 0.0);
             fail("Expected exception not thrown");
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), containsString("amount must be greater than zero and less than or equal to the widthrawing account's value"));
+            assertThat(e.getMessage(), containsString("amount must be greater than zero and less than or equal to the withdrawing account's value"));
         }
     }
 
@@ -120,13 +126,13 @@ public class CustomerTest {
         john.openAccount(withdrawAccount);
         john.openAccount(depositAccount);
 
-        withdrawAccount.deposit(100);
-        depositAccount.deposit(100);
+        withdrawAccount.deposit(100.0);
+        depositAccount.deposit(100.0);
 
         john.transferBetweenAccounts(withdrawAccount, depositAccount, 1.0);
 
-        assertEquals(withdrawAccount.getAccountValue(), 99.0, 0.001);
-        assertEquals(depositAccount.getAccountValue(), 101.0, 0.001);
+        assertEquals(99.0, withdrawAccount.getAccountValue(), 0.001);
+        assertEquals(101.0, depositAccount.getAccountValue(), 0.001);
     }
 
     @Test
@@ -145,7 +151,7 @@ public class CustomerTest {
             john.transferBetweenAccounts(withdrawAccount, depositAccount, 110.0);
             fail("Expected exception not thrown");
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), containsString("amount must be greater than zero and less than or equal to the widthrawing account's value"));
+            assertThat(e.getMessage(), containsString("amount must be greater than zero and less than or equal to the withdrawing account's value"));
         }
     }
 

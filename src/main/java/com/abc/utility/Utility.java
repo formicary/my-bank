@@ -1,8 +1,8 @@
-package com.abc;
+package com.abc.utility;
 
 import static java.lang.Math.abs;
 
-class Utility {
+public class Utility {
     public static String toDollars(double d){
         return String.format("$%,.2f", abs(d));
     }
