@@ -76,21 +76,11 @@ public class Account {
     public boolean checkLeapYear(int year)
     {
             if(year % 400 == 0)
-            {
                 return true;
-            }
             else if (year % 100 == 0)
-            {
                return false;
-            }
-            else if(year % 4 == 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            else return year % 4 == 0;
+
     }
     public double dailyInterest(double initialAmount,double interest,Date now){
         double amount=initialAmount;
