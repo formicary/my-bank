@@ -18,7 +18,7 @@ public class CustomerTest {
         Account checkingAccount = new Account(Account.CHECKING);
         Account savingsAccount = new Account(Account.SAVINGS);
         Account check=new Account(Account.SAVINGS);
-        //Then attach them
+        //Attach them
         henry.openAccount(checkingAccount);
         henry.openAccount(savingsAccount);
 
