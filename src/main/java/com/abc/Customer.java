@@ -35,8 +35,7 @@ public class Customer {
     }
 
     public String getStatement() {
-        String statement = null;
-        statement = "Statement for " + name + "\n";
+        String statement = "Statement for " + name + "\n";
         double total = 0.0;
         for (Account a : accounts) {
             statement += "\n" + statementForAccount(a) + "\n";
@@ -64,12 +63,39 @@ public class Customer {
 
         //Now total up all the transactions
         double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
+        for (Transaction t : a.getTransactions()) {
+            s += "  " + (t.getAmount() < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.getAmount()) + "\n";
+            total += t.getAmount();
         }
         s += "Total " + toDollars(total);
         return s;
+    }
+
+
+    public String transferBetweenAccounts(Account from, Account to,double sum)
+    {
+        //Check if the customer has access to these accounts
+        boolean check= false;
+        boolean check2= false;
+        for(Account a:accounts)
+        {
+            if(a==from)
+                check=true;
+            if(a==to)
+                check2=true;
+            if(check && check2)
+                break;
+        }
+
+        if(check && check2){
+            from.withdraw(sum);
+            to.deposit(sum);
+            return "Done";
+        }
+        else{
+            return "No access";
+        }
+
     }
 
     private String toDollars(double d){
