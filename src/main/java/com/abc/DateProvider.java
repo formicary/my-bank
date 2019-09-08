@@ -5,15 +5,20 @@ import java.util.Date;
 
 public class DateProvider {
 
-	private static DateProvider instance = null;
-
-	public static DateProvider getInstance() {
-		if (instance == null)
-			instance = new DateProvider();
-		return instance;
+	public static Date now() {
+		return Calendar.getInstance().getTime();
 	}
 
-	public Date now() {
-		return Calendar.getInstance().getTime();
+	/**
+	 * Generates a date in the past
+	 * 
+	 * @param days
+	 *            specified by the number days counting from today
+	 * @return date past date
+	 */
+	public static Date giveDayInThePast(int days) {
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DAY_OF_YEAR, -days);
+		return cal.getTime();
 	}
 }

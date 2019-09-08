@@ -1,7 +1,5 @@
 package com.abc;
 
-import static java.lang.Math.abs;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,13 +13,20 @@ public class Customer {
 		this.accounts = new ArrayList<Account>();
 	}
 
+	public Customer openAccount(Account account) {
+		accounts.add(account);
+		return this;
+	}
+
+	/*
+	 * Getters
+	 */
 	public String getName() {
 		return name;
 	}
 
-	public Customer openAccount(Account account) {
-		accounts.add(account);
-		return this;
+	public List<Account> getAccounts() {
+		return accounts;
 	}
 
 	public int getNumberOfAccounts() {
@@ -31,7 +36,7 @@ public class Customer {
 	public double totalInterestEarned() {
 		double total = 0;
 		for (Account a : accounts)
-			total += a.interestEarned();
+			total += a.interestEarned(a.getBalance(), a.getInterestRate(), 365, 1);
 		return total;
 	}
 
@@ -41,37 +46,35 @@ public class Customer {
 		double total = 0.0;
 		for (Account a : accounts) {
 			statement += "\n" + statementForAccount(a) + "\n";
-			total += a.sumTransactions();
+			total += a.getBalance();
 		}
-		statement += "\nTotal In All Accounts " + toDollars(total);
+		statement += "\nTotal In All Accounts " + Formatter.toDollars(total);
 		return statement;
 	}
 
 	private String statementForAccount(Account a) {
 		String s = "";
 		// Translate to pretty account type
-		switch (a.getAccountType()) {
-			case Account.CHECKING :
-				s += "Checking Account\n";
-				break;
-			case Account.SAVINGS :
-				s += "Savings Account\n";
-				break;
-			case Account.MAXI_SAVINGS :
-				s += "Maxi Savings Account\n";
-				break;
+		if (a instanceof CheckingAccount) {
+			s += "Checking Account\n";
+		} else if (a instanceof SavingsAccount) {
+			s += "Savings Account\n";
+		} else {
+			s += "Maxi Savings Account\n";
 		}
 		// Now total up all the transactions
 		double total = 0.0;
-		for (Transaction t : a.transactions) {
-			s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-			total += t.amount;
+		for (Transaction t : a.getTransactions()) {
+			String x = "";
+			if (t.getTransactionType() == "withdraw") {
+				x = "withdrawal";
+			} else {
+				x = "deposit";
+			}
+			s += "  " + x + " " + Formatter.toDollars(t.getAmount()) + "\n";
+			total = a.getBalance();
 		}
-		s += "Total " + toDollars(total);
+		s += "Total " + Formatter.toDollars(total);
 		return s;
-	}
-
-	private String toDollars(double d) {
-		return String.format("$%,.2f", abs(d));
 	}
 }

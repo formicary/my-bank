@@ -30,8 +30,10 @@ public class Bank {
 
 	public double totalInterestPaid() {
 		double total = 0;
-		for (Customer c : customers)
+		for (Customer c : customers) {
 			total += c.totalInterestEarned();
+			total = Double.valueOf(Formatter.toTwoDecimal(total));
+		}
 		return total;
 	}
 
