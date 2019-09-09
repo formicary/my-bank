@@ -7,6 +7,9 @@ public class Bank {
 
 	private List<Customer> customers;
 
+	/*
+	 * Constructor
+	 */
 	public Bank() {
 		customers = new ArrayList<Customer>();
 	}
@@ -15,17 +18,11 @@ public class Bank {
 		customers.add(customer);
 	}
 
-	public String customerSummary() {
+	public String printCustomerSummary() {
 		String summary = "Customer Summary";
 		for (Customer c : customers)
-			summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
+			summary += "\n - " + c.getName() + " (" + Formatter.toPluralForm(c.getNumberOfAccounts(), "account") + ")";
 		return summary;
-	}
-
-	// Make sure correct plural of word is created based on the number passed in:
-	// If number passed in is 1 just return the word otherwise add an 's' at the end
-	private String format(int number, String word) {
-		return number + " " + (number == 1 ? word : word + "s");
 	}
 
 	public double totalInterestPaid() {
@@ -37,13 +34,15 @@ public class Bank {
 		return total;
 	}
 
-	public String getFirstCustomer() {
-		try {
-			customers = null;
+	public List<Customer> getCustomers() {
+		return customers;
+	}
+
+	public String getFirstCustomer() throws IndexOutOfBoundsException {
+		if (customers.size() >= 1) {
 			return customers.get(0).getName();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "Error";
+		} else {
+			throw new IndexOutOfBoundsException("Bank does not have customers yet");
 		}
 	}
 }

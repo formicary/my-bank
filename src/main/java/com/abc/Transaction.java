@@ -13,13 +13,13 @@ public class Transaction {
 		this.transactionDate = DateProvider.now();
 	}
 
+	/*
+	 * Getters
+	 */
 	public double getAmount() {
 		return amount;
 	}
 
-	/*
-	 * Getters
-	 */
 	public String getTransactionType() {
 		return transactionType;
 	}

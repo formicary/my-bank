@@ -2,7 +2,6 @@ package com.abc;
 public class SavingsAccount extends Account {
 
 	public SavingsAccount() {
-		super();
 		this.setInterestRate(0.1);
 	}
 

@@ -22,4 +22,8 @@ public class Formatter {
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		return dateFormat.format(date);
 	}
+
+	public static String toPluralForm(int number, String word) {
+		return number + " " + (number == 1 ? word : word + "s");
+	}
 }

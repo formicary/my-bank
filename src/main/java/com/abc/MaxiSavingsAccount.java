@@ -5,7 +5,6 @@ import java.util.List;
 public class MaxiSavingsAccount extends Account {
 
 	public MaxiSavingsAccount() {
-		super();
 		this.setInterestRate(2);
 	}
 

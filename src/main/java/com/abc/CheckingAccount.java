@@ -2,7 +2,6 @@ package com.abc;
 public class CheckingAccount extends Account {
 
 	public CheckingAccount() {
-		super();
 		this.setInterestRate(0.1);
 	}
 

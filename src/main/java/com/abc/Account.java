@@ -4,14 +4,35 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Abstract Account class is extended by Checking, Savings and MaxiSavings classes. These three classes differ on how
+ * the interest rate is calculated but share the basic operations of an account.
+ */
 public abstract class Account {
 
+	/**
+	 * Account has a unique id, in reality this should be complex but for the sake of this exercise an incrementing
+	 * static integer to identify each object would suffice.
+	 *
+	 * A double to keep track of the balance of the account.
+	 * 
+	 * A double to represent the interest rate in percentage i.e 8% is 8.0, this is important
+	 * 
+	 * A list containing the transactions made by the account.
+	 */
+	private static int count = 0;
+	private int accountNumber;
 	private double balance;
 	private double interestRate;
 	private List<Transaction> transactions;
 
+	/*
+	 * Constructor
+	 */
 	public Account() {
 		this.transactions = new ArrayList<Transaction>();
+		accountNumber = count;
+		count++;
 	}
 
 	/**
@@ -21,7 +42,7 @@ public abstract class Account {
 	 *            value to deposit to an account
 	 * @throws IllegalArgumentException
 	 */
-	public void deposit(double amount) {
+	public void deposit(double amount) throws IllegalArgumentException {
 		if (amount <= 0) {
 			throw new IllegalArgumentException("amount must be greater than zero");
 		} else {
@@ -39,7 +60,7 @@ public abstract class Account {
 	 *            value to withdraw from an account
 	 * @throws IllegalArgumentException
 	 */
-	public void withdraw(double amount) {
+	public void withdraw(double amount) throws IllegalArgumentException {
 		if (amount <= 0) {
 			throw new IllegalArgumentException("amount must be greater than zero");
 		} else if (amount > balance) {
@@ -52,6 +73,33 @@ public abstract class Account {
 		}
 	}
 
+	/**
+	 * Customer can transfer money from account a to account b
+	 * 
+	 * @param amount
+	 *            amount to transfer
+	 * @param to
+	 *            account to transfer money to
+	 * @throws IllegalArgumentException
+	 */
+	public void transfer(double amount, Account to) throws IllegalArgumentException {
+		if (this.getAccountNumber() == to.getAccountNumber()) {
+			throw new IllegalArgumentException("THe two accounts must be differnt");
+		} else {
+			try {
+				this.withdraw(amount);
+				to.deposit(amount);
+			} catch (Exception e) {
+				System.out.println(e);
+			}
+		}
+	}
+
+	/**
+	 * calculates the sum of transactions
+	 * 
+	 * @return double sum of transactions
+	 */
 	public double sumTransactions() {
 		double amount = 0.0;
 		for (Transaction t : transactions)
@@ -72,6 +120,10 @@ public abstract class Account {
 
 	public double getInterestRate() {
 		return interestRate;
+	}
+
+	public int getAccountNumber() {
+		return accountNumber;
 	}
 
 	public List<Transaction> getTransactions() {
@@ -113,6 +165,13 @@ public abstract class Account {
 
 	public String ToString() {
 		return "Balance: " + Formatter.toDollars(balance);
+	}
+
+	/*
+	 * Updates balance to include the interest earned after a year
+	 */
+	public void addInterestToBalance() {
+		balance += interestEarned(this.balance, this.interestRate, 365, 1);
 	}
 
 	/**
