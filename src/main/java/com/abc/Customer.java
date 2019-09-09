@@ -5,6 +5,11 @@ import java.util.List;
 
 public class Customer {
 
+	/**
+	 * String Customers have a name
+	 * 
+	 * List<Account> List of accounts that they own
+	 */
 	private String name;
 	private List<Account> accounts;
 

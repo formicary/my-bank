@@ -2,11 +2,23 @@ package com.abc;
 
 import java.util.Date;
 
+/**
+ * Transactions are kept by an account to record its transaction history.
+ */
 public class Transaction {
 
+	/**
+	 * A double to keep track of the amount that is deposited or withdrawn.
+	 * 
+	 * A string to determine the transaction type, there are many types but for this exercise there are only two :
+	 * withdraw and deposit
+	 * 
+	 * A date to record when the transaction was made.
+	 * 
+	 */
 	private final double amount;
-	private Date transactionDate;
 	private String transactionType;
+	private Date transactionDate;
 
 	public Transaction(double amount) {
 		this.amount = amount;
