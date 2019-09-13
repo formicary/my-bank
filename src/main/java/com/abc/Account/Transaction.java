@@ -5,11 +5,11 @@ import com.abc.DateProvider;
 import java.util.Calendar;
 import java.util.Date;
 
-public abstract class Transaction {
-    final double amount;
-    final Date transactionDate;
+public class Transaction {
+    private final double amount;
+    private final Date transactionDate;
 
-    Transaction(double amount){
+    public Transaction(double amount){
         this.amount = amount;
         this.transactionDate = DateProvider.getInstance().now();
     }
