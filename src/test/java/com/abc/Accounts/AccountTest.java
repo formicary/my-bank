@@ -1,17 +1,23 @@
 package com.abc.Accounts;
 
+import com.abc.Transaction;
 import org.junit.Test;
+
+import static org.junit.Assert.fail;
 
 public class AccountTest {
 
     @Test
     public void getTransactions() {
         Account account = new CheckingAccount();
-        account.deposit(10);
-        account.deposit(50);
-        account.withdraw(10);
-        account.withdraw(2);
-
+        try{
+            account.processTransaction(new Transaction(15));
+            account.processTransaction(new Transaction(15));
+            account.processTransaction(new Transaction(-10));
+            account.processTransaction(new Transaction(-2));
+        } catch(Exception e) {
+            fail("Exception thrown unexpectedly");
+        }
     }
 
     @Test

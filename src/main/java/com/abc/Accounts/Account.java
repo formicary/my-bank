@@ -25,25 +25,9 @@ abstract public class Account {
         else transactions.add(t);
     }
 
-    public void deposit(double amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
-        } else {
-            transactions.add(new Transaction(amount));
-        }
-    }
-
-    public void withdraw(double amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
-        } else {
-            transactions.add(new Transaction(-amount));
-        }
-    }
-
     public abstract double interestEarned();
 
-    double calculateBalance() {
+    public double calculateBalance() {
        return checkIfTransactionsExist(true);
     }
 

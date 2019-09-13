@@ -7,6 +7,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class CustomerTest {
 
@@ -19,10 +20,13 @@ public class CustomerTest {
         Customer henry = new Customer("Henry");
         henry.addAccount(checkingAccount);
         henry.addAccount(savingsAccount);
-
-        checkingAccount.deposit(100.0);
-        savingsAccount.deposit(4000.0);
-        savingsAccount.withdraw(200.0);
+        try{
+            checkingAccount.processTransaction(new Transaction(100.0));
+            savingsAccount.processTransaction(new Transaction(4000));
+            savingsAccount.processTransaction(new Transaction(-200));
+        } catch(Exception e) {
+            fail("Exception thrown unexpectedly");
+        }
 
         assertEquals("Statement for Henry\n" +
                 "\n" +

@@ -7,6 +7,7 @@ import com.abc.Accounts.SavingsAccount;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class BankTest {
     private static final double DOUBLE_DELTA = 1e-15;
@@ -29,7 +30,11 @@ public class BankTest {
         bank.addCustomer(bill);
         bill.addAccount(checkingAccount);
 
-        checkingAccount.deposit(100.0);
+        try{
+            checkingAccount.processTransaction(new Transaction(100));
+        } catch(Exception e) {
+            fail("Exception thrown unexpectedly");
+        }
 
         assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
@@ -41,7 +46,11 @@ public class BankTest {
         Customer bill = new Customer("Bill");
         bank.addCustomer(bill).addAccount(checkingAccount);
 
-        checkingAccount.deposit(1500.0);
+        try{
+            checkingAccount.processTransaction(new Transaction(1500));
+        } catch(Exception e) {
+            fail("Exception thrown unexpectedly");
+        }
 
         assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
@@ -53,7 +62,11 @@ public class BankTest {
         Customer bill = new Customer("Bill");
         bank.addCustomer(bill).addAccount(checkingAccount);
 
-        checkingAccount.deposit(3000.0);
+        try{
+            checkingAccount.processTransaction(new Transaction(3000));
+        } catch(Exception e) {
+            fail("Exception thrown unexpectedly");
+        }
 
         assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
