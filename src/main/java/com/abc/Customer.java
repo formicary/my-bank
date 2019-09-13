@@ -1,5 +1,7 @@
 package com.abc;
 
+import com.abc.Account.Account;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,21 +48,8 @@ public class Customer {
         return statement;
     }
 
-    private String statementForAccount(Account a) {
-        String s = "";
-
-       //Translate to pretty account type
-        switch(a.getAccountType()){
-            case Account.CHECKING:
-                s += "Checking Account\n";
-                break;
-            case Account.SAVINGS:
-                s += "Savings Account\n";
-                break;
-            case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
-                break;
-        }
+    private String statementForAccount(Account a) {//TODO
+        String s = "TODO";
 
         //Now total up all the transactions
         double total = 0.0;
