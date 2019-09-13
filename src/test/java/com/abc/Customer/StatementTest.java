@@ -1,8 +1,11 @@
-package com.abc;
+package com.abc.Customer;
 
 import com.abc.Account.Account;
 import com.abc.Account.CheckingAccount;
 import com.abc.Account.SavingsAccount;
+import com.abc.Customer.Customer;
+import com.abc.Customer.Statement;
+import com.abc.Transaction;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

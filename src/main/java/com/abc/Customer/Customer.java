@@ -1,4 +1,4 @@
-package com.abc;
+package com.abc.Customer;
 
 import com.abc.Account.Account;
 

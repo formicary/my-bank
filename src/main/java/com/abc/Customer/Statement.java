@@ -1,6 +1,8 @@
-package com.abc;
+package com.abc.Customer;
 
 import com.abc.Account.Account;
+import com.abc.Customer.Customer;
+import com.abc.Transaction;
 
 import java.util.ArrayList;
 

@@ -1,7 +1,8 @@
-package com.abc;
+package com.abc.Customer;
 
 import com.abc.Account.CheckingAccount;
 import com.abc.Account.SavingsAccount;
+import com.abc.Customer.Customer;
 import org.junit.Ignore;
 import org.junit.Test;
 

@@ -4,6 +4,7 @@ import com.abc.Account.Account;
 import com.abc.Account.CheckingAccount;
 import com.abc.Account.MaxiSavingsAccount;
 import com.abc.Account.SavingsAccount;
+import com.abc.Customer.Customer;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
