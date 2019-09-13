@@ -4,7 +4,7 @@ public class CheckingAccount extends Account {
 
     public double interestEarned() {
         double amount = sumTransactions();
-        return 0*0.001;
+        return amount*0.001;
     }
 
 }
