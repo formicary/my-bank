@@ -7,10 +7,14 @@ import java.util.List;
 
 abstract public class Account {
 
-    public List<Transaction> transactions;
+    private List<Transaction> transactions;
 
     public Account() {
         this.transactions = new ArrayList<Transaction>();
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
     }
 
     public void deposit(double amount) {
@@ -26,8 +30,8 @@ abstract public class Account {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
             transactions.add(new Transaction(-amount));
+        }
     }
-}
 
     public abstract double interestEarned();
 //    {

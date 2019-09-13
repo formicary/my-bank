@@ -1,6 +1,9 @@
 package com.abc;
 
 import com.abc.Account.Account;
+import com.abc.Account.CheckingAccount;
+import com.abc.Account.MaxiSavingsAccount;
+import com.abc.Account.SavingsAccount;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +23,8 @@ public class Customer {
         return name;
     }
 
-    public Customer openAccount(Account account) {
+    public void addAccount(Account account) {
         accounts.add(account);
-        return this;
     }
 
     public int getNumberOfAccounts() {
@@ -53,7 +55,7 @@ public class Customer {
 
         //Now total up all the transactions
         double total = 0.0;
-        for (Transaction t : a.transactions) {
+        for (Transaction t : a.getTransactions()) {
             s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
             total += t.amount;
         }
