@@ -28,13 +28,9 @@ abstract public class Account {
     public abstract double interestEarned();
 
     public double calculateBalance() {
-       return checkIfTransactionsExist(true);
-    }
-
-    double checkIfTransactionsExist(boolean checkAll) {
-        double amount = 0.0;
+        double balance = 0.0;
         for (Transaction t: transactions)
-            amount += t.getAmount();
-        return amount;
+            balance += t.getAmount();
+        return balance;
     }
 }
