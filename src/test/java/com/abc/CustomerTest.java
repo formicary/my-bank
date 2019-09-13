@@ -11,7 +11,7 @@ import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
 
-    @Ignore //Test customer statement generation
+    @Test //Test customer statement generation
     public void testApp(){
 
         Account checkingAccount = new CheckingAccount();

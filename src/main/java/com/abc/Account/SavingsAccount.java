@@ -2,6 +2,12 @@ package com.abc.Account;
 
 public class SavingsAccount extends Account {
 
+    private static final String ACCOUNT_NAME = "Savings Account";
+
+    public String getName() {
+        return ACCOUNT_NAME;
+    }
+
     public double interestEarned() {
         double amount = sumTransactions();
         if (amount <= 1000)
