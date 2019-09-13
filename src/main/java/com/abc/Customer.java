@@ -1,9 +1,6 @@
 package com.abc;
 
-import com.abc.Account.Account;
-import com.abc.Account.CheckingAccount;
-import com.abc.Account.MaxiSavingsAccount;
-import com.abc.Account.SavingsAccount;
+import com.abc.Accounts.Account;
 
 import java.util.ArrayList;
 import java.util.List;

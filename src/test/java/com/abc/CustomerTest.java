@@ -1,9 +1,8 @@
 package com.abc;
 
-import com.abc.Account.Account;
-import com.abc.Account.CheckingAccount;
-import com.abc.Account.SavingsAccount;
-import jdk.internal.org.objectweb.asm.util.CheckClassAdapter;
+import com.abc.Accounts.Account;
+import com.abc.Accounts.CheckingAccount;
+import com.abc.Accounts.SavingsAccount;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -27,11 +26,11 @@ public class CustomerTest {
 
         assertEquals("Statement for Henry\n" +
                 "\n" +
-                "Checking Account\n" +
+                "Checking Accounts\n" +
                 "  deposit $100.00\n" +
                 "Total $100.00\n" +
                 "\n" +
-                "Savings Account\n" +
+                "Savings Accounts\n" +
                 "  deposit $4,000.00\n" +
                 "  withdrawal $200.00\n" +
                 "Total $3,800.00\n" +

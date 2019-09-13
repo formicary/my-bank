@@ -1,5 +1,6 @@
-package com.abc.Account;
+package com.abc.Accounts;
 
+import com.abc.Exceptions.InsufficientBalanceException;
 import com.abc.Transaction;
 
 import java.util.ArrayList;
@@ -18,9 +19,10 @@ abstract public class Account {
 
     public abstract String getName();
 
-    public void processTransaction(Transaction t){
+    public void processTransaction(Transaction t) throws InsufficientBalanceException {
         double balance = calculateBalance();
-        if (balance + t.getAmount() < 0) throw E
+        if (balance + t.getAmount() < 0) throw new InsufficientBalanceException();
+        else transactions.add(t);
     }
 
     public void deposit(double amount) {

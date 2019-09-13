@@ -1,8 +1,6 @@
-package com.abc.Account;
+package com.abc.Accounts;
 
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class AccountTest {
 
