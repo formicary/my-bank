@@ -10,10 +10,13 @@ public class Bank {
         customers = new ArrayList<Customer>();
     }
 
-    public Customer createCustomer (String name) {
-        Customer customer = new Customer(name);
+    public Customer addCustomer (Customer customer) {
         customers.add(customer);
         return customer;
+    }
+
+    public List<Customer> getCustomers() {
+        return customers;
     }
 
     public String customerSummary() {
