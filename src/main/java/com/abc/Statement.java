@@ -6,10 +6,10 @@ import java.util.ArrayList;
 
 import static java.lang.Math.abs;
 
-public class StatementGenerator {
+public class Statement {
     private Customer customer;
 
-    public StatementGenerator(Customer customer){
+    public Statement(Customer customer){
         this.customer = customer;
     }
 
