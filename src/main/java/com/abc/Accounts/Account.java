@@ -8,7 +8,7 @@ import java.util.List;
 abstract public class Account {
     private List<Transaction> transactions;
 
-    public Account() {
+    Account() {
         this.transactions = new ArrayList<Transaction>();
     }
 
@@ -17,6 +17,11 @@ abstract public class Account {
     }
 
     public abstract String getName();
+
+    public void processTransaction(Transaction t){
+        double balance = calculateBalance();
+        if (balance + t.getAmount() < 0) throw E
+    }
 
     public void deposit(double amount) {
         if (amount <= 0) {
@@ -36,14 +41,14 @@ abstract public class Account {
 
     public abstract double interestEarned();
 
-    public double sumTransactions() {
+    double calculateBalance() {
        return checkIfTransactionsExist(true);
     }
 
-    private double checkIfTransactionsExist(boolean checkAll) {
+    double checkIfTransactionsExist(boolean checkAll) {
         double amount = 0.0;
         for (Transaction t: transactions)
-            amount += t.amount;
+            amount += t.getAmount();
         return amount;
     }
 }
