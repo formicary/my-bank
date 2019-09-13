@@ -10,8 +10,10 @@ public class Bank {
         customers = new ArrayList<Customer>();
     }
 
-    public void addCustomer(Customer customer) {
+    public Customer createCustomer (String name) {
+        Customer customer = new Customer(name);
         customers.add(customer);
+        return customer;
     }
 
     public String customerSummary() {
