@@ -9,7 +9,7 @@ public class CheckingAccount extends Account {
     }
 
     public double interestEarned() {
-        double amount = sumTransactions();
+        double amount = calculateBalance();
         return amount*0.001;
     }
 

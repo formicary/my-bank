@@ -9,7 +9,7 @@ public class MaxiSavingsAccount extends Account {
     }
 
     public double interestEarned() {
-        double amount = sumTransactions();
+        double amount = calculateBalance();
         if (amount <= 1000)
             return amount * 0.02;
         if (amount <= 2000)
