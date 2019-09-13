@@ -1,8 +1,7 @@
 package com.abc;
 
-import com.abc.Accounts.Account;
-import com.abc.Accounts.CheckingAccount;
-import com.abc.Accounts.SavingsAccount;
+import com.abc.Account.CheckingAccount;
+import com.abc.Account.SavingsAccount;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -10,37 +9,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 public class CustomerTest {
-
-    @Test //Test customer statement generation
-    public void testApp(){
-
-        Account checkingAccount = new CheckingAccount();
-        Account savingsAccount = new SavingsAccount();
-
-        Customer henry = new Customer("Henry");
-        henry.addAccount(checkingAccount);
-        henry.addAccount(savingsAccount);
-        try{
-            checkingAccount.processTransaction(new Transaction(100.0));
-            savingsAccount.processTransaction(new Transaction(4000));
-            savingsAccount.processTransaction(new Transaction(-200));
-        } catch(Exception e) {
-            fail("Exception thrown unexpectedly");
-        }
-
-        assertEquals("Statement for Henry\n" +
-                "\n" +
-                "Checking Accounts\n" +
-                "  deposit $100.00\n" +
-                "Total $100.00\n" +
-                "\n" +
-                "Savings Accounts\n" +
-                "  deposit $4,000.00\n" +
-                "  withdrawal $200.00\n" +
-                "Total $3,800.00\n" +
-                "\n" +
-                "Total In All Accounts $3,900.00", henry.getStatement());
-    }
 
     @Test
     public void testOneAccount(){

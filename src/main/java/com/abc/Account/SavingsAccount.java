@@ -1,8 +1,8 @@
-package com.abc.Accounts;
+package com.abc.Account;
 
 public class SavingsAccount extends Account {
 
-    private static final String ACCOUNT_NAME = "Savings Accounts";
+    private static final String ACCOUNT_NAME = "Savings Account";
 
     public String getName() {
         return ACCOUNT_NAME;

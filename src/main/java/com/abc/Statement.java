@@ -1,6 +1,6 @@
 package com.abc;
 
-import com.abc.Accounts.Account;
+import com.abc.Account.Account;
 
 import java.util.ArrayList;
 
@@ -22,7 +22,7 @@ public class Statement {
             statement += "\n" + statementForAccount(a) + "\n";
             total += a.calculateBalance();
         }
-        statement += "\nTotal In All Accounts " + toDollars(total);
+        statement += "\nTotal In All Account " + toDollars(total);
         return statement;
     }
 

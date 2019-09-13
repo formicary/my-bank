@@ -1,6 +1,6 @@
-package com.abc.Accounts;
+package com.abc.Account;
 
-import com.abc.Exceptions.InsufficientBalanceException;
+import com.abc.Exception.InsufficientBalanceException;
 import com.abc.Transaction;
 
 import java.util.ArrayList;

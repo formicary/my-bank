@@ -1,4 +1,4 @@
-package com.abc.Exceptions;
+package com.abc.Exception;
 
 /**
  * Exception for when an account has inssufficient balance

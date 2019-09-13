@@ -1,9 +1,8 @@
 package com.abc;
 
-import com.abc.Accounts.Account;
+import com.abc.Account.Account;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static java.lang.Math.abs;
 
