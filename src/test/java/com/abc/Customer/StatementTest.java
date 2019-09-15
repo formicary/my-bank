@@ -9,6 +9,8 @@ import com.abc.Exception.InsufficientBalanceException;
 import com.abc.Transaction;
 import org.junit.Test;
 
+import com.abc.Money;;
+
 import static org.junit.Assert.*;
 
 public class StatementTest {
@@ -22,9 +24,9 @@ public class StatementTest {
         henry.addAccount(checkingAccount);
         henry.addAccount(savingsAccount);
         try{
-            checkingAccount.processTransaction(new Transaction(100.0));
-            savingsAccount.processTransaction(new Transaction(4000));
-            savingsAccount.processTransaction(new Transaction(-200));
+            checkingAccount.processTransaction(new Transaction(new Money("100")));
+            savingsAccount.processTransaction(new Transaction(new Money("4000")));
+            savingsAccount.processTransaction(new Transaction(new Money("-200")));
         } catch(InsufficientBalanceException e) {
             fail("Insufficient Balance Exception thrown unexpectedly");
         }
@@ -37,7 +39,7 @@ public class StatementTest {
                 "\n" +
                 "Savings Account\n" +
                 "  deposit $4,000.00\n" +
-                "  withdrawal $200.00\n" +
+                "  withdrawal -$200.00\n" +
                 "Total $3,800.00\n" +
                 "\n" +
                 "Total In All Account $3,900.00", new Statement(henry).getStatement());

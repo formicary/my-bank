@@ -2,6 +2,7 @@ package com.abc.Customer;
 
 import com.abc.Account.Account;
 
+import com.abc.Money;;
 import java.util.ArrayList;
 
 import static java.lang.Math.abs;
@@ -31,10 +32,10 @@ public class Customer {
         return accounts;
     }
 
-    public double totalInterestEarned() {
-        double total = 0;
+    public Money totalInterestEarned() {
+        Money total = new Money("0");
         for (Account a : accounts)
-            total += a.interestEarned();
+            total = total.add(a.getTotalInterestEarned());
         return total;
     }
 

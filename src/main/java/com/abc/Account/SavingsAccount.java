@@ -1,5 +1,7 @@
 package com.abc.Account;
 
+import com.abc.Money;
+
 public class SavingsAccount extends Account {
 
     private static final String ACCOUNT_NAME = "Savings Account";
@@ -8,11 +10,21 @@ public class SavingsAccount extends Account {
         return ACCOUNT_NAME;
     }
 
-    public double interestEarned() {
-        double amount = calculateBalance();
-        if (amount <= 1000)
-            return amount * 0.001;
-        else
-            return 1 + (amount-1000) * 0.002;
+    public Money getTotalInterestEarned() {
+        Money balance = getBalance();
+
+        Money lowInterest = calculateInterest(
+                balance,
+                new Money("0.001"),
+                new Money("0"),
+                new Money("1000")
+        );
+        Money topInterest = calculateInterest(
+                balance,
+                new Money("0.002"),
+                new Money("1000")
+        );
+
+        return lowInterest.add(topInterest);
     }
 }

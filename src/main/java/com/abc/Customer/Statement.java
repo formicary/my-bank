@@ -1,9 +1,10 @@
 package com.abc.Customer;
 
 import com.abc.Account.Account;
-import com.abc.Customer.Customer;
+import com.abc.Money;
 import com.abc.Transaction;
 
+;
 import java.util.ArrayList;
 
 import static java.lang.Math.abs;
@@ -19,12 +20,12 @@ public class Statement {
         ArrayList<Account> accounts = customer.getAccounts();
         String statement = null;
         statement = "Statement for " + customer.getName() + "\n";
-        double total = 0.0;
+        Money total = new Money("0");
         for (Account a : accounts) {
             statement += "\n" + statementForAccount(a) + "\n";
-            total += a.calculateBalance();
+            total = total.add(a.getBalance());
         }
-        statement += "\nTotal In All Account " + toDollars(total);
+        statement += "\nTotal In All Account " + total.toString();
         return statement;
     }
 
@@ -32,12 +33,12 @@ public class Statement {
         String s = "";
         s = s + a.getName() + "\n";
         //Now total up all the transactions
-        double total = 0.0;
+        Money total = new Money("0");
         for (Transaction t : a.getTransactions()) {
-            s += "  " + (t.getAmount() < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.getAmount()) + "\n";
-            total += t.getAmount();
+            s += "  " + t.getType() + " " + t.getAmount().toString() + "\n";
+            total = total.add(t.getAmount());
         }
-        s += "Total " + toDollars(total);
+        s += "Total " + total.toString();
         return s;
     }
 
