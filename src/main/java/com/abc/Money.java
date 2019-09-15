@@ -40,7 +40,7 @@ public class Money implements Comparable<Money> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Money money = (Money) o;
-        return amount.equals(money.getBigDecimal());
+        return amount.compareTo(money.getBigDecimal()) == 0;
     }
 
     public String toString(){
