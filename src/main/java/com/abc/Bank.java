@@ -2,10 +2,12 @@ package com.abc;
 
 import com.abc.Customer.Customer;
 
-import com.abc.Money;;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Maintains a reference to all of the banks customers and provides summaries for the bank manager
+ */
 public class Bank {
     private List<Customer> customers;
 
@@ -13,15 +15,19 @@ public class Bank {
         customers = new ArrayList<Customer>();
     }
 
+    /**
+     * Add new customer to list of customers for bank
+     * @param customer
+     * @return
+     */
     public Customer addCustomer (Customer customer) {
         customers.add(customer);
         return customer;
     }
 
-    public List<Customer> getCustomers() {
-        return customers;
-    }
-
+    /**
+     * @return Summary of all customers and the number of open accounts
+     */
     public String customerSummary() {
         String summary = "Customer Summary";
         for (Customer c : customers)
@@ -35,20 +41,13 @@ public class Bank {
         return number + " " + (number == 1 ? word : word + "s");
     }
 
+    /**
+     * @return total interest paid to all customers
+     */
     public Money totalInterestPaid() {
         Money total = new Money("0");
-        for(Customer c: customers)
+        for (Customer c : customers)
             total = total.add(c.totalInterestEarned());
         return total;
-    }
-
-    public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
-        }
     }
 }

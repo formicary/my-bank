@@ -9,6 +9,9 @@ import java.util.ArrayList;
 
 import static java.lang.Math.abs;
 
+/**
+ * Generates a statement for a customers set of accounts
+ */
 public class Statement {
     private Customer customer;
 
@@ -16,6 +19,9 @@ public class Statement {
         this.customer = customer;
     }
 
+    /**
+     * @return statement for ALL of a customers accounts
+     */
     public String getStatement() {
         ArrayList<Account> accounts = customer.getAccounts();
         String statement = null;
@@ -29,6 +35,10 @@ public class Statement {
         return statement;
     }
 
+    /**
+     * @param a Account
+     * @return statement for one account
+     */
     private String statementForAccount(Account a) {
         String s = "";
         s = s + a.getName() + "\n";
@@ -41,10 +51,4 @@ public class Statement {
         s += "Total " + total.toString();
         return s;
     }
-
-    private String toDollars(double d){
-        return String.format("$%,.2f", abs(d));
-    }
-
-
 }

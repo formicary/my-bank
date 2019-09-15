@@ -1,11 +1,10 @@
 package com.abc;
 
-import com.abc.DateProvider;
-
-import com.abc.Money;;
-import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * Transaction, stores amount and infers type from +ve/-ve value
+ */
 public class Transaction {
     private static final String WITHDRAWAL = "withdrawal";
     private static final String DEPOSIT = "deposit";
@@ -20,10 +19,16 @@ public class Transaction {
         this.type = (amount.compareTo(new Money("0")) < 0) ? WITHDRAWAL : DEPOSIT;
     }
 
+    /**
+     * @return "withdrawal" if negative amount, otherwise "deposit"
+     */
     public String getType() {
         return type;
     }
 
+    /**
+     * @return amount of transaction
+     */
     public Money getAmount(){
         return amount;
     };
