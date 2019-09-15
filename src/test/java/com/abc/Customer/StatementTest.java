@@ -5,6 +5,7 @@ import com.abc.Account.CheckingAccount;
 import com.abc.Account.SavingsAccount;
 import com.abc.Customer.Customer;
 import com.abc.Customer.Statement;
+import com.abc.Exception.InsufficientBalanceException;
 import com.abc.Transaction;
 import org.junit.Test;
 
@@ -24,8 +25,8 @@ public class StatementTest {
             checkingAccount.processTransaction(new Transaction(100.0));
             savingsAccount.processTransaction(new Transaction(4000));
             savingsAccount.processTransaction(new Transaction(-200));
-        } catch(Exception e) {
-            fail("Exception thrown unexpectedly");
+        } catch(InsufficientBalanceException e) {
+            fail("Insufficient Balance Exception thrown unexpectedly");
         }
 
         assertEquals("Statement for Henry\n" +
