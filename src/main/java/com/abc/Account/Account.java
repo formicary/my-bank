@@ -4,6 +4,7 @@ import com.abc.Exception.InsufficientBalanceException;
 import com.abc.Transaction;
 
 import com.abc.Money;;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,8 @@ abstract public class Account {
      * @return Account name according to type (e.g. Checking/Savings)
      */
     public abstract String getName();
+
+    public abstract ArrayList<InterestRule> getInterestRules();
 
     /**
      * Processes a transaction if sufficient funds are available
@@ -44,7 +47,7 @@ abstract public class Account {
      * @throws IllegalArgumentException thrown when lowerBoundary is less than 0
      * @return
      */
-    protected Money calculateInterest(Money balance, Money rate, Money lowerBoundary) throws IllegalArgumentException{
+    protected Money calculateInterest(Money balance, BigDecimal rate, Money lowerBoundary) throws IllegalArgumentException{
         if(lowerBoundary.compareTo(new Money("0.00")) < 0)
             throw new IllegalArgumentException("Lower boundary must be positive!");
 
@@ -63,8 +66,8 @@ abstract public class Account {
      * @return
      * @throws IllegalArgumentException thrown when lowerBoundary is less than 0 OR upperBoundary < lowerBoundary
      */
-    protected Money calculateInterest(Money balance, Money rate, Money lowerBoundary,
-                                           Money upperBoundary) throws IllegalArgumentException {
+    protected Money calculateInterest(Money balance, BigDecimal rate, Money lowerBoundary,
+                                      Money upperBoundary) throws IllegalArgumentException {
         if(upperBoundary.compareTo(lowerBoundary) != 1)
             throw new IllegalArgumentException("Upper boundary must be greater than lower boundary!");
         if(lowerBoundary.compareTo(new Money("0.00")) < 0)

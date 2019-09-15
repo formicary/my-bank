@@ -47,8 +47,8 @@ public class Money implements Comparable<Money> {
      * @param mutiplicator
      * @return
      */
-    public Money multiply(Money mutiplicator){
-        return new Money(amount.multiply(mutiplicator.getBigDecimal()));
+    public Money multiply(BigDecimal mutiplicator){
+        return new Money(amount.multiply(mutiplicator));
     }
 
     /**
