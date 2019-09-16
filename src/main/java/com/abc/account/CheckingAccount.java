@@ -2,6 +2,7 @@ package com.abc.account;
 
 import com.abc.Money;
 import com.abc.account.interest.InterestRule;
+import com.abc.account.interest.ValueBasedInterestRule;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ public class CheckingAccount extends Account {
 
     public CheckingAccount(){
         super();
-        interestRules.add(new InterestRule(new BigDecimal("0.001"), new Money("0")));
+        interestRules.add(new ValueBasedInterestRule(new BigDecimal("0.001"), new Money("0")));
     }
 
     @Override

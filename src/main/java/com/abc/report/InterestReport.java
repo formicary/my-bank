@@ -22,9 +22,8 @@ public class InterestReport {
         Money total = new Money("0");
         for (Customer c : customers) {
             for (Account a : c.getAccounts()) {
-                Money balance = a.getBalance();
                 for (InterestRule r : a.getInterestRules()){
-                    total = total.add(r.calculateInterest(balance));
+                    total = total.add(r.calculateInterest(a));
                 }
             }
         }

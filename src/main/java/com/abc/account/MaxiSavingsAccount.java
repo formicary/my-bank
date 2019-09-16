@@ -1,7 +1,9 @@
 package com.abc.account;
 
 import com.abc.Money;
-import com.abc.account.interest.InterestRule;;import java.math.BigDecimal;
+import com.abc.account.interest.InterestRule;
+import com.abc.account.interest.TimeBasedInterestRule;
+import com.abc.account.interest.ValueBasedInterestRule;;import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class MaxiSavingsAccount extends Account {
@@ -11,20 +13,12 @@ public class MaxiSavingsAccount extends Account {
 
     public MaxiSavingsAccount(){
         super();
-        interestRules.add(new InterestRule(
-                new BigDecimal("0.02"),
-                new Money("0"),
-                new Money("1000")
-        ));
-        interestRules.add(new InterestRule(
+        interestRules.add(new TimeBasedInterestRule(
+                new BigDecimal("0.001"),
                 new BigDecimal("0.05"),
-                new Money("1000"),
-                new Money("2000")
-        ));
-        interestRules.add(new InterestRule(
-                new BigDecimal("0.1"),
-                new Money("2000")
-        ));
+                10
+                )
+        );
     }
 
     public String getName() {

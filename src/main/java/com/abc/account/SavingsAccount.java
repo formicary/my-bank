@@ -2,6 +2,7 @@ package com.abc.account;
 
 import com.abc.Money;
 import com.abc.account.interest.InterestRule;
+import com.abc.account.interest.ValueBasedInterestRule;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -13,12 +14,12 @@ public class SavingsAccount extends Account {
 
     public SavingsAccount(){
         super();
-        interestRules.add(new InterestRule(
+        interestRules.add(new ValueBasedInterestRule(
                 new BigDecimal("0.001"),
                 new Money("0"),
                 new Money("1000")
         ));
-        interestRules.add(new InterestRule(
+        interestRules.add(new ValueBasedInterestRule(
                 new BigDecimal("0.002"),
                 new Money("1000")
         ));
