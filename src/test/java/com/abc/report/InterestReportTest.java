@@ -1,6 +1,5 @@
 package com.abc.report;
 
-import com.abc.DateProvider;
 import com.abc.account.Account;
 import com.abc.account.CheckingAccount;
 import com.abc.account.MaxiSavingsAccount;
@@ -10,8 +9,10 @@ import com.abc.exception.InsufficientBalanceException;
 import com.abc.Money;
 import com.abc.Transaction;
 import org.junit.Test;
+import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import static org.junit.Assert.*;
@@ -75,15 +76,19 @@ public class InterestReportTest {
         ArrayList<Customer> customers = new ArrayList<Customer>();
         customers.add(bill);
 
+        Transaction mockTransaction = mock(Transaction.class);
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, -11);
+        Date fakeDate = calendar.getTime();
+        when(mockTransaction.getAmount()).thenReturn(new Money("3000"));
+        when(mockTransaction.getTransactionDate()).thenReturn(fakeDate);
+        when(mockTransaction.getType()).thenReturn("deposit");
         try{
-            maxiSavingsAccount.processTransaction(new Transaction(new Money("3000")));
+            maxiSavingsAccount.processTransaction(mockTransaction);
         } catch(InsufficientBalanceException e) {
             fail("exception thrown unexpectedly");
         }
-
-        Date now = DateProvider.getInstance().now();
-        now.setTime(now.getTime()- 10 * 86400000);
-        assertEquals(new Money("3"), new InterestReport(customers).totalInterestPaid());
+        assertEquals(new Money("150"), new InterestReport(customers).totalInterestPaid());
     }
 
 }

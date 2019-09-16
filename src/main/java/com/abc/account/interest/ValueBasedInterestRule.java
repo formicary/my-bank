@@ -6,6 +6,9 @@ import com.abc.account.Account;
 import java.math.BigDecimal;
 import java.util.Optional;
 
+/**
+ * Calculates interest on an account for a balance between a given range
+ */
 public class ValueBasedInterestRule extends InterestRule {
 
     private Optional<Money> upperBoundary = Optional.empty();

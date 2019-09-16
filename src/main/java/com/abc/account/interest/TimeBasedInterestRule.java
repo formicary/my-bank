@@ -8,6 +8,9 @@ import com.abc.account.Account;
 import java.math.BigDecimal;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Calculates interest based on the number of days since the last transaction
+ */
 public class TimeBasedInterestRule extends InterestRule {
 
     private int daysLimit;
