@@ -1,4 +1,4 @@
-package com.abc.Account;
+package com.abc.account;
 
 import com.abc.Money;
 import org.junit.Test;

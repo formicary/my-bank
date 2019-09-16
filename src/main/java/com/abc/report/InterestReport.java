@@ -1,11 +1,10 @@
 package com.abc.report;
 
-import com.abc.Account.Account;
-import com.abc.Account.InterestRule;
-import com.abc.Customer.Customer;
+import com.abc.account.Account;
+import com.abc.account.InterestRule;
+import com.abc.customer.Customer;
 import com.abc.Money;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class InterestReport {

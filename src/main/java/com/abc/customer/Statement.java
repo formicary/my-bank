@@ -1,6 +1,6 @@
-package com.abc.Customer;
+package com.abc.customer;
 
-import com.abc.Account.Account;
+import com.abc.account.Account;
 import com.abc.Money;
 import com.abc.Transaction;
 
@@ -31,12 +31,12 @@ public class Statement {
             statement += "\n" + statementForAccount(a) + "\n";
             total = total.add(a.getBalance());
         }
-        statement += "\nTotal In All Account " + total.toString();
+        statement += "\nTotal In All account " + total.toString();
         return statement;
     }
 
     /**
-     * @param a Account
+     * @param a account
      * @return statement for one account
      */
     private String statementForAccount(Account a) {

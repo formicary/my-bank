@@ -1,11 +1,11 @@
-package com.abc.Account;
+package com.abc.account;
 
 import com.abc.Money;;import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class MaxiSavingsAccount extends Account {
 
-    private static final String ACCOUNT_NAME = "Maxi-Savings Account";
+    private static final String ACCOUNT_NAME = "Maxi-Savings account";
     private ArrayList<InterestRule> interestRules = new ArrayList<InterestRule>();
 
     public MaxiSavingsAccount(){

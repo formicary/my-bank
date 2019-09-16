@@ -1,8 +1,8 @@
-package com.abc.Customer;
+package com.abc.customer;
 
-import com.abc.Account.Account;
+import com.abc.account.Account;
 
-import com.abc.Money;;
+;
 import java.util.ArrayList;
 
 import static java.lang.Math.abs;

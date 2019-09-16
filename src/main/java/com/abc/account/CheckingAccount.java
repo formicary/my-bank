@@ -1,4 +1,4 @@
-package com.abc.Account;
+package com.abc.account;
 
 import com.abc.Money;
 import java.math.BigDecimal;
@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class CheckingAccount extends Account {
 
-    private static final String ACCOUNT_NAME = "Checking Account";
+    private static final String ACCOUNT_NAME = "Checking account";
     private ArrayList<InterestRule> interestRules = new ArrayList<InterestRule>();
 
     public CheckingAccount(){

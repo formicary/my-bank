@@ -1,7 +1,7 @@
-package com.abc.Exception;
+package com.abc.exception;
 
 /**
- * Exception for when an account has inssufficient balance
+ * exception for when an account has inssufficient balance
  */
 public class InsufficientBalanceException extends Exception {
 

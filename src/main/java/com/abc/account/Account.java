@@ -1,10 +1,9 @@
-package com.abc.Account;
+package com.abc.account;
 
-import com.abc.Exception.InsufficientBalanceException;
+import com.abc.exception.InsufficientBalanceException;
 import com.abc.Transaction;
 
 import com.abc.Money;;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +22,7 @@ abstract public class Account {
     }
 
     /**
-     * @return Account name according to type (e.g. Checking/Savings)
+     * @return account name according to type (e.g. Checking/Savings)
      */
     public abstract String getName();
 

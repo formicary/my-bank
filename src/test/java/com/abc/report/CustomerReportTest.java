@@ -1,8 +1,7 @@
 package com.abc.report;
 
-import com.abc.Account.CheckingAccount;
-import com.abc.Bank;
-import com.abc.Customer.Customer;
+import com.abc.account.CheckingAccount;
+import com.abc.customer.Customer;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -18,6 +17,6 @@ public class CustomerReportTest {
         customers.add(john);
         john.addAccount(new CheckingAccount());
 
-        assertEquals("Customer Summary\n - John (1 account)", new CustomerReport(customers).getCustomerReport());
+        assertEquals("customer Summary\n - John (1 account)", new CustomerReport(customers).getCustomerReport());
     }
 }

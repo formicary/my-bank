@@ -1,4 +1,4 @@
-package com.abc.Account;
+package com.abc.account;
 
 import com.abc.Money;
 
@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class SavingsAccount extends Account {
 
-    private static final String ACCOUNT_NAME = "Savings Account";
+    private static final String ACCOUNT_NAME = "Savings account";
     private ArrayList<InterestRule> interestRules = new ArrayList<InterestRule>();
 
     public SavingsAccount(){

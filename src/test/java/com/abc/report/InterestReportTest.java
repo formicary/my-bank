@@ -1,12 +1,11 @@
 package com.abc.report;
 
-import com.abc.Account.Account;
-import com.abc.Account.CheckingAccount;
-import com.abc.Account.MaxiSavingsAccount;
-import com.abc.Account.SavingsAccount;
-import com.abc.Bank;
-import com.abc.Customer.Customer;
-import com.abc.Exception.InsufficientBalanceException;
+import com.abc.account.Account;
+import com.abc.account.CheckingAccount;
+import com.abc.account.MaxiSavingsAccount;
+import com.abc.account.SavingsAccount;
+import com.abc.customer.Customer;
+import com.abc.exception.InsufficientBalanceException;
 import com.abc.Money;
 import com.abc.Transaction;
 import org.junit.Test;
@@ -26,7 +25,7 @@ public class InterestReportTest {
         try{
             checkingAccount.processTransaction(new Transaction(new Money("100")));
         } catch(InsufficientBalanceException e) {
-            fail("Exception thrown unexpectedly");
+            fail("exception thrown unexpectedly");
         }
         assertEquals(new Money("0.1"), new InterestReport(customers).totalInterestPaid());
     }
@@ -42,7 +41,7 @@ public class InterestReportTest {
         try{
             checkingAccount.processTransaction(new Transaction(new Money("1500")));
         } catch(InsufficientBalanceException e) {
-            fail("Exception thrown unexpectedly");
+            fail("exception thrown unexpectedly");
         }
 
         assertEquals(new Money("2"), new InterestReport(customers).totalInterestPaid());
@@ -59,7 +58,7 @@ public class InterestReportTest {
         try{
             checkingAccount.processTransaction(new Transaction(new Money("3000")));
         } catch(InsufficientBalanceException e) {
-            fail("Exception thrown unexpectedly");
+            fail("exception thrown unexpectedly");
         }
 
         assertEquals(new Money("170"), new InterestReport(customers).totalInterestPaid());

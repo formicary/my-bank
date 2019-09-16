@@ -1,6 +1,6 @@
 package com.abc.report;
 
-import com.abc.Customer.Customer;
+import com.abc.customer.Customer;
 
 import java.util.ArrayList;
 
@@ -17,7 +17,7 @@ public class CustomerReport {
      * @return Summary of all customers and the number of open accounts
      */
     public String getCustomerReport() {
-        String summary = "Customer Summary";
+        String summary = "customer Summary";
         for (Customer c : customers)
             summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
         return summary;

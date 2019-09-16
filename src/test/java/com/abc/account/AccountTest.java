@@ -1,6 +1,6 @@
-package com.abc.Account;
+package com.abc.account;
 
-import com.abc.Exception.InsufficientBalanceException;
+import com.abc.exception.InsufficientBalanceException;
 import com.abc.Transaction;
 import org.junit.Test;
 
@@ -27,7 +27,7 @@ public class AccountTest {
                 account.processTransaction(t);
             }
         } catch(InsufficientBalanceException e) {
-            fail("Unexpected Insufficient Balance Exception");
+            fail("Unexpected Insufficient Balance exception");
         }
         assertEquals(transactions, account.getTransactions());
     }
@@ -39,12 +39,12 @@ public class AccountTest {
         try { // Check exception is NOT called on deposit
             account.processTransaction(new Transaction(new Money("10")));
         } catch(InsufficientBalanceException e){
-            fail("Unexpected Insufficient Balance Exception");
+            fail("Unexpected Insufficient Balance exception");
         }
         try { // Check exception is NOT called when balance is 0
             account.processTransaction(new Transaction(new Money("-10")));
         } catch(InsufficientBalanceException e){
-            fail("Unexpected Insufficient Balance Exception");
+            fail("Unexpected Insufficient Balance exception");
         }
         try { // Check exception IS called when balance would be negative
             account.processTransaction(new Transaction(new Money("-1")));

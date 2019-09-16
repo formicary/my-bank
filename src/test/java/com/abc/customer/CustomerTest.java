@@ -1,10 +1,8 @@
-package com.abc.Customer;
+package com.abc.customer;
 
-import com.abc.Account.CheckingAccount;
-import com.abc.Account.MaxiSavingsAccount;
-import com.abc.Account.SavingsAccount;
-import com.abc.Customer.Customer;
-import org.junit.Ignore;
+import com.abc.account.CheckingAccount;
+import com.abc.account.MaxiSavingsAccount;
+import com.abc.account.SavingsAccount;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -29,9 +27,9 @@ public class CustomerTest {
         oscar.addAccount(new SavingsAccount());
         oscar.addAccount(new CheckingAccount());
         oscar.addAccount(new MaxiSavingsAccount());
-        assertEquals("Savings Account", oscar.getAccounts().get(0).getName());
-        assertEquals("Checking Account", oscar.getAccounts().get(1).getName());
-        assertEquals("Maxi-Savings Account", oscar.getAccounts().get(2).getName());
+        assertEquals("Savings account", oscar.getAccounts().get(0).getName());
+        assertEquals("Checking account", oscar.getAccounts().get(1).getName());
+        assertEquals("Maxi-Savings account", oscar.getAccounts().get(2).getName());
     }
 
     public void getName() {

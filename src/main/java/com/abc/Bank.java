@@ -1,9 +1,8 @@
 package com.abc;
 
-import com.abc.Customer.Customer;
+import com.abc.customer.Customer;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Maintains a reference to all of the banks customers
