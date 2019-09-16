@@ -1,0 +1,11 @@
+Refactoring:
+- Implemented Account types as concrete cases of an abstract class account
+- Moved responsibility for account interest calculation to InterestRule class
+- created new Statement class for generating customer statements
+- Created CustomerReport class to be responsible for customerSummary's (instead of Bank)
+- Removed intermediate interest calc from Customer and made InterestReport class soley responsible for calculating total interest for all customers
+- Implemented Money class wrapping BigDecimal
+- Improve and fix tests
+New Features:
+- Implemented new Maxi-Save interest rule and tests via TimeBasedInterestRule class.
+- Implemented transfers and tests via Transfer class.
