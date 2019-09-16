@@ -42,8 +42,9 @@ public class InterestRule {
     public Money calculateInterest(Money balance){
         if (balance.compareTo(lowerBoundary) < 1)
             return new Money("0.00");
-        if (upperBoundary.isEmpty())
+        if (!upperBoundary.isPresent())
             return balance.subtract(lowerBoundary).multiply(rate);
+
         if (balance.compareTo(upperBoundary.get()) < 1)
             return balance.subtract(lowerBoundary).multiply(rate);
         return upperBoundary.get().subtract(lowerBoundary).multiply(rate);

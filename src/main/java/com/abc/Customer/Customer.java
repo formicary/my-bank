@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import static java.lang.Math.abs;
 
 /**
- * This class stores a reference to a customers accounts and provides helper functions for aggregate statistics
+ * This class stores a reference to a customers accounts
  */
 public class Customer {
     private String name;
@@ -48,14 +48,4 @@ public class Customer {
         return accounts;
     }
 
-    /**
-     * helper function to calculate interest across customers accounts
-     * @return
-     */
-    public Money totalInterestEarned() {
-        Money total = new Money("0");
-        for (Account a : accounts)
-            total = total.add(a.getTotalInterestEarned());
-        return total;
-    }
 }

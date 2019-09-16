@@ -1,0 +1,34 @@
+package com.abc.report;
+
+import com.abc.Account.Account;
+import com.abc.Account.InterestRule;
+import com.abc.Customer.Customer;
+import com.abc.Money;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
+public class InterestReport {
+
+    private ArrayList<Customer> customers;
+
+    public InterestReport(ArrayList<Customer> customers) {
+        this.customers = customers;
+    }
+
+    /**
+     * @return total interest paid to all customers
+     */
+    public Money totalInterestPaid() {
+        Money total = new Money("0");
+        for (Customer c : customers) {
+            for (Account a : c.getAccounts()) {
+                Money balance = a.getBalance();
+                for (InterestRule r : a.getInterestRules()){
+                    total = total.add(r.calculateInterest(balance));
+                }
+            }
+        }
+        return total;
+    }
+}

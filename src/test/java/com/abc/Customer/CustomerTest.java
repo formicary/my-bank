@@ -33,4 +33,9 @@ public class CustomerTest {
         assertEquals("Checking Account", oscar.getAccounts().get(1).getName());
         assertEquals("Maxi-Savings Account", oscar.getAccounts().get(2).getName());
     }
+
+    public void getName() {
+        Customer oscar = new Customer("oscar");
+        assertEquals("oscar", oscar.getName());
+    }
 }
