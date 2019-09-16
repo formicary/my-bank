@@ -5,7 +5,7 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 /**
- * Wrapper for BigInteger to improve consistency
+ * Wrapper for BigDecimal to improve consistency
  */
 public class Money implements Comparable<Money> {
     private BigDecimal amount;
