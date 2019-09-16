@@ -33,4 +33,11 @@ public class Transaction {
         return amount;
     };
 
+    /**
+     * @return date transaction was made
+     */
+    public Date getTransactionDate(){
+        return transactionDate;
+    }
+
 }

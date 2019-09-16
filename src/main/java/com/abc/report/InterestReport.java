@@ -1,7 +1,7 @@
 package com.abc.report;
 
 import com.abc.account.Account;
-import com.abc.account.InterestRule;
+import com.abc.account.interest.InterestRule;
 import com.abc.customer.Customer;
 import com.abc.Money;
 

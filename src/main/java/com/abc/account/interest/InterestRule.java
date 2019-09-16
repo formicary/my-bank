@@ -1,4 +1,4 @@
-package com.abc.account;
+package com.abc.account.interest;
 
 import com.abc.Money;
 
@@ -9,7 +9,7 @@ import java.util.Optional;
  * Defines and interest rule and calculates amount of interest applied to a balance for that rule
  */
 public class InterestRule {
-
+    
     private Optional<Money> upperBoundary = Optional.empty();
     private Money lowerBoundary;
     private BigDecimal rate;

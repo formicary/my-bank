@@ -1,6 +1,7 @@
 package com.abc.account;
 
 import com.abc.Money;
+import com.abc.account.interest.InterestRule;
 import org.junit.Test;
 
 import java.math.BigDecimal;
