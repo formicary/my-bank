@@ -45,6 +45,7 @@ public class Customer {
         statement += "\nTotal In All Accounts " + toDollars(total);
         return statement;
     }
+    
 
     private String statementForAccount(Account a) {
         String s = "";
@@ -71,6 +72,7 @@ public class Customer {
         s += "Total " + toDollars(total);
         return s;
     }
+
 
     private void transferBetweenAccounts(Account fromAccount, Account toAccount, double amount){
         fromAccount.withdraw(amount);

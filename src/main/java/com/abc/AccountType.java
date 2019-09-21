@@ -1,5 +1,5 @@
 package com.abc;
 
 public enum AccountType {
-	CHECKING, SAVINGS, MAXI_SAVINGS;
+	CHECKING("Checking"), SAVINGS("Savings"), MAXI_SAVINGS("Maxi Savings");
 }
