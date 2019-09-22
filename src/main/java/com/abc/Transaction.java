@@ -13,10 +13,20 @@ public class Transaction {
         this.transactionDate = Calendar.getInstance().getTime();
     }
 
+    /**
+    * Gets the amount that has been transacted.
+    *
+    * @return The amount as a double.
+    */
     public double getAmount(){
     	return amount;
     }
 
+    /**
+    * Gets the exact time of the transaction.
+    *
+    * @return The transaction time, as type Date.
+    */
     public Date getTransactionDate(){
     	return transactionDate;
     }

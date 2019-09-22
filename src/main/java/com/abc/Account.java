@@ -16,6 +16,27 @@ public class Account {
     }
 
     /**
+    * Sums the amounts of every transaction in the account to get the balance.
+    *
+    * @return The net amount that has been transacted.
+    */
+    public double getBalance() {
+        double balance = 0.0d;
+        for (Transaction t : transactions)
+            balance += t.getAmount();
+        return balance;
+    }
+
+    /**
+    * Gets the type of the account.
+    *
+    * @return The account type: Checking, Savings or Maxi Savings.
+    */
+    public AccountType getAccountType() {
+        return accountType;
+    }
+
+    /**
     * Deposits an amount onto the account.
     *
     * @param amount The amount to be deposited.
@@ -33,8 +54,10 @@ public class Account {
     * @param amount The amount to be withdrawn.
     */
     public void withdraw(double amount) {
+        double balance = getBalance();
         if (amount <= 0)
             throw new IllegalArgumentException("Amount must be greater than zero.");
+        else if ()
         else
             transactions.add(new Transaction(-amount));
     }
@@ -46,7 +69,7 @@ public class Account {
     */
     public double interestEarned() {
         double amount = sumTransactions();
-        switch(accountType){
+        switch(accountType) {
 
             case SAVINGS:
                 // Rate of 0.1% for the first $1,000 and then 0.2%
@@ -68,27 +91,6 @@ public class Account {
             default:
                 return amount * 0.001;
         }
-    }
-
-    /**
-    * Sums the amounts of every transaction in the account.
-    *
-    * @return The net amount that has been transacted.
-    */
-    public double sumTransactions() {
-        double amount = 0.0d;
-        for (Transaction t : transactions)
-            amount += t.amount;
-        return amount;
-    }
-
-    /**
-    * Gets the type of the account.
-    *
-    * @return The account type: Checking, Savings or Maxi Savings.
-    */
-    public AccountType getAccountType() {
-        return accountType;
     }
 
     /**
