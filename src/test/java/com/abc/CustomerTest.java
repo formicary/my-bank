@@ -7,8 +7,14 @@ import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
 
+    @Test
+    public void customerNameIsCorrect(){
+        Customer oscar = new Customer("Oscar");
+        assertEquals(oscar.getName(), "Oscar");
+    }
+
     @Test //Test customer statement generation
-    public void testApp(){
+    public void customerStatementPrintsCorrectly(){
 
         Account checkingAccount = new Account(Account.CHECKING);
         Account savingsAccount = new Account(Account.SAVINGS);
@@ -35,23 +41,41 @@ public class CustomerTest {
 
     @Test
     public void testOneAccount(){
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
+        Customer oscar = new Customer("Oscar");
+        oscar.openAccount(new Account(Account.CHECKING));
         assertEquals(1, oscar.getNumberOfAccounts());
     }
 
     @Test
-    public void testTwoAccount(){
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
+    public void testTwoAccounts(){
+        Customer oscar = new Customer("Oscar");
         oscar.openAccount(new Account(Account.CHECKING));
+        oscar.openAccount(new Account(Account.SAVINGS));
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
-    @Ignore
-    public void testThreeAcounts() {
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
+    @Test
+    public void testThreeAccounts() {
+        Customer oscar = new Customer("Oscar");
         oscar.openAccount(new Account(Account.CHECKING));
+        oscar.openAccount(new Account(Account.SAVINGS));
+        oscar.openAccount(new Account(Account.MAXI_SAVINGS));
         assertEquals(3, oscar.getNumberOfAccounts());
+    }
+
+    @Test
+    public void transfersCorrectlyBetweenTwoAccounts(){
+        Customer oscar = new Customer("Oscar");
+        oscar.openAccount(new Account(Account.CHECKING));
+        oscar.openAccount(new Account(Account.SAVINGS));
+
+        Account firstAccount = oscar.getAccounts().get(0);
+        Account secondAccount = oscar.getAccounts().get(1);
+
+        firstAccount.deposit(100.0);
+        oscar.transferBetweenAccounts(firstAccount, secondAccount, 70.0);
+
+        assertEquals(firstAccount.getBalance(), 30);
+        assertEquals(secondAccount.getBalance(), 70);
     }
 }
