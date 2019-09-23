@@ -24,6 +24,15 @@ public class Customer {
     }
 
     /**
+    * Gets the accounts opened by the customer.
+    *
+    * @return The list of accounts.
+    */
+    public List<Transaction> getAccounts() {
+        return accounts;
+    }
+
+    /**
     * Gets how many accounts the customer has opened so far.
     *
     * @return The number of accounts of the customer.
