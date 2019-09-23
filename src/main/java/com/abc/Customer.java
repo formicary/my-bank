@@ -6,6 +6,9 @@ import java.util.List;
 import static java.lang.Math.abs;
 
 public class Customer {
+
+    //TODO Should extend from a User class as the addition of a bank manager suggests more than one type of user
+
     private String name;
     private List<Account> accounts;
 

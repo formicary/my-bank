@@ -5,6 +5,8 @@ import java.util.List;
 
 public class Account {
 
+    //TODO Change class into abstract or interface class and split the other account classes into sub classes
+
     public static final int CHECKING = 0;
     public static final int SAVINGS = 1;
     public static final int MAXI_SAVINGS = 2;
@@ -33,6 +35,7 @@ public void withdraw(double amount) {
     }
 }
 
+//TODO can be improved using subclasses, using the same method to suit the individual need
     public double interestEarned() {
         double amount = sumTransactions();
         switch(accountType){

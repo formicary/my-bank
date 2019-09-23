@@ -34,6 +34,7 @@ public class Bank {
         return total;
     }
 
+    //TODO Is this method needed?
     public String getFirstCustomer() {
         try {
             customers = null;
