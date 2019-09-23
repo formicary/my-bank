@@ -58,7 +58,7 @@ public class Bank {
     */
     public String getFirstCustomer() {
         if (customers.isEmpty())
-            return "No customers."
+            return "No customers.";
         else
             return customers.get(0).getName();
     }

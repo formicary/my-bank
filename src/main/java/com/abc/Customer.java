@@ -78,20 +78,20 @@ public class Customer {
 
        // Translate to account type name
         switch(a.getAccountType()){
-            case AccountType.CHECKING:
+            case CHECKING:
                 s += "Checking Account\n";
                 break;
-            case AccountType.SAVINGS:
+            case SAVINGS:
                 s += "Savings Account\n";
                 break;
-            case AccountType.MAXI_SAVINGS:
+            case MAXI_SAVINGS:
                 s += "Maxi Savings Account\n";
                 break;
         }
 
         // Total up all the transactions
         double total = 0.0d;
-        for (Transaction t : a.transactions) {
+        for (Transaction t : a.getTransactions()) {
             s += "  " + (t.getAmount() < 0 ? "withdrawal" : "deposit") + " " + dollarFormat(t.getAmount()) + "\n";
             total += t.getAmount();
         }
@@ -111,7 +111,7 @@ public class Customer {
             fromAccount.withdraw(amount);
             toAccount.deposit(amount);
         } else {
-            throw new IllegalArgumentException("The transfer amount cannot be negative.")
+            throw new IllegalArgumentException("The transfer amount cannot be negative.");
         }
     }
 

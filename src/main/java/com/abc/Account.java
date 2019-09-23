@@ -37,6 +37,15 @@ public class Account {
     }
 
     /**
+    * Gets the transactions made by the account.
+    *
+    * @return The list of transactions.
+    */
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    /**
     * Deposits an amount onto the account.
     *
     * @param amount The amount to be deposited.
@@ -57,7 +66,8 @@ public class Account {
         double balance = getBalance();
         if (amount <= 0)
             throw new IllegalArgumentException("Amount must be greater than zero.");
-        else if ()
+        else if (balance < amount)
+            throw new IllegalArgumentException("Not enough funds for withdrawal.");
         else
             transactions.add(new Transaction(-amount));
     }
@@ -68,41 +78,82 @@ public class Account {
     * @return The amount earned from the interest rate.
     */
     public double interestEarned() {
-        double amount = sumTransactions();
+        Transaction prevTransaction = transactions.get(0);
+        double balance = prevTransaction.getAmount();
+        double interest = 0.0d;
+
+        // Accrue interest for every day since the first transaction
+        for (int i = 1; i < transactions.size(); i++) {
+            int daysInBetween = daysInBetween(prevTransaction.getDate(), transactions.get(i).getDate());
+
+            switch(accountType) {
+
+                case SAVINGS:
+                    // Rate of 0.1% for the first $1,000 and then 0.2%
+                    if (balance <= 1000)
+                        interest += balance * 0.001 * (daysInBetween / 365);
+                    else
+                        interest += 1 + (balance-1000) * 0.002 * (daysInBetween / 365);
+                    break;
+
+                case MAXI_SAVINGS:
+                    // Rate of 0.1% if there was a withdrawal in the last 10 days, otherwise 5%
+                    if (prevTransaction.getAmount() < 0 && daysInBetween < 10)
+                        interest += balance * 0.001 * (daysInBetween / 365);
+                    else
+                        interest += balance * 0.5 * (daysInBetween / 365);
+                    break;
+            
+                default:
+                    // Flat rate of 1%
+                    interest += balance * 0.001 * (daysInBetween / 365);
+                }
+
+            balance += transactions.get(i).getAmount();
+            prevTransaction = transactions.get(i);
+        }
+
+        // Also accrue the interest since the last transaction
+        Date now = Calendar.getInstance().getTime();
+        int daysSinceLast = daysInBetween(prevTransaction.getDate(), now);
+        
         switch(accountType) {
 
             case SAVINGS:
                 // Rate of 0.1% for the first $1,000 and then 0.2%
-                if (amount <= 1000)
-                    return amount * 0.001;
+                if (balance <= 1000)
+                    interest += balance * 0.001 * (daysSinceLast / 365);
                 else
-                    return 1 + (amount-1000) * 0.002;
+                    interest += 1 + (balance-1000) * 0.002 * (daysSinceLast / 365);
+                break;
 
             case MAXI_SAVINGS:
-                Date now = Calendar.getInstance().getTime();
-                for (int i = transactions.size(); i>=0; i--) {
-                    // If there has been a withdrawal within the last 10 days, the rate is 0.1%
-                    Transaction t = transactions[i];
-                    if (t.getAmount() < 0 && daysBetween(t.getTransactionDate(), now) < 10)
-                        return amount * 0.001;
-                }
-                return amount * 0.5;
-
+                // Rate of 0.1% if there was a withdrawal in the last 10 days, otherwise 5%
+                if (prevTransaction.getAmount() < 0 && daysSinceLast < 10)
+                    interest += balance * 0.001 * (daysSinceLast / 365);
+                else
+                    interest += balance * 0.5 * (daysSinceLast / 365);
+                break;
+        
             default:
-                return amount * 0.001;
+                // Flat rate of 1%
+                interest += balance * 0.001 * (daysSinceLast / 365);
         }
+
+        return interest;
     }
 
     /**
     * Gets the number of days between two dates.
     *
     * @param firstDate The first date.
-    * @param secondData The date to be compared with the first one.
+    * @param secondDate The date to be compared with the first one.
     * @return The time difference between the two dates, given in days.
     */
-    public AccountType daysBetween(Date firstDate, Date secondDate) {
-        long diff_ms = secondDate.getTime() - firstDate.getTime();
-        return diff_ms / (1000 * 60 * 60 * 24);  // Convert from milliseconds to days
+    public int daysInBetween(Date firstDate, Date secondDate) {
+        long diff_ms = secondDate.getTime() - firstDate.getTime();  // Difference in milliseconds
+        long diff_days = diff_ms / (1000 * 60 * 60 * 24);  // Convert from milliseconds to days
+        return (int) diff_days;
     }
 
 }

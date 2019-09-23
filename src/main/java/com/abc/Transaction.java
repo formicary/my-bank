@@ -27,7 +27,7 @@ public class Transaction {
     *
     * @return The transaction time, as type Date.
     */
-    public Date getTransactionDate(){
+    public Date getDate(){
     	return transactionDate;
     }
 
