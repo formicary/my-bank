@@ -129,7 +129,7 @@ public class Customer {
     *
     * @return The formatted String.
     */
-    private String dollarFormat(double d){
+    private String dollarFormat(double d) {
         return String.format("$%,.2f", abs(d));
     }
 
