@@ -1,23 +1,22 @@
 package com.abc.users;
 
-import com.abc.Transaction;
 import com.abc.accounts.Account;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Math.abs;
+import static com.abc.util.CurrencyFormatter.toDollars;
 
 public class Customer {
 
-    //TODO Should extend from a User class as the addition of a bank manager suggests more than one type of user
+    //TODO May extend from a User class as the addition of a bank manager suggests more than one type of user
 
     private String name;
     private List<Account> accounts;
 
     public Customer(String name) {
         this.name = name;
-        this.accounts = new ArrayList<Account>();
+        this.accounts = new ArrayList<>();
     }
 
     public String getName() {
@@ -34,38 +33,17 @@ public class Customer {
     }
 
     public double totalInterestEarned() {
-        double total = 0;
-        for (Account a : accounts)
-            total += a.interestEarned();
-        return total;
+        return accounts.stream().mapToDouble(Account::interestEarned).sum();
     }
 
     public String getStatement() {
-        String statement = null;
-        statement = "Statement for " + name + "\n";
+        StringBuilder statement = new StringBuilder("Statement for " + name + "\n");
         double total = 0.0;
         for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
+            statement.append("\n").append(a.getStatement()).append("\n");
             total += a.sumTransactions();
         }
-        statement += "\nTotal In All Accounts " + toDollars(total);
-        return statement;
-    }
-
-    private String statementForAccount(Account a) {
-        String s = a.toString();
-
-        //Now total up all the transactions
-        double total = 0.0;
-        for (Transaction t : a.getTransactions()) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
-        }
-        s += "Total " + toDollars(total);
-        return s;
-    }
-
-    private String toDollars(double d){
-        return String.format("$%,.2f", abs(d));
+        statement.append("\nTotal In All Accounts ").append(toDollars(total));
+        return statement.toString();
     }
 }
