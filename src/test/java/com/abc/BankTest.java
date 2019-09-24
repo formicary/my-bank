@@ -1,5 +1,10 @@
 package com.abc;
 
+import com.abc.accounts.Account;
+import com.abc.accounts.Checkings;
+import com.abc.accounts.MaxiSavings;
+import com.abc.accounts.Savings;
+import com.abc.users.Customer;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -11,7 +16,7 @@ public class BankTest {
     public void customerSummary() {
         Bank bank = new Bank();
         Customer john = new Customer("John");
-        john.openAccount(new Account(Account.CHECKING));
+        john.openAccount(new Checkings());
         bank.addCustomer(john);
 
         assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
@@ -20,7 +25,7 @@ public class BankTest {
     @Test
     public void checkingAccount() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.CHECKING);
+        Account checkingAccount = new Checkings();
         Customer bill = new Customer("Bill").openAccount(checkingAccount);
         bank.addCustomer(bill);
 
@@ -32,7 +37,7 @@ public class BankTest {
     @Test
     public void savings_account() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.SAVINGS);
+        Account checkingAccount = new Savings();
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
         checkingAccount.deposit(1500.0);
@@ -43,10 +48,10 @@ public class BankTest {
     @Test
     public void maxi_savings_account() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+        Account maxiSavingsAccount = new MaxiSavings();
+        bank.addCustomer(new Customer("Bill").openAccount(maxiSavingsAccount));
 
-        checkingAccount.deposit(3000.0);
+        maxiSavingsAccount.deposit(3000.0);
 
         assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }

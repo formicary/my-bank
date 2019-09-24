@@ -1,11 +1,11 @@
 package com.abc;
 
-import java.util.Calendar;
+import com.abc.util.DateProvider;
+
 import java.util.Date;
 
 public class Transaction {
 
-    //TODO Move to util folder or add to existing class
     public final double amount;
 
     private Date transactionDate;
