@@ -31,6 +31,7 @@ public class Customer extends User {
     }
 
     public double totalInterestEarned() {
+
         return accounts.stream().mapToDouble(Account::interestEarned).sum();
     }
 

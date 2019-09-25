@@ -57,13 +57,14 @@ public abstract class Account {
     }
 
     private void updateAccount(Transaction transaction) {
-        transactions.add(transaction);
+
         int daysSinceLastUpdate = (int) DAYS.between(dateOfLastUpdate, transaction.getTransactionDate());
         while (daysSinceLastUpdate>0){
             accrueInterest();
             compoundInterest();
             daysSinceLastUpdate--;
         }
+        transactions.add(transaction);
         balance += transaction.getAmount();
         dateOfLastUpdate = transaction.getTransactionDate();
     }
@@ -73,6 +74,7 @@ public abstract class Account {
     protected abstract void accrueInterest();
 
     public double interestEarned(){
+
         return balance - sumTransactions();
     }
 
