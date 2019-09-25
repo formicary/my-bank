@@ -16,7 +16,7 @@ public abstract class Account {
     double interestRate;
     double accrueRate;
     double balance;
-    LocalDateTime dateOfLastUpdate;
+    private LocalDateTime dateOfLastUpdate;
 
     public Account() {
         this.transactions = new ArrayList<>();
@@ -69,12 +69,24 @@ public abstract class Account {
         dateOfLastUpdate = transaction.getTransactionDate();
     }
 
+    private void updateAccount(){
+        LocalDateTime dateNow = DateProvider.getInstance().now();
+        int daysSinceLastUpdate = (int) DAYS.between(dateOfLastUpdate, dateNow);
+
+        while (daysSinceLastUpdate>0){
+            accrueInterest();
+            compoundInterest();
+            daysSinceLastUpdate--;
+        }
+        dateOfLastUpdate = dateNow;
+    }
+
     protected abstract void compoundInterest();
 
     protected abstract void accrueInterest();
 
     public double interestEarned(){
-
+        updateAccount();
         return balance - sumTransactions();
     }
 
