@@ -1,7 +1,6 @@
 package com.abc.util;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class DateProvider {
 
@@ -13,7 +12,7 @@ public class DateProvider {
         return instance;
     }
 
-    public Date now() {
-        return Calendar.getInstance().getTime();
+    public LocalDateTime now() {
+        return LocalDateTime.now();
     }
 }

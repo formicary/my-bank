@@ -4,6 +4,23 @@ package com.abc.accounts;
  * @project MyBank
  */
 public class MaxiSavings extends Account {
+
+    public MaxiSavings(){
+        super();
+        interestRate = 0.05;
+        accrueRate = interestRate/365;
+    }
+
+    @Override
+    protected void compoundInterest() {
+
+    }
+
+    @Override
+    protected void accrueInterest() {
+
+    }
+
     @Override
     public double interestEarned() {
         double amount = sumTransactions();

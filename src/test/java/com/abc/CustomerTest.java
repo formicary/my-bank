@@ -1,7 +1,7 @@
 package com.abc;
 
 import com.abc.accounts.Account;
-import com.abc.accounts.Checkings;
+import com.abc.accounts.Checking;
 import com.abc.accounts.Savings;
 import com.abc.users.Customer;
 import org.junit.Ignore;
@@ -14,7 +14,7 @@ public class CustomerTest {
     @Test //Test customer statement generation
     public void testApp(){
 
-        Account checkingAccount = new Checkings();
+        Account checkingAccount = new Checking();
         Account savingsAccount = new Savings();
 
         Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
@@ -47,7 +47,7 @@ public class CustomerTest {
     public void testTwoAccount(){
         Customer oscar = new Customer("Oscar")
                 .openAccount(new Savings());
-        oscar.openAccount(new Checkings());
+        oscar.openAccount(new Checking());
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
@@ -55,7 +55,7 @@ public class CustomerTest {
     public void testThreeAcounts() {
         Customer oscar = new Customer("Oscar")
                 .openAccount(new Savings());
-        oscar.openAccount(new Checkings());
+        oscar.openAccount(new Checking());
         assertEquals(3, oscar.getNumberOfAccounts());
     }
 }

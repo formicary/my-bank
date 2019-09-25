@@ -2,7 +2,7 @@ package com.abc.users;
 
 import com.abc.Bank;
 
-import static com.abc.util.StringFormatter.numbOfAccountsFormat;
+import static com.abc.util.StringFormatter.pluralFormatter;
 
 /**
  * @project MyBank
@@ -20,7 +20,7 @@ public class Manager extends User {
         StringBuilder summary = new StringBuilder("Customer Summary");
         for (Customer c : bank.getCustomers())
             summary.append("\n - ").append(c.getName())
-                    .append(" (").append(numbOfAccountsFormat(c.getNumberOfAccounts(), "account")).append(")");
+                    .append(" (").append(pluralFormatter(c.getNumberOfAccounts(), "account")).append(")");
         return summary.toString();
     }
 

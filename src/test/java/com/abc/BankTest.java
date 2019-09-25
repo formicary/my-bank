@@ -1,12 +1,11 @@
 package com.abc;
 
 import com.abc.accounts.Account;
-import com.abc.accounts.Checkings;
+import com.abc.accounts.Checking;
 import com.abc.accounts.MaxiSavings;
 import com.abc.accounts.Savings;
 import com.abc.users.Customer;
 import com.abc.users.Manager;
-import com.abc.users.User;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -19,7 +18,7 @@ public class BankTest {
         Bank bank = new Bank();
         Manager manager = new Manager("Bob", bank);
         Customer john = new Customer("John");
-        john.openAccount(new Checkings());
+        john.openAccount(new Checking());
         bank.addCustomer(john);
 
         assertEquals("Customer Summary\n - John (1 account)", manager.getCustomerSummary());
@@ -29,7 +28,7 @@ public class BankTest {
     public void checkingAccount() {
         Bank bank = new Bank();
         Manager manager = new Manager("Bob", bank);
-        Account checkingAccount = new Checkings();
+        Account checkingAccount = new Checking();
         Customer bill = new Customer("Bill").openAccount(checkingAccount);
         bank.addCustomer(bill);
 

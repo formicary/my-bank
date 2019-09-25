@@ -38,7 +38,8 @@ public class Customer extends User {
         StringBuilder statement = new StringBuilder("Statement for " + getName() + "\n");
         double total = 0.0;
         for (Account a : accounts) {
-            statement.append("\n").append(a.getStatement()).append("\n");
+            statement.append("\n").append(a.getStatementInDollars()).append("\n");
+            statement.append("\n").append(a.getStatementInDollars()).append("\n");
             total += a.sumTransactions();
         }
         statement.append("\nTotal In All Accounts ").append(toDollars(total));
