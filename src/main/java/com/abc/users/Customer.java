@@ -7,20 +7,13 @@ import java.util.List;
 
 import static com.abc.util.CurrencyFormatter.toDollars;
 
-public class Customer {
+public class Customer extends User {
 
-    //TODO May extend from a User class as the addition of a bank manager suggests more than one type of user
-
-    private String name;
     private List<Account> accounts;
 
     public Customer(String name) {
-        this.name = name;
+        super(name);
         this.accounts = new ArrayList<>();
-    }
-
-    public String getName() {
-        return name;
     }
 
     public Customer openAccount(Account account) {
@@ -37,7 +30,7 @@ public class Customer {
     }
 
     public String getStatement() {
-        StringBuilder statement = new StringBuilder("Statement for " + name + "\n");
+        StringBuilder statement = new StringBuilder("Statement for " + getName() + "\n");
         double total = 0.0;
         for (Account a : accounts) {
             statement.append("\n").append(a.getStatement()).append("\n");

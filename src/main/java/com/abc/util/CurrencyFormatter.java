@@ -1,5 +1,4 @@
 package com.abc.util;
-
 import static java.lang.Math.abs;
 
 /**
