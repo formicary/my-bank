@@ -21,6 +21,11 @@ public class Customer extends User {
         return this;
     }
 
+    public void transfer(Account accFrom, Account accTo, double amount){
+        accFrom.withdraw(amount);
+        accTo.deposit(amount);
+    }
+
     public int getNumberOfAccounts() {
         return accounts.size();
     }
