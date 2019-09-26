@@ -64,11 +64,7 @@ public abstract class Account {
     void updateAccount(Transaction transaction) {
 
         int daysSinceLastUpdate = (int) DAYS.between(dateOfLastUpdate, transaction.getTransactionDate());
-        while (daysSinceLastUpdate>0){
-            accrueInterest();
-            compoundInterest();
-            daysSinceLastUpdate--;
-        }
+        acrrueAndCompBalance(daysSinceLastUpdate);
         addTransaction(transaction);
         balance += transaction.getAmount();
         updateDateOfLastUpdate(transaction.getTransactionDate());
@@ -76,15 +72,20 @@ public abstract class Account {
     void updateAccount(){
         updateAccount(DateProvider.getInstance().now());
     }
+
     void updateAccount(LocalDateTime date){
         int daysSinceLastUpdate = (int) DAYS.between(dateOfLastUpdate, date);
 
-        while (daysSinceLastUpdate>0){
-            accrueInterest();
+        acrrueAndCompBalance(daysSinceLastUpdate);
+        updateDateOfLastUpdate(date);
+    }
+
+    void acrrueAndCompBalance(int daysSinceLastUpdate) {
+        while (daysSinceLastUpdate > 0) {
             compoundInterest();
+            accrueInterest();
             daysSinceLastUpdate--;
         }
-        updateDateOfLastUpdate(date);
     }
 
     protected abstract void compoundInterest();
@@ -105,7 +106,7 @@ public abstract class Account {
 
     public String getStatementInDollars(){
 
-        StringBuilder s = new StringBuilder(this.toString());
+        StringBuilder s = new StringBuilder(this.toString() + "\n");
         //Now total up all the transactions
         double total = 0.0;
         for (Transaction t : transactions) {
@@ -131,6 +132,7 @@ public abstract class Account {
     public void setAccrueRate(double accrueRate) {
         this.accrueRate = accrueRate;
     }
+
     public double getBalance() {
         return balance;
     }
@@ -139,5 +141,8 @@ public abstract class Account {
         return dateOfLastUpdate;
     }
 
-
+    @Override
+    public String toString(){
+        return "Account";
+    }
 }

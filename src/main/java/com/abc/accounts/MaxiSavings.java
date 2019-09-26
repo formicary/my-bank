@@ -15,6 +15,15 @@ public class MaxiSavings extends Account {
 
     public MaxiSavings(){
         super();
+        init();
+    }
+
+    public MaxiSavings(LocalDateTime date){
+        super(date);
+        init();
+    }
+
+    private void init(){
         interestRate = 0.05;
         accrueRate = interestRate/365;
     }

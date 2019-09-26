@@ -1,15 +1,12 @@
 package com.abc.accounts;
 
 import com.abc.Transaction;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -109,4 +106,31 @@ public class AccountTest {
         mockAcc.updateAccount(date);
         assertEquals(date, mockAcc.getDateOfLastUpdate());
     }
+
+    @Test
+    public void testTotalInterestEarned(){
+        mockAcc.deposit(1000);
+        mockAcc.deposit(500);
+        mockAcc.withdraw(200);
+
+        double expected = 0;
+        double actual = mockAcc.totalInterestEarned();
+
+        assertEquals(expected,actual);
+    }
+
+    @Test
+    public void testStatementInDollars(){
+        mockAcc.deposit(1000);
+        mockAcc.deposit(500);
+        mockAcc.withdraw(200);
+
+        String expected = "Account\n" +
+                "  Deposit $1,000.00\n" +
+                "  Deposit $500.00\n" +
+                "  Withdrawal $200.00\n" +
+                "Total $1,300.00";
+        assertEquals(expected, mockAcc.getStatementInDollars());
+    }
+
 }
