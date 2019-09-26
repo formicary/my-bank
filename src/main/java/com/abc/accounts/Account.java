@@ -26,12 +26,13 @@ public abstract class Account {
         dateOfLastUpdate = DateProvider.getInstance().now();
     }
 
+    public Account(LocalDateTime date){
+        this();
+        dateOfLastUpdate = date;
+    }
+
     public void deposit(double amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
-        } else {
-            updateAccount(new Transaction(amount));
-        }
+       deposit(amount, DateProvider.getInstance().now());
     }
     public void deposit(double amount, LocalDateTime date) {
         if (amount <= 0) {
@@ -42,11 +43,7 @@ public abstract class Account {
     }
 
     public void withdraw(double amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
-        } else {
-            updateAccount(new Transaction(-amount));
-        }
+        withdraw(amount,DateProvider.getInstance().now());
     }
     public void withdraw(double amount, LocalDateTime date) {
         if (amount <= 0) {
@@ -56,7 +53,15 @@ public abstract class Account {
         }
     }
 
-    private void updateAccount(Transaction transaction) {
+    void updateDateOfLastUpdate(LocalDateTime date){
+        dateOfLastUpdate = date;
+    }
+
+    void addTransaction(Transaction transaction) {
+        transactions.add(transaction);
+    }
+
+    void updateAccount(Transaction transaction) {
 
         int daysSinceLastUpdate = (int) DAYS.between(dateOfLastUpdate, transaction.getTransactionDate());
         while (daysSinceLastUpdate>0){
@@ -64,28 +69,28 @@ public abstract class Account {
             compoundInterest();
             daysSinceLastUpdate--;
         }
-        transactions.add(transaction);
+        addTransaction(transaction);
         balance += transaction.getAmount();
-        dateOfLastUpdate = transaction.getTransactionDate();
+        updateDateOfLastUpdate(transaction.getTransactionDate());
     }
-
-    private void updateAccount(){
-        LocalDateTime dateNow = DateProvider.getInstance().now();
-        int daysSinceLastUpdate = (int) DAYS.between(dateOfLastUpdate, dateNow);
+    void updateAccount(){
+        updateAccount(DateProvider.getInstance().now());
+    }
+    void updateAccount(LocalDateTime date){
+        int daysSinceLastUpdate = (int) DAYS.between(dateOfLastUpdate, date);
 
         while (daysSinceLastUpdate>0){
             accrueInterest();
             compoundInterest();
             daysSinceLastUpdate--;
         }
-        dateOfLastUpdate = dateNow;
+        updateDateOfLastUpdate(date);
     }
 
     protected abstract void compoundInterest();
-
     protected abstract void accrueInterest();
 
-    public double interestEarned(){
+    public double totalInterestEarned(){
         updateAccount();
         return balance - sumTransactions();
     }
@@ -118,4 +123,21 @@ public abstract class Account {
     public void setInterestRate(double interestRate) {
         this.interestRate = interestRate;
     }
+
+    public double getAccrueRate() {
+        return accrueRate;
+    }
+
+    public void setAccrueRate(double accrueRate) {
+        this.accrueRate = accrueRate;
+    }
+    public double getBalance() {
+        return balance;
+    }
+
+    public LocalDateTime getDateOfLastUpdate() {
+        return dateOfLastUpdate;
+    }
+
+
 }

@@ -6,9 +6,9 @@ import com.abc.accounts.MaxiSavings;
 import com.abc.accounts.Savings;
 import com.abc.users.Customer;
 import com.abc.users.Manager;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BankTest {
     private static final double DOUBLE_DELTA = 1e-15;

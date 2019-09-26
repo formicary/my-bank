@@ -32,7 +32,7 @@ public class Customer extends User {
 
     public double totalInterestEarned() {
 
-        return accounts.stream().mapToDouble(Account::interestEarned).sum();
+        return accounts.stream().mapToDouble(Account::totalInterestEarned).sum();
     }
 
     public String getStatement() {

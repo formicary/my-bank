@@ -1,13 +1,12 @@
-package com.abc;
+package com.abc.users;
 
 import com.abc.accounts.Account;
 import com.abc.accounts.Checking;
 import com.abc.accounts.Savings;
 import com.abc.users.Customer;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CustomerTest {
 
@@ -51,11 +50,11 @@ public class CustomerTest {
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
-    @Ignore
-    public void testThreeAcounts() {
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Savings());
-        oscar.openAccount(new Checking());
-        assertEquals(3, oscar.getNumberOfAccounts());
-    }
+//    @Ignore
+//    public void testThreeAcounts() {
+//        Customer oscar = new Customer("Oscar")
+//                .openAccount(new Savings());
+//        oscar.openAccount(new Checking());
+//        assertEquals(3, oscar.getNumberOfAccounts());
+//    }
 }
