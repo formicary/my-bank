@@ -40,4 +40,5 @@ public class Transaction {
     public String getStatementInDollars(){
         return (transactionType == WITHDRAWAL ? "Withdrawal " : "Deposit ") + toDollars(amount);
     }
+
 }

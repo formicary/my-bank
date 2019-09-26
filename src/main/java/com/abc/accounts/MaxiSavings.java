@@ -1,5 +1,6 @@
 package com.abc.accounts;
 
+import com.abc.Transaction;
 import com.abc.util.DateProvider;
 
 import java.time.LocalDateTime;
@@ -11,7 +12,8 @@ import static java.time.temporal.ChronoUnit.DAYS;
  */
 public class MaxiSavings extends Account {
 
-    private boolean hadWithdrawal = false;
+    private double secIntRate;
+    private double secAccrueRate;
 
     public MaxiSavings(){
         super();
@@ -24,33 +26,37 @@ public class MaxiSavings extends Account {
     }
 
     private void init(){
-        interestRate = 0.05;
-        accrueRate = interestRate/365;
+        intRate = 0.05;
+        accrueRate = intRate /365;
+        secIntRate = 0.001;
+        secAccrueRate = secIntRate/365;
     }
 
     @Override
     protected void compoundInterest() {
-        balance += balance * interestRate;
+
+        boolean hadWithdrawal = hadWithdrawalInPast(10);
+        balance += (hadWithdrawal) ? (balance * secIntRate) : (balance * intRate);
     }
 
     @Override
     protected void accrueInterest() {
-        
-        boolean hadWithdrawal = hadWithdrawalInPast(10);
-        
-        if(hadWithdrawal == this.hadWithdrawal){
-            interestRate += accrueRate;
-        }else{
-            this.hadWithdrawal = hadWithdrawal;
-            interestRate = hadWithdrawal ? 0.001 : 0.05;
-            accrueRate = interestRate/365;
-        }
+        intRate += accrueRate;
+        secIntRate += secAccrueRate;
     }
 
-    private boolean hadWithdrawalInPast(int numbOfDays) {
-        LocalDateTime today = DateProvider.getInstance().now();
+    boolean hadWithdrawalInPast(int numbOfDays) {
+        LocalDateTime today = this.getDateOfLastUpdate();
         return transactions.stream()
-                .anyMatch(t -> t.getTransactionType() == 0 && DAYS.between(t.getTransactionDate(), today)<=numbOfDays);
+                .anyMatch(t -> (t.getTransactionType() == 0) && (DAYS.between(t.getTransactionDate(), today)<=numbOfDays));
+    }
+
+    public double getSecIntRate() {
+        return secIntRate;
+    }
+
+    public double getSecAccrueRate() {
+        return secAccrueRate;
     }
 
     @Override

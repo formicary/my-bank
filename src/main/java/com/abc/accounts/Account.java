@@ -13,14 +13,14 @@ import static java.time.temporal.ChronoUnit.DAYS;
 public abstract class Account {
 
     List<Transaction> transactions;
-    double interestRate;
+    double intRate;
     double accrueRate;
     double balance;
     private LocalDateTime dateOfLastUpdate;
 
     public Account() {
         this.transactions = new ArrayList<>();
-        interestRate = 0.0;
+        intRate = 0.0;
         balance = 0.0;
         accrueRate = 0.0;
         dateOfLastUpdate = DateProvider.getInstance().now();
@@ -53,7 +53,7 @@ public abstract class Account {
         }
     }
 
-    void updateDateOfLastUpdate(LocalDateTime date){
+    void updateDate(LocalDateTime date){
         dateOfLastUpdate = date;
     }
 
@@ -63,21 +63,19 @@ public abstract class Account {
 
     void updateAccount(Transaction transaction) {
 
-        int daysSinceLastUpdate = (int) DAYS.between(dateOfLastUpdate, transaction.getTransactionDate());
-        acrrueAndCompBalance(daysSinceLastUpdate);
+        LocalDateTime date = transaction.getTransactionDate();
+        updateAccount(date);
         addTransaction(transaction);
         balance += transaction.getAmount();
-        updateDateOfLastUpdate(transaction.getTransactionDate());
     }
     void updateAccount(){
         updateAccount(DateProvider.getInstance().now());
     }
-
     void updateAccount(LocalDateTime date){
-        int daysSinceLastUpdate = (int) DAYS.between(dateOfLastUpdate, date);
 
+        int daysSinceLastUpdate = (int) DAYS.between(dateOfLastUpdate, date);
+        updateDate(date);
         acrrueAndCompBalance(daysSinceLastUpdate);
-        updateDateOfLastUpdate(date);
     }
 
     void acrrueAndCompBalance(int daysSinceLastUpdate) {
@@ -117,12 +115,12 @@ public abstract class Account {
         return s.toString();
     }
 
-    public double getInterestRate() {
-        return interestRate;
+    public double getIntRate() {
+        return intRate;
     }
 
-    public void setInterestRate(double interestRate) {
-        this.interestRate = interestRate;
+    public void setIntRate(double intRate) {
+        this.intRate = intRate;
     }
 
     public double getAccrueRate() {

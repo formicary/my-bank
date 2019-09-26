@@ -21,21 +21,21 @@ public class Savings extends Account {
     }
 
     private void init(){
-        interestRate = 0.001;
+        intRate = 0.001;
         secInterestRate = 0.002;
-        accrueRate = interestRate/365;
+        accrueRate = intRate /365;
         secAccrueRate = secInterestRate/365;
     }
 
     @Override
     protected void compoundInterest() {
-        if (balance <= 1000) balance += balance * interestRate;
-        else balance += (1000 * interestRate) + ((balance - 1000) * (secInterestRate));
+        if (balance <= 1000) balance += balance * intRate;
+        else balance += (1000 * intRate) + ((balance - 1000) * (secInterestRate));
     }
 
     @Override
     protected void accrueInterest() {
-        interestRate += accrueRate;
+        intRate += accrueRate;
         secInterestRate += secAccrueRate;
     }
 

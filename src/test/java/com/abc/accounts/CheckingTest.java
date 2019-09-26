@@ -25,7 +25,7 @@ public class CheckingTest {
 
     @Test
     public void testInitInterestRate(){
-        assertEquals(expIntRate,mockAcc.getInterestRate());
+        assertEquals(expIntRate,mockAcc.getIntRate());
     }
 
     @Test
@@ -42,6 +42,17 @@ public class CheckingTest {
     }
 
     //TODO split to test both time passing and total interest
+    @Test
+    public void testTenDaysPassing(){
+        mockAcc.deposit(1000);
+        LocalDateTime tenDaysLater = mockAcc.getDateOfLastUpdate().plusDays(10);
+        mockAcc.updateAccount(tenDaysLater);
+
+        double expected = 1010.1695285021814;
+
+        assertEquals(expected, mockAcc.getBalance());
+    }
+
     @Test
     public void testTotalInterest(){
         mockAcc.deposit(1000);

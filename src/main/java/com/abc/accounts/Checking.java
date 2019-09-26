@@ -17,18 +17,18 @@ public class Checking extends Account {
     }
 
     private void init() {
-        interestRate = 0.001;
-        accrueRate = interestRate/365;
+        intRate = 0.001;
+        accrueRate = intRate /365;
     }
 
     @Override
     protected void compoundInterest() {
-        balance += balance * interestRate;
+        balance += balance * intRate;
     }
 
     @Override
     protected void accrueInterest() {
-        interestRate += accrueRate;
+        intRate += accrueRate;
     }
 
     @Override

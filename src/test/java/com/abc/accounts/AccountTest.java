@@ -82,15 +82,15 @@ public class AccountTest {
     @Test
     public void testUpdateDateOfLastUpdate(){
         LocalDateTime expected = mockAcc.getDateOfLastUpdate().plusMonths(5);
-        mockAcc.updateDateOfLastUpdate(expected);
+        mockAcc.updateDate(expected);
         assertEquals(expected,mockAcc.getDateOfLastUpdate());
     }
 
     @Test
     public void testInterestRate(){
         double expected = 0.5;
-        mockAcc.setInterestRate(0.5);
-        assertEquals(expected,mockAcc.getInterestRate());
+        mockAcc.setIntRate(0.5);
+        assertEquals(expected,mockAcc.getIntRate());
     }
 
     @Test

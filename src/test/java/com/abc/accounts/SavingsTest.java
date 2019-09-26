@@ -29,7 +29,7 @@ public class SavingsTest {
 
     @Test
     public void testInitInterestRate(){
-        assertEquals(expIntRate,mockAcc.getInterestRate());
+        assertEquals(expIntRate,mockAcc.getIntRate());
     }
 
     @Test
@@ -68,7 +68,7 @@ public class SavingsTest {
 
         mockAcc.accrueInterest();
         double expected = expIntRate + expAccrueRate;
-        assertEquals(expected, mockAcc.getInterestRate());
+        assertEquals(expected, mockAcc.getIntRate());
         expected = expSecIntRate + expSecAccrueRate;
         assertEquals(expected, mockAcc.getSecInterestRate());
     }
@@ -93,6 +93,11 @@ public class SavingsTest {
         double expected = 1009.1966070168221 - 999;
 
         assertEquals(expected, mockAcc.totalInterestEarned());
+    }
+
+    @Test
+    public void testToString(){
+        assertEquals("Savings Account", mockAcc.toString());
     }
 
 }
