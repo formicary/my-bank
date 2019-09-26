@@ -29,8 +29,8 @@ public class Savings extends Account {
 
     @Override
     protected void compoundInterest() {
-        if(balance <= 1000) balance += balance * interestRate;
-        else balance = (1000 * interestRate) + ((balance - 1000) * (secInterestRate));
+        if (balance <= 1000) balance += balance * interestRate;
+        else balance += (1000 * interestRate) + ((balance - 1000) * (secInterestRate));
     }
 
     @Override
@@ -43,17 +43,11 @@ public class Savings extends Account {
         return secInterestRate;
     }
 
-    public void setSecInterestRate(double secInterestRate) {
-        this.secInterestRate = secInterestRate;
-    }
 
     public double getSecAccrueRate() {
         return secAccrueRate;
     }
 
-    public void setSecAccrueRate(double secAccrueRate) {
-        this.secAccrueRate = secAccrueRate;
-    }
 
     @Override
     public String toString() {
