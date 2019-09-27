@@ -25,9 +25,6 @@ public class Manager extends User {
     }
 
     public double getTotalInterestPaid() {
-        double total = 0;
-        for(Customer c: bank.getCustomers())
-            total += c.totalInterestEarned();
-        return total;
+        return bank.getCustomers().stream().mapToDouble(Customer::totalInterestEarned).sum();
     }
 }

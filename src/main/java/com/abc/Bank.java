@@ -17,7 +17,6 @@ public class Bank {
         customers.add(customer);
     }
 
-    public List<Customer> getCustomers() {
-        return customers;
+    public List<Customer> getCustomers() {        return customers;
     }
 }
