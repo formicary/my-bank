@@ -21,29 +21,33 @@ public class Customer extends User {
         return this;
     }
 
+    public int getNumberOfAccounts() {
+        return accounts.size();
+    }
+
     public void transfer(Account accFrom, Account accTo, double amount){
         accFrom.withdraw(amount);
         accTo.deposit(amount);
     }
 
-    public int getNumberOfAccounts() {
-        return accounts.size();
-    }
-
     public double totalInterestEarned() {
 
-        return accounts.stream().mapToDouble(Account::totalInterestEarned).sum();
+        return accounts.stream()
+                .mapToDouble(Account::totalInterestEarned).sum();
     }
 
-    public String getStatement() {
+    public String getStatementInDollars() {
         StringBuilder statement = new StringBuilder("Statement for " + getName() + "\n");
         double total = 0.0;
         for (Account a : accounts) {
             statement.append("\n").append(a.getStatementInDollars()).append("\n");
-            statement.append("\n").append(a.getStatementInDollars()).append("\n");
-            total += a.sumTransactions();
+            total += a.getBalance();
         }
         statement.append("\nTotal In All Accounts ").append(toDollars(total));
         return statement.toString();
+    }
+
+    public List<Account> getAccounts() {
+        return accounts;
     }
 }

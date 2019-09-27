@@ -68,10 +68,10 @@ public abstract class Account {
         addTransaction(transaction);
         balance += transaction.getAmount();
     }
-    void updateAccount(){
+    public void updateAccount(){
         updateAccount(DateProvider.getInstance().now());
     }
-    void updateAccount(LocalDateTime date){
+    public void updateAccount(LocalDateTime date){
 
         int daysSinceLastUpdate = (int) DAYS.between(dateOfLastUpdate, date);
         updateDate(date);
@@ -90,7 +90,6 @@ public abstract class Account {
     protected abstract void accrueInterest();
 
     public double totalInterestEarned(){
-        updateAccount();
         return balance - sumTransactions();
     }
 
@@ -106,12 +105,8 @@ public abstract class Account {
 
         StringBuilder s = new StringBuilder(this.toString() + "\n");
         //Now total up all the transactions
-        double total = 0.0;
-        for (Transaction t : transactions) {
-            s.append("  ").append(t.getStatementInDollars()).append("\n");
-            total += t.getAmount();
-        }
-        s.append("Total ").append(toDollars(total));
+        transactions.forEach(t -> s.append("  ").append(t.getStatementInDollars()).append("\n"));
+        s.append("Total ").append(toDollars(balance));
         return s.toString();
     }
 
