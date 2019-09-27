@@ -12,11 +12,11 @@ import static java.time.temporal.ChronoUnit.DAYS;
 
 public abstract class Account {
 
-    List<Transaction> transactions;
-    double intRate;
-    double accrueRate;
-    double balance;
-    private LocalDateTime dateOfLastUpdate;
+    protected List<Transaction> transactions;
+    protected double intRate;
+    protected double accrueRate;
+    protected double balance;
+    protected LocalDateTime dateOfLastUpdate;
 
     public Account() {
         this.transactions = new ArrayList<>();
@@ -39,6 +39,7 @@ public abstract class Account {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
             updateAccount(new Transaction(amount,date));
+            balance += amount;
         }
     }
 
@@ -50,10 +51,11 @@ public abstract class Account {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
             updateAccount(new Transaction(-amount,date));
+            balance -= amount;
         }
     }
 
-    void updateDate(LocalDateTime date){
+    void setDate(LocalDateTime date){
         dateOfLastUpdate = date;
     }
 
@@ -66,7 +68,6 @@ public abstract class Account {
         LocalDateTime date = transaction.getTransactionDate();
         updateAccount(date);
         addTransaction(transaction);
-        balance += transaction.getAmount();
     }
     public void updateAccount(){
         updateAccount(DateProvider.getInstance().now());
@@ -74,7 +75,7 @@ public abstract class Account {
     public void updateAccount(LocalDateTime date){
 
         int daysSinceLastUpdate = (int) DAYS.between(dateOfLastUpdate, date);
-        updateDate(date);
+        setDate(date);
         acrrueAndCompBalance(daysSinceLastUpdate);
     }
 
@@ -114,16 +115,8 @@ public abstract class Account {
         return intRate;
     }
 
-    public void setIntRate(double intRate) {
-        this.intRate = intRate;
-    }
-
     public double getAccrueRate() {
         return accrueRate;
-    }
-
-    public void setAccrueRate(double accrueRate) {
-        this.accrueRate = accrueRate;
     }
 
     public double getBalance() {

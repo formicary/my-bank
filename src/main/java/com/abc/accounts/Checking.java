@@ -18,7 +18,7 @@ public class Checking extends Account {
 
     private void init() {
         intRate = 0.001;
-        accrueRate = intRate /365;
+        accrueRate = getIntRate() / 365;
     }
 
     @Override
