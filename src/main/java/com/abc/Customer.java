@@ -3,76 +3,76 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Math.abs;
-
 public class Customer {
     private String name;
     private List<Account> accounts;
 
-    public Customer(String name) {
+    //Customer must be added to a bank on instantiation. This avoids the same customer belonging to multiple banks.
+    Customer(String name, Bank bank) {
         this.name = name;
         this.accounts = new ArrayList<Account>();
+        bank.addCustomer(this);
     }
 
     public String getName() {
         return name;
     }
 
-    public Customer openAccount(Account account) {
-        accounts.add(account);
+    public Customer openAccount(int accountType) {
+        accounts.add(new Account(accountType));
         return this;
+    }
+
+    public void deposit(double dollars, int accountIndex) {
+        try {
+            isValidIndex(accountIndex);
+        } catch (IllegalArgumentException e) {
+            throw e;
+        }
+
+        accounts.get(accountIndex).deposit(dollars);
+    }
+
+    public void withdraw(double dollars, int accountIndex) {
+        try {
+            isValidIndex(accountIndex);
+        } catch (IllegalArgumentException e) {
+            throw e;
+        }
+
+        accounts.get(accountIndex).withdraw(dollars);
     }
 
     public int getNumberOfAccounts() {
         return accounts.size();
     }
 
-    public double totalInterestEarned() {
+    public String getStatement() {
+        String statement;
+        statement = "Statement for " + name + "\n";
+        double total = 0;
+        for (Account a : accounts) {
+            statement += "\n" + a.createStatement() + "\n";
+            total += a.getBalanceDollars();
+        }
+        statement += "\nTotal In All Accounts " + String.format("$%,.2f", total);
+        return statement;
+    }
+
+    public void transfer(int toIndex, int fromIndex, double dollars) {
+        accounts.get(fromIndex).withdraw(dollars);
+        accounts.get(toIndex).deposit(dollars);
+    }
+
+    double totalInterestEarned() {
         double total = 0;
         for (Account a : accounts)
             total += a.interestEarned();
         return total;
     }
 
-    public String getStatement() {
-        String statement = null;
-        statement = "Statement for " + name + "\n";
-        double total = 0.0;
-        for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
-        }
-        statement += "\nTotal In All Accounts " + toDollars(total);
-        return statement;
-    }
-
-    private String statementForAccount(Account a) {
-        String s = "";
-
-       //Translate to pretty account type
-        switch(a.getAccountType()){
-            case Account.CHECKING:
-                s += "Checking Account\n";
-                break;
-            case Account.SAVINGS:
-                s += "Savings Account\n";
-                break;
-            case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
-                break;
-        }
-
-        //Now total up all the transactions
-        double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
-        }
-        s += "Total " + toDollars(total);
-        return s;
-    }
-
-    private String toDollars(double d){
-        return String.format("$%,.2f", abs(d));
+    private void isValidIndex(int accountIndex) {
+        if (accountIndex < 0 || accountIndex >= accounts.size())
+            throw new IllegalArgumentException("invalid account index");
     }
 }

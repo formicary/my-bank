@@ -10,45 +10,64 @@ public class BankTest {
     @Test
     public void customerSummary() {
         Bank bank = new Bank();
-        Customer john = new Customer("John");
-        john.openAccount(new Account(Account.CHECKING));
-        bank.addCustomer(john);
+        Customer john = new Customer("John", bank);
+        john.openAccount(Account.CHECKING);
 
         assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
     }
 
     @Test
-    public void checkingAccount() {
+    public void customerSummaryNoAccounts() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.CHECKING);
-        Customer bill = new Customer("Bill").openAccount(checkingAccount);
-        bank.addCustomer(bill);
+        Customer john = new Customer("John", bank);
 
-        checkingAccount.deposit(100.0);
-
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals("Customer Summary\n - John (0 accounts)", bank.customerSummary());
     }
 
     @Test
-    public void savings_account() {
+    public void customerSummaryNoCustomers() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
-
-        checkingAccount.deposit(1500.0);
-
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals("Customer Summary", bank.customerSummary());
     }
 
     @Test
-    public void maxi_savings_account() {
+    public void customerSummaryMultipleAccounts() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+        Customer john = new Customer("John", bank);
+        john.openAccount(Account.CHECKING);
+        john.openAccount(Account.SAVINGS);
 
-        checkingAccount.deposit(3000.0);
-
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals("Customer Summary\n - John (2 accounts)", bank.customerSummary());
     }
 
+    @Test
+    public void customerSummaryMultipleCustomers() {
+        Bank bank = new Bank();
+        Customer john = new Customer("John", bank);
+        Customer harambe = new Customer("Harambe", bank);
+        harambe.openAccount(Account.CHECKING);
+        john.openAccount(Account.CHECKING);
+
+        assertEquals("Customer Summary\n" +
+                " - John (1 account)\n" +
+                " - Harambe (1 account)", bank.customerSummary());
+    }
+
+    @Test
+    public void totalInterestPaid() {
+        Bank bank = new Bank();
+        Customer george = new Customer("George", bank);
+        Customer bob = new Customer("Bob", bank);
+        Customer alice = new Customer("Alice", bank);
+
+        george.openAccount(Account.CHECKING);
+        bob.openAccount(Account.CHECKING);
+        alice.openAccount(Account.CHECKING);
+
+        george.deposit(1000, 0);
+        bob.deposit(1000, 0);
+        alice.deposit(1000, 0);
+
+        assertEquals(3, bank.totalInterestPaid(), DOUBLE_DELTA);
+    }
 }
