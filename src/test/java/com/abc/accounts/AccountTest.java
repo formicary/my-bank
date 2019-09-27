@@ -44,8 +44,7 @@ public class AccountTest {
         @DisplayName("should contain no transactions")
         void testInitTransaction(){
             int numbOftrans = mockAcc.transactions.size();
-            assertTrue(numbOftrans == 0,
-                    () -> "Should contain no transactions but contains: " + numbOftrans);
+            assertEquals(0, numbOftrans, () -> "Should contain no transactions but contains: " + numbOftrans);
         }
 
         @Test
@@ -183,7 +182,7 @@ public class AccountTest {
 
 
             mockAcc.addTransaction(new Transaction(1000));
-            assumeTrue(mockAcc.transactions.size()==1);
+            assumeTrue(mockAcc.transactions.size()==1, () -> "transitions are not successfully updating");
             mockAcc.addTransaction(new Transaction(-500));
             mockAcc.addTransaction(new Transaction(5.56));
 
@@ -225,6 +224,12 @@ public class AccountTest {
             mockAcc.deposit(500);
             mockAcc.withdraw(200);
 
+            LocalDateTime oldDate = mockAcc.dateOfLastUpdate;
+            LocalDateTime newDate = oldDate.plusDays(10);
+            mockAcc.updateAccount(newDate);
+            assumeTrue(mockAcc.dateOfLastUpdate==newDate, () -> "update Account is not working as expected \n " +
+                    "Date expected: " + newDate + "Date actual: " + mockAcc.dateOfLastUpdate);
+
             double expected = 0;
             double actual = mockAcc.totalInterestEarned();
 
@@ -232,7 +237,6 @@ public class AccountTest {
         }
 
     }
-
 
     @Nested
     @DisplayName("When displaying a report")
