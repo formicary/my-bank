@@ -1,64 +1,38 @@
 package com.abc;
 
-import com.abc.accounts.Account;
-import com.abc.accounts.Checking;
-import com.abc.accounts.MaxiSavings;
-import com.abc.accounts.Savings;
+
 import com.abc.users.Customer;
-import com.abc.users.Manager;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BankTest {
-    private static final double DOUBLE_DELTA = 1e-15;
 
-    @Test
-    public void customerSummary() {
-        Bank bank = new Bank();
-        Manager manager = new Manager("Bob", bank);
-        Customer john = new Customer("John");
-        john.openAccount(new Checking());
-        bank.addCustomer(john);
+    Bank mockB;
 
-        assertEquals("Customer Summary\n - John (1 account)", manager.getCustomerSummary());
+    @BeforeEach
+    public void init(){
+        mockB = new Bank();
     }
 
     @Test
-    public void checkingAccount() {
-        Bank bank = new Bank();
-        Manager manager = new Manager("Bob", bank);
-        Account checkingAccount = new Checking();
-        Customer bill = new Customer("Bill").openAccount(checkingAccount);
-        bank.addCustomer(bill);
+    public void testAddCustomer(){
+        Customer customer = new Customer("mock");
+        mockB.addCustomer(customer);
 
-        checkingAccount.deposit(100.0);
-
-        assertEquals(0.1, manager.getTotalInterestPaid(), DOUBLE_DELTA);
+        assertTrue(mockB.getCustomers().contains(customer));
     }
 
     @Test
-    public void savings_account() {
-        Bank bank = new Bank();
-        Manager manager = new Manager("Bob", bank);
-        Account checkingAccount = new Savings();
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+    public void testNumbOfCustomers(){
+        mockB.addCustomer(new Customer("Bob"));
+        mockB.addCustomer(new Customer("Steve"));
+        mockB.addCustomer(new Customer("Neil"));
 
-        checkingAccount.deposit(1500.0);
-
-        assertEquals(2.0, manager.getTotalInterestPaid(), DOUBLE_DELTA);
-    }
-
-    @Test
-    public void maxi_savings_account() {
-        Bank bank = new Bank();
-        Manager manager = new Manager("Bob", bank);
-        Account maxiSavingsAccount = new MaxiSavings();
-        bank.addCustomer(new Customer("Bill").openAccount(maxiSavingsAccount));
-
-        maxiSavingsAccount.deposit(3000.0);
-
-        assertEquals(170.0, manager.getTotalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(3, mockB.getCustomers().size());
     }
 
 }
