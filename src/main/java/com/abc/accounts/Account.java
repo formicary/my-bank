@@ -16,6 +16,7 @@ public abstract class Account {
     protected double intRate;
     protected double accrueRate;
     protected double balance;
+    protected double totalEarnedInt;
     protected LocalDateTime dateOfLastUpdate;
 
     public Account() {
@@ -23,6 +24,7 @@ public abstract class Account {
         intRate = 0.0;
         balance = 0.0;
         accrueRate = 0.0;
+        totalEarnedInt = 0.0;
         dateOfLastUpdate = DateProvider.getInstance().now();
     }
 
@@ -91,7 +93,7 @@ public abstract class Account {
     protected abstract void accrueInterest();
 
     public double totalInterestEarned(){
-        return balance - sumTransactions();
+        return totalEarnedInt;
     }
 
     public double sumTransactions() {

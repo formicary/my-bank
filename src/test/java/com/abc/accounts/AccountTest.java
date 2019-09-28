@@ -62,7 +62,7 @@ public class AccountTest {
         }
         @Test
         @DisplayName("Should have balance of 0.0")
-        void testInitbal(){
+        void testInitBal(){
             double actual = mockAcc.balance;
             assertEquals(0.0,actual, () -> "Expected balance = 0.0, Actual = " + actual);
         }

@@ -7,8 +7,8 @@ import java.time.LocalDateTime;
  */
 public class Savings extends Account {
 
-    private double secInterestRate;
-    private double secAccrueRate;
+    protected double secIntRate;
+    protected double secAccrueRate;
 
     public Savings(){
         super();
@@ -22,32 +22,33 @@ public class Savings extends Account {
 
     private void init(){
         intRate = 0.001;
-        secInterestRate = 0.002;
+        secIntRate = 0.002;
         accrueRate = intRate /365;
-        secAccrueRate = secInterestRate/365;
+        secAccrueRate = secIntRate /365;
     }
 
     @Override
     protected void compoundInterest() {
-        if (balance <= 1000) balance += balance * intRate;
-        else balance += (1000 * intRate) + ((balance - 1000) * (secInterestRate));
+
+        double earnedInt;
+
+        if (balance <= 1000) {
+            earnedInt = balance * intRate;
+            balance += earnedInt;
+            totalEarnedInt += earnedInt;
+        }
+        else {
+            earnedInt = (1000 * intRate) + ((balance - 1000) * (secIntRate));
+            balance += earnedInt;
+            totalEarnedInt += earnedInt;
+        }
     }
 
     @Override
     protected void accrueInterest() {
         intRate += accrueRate;
-        secInterestRate += secAccrueRate;
+        secIntRate += secAccrueRate;
     }
-
-    public double getSecInterestRate() {
-        return secInterestRate;
-    }
-
-
-    public double getSecAccrueRate() {
-        return secAccrueRate;
-    }
-
 
     @Override
     public String toString() {

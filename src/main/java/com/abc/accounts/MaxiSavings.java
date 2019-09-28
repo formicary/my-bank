@@ -12,8 +12,8 @@ import static java.time.temporal.ChronoUnit.DAYS;
  */
 public class MaxiSavings extends Account {
 
-    private double secIntRate;
-    private double secAccrueRate;
+    protected double secIntRate;
+    protected double secAccrueRate;
 
     public MaxiSavings(){
         super();
@@ -35,8 +35,12 @@ public class MaxiSavings extends Account {
     @Override
     protected void compoundInterest() {
 
+        double earnedInt;
+
         boolean hadWithdrawal = hadWithdrawalInPast(10);
-        balance += (hadWithdrawal) ? (balance * secIntRate) : (balance * intRate);
+        earnedInt = (hadWithdrawal) ? (balance * secIntRate) : (balance * intRate);
+        balance += earnedInt;
+        totalEarnedInt += earnedInt;
     }
 
     @Override
@@ -49,14 +53,6 @@ public class MaxiSavings extends Account {
         LocalDateTime today = this.getDateOfLastUpdate();
         return transactions.stream()
                 .anyMatch(t -> (t.getTransactionType() == 0) && (DAYS.between(t.getTransactionDate(), today)<=numbOfDays));
-    }
-
-    public double getSecIntRate() {
-        return secIntRate;
-    }
-
-    public double getSecAccrueRate() {
-        return secAccrueRate;
     }
 
     @Override

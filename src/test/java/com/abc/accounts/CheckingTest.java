@@ -18,16 +18,11 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 public class CheckingTest {
 
     private Checking mockAcc;
-    private double expIntRate;
-    private double expAccrueRate;
 
     @BeforeEach
     public void init(){
-        mockAcc = new Checking(LocalDateTime.now());
-        expIntRate = 0.001;
-        expAccrueRate = 2.7397260273972604E-6;
+        mockAcc = new Checking();
     }
-
 
     @Nested
     @DisplayName("When an account is initialised it")
@@ -45,7 +40,7 @@ public class CheckingTest {
         void testInitIntRate(){
             double actual = mockAcc.intRate;
             double expected = 0.001;
-            assertEquals(expected,actual, () -> "Expected intRate = 0.001, Actual = " + actual);
+            assertEquals(expected,actual, () -> "Expected intRate = " + expected + " Actual = " + actual);
         }
 
         @Test
@@ -53,11 +48,11 @@ public class CheckingTest {
         void testInitAccrueRate(){
             double actual = mockAcc.accrueRate;
             double expected =  2.7397260273972604E-6;
-            assertEquals(expected,actual, () -> "Expected accrueRate = 2.7397260273972604E-6, Actual = " + actual);
+            assertEquals(expected,actual, () -> "Expected accrueRate = " + expected + " Actual = " + actual);
         }
         @Test
         @DisplayName("Should have balance of 0.0")
-        void testInitbal(){
+        void testInitBal(){
             double actual = mockAcc.balance;
             assertEquals(0.0,actual, () -> "Expected balance = 0.0, Actual = " + actual);
         }
@@ -203,8 +198,8 @@ public class CheckingTest {
         }
 
         @Test
-        @DisplayName("The rate should accrue")
-        public void testAccrue(){
+        @DisplayName("The rate should accrue 10 times in 10 days")
+        public void testAccrueTenDays(){
 
             mockAcc.updateAccount(mockAcc.dateOfLastUpdate.plusDays(10));
             double expected = 0.0010273972602739736;
@@ -213,8 +208,19 @@ public class CheckingTest {
         }
 
         @Test
-        @DisplayName("The balance should compound")
-        public void testCompound(){
+        @DisplayName("The balance should compound from 1000 to 1001 after 1 day")
+        public void testCompoundOneDay(){
+            mockAcc.balance = 1000;
+            mockAcc.updateAccount(mockAcc.dateOfLastUpdate.plusDays(1));
+            double expected = 1001;
+            double actual = mockAcc.balance;
+            assertEquals(expected,actual,
+                    () -> "Expected balance: " + expected + " actual balance: " + actual);
+        }
+
+        @Test
+        @DisplayName("A balance of 1000 should accrue and compound to value: 1010.169528502181379 after 10 days")
+        public void testAcrueAndCompoundTenDays(){
             mockAcc.deposit(1000);
 
             LocalDateTime oldDate = mockAcc.dateOfLastUpdate;
@@ -243,7 +249,7 @@ public class CheckingTest {
                     "Date expected: " + newDate + "Date actual: " + mockAcc.dateOfLastUpdate);
 
 
-            double expected = 10.169528502181379;
+            double expected = 10.169528502181308;
             double actual = mockAcc.totalInterestEarned();
 
             assertEquals(expected,actual, () -> "Expected interest: " + expected + " Actual interest: " + actual);
@@ -261,7 +267,7 @@ public class CheckingTest {
             assumeTrue(mockAcc.dateOfLastUpdate==newDate, () -> "update Account is not working as expected \n " +
                     "Date expected: " + newDate + "Date actual: " + mockAcc.dateOfLastUpdate);
 
-            double expected = 41.44360252486581;
+            double expected = 41.443602524865305;
             double actual = mockAcc.totalInterestEarned();
 
             assertEquals(expected,actual, () -> "Expected interest: " + expected + " Actual interest: " + actual);

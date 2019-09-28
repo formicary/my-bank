@@ -23,7 +23,11 @@ public class Checking extends Account {
 
     @Override
     protected void compoundInterest() {
-        balance += balance * intRate;
+
+        double earnedInt = balance * intRate;
+
+        balance += earnedInt;
+        totalEarnedInt += earnedInt;
     }
 
     @Override
