@@ -5,7 +5,7 @@ import com.abc.accounts.Account;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.abc.util.CurrencyFormatter.toDollars;
+import static com.abc.util.StringFormatter.toDollars;
 
 public class Customer extends User {
 

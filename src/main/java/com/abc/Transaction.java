@@ -4,7 +4,7 @@ import com.abc.util.DateProvider;
 
 import java.time.LocalDateTime;
 
-import static com.abc.util.CurrencyFormatter.toDollars;
+import static com.abc.util.StringFormatter.toDollars;
 
 public class Transaction {
 

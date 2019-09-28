@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.abc.util.CurrencyFormatter.toDollars;
+import static com.abc.util.StringFormatter.toDollars;
 import static java.time.temporal.ChronoUnit.DAYS;
 
 public abstract class Account {
