@@ -1,7 +1,5 @@
 package com.abc;
 
-import com.abc.util.DateProvider;
-
 import java.time.LocalDateTime;
 
 import static com.abc.util.StringFormatter.toDollars;
@@ -16,7 +14,7 @@ public class Transaction {
 
     public Transaction(double amount) {
         this.amount = amount;
-        this.transactionDate = DateProvider.getInstance().now();
+        this.transactionDate = LocalDateTime.now();
         transactionType = (amount < 0) ? WITHDRAWAL : DEPOSIT;
     }
 

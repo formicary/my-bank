@@ -1,8 +1,5 @@
 package com.abc.accounts;
 
-import com.abc.Transaction;
-import com.abc.util.DateProvider;
-
 import java.time.LocalDateTime;
 
 import static java.time.temporal.ChronoUnit.DAYS;

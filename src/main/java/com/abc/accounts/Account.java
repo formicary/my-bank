@@ -1,7 +1,6 @@
 package com.abc.accounts;
 
 import com.abc.Transaction;
-import com.abc.util.DateProvider;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ public abstract class Account {
         balance = 0.0;
         accrueRate = 0.0;
         totalEarnedInt = 0.0;
-        dateOfLastUpdate = DateProvider.getInstance().now();
+        dateOfLastUpdate = LocalDateTime.now();
     }
 
     public Account(LocalDateTime date){
@@ -34,7 +33,7 @@ public abstract class Account {
     }
 
     public void deposit(double amount) {
-       deposit(amount, DateProvider.getInstance().now());
+       deposit(amount, LocalDateTime.now());
     }
     public void deposit(double amount, LocalDateTime date) {
         if (amount <= 0) {
@@ -46,7 +45,7 @@ public abstract class Account {
     }
 
     public void withdraw(double amount) {
-        withdraw(amount,DateProvider.getInstance().now());
+        withdraw(amount,LocalDateTime.now());
     }
     public void withdraw(double amount, LocalDateTime date) {
         if (amount <= 0) {
@@ -72,7 +71,7 @@ public abstract class Account {
         addTransaction(transaction);
     }
     public void updateAccount(){
-        updateAccount(DateProvider.getInstance().now());
+        updateAccount(LocalDateTime.now());
     }
     public void updateAccount(LocalDateTime date){
 
