@@ -25,12 +25,14 @@ public class Customer extends User {
         return accounts.size();
     }
 
-    public void transfer(Account accFrom, Account accTo, double amount){
+    public void transfer(Account accFrom, Account accTo, double amount) {
         accFrom.withdraw(amount);
         accTo.deposit(amount);
     }
 
-    public double totalInterestEarned() { return accounts.stream().mapToDouble(Account::totalInterestEarned).sum(); }
+    public double totalInterestEarned() {
+        return accounts.stream().mapToDouble(Account::totalInterestEarned).sum();
+    }
 
     public String getStatementInDollars() {
         StringBuilder statement = new StringBuilder("Statement for " + getName() + "\n");

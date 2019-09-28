@@ -10,21 +10,21 @@ public class Savings extends Account {
     protected double secIntRate;
     protected double secAccrueRate;
 
-    public Savings(){
+    public Savings() {
         super();
         init();
     }
 
-    public Savings(LocalDateTime date){
+    public Savings(LocalDateTime date) {
         super(date);
         init();
     }
 
-    private void init(){
+    private void init() {
         intRate = 0.001;
         secIntRate = 0.002;
-        accrueRate = intRate /365;
-        secAccrueRate = secIntRate /365;
+        accrueRate = intRate / 365;
+        secAccrueRate = secIntRate / 365;
     }
 
     @Override
@@ -36,8 +36,7 @@ public class Savings extends Account {
             earnedInt = balance * intRate;
             balance += earnedInt;
             totalEarnedInt += earnedInt;
-        }
-        else {
+        } else {
             earnedInt = (1000 * intRate) + ((balance - 1000) * (secIntRate));
             balance += earnedInt;
             totalEarnedInt += earnedInt;

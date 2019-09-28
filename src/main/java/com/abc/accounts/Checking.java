@@ -7,11 +7,12 @@ import java.time.LocalDateTime;
  */
 public class Checking extends Account {
 
-    public Checking(){
+    public Checking() {
         super();
         init();
     }
-    public Checking(LocalDateTime date){
+
+    public Checking(LocalDateTime date) {
         super(date);
         init();
     }

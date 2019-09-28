@@ -1,7 +1,10 @@
 package com.abc.accounts;
 
 import com.abc.Transaction;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -19,7 +22,7 @@ public class AccountTest {
     private static Account mockAcc;
 
     @BeforeEach
-    public void init(){
+    public void init() {
 
         LocalDateTime date = LocalDateTime.now();
         mockAcc = new Account(date) {
@@ -38,49 +41,50 @@ public class AccountTest {
 
     @Nested
     @DisplayName("When an account is initialised it")
-    class InitAccountTest{
+    class InitAccountTest {
 
         @Test
         @DisplayName("should contain no transactions")
-        void testInitTransaction(){
+        void testInitTransaction() {
             int numbOftrans = mockAcc.transactions.size();
             assertEquals(0, numbOftrans, () -> "Should contain no transactions but contains: " + numbOftrans);
         }
 
         @Test
         @DisplayName("Should have interest rate of 0.0")
-        void testInitIntRate(){
+        void testInitIntRate() {
             double actual = mockAcc.intRate;
-            assertEquals(0.0,actual, () -> "Expected intRate = 0.0, Actual = " + actual);
+            assertEquals(0.0, actual, () -> "Expected intRate = 0.0, Actual = " + actual);
         }
 
         @Test
         @DisplayName("Should have accrue rate of 0.0")
-        void testInitAccrueRate(){
+        void testInitAccrueRate() {
             double actual = mockAcc.accrueRate;
-            assertEquals(0.0,actual, () -> "Expected accrueRate = 0.0, Actual = " + actual);
+            assertEquals(0.0, actual, () -> "Expected accrueRate = 0.0, Actual = " + actual);
         }
+
         @Test
         @DisplayName("Should have balance of 0.0")
-        void testInitBal(){
+        void testInitBal() {
             double actual = mockAcc.balance;
-            assertEquals(0.0,actual, () -> "Expected balance = 0.0, Actual = " + actual);
+            assertEquals(0.0, actual, () -> "Expected balance = 0.0, Actual = " + actual);
         }
 
         @Test
         @DisplayName("Should contain date of initialisation when date is not specified")
-        void testInitDate(){
+        void testInitDate() {
             DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
             String actual = mockAcc.dateOfLastUpdate.format(format);
             String expected = LocalDateTime.now().format(format);
 
-            assertEquals(expected,actual, () -> "expected date: " + expected + " actual date: " + actual);
+            assertEquals(expected, actual, () -> "expected date: " + expected + " actual date: " + actual);
         }
 
         @Test
         @DisplayName("Should contain the date that is specified, when specified")
-        void testInitSpecifiedDate(){
+        void testInitSpecifiedDate() {
             LocalDateTime expected = LocalDateTime.now();
             mockAcc = new Account(expected) {
                 @Override
@@ -94,26 +98,26 @@ public class AccountTest {
                 }
             };
             LocalDateTime actual = mockAcc.dateOfLastUpdate;
-            assertEquals(expected,actual, () -> "Expected date: " + expected + " Actual date: " + actual);
+            assertEquals(expected, actual, () -> "Expected date: " + expected + " Actual date: " + actual);
         }
     }
 
     @Nested
     @DisplayName("When making a deposit")
-    class DepositTest{
+    class DepositTest {
 
         @Test
         @DisplayName("of 2000.50, balance must equal 2000.50")
-        void testSingleDeposit(){
+        void testSingleDeposit() {
             double expected = 2000.50;
             mockAcc.deposit(expected);
             double actual = mockAcc.balance;
-            assertEquals(expected,actual, () -> "Expected balance: " + expected + "Actual balance: " + actual);
+            assertEquals(expected, actual, () -> "Expected balance: " + expected + "Actual balance: " + actual);
         }
 
         @Test
         @DisplayName("of 200.40, then 500.70, then 300 then balance must be 1001.10")
-        void testMultipleDeposits(){
+        void testMultipleDeposits() {
             double expected = 1001.10;
             mockAcc.deposit(200.40);
             mockAcc.deposit(500.70);
@@ -125,28 +129,28 @@ public class AccountTest {
 
         @Test
         @DisplayName("of -500, should throw an IllegalArgumentException")
-        public void testDepositThrows(){
+        public void testDepositThrows() {
             assertThrows(IllegalArgumentException.class, () -> mockAcc.deposit(-500));
         }
     }
 
     @Nested
     @DisplayName("When making a withdrawal")
-    class WithdrawalTest{
+    class WithdrawalTest {
 
 
         @Test
         @DisplayName("of 500.50, balance must equal -500.50")
-        public void testSingleWithdrawal(){
+        public void testSingleWithdrawal() {
             double expected = -500.50;
             mockAcc.withdraw(-expected);
             double actual = mockAcc.getBalance();
-            assertEquals(expected,actual, () -> "Expected balance: " + expected + "Actual balance: " + actual);
+            assertEquals(expected, actual, () -> "Expected balance: " + expected + "Actual balance: " + actual);
         }
 
         @Test
         @DisplayName("of 200.40, then 500.70, then 300 then balance must be -1001.10")
-        void testMultipleWithdrawals(){
+        void testMultipleWithdrawals() {
             double expected = -1001.10;
             mockAcc.withdraw(200.40);
             mockAcc.withdraw(500.70);
@@ -158,31 +162,31 @@ public class AccountTest {
 
         @Test
         @DisplayName("of -500, should throw an IllegalArgumentException")
-        public void testWithdrawThrows(){
+        public void testWithdrawThrows() {
             assertThrows(IllegalArgumentException.class, () -> mockAcc.withdraw(-500));
         }
     }
 
     @Nested
     @DisplayName("Concerning transactions where")
-    class transactionsTest{
+    class transactionsTest {
 
         @Test
         @DisplayName("a transaction is added, the account should contain it")
-        public void testAddTransaction(){
+        public void testAddTransaction() {
             Transaction expected = new Transaction(500);
             mockAcc.addTransaction(expected);
             assertTrue(mockAcc.getTransactions().contains(expected),
-                    () -> "Account does not contain the transaction: " + expected );
+                    () -> "Account does not contain the transaction: " + expected);
         }
 
         @Test
         @DisplayName("multiple are added with a combined sum of 505.56, sumTransactions should output 505.56")
-        public void testSumTransitions(){
+        public void testSumTransitions() {
 
 
             mockAcc.addTransaction(new Transaction(1000));
-            assumeTrue(mockAcc.transactions.size()==1, () -> "transitions are not successfully updating");
+            assumeTrue(mockAcc.transactions.size() == 1, () -> "transitions are not successfully updating");
             mockAcc.addTransaction(new Transaction(-500));
             mockAcc.addTransaction(new Transaction(5.56));
 
@@ -195,31 +199,31 @@ public class AccountTest {
 
     @Nested
     @DisplayName("When updating the account")
-    class UpdateAccountTest{
+    class UpdateAccountTest {
 
         @Test
         @DisplayName("The date should equal the date that the account was updated")
-        public void testUpdateDate(){
+        public void testUpdateDate() {
             DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             mockAcc.updateAccount();
             String actual = mockAcc.dateOfLastUpdate.format(format);
             String expected = LocalDateTime.now().format(format);
-            assertEquals(expected,actual, () -> "Expected date: " + expected + "Actual Date: "+ actual);
+            assertEquals(expected, actual, () -> "Expected date: " + expected + "Actual Date: " + actual);
         }
 
         @Test
         @DisplayName("The date should equal the date specified when updating")
-        public void testUpdateDateSpecified(){
+        public void testUpdateDateSpecified() {
             LocalDateTime expected = LocalDateTime.now().plusDays(10);
             mockAcc.updateAccount(expected);
             LocalDateTime actual = mockAcc.dateOfLastUpdate;
 
-            assertEquals(expected,actual, () -> "Expected date: " + expected + " Actual Date: "+ actual);
+            assertEquals(expected, actual, () -> "Expected date: " + expected + " Actual Date: " + actual);
         }
 
         @Test
         @DisplayName("There should be no interest earned")
-        public void testTotalInterestEarned(){
+        public void testTotalInterestEarned() {
             mockAcc.deposit(1000);
             mockAcc.deposit(500);
             mockAcc.withdraw(200);
@@ -227,36 +231,36 @@ public class AccountTest {
             LocalDateTime oldDate = mockAcc.dateOfLastUpdate;
             LocalDateTime newDate = oldDate.plusDays(10);
             mockAcc.updateAccount(newDate);
-            assumeTrue(mockAcc.dateOfLastUpdate==newDate, () -> "update Account is not working as expected \n " +
+            assumeTrue(mockAcc.dateOfLastUpdate == newDate, () -> "update Account is not working as expected \n " +
                     "Date expected: " + newDate + "Date actual: " + mockAcc.dateOfLastUpdate);
 
             double expected = 0;
             double actual = mockAcc.totalInterestEarned();
 
-            assertEquals(expected,actual, () -> "Expected interest: " + expected + " Actual interest: " + actual);
+            assertEquals(expected, actual, () -> "Expected interest: " + expected + " Actual interest: " + actual);
         }
 
     }
 
     @Nested
     @DisplayName("When displaying a report")
-    class statementTest{
+    class statementTest {
 
         @Test
         @DisplayName("Should correctly display an empty statement in Dollar format")
-        public void testEmptyStatementInDollars(){
+        public void testEmptyStatementInDollars() {
 
             String expected = "Account\n" +
                     "Total $0.00";
             String actual = mockAcc.getStatementInDollars();
 
-            assertEquals(expected,actual,
+            assertEquals(expected, actual,
                     () -> "Expected statement: " + expected + " Actual statement: " + actual);
         }
 
         @Test
         @DisplayName("Should correctly display deposits and withdrawals in Dollar format")
-        public void testStatementInDollars(){
+        public void testStatementInDollars() {
             mockAcc.deposit(1000);
             mockAcc.deposit(500);
             mockAcc.withdraw(200);
@@ -275,10 +279,10 @@ public class AccountTest {
 
     @Test
     @DisplayName("When calling toString output should be Account")
-    void testToString(){
+    void testToString() {
         String expected = "Account";
         String actual = mockAcc.toString();
-        assertEquals(expected,actual, () -> "Expected output: " + expected + "Actual output: " + actual);
+        assertEquals(expected, actual, () -> "Expected output: " + expected + "Actual output: " + actual);
     }
 
 

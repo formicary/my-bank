@@ -22,7 +22,7 @@ public class CustomerTest {
     private Account maxiAcc;
 
     @BeforeEach
-    public void init(){
+    public void init() {
         mockC = new Customer("Bob");
         checkingAcc = new Checking(LocalDateTime.now());
         savingsAcc = new Savings(LocalDateTime.now());
@@ -31,14 +31,14 @@ public class CustomerTest {
 
     @Test
     @DisplayName("When an account is opened, one should be present in accounts")
-    public void testOpenAccount(){
+    public void testOpenAccount() {
         mockC.openAccount(checkingAcc);
-        assertEquals(checkingAcc,mockC.getAccounts().get(0));
+        assertEquals(checkingAcc, mockC.getAccounts().get(0));
     }
 
     @Test
     @DisplayName("when 3 accounts are opened, customer should own 3 accounts")
-    public void testOpenMultAccounts(){
+    public void testOpenMultAccounts() {
         mockC.openAccount(checkingAcc);
         mockC.openAccount(savingsAcc);
         mockC.openAccount(maxiAcc);
@@ -48,14 +48,14 @@ public class CustomerTest {
 
     @Test
     @DisplayName("When a transfer is made between two accounts, one acc should withdraw 200, and the other deposit 200")
-    public void testTransfer(){
+    public void testTransfer() {
         mockC.openAccount(checkingAcc);
         mockC.openAccount(savingsAcc);
 
         checkingAcc.deposit(1000);
         savingsAcc.deposit(1000);
 
-        mockC.transfer(checkingAcc,savingsAcc,200);
+        mockC.transfer(checkingAcc, savingsAcc, 200);
 
         Account checkingAcc = mockC.getAccounts().get(0);
         Account savingsAcc = mockC.getAccounts().get(1);
@@ -66,7 +66,7 @@ public class CustomerTest {
 
     @Test
     @DisplayName("when one of each account earns a day of interest, sum of interest should be 54")
-    public void testTotalInterestEarned(){
+    public void testTotalInterestEarned() {
         mockC.openAccount(checkingAcc);
         mockC.openAccount(savingsAcc);
         mockC.openAccount(maxiAcc);
@@ -78,7 +78,7 @@ public class CustomerTest {
         savingsAcc.deposit(2000);
         maxiAcc.deposit(1000);
 
-        assumeTrue(checkingAcc.getBalance()==1000,
+        assumeTrue(checkingAcc.getBalance() == 1000,
                 () -> "Account's deposit method is not updating the balance correctly");
 
         LocalDateTime oldDate = checkingAcc.getDateOfLastUpdate();
@@ -96,14 +96,14 @@ public class CustomerTest {
 
     @Test
     @DisplayName("When a statement is requested and customer own no accounts, statement should be empty")
-    public void testGetEmpStatementInDollars(){
+    public void testGetEmpStatementInDollars() {
         String actual = mockC.getStatementInDollars();
         System.out.println(actual);
     }
 
     @Test
     @DisplayName("when a statement is requested, statement must output each account and their transactions")
-    public void testGetStatementInDollars(){
+    public void testGetStatementInDollars() {
         mockC.openAccount(checkingAcc);
         mockC.openAccount(savingsAcc);
         mockC.openAccount(maxiAcc);
@@ -115,7 +115,7 @@ public class CustomerTest {
         savingsAcc.deposit(2000);
         maxiAcc.deposit(1000);
 
-        assumeTrue(checkingAcc.getBalance()==1000,
+        assumeTrue(checkingAcc.getBalance() == 1000,
                 () -> "Account's deposit method is not updating the balance correctly");
 
         checkingAcc.withdraw(500, checkingAcc.getDateOfLastUpdate().plusDays(1));

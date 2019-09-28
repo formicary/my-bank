@@ -36,7 +36,7 @@ public class Transaction {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return (transactionType == WITHDRAWAL ? "Withdrawal " : "Deposit ") + toDollars(amount);
     }
 

@@ -1,11 +1,15 @@
 package com.abc;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @DisplayName("Testing a transaction")
 public class TransactionTest {
 
@@ -77,7 +81,7 @@ public class TransactionTest {
 
     @Test
     @DisplayName("When toString is used, should output type and amount")
-    public void testToString(){
+    public void testToString() {
         assertEquals("Withdrawal $1,000.00", mockTWithdrawel.toString());
         assertEquals("Deposit $1,000.00", mockTDeposit.toString());
     }

@@ -27,36 +27,38 @@ public abstract class Account {
         dateOfLastUpdate = LocalDateTime.now();
     }
 
-    public Account(LocalDateTime date){
+    public Account(LocalDateTime date) {
         this();
         dateOfLastUpdate = date;
     }
 
     public void deposit(double amount) {
-       deposit(amount, LocalDateTime.now());
+        deposit(amount, LocalDateTime.now());
     }
+
     public void deposit(double amount, LocalDateTime date) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
-            updateAccount(new Transaction(amount,date));
+            updateAccount(new Transaction(amount, date));
             balance += amount;
         }
     }
 
     public void withdraw(double amount) {
-        withdraw(amount,LocalDateTime.now());
+        withdraw(amount, LocalDateTime.now());
     }
+
     public void withdraw(double amount, LocalDateTime date) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
-            updateAccount(new Transaction(-amount,date));
+            updateAccount(new Transaction(-amount, date));
             balance -= amount;
         }
     }
 
-    void setDate(LocalDateTime date){
+    void setDate(LocalDateTime date) {
         dateOfLastUpdate = date;
     }
 
@@ -70,10 +72,12 @@ public abstract class Account {
         updateAccount(date);
         addTransaction(transaction);
     }
-    public void updateAccount(){
+
+    public void updateAccount() {
         updateAccount(LocalDateTime.now());
     }
-    public void updateAccount(LocalDateTime date){
+
+    public void updateAccount(LocalDateTime date) {
 
         int daysSinceLastUpdate = (int) DAYS.between(dateOfLastUpdate, date);
         setDate(date);
@@ -89,9 +93,10 @@ public abstract class Account {
     }
 
     protected abstract void compoundInterest();
+
     protected abstract void accrueInterest();
 
-    public double totalInterestEarned(){
+    public double totalInterestEarned() {
         return totalEarnedInt;
     }
 
@@ -103,7 +108,7 @@ public abstract class Account {
         return transactions;
     }
 
-    public String getStatementInDollars(){
+    public String getStatementInDollars() {
 
         StringBuilder s = new StringBuilder(this.toString() + "\n");
         //Now total up all the transactions
@@ -125,7 +130,7 @@ public abstract class Account {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "Account";
     }
 }

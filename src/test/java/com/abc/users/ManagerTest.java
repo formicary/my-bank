@@ -23,7 +23,7 @@ public class ManagerTest {
     private Account savings, maxiSavings, checkingsOne, checkingsTwo;
 
     @BeforeEach
-    public void init(){
+    public void init() {
         mockBank = new Bank();
         mockManager = new Manager("Bob", mockBank);
 
@@ -48,7 +48,7 @@ public class ManagerTest {
 
     @Test
     @DisplayName("When a summary of customers is requested, it should output their names and number of accounts owned")
-    public void testGetCustomerSummary(){
+    public void testGetCustomerSummary() {
         String expected = "Customer Summary\n" +
                 " - Cain (1 account)\n" +
                 " - Steve (2 accounts)\n" +
@@ -59,7 +59,7 @@ public class ManagerTest {
 
     @Test
     @DisplayName("When a request for total interest paid by bank, a sum of all interest paid to customers should output")
-    public void testTotalInterestPaid(){
+    public void testTotalInterestPaid() {
         savings.deposit(1000);
         savings.updateAccount(savings.getDateOfLastUpdate().plusDays(1));
         maxiSavings.deposit(1000);

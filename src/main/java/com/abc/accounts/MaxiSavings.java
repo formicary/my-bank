@@ -12,21 +12,21 @@ public class MaxiSavings extends Account {
     protected double secIntRate;
     protected double secAccrueRate;
 
-    public MaxiSavings(){
+    public MaxiSavings() {
         super();
         init();
     }
 
-    public MaxiSavings(LocalDateTime date){
+    public MaxiSavings(LocalDateTime date) {
         super(date);
         init();
     }
 
-    private void init(){
+    private void init() {
         intRate = 0.05;
-        accrueRate = intRate /365;
+        accrueRate = intRate / 365;
         secIntRate = 0.001;
-        secAccrueRate = secIntRate/365;
+        secAccrueRate = secIntRate / 365;
     }
 
     @Override
@@ -49,7 +49,7 @@ public class MaxiSavings extends Account {
     boolean hadWithdrawalInPast(int numbOfDays) {
         LocalDateTime today = this.getDateOfLastUpdate();
         return transactions.stream()
-                .anyMatch(t -> (t.getTransactionType() == 0) && (DAYS.between(t.getTransactionDate(), today)<=numbOfDays));
+                .anyMatch(t -> (t.getTransactionType() == 0) && (DAYS.between(t.getTransactionDate(), today) <= numbOfDays));
     }
 
     @Override
