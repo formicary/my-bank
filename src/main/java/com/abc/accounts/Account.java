@@ -107,17 +107,13 @@ public abstract class Account {
 
         StringBuilder s = new StringBuilder(this.toString() + "\n");
         //Now total up all the transactions
-        transactions.forEach(t -> s.append("  ").append(t.getStatementInDollars()).append("\n"));
+        transactions.forEach(t -> s.append("  ").append(t.toString()).append("\n"));
         s.append("Total ").append(toDollars(balance));
         return s.toString();
     }
 
     public double getIntRate() {
         return intRate;
-    }
-
-    public double getAccrueRate() {
-        return accrueRate;
     }
 
     public double getBalance() {
