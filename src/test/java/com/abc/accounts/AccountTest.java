@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 /**
  * @project MyBank
  */
-@DisplayName("Testing a normal Account")
+@DisplayName("Testing a normal account")
 public class AccountTest {
 
     private static Account mockAcc;
@@ -274,7 +274,7 @@ public class AccountTest {
     }
 
     @Test
-    @DisplayName("When calling toString output should be -> Account")
+    @DisplayName("When calling toString output should be Account")
     void testToString(){
         String expected = "Account";
         String actual = mockAcc.toString();

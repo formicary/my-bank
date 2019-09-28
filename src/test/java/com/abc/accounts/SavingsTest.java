@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 /**
  * @project MyBank
  */
+@DisplayName("Testing a Savings account")
 public class SavingsTest {
 
     private Savings mockAcc;
@@ -358,6 +359,7 @@ public class SavingsTest {
     }
 
     @Test
+    @DisplayName("When calling toString output should be Savings Account")
     public void testToString(){
         assertEquals("Savings Account", mockAcc.toString());
     }

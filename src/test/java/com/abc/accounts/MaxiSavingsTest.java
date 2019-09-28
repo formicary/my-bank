@@ -9,13 +9,13 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import static java.time.temporal.ChronoUnit.DAYS;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 /**
  * @project MyBank
  */
+@DisplayName("Testing a maxi-savings account")
 public class MaxiSavingsTest {
 
     private MaxiSavings mockAcc;
@@ -389,6 +389,7 @@ public class MaxiSavingsTest {
     }
 
     @Test
+    @DisplayName("When calling toString, output should be Maxi Savings Account")
     public void testToString(){
         assertEquals("Maxi Savings Account", mockAcc.toString());
     }
