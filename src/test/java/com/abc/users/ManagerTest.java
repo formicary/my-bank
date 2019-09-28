@@ -6,6 +6,7 @@ import com.abc.accounts.Checking;
 import com.abc.accounts.MaxiSavings;
 import com.abc.accounts.Savings;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -13,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * @project MyBank
  */
+@DisplayName("Testing Manager")
 public class ManagerTest {
 
     private Manager mockManager;
@@ -45,6 +47,7 @@ public class ManagerTest {
     }
 
     @Test
+    @DisplayName("When a summary of customers is requested, it should output their names and number of accounts owned")
     public void testGetCustomerSummary(){
         String expected = "Customer Summary\n" +
                 " - Cain (1 account)\n" +
@@ -55,6 +58,7 @@ public class ManagerTest {
     }
 
     @Test
+    @DisplayName("When a request for total interest paid by bank, a sum of all interest paid to customers should output")
     public void testTotalInterestPaid(){
         savings.deposit(1000);
         savings.updateAccount(savings.getDateOfLastUpdate().plusDays(1));
