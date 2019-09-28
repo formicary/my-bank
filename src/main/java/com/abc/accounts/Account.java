@@ -81,18 +81,18 @@ public abstract class Account {
 
         int daysSinceLastUpdate = (int) DAYS.between(dateOfLastUpdate, date);
         setDate(date);
-        acrrueAndCompBalance(daysSinceLastUpdate);
+        updateBalance(daysSinceLastUpdate);
     }
 
-    void acrrueAndCompBalance(int daysSinceLastUpdate) {
+    void updateBalance(int daysSinceLastUpdate) {
         while (daysSinceLastUpdate > 0) {
-            compoundInterest();
+            compoundBalance();
             accrueInterest();
             daysSinceLastUpdate--;
         }
     }
 
-    protected abstract void compoundInterest();
+    protected abstract void compoundBalance();
 
     protected abstract void accrueInterest();
 

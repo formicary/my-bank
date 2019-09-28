@@ -28,7 +28,7 @@ public class Savings extends Account {
     }
 
     @Override
-    protected void compoundInterest() {
+    protected void compoundBalance() {
 
         double earnedInt;
 

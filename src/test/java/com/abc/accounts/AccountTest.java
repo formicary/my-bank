@@ -27,7 +27,7 @@ public class AccountTest {
         LocalDateTime date = LocalDateTime.now();
         mockAcc = new Account(date) {
             @Override
-            protected void compoundInterest() {
+            protected void compoundBalance() {
 
             }
 
@@ -88,7 +88,7 @@ public class AccountTest {
             LocalDateTime expected = LocalDateTime.now();
             mockAcc = new Account(expected) {
                 @Override
-                protected void compoundInterest() {
+                protected void compoundBalance() {
 
                 }
 
