@@ -58,12 +58,11 @@ public abstract class Account {
         }
     }
 
-    void setDate(LocalDateTime date) {
-        dateOfLastUpdate = date;
-    }
+    public void updateAccount(LocalDateTime date) {
 
-    void addTransaction(Transaction transaction) {
-        transactions.add(transaction);
+        int daysSinceLastUpdate = (int) DAYS.between(dateOfLastUpdate, date);
+        setDate(date);
+        updateBalance(daysSinceLastUpdate);
     }
 
     void updateAccount(Transaction transaction) {
@@ -77,16 +76,12 @@ public abstract class Account {
         updateAccount(LocalDateTime.now());
     }
 
-    public void updateAccount(LocalDateTime date) {
-
-        int daysSinceLastUpdate = (int) DAYS.between(dateOfLastUpdate, date);
-        setDate(date);
-        updateBalance(daysSinceLastUpdate);
-    }
 
     void updateBalance(int daysSinceLastUpdate) {
         while (daysSinceLastUpdate > 0) {
-            compoundBalance();
+            if(balance>0){
+                compoundBalance();
+            }
             accrueInterest();
             daysSinceLastUpdate--;
         }
@@ -104,10 +99,6 @@ public abstract class Account {
         return transactions.stream().mapToDouble(Transaction::getAmount).sum();
     }
 
-    public List<Transaction> getTransactions() {
-        return transactions;
-    }
-
     public String getStatementInDollars() {
 
         StringBuilder s = new StringBuilder(this.toString() + "\n");
@@ -115,6 +106,18 @@ public abstract class Account {
         transactions.forEach(t -> s.append("  ").append(t.toString()).append("\n"));
         s.append("Total ").append(toDollars(balance));
         return s.toString();
+    }
+
+    void addTransaction(Transaction transaction) {
+        transactions.add(transaction);
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    void setDate(LocalDateTime date) {
+        dateOfLastUpdate = date;
     }
 
     public double getIntRate() {
