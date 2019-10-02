@@ -49,7 +49,7 @@ public class BankTest {
     	checkingAccount2.deposit(2000);
     	savingsAccount.deposit(2000);
     	maxiSavingsAccount.deposit(3000);
-    	assertEquals(176, testBank.totalInterestPaid(), delta);
+    	assertEquals(156, testBank.totalInterestPaid(), delta);
     	SavingsAccount savingsAccount = new SavingsAccount();
     	testCustomer1.openAccount(savingsAccount);
     	

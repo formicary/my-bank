@@ -1,5 +1,9 @@
 package com.abc;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
 public class MaxiSavingsAccount extends Account{
 
 	@Override
@@ -9,16 +13,10 @@ public class MaxiSavingsAccount extends Account{
 
 	@Override
 	public double getInterest() {
-		double sum = sumTransactions();
+		Date currentDate = Calendar.getInstance().getTime();
+		long diffMs = currentDate.getTime() - lastWithdrawalDate.getTime();
+	    long diff = TimeUnit.DAYS.convert(diffMs, TimeUnit.MILLISECONDS);
 		
-		if (sum <= 1000) {
-			return sum * 0.02;
-		}
-		else if (sum <= 2000) {
-			return 20 + (sum-1000) * 0.05;
-		}
-		else {
-			return 70 + (sum-2000) * 0.1;
-		}
+	    return (diff >= 10) ? sumTransactions() * 0.05 : sumTransactions() * 0.001;
 	}
 }

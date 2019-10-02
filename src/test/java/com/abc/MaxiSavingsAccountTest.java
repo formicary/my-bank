@@ -2,6 +2,11 @@ package com.abc;
 
 import static org.junit.Assert.*;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.concurrent.TimeUnit;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -60,21 +65,36 @@ public class MaxiSavingsAccountTest {
 	}
 	
 	@Test
-	public void interestTest1() {
+	public void noWithdrawalInterestTest1() {
 		testAccount.deposit(1000);
-		assertEquals(20, testAccount.getInterest(), delta);
+		assertEquals(50, testAccount.getInterest(), delta);
 	}
 	
 	@Test
-	public void interestTest2() {
-		testAccount.deposit(2000);
-		assertEquals(70, testAccount.getInterest(), delta);
+	public void recentWithdrawalInterestTest1() {
+		testAccount.deposit(1100);
+		testAccount.withdraw(100);
+		assertEquals(1, testAccount.getInterest(), delta);
 	}
 	
 	@Test
-	public void interestTest3() {
-		testAccount.deposit(3000);
-		assertEquals(170, testAccount.getInterest(), delta);
+	public void nineDayWithdrawalInterestTest1() {
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DATE, -9);
+		Date withdrawDate = cal.getTime();
+		testAccount.deposit(1100, withdrawDate);
+		testAccount.withdraw(100, withdrawDate);
+		assertEquals(1, testAccount.getInterest(), delta);
+	}
+	
+	@Test
+	public void tenDayWithdrawalInterestTest1() {
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DATE, -10);
+		Date withdrawDate = cal.getTime();
+		testAccount.deposit(1100, withdrawDate);
+		testAccount.withdraw(100, withdrawDate);
+		assertEquals(50, testAccount.getInterest(), delta);
 	}
 	
 	@Test

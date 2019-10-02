@@ -67,7 +67,7 @@ public class CustomerTest {
     	checkingAccount.deposit(1000);
     	savingsAccount.deposit(2000);
     	maxiSavingsAccount.deposit(3000);
-    	assertEquals(174, testCustomer.totalInterestEarned(), delta);
+    	assertEquals(154, testCustomer.totalInterestEarned(), delta);
     }
     
     @Test
