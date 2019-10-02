@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Bank {
     private List<Customer> customers;
-
+    
     public Bank() {
         customers = new ArrayList<Customer>();
     }
