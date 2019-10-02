@@ -1,57 +1,72 @@
 package com.abc;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+import org.junit.Before;
+
 public class CustomerTest {
-
-    @Test //Test customer statement generation
-    public void testApp(){
-
-        Account checkingAccount = new Account(Account.CHECKING);
-        Account savingsAccount = new Account(Account.SAVINGS);
-
-        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
-
-        checkingAccount.deposit(100.0);
-        savingsAccount.deposit(4000.0);
-        savingsAccount.withdraw(200.0);
-
-        assertEquals("Statement for Henry\n" +
-                "\n" +
-                "Checking Account\n" +
-                "  deposit $100.00\n" +
-                "Total $100.00\n" +
-                "\n" +
-                "Savings Account\n" +
-                "  deposit $4,000.00\n" +
-                "  withdrawal $200.00\n" +
-                "Total $3,800.00\n" +
-                "\n" +
-                "Total In All Accounts $3,900.00", henry.getStatement());
-    }
+	
+	Customer testCustomer;
+    CheckingAccount checkingAccount;
+    SavingsAccount savingsAccount;
+    MaxiSavingsAccount maxiSavingsAccount;
+    private static final double delta = 1e-15;
+	
+	@Before
+	public void setUpBeforeEach() {
+		testCustomer = new Customer("John");
+        
+        checkingAccount = new CheckingAccount();
+        savingsAccount = new SavingsAccount();
+        maxiSavingsAccount = new MaxiSavingsAccount();
+        
+        testCustomer.openAccount(checkingAccount);
+        testCustomer.openAccount(savingsAccount);
+        testCustomer.openAccount(maxiSavingsAccount);
+	}
 
     @Test
-    public void testOneAccount(){
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
-        assertEquals(1, oscar.getNumberOfAccounts());
-    }
+    public void statementTest(){
 
+        checkingAccount.deposit(1000.0);
+        savingsAccount.deposit(1000.0);
+        savingsAccount.withdraw(500.0);
+        maxiSavingsAccount.deposit(1000);
+        maxiSavingsAccount.withdraw(1000);
+
+        String expStr = "Statement for John\n" +
+        		"\n" +
+        		"Checking Account\n" + 
+        		"\n" + 
+        		"  Deposit $1000.00\n" + 
+        		"Total: $1000.00\n" + 
+        		"\n" + 
+        		"Savings Account\n" + 
+        		"\n" + 
+        		"  Deposit $1000.00\n" + 
+        		"  Withdrawal $500.00\n" + 
+        		"Total: $500.00\n" + 
+        		"\n" + 
+        		"Maxi-Savings Account\n" + 
+        		"\n" + 
+        		"  Deposit $1000.00\n" + 
+        		"  Withdrawal $1000.00\n" + 
+        		"Total: $0.00\n" + 
+        		"\n" + 
+        		"Total for all accounts: $1500.00";
+
+        
+        assertEquals(expStr, testCustomer.getStatement());
+    }
+    
     @Test
-    public void testTwoAccount(){
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
-        assertEquals(2, oscar.getNumberOfAccounts());
+    public void interestTest() {
+    	checkingAccount.deposit(1000);
+    	savingsAccount.deposit(2000);
+    	maxiSavingsAccount.deposit(3000);
+    	assertEquals(174, testCustomer.totalInterestEarned(), delta);
     }
 
-    @Ignore
-    public void testThreeAcounts() {
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
-        assertEquals(3, oscar.getNumberOfAccounts());
-    }
 }
