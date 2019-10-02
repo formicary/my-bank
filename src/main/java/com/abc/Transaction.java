@@ -1,6 +1,5 @@
 package com.abc;
 
-import java.util.Calendar;
 import java.util.Date;
 
 public class Transaction {
@@ -26,5 +25,4 @@ public class Transaction {
  		String type = (amount > 0) ? "Deposit" : "Withdrawal";
 		return String.format("  %s $%.2f", type, Math.abs(amount));
  	}
-
 }

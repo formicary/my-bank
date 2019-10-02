@@ -19,6 +19,7 @@ public abstract class Account {
     @Override
     public abstract String toString();
     
+    /* If the deposit doesn't specify a time it is assumed to be now */
     public void deposit(double amount) {
     	deposit(amount, Calendar.getInstance().getTime());
     }
@@ -32,10 +33,12 @@ public abstract class Account {
         }
     }
     
+    /* Likewise if the withdrawal doesn't specify a time it is assumed to be now */
     public void withdraw(double amount) {
     	withdraw(amount, Calendar.getInstance().getTime());
     }
 	
+    /* It is assumed that accounts can be withdrawn into negative values */
 	public void withdraw(double amount, Date transactionDate) throws IllegalArgumentException {
 	    if (amount <= 0) {
 	        throw new IllegalArgumentException("Amount must be greater than zero");
@@ -50,11 +53,9 @@ public abstract class Account {
 	
 	public String getStatement() {
 		String statement = this.toString() +"\n";
-		
 		for (Transaction transaction: transactions) {
 			statement += "\n" + transaction.toString();
 		}
-		
 		statement += String.format("\nTotal: $%.2f", sumTransactions());
 		return statement;
 	}

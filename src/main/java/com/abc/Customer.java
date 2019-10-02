@@ -48,6 +48,7 @@ public class Customer {
     	return sum;
     }
     
+    /* Invalid transfer values will be handled by the withdraw/deposit methods of Account */
     public void transfer(Account sourceAccount, Account destinationAccount, double amount) {
     	sourceAccount.withdraw(amount);
     	destinationAccount.deposit(amount);

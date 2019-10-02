@@ -11,5 +11,4 @@ public class CheckingAccount extends Account{
 	public double getInterest() {
 		return sumTransactions() * 0.001;
 	}
-
 }

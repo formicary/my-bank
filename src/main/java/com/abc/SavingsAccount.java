@@ -12,5 +12,4 @@ public class SavingsAccount extends Account{
 		double sum = sumTransactions();
 		return (sum > 1000) ? 1 + (sum-1000) * 0.002 : sum * 0.001;
 	}
-
 }

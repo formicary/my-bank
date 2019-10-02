@@ -15,8 +15,7 @@ public class MaxiSavingsAccount extends Account{
 	public double getInterest() {
 		Date currentDate = Calendar.getInstance().getTime();
 		long diffMs = currentDate.getTime() - lastWithdrawalDate.getTime();
-	    long diff = TimeUnit.DAYS.convert(diffMs, TimeUnit.MILLISECONDS);
-		
-	    return (diff >= 10) ? sumTransactions() * 0.05 : sumTransactions() * 0.001;
+	    long diffDays = TimeUnit.DAYS.convert(diffMs, TimeUnit.MILLISECONDS);	
+	    return (diffDays >= 10) ? sumTransactions() * 0.05 : sumTransactions() * 0.001;
 	}
 }
