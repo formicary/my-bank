@@ -9,7 +9,7 @@ public class TransactionTest {
 
     private Transaction testDeposit;
     private Transaction testWithdraw;
-    private final double delta = 0.000001;
+    private final double DOUBLE_DELTA = 1e-15;
 
     @Before
     public void init() {
@@ -21,13 +21,13 @@ public class TransactionTest {
     public void testDeposit() {
         double expected = 50;
         double actual = testDeposit.getAmount();
-        assertEquals(expected, actual, delta);
+        assertEquals(expected, actual, DOUBLE_DELTA);
     }
 
     @Test
     public void testWithdraw() {
         double expected = -50;
         double actual = testWithdraw.getAmount();
-        assertEquals(expected, actual, delta);
+        assertEquals(expected, actual, DOUBLE_DELTA);
     }
 }
