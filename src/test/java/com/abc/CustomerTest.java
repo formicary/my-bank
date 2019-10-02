@@ -1,5 +1,6 @@
 package com.abc;
 
+import com.abc.accounts.Account;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -7,7 +8,13 @@ import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
 
-    @Test //Test customer statement generation
+    @Test // Test customer name
+    public void testName() {
+        Customer alex = new Customer("Alex");
+        assertEquals("Alex", alex.getName());
+    }
+
+    @Test // Test customer statement generation
     public void testApp(){
 
         Account checkingAccount = new Account(Account.CHECKING);
