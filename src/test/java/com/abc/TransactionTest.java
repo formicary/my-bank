@@ -5,6 +5,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 //import static org.junit.Assert.assertTrue;
 
+import java.util.Calendar;
 
 import org.junit.BeforeClass;
 
@@ -17,8 +18,8 @@ public class TransactionTest {
 	
 	@BeforeClass
 	public static void setUpBeforeClass() {
-		testDeposit = new Transaction(1);
-		testWithdrawal = new Transaction(-1);
+		testDeposit = new Transaction(1, Calendar.getInstance().getTime());
+		testWithdrawal = new Transaction(-1, Calendar.getInstance().getTime());
 	}
 	
     @Test

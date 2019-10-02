@@ -8,9 +8,9 @@ public class Transaction {
  	private final double amount;
     private final Date transactionDate;
 
-    public Transaction(double amount) {
+    public Transaction(double amount, Date transactionDate) {
         this.amount = amount;
-        this.transactionDate = Calendar.getInstance().getTime();
+        this.transactionDate = transactionDate;
     }
     
     public double getAmount() {
