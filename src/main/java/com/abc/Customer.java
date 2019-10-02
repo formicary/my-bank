@@ -47,4 +47,9 @@ public class Customer {
     	}
     	return sum;
     }
+    
+    public void transfer(Account sourceAccount, Account destinationAccount, double amount) {
+    	sourceAccount.withdraw(amount);
+    	destinationAccount.deposit(amount);
+    }
 }

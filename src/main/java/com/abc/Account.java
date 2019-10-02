@@ -14,7 +14,7 @@ public abstract class Account {
     @Override
     public abstract String toString();
     
-    public void deposit(double amount) {
+    public void deposit(double amount) throws IllegalArgumentException {
         if (amount <= 0) {
             throw new IllegalArgumentException("Amount must be greater than zero");
         } 
@@ -23,7 +23,7 @@ public abstract class Account {
         }
     }
 	
-	public void withdraw(double amount) {
+	public void withdraw(double amount) throws IllegalArgumentException {
 	    if (amount <= 0) {
 	        throw new IllegalArgumentException("Amount must be greater than zero");
 	    } 
