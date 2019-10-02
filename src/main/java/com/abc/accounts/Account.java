@@ -3,6 +3,7 @@ package com.abc.accounts;
 import com.abc.Transaction;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public abstract class Account {
@@ -39,19 +40,33 @@ public abstract class Account {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
             transactions.add(new Transaction(amount));
+            balance += amount;
         }
     }
 
     public void withdraw(double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
+        } else if (amount > balance) {
+            throw new IllegalArgumentException("not enough money to cover amount");
         } else {
             transactions.add(new Transaction(-amount));
+            balance -= amount;
         }
     }
 
     public void addTransaction(Transaction transaction) {
         transactions.add(transaction);
+        balance += transaction.getAmount();
+    }
+
+    public abstract double interestEarned();
+
+    // Return the number of days between 2 dates
+    public int daysBetween(Date start, Date end) {
+        long msLength = end.getTime() - start.getTime();
+        long daysLength = msLength / (1000 * 60 * 60 * 24);
+        return (int) daysLength;
     }
 
 //    public double interestEarned() {
