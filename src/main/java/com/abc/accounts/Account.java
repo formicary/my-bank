@@ -62,9 +62,10 @@ public abstract class Account {
     }
 
     // Manually add transactions, to aid in testing interest calculations
-    public void addTransaction(Transaction transaction) {
+    public Account addTransaction(Transaction transaction) {
         transactions.add(transaction);
         balance += transaction.getAmount();
+        return this;
     }
 
     public String toString() {

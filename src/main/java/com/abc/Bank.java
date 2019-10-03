@@ -7,11 +7,16 @@ public class Bank {
     private List<Customer> customers;
 
     public Bank() {
-        customers = new ArrayList<Customer>();
+        this.customers = new ArrayList<Customer>();
     }
 
-    public void addCustomer(Customer customer) {
+    public List<Customer> getCustomers() {
+        return customers;
+    }
+
+    public Bank addCustomer(Customer customer) {
         customers.add(customer);
+        return this;
     }
 
     public String customerSummary() {
@@ -32,15 +37,5 @@ public class Bank {
         for(Customer c: customers)
             total += c.totalInterestEarned();
         return total;
-    }
-
-    public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
-        }
     }
 }

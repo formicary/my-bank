@@ -18,13 +18,17 @@ public class MaxiSavings extends Account {
     // Calculate total interest earned on the account from first transaction till now
     // Daily accrual and compounding of interest
     public double interestEarned() {
+        // If no transactions just return 0
+        if (transactions.size() == 0)
+            return 0;
+
         double totalEarnedInterest = 0;
         Transaction prevTransaction = transactions.get(0);
         double currBalance = prevTransaction.getAmount();
         double earnedInterest = 0.0;
         int daysSinceLastWithdrawal = 0;
 
-        // Assuming transactions are in chronological order (for now)
+        // Assuming transactions are in chronological order
         for (int i = 1; i < transactions.size(); i++) {
             Transaction currTransaction = transactions.get(i);
             int numDays = daysBetween(prevTransaction.getTransactionDate(), currTransaction.getTransactionDate());

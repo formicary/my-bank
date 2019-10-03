@@ -4,55 +4,100 @@ import com.abc.accounts.Account;
 import com.abc.accounts.Checking;
 import com.abc.accounts.MaxiSavings;
 import com.abc.accounts.Savings;
+import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Calendar;
+import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 
 public class BankTest {
     private static final double DOUBLE_DELTA = 1e-15;
 
-    @Test
-    public void customerSummary() {
-        Bank bank = new Bank();
-        Customer john = new Customer("John");
-        john.openAccount(new Checking());
-        bank.addCustomer(john);
+    private Bank testBank;
+    private Customer alice;
+    private Customer bob;
 
-        assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
+    private Checking aliceChecking;
+    private Savings aliceSavings;
+    private Checking bobChecking;
+    private MaxiSavings bobMaxiSavings;
+
+    @Before
+    public void init() {
+        testBank = new Bank();
+        alice = new Customer("Alice");
+        bob = new Customer("Bob");
+
+        aliceChecking = new Checking();
+        aliceSavings = new Savings();
+        bobChecking = new Checking();
+        bobMaxiSavings = new MaxiSavings();
+
+        alice.openAccount(aliceChecking).openAccount(aliceSavings);
+        bob.openAccount(bobChecking).openAccount(bobMaxiSavings);
+        testBank.addCustomer(alice).addCustomer(bob);
     }
 
-    @Test
-    public void checkingAccount() {
-        Bank bank = new Bank();
-        Checking checkingAccount = new Checking();
-        Customer bill = new Customer("Bill").openAccount(checkingAccount);
-        bank.addCustomer(bill);
-
-        checkingAccount.deposit(100.0);
-
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+    @Test // Test customers are added
+    public void testAddCustomer() {
+        assertEquals(2, testBank.getCustomers().size());
     }
 
-    @Test
-    public void savings_account() {
-        Bank bank = new Bank();
-        Savings checkingAccount = new Savings();
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+    @Test // Test customer summary
+    public void testCustomerSummary() {
+        String expected = "Customer Summary\n" +
+                " - Alice (2 accounts)\n" +
+                " - Bob (2 accounts)";
+        String actual = testBank.customerSummary();
 
-        checkingAccount.deposit(1500.0);
-
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(expected, actual);
     }
 
-    @Test
-    public void maxi_savings_account() {
-        Bank bank = new Bank();
-        Account checkingAccount = new MaxiSavings();
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+    @Test // Test simple interest calculations
+    public void testSimpleInterestPaid() {
+        Date now = Calendar.getInstance().getTime();
+        long DAY_IN_MS = 1000 * 60 * 60 * 24;
+        Date initDate = new Date(now.getTime() - 365*DAY_IN_MS);
 
-        checkingAccount.deposit(3000.0);
+        Transaction init = new Transaction(1000, initDate);
 
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        aliceChecking.addTransaction(init);
+        bobChecking.addTransaction(init);
+        double expected = 2;
+        double actual = testBank.totalInterestPaid();
+        assertEquals(expected, actual, DOUBLE_DELTA);
+    }
+
+    @Test // Test complex interest calculations
+    public void testComplexInterestPaid() {
+        Date now = Calendar.getInstance().getTime();
+        long DAY_IN_MS = 1000 * 60 * 60 * 24;
+        Date initDate = new Date(now.getTime() - 365*DAY_IN_MS);
+        Date d1 = new Date(now.getTime() - 335*DAY_IN_MS);
+        Date d2 = new Date(now.getTime() - 35*DAY_IN_MS);
+
+        Transaction init = new Transaction(1000, initDate);
+        Transaction t1 = new Transaction(500, d1);
+        Transaction t2 = new Transaction(-250, d2);
+
+        aliceChecking.addTransaction(init)
+                .addTransaction(t1)
+                .addTransaction(t2);
+        aliceSavings.addTransaction(init)
+                .addTransaction(t1)
+                .addTransaction(t2);
+        bobChecking.addTransaction(init)
+                .addTransaction(t1)
+                .addTransaction(t2);
+        bobMaxiSavings.addTransaction(init)
+                .addTransaction(t1)
+                .addTransaction(t2);
+
+        double expected = (2*1.4351251706737753) + 1.870329168339687 + 69.06268926318388;
+        double actual = testBank.totalInterestPaid();
+        assertEquals(expected, actual, DOUBLE_DELTA);
     }
 
 }
