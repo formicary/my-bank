@@ -9,14 +9,14 @@ import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 
-public class CheckingTest {
-    private Checking testAccount;
+public class SavingsTest {
+    private Savings testAccount;
     private final double DOUBLE_DELTA = 1e-15;
     private final long DAY_IN_MS = 1000 * 60 * 60 * 24;
 
     @Before
     public void init() {
-        testAccount = new Checking();
+        testAccount = new Savings();
 
         // Set initial deposit to 1 year ago
         Date now = Calendar.getInstance().getTime();
@@ -95,7 +95,7 @@ public class CheckingTest {
         testAccount.addTransaction(t1);
         testAccount.addTransaction(t2);
 
-        double expectedInterest = 1.4351251706737753;
+        double expectedInterest = 1.870329168339687;
         double actualInterest = testAccount.interestEarned();
         assertEquals(expectedInterest, actualInterest, DOUBLE_DELTA);
     }
