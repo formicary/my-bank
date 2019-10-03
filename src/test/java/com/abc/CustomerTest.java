@@ -1,17 +1,20 @@
 package com.abc;
 
-import org.junit.Ignore;
+import com.abc.Accounts.Account;
+import com.abc.Accounts.AccountCreator;
+import com.abc.Accounts.AccountType;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
+    private static final double DOUBLE_DELTA = 1e-15;
 
     @Test //Test customer statement generation
-    public void testApp(){
+    public void testCustomerStatement() {
 
-        Account checkingAccount = new Account(Account.CHECKING);
-        Account savingsAccount = new Account(Account.SAVINGS);
+        Account checkingAccount = AccountCreator.createAccount(AccountType.CHECKING);
+        Account savingsAccount = AccountCreator.createAccount(AccountType.SAVINGS);
 
         Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
 
@@ -34,24 +37,76 @@ public class CustomerTest {
     }
 
     @Test
-    public void testOneAccount(){
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
+    public void testOneAccount() {
+        Account savingsAccount = AccountCreator.createAccount(AccountType.SAVINGS);
+        Customer oscar = new Customer("Oscar").openAccount(savingsAccount);
         assertEquals(1, oscar.getNumberOfAccounts());
     }
 
     @Test
-    public void testTwoAccount(){
+    public void testTwoAccounts() {
+        Account savingsAccount = AccountCreator.createAccount(AccountType.SAVINGS);
+        Account checkingAccount = AccountCreator.createAccount(AccountType.CHECKING);
         Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
+                .openAccount(savingsAccount)
+                .openAccount(checkingAccount);
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
-    @Ignore
-    public void testThreeAcounts() {
+    @Test
+    public void testThreeAccounts() {
+        Account savingsAccount = AccountCreator.createAccount(AccountType.SAVINGS);
+        Account checkingAccount = AccountCreator.createAccount(AccountType.CHECKING);
+        Account maxiSavingsAccount = AccountCreator.createAccount(AccountType.MAXI_SAVINGS);
+
         Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
+                .openAccount(savingsAccount)
+                .openAccount(checkingAccount)
+                .openAccount(maxiSavingsAccount);
         assertEquals(3, oscar.getNumberOfAccounts());
+    }
+
+    @Test
+    public void testTransferFunds() {
+        Account savingsAccount = AccountCreator.createAccount(AccountType.SAVINGS);
+        Account checkingAccount = AccountCreator.createAccount(AccountType.CHECKING);
+
+        Customer oscar = new Customer("Oscar")
+                .openAccount(savingsAccount)
+                .openAccount(checkingAccount);
+
+        savingsAccount.deposit(1000.0);
+        oscar.transferFunds(savingsAccount, checkingAccount, 100);
+
+        assertEquals(900.0, savingsAccount.getBalance(), DOUBLE_DELTA);
+
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testTransferFundsDoesNotOwnSourceAccount() {
+        Account savingsAccount = AccountCreator.createAccount(AccountType.SAVINGS);
+        Account checkingAccount = AccountCreator.createAccount(AccountType.CHECKING);
+
+        Customer oscar = new Customer("Oscar")
+                .openAccount(checkingAccount);
+
+        savingsAccount.deposit(1000.0);
+        oscar.transferFunds(savingsAccount, checkingAccount, 100);
+
+
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testTransferFundsDoesNotOwnDestAccount() {
+        Account savingsAccount = AccountCreator.createAccount(AccountType.SAVINGS);
+        Account checkingAccount = AccountCreator.createAccount(AccountType.CHECKING);
+
+        Customer oscar = new Customer("Oscar")
+                .openAccount(checkingAccount);
+
+        savingsAccount.deposit(1000.0);
+        oscar.transferFunds(checkingAccount, savingsAccount, 100);
+
+
     }
 }
