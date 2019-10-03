@@ -1,6 +1,5 @@
 package com.abc;
 
-import com.abc.accounts.Account;
 import com.abc.accounts.Checking;
 import com.abc.accounts.MaxiSavings;
 import com.abc.accounts.Savings;

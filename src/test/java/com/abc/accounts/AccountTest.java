@@ -1,6 +1,5 @@
 package com.abc.accounts;
 
-import com.abc.Transaction;
 import org.junit.Before;
 import org.junit.Test;
 

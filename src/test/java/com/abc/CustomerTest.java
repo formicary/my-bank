@@ -1,11 +1,9 @@
 package com.abc;
 
-import com.abc.accounts.Account;
 import com.abc.accounts.Checking;
 import com.abc.accounts.MaxiSavings;
 import com.abc.accounts.Savings;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Calendar;
