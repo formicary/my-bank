@@ -99,4 +99,19 @@ public class MaxiSavingsTest {
         double actualInterest = testAccount.interestEarned();
         assertEquals(expectedInterest, actualInterest, DOUBLE_DELTA);
     }
+
+    @Test // Check statement
+    public void testStatement() {
+        testAccount.withdraw(50);
+        testAccount.deposit(44);
+        testAccount.withdraw(2.511);
+        String expected = "Maxi Savings Account\n" +
+                "  Deposit: $1,000.00\n" +
+                "  Withdraw: $50.00\n" +
+                "  Deposit: $44.00\n" +
+                "  Withdraw: $2.51\n" +
+                "Total: $991.49";
+        String actual = testAccount.getStatement();
+        assertEquals(expected, actual);
+    }
 }

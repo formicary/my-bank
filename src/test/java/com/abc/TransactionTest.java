@@ -30,4 +30,11 @@ public class TransactionTest {
         double actual = testWithdraw.getAmount();
         assertEquals(expected, actual, DOUBLE_DELTA);
     }
+
+    @Test
+    public void testToString() {
+        String expected = "  Deposit: $50.00";
+        String actual = testDeposit.toString();
+        assertEquals(expected, actual);
+    }
 }

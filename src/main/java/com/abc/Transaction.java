@@ -3,6 +3,8 @@ package com.abc;
 import java.util.Calendar;
 import java.util.Date;
 
+import static java.lang.Math.abs;
+
 public class Transaction {
 
     private final double amount;
@@ -25,6 +27,16 @@ public class Transaction {
 
     public Date getTransactionDate() {
         return this.transactionDate;
+    }
+
+    public String toString() {
+        String ret = "";
+        if (amount < 0)
+            ret += "  Withdraw: ";
+        else
+            ret += "  Deposit: ";
+        ret += String.format("$%,.2f", abs(amount));
+        return ret;
     }
 
 }

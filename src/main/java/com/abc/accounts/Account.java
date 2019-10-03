@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static java.lang.Math.abs;
+
 public abstract class Account {
 
     protected List<Transaction> transactions;
@@ -63,5 +65,19 @@ public abstract class Account {
     public void addTransaction(Transaction transaction) {
         transactions.add(transaction);
         balance += transaction.getAmount();
+    }
+
+    public String toString() {
+        return "Account";
+    }
+
+    // Get statement for account
+    public String getStatement() {
+        String statement = this.toString();
+        for (Transaction transaction : transactions) {
+            statement += "\n" + transaction.toString();
+        }
+        statement += "\nTotal: " + String.format("$%,.2f", abs(balance));
+        return statement;
     }
 }
