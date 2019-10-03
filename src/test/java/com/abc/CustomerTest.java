@@ -96,4 +96,13 @@ public class CustomerTest {
         double actualInterest = testCustomer.totalInterestEarned();
         assertEquals(expectedInterest, actualInterest, DOUBLE_DELTA);
     }
+
+    @Test // Test transfer
+    public void testTransfer() {
+        testCustomer.openAccount(testChecking).openAccount(testSavings);
+        testChecking.deposit(500);
+
+        testCustomer.transfer(45, testChecking, testSavings);
+        assertEquals(45, testSavings.getBalance(), DOUBLE_DELTA);
+    }
 }
