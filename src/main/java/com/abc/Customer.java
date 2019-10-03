@@ -47,27 +47,7 @@ public class Customer {
             statement += "\n" + a.getStatement() + "\n";
             total += a.getBalance();
         }
-        statement += "\nTotal In All Accounts " + toDollars(total);
+        statement += "\nTotal In All Accounts " + String.format("$%,.2f", abs(total));
         return statement;
-    }
-
-//    private String statementForAccount(Account a) {
-//        String s = "";
-//
-//       //Translate to pretty account type
-//        s += a.toString() + "\n";
-//
-//        //Now total up all the transactions
-//        double total = 0.0;
-//        for (Transaction t : a.getTransactions()) {
-//            s += "  " + (t.getAmount() < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.getAmount()) + "\n";
-//            total += t.getAmount();
-//        }
-//        s += "Total " + toDollars(total);
-//        return s;
-//    }
-
-    private String toDollars(double d){
-        return String.format("$%,.2f", abs(d));
     }
 }
