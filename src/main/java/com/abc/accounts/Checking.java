@@ -30,6 +30,7 @@ public class Checking extends Account {
 
             // Update balance and total interest
             currBalance += earnedInterest;
+            currBalance += currTransaction.getAmount();
             totalEarnedInterest += earnedInterest;
 
             // Update prevTransaction

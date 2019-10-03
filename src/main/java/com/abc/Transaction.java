@@ -13,6 +13,12 @@ public class Transaction {
         this.transactionDate = Calendar.getInstance().getTime();
     }
 
+    // Constructor to manually set transaction date, to aid in testing account interest calculations
+    public Transaction(double amount, Date date) {
+        this.amount = amount;
+        this.transactionDate = date;
+    }
+
     public double getAmount() {
         return this.amount;
     }

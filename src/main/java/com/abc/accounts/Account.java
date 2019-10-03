@@ -58,4 +58,10 @@ public abstract class Account {
         long daysLength = msLength / (1000 * 60 * 60 * 24);
         return (int) daysLength;
     }
+
+    // Manually add transactions, to aid in testing interest calculations
+    public void addTransaction(Transaction transaction) {
+        transactions.add(transaction);
+        balance += transaction.getAmount();
+    }
 }
