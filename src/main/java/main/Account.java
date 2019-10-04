@@ -50,8 +50,8 @@ public class Account implements Comparable<Account> {
 			else if (amount <= 2000)
 				return 20 + (amount - 1000) * 0.05;
 			// 5% interest (no withdrawals in past 10 days), otherwise 0.1%
-			else if ((DateProvider.getInstance().now().getDay()
-					- transactions.get(0).getTranscationDate().getDay()) >= 10) {
+			else if (DateProvider.getInstance().now().getDayOfMonth()
+					- transactions.get(0).getTranscationDate().getDayOfMonth() >= 10) {
 				return amount * 0.001;
 			} else {
 				return 20 + (amount * 0.05);
