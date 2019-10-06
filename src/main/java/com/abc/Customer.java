@@ -1,78 +1,81 @@
 package com.abc;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static java.lang.Math.abs;
 
 public class Customer {
-    private String name;
-    private List<Account> accounts;
+    private String name; // TODO Should this be readonly (final)?
+    private Map<String, Account> accountMap; // Does this make sense? Is this a sensible way of retrieving accounts? YOu have to scan the list?
+    private final String emailAddress; // ReadOnly email address for unique account ID.
 
-    public Customer(String name) {
+    Customer(String name, String emailAddress) {
         this.name = name;
-        this.accounts = new ArrayList<Account>();
+        this.emailAddress = emailAddress;
+        this.accountMap = new HashMap<>();
     }
 
-    public String getName() {
+    final String getName() {
         return name;
     }
 
-    public Customer openAccount(Account account) {
-        accounts.add(account);
+    final String getEmailAddress(){
+        return this.emailAddress;
+    }
+
+    Customer addAccount(Account account) {
+        if(accountMap.containsKey(account.getAccountType())){
+            throw new IllegalArgumentException("Customer ID " + emailAddress + " tried to add a duplicate " +
+                    account.getAccountType() + ".");
+        }
+        accountMap.put(account.getAccountType(),account);
+        account.setCustomerID(emailAddress);
         return this;
     }
-
-    public int getNumberOfAccounts() {
-        return accounts.size();
+    int getNumberOfAccounts() {
+        return accountMap.size();
     }
 
-    public double totalInterestEarned() {
+     double totalInterestEarned() {
         double total = 0;
-        for (Account a : accounts)
-            total += a.interestEarned();
+        for (Account a : accountMap.values())
+            total += a.getInterestAccrued();
         return total;
     }
-
-    public String getStatement() {
-        String statement = null;
-        statement = "Statement for " + name + "\n";
-        double total = 0.0;
-        for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+    void transferBetweenAccounts(Account transferFrom, Account transferTo, double amountToTransfer){ //why always 50?
+        if(transferFrom.getAccountBalance() < amountToTransfer){
+            throw new IllegalArgumentException("Customer ID " + emailAddress + " tried to transfer money out of a "
+                    + transferFrom.getAccountType() + " but didn't have sufficient funds for the transaction.");
         }
-        statement += "\nTotal In All Accounts " + toDollars(total);
-        return statement;
+        if(amountToTransfer <= 0){
+            throw new IllegalArgumentException("Customer ID " + emailAddress + " tried to transfer a negative or nil" +
+                    " quantity from their " + transferFrom.getAccountType() + " to their "
+                    + transferTo.getAccountType());
+        }
+        if(!(accountMap.containsValue(transferFrom) && accountMap.containsValue(transferTo))){
+            throw new IllegalArgumentException("Customer ID " + emailAddress + " tried to transfer money to or from an " +
+                    "account that they have not opened.");
+        }
+        else{
+            transferFrom.outwardTransfer(transferTo, amountToTransfer);
+            transferTo.inwardTransfer(transferFrom, amountToTransfer);
+        }
+    }
+    String getTotalStatement() {
+        StringBuilder statement = new StringBuilder("Statement for " + name + "\n");
+        double total = 0.0;
+        for (Account account : accountMap.values()) {
+            statement.append("\n").append(statementForAccount(account)).append("\n");
+            total += account.getAccountBalance();
+        }
+        statement.append("\nTotal In All Accounts: ").append(BankUtils.toDollars(total));
+        return statement.toString();
     }
 
-    private String statementForAccount(Account a) {
-        String s = "";
-
-       //Translate to pretty account type
-        switch(a.getAccountType()){
-            case Account.CHECKING:
-                s += "Checking Account\n";
-                break;
-            case Account.SAVINGS:
-                s += "Savings Account\n";
-                break;
-            case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
-                break;
-        }
-
-        //Now total up all the transactions
-        double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
-        }
-        s += "Total " + toDollars(total);
-        return s;
-    }
-
-    private String toDollars(double d){
-        return String.format("$%,.2f", abs(d));
+    private String statementForAccount(Account account) {
+        return account.stringForAccountStatement();
     }
 }

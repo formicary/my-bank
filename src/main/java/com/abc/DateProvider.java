@@ -1,18 +1,13 @@
 package com.abc;
 
+import java.time.Month;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
+import java.time.LocalDate;
 
-public class DateProvider {
-    private static DateProvider instance = null;
-
-    public static DateProvider getInstance() {
-        if (instance == null)
-            instance = new DateProvider();
-        return instance;
-    }
-
-    public Date now() {
-        return Calendar.getInstance().getTime();
+public class DateProvider {//TODO MAKE THIS JUST A DATE, ADD A NOTE SAYING i KNOW THIS LIMITS IT INTERNATIONALLY?
+    public static LocalDate now() {
+        return LocalDate.now(ZoneId.of("GMT"));
     }
 }

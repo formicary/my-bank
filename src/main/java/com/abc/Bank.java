@@ -1,46 +1,46 @@
 package com.abc;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Bank {
-    private List<Customer> customers;
+    private Map<String, Customer> customerMap;
+    private double totalInterestPaid;
 
-    public Bank() {
-        customers = new ArrayList<Customer>();
+    Bank() {
+        this.customerMap = new HashMap<>();
     }
 
-    public void addCustomer(Customer customer) {
-        customers.add(customer);
-    }
-
-    public String customerSummary() {
-        String summary = "Customer Summary";
-        for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-        return summary;
-    }
-
-    //Make sure correct plural of word is created based on the number passed in:
-    //If number passed in is 1 just return the word otherwise add an 's' at the end
-    private String format(int number, String word) {
-        return number + " " + (number == 1 ? word : word + "s");
-    }
-
-    public double totalInterestPaid() {
-        double total = 0;
-        for(Customer c: customers)
-            total += c.totalInterestEarned();
-        return total;
-    }
-
-    public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
+    void addCustomer(Customer customer) {
+        String customerKey = customer.getEmailAddress();
+        if (customerMap.containsKey(customerKey)) {
+            throw new IllegalArgumentException("Bank tried to register a new customer using an existing unique ID" +
+                    " (email address): " + customerKey);
+        } else {
+            customerMap.put(customer.getEmailAddress(), customer);
         }
     }
+
+    public Map getCustomerMap() { //todo do I need this?
+        return this.customerMap;
+    }
+
+    String customerSummary() {
+        StringBuilder summary = new StringBuilder("Customer Summary");
+        for (Customer customer : customerMap.values()) {
+            summary.append("\n - ").append(customer.getName()).append(" (")
+                    .append(BankUtils.format(customer.getNumberOfAccounts(), "account")).append(")");
+        }
+        return summary.toString();
+    }
+    // Total interest paid is generated from transaction lists when called.
+    // Performs more slowly than maintaining an 'interest paid' counter, but reduces potential for concurrency issues.
+    double totalInterestPaid() {
+        double total = 0; // Decimal?
+        for (Customer customer : customerMap.values()) {
+            total += customer.totalInterestEarned();
+        }
+        return total;
+    }
 }
+
