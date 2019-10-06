@@ -1,26 +1,27 @@
 package com.abc;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class MaxiSavingsAccount extends Account {
-    private double yearlyInterestRateNoWithdrawal = 0.05;
-    private double yearlyInterestRateAfterWithdrawal = 0.001;
-    private double currentYearlyInterestRate;
+    private BigDecimal yearlyInterestRateNoWithdrawal = BigDecimal.valueOf(0.05);
+    private BigDecimal yearlyInterestRateAfterWithdrawal = BigDecimal.valueOf(0.001);
+    private BigDecimal currentYearlyInterestRate;
 
     MaxiSavingsAccount() {
         super();
         this.currentYearlyInterestRate = yearlyInterestRateNoWithdrawal; //default - no withdrawals, so starting interest rate of 5%.
     }
     @Override
-    public double interestEarnedDaily() {
+    public BigDecimal interestEarnedDaily() {
         this.toggleInterestRate(DateProvider.now());
-        double amountToAccrueInterestOn = this.getAccountBalance();
-        return amountToAccrueInterestOn * this.dailyCompoundInterestRate(currentYearlyInterestRate);
+        BigDecimal amountToAccrueInterestOn = this.getAccountBalance();
+        return amountToAccrueInterestOn.multiply(this.dailyCompoundInterestRate(currentYearlyInterestRate));
     }
     public String getAccountType(){
         return "Maxi-Savings Account";
     }
-    double getCurrentYearlyInterest(){
+    BigDecimal getCurrentYearlyInterest(){
         return this.currentYearlyInterestRate;
     }
     void toggleInterestRate(LocalDate currentDate){

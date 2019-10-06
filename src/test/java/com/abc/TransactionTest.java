@@ -2,17 +2,17 @@ package com.abc;
 
 import org.junit.Test;
 
+import java.math.BigDecimal;
+
 import static org.junit.Assert.assertEquals;
 
-//todo what's the point in this test? How can it actually be tested better?
 public class TransactionTest {
-    private static final double DOUBLE_DELTA = 1e-15;
     @Test
     public void transaction() {
-        Transaction t = new Transaction(5, "withdrawal");
+        Transaction t = new Transaction(BigDecimal.valueOf(5), "withdrawal");
         assertEquals(DateProvider.now(), t.getTransactionDate());
         assertEquals("withdrawal", t.getTransactionType());
-        assertEquals(5, t.amount, DOUBLE_DELTA);
+        assertEquals(0, t.amount.compareTo(BigDecimal.valueOf(5)));
     }
 }
 

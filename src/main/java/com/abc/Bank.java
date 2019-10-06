@@ -1,11 +1,11 @@
 package com.abc;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Bank {
+class Bank {
     private Map<String, Customer> customerMap;
-    private double totalInterestPaid;
 
     Bank() {
         this.customerMap = new HashMap<>();
@@ -21,10 +21,6 @@ public class Bank {
         }
     }
 
-    public Map getCustomerMap() { //todo do I need this?
-        return this.customerMap;
-    }
-
     String customerSummary() {
         StringBuilder summary = new StringBuilder("Customer Summary");
         for (Customer customer : customerMap.values()) {
@@ -35,10 +31,10 @@ public class Bank {
     }
     // Total interest paid is generated from transaction lists when called.
     // Performs more slowly than maintaining an 'interest paid' counter, but reduces potential for concurrency issues.
-    double totalInterestPaid() {
-        double total = 0; // Decimal?
+    BigDecimal totalInterestPaid() {
+        BigDecimal total = BigDecimal.valueOf(0); // Decimal?
         for (Customer customer : customerMap.values()) {
-            total += customer.totalInterestEarned();
+            total = total.add(customer.totalInterestEarned());
         }
         return total;
     }

@@ -1,5 +1,6 @@
 package com.abc;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.Map;
 import static java.lang.Math.abs;
 
 public class Customer {
-    private String name; // TODO Should this be readonly (final)?
+    private String name; //
     private Map<String, Account> accountMap; // Does this make sense? Is this a sensible way of retrieving accounts? YOu have to scan the list?
     private final String emailAddress; // ReadOnly email address for unique account ID.
 
@@ -39,18 +40,18 @@ public class Customer {
         return accountMap.size();
     }
 
-     double totalInterestEarned() {
-        double total = 0;
+     BigDecimal totalInterestEarned() {
+        BigDecimal total = BigDecimal.valueOf(0);
         for (Account a : accountMap.values())
-            total += a.getInterestAccrued();
+            total = total.add(a.getInterestAccrued());
         return total;
     }
-    void transferBetweenAccounts(Account transferFrom, Account transferTo, double amountToTransfer){ //why always 50?
-        if(transferFrom.getAccountBalance() < amountToTransfer){
+    void transferBetweenAccounts(Account transferFrom, Account transferTo, BigDecimal amountToTransfer){ //why always 50?
+        if(transferFrom.getAccountBalance().compareTo(amountToTransfer) < 0){
             throw new IllegalArgumentException("Customer ID " + emailAddress + " tried to transfer money out of a "
                     + transferFrom.getAccountType() + " but didn't have sufficient funds for the transaction.");
         }
-        if(amountToTransfer <= 0){
+        if(amountToTransfer.compareTo(BigDecimal.ZERO) <= 0){
             throw new IllegalArgumentException("Customer ID " + emailAddress + " tried to transfer a negative or nil" +
                     " quantity from their " + transferFrom.getAccountType() + " to their "
                     + transferTo.getAccountType());
@@ -66,10 +67,10 @@ public class Customer {
     }
     String getTotalStatement() {
         StringBuilder statement = new StringBuilder("Statement for " + name + "\n");
-        double total = 0.0;
+        BigDecimal total = BigDecimal.valueOf(0);
         for (Account account : accountMap.values()) {
             statement.append("\n").append(statementForAccount(account)).append("\n");
-            total += account.getAccountBalance();
+            total = total.add(account.getAccountBalance());
         }
         statement.append("\nTotal In All Accounts: ").append(BankUtils.toDollars(total));
         return statement.toString();

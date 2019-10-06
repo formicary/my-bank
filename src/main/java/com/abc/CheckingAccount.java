@@ -1,16 +1,18 @@
 package com.abc;
 
-public class CheckingAccount extends Account {
-    private double yearlyInterestRate;
+import java.math.BigDecimal;
 
-    public CheckingAccount(){
+public class CheckingAccount extends Account {
+    private BigDecimal yearlyInterestRate;
+
+    CheckingAccount(){
         super();
-        this.yearlyInterestRate = 0.001;
+        this.yearlyInterestRate = BigDecimal.valueOf(0.001);
     }
     @Override
-    public double interestEarnedDaily(){
-        double amountToAccrueInterestOn = this.getAccountBalance(); //todo can this just be balance?
-        return amountToAccrueInterestOn * dailyCompoundInterestRate(yearlyInterestRate);
+    public BigDecimal interestEarnedDaily(){
+        BigDecimal amountToAccrueInterestOn = this.getAccountBalance();
+        return amountToAccrueInterestOn.multiply(dailyCompoundInterestRate(yearlyInterestRate));
     }
     @Override
     public String getAccountType() {

@@ -4,10 +4,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-import java.time.LocalDate;
+import java.math.BigDecimal;
 
 public class CustomerTest {
-    private static final double DOUBLE_DELTA = 1e-15;
 
     @Test //Test customer statement generation
     public void testCustomerStatement(){
@@ -16,9 +15,9 @@ public class CustomerTest {
 
         Customer henry = new Customer("Henry", "henry@email.com").addAccount(checkingAccount).addAccount(savingsAccount);
 
-        checkingAccount.deposit(100.0);
-        savingsAccount.deposit(4000.0);
-        savingsAccount.withdraw(200.0);
+        checkingAccount.deposit(BigDecimal.valueOf(100.0));
+        savingsAccount.deposit(BigDecimal.valueOf(4000.0));
+        savingsAccount.withdraw(BigDecimal.valueOf(200.0));
 
         assertEquals("Statement for Henry\n" +
                 "\n" +
@@ -59,9 +58,10 @@ public class CustomerTest {
         Account savingsAccount = new SavingsAccount();
         Customer oscar = new Customer("Oscar", "oscar@email.com").
                 addAccount(checkingAccount).addAccount(savingsAccount);
-        checkingAccount.deposit(100);
-        oscar.transferBetweenAccounts(checkingAccount, savingsAccount, 50);
-        assertEquals(50, checkingAccount.getAccountBalance(), DOUBLE_DELTA);
-        assertEquals(50, savingsAccount.getAccountBalance(), DOUBLE_DELTA);
+        checkingAccount.deposit(BigDecimal.valueOf(100));
+        oscar.transferBetweenAccounts(checkingAccount, savingsAccount, BigDecimal.valueOf(50));
+        BigDecimal expectedInEachAccount = BigDecimal.valueOf(50);
+        assertEquals(0, expectedInEachAccount.compareTo(checkingAccount.getAccountBalance()));
+        assertEquals(0, expectedInEachAccount.compareTo(savingsAccount.getAccountBalance()));
     }
 }
