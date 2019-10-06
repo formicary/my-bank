@@ -32,7 +32,7 @@ class Bank {
     // Total interest paid is generated from transaction lists when called.
     // Performs more slowly than maintaining an 'interest paid' counter, but reduces potential for concurrency issues.
     BigDecimal totalInterestPaid() {
-        BigDecimal total = BigDecimal.valueOf(0); // Decimal?
+        BigDecimal total = BigDecimal.valueOf(0);
         for (Customer customer : customerMap.values()) {
             total = total.add(customer.totalInterestEarned());
         }

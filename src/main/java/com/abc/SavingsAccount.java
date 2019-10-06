@@ -14,7 +14,6 @@ public class SavingsAccount extends Account {
     }
     @Override
 
-    //TODO fix rates and get rid of hard coding
     public BigDecimal interestEarnedDaily() {
         BigDecimal amountToAccrueInterestOn = this.getAccountBalance();
         BigDecimal tier1Interest = dailyCompoundInterestRate(yearlyInterestRateTier1).multiply(tier2Cutoff);

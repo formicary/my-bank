@@ -10,7 +10,7 @@ import static java.lang.Math.abs;
 
 public class Customer {
     private String name; //
-    private Map<String, Account> accountMap; // Does this make sense? Is this a sensible way of retrieving accounts? YOu have to scan the list?
+    private Map<String, Account> accountMap;
     private final String emailAddress; // ReadOnly email address for unique account ID.
 
     Customer(String name, String emailAddress) {
@@ -46,7 +46,7 @@ public class Customer {
             total = total.add(a.getInterestAccrued());
         return total;
     }
-    void transferBetweenAccounts(Account transferFrom, Account transferTo, BigDecimal amountToTransfer){ //why always 50?
+    void transferBetweenAccounts(Account transferFrom, Account transferTo, BigDecimal amountToTransfer){
         if(transferFrom.getAccountBalance().compareTo(amountToTransfer) < 0){
             throw new IllegalArgumentException("Customer ID " + emailAddress + " tried to transfer money out of a "
                     + transferFrom.getAccountType() + " but didn't have sufficient funds for the transaction.");

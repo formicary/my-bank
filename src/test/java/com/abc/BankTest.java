@@ -21,7 +21,7 @@ public class BankTest {
     }
 
     @Test
-    public void totalInterest(){//TODO refactor with bigDecimal
+    public void totalInterest(){
         Bank bank = new Bank();
         Customer john = new Customer("John", "john@email.com");
         Account maxiSavingsAccount = new MaxiSavingsAccount();
