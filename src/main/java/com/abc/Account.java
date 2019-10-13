@@ -1,5 +1,8 @@
 package com.abc;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,31 +23,39 @@ import java.util.List;
 /**
  * This class represents all Accounts a Customer can open.
  */
-public class Account {
-    // TODO: 11/10/2019 Make this class an interface
-    // TODO: 11/10/2019 Use subclasses to represent different accounts
-    //Account ids
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
-    //Current account type
-    private final int accountType;  //defaults to CHECKING
+public abstract class Account {
+    private final String accountType;
+    private List<Transaction> transactions;
 
-    //List of all transactions of this account
-    public List<Transaction> transactions;
+    private BigDecimal balance;
 
     /**
      * Initializes a new Account where the type matches the argument given.
      *
      * @param accountType the account id
      */
-    public Account(int accountType) {
-        // TODO: 10/10/2019 correct account validation
-        if (accountType < CHECKING || accountType > MAXI_SAVINGS) {
-            throw new IllegalArgumentException("please enter correct account type");
-        }
+    public Account(String accountType) {
+        System.out.println("Creating new Account...");
         this.accountType = accountType;
-        this.transactions = new ArrayList<Transaction>();
+        this.transactions = new ArrayList<>();
+        this.balance = BigDecimal.ZERO;
+    }
+
+    public BigDecimal updateBalance() {
+        //loop through all transaction
+        //either add too or subtract based on the transaction type
+        this.balance = BigDecimal.ZERO;
+        for (Transaction transaction : transactions) {
+            this.balance = this.balance.add(transaction.getAmount());
+        }
+        this.balance = balance.setScale(2, RoundingMode.HALF_EVEN);
+        return balance;
+//        System.out.println("Total balance is now: " + currencyFormat(balance));
+    }
+
+    public BigDecimal getBalance() {
+//        System.out.println(currencyFormat(balance));
+        return balance;
     }
 
     /**
@@ -52,11 +63,13 @@ public class Account {
      *
      * @param amount amount in decimal
      */
-    public void deposit(double amount) {
-        if (amount <= 0) {
+    public void deposit(BigDecimal amount) {
+        if (amount.signum() <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
+            System.out.println(getAccountType() + " -> deposit: " + amount);
             transactions.add(new Transaction(amount));
+            updateBalance();
         }
     }
 
@@ -65,67 +78,44 @@ public class Account {
      *
      * @param amount amount in decimal
      */
-    public void withdraw(double amount) {
-        if (amount <= 0) {
+    public void withdraw(BigDecimal amount) {
+        if (amount.signum() <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
-            transactions.add(new Transaction(-amount));
+            System.out.println(getAccountType() + " -> deposit: " + amount);
+            transactions.add(new Transaction(amount.negate()));
+            updateBalance();
         }
     }
 
     /**
-     * Calculate the interest earned of the current account.
+     * Interest depends on account type.
      *
      * @return interest earned
      */
-    public double interestEarned() {
-        // TODO: 10/10/2019 Remove magic numbers
-        double amount = sumTransactions();
-        switch (accountType) {
-            case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount - 1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
-            case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount - 1000) * 0.05;
-                return 70 + (amount - 2000) * 0.1;
-            default:
-                return amount * 0.001;
-        }
-    }
+    abstract long interestEarned();
 
     /**
-     * @return
-     */
-    public double sumTransactions() {
-        return checkIfTransactionsExist(true);
-    }
-
-    /**
-     * @param checkAll
-     * @return
-     */
-    private double checkIfTransactionsExist(boolean checkAll) {
-        double amount = 0.0;
-        for (Transaction t : transactions)
-            amount += t.amount;
-        return amount;
-    }
-
-    /**
-     * Returns the type of the current account.
+     * List of all transactions.
      *
-     * @return the account type
+     * @return transaction list
      */
-    public int getAccountType() {
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    /**
+     * Returns the name of the account. e.g. Savings Account
+     *
+     * @return name of current account
+     */
+    public String getAccountType() {
+//        System.out.println(accountType);
         return accountType;
     }
 
+    public static String currencyFormat(BigDecimal n) {
+        // TODO: 12/10/2019 Use helper method
+        return NumberFormat.getCurrencyInstance().format(n);
+    }
 }

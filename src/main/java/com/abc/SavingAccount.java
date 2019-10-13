@@ -1,4 +1,4 @@
-package com.ds.mo;
+package com.abc;
 
 import java.math.BigDecimal;
 

@@ -1,7 +1,6 @@
-package com.ds.mo;
+package com.abc;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 
 public class CheckingAccount extends Account {
     public CheckingAccount() {
