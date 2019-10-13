@@ -2,6 +2,8 @@ package com.abc;
 
 import org.junit.Test;
 
+import java.math.BigDecimal;
+
 import static org.junit.Assert.assertEquals;
 
 public class BankTest {
@@ -10,8 +12,7 @@ public class BankTest {
     @Test
     public void customerSummary() {
         Bank bank = new Bank();
-        Customer john = new Customer("John");
-        john.openAccount(new Account(Account.CHECKING));
+        Customer john = new Customer("John", new CheckingAccount());
         bank.addCustomer(john);
 
         assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
@@ -20,11 +21,11 @@ public class BankTest {
     @Test
     public void checkingAccount() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.CHECKING);
-        Customer bill = new Customer("Bill").openAccount(checkingAccount);
+        Account checkingAccount = new CheckingAccount();
+        Customer bill = new Customer("Bill", checkingAccount);
         bank.addCustomer(bill);
 
-        checkingAccount.deposit(100.0);
+        checkingAccount.deposit(new BigDecimal("100.0"));
 
         assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
@@ -32,10 +33,10 @@ public class BankTest {
     @Test
     public void savings_account() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+        Account checkingAccount = new SavingAccount();
+        bank.addCustomer(new Customer("Bill", checkingAccount));
 
-        checkingAccount.deposit(1500.0);
+        checkingAccount.deposit(new BigDecimal("1500.0"));
 
         assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
@@ -43,10 +44,10 @@ public class BankTest {
     @Test
     public void maxi_savings_account() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+        Account checkingAccount = new MaxiAccount();
+        bank.addCustomer(new Customer("Bill", checkingAccount));
 
-        checkingAccount.deposit(3000.0);
+        checkingAccount.deposit(new BigDecimal("3000.0"));
 
         assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
