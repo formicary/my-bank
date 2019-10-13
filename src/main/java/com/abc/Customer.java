@@ -1,5 +1,8 @@
 package com.abc;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,27 +22,39 @@ import static java.lang.Math.abs;
  * The Customer class represents a user of an artificial bank application.
  */
 public class Customer {
-    private String name;
-    private List<Account> accounts; //can currently hold many duplicate accounts
+    private final String name;
+    private List<Account> accounts; //can hold multiple instances of the same accounts
+
+    //id
+    //firstName
+    //surname
+    //Address Line 1
+    //Address Line 2
+    //Postcode
+    //Mobile Number
+    //Email
 
     /**
      * Constructs a new Customer with the given name.
      *
      * @param name the Customers name
      */
-    public Customer(String name) {
+    public Customer(String name, Account account) {
         // TODO: 10/10/2019 Name validation
+        if (name == null) {
+            throw new IllegalArgumentException("name must not be null");
+        }
+        if (name.isEmpty()) {
+            throw new IllegalArgumentException("name must not be empty");
+        }
+        if (account == null) {
+            throw new IllegalArgumentException("account must not be null");
+        }
+        System.out.println("Creating new Customer...");
         this.name = name;
-        this.accounts = new ArrayList<Account>();
-    }
-
-    /**
-     * Returns the name of the Customer.
-     *
-     * @return the Customers name
-     */
-    public String getName() {
-        return name;
+        this.accounts = new ArrayList<>();
+        //Customer must have at least one account
+        openAccount(account);
     }
 
     /**
@@ -54,15 +69,6 @@ public class Customer {
     }
 
     /**
-     * Gets the amount of accounts currently opened by a Customer.
-     *
-     * @return number of accounts
-     */
-    public int getNumberOfAccounts() {
-        return accounts.size();
-    }
-
-    /**
      * Displays interest earned from all accounts.
      *
      * @return interest earned
@@ -74,56 +80,88 @@ public class Customer {
         return total;
     }
 
+    private BigDecimal sumSingleAccount(Account account){
+        BigDecimal total = BigDecimal.ZERO;
+        for(Transaction t: account.getTransactions()){
+            total = total.add(t.getAmount());
+        }
+        total = total.setScale(2, RoundingMode.HALF_EVEN);
+        return total;
+    }
+
+    private BigDecimal sumAllAccount() {
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (Account account : accounts) {
+            total = total.add(account.getBalance());
+        }
+        total = total.setScale(2, RoundingMode.HALF_EVEN);  //round to 2.d.p
+        return total;
+    }
+
     /**
-     * Displays Transactions from ALL accounts and the total balance.
+     * Prints the statement for all accounts.
      *
-     * @return a list of transactions from all accounts
+     * @return
      */
     public String getStatement() {
-        // TODO: 11/10/2019 Use a StringBuilder here
-        String statement = null;
-        statement = "Statement for " + name + "\n";
-        double total = 0.0;
-        for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+        StringBuilder sb = new StringBuilder();
+        sb.append("Statement for ")
+                .append(name)
+                .append("\n");
+
+        //Print statement for each Account
+        for (Account account : accounts) {
+            sb.append("\n")
+                    .append(statementForAccount(account))
+                    .append("\n");
         }
-        statement += "\nTotal In All Accounts " + toDollars(total);
-        return statement;
+        //Sum of all Accounts
+        sb.append("\nTotal In All Accounts ")
+                .append(currencyFormat(sumAllAccount()));
+        return sb.toString();
     }
 
     /**
      * Displays transactions of a GIVEN account and its final balance.
      *
-     * @param a the account to query
+     * @param account the account to query
      * @return a list of transactions from the given account
      */
-    private String statementForAccount(Account a) {
-        // TODO: 11/10/2019 rename parameter
-        // TODO: 11/10/2019 Move to account
-        String s = "";
+    private String statementForAccount(Account account) {
+        StringBuilder sb = new StringBuilder();
 
-        //Translate to pretty account type
-        switch (a.getAccountType()) {
-            case Account.CHECKING:
-                s += "Checking Account\n";
-                break;
-            case Account.SAVINGS:
-                s += "Savings Account\n";
-                break;
-            case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
-                break;
-        }
+        //Print account name (e.g. Saving Account)
+        sb.append(account.getAccountType()).append("\n");
 
         //Now total up all the transactions
-        double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
+        for (Transaction t : account.getTransactions()) {
+            sb.append("  ")
+                    .append(t.getAmount().signum() < 0 ? "withdrawal" : "deposit")
+                    .append(" ").append(currencyFormat(t.getAmount().abs())).append("\n");
         }
-        s += "Total " + toDollars(total);
-        return s;
+        BigDecimal total = sumSingleAccount(account);
+        sb.append("Total ")
+                .append(currencyFormat(total));
+        return sb.toString();
+    }
+
+    /**
+     * Gets the amount of accounts currently opened by a Customer.
+     *
+     * @return number of accounts
+     */
+    public int getNumberOfAccounts() {
+        return accounts.size();
+    }
+
+    /**
+     * Returns the name of the Customer.
+     *
+     * @return the Customers name
+     */
+    public String getName() {
+        return name;
     }
 
     /**
@@ -132,8 +170,12 @@ public class Customer {
      * @param d the input representing the price
      * @return String prefixed with dollar symbol
      */
-    private String toDollars(double d) {
-        // TODO: 11/10/2019 Change parameter name
-        return String.format("$%,.2f", abs(d));
+    @Deprecated
+    private String toPounds(double d) {
+        return String.format("£%,.2f", abs(d));
+    }
+
+    public static String currencyFormat(BigDecimal n) {
+        return NumberFormat.getCurrencyInstance().format(n);
     }
 }
