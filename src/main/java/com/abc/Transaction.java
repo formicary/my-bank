@@ -1,6 +1,6 @@
 package com.abc;
 
-import java.util.Calendar;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -8,22 +8,39 @@ import java.util.Date;
  * A Transaction represents money going into or out of an account.
  */
 public class Transaction {
-    // TODO: 10/10/2019 Change to BigInteger
-    public final double amount;
+    //Common transactions
+    public final static BigDecimal FIVE = new BigDecimal("5.00");
+    public final static BigDecimal TEN = new BigDecimal("10.00");
+    public final static BigDecimal FIFTEEN = new BigDecimal("15.00");
+    public final static BigDecimal TWENTY = new BigDecimal("20.00");
+    public final static BigDecimal FIFTY = new BigDecimal("50.00");
+    public final static BigDecimal ONE_HUNDRED = new BigDecimal("100.00");
 
-    private Date transactionDate;   //can be final as the date will never change
+    //Actual amount transferred
+    private final BigDecimal amount;
+    //The current Date
+    private final Date transactionDate;
 
     /**
-     * Creates a new Transaction object with the given  amount.
+     * Creates a new Transaction object with the given amount.
      *
      * @param amount the amount of the current transaction
      */
-    public Transaction(double amount) {
+    public Transaction(BigDecimal amount) {
         // TODO: 10/10/2019 add Validation
+        if (amount == null) {
+            throw new IllegalArgumentException("amount must not be null");
+        }
         this.amount = amount;
         this.transactionDate = DateProvider.getInstance().now();
     }
 
-    // TODO: 11/10/2019 Add method to convert pennies to decimal e.g input: 150   output: £1.50
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public Date getTransactionDate() {
+        return transactionDate;
+    }
 
 }
