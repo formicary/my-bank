@@ -1,5 +1,6 @@
 package com.abc;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,11 +9,41 @@ import static java.lang.Math.abs;
 public class Customer {
     private String name;
     private List<Account> accounts;
+    private Account account;
+    private List<Customer> allCustomers;
+
+    /**
+     * Constructs a new arraylist with the account name.
+     * @param name of the account
+     */
 
     public Customer(String name) {
         this.name = name;
         this.accounts = new ArrayList<Account>();
+
+        this.allCustomers = new ArrayList<>();
+
     }
+
+    public void addCustomer(Customer customer) {
+        allCustomers.add(customer);
+    }
+
+
+    public String customerSummary(Customer customer) {
+        String summary = "Customer Summary";
+        for (Customer c : allCustomers)
+            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
+        return summary;
+    }
+
+
+    //Make sure correct plural of word is created based on the number passed in:
+    //If number passed in is 1 just return the word otherwise add an 's' at the end
+    private String format(int number, String word) {
+        return number + " " + (number == 1 ? word : word + "s");
+    }
+
 
     public String getName() {
         return name;
@@ -23,56 +54,42 @@ public class Customer {
         return this;
     }
 
+
+
     public int getNumberOfAccounts() {
         return accounts.size();
     }
 
-    public double totalInterestEarned() {
-        double total = 0;
+    public BigDecimal totalInterestEarned() {
+        BigDecimal total = new BigDecimal(0);
         for (Account a : accounts)
-            total += a.interestEarned();
+            total = total.add(a.interestEarned());
         return total;
     }
 
-    public String getStatement() {
-        String statement = null;
-        statement = "Statement for " + name + "\n";
-        double total = 0.0;
+//    public String getStatement(Account account) {
+//        String statement = null;
+//        statement = "Statement for " + name + "\n";
+//        BigDecimal total = new BigDecimal(0.0);
+//        for (Account a : accounts) {
+//            statement += "\n" +  account.statementForAccount(a) + "\n";
+//            total = total.add(a.getAccountBalance());
+//        }
+//        statement += "\nTotal In All Accounts " + Conversion.toDollars(total);
+//        return statement;
+//    }
+
+    public String getStatement(){
+
+        String s = this.name + "'s Statement: \n";
+        BigDecimal total = new BigDecimal(0.0);
         for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+            s += "\n" +  a.getAccountSummary() + "\n";
+            total = total.add(a.getAccountBalance());
         }
-        statement += "\nTotal In All Accounts " + toDollars(total);
-        return statement;
-    }
-
-    private String statementForAccount(Account a) {
-        String s = "";
-
-       //Translate to pretty account type
-        switch(a.getAccountType()){
-            case Account.CHECKING:
-                s += "Checking Account\n";
-                break;
-            case Account.SAVINGS:
-                s += "Savings Account\n";
-                break;
-            case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
-                break;
-        }
-
-        //Now total up all the transactions
-        double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
-        }
-        s += "Total " + toDollars(total);
+        s += "\nTotal In All Accounts " + Conversion.toDollars(total);
         return s;
     }
 
-    private String toDollars(double d){
-        return String.format("$%,.2f", abs(d));
-    }
+
 }

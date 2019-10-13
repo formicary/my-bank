@@ -1,13 +1,16 @@
 package com.abc;
 
-import org.junit.Test;
+        import org.junit.Test;
 
-import static org.junit.Assert.assertTrue;
+        import java.math.BigDecimal;
+
+        import static org.junit.Assert.assertTrue;
 
 public class TransactionTest {
     @Test
     public void transaction() {
-        Transaction t = new Transaction(5);
+        BigDecimal five = new BigDecimal(5);
+        Transaction t = new Transaction(five, "Withrawal");
         assertTrue(t instanceof Transaction);
     }
 }
