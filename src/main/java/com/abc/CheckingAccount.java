@@ -1,18 +1,20 @@
 package com.abc;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class CheckingAccount extends Account {
+
     public CheckingAccount() {
         super("Checking Account");
     }
 
     @Override
-    long interestEarned() {
-        // TODO: 10/10/2019 Remove magic numbers
-        BigDecimal amount = getBalance();
-
+    BigDecimal interestEarned() {
+        BigDecimal balance = getBalance();
+        BigDecimal result = balance.multiply(INTEREST_F1);
+        result = result.setScale(2, RoundingMode.HALF_EVEN);
 //        return amount * 0.001;
-        return 0;
+        return result;
     }
 }
