@@ -1,73 +1,99 @@
 package com.abc;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Account {
+public abstract class Account {
 
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
+	private int accountNumber;
+	private BigDecimal balance;
+	private List<Transaction> transactions;
+	private double interestRate;
+	private BigDecimal interestPaid;
+	private LocalDate dateCreated;
+	private String accountName;
 
-    private final int accountType;
-    public List<Transaction> transactions;
+	public Account(int accountNumber) {
+		this.accountNumber = accountNumber;
 
-    public Account(int accountType) {
-        this.accountType = accountType;
-        this.transactions = new ArrayList<Transaction>();
-    }
+		balance = BigDecimal.ZERO;
+		transactions = new ArrayList<Transaction>();
+		// Flat interest rate of 0.1%
+		interestRate = 1;
+		interestPaid = BigDecimal.ZERO;
+		dateCreated = DateProvider.getInstance().getCurrentDate();
+	}
 
-    public void deposit(double amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
-        } else {
-            transactions.add(new Transaction(amount));
-        }
-    }
+	public abstract void deposit(BigDecimal amount);
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
-    }
-}
+	public abstract boolean withdraw(BigDecimal amount);
 
-    public double interestEarned() {
-        double amount = sumTransactions();
-        switch(accountType){
-            case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
-            case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
-            default:
-                return amount * 0.001;
-        }
-    }
+	public abstract void dailyTasks();
 
-    public double sumTransactions() {
-       return checkIfTransactionsExist(true);
-    }
+	// BigDecimal implementation of (p(1 + r/n)^(nt)) - p to calculate compound
+	// interest
+	public BigDecimal compoundInterest(BigDecimal principle) {
+		int numberCompounded = 365;
+		double time = (double) dateCreated.until(DateProvider.getInstance().getCurrentDate(), ChronoUnit.DAYS) / 365;
+		// (1 + r/n)^(nt)
+		double rateCompoundTime = Math.pow((1 + ((interestRate / 100) / numberCompounded)), numberCompounded * time);
 
-    private double checkIfTransactionsExist(boolean checkAll) {
-        double amount = 0.0;
-        for (Transaction t: transactions)
-            amount += t.amount;
-        return amount;
-    }
+		// Implement compound interest formula to get new amount and interest earned
+		BigDecimal amount = principle.multiply(new BigDecimal(rateCompoundTime)).setScale(2, RoundingMode.CEILING);
+		BigDecimal compoundInterest = amount.subtract(principle);
 
-    public int getAccountType() {
-        return accountType;
-    }
+		interestPaid = interestPaid.add(compoundInterest);
 
+		return compoundInterest;
+	}
+
+	public int getAccountNumber() {
+		return accountNumber;
+	}
+
+	public BigDecimal getBalance() {
+		return balance;
+	}
+
+	public void setBalance(BigDecimal balance) {
+		this.balance = balance;
+	}
+
+	public List<Transaction> getTransactions() {
+		return transactions;
+	}
+
+	public double getInterestRate() {
+		return interestRate;
+	}
+
+	public void setInterestRate(double interestRate) {
+		this.interestRate = interestRate;
+	}
+
+	public BigDecimal getInterestPaid() {
+		return interestPaid;
+	}
+
+	// Created for JUnit testing purposes
+	public void setInterestPaid(BigDecimal interestPaid) {
+		this.interestPaid = interestPaid;
+	}
+
+	public LocalDate getDateCreated() {
+		return dateCreated;
+	}
+
+	public String getAccountName() {
+		return accountName;
+	}
+
+	public void setAccountName(String name) {
+		accountName = name;
+	}
+	
 }

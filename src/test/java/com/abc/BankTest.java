@@ -1,54 +1,80 @@
 package com.abc;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-
 public class BankTest {
-    private static final double DOUBLE_DELTA = 1e-15;
 
-    @Test
-    public void customerSummary() {
-        Bank bank = new Bank();
-        Customer john = new Customer("John");
-        john.openAccount(new Account(Account.CHECKING));
-        bank.addCustomer(john);
+	private static Bank abcBank;
+	private static Customer customerMatt;
 
-        assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
-    }
+	@BeforeClass
+	public static void init() {
+		Teller tellerAlison = new Teller("Alison");
+		BankManager managerRobert = new BankManager("Robert");
 
-    @Test
-    public void checkingAccount() {
-        Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.CHECKING);
-        Customer bill = new Customer("Bill").openAccount(checkingAccount);
-        bank.addCustomer(bill);
+		// Instantiate a bank with a teller and bank manager
+		abcBank = new Bank("ABC Bank", managerRobert, tellerAlison);
 
-        checkingAccount.deposit(100.0);
+		customerMatt = new Customer("Matt");
 
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
-    }
+		// Make accounts for both customers
+		// Account number: 0
+		tellerAlison.openAccount(customerMatt, 0);
+	}
 
-    @Test
-    public void savings_account() {
-        Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+	@Test
+	public void addMultipleEmployees() {
+		Teller tellerLuna = new Teller("Luna");
+		Teller tellerMolly = new Teller("Molly");
+		BankManager managerPatricia = new BankManager("Patricia");
 
-        checkingAccount.deposit(1500.0);
+		List<Employee> employees = new ArrayList<Employee>();
 
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
-    }
+		employees.add(tellerLuna);
+		employees.add(tellerMolly);
+		employees.add(managerPatricia);
 
-    @Test
-    public void maxi_savings_account() {
-        Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+		abcBank.addEmployees(employees);
 
-        checkingAccount.deposit(3000.0);
+		// Check if all the employees are present in the bank's employee list
+		assertTrue(abcBank.getEmployees().containsAll(employees));
+	}
 
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
-    }
+	@Test
+	public void nonExistentAccountNumber() {
+		// The bank should return null if a non-existent account number is passed
+		assertNull(abcBank.getAccount(3));
+	}
+
+	@Test
+	public void getAccountByNumber() {
+		// The bank should return the account via the passed account number (account
+		// number: 0)
+		assertNotNull(abcBank.getAccount(0));
+		assertTrue(abcBank.getAccount(0).getAccountNumber() == 0);
+	}
+
+	@Test
+	public void getAccountsForCustomer() {
+		// The bank should return all accounts belonging to the customer
+		assertTrue(abcBank.getAccounts(customerMatt).size() == 1);
+		assertTrue(abcBank.getAccounts(customerMatt).get(0).getAccountNumber() == 0);
+		assertNotNull(abcBank.getAccounts(customerMatt));
+	}
+
+	@AfterClass
+	public static void finalise() {
+		abcBank = null;
+		customerMatt = null;
+	}
 
 }
