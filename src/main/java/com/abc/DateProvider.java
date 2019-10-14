@@ -25,14 +25,17 @@ public class DateProvider {
 
 	// Fast forward the number of days for unit testing the accounts
 	public void addDays(int days) {
-		currentDate = currentDate.plusDays(days);
+		if (days > 0)
+			currentDate = currentDate.plusDays(days);
 	}
 
 	// Fast-forward the number of days for the bank
 	public void addDays(Bank bank, int days) {
-		currentDate = currentDate.plusDays(days);
+		if (days > 0) {
+			currentDate = currentDate.plusDays(days);
 
-		dailyTasks(bank);
+			dailyTasks(bank);
+		}
 	}
 
 	public LocalDate getCurrentDate() {
