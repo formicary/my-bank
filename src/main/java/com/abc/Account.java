@@ -8,20 +8,6 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * TASK
- * Different accounts have interest calculated in different ways:
- * -Checking accounts have a flat rate of 0.1%
- * -Savings accounts have a rate of 0.1% for the first $1,000 then 0.2%
- * -Maxi-Savings accounts have a rate of 2% for the first $1,000 then 5% for the next $1,000
- * then 10%
- * <p>
- * Additional
- * -Change Maxi-Savings accounts to have an interest rate of 5% assuming no withdrawals in the
- * past 10 days otherwise 0.1%
- * -Interest rates should accrue and compound daily (incl. weekends), rates above are per-annum
- */
-
-/**
  * This class represents all Accounts a Customer can open.
  */
 public abstract class Account {
@@ -48,7 +34,6 @@ public abstract class Account {
      * @param accountType the account id
      */
     public Account(String accountType) {
-        System.out.println("Creating new Account...");
         this.accountType = accountType;
         this.transactions = new ArrayList<>();
         this.balance = BigDecimal.ZERO;
@@ -56,7 +41,7 @@ public abstract class Account {
         this.accountNum = Helper.generateAccountNum();
     }
 
-    public BigDecimal updateBalance() {
+    private BigDecimal updateBalance() {
         //loop through all transaction and sum them up
         this.balance = BigDecimal.ZERO;
         for (Transaction transaction : transactions) {
@@ -78,13 +63,13 @@ public abstract class Account {
      *
      * @param amount amount in decimal
      */
-    public void deposit(BigDecimal amount) {
+    public boolean deposit(BigDecimal amount) {
         if (amount.signum() <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
-            System.out.println(getAccountType() + " -> deposit: " + amount);
             transactions.add(new Transaction(amount));
             updateBalance();
+            return true;
         }
     }
 
@@ -93,24 +78,26 @@ public abstract class Account {
      *
      * @param amount amount in decimal
      */
-    public void withdraw(BigDecimal amount) {
+    public boolean withdraw(BigDecimal amount) {
         if (amount.signum() <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
             //ensure balance > amount to withdraw
             if (canWithdraw(amount)) {
-                System.out.println(getAccountType() + " -> withdraw: " + amount);
                 transactions.add(new Transaction(amount.negate()));
                 updateBalance();
+                return true;
             } else {
-                System.err.println("ERROR\nbalance: " + balance);
-                System.err.println("trying to withdraw: " + amount.toString());
+//                System.err.println("ERROR\nbalance: " + balance);
+//                System.err.println("trying to withdraw: " + amount.toString());
+                System.err.printf("ERROR Account (%s)\nbalance: %s\ntrying to withdraw: %s\n",
+                        accountNum, balance, amount.toString());
+                return false;
             }
         }
     }
 
-    private boolean canWithdraw(BigDecimal amount) {
-        boolean bool = false;
+    public boolean canWithdraw(BigDecimal amount) {
         //throw new IllegalArgumentException("amount must be greater than balance");
         return amount.compareTo(balance) <= 0;
     }
@@ -139,5 +126,9 @@ public abstract class Account {
     public String getAccountType() {
 //        System.out.println(accountType);
         return accountType;
+    }
+
+    public String getAccountNum() {
+        return accountNum;
     }
 }
