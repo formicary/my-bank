@@ -2,7 +2,11 @@ package com.abc;
 
 import org.junit.Test;
 
+
+
 import static org.junit.Assert.assertEquals;
+
+import java.util.Date;
 
 public class BankTest {
     private static final double DOUBLE_DELTA = 1e-15;
@@ -32,23 +36,46 @@ public class BankTest {
     @Test
     public void savings_account() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+        Account savingsAccount = new Account(Account.SAVINGS);
+        bank.addCustomer(new Customer("Bill").openAccount(savingsAccount));
 
-        checkingAccount.deposit(1500.0);
+        savingsAccount.deposit(1500.0);
 
         assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
+    
+    @Test
+    public void maxi_savings_account_deposit_in_last_10_days() {
+        Bank bank = new Bank();
+        Account maxiAccount = new Account(Account.MAXI_SAVINGS);
+        bank.addCustomer(new Customer("Bill").openAccount(maxiAccount));
+
+        maxiAccount.deposit(3000.0);
+        
+        maxiAccount.withdraw(1000.0);
+        
+        assertEquals(20.0, bank.totalInterestPaid(), DOUBLE_DELTA);	//3000-1000 = 2000. 0.01 * 1000 = 20
+    }
 
     @Test
-    public void maxi_savings_account() {
+    public void maxi_savings_account_no_deposit_in_last_10_days() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+        Account maxiAccount = new Account(Account.MAXI_SAVINGS);
+        bank.addCustomer(new Customer("Bill").openAccount(maxiAccount));
 
-        checkingAccount.deposit(3000.0);
+        maxiAccount.deposit(3000.0);
+        
+        maxiAccount.withdraw(1000.0);
+        
+        Date d = new Date();
+        
+        Date now = DateProvider.getInstance().now();						//get date now
+        
+        d = Transaction.subtractDays(now,11);							//change date to more than 10 days ago
+        
+        maxiAccount.transactions.get(0).setTransactionDate(d);;		//set transaction to new date
 
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(100, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
 }

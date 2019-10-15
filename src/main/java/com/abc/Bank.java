@@ -43,4 +43,8 @@ public class Bank {
             return "Error";
         }
     }
+    
+    public void transferBetweenAccounts(Account outgoing, Account incoming, double amount) {
+    		
+    }
 }
