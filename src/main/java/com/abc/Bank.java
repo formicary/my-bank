@@ -1,13 +1,8 @@
 package com.abc;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-
-/**
- * TASK
- * A bank manager can get a report showing the list of customers and how many accounts they have
- * A bank manager can get a report showing the total interest paid by the bank on all accounts
- */
 
 /**
  * The Bank class holds all the information regarding its Customers.
@@ -19,11 +14,11 @@ public class Bank {
      * Initializes a new Bank with no Customers.
      */
     public Bank() {
-        customers = new ArrayList<Customer>();
+        customers = new ArrayList<>();
     }
 
     /**
-     * Adds a new Customer to the Bank.
+     * Add a new Customer to the Bank.
      *
      * @param customer new customer object
      */
@@ -34,14 +29,23 @@ public class Bank {
     /**
      * List all customers and the amount of accounts they have opened.
      *
-     * @return list of customer information
+     * @return list of customer information or empty string if no customers
      */
     public String customerSummary() {
-        // TODO: 10/10/2019 Use a StringBuilder here
-        String summary = "Customer Summary";
-        for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-        return summary;
+        if (customers == null) return "";
+        if (customers.isEmpty()) return "No Customers";
+        StringBuilder summary = new StringBuilder();
+        summary.append("Customer Summary");
+        for (Customer c : customers) {
+//            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
+            summary.append("\n - ")
+                    .append(c.getName())
+                    .append(" (")
+                    .append(format(c.getNumberOfAccounts(), "account"))
+                    .append(")");
+        }
+//        System.out.println(summary.toString());
+        return summary.toString();
     }
 
     //Make sure correct plural of word is created based on the number passed in:
@@ -55,25 +59,12 @@ public class Bank {
      *
      * @return total interest paid out
      */
-    public double totalInterestPaid() {
-        double total = 0;
-        for (Customer c : customers)
-            total += c.totalInterestEarned();
-        return total;
-    }
-
-    /**
-     * Broken method.
-     *
-     * @return error
-     */
-    public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "Error";
+    public BigDecimal totalInterestPaid() {
+        BigDecimal total = BigDecimal.ZERO;
+        for (Customer c : customers) {
+            total = total.add(c.totalInterestEarned());
         }
+//        System.out.println("total interest paid to all customers: " + total);
+        return total;
     }
 }
