@@ -15,6 +15,7 @@ public class Transaction {
     public final static BigDecimal TWENTY = new BigDecimal("20.00");
     public final static BigDecimal FIFTY = new BigDecimal("50.00");
     public final static BigDecimal ONE_HUNDRED = new BigDecimal("100.00");
+    public final static BigDecimal TWO_HUNDRED = new BigDecimal("200.00");
 
     //Actual amount transferred
     private final BigDecimal amount;
