@@ -9,22 +9,14 @@ import java.util.List;
 import static java.lang.Math.abs;
 
 /**
- * TASK
- * A customer can open an account
- * A customer can deposit / withdraw funds from an account
- * A customer can request a statement that shows transactions and totals for each of their accounts
- * <p>
- * Additional
- * A customer can transfer between their accounts
- */
-
-/**
  * The Customer class represents a user of an artificial bank application.
  */
 public class Customer {
     private final String name;
     private List<Account> accounts; //can hold multiple instances of the same accounts
 
+    private String firstNameRegex = "[A-Z][a-z]*";
+    private static final int NAME_LEN = 13;
     //id
     //firstName
     //surname
@@ -40,17 +32,22 @@ public class Customer {
      * @param name the Customers name
      */
     public Customer(String name, Account account) {
-        // TODO: 10/10/2019 Name validation
         if (name == null) {
             throw new IllegalArgumentException("name must not be null");
         }
         if (name.isEmpty()) {
             throw new IllegalArgumentException("name must not be empty");
         }
+        if (!name.matches(firstNameRegex)) {
+            throw new IllegalArgumentException("Incorrect name, valid name has only lowercase/capital letters with" +
+                    "no spaces.");
+        }
+        if (name.length() >= NAME_LEN) {
+            throw new IllegalArgumentException("name must be less than " + NAME_LEN + " characters");
+        }
         if (account == null) {
             throw new IllegalArgumentException("account must not be null");
         }
-        System.out.println("Creating new Customer...");
         this.name = name;
         this.accounts = new ArrayList<>();
         //Customer must have at least one account
@@ -69,23 +66,15 @@ public class Customer {
     }
 
     /**
-     * Displays interest earned from all accounts.
+     * Displays interest earned from all accounts. Single customer.
      *
      * @return interest earned
      */
-    public double totalInterestEarned() {
-        double total = 0;
-        for (Account a : accounts)
-            total += a.interestEarned();
-        return total;
-    }
-
-    private BigDecimal sumSingleAccount(Account account){
+    public BigDecimal totalInterestEarned() {
         BigDecimal total = BigDecimal.ZERO;
-        for(Transaction t: account.getTransactions()){
-            total = total.add(t.getAmount());
+        for (Account account : accounts) {
+            total = total.add(account.interestEarned());
         }
-        total = total.setScale(2, RoundingMode.HALF_EVEN);
         return total;
     }
 
@@ -134,16 +123,39 @@ public class Customer {
         //Print account name (e.g. Saving Account)
         sb.append(account.getAccountType()).append("\n");
 
-        //Now total up all the transactions
+        //Prints all transactions of Account given
         for (Transaction t : account.getTransactions()) {
             sb.append("  ")
                     .append(t.getAmount().signum() < 0 ? "withdrawal" : "deposit")
                     .append(" ").append(currencyFormat(t.getAmount().abs())).append("\n");
         }
-        BigDecimal total = sumSingleAccount(account);
+        //Prints the final balance
+        BigDecimal total = account.getBalance();
         sb.append("Total ")
                 .append(currencyFormat(total));
         return sb.toString();
+    }
+
+    public void transfer(String fromAccountNo, String toAccountNo, BigDecimal amount) {
+        Account from = getAccount(fromAccountNo);
+        Account to = getAccount(toAccountNo);
+        if (from == null || to == null) {
+            System.err.println("Please enter correct account number...");
+        } else {
+            if (from.withdraw(amount)) {
+                to.deposit(amount);
+            }
+        }
+    }
+
+    public Account getAccount(String other) {
+        for (Account account : accounts) {
+            if (account.getAccountNum().equals(other)) {
+                return account;
+            }
+        }
+        System.err.println("Can't find account: " + other);
+        return null;
     }
 
     /**
