@@ -7,7 +7,6 @@ import java.math.BigDecimal;
 import static org.junit.Assert.assertEquals;
 
 public class BankTest {
-    private static final double DOUBLE_DELTA = 1e-15;
 
     @Test
     public void customerSummary() {
@@ -27,7 +26,7 @@ public class BankTest {
 
         checkingAccount.deposit(new BigDecimal("100.0"));
 
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals("0.10", bank.totalInterestPaid().toString());
     }
 
     @Test
@@ -38,18 +37,42 @@ public class BankTest {
 
         checkingAccount.deposit(new BigDecimal("1500.0"));
 
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals("3.00", bank.totalInterestPaid().toString());
     }
 
     @Test
     public void maxi_savings_account() {
         Bank bank = new Bank();
-        Account checkingAccount = new MaxiAccount();
-        bank.addCustomer(new Customer("Bill", checkingAccount));
+        Account maxiAccount = new MaxiAccount();
+        bank.addCustomer(new Customer("Bill", maxiAccount));
 
-        checkingAccount.deposit(new BigDecimal("3000.0"));
+        maxiAccount.deposit(new BigDecimal("3000.0"));
 
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals("300.00", bank.totalInterestPaid().toString());
+    }
+
+    @Test
+    public void multiCustomerInterestPaid() {
+        Bank bank = new Bank();
+        Account bob_checking = new CheckingAccount();
+        Account bob_saving = new SavingAccount();
+        Account charlie_checking = new CheckingAccount();
+        Account charlie_saving = new SavingAccount();
+        Customer bob = new Customer("Bob", bob_checking);
+        bob.openAccount(bob_saving);
+        Customer charlie = new Customer("Charlie", charlie_checking);
+        charlie.openAccount(charlie_saving);
+
+        bob_checking.deposit(new BigDecimal("400.00"));
+        bob_saving.deposit(new BigDecimal("9000.00"));
+        charlie_checking.deposit(Transaction.TWO_HUNDRED);
+        charlie_saving.deposit(new BigDecimal("6000.00"));
+        bank.addCustomer(bob);
+        bank.addCustomer(charlie);
+
+        //bob total interest earned => 18.40
+        //charlie total interest earned => 12.20
+        assertEquals("30.60", bank.totalInterestPaid().toString());
     }
 
 }
