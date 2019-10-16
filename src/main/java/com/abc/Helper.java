@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class Helper {
 
-    //Length of account number
+    //Max length of account number
     private static final int ACC_LEN = 8;
 
     //Acceptable characters
@@ -15,6 +15,11 @@ public class Helper {
 
     private static Random random = new Random();
 
+    /**
+     * Generate a random string of characters from the acceptable character (alphaNum) field.
+     *
+     * @return random string
+     */
     public static String generateAccountNum() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < ACC_LEN; i++) {

@@ -19,7 +19,7 @@ public class Transaction {
 
     //Actual amount transferred
     private final BigDecimal amount;
-    //The current Date
+    //Date/Time of the transaction
     private final Date transactionDate;
 
     /**
@@ -28,7 +28,6 @@ public class Transaction {
      * @param amount the amount of the current transaction
      */
     public Transaction(BigDecimal amount) {
-        // TODO: 10/10/2019 add Validation
         if (amount == null) {
             throw new IllegalArgumentException("amount must not be null");
         }
@@ -36,10 +35,20 @@ public class Transaction {
         this.transactionDate = DateProvider.getInstance().now();
     }
 
+    /**
+     * Get the amount of this transaction.
+     *
+     * @return transaction amount
+     */
     public BigDecimal getAmount() {
         return amount;
     }
 
+    /**
+     * Date of transaction.
+     *
+     * @return date
+     */
     public Date getTransactionDate() {
         return transactionDate;
     }

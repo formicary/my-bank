@@ -55,9 +55,9 @@ public class Customer {
     }
 
     /**
-     * Adds a new account to list of accounts.
+     * Open new account.
      *
-     * @param account new account
+     * @param account new account to add
      * @return the current Customer object
      */
     public Customer openAccount(Account account) {
@@ -66,7 +66,7 @@ public class Customer {
     }
 
     /**
-     * Displays interest earned from all accounts. Single customer.
+     * Displays interest earned from all accounts of a single customer.
      *
      * @return interest earned
      */
@@ -81,6 +81,7 @@ public class Customer {
     private BigDecimal sumAllAccount() {
         BigDecimal total = BigDecimal.ZERO;
 
+        //loop through all accounts -> sum the balance
         for (Account account : accounts) {
             total = total.add(account.getBalance());
         }
@@ -91,7 +92,7 @@ public class Customer {
     /**
      * Prints the statement for all accounts.
      *
-     * @return
+     * @return account statement
      */
     public String getStatement() {
         StringBuilder sb = new StringBuilder();
@@ -99,13 +100,13 @@ public class Customer {
                 .append(name)
                 .append("\n");
 
-        //Print statement for each Account
+        //Print statement for individual Accounts
         for (Account account : accounts) {
             sb.append("\n")
                     .append(statementForAccount(account))
                     .append("\n");
         }
-        //Sum of all Accounts
+        //Print the final Sum of all Accounts
         sb.append("\nTotal In All Accounts ")
                 .append(currencyFormat(sumAllAccount()));
         return sb.toString();
@@ -121,21 +122,29 @@ public class Customer {
         StringBuilder sb = new StringBuilder();
 
         //Print account name (e.g. Saving Account)
-        sb.append(account.getAccountType()).append("\n");
+        sb.append(account.getAccountName()).append("\n");
 
-        //Prints all transactions of Account given
+        //Print all transactions of the Account given
         for (Transaction t : account.getTransactions()) {
             sb.append("  ")
                     .append(t.getAmount().signum() < 0 ? "withdrawal" : "deposit")
                     .append(" ").append(currencyFormat(t.getAmount().abs())).append("\n");
         }
-        //Prints the final balance
+        //Print the final balance
         BigDecimal total = account.getBalance();
         sb.append("Total ")
                 .append(currencyFormat(total));
         return sb.toString();
     }
 
+    /**
+     * Transfer money between 2 accounts of an individual customer given the accounts unique
+     * account numbers.
+     *
+     * @param fromAccountNo the account to withdraw from
+     * @param toAccountNo   the account to deposit into
+     * @param amount        the amount to transfer
+     */
     public void transfer(String fromAccountNo, String toAccountNo, BigDecimal amount) {
         Account from = getAccount(fromAccountNo);
         Account to = getAccount(toAccountNo);
@@ -148,20 +157,26 @@ public class Customer {
         }
     }
 
-    public Account getAccount(String other) {
+    /**
+     * Return the customers account when given the correct account number or null.
+     *
+     * @param accountNum account number of the account object to retrieve
+     * @return the customers account object, null otherwise
+     */
+    public Account getAccount(String accountNum) {
         for (Account account : accounts) {
-            if (account.getAccountNum().equals(other)) {
+            if (account.getAccountNum().equals(accountNum)) {
                 return account;
             }
         }
-        System.err.println("Can't find account: " + other);
+        System.err.println("Can't find account: " + accountNum);
         return null;
     }
 
     /**
-     * Gets the amount of accounts currently opened by a Customer.
+     * Gets the number of accounts currently opened by a Customer.
      *
-     * @return number of accounts
+     * @return size of accounts array
      */
     public int getNumberOfAccounts() {
         return accounts.size();
@@ -170,7 +185,7 @@ public class Customer {
     /**
      * Returns the name of the Customer.
      *
-     * @return the Customers name
+     * @return a String representing the customers name
      */
     public String getName() {
         return name;
@@ -187,7 +202,13 @@ public class Customer {
         return String.format("£%,.2f", abs(d));
     }
 
-    public static String currencyFormat(BigDecimal n) {
-        return NumberFormat.getCurrencyInstance().format(n);
+    /**
+     * Returns a currency format for the current default locale.
+     *
+     * @param d the input representing the price
+     * @return String prefixed with dollar symbol
+     */
+    public static String currencyFormat(BigDecimal d) {
+        return NumberFormat.getCurrencyInstance().format(d);
     }
 }

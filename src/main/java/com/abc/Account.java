@@ -2,13 +2,11 @@ package com.abc;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
- * This class represents all Accounts a Customer can open.
+ * The abstract Account class represents the core functionality of all Accounts.
  */
 public abstract class Account {
     //Fixed interest rates
@@ -18,10 +16,10 @@ public abstract class Account {
     static final BigDecimal PRIMARY_BALANCE = new BigDecimal("1000.00");
     static final BigDecimal SECONDARY_BALANCE = new BigDecimal("2000.00");
 
-    //The account type (e.g. Checking Account)
-    private final String accountType;
+    //The account name (e.g. Checking Account)
+    private final String accountName;
+    //All transaction on this account
     private List<Transaction> transactions;
-
     //Money in this account
     private BigDecimal balance;
 
@@ -29,12 +27,12 @@ public abstract class Account {
     private final String accountNum;
 
     /**
-     * Initializes a new Account where the type matches the argument given.
+     * Initializes a new Account then generates a random account number.
      *
-     * @param accountType the account id
+     * @param accountName the account name
      */
-    public Account(String accountType) {
-        this.accountType = accountType;
+    public Account(String accountName) {
+        this.accountName = accountName;
         this.transactions = new ArrayList<>();
         this.balance = BigDecimal.ZERO;
 
@@ -42,7 +40,7 @@ public abstract class Account {
     }
 
     private BigDecimal updateBalance() {
-        //loop through all transaction and sum them up
+        //loop through all transactions and sum them up
         this.balance = BigDecimal.ZERO;
         for (Transaction transaction : transactions) {
             this.balance = this.balance.add(transaction.getAmount());
@@ -50,18 +48,22 @@ public abstract class Account {
         //round here?
         this.balance = balance.setScale(2, RoundingMode.HALF_EVEN);
         return balance;
-//        System.out.println("Total balance is now: " + currencyFormat(balance));
     }
 
+    /**
+     * Gets the current balance of this account.
+     *
+     * @return money in account
+     */
     public BigDecimal getBalance() {
 //        System.out.println(currencyFormat(balance));
         return balance;
     }
 
     /**
-     * Add money to this Account. The transaction is added to list of transaction.
+     * Add money to this Account. A new transaction is added to list of transaction.
      *
-     * @param amount amount in decimal
+     * @param amount the amount to deposit
      */
     public boolean deposit(BigDecimal amount) {
         if (amount.signum() <= 0) {
@@ -74,9 +76,9 @@ public abstract class Account {
     }
 
     /**
-     * Withdraw from this Account. The transaction is added to list of transaction.
+     * Withdraw from this Account. A new transaction is added to list of transaction.
      *
-     * @param amount amount in decimal
+     * @param amount the amount to withdraw
      */
     public boolean withdraw(BigDecimal amount) {
         if (amount.signum() <= 0) {
@@ -88,8 +90,6 @@ public abstract class Account {
                 updateBalance();
                 return true;
             } else {
-//                System.err.println("ERROR\nbalance: " + balance);
-//                System.err.println("trying to withdraw: " + amount.toString());
                 System.err.printf("ERROR Account (%s)\nbalance: %s\ntrying to withdraw: %s\n",
                         accountNum, balance, amount.toString());
                 return false;
@@ -97,13 +97,19 @@ public abstract class Account {
         }
     }
 
+    /**
+     * Returns true if the current balance is greater than the amount given.
+     *
+     * @param amount the amount to withdraw
+     * @return true is balance > amount
+     */
     public boolean canWithdraw(BigDecimal amount) {
         //throw new IllegalArgumentException("amount must be greater than balance");
         return amount.compareTo(balance) <= 0;
     }
 
     /**
-     * Interest depends on account type.
+     * Calculate interest earned depending on account type.
      *
      * @return interest earned
      */
@@ -123,11 +129,16 @@ public abstract class Account {
      *
      * @return name of current account
      */
-    public String getAccountType() {
+    public String getAccountName() {
 //        System.out.println(accountType);
-        return accountType;
+        return accountName;
     }
 
+    /**
+     * Returns the String representation of the unique account number.
+     *
+     * @return current account number
+     */
     public String getAccountNum() {
         return accountNum;
     }
