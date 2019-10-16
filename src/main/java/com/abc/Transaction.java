@@ -8,20 +8,21 @@ import static java.lang.Math.abs;
 
 public class Transaction {
     public final BigDecimal amount;
-    public final String transactionType;
+    public final AccountOperation transactionType;
 
+    public enum AccountOperation {
+        GETACCOUNTSUMMARY, WITHRAW, DEPOSIT, TRANSFERTO, TRANSFERFROM
+    }
 
     private Date transactionDate;
 
-    public Transaction(BigDecimal amount, String transactionType) {
+    public Transaction(BigDecimal amount, AccountOperation transactionType) {
         this.amount = amount;
         this.transactionDate = DateProvider.getInstance().now();
         this.transactionType = transactionType;
     }
 
-    private String toDollars(double d){
-        return String.format("$%,.2f", abs(d));
-    }
+
 
     public String toString(){
         return this.transactionDate + " " + this.transactionType + ": " + Conversion.toDollars(this.amount);
