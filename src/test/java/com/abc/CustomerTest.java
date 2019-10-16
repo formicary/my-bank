@@ -1,7 +1,6 @@
 package com.abc;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -143,7 +142,7 @@ public class CustomerTest {
         saving.deposit(new BigDecimal("500.00"));
         String acc = saving.getAccountNum();
 
-        assertEquals("Savings Account", mo.getAccount(acc).getAccountType());
+        assertEquals("Savings Account", mo.getAccount(acc).getAccountName());
         assertEquals("500.00", mo.getAccount(acc).getBalance().toString());
     }
 
