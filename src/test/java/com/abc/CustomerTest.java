@@ -8,19 +8,23 @@ import static org.junit.Assert.assertEquals;
 public class CustomerTest {
     private static final double DOUBLE_DELTA = 1e-15;
 
-    @Test //Test customer statement generation
-    public void testApp(){
-
+    // Customer can get history of transactions
+    @Test
+    public void CustomerTransactionHistory_GetStatement_ShowsStatementAndTotalsForAllCustomerAccounts(){
+        // Arrange
         Account checkingAccount = new Account(Account.CHECKING);
         Account savingsAccount = new Account(Account.SAVINGS);
+        Customer john = new Customer("John");
+        john.openAccount(checkingAccount);
+        john.openAccount(savingsAccount);
 
-        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
-
-        checkingAccount.depositFunds(100.0);
+        //Act
+        checkingAccount.depositFunds(100.00);
         savingsAccount.depositFunds(4000.0);
         savingsAccount.withdrawFunds(200.0);
 
-        assertEquals("Statement for Henry\n" +
+        // Assert
+        assertEquals("Statement for John\n" +
                 "\n" +
                 "Checking Account\n" +
                 "  deposit $100.00\n" +
@@ -31,8 +35,10 @@ public class CustomerTest {
                 "  withdrawal $200.00\n" +
                 "Total $3,800.00\n" +
                 "\n" +
-                "Total In All Accounts $3,900.00", henry.getStatement());
+                "Total In All Accounts $3,900.00", john.getStatement());
     }
+
+
 
     @Test
     public void testOneAccount(){
