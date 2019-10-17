@@ -11,12 +11,25 @@ public class BankTest {
     public void CustomerCheckingAccount_SummaryRequest_ShowsSummary() {
         // Arrange
         Bank bank = new Bank();
-        Customer john = new Customer("John");
-        john.openAccount(new Account(Account.CHECKING));
+        Account checkingAccount = new Account(Account.CHECKING);
+        Customer john = new Customer("John").openAccount(checkingAccount);
         bank.addCustomer(john);
 
         // Act / Assert
         assertEquals("Customer Summary\n - John (1 account)", bank.getCustomerSummary());
+    }
+
+    @Test
+    public void CustomerWithMultipleAccounts_SummeryRequest_ShowsSummary(){
+        // Arrange
+        Bank bank = new Bank();
+        Customer john = new Customer("John");
+        john.openAccount(new Account(Account.SAVINGS));
+        john.openAccount(new Account(Account.CHECKING));
+        bank.addCustomer(john);
+
+        // Act / Assert
+        assertEquals("Customer Summary\n - John (2 accounts)", bank.getCustomerSummary());
     }
 
     //TODO: Customer with all the other account types

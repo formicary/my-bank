@@ -17,14 +17,14 @@ public class Bank {
     String getCustomerSummary() {
         String summary = "Customer Summary";
         for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
+            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts()) + ")";
         return summary;
     }
 
     //Make sure correct plural of word is created based on the number passed in:
     //If number passed in is 1 just return the word otherwise add an 's' at the end
-    private String format(int number, String word) {
-        return number + " " + (number == 1 ? word : word + "s");
+    private String format(int number) {
+        return number + " " + (number == 1 ? "account" : "account" + "s");
     }
 
     double getTotalInterestPaid() {
