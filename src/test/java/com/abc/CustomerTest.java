@@ -54,4 +54,18 @@ public class CustomerTest {
         oscar.openAccount(new Account(Account.CHECKING));
         assertEquals(3, oscar.getNumberOfAccounts());
     }
+
+    // A customer can have more than one account
+    @Test
+    public void CustomerWithMultipleAccounts_SummeryRequest_ShowsSummary(){
+        // Arrange
+        Bank bank = new Bank();
+        Customer john = new Customer("John");
+        john.openAccount(new Account(Account.SAVINGS));
+        john.openAccount(new Account(Account.CHECKING));
+        bank.addCustomer(john);
+
+        // Act / Assert
+        assertEquals("Customer Summary\n - John (2 accounts)", bank.getCustomerSummary());
+    }
 }
