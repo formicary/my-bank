@@ -37,19 +37,27 @@ class Account {
         double amount = sumTransactions();
         switch (accountType) {
             case SAVINGS:
-                if (amount <= 1000)
+                if (amount <= 1000) {
                     return amount * 0.001;
-                else
+                }
+                else {
                     return 1 + (amount - 1000) * 0.002;
+                }
+
 //            case SUPER_SAVINGS:
 //                if (amount <= 4000)
 //                    return 20;
+
             case MAXI_SAVINGS:
-                if (amount <= 1000)
+                if (amount <= 1000) {
                     return amount * 0.02;
-                if (amount <= 2000)
+                }
+                else if (amount <= 2000) {
                     return 20 + (amount - 1000) * 0.05;
-                return 70 + (amount - 2000) * 0.1;
+                }
+                else {
+                    return 51 + (amount - 2000) * 0.1;
+                }
             default:
                 return amount * 0.001;
         }
