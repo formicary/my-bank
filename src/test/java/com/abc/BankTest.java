@@ -7,7 +7,6 @@ import static org.junit.Assert.assertEquals;
 public class BankTest {
     private static final double DOUBLE_DELTA = 1e-15;
 
-    // A customer can open an account
     @Test
     public void BankCustomerSummary_SummaryRequest_ShowsSummary() {
         // Arrange
@@ -20,7 +19,6 @@ public class BankTest {
         assertEquals("Customer Summary\n - John (1 account)", bank.getCustomerSummary());
     }
 
-    // A customer can have more than one account and formatting changes to plural
     @Test
     public void BankCustomerWithMultipleAccounts_SummeryRequest_ShowsSummary(){
         // Arrange
@@ -65,7 +63,7 @@ public class BankTest {
    }
 
    @Test
-   public void BankMaxiSavingsAccount1000_TotalInterestPaid_ShowsFirstInterestRate(){
+   public void BankMaxiSavingsAccount1000_TotalInterestPaid_FirstInterestRateApplied(){
        // Arrange
        Bank bank = new Bank();
        Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
@@ -80,7 +78,7 @@ public class BankTest {
    }
 
     @Test
-    public void BankMaxiSavingsAccount2000_TotalInterestPaid_ShowsFirstInterestRate(){
+    public void BankMaxiSavingsAccount2000_TotalInterestPaid_SecondInterestRateApplied(){
         // Arrange
         Bank bank = new Bank();
         Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
@@ -95,7 +93,7 @@ public class BankTest {
     }
 
     @Test
-    public void BankMaxiSavingsAccount3000_TotalInterestPaid_ShowsInterest() {
+    public void BankMaxiSavingsAccount3000_TotalInterestPaid_ThirdInterestRateApplied() {
         // Arrange
         Bank bank = new Bank();
         Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
@@ -109,6 +107,37 @@ public class BankTest {
         assertEquals(170.00, bank.getTotalInterestPaid(), DOUBLE_DELTA);
     }
 
+    @Test
+    public void BankSavingsAccount1000_TotalInterestPaid_FirstInterestRateApplied() {
+        // Arrange
+        Bank bank = new Bank();
+        Account savingsAccount = new Account(Account.SAVINGS);
+        Customer john = new Customer("John").openAccount(savingsAccount);
+        bank.addCustomer(john);
+
+        // Act
+        savingsAccount.depositFunds(1000);
+
+
+        // Assert
+        assertEquals(1.0, bank.getTotalInterestPaid(), DOUBLE_DELTA);
+    }
+
+    @Test
+    public void BankSavingsAccount2000_TotalInterestPaid_SecondInterestRateApplied() {
+        // Arrange
+        Bank bank = new Bank();
+        Account savingsAccount = new Account(Account.SAVINGS);
+        Customer john = new Customer("John").openAccount(savingsAccount);
+        bank.addCustomer(john);
+
+        // Act
+        savingsAccount.depositFunds(2000);
+
+
+        // Assert
+        assertEquals(3.0, bank.getTotalInterestPaid(), DOUBLE_DELTA);
+    }
 
     @Test
     public void BankShowFirstCustomer_GetFirstCustomer_ShowsCustomerWithIndexZero() {
