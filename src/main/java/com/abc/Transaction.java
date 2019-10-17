@@ -6,10 +6,8 @@ import java.util.Date;
 class Transaction {
     final double amount;
 
-    private Date transactionDate;
-
     Transaction(double amount) {
         this.amount = amount;
-        this.transactionDate = DateProvider.getInstance().now();
+        Date transactionDate = DateProvider.getInstance().now();
     }
 }
