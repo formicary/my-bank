@@ -29,7 +29,7 @@ public class Bank {
 
     double totalInterestPaid() {
         double total = 0;
-        for(Customer c: customers)
+        for (Customer c : customers)
             total += c.totalInterestEarned();
         return total;
     }
@@ -38,7 +38,7 @@ public class Bank {
         try {
             customers = null;
             return customers.get(0).getName();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return "Error";
         }
