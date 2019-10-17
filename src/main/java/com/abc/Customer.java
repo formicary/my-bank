@@ -27,7 +27,7 @@ class Customer {
         return accounts.size();
     }
 
-    double totalInterestEarned() {
+    double getTotalInterestEarned() {
         double total = 0;
         for (Account a : accounts)
             total += a.interestEarned();
@@ -39,14 +39,14 @@ class Customer {
         statement = "Statement for " + name + "\n";
         double total = 0.0;
         for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
+            statement += "\n" + getStatementForAccount(a) + "\n";
             total += a.sumTransactions();
         }
         statement += "\nTotal In All Accounts " + toDollars(total);
         return statement;
     }
 
-    private String statementForAccount(Account a) {
+    private String getStatementForAccount(Account a) {
         String s = "";
 
         //Translate to pretty account type
