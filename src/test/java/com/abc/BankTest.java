@@ -210,6 +210,7 @@ public class BankTest {
         Bank bank = new Bank();
         Account checkingAccount = new Account(Account.CHECKING);
         Account savingsAccount = new Account(Account.SAVINGS);
+        Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
         Customer john = new Customer("John");
         Customer mary = new Customer("Mary");
         bank.addCustomer(john);
@@ -217,11 +218,13 @@ public class BankTest {
 
         // Act
         john.openAccount(checkingAccount);
+        john.openAccount(maxiSavingsAccount);
         mary.openAccount(savingsAccount);
         checkingAccount.depositFunds(1000.00);
+        maxiSavingsAccount.depositFunds(3000.00);
         savingsAccount.depositFunds(1000.00);
 
         // Assert
-        assertEquals(2.0, bank.getTotalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(172.0, bank.getTotalInterestPaid(), DOUBLE_DELTA);
     }
 }
