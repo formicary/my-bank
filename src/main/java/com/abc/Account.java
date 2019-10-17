@@ -56,7 +56,7 @@ class Account {
                     return 20 + (amount - 1000) * 0.05;
                 }
                 else {
-                    return 51 + (amount - 2000) * 0.1;
+                    return 70 + (amount - 2000) * 0.1;
                 }
             default:
                 return amount * 0.001;

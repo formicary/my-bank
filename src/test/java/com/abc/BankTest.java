@@ -64,19 +64,51 @@ public class BankTest {
        assertEquals(2.0, bank.getTotalInterestPaid(), DOUBLE_DELTA);
    }
 
+   @Test
+   public void BankMaxiSavingsAccount1000_TotalInterestPaid_ShowsFirstInterestRate(){
+       // Arrange
+       Bank bank = new Bank();
+       Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
+       Customer john = new Customer("John").openAccount(maxiSavingsAccount);
+       bank.addCustomer(john);
+
+       // Act
+       maxiSavingsAccount.depositFunds(1000.00);
+
+       // Assert
+       assertEquals(20.00, bank.getTotalInterestPaid(), DOUBLE_DELTA);
+   }
+
     @Test
-    public void BankMaxiSavingsAccount_TotalInterestPaid_ShowsInterest() {
+    public void BankMaxiSavingsAccount2000_TotalInterestPaid_ShowsFirstInterestRate(){
         // Arrange
         Bank bank = new Bank();
         Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
         Customer john = new Customer("John").openAccount(maxiSavingsAccount);
+        bank.addCustomer(john);
+
+        // Act
+        maxiSavingsAccount.depositFunds(2000.00);
+
+        // Assert
+        assertEquals(70.00, bank.getTotalInterestPaid(), DOUBLE_DELTA);
+    }
+
+    @Test
+    public void BankMaxiSavingsAccount3000_TotalInterestPaid_ShowsInterest() {
+        // Arrange
+        Bank bank = new Bank();
+        Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
+        Customer john = new Customer("John").openAccount(maxiSavingsAccount);
+        bank.addCustomer(john);
 
         // Act
         maxiSavingsAccount.depositFunds(3000.00);
 
         // Assert
-        assertEquals(170.0, bank.getTotalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(170.00, bank.getTotalInterestPaid(), DOUBLE_DELTA);
     }
+
 
     @Test
     public void BankShowFirstCustomer_GetFirstCustomer_ShowsCustomerWithIndexZero() {
