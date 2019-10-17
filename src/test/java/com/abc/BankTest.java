@@ -182,7 +182,8 @@ public class BankTest {
 
     // Bank manager gets list of customers and number of accounts they have
     @Test
-    public void ManagerGetsListOfCustomersAndNumberOfAccounts_x_ShowsCustomerAndTheirAccountCount() {
+    public void ManagerGetsListOfCustomersAndNumberOfAccounts_GetCustomerSummary_ShowsCustomerAndTheirAccountCount() {
+        // Arrange
         Bank bank = new Bank();
         Account checkingAccount = new Account(Account.CHECKING);
         Account savingsAccount = new Account(Account.SAVINGS);
@@ -196,8 +197,31 @@ public class BankTest {
         john.openAccount(savingsAccount);
         mary.openAccount(checkingAccount);
 
+        // Assert
         assertEquals("Customer Summary\n" +
                 " - John (2 accounts)\n" +
                 " - Mary (1 account)", bank.getCustomerSummary());
+    }
+
+    // Bank manager gets total interest paid by the bank on all accounts
+    @Test
+    public void ManagerGetsSummaryOfInterestPaid_GetTotalInterestPaid_ShowsSummaryOfAllInterestsPaidByBank() {
+        // Arrange
+        Bank bank = new Bank();
+        Account checkingAccount = new Account(Account.CHECKING);
+        Account savingsAccount = new Account(Account.SAVINGS);
+        Customer john = new Customer("John");
+        Customer mary = new Customer("Mary");
+        bank.addCustomer(john);
+        bank.addCustomer(mary);
+
+        // Act
+        john.openAccount(checkingAccount);
+        mary.openAccount(savingsAccount);
+        checkingAccount.depositFunds(1000.00);
+        savingsAccount.depositFunds(1000.00);
+
+        // Assert
+        assertEquals(2.0, bank.getTotalInterestPaid(), DOUBLE_DELTA);
     }
 }
