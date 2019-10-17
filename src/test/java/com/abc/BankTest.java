@@ -165,7 +165,7 @@ public class BankTest {
         assertEquals(3.0, bank.getTotalInterestPaid(), DOUBLE_DELTA);
     }
 
-    // First customer can be dispalyed
+    // First customer can be displayed
     @Test
     public void BankShowFirstCustomer_GetFirstCustomer_ShowsCustomerWithIndexZero() {
         // Arrange

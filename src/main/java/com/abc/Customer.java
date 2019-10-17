@@ -86,7 +86,7 @@ class Customer {
             fromAccount.withdrawFunds(transferAmount);
             toAccount.depositFunds(transferAmount);
         } else {
-            throw new IllegalStateException("insufficient funds in account");
+            throw new IllegalArgumentException("insufficient funds in account");
         }
         //TODO: Cover negative amount case
     }
