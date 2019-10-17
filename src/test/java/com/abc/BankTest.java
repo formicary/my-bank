@@ -8,12 +8,14 @@ public class BankTest {
     private static final double DOUBLE_DELTA = 1e-15;
 
     @Test
-    public void customerSummary() {
+    public void CustomerSummary_SummaryRequest_ShowsSummary() {
+        // Arrange
         Bank bank = new Bank();
         Customer john = new Customer("John");
         john.openAccount(new Account(Account.CHECKING));
         bank.addCustomer(john);
 
+        // Act / Assert
         assertEquals("Customer Summary\n - John (1 account)", bank.getCustomerSummary());
     }
 
