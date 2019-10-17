@@ -75,4 +75,20 @@ class Customer {
     private String toDollars(double d) {
         return String.format("$%,.2f", abs(d));
     }
+
+    void transferFunds(Account fromAccount, Account toAccount, double transferAmount) {
+        if (transferAmount <= 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        }
+
+        // Check if account has enough funds for transfer
+        if (fromAccount.sumTransactions() >= transferAmount) {
+            fromAccount.withdrawFunds(transferAmount);
+            toAccount.depositFunds(transferAmount);
+        } else {
+            throw new IllegalStateException("insufficient funds in account");
+        }
+        //TODO: Cover negative amount case
+    }
 }
+
