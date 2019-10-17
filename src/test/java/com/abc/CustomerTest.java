@@ -6,6 +6,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
+    private static final double DOUBLE_DELTA = 1e-15;
 
     @Test //Test customer statement generation
     public void testApp(){
@@ -68,4 +69,40 @@ public class CustomerTest {
         // Act / Assert
         assertEquals("Customer Summary\n - John (2 accounts)", bank.getCustomerSummary());
     }
+
+
+    // A customer can deposit funds
+    @Test
+    public void BankCustomerMakesDeposit_SumTransactions_AccountBalanceIncreases() {
+        // Arrange
+        Bank bank = new Bank();
+        Account checkingAccount = new Account(Account.CHECKING);
+        Customer john = new Customer("John").openAccount(checkingAccount);
+        bank.addCustomer(john);
+
+        //Act
+        checkingAccount.depositFunds(1000.00);
+        checkingAccount.depositFunds(500.50);
+
+        // Assert
+        assertEquals(1500.50, checkingAccount.sumTransactions(), DOUBLE_DELTA);
+    }
+
+    // A customer can withdraw funds
+    @Test
+    public void BankCustomerWithdraws_SumTransactions_AccountBalanceIncreases() {
+        // Arrange
+        Bank bank = new Bank();
+        Account checkingAccount = new Account(Account.CHECKING);
+        Customer john = new Customer("John").openAccount(checkingAccount);
+        bank.addCustomer(john);
+
+        //Act
+        checkingAccount.depositFunds(1000.00);
+        checkingAccount.withdrawFunds(500.00);
+
+        // Assert
+        assertEquals(500.00, checkingAccount.sumTransactions(), DOUBLE_DELTA);
+    }
+
 }
