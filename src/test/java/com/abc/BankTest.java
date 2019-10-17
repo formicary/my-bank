@@ -179,4 +179,25 @@ public class BankTest {
         // Act / Assert
         assertEquals("John", bank.getFirstCustomer());
     }
+
+    // Bank manager gets list of customers and number of accounts they have
+    @Test
+    public void ManagerGetsListOfCustomersAndNumberOfAccounts_x_ShowsCustomerAndTheirAccountCount() {
+        Bank bank = new Bank();
+        Account checkingAccount = new Account(Account.CHECKING);
+        Account savingsAccount = new Account(Account.SAVINGS);
+        Customer john = new Customer("John");
+        Customer mary = new Customer("Mary");
+        bank.addCustomer(john);
+        bank.addCustomer(mary);
+
+        // Act
+        john.openAccount(checkingAccount);
+        john.openAccount(savingsAccount);
+        mary.openAccount(checkingAccount);
+
+        assertEquals("Customer Summary\n" +
+                " - John (2 accounts)\n" +
+                " - Mary (1 account)", bank.getCustomerSummary());
+    }
 }

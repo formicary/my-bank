@@ -90,7 +90,7 @@ public class CustomerTest {
 
     // A customer can deposit funds
     @Test
-    public void BankCustomerMakesDeposit_SumTransactions_AccountBalanceIncreases() {
+    public void CustomerMakesDeposit_SumTransactions_AccountBalanceIncreases() {
         // Arrange
         Bank bank = new Bank();
         Account checkingAccount = new Account(Account.CHECKING);
@@ -107,7 +107,7 @@ public class CustomerTest {
 
     // A customer can withdraw funds
     @Test
-    public void BankCustomerWithdraws_SumTransactions_AccountBalanceIncreases() {
+    public void CustomerWithdraws_SumTransactions_AccountBalanceIncreases() {
         // Arrange
         Bank bank = new Bank();
         Account checkingAccount = new Account(Account.CHECKING);
