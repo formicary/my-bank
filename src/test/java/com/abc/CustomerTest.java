@@ -12,9 +12,11 @@ public class CustomerTest {
     @Test
     public void CustomerTransactionHistory_GetStatement_ShowsStatementAndTotalsForAllCustomerAccounts(){
         // Arrange
+        Bank bank = new Bank();
         Account checkingAccount = new Account(Account.CHECKING);
         Account savingsAccount = new Account(Account.SAVINGS);
         Customer john = new Customer("John");
+        bank.addCustomer(john);
         john.openAccount(checkingAccount);
         john.openAccount(savingsAccount);
 
@@ -38,33 +40,43 @@ public class CustomerTest {
                 "Total In All Accounts $3,900.00", john.getStatement());
     }
 
-
-
+    // Customer opens one account
     @Test
-    public void testOneAccount(){
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
-        assertEquals(1, oscar.getNumberOfAccounts());
+    public void CustomerOpensOneAccount_GetNumberOfAccounts_ShowsOneCustomerAccount() {
+        // Arrange
+        Bank bank = new Bank();
+        Account checkingAccount = new Account(Account.CHECKING);
+        Customer john = new Customer("John");
+        bank.addCustomer(john);
+
+        // Act
+        john.openAccount(checkingAccount);
+
+        // Assert
+        assertEquals(1, john.getNumberOfAccounts());
     }
 
+    // Customer opens two accounts
     @Test
-    public void testTwoAccount(){
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
-        assertEquals(2, oscar.getNumberOfAccounts());
+    public void CustomerOpensTwoAccounts_GetNumberOfAccounts_ShowsOneCustomerAccount() {
+        // Arrange
+        Bank bank = new Bank();
+        Account checkingAccount = new Account(Account.CHECKING);
+        Account savingsAccount = new Account(Account.SAVINGS);
+        Customer john = new Customer("John");
+        bank.addCustomer(john);
+
+        // Act
+        john.openAccount(checkingAccount);
+        john.openAccount(savingsAccount);
+
+        // Assert
+        assertEquals(2, john.getNumberOfAccounts());
     }
 
-    @Ignore
-    public void testThreeAcounts() {
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
-        assertEquals(3, oscar.getNumberOfAccounts());
-    }
-
-    // A customer can have more than one account
+    // A customer can have more than one account and word "account" is pluralised in customer summary
     @Test
-    public void CustomerWithMultipleAccounts_SummeryRequest_ShowsSummary(){
+    public void CustomerWithMultipleAccountsSummaryPluralised_SummeryRequest_ShowsSummary(){
         // Arrange
         Bank bank = new Bank();
         Customer john = new Customer("John");
@@ -75,7 +87,6 @@ public class CustomerTest {
         // Act / Assert
         assertEquals("Customer Summary\n - John (2 accounts)", bank.getCustomerSummary());
     }
-
 
     // A customer can deposit funds
     @Test
@@ -110,5 +121,6 @@ public class CustomerTest {
         // Assert
         assertEquals(500.00, checkingAccount.sumTransactions(), DOUBLE_DELTA);
     }
+
 
 }
