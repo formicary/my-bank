@@ -60,10 +60,10 @@ class Account {
     }
 
     double sumTransactions() {
-        return checkIfTransactionsExist(true);
+        return checkIfTransactionsExist();
     }
 
-    private double checkIfTransactionsExist(boolean checkAll) {
+    private double checkIfTransactionsExist() {
         double amount = 0.0;
         for (Transaction t : transactions)
             amount += t.amount;
