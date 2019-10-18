@@ -1,5 +1,7 @@
 package com.abc;
 
+import java.util.concurrent.TimeUnit;
+
 public class MaxiSavingAccount extends Account {
     public MaxiSavingAccount(String name) {
         super(name);
@@ -7,10 +9,14 @@ public class MaxiSavingAccount extends Account {
 
     public double interestEarned() {
         double amount = sumTransactions();
-        if (amount <= 1000)
-            return amount * 0.02;
-        if (amount <= 2000)
-            return 20 + (amount-1000) * 0.05;
-        return 70 + (amount-2000) * 0.1;
+
+        if(getLastWithdrawal() != null) {
+            long diff = DateProvider.getInstance().now().getTime() - getLastWithdrawal().getTime();
+            long days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+            if(days < 10 ) return amount * 0.01;
+            else return amount * 0.05;
+        }
+        else return amount * 0.05;
     }
+
 }

@@ -47,9 +47,13 @@ public class BankTest {
         MaxiSavingAccount maxiSavingAccount = new MaxiSavingAccount("Maxi-Savings Account");
         bank.addCustomer(new Customer("Bill").openAccount(maxiSavingAccount));
 
+        // total interest when no withdrawal
         maxiSavingAccount.deposit(3000.0);
+        assertEquals(150, bank.totalInterestPaid(), DOUBLE_DELTA);
 
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        // checking total interest paid when the last withdrawal happened on the same day
+        maxiSavingAccount.withdraw(1000.0);
+        assertEquals(20, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
 }

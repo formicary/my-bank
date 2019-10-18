@@ -57,8 +57,4 @@ public class Customer {
         s += "Total " + a.getBalanceinDollars();
         return s;
     }
-
-    public void transfer() {
-
-    }
 }
