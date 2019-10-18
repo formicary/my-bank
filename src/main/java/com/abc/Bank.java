@@ -11,14 +11,22 @@ public class Bank {
     }
 
     public void addCustomer(Customer customer) {
-        customers.add(customer);
+        if(customer.validateData()) {
+            customers.add(customer);
+        } else {
+            throw new IllegalArgumentException("Invalid customer");
+        }
     }
 
     public String customerSummary() {
-        String summary = "Customer Summary";
-        for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-        return summary;
+        if(customers.size()==0) {
+            throw new IllegalStateException("there must be at least one customer");
+        } else {
+            String summary = "Customer Summary";
+            for (Customer c : customers)
+                summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
+            return summary;
+        }
     }
 
     //Make sure correct plural of word is created based on the number passed in:
@@ -35,12 +43,11 @@ public class Bank {
     }
 
     public String getFirstCustomer() {
-        try {
-            customers = null;
+        if(customers.size()==0) {
+            throw new IllegalStateException("there must be at least one customer");
+        } else {
             return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
         }
+
     }
 }
