@@ -7,6 +7,8 @@ import static org.junit.Assert.assertEquals;
 public class BankTest {
     private static final double DOUBLE_DELTA = 1e-15;
 
+    // customerSummary() tests
+    
     @Test
     public void customerSummary() {
         Bank bank = new Bank();
@@ -17,7 +19,18 @@ public class BankTest {
         assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
     }
     
-    // Interest tests
+    @Test
+    public void multiAccountSummary() {
+        Bank bank = new Bank();
+        Customer john = new Customer("John");
+        john.openAccount(new Account(Account.CHECKING));
+        john.openAccount(new Account(Account.SAVINGS));
+        bank.addCustomer(john);
+
+        assertEquals("Customer Summary\n - John (2 accounts)", bank.customerSummary());
+    }
+    
+    // totalInterestPaid() tests
     
     @Test
     public void checkingAccount() {
@@ -52,8 +65,6 @@ public class BankTest {
 
         assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
-    
-    // Interest for negative total amount test
     
     @Test
     public void checkingNegInterest() {
@@ -91,7 +102,7 @@ public class BankTest {
         assertEquals(0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
     
-    // Get first customer test
+    // getFirstCustomer() tests
     
     @Test
     public void firstCustomer() {
@@ -106,5 +117,13 @@ public class BankTest {
         
         assertEquals("Bill", bank.getFirstCustomer());
     }
+    
+    @Test
+    public void firstCustomerNull() {
+        Bank bank = new Bank();
+        assertEquals("Error", bank.getFirstCustomer());
+    }
+    
+    
 
 }
