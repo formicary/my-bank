@@ -16,7 +16,8 @@ public class Account {
 
     
     /**
-     * Account class constructor 
+     * Account class constructor. Takes an account type as a parameter and 
+     * initialises the transactions array list
      * @param accountType CHECKING, SAVINGS or MAXI_SAVINGS
      */
     public Account(int accountType) {

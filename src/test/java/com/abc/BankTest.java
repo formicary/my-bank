@@ -16,7 +16,9 @@ public class BankTest {
 
         assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
     }
-
+    
+    // Interest tests
+    
     @Test
     public void checkingAccount() {
         Bank bank = new Bank();
@@ -50,6 +52,8 @@ public class BankTest {
 
         assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
+    
+    // Interest for negative total amount test
     
     @Test
     public void checkingNegInterest() {
@@ -85,6 +89,22 @@ public class BankTest {
         maxiAccount.withdraw(100.0);
 
         assertEquals(0, bank.totalInterestPaid(), DOUBLE_DELTA);
+    }
+    
+    // Get first customer test
+    
+    @Test
+    public void firstCustomer() {
+        Bank bank = new Bank();
+        Account checkingAccount = new Account(Account.CHECKING);
+        Customer bill = new Customer("Bill").openAccount(checkingAccount);
+        bank.addCustomer(bill);
+
+        Account maxiAccount = new Account(Account.MAXI_SAVINGS);
+        Customer tom = new Customer("Tom").openAccount(maxiAccount);
+        bank.addCustomer(tom);
+        
+        assertEquals("Bill", bank.getFirstCustomer());
     }
 
 }
