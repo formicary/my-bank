@@ -16,8 +16,9 @@ public class Bank {
 
     public String customerSummary() {
         String summary = "Customer Summary";
-        for (Customer c : customers)
+        for (Customer c : customers) {
             summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
+        }
         return summary;
     }
 
@@ -29,8 +30,9 @@ public class Bank {
 
     public double totalInterestPaid() {
         double total = 0;
-        for (Customer c : customers)
+        for (Customer c : customers) {
             total += c.totalInterestEarned();
+        }
         return total;
     }
 

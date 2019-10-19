@@ -30,25 +30,61 @@ public class BankTest {
     }
 
     @Test
-    public void savings_account() {
+    public void savingsAccount() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+        Account savingsAccount = new Account(Account.SAVINGS);
+        bank.addCustomer(new Customer("Bill").openAccount(savingsAccount));
 
-        checkingAccount.deposit(1500.0);
+        savingsAccount.deposit(1500.0);
 
         assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
-    public void maxi_savings_account() {
+    public void maxiSavingsAccount() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+        Account maxiAccount = new Account(Account.MAXI_SAVINGS);
+        bank.addCustomer(new Customer("Bill").openAccount(maxiAccount));
 
-        checkingAccount.deposit(3000.0);
+        maxiAccount.deposit(3000.0);
 
         assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+    }
+    
+    @Test
+    public void checkingNegInterest() {
+        Bank bank = new Bank();
+        Account checkingAccount = new Account(Account.CHECKING);
+        Customer bill = new Customer("Bill").openAccount(checkingAccount);
+        bank.addCustomer(bill);
+
+        checkingAccount.withdraw(100.0);
+
+        assertEquals(0, bank.totalInterestPaid(), DOUBLE_DELTA);
+    }
+    
+    @Test
+    public void savingsNegInterest() {
+        Bank bank = new Bank();
+        Account savingsAccount = new Account(Account.SAVINGS);
+        Customer bill = new Customer("Bill").openAccount(savingsAccount);
+        bank.addCustomer(bill);
+
+        savingsAccount.withdraw(100.0);
+
+        assertEquals(0, bank.totalInterestPaid(), DOUBLE_DELTA);
+    }
+    
+    @Test
+    public void maxiNegInterest() {
+        Bank bank = new Bank();
+        Account maxiAccount = new Account(Account.MAXI_SAVINGS);
+        Customer bill = new Customer("Bill").openAccount(maxiAccount);
+        bank.addCustomer(bill);
+
+        maxiAccount.withdraw(100.0);
+
+        assertEquals(0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
 }

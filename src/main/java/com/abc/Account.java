@@ -35,23 +35,38 @@ public class Account {
 
     public double interestEarned() {
         double amount = sumTransactions();
+
+        // Interest earned is 0 if amount is 0 or a negative number
+        if (amount < 1) {
+            return 0;
+        }
+
         switch (accountType) {
         case SAVINGS:
-            if (amount <= 1000)
+            if (amount <= 1000) {
                 return amount * 0.001;
-            else
+            } else {
                 return 1 + (amount - 1000) * 0.002;
+            }
 //            case SUPER_SAVINGS:
 //                if (amount <= 4000)
 //                    return 20;
+
         case MAXI_SAVINGS:
-            if (amount <= 1000)
+            if (amount <= 1000) {
                 return amount * 0.02;
-            if (amount <= 2000)
+            }
+            if (amount <= 2000) {
                 return 20 + (amount - 1000) * 0.05;
+            }
             return 70 + (amount - 2000) * 0.1;
+
         default:
-            return amount * 0.001;
+            if (amount > 1) {
+                return amount * 0.001;
+            } else {
+                return 0;
+            }
         }
     }
 
@@ -61,8 +76,9 @@ public class Account {
 
     private double checkIfTransactionsExist(boolean checkAll) {
         double amount = 0.0;
-        for (Transaction t : transactions)
+        for (Transaction t : transactions) {
             amount += t.amount;
+        }
         return amount;
     }
 
