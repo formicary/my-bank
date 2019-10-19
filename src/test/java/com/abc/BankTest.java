@@ -3,6 +3,7 @@ package com.abc;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class BankTest {
     private static final double DOUBLE_DELTA = 1e-15;
@@ -83,9 +84,9 @@ public class BankTest {
     }
     
     @Test
-    public void firstCustomerNull() {
+    public void firstCustomerNull() throws Exception {
         Bank bank = new Bank();
-        assertEquals("Error", bank.getFirstCustomer());
+        assertNull(bank.getFirstCustomer());
     }
     
     

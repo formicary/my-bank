@@ -66,8 +66,8 @@ public class Bank {
         try {
             return customers.get(0).getName();
         } catch (Exception e) {
-            e.printStackTrace();
-            return "Error";
+            System.out.println("No customers in list");
+            return null;
         }
     }
 }

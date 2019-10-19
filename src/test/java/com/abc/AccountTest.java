@@ -8,6 +8,20 @@ public class AccountTest {
     
     private static final double DOUBLE_DELTA = 1e-15;
     
+    // deposit() and withdraw() tests
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void negativeDeposit() {
+        Account checkAcc = new Account(Account.CHECKING);
+        checkAcc.deposit(-100.0);
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void negativeWithdrawal() {
+        Account checkAcc = new Account(Account.CHECKING);
+        checkAcc.withdraw(-100.0);
+    }
+    
     // sumTransactions() tests
     
     @Test
@@ -16,21 +30,7 @@ public class AccountTest {
         checkingAccount.deposit(100.0);
         assertEquals(100.0, checkingAccount.sumTransactions(), DOUBLE_DELTA);
     }
-    
-    @Test(expected = IllegalArgumentException.class)
-    public void negativeDeposit() {
-        Account checkAcc = new Account(Account.CHECKING);
-        checkAcc.deposit(-100.0);
-        assertEquals("amount must be greater than zero", checkAcc.sumTransactions());
-    }
-    
-    @Test(expected = IllegalArgumentException.class)
-    public void negativeWithdrawal() {
-        Account checkAcc = new Account(Account.CHECKING);
-        checkAcc.withdraw(-100.0);
-        assertEquals("amount must be greater than zero", checkAcc.sumTransactions());
-    }
-    
+        
     @Test
     public void noTransactions() {
         Account checkAcc = new Account(Account.CHECKING);
