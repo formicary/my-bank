@@ -85,11 +85,7 @@ public class Account {
             return 70 + (amount - 2000) * 0.1;
 
         default: // CHECKING
-            if (amount > 1) {
-                return amount * 0.001;
-            } else {
-                return 0;
-            }
+            return amount * 0.001;
         }
     }
 
