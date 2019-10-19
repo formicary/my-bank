@@ -6,8 +6,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
-
-
+    private static final double DOUBLE_DELTA = 1e-15;
 
     @Test //Test customer statement generation
     public void testApp(){
@@ -33,6 +32,21 @@ public class CustomerTest {
                 "Total $3,800.00\n" +
                 "\n" +
                 "Total In All Accounts $3,900.00", henry.getStatement());
+    }
+
+    @Test // Test if $50 get transfered to the saving account
+    public void testTransfer(){
+
+
+        Account checkingAccount = new CheckingAccount("Checking Account");
+        Account savingsAccount = new SavingAccount("Savings Account");
+
+        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
+
+        checkingAccount.deposit(100.0);
+        henry.transfer(checkingAccount,savingsAccount,50.0);
+
+        assertEquals(50.0, savingsAccount.sumTransactions(),DOUBLE_DELTA);
     }
 
     @Test

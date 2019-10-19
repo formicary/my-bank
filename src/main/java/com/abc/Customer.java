@@ -57,4 +57,11 @@ public class Customer {
         s += "Total " + a.getBalanceinDollars();
         return s;
     }
+
+    public void transfer(Account a1, Account a2, double amount) {
+        for(Account a : accounts) {
+            if(a.equals(a1)) a.withdraw(amount);
+            if(a.equals(a2)) a.deposit(amount);
+        }
+    }
 }

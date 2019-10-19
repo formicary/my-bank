@@ -39,18 +39,6 @@ public abstract class Account {
         }
     }
 
-    public void transfer(Account account,double amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
-        } else {
-            balance -= amount;
-            String statement = "transfered " + toDollars(amount) + " to " + account.getName();
-            transactions.add(new Transaction(-amount,statement));
-            String statement2 = "recieved " + toDollars(amount) + " by " + getName();
-            account.getTransactions().add(new Transaction(amount,statement));
-        }
-    }
-
     public abstract double interestEarned();
 
     public double sumTransactions() {
