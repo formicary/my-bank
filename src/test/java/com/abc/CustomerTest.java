@@ -9,12 +9,15 @@ public class CustomerTest {
     
     private static final double DOUBLE_DELTA = 1e-15;
 
+    /* getName() test */
+    
     @Test
     public void testGetName() {
         Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
         assertEquals("Oscar", oscar.getName());
     }
     
+    /* getStatement tests */
     
     @Test
     public void testGetStatement() {
@@ -48,39 +51,6 @@ public class CustomerTest {
                 "\n" +
                 "Total In All Accounts $4,145.60", henry.getStatement());
     }
-
-
-    @Test
-    public void testOneAccount() {
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
-        assertEquals(1, oscar.getNumberOfAccounts());
-    }
-
-    @Test
-    public void testTwoAccount() {
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
-        assertEquals(2, oscar.getNumberOfAccounts());
-    }
-    
-    @Test
-    public void testThreeAcounts() {
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
-        oscar.openAccount(new Account(Account.MAXI_SAVINGS));
-        assertEquals(3, oscar.getNumberOfAccounts());
-    }
-       
-    
-    @Test
-    public void testInterestEarned() {
-        Account checkingAccount = new Account(Account.CHECKING);
-        Customer oscar = new Customer("Oscar").openAccount(checkingAccount); 
-        checkingAccount.deposit(3000.0);
-        
-        assertEquals(3.0, oscar.totalInterestEarned(), DOUBLE_DELTA);
-    }
-    
     
     @Test
     public void testAccountTransfer() throws NoSuchFieldException {
@@ -107,6 +77,42 @@ public class CustomerTest {
                 "\n" +
                 "Total In All Accounts $1,000.00", oscar.getStatement());
     }
+
+    /* getNumberOfAccounts() tests */
+    
+    @Test
+    public void testOneAccount() {
+        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
+        assertEquals(1, oscar.getNumberOfAccounts());
+    }
+
+    @Test
+    public void testTwoAccount() {
+        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
+        oscar.openAccount(new Account(Account.CHECKING));
+        assertEquals(2, oscar.getNumberOfAccounts());
+    }
+    
+    @Test
+    public void testThreeAcounts() {
+        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
+        oscar.openAccount(new Account(Account.CHECKING));
+        oscar.openAccount(new Account(Account.MAXI_SAVINGS));
+        assertEquals(3, oscar.getNumberOfAccounts());
+    }
+       
+    /* totalInterestEarned() tests */
+    
+    @Test
+    public void testInterestEarned() {
+        Account checkingAccount = new Account(Account.CHECKING);
+        Customer oscar = new Customer("Oscar").openAccount(checkingAccount); 
+        checkingAccount.deposit(3000.0);
+        
+        assertEquals(3.0, oscar.totalInterestEarned(), DOUBLE_DELTA);
+    }
+    
+    /* Exception handling test */
     
     @Test
     public void testAccountTransferWithInvalidAccount() throws NoSuchFieldException {

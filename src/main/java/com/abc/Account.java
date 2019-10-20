@@ -25,6 +25,14 @@ public class Account {
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
     }
+    
+    /**
+     * Returns the account type in the form of an integer
+     * @return int 0 (CHECKING), 1 (SAVINGS) or 2 (MAXI_SAVINGS)
+     */
+    public int getAccountType() {
+        return accountType;
+    }
 
     /**
      * Adds a positive double into the array list of transactions in the form of
@@ -85,10 +93,11 @@ public class Account {
             }
         case MAXI_SAVINGS:
             DateProvider dp = new DateProvider();
-            Transaction lastTrans = getLastWithdrawal();
+            Transaction lastWithdraw = getLastWithdrawal();
             
-            if (lastTrans != null) {
-                if (DateProvider.getDateDiff(lastTrans.getTransactionDate(),
+            // Checks if withdrawal exists, and checks for 10 day gap
+            if (lastWithdraw != null) {
+                if (DateProvider.getDateDiff(lastWithdraw.getTransactionDate(),
                                              dp.now()) > 10) {
                     return amount * 0.05;
                 } else {
@@ -139,13 +148,5 @@ public class Account {
         }
         return null;
     }
-
-    /**
-     * Returns the account type in the form of an integer
-     * @return int 0 (CHECKING), 1 (SAVINGS) or 2 (MAXI_SAVINGS)
-     */
-    public int getAccountType() {
-        return accountType;
-    }
-
+    
 }

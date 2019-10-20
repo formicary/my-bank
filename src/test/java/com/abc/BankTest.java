@@ -8,7 +8,7 @@ import static org.junit.Assert.assertNull;
 public class BankTest {
     private static final double DOUBLE_DELTA = 1e-15;
 
-    // customerSummary() tests
+    /* customerSummary() tests */
     
     @Test
     public void customerSummary() {
@@ -31,7 +31,7 @@ public class BankTest {
         assertEquals("Customer Summary\n - John (2 accounts)", bank.customerSummary());
     }
     
-    // totalInterestPaid() tests
+    /* totalInterestPaid() tests */
     
     @Test
     public void checkingAccount() {
@@ -67,7 +67,7 @@ public class BankTest {
         assertEquals(150.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
     
-    // getFirstCustomer() tests
+    /* getFirstCustomer() tests */
     
     @Test
     public void firstCustomer() {
@@ -88,7 +88,4 @@ public class BankTest {
         Bank bank = new Bank();
         assertNull(bank.getFirstCustomer());
     }
-    
-    
-
 }
