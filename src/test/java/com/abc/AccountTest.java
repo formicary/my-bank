@@ -5,11 +5,19 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Clock;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Date;
+import java.util.Locale;
+
 public class AccountTest {
     
     private static final double DOUBLE_DELTA = 1e-15;
     
-    // deposit() and withdraw() tests
+    /* deposit() and withdraw() tests */
     
     @Test
     public void negativeDeposit() {
@@ -33,7 +41,7 @@ public class AccountTest {
         }
     }
     
-    // sumTransactions() tests
+    /* sumTransactions() tests */
     
     @Test
     public void testDeposit() {
@@ -48,7 +56,7 @@ public class AccountTest {
         assertEquals(0, checkAcc.sumTransactions(), DOUBLE_DELTA);
     }
     
-    // getAccountType() tests
+    /* getAccountType() tests */
     
     @Test
     public void testAccType() {
@@ -56,7 +64,7 @@ public class AccountTest {
         assertEquals(0, checkAcc.getAccountType(), DOUBLE_DELTA);
     }
     
-    // interestEarned() tests
+    /* interestEarned() tests */
     
     @Test
     public void checkingInterest() {
@@ -81,24 +89,30 @@ public class AccountTest {
     }
     
     @Test
-    public void maxiInterest2() {
-        Account maxiAcc = new Account(Account.MAXI_SAVINGS);
-        maxiAcc.deposit(900.0);
-        assertEquals(18, maxiAcc.interestEarned(), DOUBLE_DELTA);
-    }
-    
-    @Test
-    public void maxiInterest5() {
-        Account maxiAcc = new Account(Account.MAXI_SAVINGS);
-        maxiAcc.deposit(1500.0);
-        assertEquals(45, maxiAcc.interestEarned(), DOUBLE_DELTA);
-    }
-    
-    @Test
-    public void maxiInterest10() {
+    public void maxiInterestWithRecentWithdrawal() {
         Account maxiAcc = new Account(Account.MAXI_SAVINGS);
         maxiAcc.deposit(3000.0);
-        assertEquals(170, maxiAcc.interestEarned(), DOUBLE_DELTA);
+        maxiAcc.withdraw(1000);
+        assertEquals(2, maxiAcc.interestEarned(), DOUBLE_DELTA);
+    }
+    
+    @Test
+    public void maxiInterestWith10DayNoWithdrawal() throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
+        Date date = formatter.parse("09-10-2019");
+        
+        Account maxiAcc = new Account(Account.MAXI_SAVINGS);
+        maxiAcc.addTransaction(2000, date);
+        maxiAcc.addTransaction(-500, date);
+        
+        assertEquals(75, maxiAcc.interestEarned(), DOUBLE_DELTA);
+    }
+    
+    @Test
+    public void maxiInterestWithNullWithdrawals() {
+        Account maxiAcc = new Account(Account.MAXI_SAVINGS);
+        maxiAcc.deposit(3000.0);
+        assertEquals(150, maxiAcc.interestEarned(), DOUBLE_DELTA);
     }
    
     @Test
@@ -106,5 +120,5 @@ public class AccountTest {
         Account checkAcc = new Account(Account.CHECKING);
         checkAcc.withdraw(100.0);
         assertEquals(0, checkAcc.interestEarned(), DOUBLE_DELTA);
-    }
+    }   
 }

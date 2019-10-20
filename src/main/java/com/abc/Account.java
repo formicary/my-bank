@@ -1,6 +1,7 @@
 package com.abc;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Account {
@@ -52,6 +53,16 @@ public class Account {
             transactions.add(new Transaction(-amount));
         }
     }
+    
+    /**
+     * Adds a transaction into the array list of transactions. This method allows
+     * a date to be input as a parameter, to add transactions in the past
+     * @param amount Double value to withdraw (negative val) or deposit (positive val)
+     * @param date Date that the transaction occurred
+     */
+    public void addTransaction(double amount, Date date) {
+        transactions.add(new Transaction(amount, date));
+    }
 
     /**
      * Calculates the amount of interest earned based on which account is in use
@@ -65,7 +76,6 @@ public class Account {
         if (amount <= 0 ) {
             return 0;
         }
-
         switch (accountType) {
         case SAVINGS:
             if (amount <= 1000) {
@@ -73,19 +83,20 @@ public class Account {
             } else {
                 return 1 + (amount - 1000) * 0.002;
             }
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
-
         case MAXI_SAVINGS:
-            if (amount <= 1000) {
-                return amount * 0.02;
+            DateProvider dp = new DateProvider();
+            Transaction lastTrans = getLastWithdrawal();
+            
+            if (lastTrans != null) {
+                if (DateProvider.getDateDiff(lastTrans.getTransactionDate(),
+                                             dp.now()) > 10) {
+                    return amount * 0.05;
+                } else {
+                    return amount * 0.001;
+                }
+            } else {
+                return amount * 0.05;
             }
-            if (amount <= 2000) {
-                return 20 + (amount - 1000) * 0.05;
-            }
-            return 70 + (amount - 2000) * 0.1;
-
         default: // CHECKING
             return amount * 0.001;
         }
@@ -107,7 +118,6 @@ public class Account {
             return 0;
         }
     }
-
     
     /**
      * Checks if the transactions array list is empty or not
@@ -115,6 +125,19 @@ public class Account {
      */
     private Boolean transactionsExist() {
         return !transactions.isEmpty();
+    }
+    
+    /**
+     * Returns the most recent withdrawal transaction made in this account
+     * @return Transaction or Null depending on if a withdrawal exists
+     */
+    private Transaction getLastWithdrawal() {
+        for (int i = transactions.size() - 1; i >= 0; i--) {
+            if (transactions.get(i).amount < 0) {
+                return transactions.get(i);
+            }
+        }
+        return null;
     }
 
     /**
