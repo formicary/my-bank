@@ -1,9 +1,9 @@
 package com.abc;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class CustomerTest {
     
@@ -15,8 +15,9 @@ public class CustomerTest {
         assertEquals("Oscar", oscar.getName());
     }
     
-    @Test // Test customer statement generation
-    public void testApp() {
+    
+    @Test
+    public void testGetStatement() {
 
         Account checkingAccount = new Account(Account.CHECKING);
         Account savingsAccount = new Account(Account.SAVINGS);
@@ -48,6 +49,7 @@ public class CustomerTest {
                 "Total In All Accounts $4,145.60", henry.getStatement());
     }
 
+
     @Test
     public void testOneAccount() {
         Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
@@ -62,6 +64,15 @@ public class CustomerTest {
     }
     
     @Test
+    public void testThreeAcounts() {
+        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
+        oscar.openAccount(new Account(Account.CHECKING));
+        oscar.openAccount(new Account(Account.MAXI_SAVINGS));
+        assertEquals(3, oscar.getNumberOfAccounts());
+    }
+       
+    
+    @Test
     public void testInterestEarned() {
         Account checkingAccount = new Account(Account.CHECKING);
         Customer oscar = new Customer("Oscar").openAccount(checkingAccount); 
@@ -70,11 +81,49 @@ public class CustomerTest {
         assertEquals(3.0, oscar.totalInterestEarned(), DOUBLE_DELTA);
     }
     
+    
     @Test
-    public void testThreeAcounts() {
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
-        oscar.openAccount(new Account(Account.MAXI_SAVINGS));
-        assertEquals(3, oscar.getNumberOfAccounts());
+    public void testAccountTransfer() throws NoSuchFieldException {
+        Customer oscar = new Customer("Oscar");
+
+        Account checkingAcc = new Account(Account.CHECKING);
+        Account maxiAcc = new Account(Account.MAXI_SAVINGS);
+        oscar.openAccount(checkingAcc);
+        oscar.openAccount(maxiAcc);
+
+        checkingAcc.deposit(1000);
+        oscar.accountTransfer(checkingAcc, maxiAcc, 600);
+
+        assertEquals("Statement for Oscar\n" +
+                "\n" +
+                "Checking Account\n" +
+                "  deposit $1,000.00\n" +
+                "  withdrawal $600.00\n" +
+                "Total $400.00\n" +
+                "\n" +
+                "Maxi Savings Account\n" +
+                "  deposit $600.00\n" +
+                "Total $600.00\n" +
+                "\n" +
+                "Total In All Accounts $1,000.00", oscar.getStatement());
+    }
+    
+    @Test
+    public void testAccountTransferWithInvalidAccount() throws NoSuchFieldException {
+        Customer oscar = new Customer("Oscar");
+
+        Account checkingAcc = new Account(Account.CHECKING);
+        Account maxiAcc = new Account(Account.MAXI_SAVINGS);
+        oscar.openAccount(checkingAcc);
+
+        checkingAcc.deposit(1000);
+        
+        try {
+            oscar.accountTransfer(checkingAcc, maxiAcc, 600);
+            fail();
+        } catch (NoSuchFieldException e) {
+            assertEquals("customer does not own one or more selected accounts",
+                         e.getMessage());
+        }
     }
 }

@@ -29,6 +29,7 @@ public class Account {
      * Adds a positive double into the array list of transactions in the form of
      * an account deposit. 
      * @param amount Double value to deposit
+     * @throws IllegalArgumentException If the amount parameter is less than 1
      */
     public void deposit(double amount) {
         if (amount <= 0) {
@@ -42,6 +43,7 @@ public class Account {
      * Adds a negative double into the array list of transactions in the form of
      * an account withdrawal. 
      * @param amount Double value to withdraw
+     * @throws IllegalArgumentException If the amount parameter is less than 1
      */
     public void withdraw(double amount) {
         if (amount <= 0) {

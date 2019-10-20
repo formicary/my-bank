@@ -3,6 +3,7 @@ package com.abc;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class AccountTest {
     
@@ -10,16 +11,26 @@ public class AccountTest {
     
     // deposit() and withdraw() tests
     
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void negativeDeposit() {
         Account checkAcc = new Account(Account.CHECKING);
-        checkAcc.deposit(-100.0);
+        try {
+            checkAcc.deposit(-100.0);
+            fail();
+        } catch (IllegalArgumentException e) {
+            assertEquals("amount must be greater than zero", e.getMessage());
+        }
     }
     
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void negativeWithdrawal() {
         Account checkAcc = new Account(Account.CHECKING);
-        checkAcc.withdraw(-100.0);
+        try {
+            checkAcc.withdraw(-100.0);
+            fail();
+        } catch (IllegalArgumentException e) {
+            assertEquals("amount must be greater than zero", e.getMessage());
+        }
     }
     
     // sumTransactions() tests

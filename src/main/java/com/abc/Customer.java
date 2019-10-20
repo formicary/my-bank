@@ -74,6 +74,23 @@ public class Customer {
         statement += "\nTotal In All Accounts " + toDollars(total);
         return statement;
     }
+    
+    /**
+     * Transfers an amount of money from one account that the customer holds to another
+     * @param fromAcc
+     * @param toAcc
+     * @param amount
+     * @throws NoSuchFieldException If account is not present in the accounts array list
+     */
+    public void accountTransfer(Account fromAcc, Account toAcc, double amount) throws NoSuchFieldException {
+        if (accounts.contains(fromAcc) && accounts.contains(toAcc)) {
+            fromAcc.withdraw(amount);
+            toAcc.deposit(amount);
+        }
+        else {
+            throw new NoSuchFieldException("customer does not own one or more selected accounts");
+        }
+    }
 
     /**
      * Identifies the account type and totals the transactions for that account.
@@ -115,4 +132,5 @@ public class Customer {
     private String toDollars(double d) {
         return String.format("$%,.2f", abs(d));
     }
+    
 }
