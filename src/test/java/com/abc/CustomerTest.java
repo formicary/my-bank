@@ -59,11 +59,11 @@ public class CustomerTest {
     @Test
     public void testTransfer() {
     	Customer oscar = new Customer("Oscar");
-    	oscar.openAccount(new Account(Account.SAVINGS));
     	oscar.openAccount(new Account(Account.CHECKING));
+    	oscar.openAccount(new Account(Account.SAVINGS));
     	Account oscarChecking = oscar.getAccountByType(Account.CHECKING);
     	oscarChecking.deposit(5000);
-    	Account oscarSavings = oscar.getAccountByType(Account.SAVINGS);
+    	Account oscarSavings = oscar.getAccountByIndex(1);
     	oscarChecking.transfer(2000, oscarSavings);
     	
     	assertEquals(2000, oscarSavings.getBalance(), DOUBLE_DELTA);

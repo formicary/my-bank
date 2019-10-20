@@ -38,6 +38,7 @@ public class Customer {
     	return accounts.get(index);
     }
     
+    // returns first account of the type that it founds
     public Account getAccountByType(int accountType) {
     	for (Account a : accounts) {
     		if (a.getAccountType() == accountType) {
