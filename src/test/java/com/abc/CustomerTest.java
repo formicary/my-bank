@@ -6,7 +6,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
-
+    private static final double DOUBLE_DELTA = 1e-15;
     @Test //Test customer statement generation
     public void testApp(){
 
@@ -34,6 +34,7 @@ public class CustomerTest {
                 "Total $3,500.00\n" +
                 "\n" +
                 "Total In All Accounts $3,900.00", henry.getStatement());
+        assertEquals(0.1, henry.totalInterestEarned(), DOUBLE_DELTA);
     }
 
     @Test

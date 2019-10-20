@@ -13,16 +13,17 @@ public class Account {
 
 
     private final int accountType;
+    private boolean lastdepositorwithdrawal = false;
     public List<Transaction> transactions;
     public DateProvider dateProvider = DateProvider.getInstance();
-    public Date currentdate;
+
+
 
     public Date dateofwithdrawal;
+    public Date dateofdeposit;
     public Account(int accountType) {
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
-        this.currentdate = dateProvider.now();
-
 
     }
 
@@ -31,6 +32,11 @@ public class Account {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
             transactions.add(new Transaction(amount));
+            dateofdeposit = dateProvider.now();
+
+            lastdepositorwithdrawal = true;
+            //Last thing done was a deposit
+
         }
     }
 
@@ -39,7 +45,10 @@ public class Account {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
             transactions.add(new Transaction(-amount));
-            dateofwithdrawal = this.currentdate;
+            dateofwithdrawal = dateProvider.now();
+            lastdepositorwithdrawal = false;
+            //Last thing done was a withdrawal
+
         }
     }
 
@@ -48,29 +57,57 @@ public class Account {
         account.deposit(amount);
     }
 
-    public long checkdayspassed(Date date)  {
+    public long checkdayspassed(Date date1, Date date2)  {
 
-        long difference = ((date.getTime() - dateofwithdrawal.getTime())/86400000);
+        long difference = ((date1.getTime() - date2.getTime())/86400000);
         return Math.abs(difference);
     }
 
     public double interestEarned() {
         double amount = sumTransactions();
+        double overamount = 0;
+        double standardinterest = 0;
         switch(accountType){
             case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
+                if (amount <= 1000) {
+                    if (lastdepositorwithdrawal == false) {
+                        return (amount * Math.pow((0.001 / 365), checkdayspassed(dateProvider.now(), dateofwithdrawal)));
+                        //Calculate based on date of withdrawal
+                    } else if (lastdepositorwithdrawal == true) {
+                        return (amount * Math.pow((0.001 / 365), checkdayspassed(dateProvider.now(), dateofdeposit)));
+                        //Calculate based on date of deposit
+                    }
+                }
+                else{
+                    if (lastdepositorwithdrawal == false) {
+                        standardinterest = (1000 * Math.pow((0.001/365), checkdayspassed(dateProvider.now(), dateofwithdrawal)));
+                        overamount = amount - 1000;
+                        return  standardinterest + (overamount) * Math.pow((0.002/365), checkdayspassed(dateProvider.now(), dateofwithdrawal));
+                        //Calculate based on date of withdrawal
+                    } else if (lastdepositorwithdrawal == true) {
+                        standardinterest = (1000 * Math.pow((0.001/365), checkdayspassed(dateProvider.now(), dateofdeposit)));
+                        overamount = amount - 1000;
+                        return  standardinterest + (overamount) * Math.pow((0.002/365), checkdayspassed(dateProvider.now(), dateofdeposit));
+                        //Calculate based on date of deposit
+                    }
+
+                }
+
+
 //            case SUPER_SAVINGS:
 //                if (amount <= 4000)
 //                    return 20;
             case MAXI_SAVINGS:
-                if(checkdayspassed(currentdate) >=10){
-                    return amount * 0.05;
+                if(checkdayspassed(dateProvider.now(), dateofwithdrawal) >=10){
+                    return (amount * Math.pow((0.05/365), checkdayspassed(dateProvider.now(), dateofwithdrawal)));
                 }
             default:
-                return amount * 0.001;
+                if (lastdepositorwithdrawal == false) {
+                    return amount * Math.pow((0.001/365), checkdayspassed(dateProvider.now(), dateofwithdrawal));
+                }else
+                {
+                    return amount * Math.pow((0.001/365), checkdayspassed(dateProvider.now(), dateofdeposit));
+                }
         }
     }
 
