@@ -30,8 +30,21 @@ public class Customer {
     public double totalInterestEarned() {
         double total = 0;
         for (Account a : accounts)
-            total += a.interestEarned();
+            total += a.getInterestsPaid();
         return total;
+    }
+    
+    public Account getAccountByIndex(int index) {
+    	return accounts.get(index);
+    }
+    
+    public Account getAccountByType(int accountType) {
+    	for (Account a : accounts) {
+    		if (a.getAccountType() == accountType) {
+    			return a;
+    		}
+    	}
+    	throw new IllegalArgumentException("Account type not found");
     }
 
     public String getStatement() {
@@ -40,7 +53,7 @@ public class Customer {
         double total = 0.0;
         for (Account a : accounts) {
             statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+            total += a.getBalance();
         }
         statement += "\nTotal In All Accounts " + toDollars(total);
         return statement;

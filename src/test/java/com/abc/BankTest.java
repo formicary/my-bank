@@ -5,7 +5,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class BankTest {
-    private static final double DOUBLE_DELTA = 1e-15;
+    private static final double DOUBLE_DELTA = 1e-10;
 
     @Test
     public void customerSummary() {
@@ -23,10 +23,12 @@ public class BankTest {
         Account checkingAccount = new Account(Account.CHECKING);
         Customer bill = new Customer("Bill").openAccount(checkingAccount);
         bank.addCustomer(bill);
-
+        
         checkingAccount.deposit(100.0);
+        DateProvider.getInstance().advanceDate(5);
+        checkingAccount.compounding();
 
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(0.00136893288945, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
@@ -36,8 +38,14 @@ public class BankTest {
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
         checkingAccount.deposit(1500.0);
-
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        DateProvider.getInstance().advanceDate(23);
+        checkingAccount.withdraw(200.0);
+        DateProvider.getInstance().advanceDate(12);
+        checkingAccount.deposit(3000.0);
+        DateProvider.getInstance().advanceDate(17);
+        checkingAccount.compounding();
+        
+        assertEquals(0.5322877532681201, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
@@ -47,8 +55,12 @@ public class BankTest {
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
         checkingAccount.deposit(3000.0);
-
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        DateProvider.getInstance().advanceDate(7);
+        checkingAccount.withdraw(300.0);
+        DateProvider.getInstance().advanceDate(12);
+        checkingAccount.compounding();
+        
+        assertEquals(3.690003820418042, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
 }
