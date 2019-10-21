@@ -109,13 +109,57 @@ public class TransactionTest {
     }
 
     // Check if withdrawals over 10 days are not detected
+    @Test
+    public void WithdrawalsOutsideLast10Days_WithdrawnFindsInLastTenDays_ReturnsFalse() throws ParseException {
+        // Arrange
+        Bank bank = new Bank();
+        Account checkingAccount = new Account(Account.CHECKING);
+        Customer john = new Customer("John");
+        bank.addCustomer(john);
+        john.openAccount(checkingAccount);
+        checkingAccount.depositFunds(1000.00, "2019-01-01");
 
+        // Act
+        // Get today's and yesterday's date
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date today = new Date();
+        Date fortnight = new Date(System.currentTimeMillis() - 1000L * 60L * 60L * 336L);
+        String strToday = format.format(today);
+        String strFortnight = format.format(fortnight);
+
+        // Withdraw money yesterday
+        checkingAccount.withdrawFunds(200, strFortnight);
+
+        // Assert
+        assertEquals(false, checkingAccount.withdrawnFundsInLastTenDays());
+    }
 
     // Check if withdrawals and deposits within last 10 days are triggering false positives
+    @Test
+    public void DepositWithinLast10Days_WithdrawnFundsInLastTenDays_ReturnsFalse() throws ParseException {
+        // Arrange
+        Bank bank = new Bank();
+        Account checkingAccount = new Account(Account.CHECKING);
+        Customer john = new Customer("John");
+        bank.addCustomer(john);
+        john.openAccount(checkingAccount);
+        checkingAccount.depositFunds(1000.00, "2019-01-01");
+
+        // Act
+        // Get today's and yesterday's date
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date today = new Date();
+        Date yesterday = new Date(System.currentTimeMillis() - 1000L * 60L * 60L * 24L);
+        String strToday = format.format(today);
+        String strYesterday = format.format(yesterday);
+
+        // Withdraw money yesterday
+        checkingAccount.depositFunds(200, strYesterday);
 
 
-
-
+        // Assert
+        assertEquals(false, checkingAccount.withdrawnFundsInLastTenDays());
+    }
 
     @Test
     public void transaction() {
