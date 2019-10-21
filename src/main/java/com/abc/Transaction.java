@@ -15,6 +15,6 @@ class Transaction {
 
     Transaction(double amount, String customTransactionDate) throws ParseException {
         this.AMOUNT = amount;
-        this.TRANSACTION_DATE = new SimpleDateFormat("E MMM d k:m:s z y").parse(customTransactionDate);
+        this.TRANSACTION_DATE = new SimpleDateFormat("yyyy-MM-dd").parse(customTransactionDate);
     }
 }

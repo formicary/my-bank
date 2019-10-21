@@ -4,6 +4,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -48,6 +53,68 @@ public class TransactionTest {
         // Act / Assert
         john.transferFunds(checkingAccount1, checkingAccount2, 100.00);
     }
+
+    // Test day difference calculation between two dates
+    @Test
+    public void DayDifferenceCalculation_DaysBetweenTwoDates_ReturnsIntegerValueOf10() throws ParseException {
+        // Arrange
+        Account checkingAccount = new Account(Account.CHECKING);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+
+        Date startDate = format.parse("2001-01-01");
+        Date endDate = format.parse("2001-01-11");
+
+        // Act / Assert
+        assertEquals(10, checkingAccount.daysBetweenTwoDates(startDate, endDate));
+    }
+
+    @Test
+    public void DayDifferenceCalculation_DaysBetweenTwoDates_ReturnsIntegerValueOf5() throws ParseException {
+        // Arrange
+        Account checkingAccount = new Account(Account.CHECKING);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+
+        Date startDate = format.parse("2001-01-01");
+        Date endDate = format.parse("2001-01-06");
+
+        // Act / Assert
+        assertEquals(5, checkingAccount.daysBetweenTwoDates(startDate, endDate));
+    }
+
+    // Check if withdrawals within last 10 days are detected
+    @Test
+    public void WithdrawalsWithinLast10Days_WithdrawnFundsInLastTenDays_ReturnsTrue() throws ParseException {
+        // Arrange
+        Bank bank = new Bank();
+        Account checkingAccount = new Account(Account.CHECKING);
+        Customer john = new Customer("John");
+        bank.addCustomer(john);
+        john.openAccount(checkingAccount);
+        checkingAccount.depositFunds(1000.00, "2019-01-01");
+
+        // Act
+        // Get today's and yesterday's date
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date today = new Date();
+        Date yesterday = new Date(System.currentTimeMillis() - 1000L * 60L * 60L * 24L);
+        String strToday = format.format(today);
+        String strYesterday = format.format(yesterday);
+
+        // Withdraw money yesterday
+        checkingAccount.withdrawFunds(200, strYesterday);
+
+
+        // Assert
+        assertEquals(true, checkingAccount.withdrawnFundsInLastTenDays());
+    }
+
+    // Check if withdrawals over 10 days are not detected
+
+
+    // Check if withdrawals and deposits within last 10 days are triggering false positives
+
+
+
 
 
     @Test

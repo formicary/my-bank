@@ -2,7 +2,10 @@ package com.abc;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 
 class Account {
 
@@ -78,6 +81,28 @@ class Account {
 
     double sumTransactions() {
         return checkIfTransactionsExist();
+    }
+
+    boolean withdrawnFundsInLastTenDays() {
+
+        Date currentDate = DateProvider.getInstance().now();
+
+        for (Transaction t : transactions) {
+            if (t.AMOUNT < 0) {
+                //TODO: Get last withdrawal and check if it's younger than 10 days
+                if (daysBetweenTwoDates(t.TRANSACTION_DATE, currentDate) <= 10) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    int daysBetweenTwoDates(Date firstDate, Date secondDate) {
+        long differenceInMilliseconds = Math.abs(secondDate.getTime() - firstDate.getTime());
+        long difference = TimeUnit.DAYS.convert(differenceInMilliseconds, TimeUnit.MILLISECONDS);
+
+        return Math.toIntExact(difference);
     }
 
     private double checkIfTransactionsExist() {
