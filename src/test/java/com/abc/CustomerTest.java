@@ -121,6 +121,4 @@ public class CustomerTest {
         // Assert
         assertEquals(500.00, checkingAccount.sumTransactions(), DOUBLE_DELTA);
     }
-
-
 }

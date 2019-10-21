@@ -1,5 +1,6 @@
 package com.abc;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,11 +26,27 @@ class Account {
         }
     }
 
+    void depositFunds(double amount, String customTransactionDate) throws ParseException {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        } else {
+            transactions.add(new Transaction(amount, customTransactionDate));
+        }
+    }
+
     void withdrawFunds(double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
             transactions.add(new Transaction(-amount));
+        }
+    }
+
+    void withdrawFunds(double amount, String customTransactionDate) throws ParseException {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        } else {
+            transactions.add(new Transaction(-amount, customTransactionDate));
         }
     }
 
@@ -66,7 +83,7 @@ class Account {
     private double checkIfTransactionsExist() {
         double amount = 0.0;
         for (Transaction t : transactions)
-            amount += t.amount;
+            amount += t.AMOUNT;
         return amount;
     }
 
