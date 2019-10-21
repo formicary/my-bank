@@ -108,7 +108,7 @@ public class TransactionTest {
         assertEquals(true, checkingAccount.withdrawnFundsInLastTenDays());
     }
 
-    // Check if withdrawals over 10 days are not detected
+    // Check if withdrawals older than 10 days are not triggering false positives
     @Test
     public void WithdrawalsOutsideLast10Days_WithdrawnFindsInLastTenDays_ReturnsFalse() throws ParseException {
         // Arrange
@@ -120,11 +120,10 @@ public class TransactionTest {
         checkingAccount.depositFunds(1000.00, "2019-01-01");
 
         // Act
-        // Get today's and yesterday's date
+        // Get today's and fortnights's date
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date today = new Date();
         Date fortnight = new Date(System.currentTimeMillis() - 1000L * 60L * 60L * 336L);
-        String strToday = format.format(today);
         String strFortnight = format.format(fortnight);
 
         // Withdraw money yesterday
@@ -134,7 +133,7 @@ public class TransactionTest {
         assertEquals(false, checkingAccount.withdrawnFundsInLastTenDays());
     }
 
-    // Check if withdrawals and deposits within last 10 days are triggering false positives
+    // Check if deposits within last 10 days are triggering false positives
     @Test
     public void DepositWithinLast10Days_WithdrawnFundsInLastTenDays_ReturnsFalse() throws ParseException {
         // Arrange
@@ -150,7 +149,6 @@ public class TransactionTest {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date today = new Date();
         Date yesterday = new Date(System.currentTimeMillis() - 1000L * 60L * 60L * 24L);
-        String strToday = format.format(today);
         String strYesterday = format.format(yesterday);
 
         // Withdraw money yesterday
@@ -159,6 +157,56 @@ public class TransactionTest {
 
         // Assert
         assertEquals(false, checkingAccount.withdrawnFundsInLastTenDays());
+    }
+
+    // Maxi Savings Account Interest Rate within last 10 Days = 5%
+    @Test
+    public void MaxiSavingsFivePercentRateForNoWithdrawals_calculateInterestEarned_AppliesFivePercentInterest() throws ParseException {
+        // Arrange
+        Bank bank = new Bank();
+        Account maxiSavings = new Account(Account.MAXI_SAVINGS);
+        Customer john = new Customer("John");
+        bank.addCustomer(john);
+        john.openAccount(maxiSavings);
+        maxiSavings.depositFunds(1100.00, "2019-01-01");
+
+        // Act
+        // Get today's and fortnights's date
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date today = new Date();
+        Date fortnight = new Date(System.currentTimeMillis() - 1000L * 60L * 60L * 336L);
+        String strFortnight = format.format(fortnight);
+
+        // Withdraw money yesterday
+        maxiSavings.withdrawFunds(100, strFortnight);
+
+        // Assert
+        assertEquals(50.0, maxiSavings.calculateInterestEarned());
+    }
+
+    // Maxi Savings Account Interest Rate within last 10 Days = 0.1%
+    @Test
+    public void MaxiSavingsNaughtOnePercentRateWithWithdrawals_calculateInterestEarned_AppliesFivePercentInterest() throws ParseException {
+        // Arrange
+        Bank bank = new Bank();
+        Account maxiSavings = new Account(Account.MAXI_SAVINGS);
+        Customer john = new Customer("John");
+        bank.addCustomer(john);
+        john.openAccount(maxiSavings);
+        maxiSavings.depositFunds(1100.00, "2019-01-01");
+
+        // Act
+        // Get today's and fortnights's date
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date today = new Date();
+        Date yesterday = new Date(System.currentTimeMillis() - 1000L * 60L * 60L * 24L);
+        String strYesterday = format.format(yesterday);
+
+        // Withdraw money yesterday
+        maxiSavings.withdrawFunds(100, strYesterday);
+
+        // Assert
+        assertEquals(1.0, maxiSavings.calculateInterestEarned());
     }
 
     @Test
