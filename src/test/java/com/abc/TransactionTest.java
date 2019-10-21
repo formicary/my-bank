@@ -1,16 +1,13 @@
 package com.abc;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
 import static junit.framework.TestCase.assertEquals;
-import static org.junit.Assert.assertThat;
+import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class TransactionTest {
@@ -95,17 +92,14 @@ public class TransactionTest {
         // Act
         // Get today's and yesterday's date
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date today = new Date();
         Date yesterday = new Date(System.currentTimeMillis() - 1000L * 60L * 60L * 24L);
-        String strToday = format.format(today);
         String strYesterday = format.format(yesterday);
 
         // Withdraw money yesterday
         checkingAccount.withdrawFunds(200, strYesterday);
 
-
         // Assert
-        assertEquals(true, checkingAccount.withdrawnFundsInLastTenDays());
+        assertTrue(checkingAccount.withdrawnFundsInLastTenDays());
     }
 
     // Check if withdrawals older than 10 days are not triggering false positives
@@ -122,7 +116,6 @@ public class TransactionTest {
         // Act
         // Get today's and fortnights's date
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date today = new Date();
         Date fortnight = new Date(System.currentTimeMillis() - 1000L * 60L * 60L * 336L);
         String strFortnight = format.format(fortnight);
 
@@ -130,7 +123,7 @@ public class TransactionTest {
         checkingAccount.withdrawFunds(200, strFortnight);
 
         // Assert
-        assertEquals(false, checkingAccount.withdrawnFundsInLastTenDays());
+        assertFalse(checkingAccount.withdrawnFundsInLastTenDays());
     }
 
     // Check if deposits within last 10 days are triggering false positives
@@ -147,16 +140,14 @@ public class TransactionTest {
         // Act
         // Get today's and yesterday's date
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date today = new Date();
         Date yesterday = new Date(System.currentTimeMillis() - 1000L * 60L * 60L * 24L);
         String strYesterday = format.format(yesterday);
 
         // Withdraw money yesterday
         checkingAccount.depositFunds(200, strYesterday);
 
-
         // Assert
-        assertEquals(false, checkingAccount.withdrawnFundsInLastTenDays());
+        assertFalse(checkingAccount.withdrawnFundsInLastTenDays());
     }
 
     // Maxi Savings Account Interest Rate within last 10 Days = 5%
@@ -173,7 +164,6 @@ public class TransactionTest {
         // Act
         // Get today's and fortnights's date
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date today = new Date();
         Date fortnight = new Date(System.currentTimeMillis() - 1000L * 60L * 60L * 336L);
         String strFortnight = format.format(fortnight);
 
@@ -198,7 +188,6 @@ public class TransactionTest {
         // Act
         // Get today's and fortnights's date
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date today = new Date();
         Date yesterday = new Date(System.currentTimeMillis() - 1000L * 60L * 60L * 24L);
         String strYesterday = format.format(yesterday);
 
@@ -207,11 +196,5 @@ public class TransactionTest {
 
         // Assert
         assertEquals(1.0, maxiSavings.calculateInterestEarned());
-    }
-
-    @Test
-    public void transaction() {
-        Transaction t = new Transaction(5);
-        assertTrue(true);
     }
 }

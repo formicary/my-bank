@@ -81,12 +81,9 @@ class Account {
     }
 
     boolean withdrawnFundsInLastTenDays() {
-
         Date currentDate = DateProvider.getInstance().now();
-
         for (Transaction t : transactions) {
             if (t.AMOUNT < 0) {
-                //TODO: Get last withdrawal and check if it's younger than 10 days
                 if (daysBetweenTwoDates(t.TRANSACTION_DATE, currentDate) <= 10) {
                     return true;
                 }

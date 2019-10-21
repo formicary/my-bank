@@ -7,7 +7,7 @@ class Bank {
     private List<Customer> customers;
 
     Bank() {
-        customers = new ArrayList<Customer>();
+        customers = new ArrayList<>();
     }
 
     void addCustomer(Customer customer) {
@@ -15,10 +15,10 @@ class Bank {
     }
 
     String getCustomerSummary() {
-        String summary = "Customer Summary";
+        StringBuilder summary = new StringBuilder("Customer Summary");
         for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts()) + ")";
-        return summary;
+            summary.append("\n - ").append(c.getName()).append(" (").append(format(c.getNumberOfAccounts())).append(")");
+        return summary.toString();
     }
 
     //Make sure correct plural of word is created based on the number passed in:
