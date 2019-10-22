@@ -5,6 +5,8 @@ import java.util.List;
 
 public class Bank {
     private List<Customer> customers;
+	public List<Interest> interests;
+	boolean interestChk = true;
 
     public Bank() {
         customers = new ArrayList<Customer>();
@@ -15,10 +17,16 @@ public class Bank {
     }
 
     public String customerSummary() {
-        String summary = "Customer Summary";
-        for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-        return summary;
+		try {
+            customers = null;
+            String summary = "Customer Summary";
+			for (Customer c : customers)
+				summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
+			return summary;
+        } catch (Exception e){
+            e.printStackTrace();
+            return "Error";
+        }        
     }
 
     //Make sure correct plural of word is created based on the number passed in:
@@ -27,12 +35,17 @@ public class Bank {
         return number + " " + (number == 1 ? word : word + "s");
     }
 
-    public double totalInterestPaid() {
-        double total = 0;
-        for(Customer c: customers)
-            total += c.totalInterestEarned();
-        return total;
-    }
+	if (interestChk == true){
+		public double totalInterestPaid() {
+			double total = 0;
+			for(Customer c: customers)
+				total += c.totalInterestEarned();
+			interests.add(new Interest());
+			return total;
+		}
+		interestChk = checkInterestCalc();
+	}
+
 
     public String getFirstCustomer() {
         try {
@@ -43,4 +56,19 @@ public class Bank {
             return "Error";
         }
     }
+
+	public boolean checkInterestCalc(){
+		Calendar prevDate  = Calendar.getInstance();
+		prevDate.add(Calendar.DAY_OF_MONTH, -1).
+		if (interests.size > 0){
+			if (prevDate == interests.end){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+		else{
+			return false;
+		}
 }

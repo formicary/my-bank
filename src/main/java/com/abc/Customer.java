@@ -65,8 +65,8 @@ public class Customer {
         //Now total up all the transactions
         double total = 0.0;
         for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
+            s += "  " + (t.getAmount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.getAmount) + "\n";
+            total += t.getAmount;
         }
         s += "Total " + toDollars(total);
         return s;
@@ -75,4 +75,21 @@ public class Customer {
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
     }
+
+	public void transfer(double amount, Account a, Account b){
+		boolean complete;
+		if (this.getNumberOfAccounts < 2){
+			throw new IllegalArgumentException("there must be more than one account")
+		}
+		else{
+			if (amount <= 0) {
+				throw new IllegalArgumentException("amount must be greater than zero");
+			} else {
+				complete = a.withdraw(amount);
+				if (complete == true){
+					b.deposit(amount);
+				}
+			}
+		}
+	}
 }
