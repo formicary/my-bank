@@ -99,31 +99,6 @@ class Account {
         }
     }
 
-//    double calculateInterestEarned() {
-//        double amount = sumTransactions();
-//        //TODO: Get how long the client had an account for
-//        //TODO: Convert standard rates into daily rates
-//        //TODO: Calculate interest using daily rates
-//        switch (accountType) {
-//            case SAVINGS:
-//                if (amount <= 1000) {
-//                    return amount * 0.001;
-//                }
-//                else {
-//                    return 1 + (amount - 1000) * 0.002;
-//                }
-//
-//            case MAXI_SAVINGS:
-//                if (!withdrawnFundsInLastTenDays()) {
-//                    return amount * 0.05;
-//                } else {
-//                    return amount * 0.001;
-//                }
-//
-//            default:
-//                return amount * 0.001;
-//        }
-//    }
 
     double sumTransactions() {
         return checkIfTransactionsExist();
