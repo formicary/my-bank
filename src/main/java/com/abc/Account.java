@@ -1,6 +1,8 @@
 package com.abc;
 
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,11 +23,14 @@ class Account {
         this.transactions = new ArrayList<>();
     }
 
-    void depositFunds(double amount) {
+    void depositFunds(double amount) throws ParseException {
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
-            transactions.add(new Transaction(amount));
+            transactions.add(new Transaction(amount, format.format(date)));
         }
     }
 
@@ -37,11 +42,13 @@ class Account {
         }
     }
 
-    void withdrawFunds(double amount) {
+    void withdrawFunds(double amount) throws ParseException {
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
-            transactions.add(new Transaction(-amount));
+            transactions.add(new Transaction(-amount, format.format(date)));
         }
     }
 
@@ -53,28 +60,70 @@ class Account {
         }
     }
 
+
     double calculateInterestEarned() {
+        Date accountOpenDate = transactions.get(0).TRANSACTION_DATE;
+        Date today = DateProvider.getInstance().now();
+        int accountAge = daysBetweenTwoDates(accountOpenDate, today);
         double amount = sumTransactions();
+        double dailyInterestRate;
+        double interestRate;
+
         switch (accountType) {
             case SAVINGS:
                 if (amount <= 1000) {
-                    return amount * 0.001;
-                }
-                else {
-                    return 1 + (amount - 1000) * 0.002;
+                    dailyInterestRate = 0.001 / 365.5;
+                    interestRate = dailyInterestRate * accountAge;
+                    return amount * interestRate;
+                } else {
+                    dailyInterestRate = 0.002 / 365.5;
+                    interestRate = dailyInterestRate * accountAge;
+                    return 1 + (amount - 1000) * interestRate;
                 }
 
             case MAXI_SAVINGS:
                 if (!withdrawnFundsInLastTenDays()) {
-                    return amount * 0.05;
+                    dailyInterestRate = 0.05 / 365.5;
+                    interestRate = dailyInterestRate * accountAge;
+                    return amount * interestRate;
                 } else {
-                    return amount * 0.001;
+                    dailyInterestRate = 0.001 / 365.5;
+                    interestRate = dailyInterestRate * accountAge;
+                    return amount * interestRate;
                 }
 
             default:
-                return amount * 0.001;
+                dailyInterestRate = 0.001 / 365.5;
+                interestRate = dailyInterestRate * accountAge;
+                return amount * interestRate;
         }
     }
+
+//    double calculateInterestEarned() {
+//        double amount = sumTransactions();
+//        //TODO: Get how long the client had an account for
+//        //TODO: Convert standard rates into daily rates
+//        //TODO: Calculate interest using daily rates
+//        switch (accountType) {
+//            case SAVINGS:
+//                if (amount <= 1000) {
+//                    return amount * 0.001;
+//                }
+//                else {
+//                    return 1 + (amount - 1000) * 0.002;
+//                }
+//
+//            case MAXI_SAVINGS:
+//                if (!withdrawnFundsInLastTenDays()) {
+//                    return amount * 0.05;
+//                } else {
+//                    return amount * 0.001;
+//                }
+//
+//            default:
+//                return amount * 0.001;
+//        }
+//    }
 
     double sumTransactions() {
         return checkIfTransactionsExist();
