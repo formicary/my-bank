@@ -1,6 +1,7 @@
 package com.abc;
 
 import org.junit.Test;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -14,7 +15,7 @@ public class TransactionTest {
 
     // Customer can transfer balance between their accounts
     @Test
-    public void BalanceTransfer_TransferFunds_BalanceTransfersFromOneAccountToAnother(){
+    public void BalanceTransfer_TransferFunds_BalanceTransfersFromOneAccountToAnother() throws ParseException {
         // Arrange
         Bank bank = new Bank();
         Account checkingAccount1 = new Account(Account.CHECKING);
@@ -34,8 +35,8 @@ public class TransactionTest {
     }
 
     // Customer should not be able to transfer more than account holds
-    @Test (expected = IllegalArgumentException.class)
-    public void NegativeBalanceTransfer_TransferFunds_BalanceTransferShouldBeStopped() {
+    @Test(expected = IllegalArgumentException.class)
+    public void NegativeBalanceTransfer_TransferFunds_BalanceTransferShouldBeStopped() throws ParseException {
         // Arrange
         Bank bank = new Bank();
         Account checkingAccount1 = new Account(Account.CHECKING);
@@ -159,11 +160,15 @@ public class TransactionTest {
         Customer john = new Customer("John");
         bank.addCustomer(john);
         john.openAccount(maxiSavings);
-        maxiSavings.depositFunds(1100.00, "2019-01-01");
+
+        // Get today's and last year's date
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date oneYearAgo = new Date(System.currentTimeMillis() - 1000L * 60L * 60L * 8872L); // 24 x 365.5 (to account for leaps)
+        String stringOneYearAgo = format.format(oneYearAgo);
+        maxiSavings.depositFunds(1100.00, stringOneYearAgo);
 
         // Act
         // Get today's and fortnights's date
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date fortnight = new Date(System.currentTimeMillis() - 1000L * 60L * 60L * 336L);
         String strFortnight = format.format(fortnight);
 

@@ -2,6 +2,10 @@ package com.abc;
 
 import org.junit.Test;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import static org.junit.Assert.assertEquals;
 
 public class BankTest {
@@ -36,7 +40,7 @@ public class BankTest {
 
     // Checking Account can be opened
     @Test
-    public void BankCheckingAccount_TotalInterestPaid_ShowsInterest() {
+    public void BankCheckingAccount_TotalInterestPaid_ShowsInterest() throws ParseException {
         // Assert
         Bank bank = new Bank();
         Account checkingAccount = new Account(Account.CHECKING);
@@ -44,113 +48,100 @@ public class BankTest {
         bank.addCustomer(john);
 
         // Act
-        checkingAccount.depositFunds(100.00);
-
-        // Assert
-        assertEquals(0.1, bank.getTotalInterestPaid(), DOUBLE_DELTA);
-    }
-
-    // Savings Account can be opened
-    @Test
-    public void BankSavingsAccount_TotalInterestPaid_ShowsInterest() {
-        // Assert
-        Bank bank = new Bank();
-        Account savingsAccount = new Account(Account.SAVINGS);
-        Customer john = new Customer("John").openAccount(savingsAccount);
-        bank.addCustomer(john);
-
-        // Act
-        savingsAccount.depositFunds(1500.00);
-
-        // Assert
-        assertEquals(2.0, bank.getTotalInterestPaid(), DOUBLE_DELTA);
-    }
-
-    // Maxi Savings account can be opened and applies 2% increase for first $1000
-    @Test
-    public void BankMaxiSavingsAccountFirstBand_TotalInterestPaid_TwoPercentInterestRateApplied() {
-        // Arrange
-        Bank bank = new Bank();
-        Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
-        Customer john = new Customer("John").openAccount(maxiSavingsAccount);
-        bank.addCustomer(john);
-
-        // Act
-        maxiSavingsAccount.depositFunds(1000.00);
-
-        // Assert
-        assertEquals(20.00, bank.getTotalInterestPaid(), DOUBLE_DELTA);
-    }
-
-    // Maxi Savings account applies 5% increase for next $1000
-    @Test
-    public void BankMaxiSavingsAccountSecondBand_TotalInterestPaid_FivePercentInterestRateApplied() {
-        // Arrange
-        Bank bank = new Bank();
-        Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
-        Customer john = new Customer("John").openAccount(maxiSavingsAccount);
-        bank.addCustomer(john);
-
-        // Act
-        maxiSavingsAccount.depositFunds(2000.00);
-
-        // Assert
-        assertEquals(70.00, bank.getTotalInterestPaid(), DOUBLE_DELTA);
-    }
-
-    // Maxi Savings account applies 10% for sums greater than $3000
-    @Test
-    public void BankMaxiSavingsAccountThirdBand_TotalInterestPaid_TenPercentInterestRateApplied() {
-        // Arrange
-        Bank bank = new Bank();
-        Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
-        Customer john = new Customer("John").openAccount(maxiSavingsAccount);
-        bank.addCustomer(john);
-
-        // Act
-        maxiSavingsAccount.depositFunds(3000.00);
-
-        // Assert
-        assertEquals(170.00, bank.getTotalInterestPaid(), DOUBLE_DELTA);
-    }
-
-    //TODO: To be completed
-    @Test
-    public void BankMaxiSavingsNoWithdrawalsForTenDays_TotalInterestPaid_FivePercentInterestRateApplied() {
-        // Arrange
-        Bank bank = new Bank();
-        Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
-        Customer john = new Customer("John").openAccount(maxiSavingsAccount);
-        bank.addCustomer(john);
-
-        // Act
-        maxiSavingsAccount.depositFunds(1000.00);
-    }
-
-    //TODO: To be completed
-    @Test
-    public void BankMaxiSavingsWithdrawalsInLastTenDays_TotalInterestPaid_LowestPercentInterestRateApplied() {}
-
-    // Savings account applies 0.1% interest for first $1000
-    @Test
-    public void BankSavingsAccount1000_TotalInterestPaid_FirstInterestRateApplied() {
-        // Arrange
-        Bank bank = new Bank();
-        Account savingsAccount = new Account(Account.SAVINGS);
-        Customer john = new Customer("John").openAccount(savingsAccount);
-        bank.addCustomer(john);
-
-        // Act
-        savingsAccount.depositFunds(1000);
-
+        // Get today's and last year's date
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date oneYearAgo = new Date(System.currentTimeMillis() - 1000L * 60L * 60L * 8872L); // 24 x 365.5 (to account for leaps)
+        String stringOneYearAgo = format.format(oneYearAgo);
+        checkingAccount.depositFunds(1000.00, stringOneYearAgo);
 
         // Assert
         assertEquals(1.0, bank.getTotalInterestPaid(), DOUBLE_DELTA);
     }
 
-    // Savings account applies 0.2% interest for more than $1000
+    // Savings Account can be opened
     @Test
-    public void BankSavingsAccount2000_TotalInterestPaid_SecondInterestRateApplied() {
+    public void BankSavingsAccount_TotalInterestPaid_ShowsInterest() throws ParseException {
+        // Assert
+        Bank bank = new Bank();
+        Account savingsAccount = new Account(Account.SAVINGS);
+        Customer john = new Customer("John").openAccount(savingsAccount);
+        bank.addCustomer(john);
+
+        // Act
+        // Get today's and last year's date
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date oneYearAgo = new Date(System.currentTimeMillis() - 1000L * 60L * 60L * 8872L); // 24 x 365.5 (to account for leaps)
+        String stringOneYearAgo = format.format(oneYearAgo);
+        savingsAccount.depositFunds(1500.00, stringOneYearAgo);
+
+        // Assert
+        assertEquals(2.0, bank.getTotalInterestPaid(), DOUBLE_DELTA);
+    }
+
+    // Maxi Savings account can be opened and applies 5% increase for first $1000
+    @Test
+    public void BankMaxiSavingsAccountFirstBand_TotalInterestPaid_TwoPercentInterestRateApplied() throws ParseException {
+        // Arrange
+        Bank bank = new Bank();
+        Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
+        Customer john = new Customer("John").openAccount(maxiSavingsAccount);
+        bank.addCustomer(john);
+
+        // Act
+        // Get today's and last year's date
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date oneYearAgo = new Date(System.currentTimeMillis() - 1000L * 60L * 60L * 8872L); // 24 x 365.5 (to account for leaps)
+        String stringOneYearAgo = format.format(oneYearAgo);
+        maxiSavingsAccount.depositFunds(1000.00, stringOneYearAgo);
+
+        // Assert
+        assertEquals(50.00, bank.getTotalInterestPaid(), DOUBLE_DELTA);
+    }
+
+    // Maxi Savings account applies 0.1% increase for next $1000 due to withdrawal of funds
+    @Test
+    public void BankMaxiSavingsAccountSecondBand_TotalInterestPaid_NaughOnePercentInterestRateApplied() throws ParseException {
+        // Arrange
+        Bank bank = new Bank();
+        Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
+        Customer john = new Customer("John").openAccount(maxiSavingsAccount);
+        bank.addCustomer(john);
+
+        // Act
+        // Get today's and last year's date
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date oneYearAgo = new Date(System.currentTimeMillis() - 1000L * 60L * 60L * 8872L); // 24 x 365.5 (to account for leaps)
+        Date yesterday = new Date(System.currentTimeMillis() - 1000L * 60L * 60L * 24L);
+        String stringOneYearAgo = format.format(oneYearAgo);
+        String stringYesterday = format.format(yesterday);
+        maxiSavingsAccount.depositFunds(2000.00, stringOneYearAgo);
+        maxiSavingsAccount.withdrawFunds(1000.00, stringYesterday);
+
+        // Assert
+        assertEquals(1.00, bank.getTotalInterestPaid(), DOUBLE_DELTA);
+    }
+
+
+    @Test
+    public void BankMaxiSavingsNoWithdrawalsForTenDays_TotalInterestPaid_FivePercentInterestRateApplied() throws ParseException {
+        // Arrange
+        Bank bank = new Bank();
+        Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
+        Customer john = new Customer("John").openAccount(maxiSavingsAccount);
+        bank.addCustomer(john);
+
+        // Act
+        maxiSavingsAccount.depositFunds(1000.00);
+    }
+
+    //TODO: To be completed
+    @Test
+    public void BankMaxiSavingsWithdrawalsInLastTenDays_TotalInterestPaid_LowestPercentInterestRateApplied() {
+    }
+
+    // Savings account applies 0.1% interest for first $1000
+    @Test
+    public void BankSavingsAccount1000_TotalInterestPaid_FirstInterestRateApplied() throws ParseException {
         // Arrange
         Bank bank = new Bank();
         Account savingsAccount = new Account(Account.SAVINGS);
@@ -158,8 +149,31 @@ public class BankTest {
         bank.addCustomer(john);
 
         // Act
-        savingsAccount.depositFunds(2000);
+        // Get today's and last year's date
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date oneYearAgo = new Date(System.currentTimeMillis() - 1000L * 60L * 60L * 8872L); // 24 x 365.5 (to account for leaps)
+        String stringOneYearAgo = format.format(oneYearAgo);
+        savingsAccount.depositFunds(1000.00, stringOneYearAgo);
 
+        // Assert
+        assertEquals(1.00, bank.getTotalInterestPaid(), DOUBLE_DELTA);
+    }
+
+    // Savings account applies 0.2% interest for more than $1000
+    @Test
+    public void BankSavingsAccount2000_TotalInterestPaid_SecondInterestRateApplied() throws ParseException {
+        // Arrange
+        Bank bank = new Bank();
+        Account savingsAccount = new Account(Account.SAVINGS);
+        Customer john = new Customer("John").openAccount(savingsAccount);
+        bank.addCustomer(john);
+
+        // Act
+        // Get today's and last year's date
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date oneYearAgo = new Date(System.currentTimeMillis() - 1000L * 60L * 60L * 8872L); // 24 x 365.5 (to account for leaps)
+        String stringOneYearAgo = format.format(oneYearAgo);
+        savingsAccount.depositFunds(2000.00, stringOneYearAgo);
 
         // Assert
         assertEquals(3.0, bank.getTotalInterestPaid(), DOUBLE_DELTA);
@@ -205,7 +219,7 @@ public class BankTest {
 
     // Bank manager gets total interest paid by the bank on all accounts
     @Test
-    public void ManagerGetsSummaryOfInterestPaid_GetTotalInterestPaid_ShowsSummaryOfAllInterestsPaidByBank() {
+    public void ManagerGetsSummaryOfInterestPaid_GetTotalInterestPaid_ShowsSummaryOfAllInterestsPaidByBank() throws ParseException {
         // Arrange
         Bank bank = new Bank();
         Account checkingAccount = new Account(Account.CHECKING);
@@ -217,14 +231,19 @@ public class BankTest {
         bank.addCustomer(mary);
 
         // Act
+        // Get today's and last year's date
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date oneYearAgo = new Date(System.currentTimeMillis() - 1000L * 60L * 60L * 8872L); // 24 x 365.5 (to account for leaps)
+        String stringOneYearAgo = format.format(oneYearAgo);
+
         john.openAccount(checkingAccount);
         john.openAccount(maxiSavingsAccount);
         mary.openAccount(savingsAccount);
-        checkingAccount.depositFunds(1000.00);
-        maxiSavingsAccount.depositFunds(3000.00);
-        savingsAccount.depositFunds(1000.00);
+        checkingAccount.depositFunds(1000.00, stringOneYearAgo);
+        maxiSavingsAccount.depositFunds(1000.00, stringOneYearAgo);
+        savingsAccount.depositFunds(1000.00, stringOneYearAgo);
 
         // Assert
-        assertEquals(172.0, bank.getTotalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(52.0, bank.getTotalInterestPaid(), DOUBLE_DELTA);
     }
 }

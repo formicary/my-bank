@@ -10,7 +10,7 @@ instructions
 * There are several deliberate design, code quality and test issues that should be identified and resolved.
 * Below is a list of the current features supported by the application; as well as some additional features that have been requested by the business owner.
 * In order to work on this take a fork into your own GitHub area; make whatever changes you feel are necessary and when you are satisfied submit back via a pull request. See details on GitHub's [Fork & Pull](https://help.github.com/articles/using-pull-requests) model
-* Be sure to put your name in the pull request comment so your work can be easily identied.
+* Be sure to put your name in the pull request comment so your work can be easily identified.
 * The project uses maven to resolve dependencies however if you want to avoid maven configuration the only external JAR that's required is junit-4.11.
 * Refactor and add features (from the below list) as you see fit; there is no need to add all the features in order to "complete" the exercise. Keep in mind that code quality is the critical measure and there should be an obvious focus on testing.
 * You'll notice there is no database or UI; these are not needed - the exercise deliberately avoids these requirements.
@@ -36,6 +36,7 @@ A dummy application for a bank; should provide various functions of a retail ban
 * A bank manager can get a report showing the total interest paid by the bank on all accounts
 * A customer can transfer between their accounts
 * **Maxi-Savings accounts** has an interest rate of 5% assuming no withdrawals in the past 10 days otherwise 0.1% (**overwrites original interest rates**)
+* Interest rates should accrue and compound daily (incl. weekends), rates above are per-annum
 
 ### Additional Features
-* Interest rates should accrue and compound daily (incl. weekends), rates above are per-annum
+N/A

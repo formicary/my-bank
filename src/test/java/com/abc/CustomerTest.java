@@ -1,7 +1,8 @@
 package com.abc;
 
-import org.junit.Ignore;
 import org.junit.Test;
+
+import java.text.ParseException;
 
 import static org.junit.Assert.assertEquals;
 
@@ -10,7 +11,7 @@ public class CustomerTest {
 
     // Customer can get history of transactions
     @Test
-    public void CustomerTransactionHistory_GetStatement_ShowsStatementAndTotalsForAllCustomerAccounts(){
+    public void CustomerTransactionHistory_GetStatement_ShowsStatementAndTotalsForAllCustomerAccounts() throws ParseException {
         // Arrange
         Bank bank = new Bank();
         Account checkingAccount = new Account(Account.CHECKING);
@@ -76,7 +77,7 @@ public class CustomerTest {
 
     // A customer can have more than one account and word "account" is pluralised in customer summary
     @Test
-    public void CustomerWithMultipleAccountsSummaryPluralised_SummeryRequest_ShowsSummary(){
+    public void CustomerWithMultipleAccountsSummaryPluralised_SummeryRequest_ShowsSummary() {
         // Arrange
         Bank bank = new Bank();
         Customer john = new Customer("John");
@@ -90,7 +91,7 @@ public class CustomerTest {
 
     // A customer can deposit funds
     @Test
-    public void CustomerMakesDeposit_SumTransactions_AccountBalanceIncreases() {
+    public void CustomerMakesDeposit_SumTransactions_AccountBalanceIncreases() throws ParseException {
         // Arrange
         Bank bank = new Bank();
         Account checkingAccount = new Account(Account.CHECKING);
@@ -107,7 +108,7 @@ public class CustomerTest {
 
     // A customer can withdraw funds
     @Test
-    public void CustomerWithdraws_SumTransactions_AccountBalanceIncreases() {
+    public void CustomerWithdraws_SumTransactions_AccountBalanceIncreases() throws ParseException {
         // Arrange
         Bank bank = new Bank();
         Account checkingAccount = new Account(Account.CHECKING);

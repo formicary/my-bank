@@ -1,6 +1,7 @@
 package com.abc;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -8,13 +9,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-
 class Account {
 
     static final int CHECKING = 0;
     static final int SAVINGS = 1;
     static final int MAXI_SAVINGS = 2;
-
+    private static DecimalFormat df2 = new DecimalFormat("#.##");
     private final int accountType;
     List<Transaction> transactions;
 
@@ -68,34 +68,40 @@ class Account {
         double amount = sumTransactions();
         double dailyInterestRate;
         double interestRate;
+        double total;
 
         switch (accountType) {
             case SAVINGS:
                 if (amount <= 1000) {
                     dailyInterestRate = 0.001 / 365.5;
                     interestRate = dailyInterestRate * accountAge;
-                    return amount * interestRate;
+                    total = amount * interestRate;
+                    return Math.round(total);
                 } else {
                     dailyInterestRate = 0.002 / 365.5;
                     interestRate = dailyInterestRate * accountAge;
-                    return 1 + (amount - 1000) * interestRate;
+                    total = 1 + (amount - 1000) * interestRate;
+                    return Math.round(total);
                 }
 
             case MAXI_SAVINGS:
                 if (!withdrawnFundsInLastTenDays()) {
                     dailyInterestRate = 0.05 / 365.5;
                     interestRate = dailyInterestRate * accountAge;
-                    return amount * interestRate;
+                    total = amount * interestRate;
+                    return Math.round(total);
                 } else {
                     dailyInterestRate = 0.001 / 365.5;
                     interestRate = dailyInterestRate * accountAge;
-                    return amount * interestRate;
+                    total = amount * interestRate;
+                    return Math.round(total);
                 }
 
             default:
                 dailyInterestRate = 0.001 / 365.5;
                 interestRate = dailyInterestRate * accountAge;
-                return amount * interestRate;
+                total = amount * interestRate;
+                return Math.round(total);
         }
     }
 
@@ -125,8 +131,9 @@ class Account {
 
     private double checkIfTransactionsExist() {
         double amount = 0.0;
-        for (Transaction t : transactions)
+        for (Transaction t : transactions) {
             amount += t.AMOUNT;
+        }
         return amount;
     }
 
