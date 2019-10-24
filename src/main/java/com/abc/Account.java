@@ -48,7 +48,7 @@ public class Account {
     String statementForAccount() {
         String s = "";
 
-        // Generate account type
+        // Generate account type output
         switch(getAccountType()){
             case CHECKING:
                 s += "Checking Account\n";

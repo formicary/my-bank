@@ -35,7 +35,6 @@ public class Bank {
      * @param word Word to be pluralised if required
      * @return The number given and the appropriate format of the word
      */
-    // Formats plural of word to add an s on the end if required
     private String format(int number, String word) {
         return number + " " + (number == 1 ? word : word + "s");
     }
@@ -62,7 +61,7 @@ public class Bank {
     }
 
     /**
-     * Updates each customer's interest daily
+     * Updates each customer's interest by a daily increment
      */
     public void dailyInterest() {
         for (Customer c : customers) {

@@ -76,6 +76,12 @@ public class Customer {
         }
     }
 
+    /**
+     * @param fromAccount The account from which money is being transfered out of
+     * @param toAccount The account from which money is being transfered to
+     * @param balance The amount of money being transfered
+     * @return true if successful, else false
+     */
     public boolean accountTransfer(Account fromAccount, Account toAccount, double balance) {
         if (fromAccount.getBalance() < balance){
             System.out.println("Not enough funds to make transfer");
