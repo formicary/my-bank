@@ -1,4 +1,4 @@
-Programming Test
+Programming Test - James Bramley
 ========
 
 This is a dummy application to be used as part of a software development interview.
