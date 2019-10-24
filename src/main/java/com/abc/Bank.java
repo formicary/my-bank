@@ -41,7 +41,7 @@ public class Bank {
     }
 
     /**
-     * @return Total interest paid by the bank for the current year
+     * @return Total interest paid by the bank for all accounts
      */
     public double totalInterestPaid() {
         double total = 0;

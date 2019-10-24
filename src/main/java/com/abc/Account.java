@@ -14,11 +14,13 @@ public class Account {
     private final int accountType;
     public List<Transaction> transactions;
     private double balance;
+    private double interestEarned;
 
     public Account(int accountType) {
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
         this.balance = 0.0;
+        this.interestEarned = 0.0;
     }
 
     public void deposit(double amount) {
@@ -46,23 +48,22 @@ public class Account {
     String statementForAccount() {
         String s = "";
 
-        //Translate to account type
+        // Generate account type
         switch(getAccountType()){
-            case Account.CHECKING:
+            case CHECKING:
                 s += "Checking Account\n";
                 break;
-            case Account.SAVINGS:
+            case SAVINGS:
                 s += "Savings Account\n";
                 break;
-            case Account.MAXI_SAVINGS:
+            case MAXI_SAVINGS:
                 s += "Maxi Savings Account\n";
                 break;
         }
 
-        //Total up all the transactions
+        // Print each transaction based on type and amount
         for (Transaction t : transactions) {
-            s += "  " + t.getType() + ": " + t.getTransactionDate()
-                    + "         " + toDollars(t.amount) + "\n";
+            s += "  " + t.getType() + ": " + toDollars(t.amount) + "\n";
         }
         s += "Total " + toDollars(getBalance());
         return s;
@@ -73,7 +74,7 @@ public class Account {
      * Calculates the total interest earned annually based on the account type
      * @return The amount of interest earned annually on this account based on current balance
      */
-    public double interestEarned() {
+    public double interestCalculation() {
         double amount = balance;
         switch(accountType){
             case SAVINGS:
@@ -97,9 +98,18 @@ public class Account {
      * customer class
      */
     public void applyInterest() {
-        balance = balance + (interestEarned()/360);
+        double interest = (interestCalculation()/360);
+        balance += interest;
+        interestEarned += interest;
     }
 
+    public double interestEarned() {
+        return interestEarned;
+    }
+
+    /**
+     * @return Sum total of all transactions that have occured on the account
+     */
     public double sumTransactions() {
        return checkIfTransactionsExist(true);
     }

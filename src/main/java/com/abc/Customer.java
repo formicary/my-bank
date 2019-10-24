@@ -36,7 +36,7 @@ public class Customer {
     }
 
     /**
-     * @return Total annual interest to be earned by all accounts in the customers name based on current balance
+     * @return Total interest paid across all accounts for the customer
      */
     public double totalInterestEarned() {
         double total = 0;
@@ -73,6 +73,17 @@ public class Customer {
     public void dailyInterest() {
         for (Account a: accounts) {
             a.applyInterest();
+        }
+    }
+
+    public boolean accountTransfer(Account fromAccount, Account toAccount, double balance) {
+        if (fromAccount.getBalance() < balance){
+            System.out.println("Not enough funds to make transfer");
+            return false;
+        } else {
+            fromAccount.withdraw(balance);
+            toAccount.deposit(balance);
+            return true;
         }
     }
 }
