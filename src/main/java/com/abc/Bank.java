@@ -3,11 +3,13 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Bank {
-    private List<Customer> customers;
+public final class Bank {
+    private final List<Customer> customers;
+    private final String bankName;
 
-    public Bank() {
-        customers = new ArrayList<Customer>();
+    public Bank(String bankName) {
+        this.bankName = bankName;
+        this.customers = new ArrayList<>();
     }
 
     public void addCustomer(Customer customer) {
@@ -15,16 +17,19 @@ public class Bank {
     }
 
     public String customerSummary() {
-        String summary = "Customer Summary";
-        for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-        return summary;
+        int numberOfCustomers = this.numberOfCustomers();
+        StringBuilder summary = new StringBuilder("Customer Summary for ").append(this.bankName)
+                        .append("\n").append(numberOfCustomers).append(" Customer").append(format(numberOfCustomers));
+        for (Customer c : customers) {
+            int numberOfAccounts = c.getNumberOfAccounts();
+            summary.append("\n - ").append(c.getName()).append(" (").append(numberOfAccounts)
+                    .append(" account").append(format(numberOfAccounts)).append(")");
+        }
+        return summary.toString();
     }
 
-    //Make sure correct plural of word is created based on the number passed in:
-    //If number passed in is 1 just return the word otherwise add an 's' at the end
-    private String format(int number, String word) {
-        return number + " " + (number == 1 ? word : word + "s");
+    private String format(int number) {
+        return (number == 1 ? "" : "s");
     }
 
     public double totalInterestPaid() {
@@ -34,13 +39,10 @@ public class Bank {
         return total;
     }
 
-    public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
-        }
+    public String getBankName() {
+        return bankName;
+    }
+    public int numberOfCustomers(){
+        return this.customers.size();
     }
 }
