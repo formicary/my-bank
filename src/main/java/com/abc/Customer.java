@@ -5,6 +5,8 @@ import java.util.List;
 
 import static java.lang.Math.abs;
 
+import java.io.IOException;
+
 public class Customer {
     private String name;
     private List<Account> accounts;
@@ -31,6 +33,13 @@ public class Customer {
         double total = 0;
         for (Account a : accounts)
             total += a.interestEarned();
+        return total;
+    }
+  //same as above but calls the function set one year in the future
+    public double totalInterestEarnedTest() {
+        double total = 0;
+        for (Account a : accounts)
+            total += a.interestEarnedAfterYear();
         return total;
     }
 
@@ -74,5 +83,13 @@ public class Customer {
 
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
+    }
+    
+    public void transferBetweenAccounts(Account from, Account to, double amount) throws IOException {
+    	if (amount <= 0) {
+    		throw new IOException("amount must be greater then 0");
+    	}
+    	from.withdraw(amount);
+    	to.deposit(amount);
     }
 }
