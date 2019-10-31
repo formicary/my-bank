@@ -14,6 +14,7 @@ public class Bank {
         customers.add(customer);
     }
 
+    //returns each customer and the number of accounts they have
     public String customerSummary() {
         String summary = "Customer Summary";
         for (Customer c : customers)
@@ -33,10 +34,17 @@ public class Bank {
             total += c.totalInterestEarned();
         return total;
     }
+    //same as above but calls the function set one year in the future
+    public double totalInterestPaidTest() {
+        double total = 0;
+        for(Customer c: customers)
+            total += c.totalInterestEarnedTest();
+        return total;
+    }
 
     public String getFirstCustomer() {
         try {
-            customers = null;
+//            customers = null; removed as it would always fail
             return customers.get(0).getName();
         } catch (Exception e){
             e.printStackTrace();
