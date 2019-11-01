@@ -79,7 +79,7 @@ public class CustomerTest {
 		oscar.openAccount(new Account(Account.MAXI_SAVINGS));
 		assertEquals(3, oscar.getNumberOfAccounts());
 	}
-	
+
 	@Test
 	public void testTransfer() throws IOException {
 		Customer oscar = new Customer("Oscar");
@@ -91,7 +91,7 @@ public class CustomerTest {
 		oscar.transferBetweenAccounts(savings, checking, 300);
 		assertEquals(300.0, checking.sumTransactions(), DOUBLE_DELTA);
 		assertEquals(700.0, savings.sumTransactions(), DOUBLE_DELTA);
-		
+
 	}
-	
+
 }
