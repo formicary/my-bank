@@ -1,17 +1,23 @@
 package com.abc;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static java.lang.Math.abs;
+import java.util.HashMap;
 
+/**
+ * Changed the List of accounts to HashMap, allowing only one account type per customer.
+ * Changed openAccount method to check if an account of the same type exists.
+ * Added a method that returns the Account object given its type.
+ * Changed statementForAccount to public to return statement for specific account type.
+ * Added transferBetweenAccounts method to allow a customer to transfer between accounts.
+ * @author Andreas Neokleous
+ */
 public class Customer {
     private String name;
-    private List<Account> accounts;
+    private HashMap<Integer, Account> accounts;
 
     public Customer(String name) {
         this.name = name;
-        this.accounts = new ArrayList<Account>();
+        this.accounts = new HashMap<Integer, Account>();
     }
 
     public String getName() {
@@ -19,8 +25,19 @@ public class Customer {
     }
 
     public Customer openAccount(Account account) {
-        accounts.add(account);
+        if (accounts.containsKey(account.getAccountType())){
+            throw new IllegalArgumentException("Account of same type exists.");
+        }
+        accounts.put(account.getAccountType(), account);
         return this;
+    }
+    
+    public Account getAccount(int accountType){
+        if (this.accounts.containsKey(accountType)){
+            return this.accounts.get(accountType);
+        }else{
+            throw new IllegalArgumentException("Account does not exists.");
+        }
     }
 
     public int getNumberOfAccounts() {
@@ -29,7 +46,7 @@ public class Customer {
 
     public double totalInterestEarned() {
         double total = 0;
-        for (Account a : accounts)
+        for (Account a : accounts.values())
             total += a.interestEarned();
         return total;
     }
@@ -38,19 +55,21 @@ public class Customer {
         String statement = null;
         statement = "Statement for " + name + "\n";
         double total = 0.0;
-        for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
+        for (Account a : accounts.values()) {
+            statement += "\n" + getStatementForAccount(a.getAccountType()) + "\n";
             total += a.sumTransactions();
         }
         statement += "\nTotal In All Accounts " + toDollars(total);
         return statement;
     }
 
-    private String statementForAccount(Account a) {
+  
+
+    public String getStatementForAccount(int accountType) {
         String s = "";
 
        //Translate to pretty account type
-        switch(a.getAccountType()){
+        switch(accountType){
             case Account.CHECKING:
                 s += "Checking Account\n";
                 break;
@@ -64,9 +83,9 @@ public class Customer {
 
         //Now total up all the transactions
         double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
+        for (Transaction t : accounts.get(accountType).transactions) {
+            s += "  " + (t.getAmount() < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.getAmount()) + "\n";
+            total += t.getAmount();
         }
         s += "Total " + toDollars(total);
         return s;
@@ -74,5 +93,18 @@ public class Customer {
 
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
+    }
+    
+    public void transferBetweenAccounts(int accountFrom, int accountTo, double amount){
+        if (this.accounts.containsKey(accountFrom) && this.accounts.containsKey(accountTo)){
+            if (amount>0){
+                Account from = this.accounts.get(accountFrom);
+                Account to = this.accounts.get(accountTo);
+                from.withdraw(amount);
+                to.deposit(amount);
+            }
+        }else{
+            throw new IllegalArgumentException("Accounts do not exist.");
+        }
     }
 }
