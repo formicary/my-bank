@@ -43,32 +43,35 @@ public class Account {
 		double total = 0.0;
 		double balance = 0.0;
 		DecimalFormat df2 = new DecimalFormat("#.##");
-//sets the time as current
+		// sets the time as current
 		long date = Calendar.getInstance().getTime().getTime();
 		switch (accountType) {
 		case SAVINGS:
 			if (amount <= 1000) {
 				// calculates the interest for each transaction from its date until now,
-				// withdrawels will give negatives which will remove from overall interest evening it out
+				// withdrawels will give negatives which will remove from overall interest
+				// evening it out
 				for (Transaction t : transactions)
 					total += compoundInterest(t.amount, 0.001 / 365, (date - t.getDate().getTime()) / 86400000);
 				return Double.parseDouble(df2.format(total));
 			} else {
-				//runs through each transaction
+				// runs through each transaction
 				for (Transaction t : transactions) {
 					double interest = 0.0;
-					//checks if balance is over 1000 currently
+					// checks if balance is over 1000 currently
 					if (balance > 1000)
-						//if so applies compound interest of 0.2%
+						// if so applies compound interest of 0.2%
 						total += compoundInterest(t.amount, 0.002 / 365, (date - t.getDate().getTime()) / 86400000);
 					else if (total + t.amount < 1000) {
-						//if the balance plus the amount of this transaction are under 1000 then it uses the rate of 0.1%
+						// if the balance plus the amount of this transaction are under 1000 then it
+						// uses the rate of 0.1%
 						interest = compoundInterest(t.amount, 0.001 / 365, (date - t.getDate().getTime()) / 86400000);
 						total += interest;
 						balance += t.amount + interest;
 					} else {
-						//if some of this transaction is over 1000 and some isnt it calculates the interest individually for each part
-						
+						// if some of this transaction is over 1000 and some isnt it calculates the
+						// interest individually for each part
+
 						interest = compoundInterest(1000 - total, 0.001 / 365,
 								(date - t.getDate().getTime()) / 86400000);
 						total += interest;
@@ -90,14 +93,15 @@ public class Account {
 			double interest = 0.0;
 
 			for (Transaction t : transactions) {
-				//calculates 5% a base rate
+				// calculates 5% a base rate
 				interest = compoundInterest(t.amount, 0.05 / 365, (date - t.getDate().getTime()) / 86400000);
 				total += interest;
 				balance += interest + t.amount;
 				// if the transaction was made within 10 days of a withdrawal deduct the
 				// interest for those days it is within 10 days of it
 				if ((t.getDate().getTime() - 864000000) < lastWithdrawal) {
-					//if the last withdrawal was within 10 days it removes interest that would have been gained in that time
+					// if the last withdrawal was within 10 days it removes interest that would have
+					// been gained in that time
 					interest = compoundInterest(t.amount, 0.049 / 365,
 							(t.getDate().getTime() - lastWithdrawal) / 86400000);
 					total -= interest;
@@ -117,10 +121,9 @@ public class Account {
 
 			}
 		case CHECKING:
-			//runs through each transaction calculating the amount of interest it receives
+			// runs through each transaction calculating the amount of interest it receives
 			for (Transaction t : transactions)
 				total += compoundInterest(t.amount, 0.001 / 365, (date - t.getDate().getTime()) / 86400000);
-//		System.out.println(Double.parseDouble(df2.format(total)));
 			return Double.parseDouble(df2.format(total));
 		default:
 			throw new IllegalArgumentException("account type is not valid");
@@ -134,7 +137,7 @@ public class Account {
 
 		double total = 0.0;
 		double balance = 0.0;
-		//used to round doubles to 2d.p
+		// used to round doubles to 2d.p
 		DecimalFormat df2 = new DecimalFormat("#.##");
 
 		// set time as 1 year in the future for testing purposes
@@ -143,26 +146,29 @@ public class Account {
 		case SAVINGS:
 			if (amount <= 1000) {
 				// calculates the interest for each transaction from its date until now,
-				// withdrawels will give negatives which will remove from overall interest evening it out
+				// withdrawels will give negatives which will remove from overall interest
+				// evening it out
 				for (Transaction t : transactions)
 					total += compoundInterest(t.amount, 0.001 / 365, (date - t.getDate().getTime()) / 86400000);
 				return Double.parseDouble(df2.format(total));
 			} else {
-				//runs through each transaction
+				// runs through each transaction
 				for (Transaction t : transactions) {
 					double interest = 0.0;
-					//checks if balance is over 1000 currently
+					// checks if balance is over 1000 currently
 					if (balance > 1000)
-						//if so applies compound interest of 0.2%
+						// if so applies compound interest of 0.2%
 						total += compoundInterest(t.amount, 0.002 / 365, (date - t.getDate().getTime()) / 86400000);
 					else if (total + t.amount < 1000) {
-						//if the balance plus the amount of this transaction are under 1000 then it uses the rate of 0.1%
+						// if the balance plus the amount of this transaction are under 1000 then it
+						// uses the rate of 0.1%
 						interest = compoundInterest(t.amount, 0.001 / 365, (date - t.getDate().getTime()) / 86400000);
 						total += interest;
 						balance += t.amount + interest;
 					} else {
-						//if some of this transaction is over 1000 and some isnt it calculates the interest individually for each part
-						
+						// if some of this transaction is over 1000 and some isnt it calculates the
+						// interest individually for each part
+
 						interest = compoundInterest(1000 - total, 0.001 / 365,
 								(date - t.getDate().getTime()) / 86400000);
 						total += interest;
@@ -184,14 +190,15 @@ public class Account {
 			double interest = 0.0;
 
 			for (Transaction t : transactions) {
-				//calculates 5% a base rate
+				// calculates 5% a base rate
 				interest = compoundInterest(t.amount, 0.05 / 365, (date - t.getDate().getTime()) / 86400000);
 				total += interest;
 				balance += interest + t.amount;
 				// if the transaction was made within 10 days of a withdrawal deduct the
 				// interest for those days it is within 10 days of it
 				if ((t.getDate().getTime() - 864000000) < lastWithdrawal) {
-					//if the last withdrawal was within 10 days it removes interest that would have been gained in that time
+					// if the last withdrawal was within 10 days it removes interest that would have
+					// been gained in that time
 					interest = compoundInterest(t.amount, 0.049 / 365,
 							(t.getDate().getTime() - lastWithdrawal) / 86400000);
 					total -= interest;
@@ -211,10 +218,10 @@ public class Account {
 
 			}
 		case CHECKING:
-			//runs through each transaction calculating the amount of interest it receives
+			// runs through each transaction calculating the amount of interest it receives
 			for (Transaction t : transactions)
 				total += compoundInterest(t.amount, 0.001 / 365, (date - t.getDate().getTime()) / 86400000);
-//		System.out.println(Double.parseDouble(df2.format(total)));
+			// System.out.println(Double.parseDouble(df2.format(total)));
 			return Double.parseDouble(df2.format(total));
 		default:
 			throw new IllegalArgumentException("account type is not valid");
