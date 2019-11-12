@@ -1,16 +1,24 @@
 package com.abc;
 
-import java.util.Calendar;
-import java.util.Date;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NonNull;
 
+import java.time.LocalDateTime;
+
+import static java.time.LocalDateTime.now;
+
+@Getter
+@AllArgsConstructor
 public class Transaction {
-    public final double amount;
 
-    private Date transactionDate;
+    @NonNull
+    private final Double amount;
+    @NonNull
+    private LocalDateTime transactionDateTime;
 
-    public Transaction(double amount) {
+    public Transaction(@NonNull Double amount) {
         this.amount = amount;
-        this.transactionDate = DateProvider.getInstance().now();
+        this.transactionDateTime = now();
     }
-
 }

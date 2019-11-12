@@ -1,78 +1,64 @@
 package com.abc;
 
-import java.util.ArrayList;
-import java.util.List;
+import lombok.Getter;
+import lombok.NonNull;
 
-import static java.lang.Math.abs;
+import java.util.*;
 
+import static com.abc.Bank.*;
+import static com.abc.Account.AccountType;
+
+@Getter
 public class Customer {
+
+    @NonNull
     private String name;
-    private List<Account> accounts;
+    @NonNull
+    private Map<AccountType, Account> accounts;
 
-    public Customer(String name) {
+    public Customer(@NonNull String name) {
         this.name = name;
-        this.accounts = new ArrayList<Account>();
+        this.accounts = new TreeMap<AccountType, Account>();
     }
 
-    public String getName() {
-        return name;
+    public Account openAccount(@NonNull AccountType accountType) {
+        Account account;
+        if (accounts.containsKey(accountType))
+            return account = accounts.get(accountType); //already opened
+        accounts.put(accountType, account = new Account(accountType));
+        return account;
     }
 
-    public Customer openAccount(Account account) {
-        accounts.add(account);
-        return this;
+    public boolean transferBetweenAccounts(@NonNull AccountType from, @NonNull AccountType to, @NonNull Double amount) throws Exception {
+        Account fromAccount = accounts.get(from);
+        Account toAccount = accounts.get(to);
+        if (fromAccount == null || toAccount == null)
+            throw new Exception("No " + from + " or " + to + " account!");
+
+        if (fromAccount.withdraw(amount)) {
+            toAccount.deposit(amount);
+            return true;
+        }
+        return false;
     }
 
     public int getNumberOfAccounts() {
         return accounts.size();
     }
 
-    public double totalInterestEarned() {
-        double total = 0;
-        for (Account a : accounts)
-            total += a.interestEarned();
-        return total;
+    public Double getTotalInterestEarned() {
+        return accounts.values().stream().mapToDouble(Account::getInterestEarned).sum();
     }
 
-    public String getStatement() {
-        String statement = null;
-        statement = "Statement for " + name + "\n";
-        double total = 0.0;
-        for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+    public String printStatement() {
+        StringBuilder statement = new StringBuilder("Statement for " + name + "\n");
+        Double total = 0d;
+        for (Account a : accounts.values()) {
+            statement.append("\n" + a.printStatement() + "\n");
+            total += a.getBalance();
         }
-        statement += "\nTotal In All Accounts " + toDollars(total);
-        return statement;
+        statement.append("\nTotal in all Accounts " + DOLLAR.format(total));
+        return statement.toString();
     }
 
-    private String statementForAccount(Account a) {
-        String s = "";
-
-       //Translate to pretty account type
-        switch(a.getAccountType()){
-            case Account.CHECKING:
-                s += "Checking Account\n";
-                break;
-            case Account.SAVINGS:
-                s += "Savings Account\n";
-                break;
-            case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
-                break;
-        }
-
-        //Now total up all the transactions
-        double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
-        }
-        s += "Total " + toDollars(total);
-        return s;
-    }
-
-    private String toDollars(double d){
-        return String.format("$%,.2f", abs(d));
-    }
 }
