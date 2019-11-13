@@ -2,53 +2,120 @@ package com.abc;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.ZonedDateTime;
+
+import static org.junit.Assert.*;
 
 public class BankTest {
-    private static final double DOUBLE_DELTA = 1e-15;
+
+    @Test
+    public void addCustomer() {
+        Bank bank = new Bank();
+        Customer customer = new Customer("Smith", "John");
+
+        int customerId = customer.getId();
+        int returnedId = bank.addCustomer(customer);
+        assertEquals(
+                "Test that returned int is the value of the parameter customer\'s id",
+                customerId,
+                returnedId);
+
+        assertEquals(
+                "Test that customer is added to customers list",
+                customerId,
+                bank.getFirstCustomer().getId());
+
+        Customer secondCustomer = new Customer("Smith", "Jane");
+        int secondCustomerId = secondCustomer.getId();
+        bank.addCustomer(secondCustomer);
+        assertNotNull(
+                "Test that multiple customers can be added", bank.getCustomer(secondCustomerId));
+        assertNotNull(
+                "Test that adding additional customers does not effect existing  customers",
+                bank.getCustomer(customerId));
+    }
 
     @Test
     public void customerSummary() {
-        Bank bank = new Bank();
-        Customer john = new Customer("John");
-        john.openAccount(new Account(Account.CHECKING));
-        bank.addCustomer(john);
+        Customer customerOne = new Customer("Doe", "Jane");
+        Customer customerTwo = new Customer("Simpson", "Marge");
+        customerOne.openMaxiSavingsAccount();
+        customerOne.openCheckingAccount();
+        customerOne.openCheckingAccount();
+        customerTwo.openCheckingAccount();
+        int customerOneAccounts = customerOne.getNumberOfAccounts();
 
-        assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
+        Bank bank = new Bank();
+        bank.addCustomer(customerTwo);
+        bank.addCustomer(customerOne);
+
+        String summery = bank.customerSummary();
+
+        assertTrue(
+                "Test that result includes customer surname",
+                summery.contains(customerTwo.getSurname()));
+        assertTrue(
+                "Test that result includes customer first name",
+                summery.contains(customerOne.getFirstName()));
+        assertTrue("Test that result includes number of customer accounts", summery.contains(Integer.toString(customerOneAccounts)));
+        assertTrue(
+                "Test that customers are ordered by ID",
+                summery.indexOf(customerOne.getSurname())
+                        < summery.indexOf(customerTwo.getSurname()));
     }
 
     @Test
-    public void checkingAccount() {
+    public void totalInterestPaid() {
+        final int BIG_DECIMAL_SCALE = 10;
+
+        Customer customerOne = new Customer("Simpson", "Homer");
+        CheckingAccount customerOneCheckingAccount = new CheckingAccount();
+        customerOneCheckingAccount.deposit(500);
+        customerOneCheckingAccount.getTransactions().get(0).setTransactionDate(ZonedDateTime.now().minusDays(4));
+        SavingsAccount customerOneSavingsAccount = new SavingsAccount();
+        customerOneSavingsAccount.deposit(25.76);
+        customerOneSavingsAccount.getTransactions().get(0).setTransactionDate(ZonedDateTime.now().minusDays(15));
+        customerOne.addAccount(customerOneCheckingAccount);
+        customerOne.addAccount(customerOneSavingsAccount);
+
+        Customer customerTwo = new Customer("Fry", "Philip");
+        CheckingAccount customerTwoCheckingAccount = new CheckingAccount();
+        customerTwoCheckingAccount.deposit(123.45);
+        customerTwoCheckingAccount.getTransactions().get(0).setTransactionDate(ZonedDateTime.now().minusDays(5));
+        customerTwo.addAccount(customerTwoCheckingAccount);
+
+        BigDecimal interestEarnedByBothCustomers = customerOne.totalInterestEarned().add(customerTwo.totalInterestEarned());
+
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.CHECKING);
-        Customer bill = new Customer("Bill").openAccount(checkingAccount);
-        bank.addCustomer(bill);
-
-        checkingAccount.deposit(100.0);
-
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+        bank.addCustomer(customerOne);
+        bank.addCustomer(customerTwo);
+        assertEquals("Test that result is the combined interest earned by all the bank\'s customers", interestEarnedByBothCustomers.setScale(BIG_DECIMAL_SCALE, RoundingMode.HALF_UP), bank.totalInterestPaid().setScale(BIG_DECIMAL_SCALE, RoundingMode.HALF_UP));
     }
 
     @Test
-    public void savings_account() {
+    public void getFirstCustomer() {
+        Customer firstCustomer = new Customer("Simpson", "Lisa");
+        Customer secondCustomer = new Customer("Simpson", "Bart");
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
-
-        checkingAccount.deposit(1500.0);
-
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        bank.addCustomer(firstCustomer);
+        bank.addCustomer(secondCustomer);
+        assertEquals("Test that result is the first customer added to the bank", firstCustomer, bank.getFirstCustomer());
     }
 
     @Test
-    public void maxi_savings_account() {
+    public void getCustomer() {
+        Customer otherCustomerOne = new Customer("Simpson", "Maggie");
+        Customer searchCustomer = new Customer("Fry", "Philip");
+        Customer otherCustomerTwo = new Customer("Farnsworth", "Hubert");
+
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+        bank.addCustomer(otherCustomerOne);
+        bank.addCustomer(searchCustomer);
+        bank.addCustomer(otherCustomerTwo);
 
-        checkingAccount.deposit(3000.0);
-
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        Customer returnedCustomer = bank.getCustomer(searchCustomer.getId());
+        assertEquals("Test that customer returned is the customer whose id was passed as a parameter", searchCustomer, returnedCustomer);
     }
-
 }
