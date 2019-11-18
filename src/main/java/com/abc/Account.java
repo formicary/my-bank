@@ -3,71 +3,89 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Account {
+/**
+ * Class correlating to bank accounts.
+ */
+class Account {
+    private final AccountType accountType;
 
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
+    private double balance = 0;
+    private List<Transaction> transactions;
 
-    private final int accountType;
-    public List<Transaction> transactions;
-
-    public Account(int accountType) {
+    Account(AccountType accountType) {
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
     }
 
-    public void deposit(double amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
-        } else {
+    /**
+     * Deposits funds into the corresponding account.
+     * @param amount the amount of money to deposit into the account
+     */
+    void deposit(double amount) {
+        if (amount <= 0) throw new IllegalArgumentException("The deposit amount must exceed zero.");
+        else {
             transactions.add(new Transaction(amount));
+            balance += amount;
         }
     }
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
+    /**
+     * Withdraws funds from the corresponding account.
+     * @param amount the amount of money to withdraw from the account
+     */
+    void withdraw(double amount) {
+        if (amount <= 0) throw new IllegalArgumentException("The withdrawal amount must exceed zero.");
+        else {
+            transactions.add(new Transaction(-amount));
+            balance -= amount;
+        }
     }
-}
 
-    public double interestEarned() {
-        double amount = sumTransactions();
-        switch(accountType){
+    /**
+     * Determines the interest earned by the bank account.
+     * @return the amount made via interest for the corresponding account
+     */
+    double interestEarned() {
+        switch (accountType) {
             case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
+                return (balance <= 1000) ? balance * 0.001 : 1 + (balance - 1000) * 0.002;
             case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
+                if (balance <= 1000) return balance * 0.02;
+                else if (balance <= 2000) return 20 + (balance - 1000) * 0.05;
+                else return  70 + (balance - 2000) * 0.1;
             default:
-                return amount * 0.001;
+                return balance * 0.001;
         }
     }
 
-    public double sumTransactions() {
-       return checkIfTransactionsExist(true);
+    double getBalance() {
+        return balance;
     }
 
-    private double checkIfTransactionsExist(boolean checkAll) {
-        double amount = 0.0;
-        for (Transaction t: transactions)
-            amount += t.amount;
-        return amount;
+    public List<Transaction> getTransactions() {
+        return transactions;
     }
 
-    public int getAccountType() {
+    /**
+     * Checks for the existence of transactions within the corresponding account.
+     * @return whether the account has made any transactions
+     */
+    boolean hasTransactions() {
+        return !transactions.isEmpty();
+    }
+
+    AccountType getAccountType() {
         return accountType;
     }
 
+    String getAccountTypeToString() {
+        switch (accountType) {
+            case SAVINGS:
+                return "Savings Account\n";
+            case MAXI_SAVINGS:
+                return "Maxi Savings Account\n";
+            default:
+                return "Checking Account\n";
+        }
+    }
 }

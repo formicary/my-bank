@@ -40,36 +40,32 @@ public class Customer {
         double total = 0.0;
         for (Account a : accounts) {
             statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+            total += a.getBalance();
         }
         statement += "\nTotal In All Accounts " + toDollars(total);
         return statement;
     }
 
-    private String statementForAccount(Account a) {
-        String s = "";
+    /**
+     * Generates an account statement, composing of a balance and record for each transaction.
+     * @param myAccount the account, for which, to generate a statement
+     * @return the account statement
+     */
+    private String statementForAccount(Account myAccount) {
+        StringBuilder statement = new StringBuilder(myAccount.getAccountTypeToString());
 
-       //Translate to pretty account type
-        switch(a.getAccountType()){
-            case Account.CHECKING:
-                s += "Checking Account\n";
-                break;
-            case Account.SAVINGS:
-                s += "Savings Account\n";
-                break;
-            case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
-                break;
+        // Appending information about each transaction.
+        for (Transaction t : myAccount.getTransactions()) {
+            statement.append("\t");
+            statement.append((t.amount < 0 ? "withdrawal" : "deposit"));
+            statement.append(toDollars(t.amount));
+            statement.append("\n");
         }
 
-        //Now total up all the transactions
-        double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
-        }
-        s += "Total " + toDollars(total);
-        return s;
+        statement.append("Total: ");
+        statement.append(toDollars(myAccount.getBalance()));
+
+        return statement.toString();
     }
 
     private String toDollars(double d){
