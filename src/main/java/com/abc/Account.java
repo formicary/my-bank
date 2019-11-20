@@ -71,7 +71,7 @@ class Account {
      */
     String genStatement() {
         StringBuilder statement = new StringBuilder(getAccountTypeToString());
-        statement.append(" - Total: ");
+        statement.append("\nTotal: ");
         statement.append(balanceToString());
         statement.append('\n');
 

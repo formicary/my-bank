@@ -3,16 +3,22 @@ package com.abc;
 import java.util.Calendar;
 import java.util.Date;
 
-public class DateProvider {
+/**
+ * Date singleton class. Provides a universal baseline for all transactions.
+ * An epoch of sorts.
+ */
+class DateProvider {
     private static DateProvider instance = null;
 
-    public static DateProvider getInstance() {
-        if (instance == null)
-            instance = new DateProvider();
+    static DateProvider getInstance() {
+        if (instance == null) instance = new DateProvider();
         return instance;
     }
 
-    public Date now() {
+    /**
+     * @return the current time.
+     */
+    Date now() {
         return Calendar.getInstance().getTime();
     }
 }

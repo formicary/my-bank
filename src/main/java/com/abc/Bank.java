@@ -47,7 +47,7 @@ class Bank {
     double totalInterestPaid() {
         double total = 0;
 
-        for(Customer c: customers) total += c.totalInterestEarned();
+        for(Customer customer: customers) total += customer.calcInterest();
 
         return total;
     }
