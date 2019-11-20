@@ -1,5 +1,7 @@
 package com.abc;
 
+import com.abc.utils.Formatting;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +20,7 @@ class Account {
     }
 
     /**
-     * Deposits funds into the corresponding account.
+     * Deposits funds into this account.
      * @param amount the amount of money to deposit into the account
      */
     void deposit(double amount) {
@@ -30,7 +32,7 @@ class Account {
     }
 
     /**
-     * Withdraws funds from the corresponding account.
+     * Withdraws funds from this account.
      * @param amount the amount of money to withdraw from the account
      */
     void withdraw(double amount) {
@@ -42,10 +44,15 @@ class Account {
     }
 
     /**
+     * Operating under the assumption that the statements:
+     * "Savings accounts have a rate of 0.1% for the first $1,000 then 0.2%"
+     * "Maxi-Savings accounts have a rate of 2% for the first $1,000 then 5% for the next $1,000 then 10%"
+     * Indicate the rate that applies for a balance
+     *
      * Determines the interest earned by the bank account.
-     * @return the amount made via interest for the corresponding account
+     * @return the amount made via interest for this account
      */
-    double interestEarned() {
+    double calcInterest() {
         switch (accountType) {
             case SAVINGS:
                 return (balance <= 1000) ? balance * 0.001 : 1 + (balance - 1000) * 0.002;
@@ -58,16 +65,45 @@ class Account {
         }
     }
 
+    /**
+     * Generates an account statement, composing of a balance and record for each transaction.
+     * @return the account statement
+     */
+    String genStatement() {
+        StringBuilder statement = new StringBuilder(getAccountTypeToString());
+        statement.append(" - Total: ");
+        statement.append(balanceToString());
+        statement.append('\n');
+
+        // Appending information about each transaction.
+        for (Transaction transaction : transactions) {
+            statement.append("\t");
+            statement.append((transaction.amount < 0 ? "Withdrawal: " : "Deposit: "));
+            statement.append(Formatting.toDollars(transaction.amount));
+            statement.append('\n');
+        }
+
+        return statement.toString();
+    }
+
     double getBalance() {
         return balance;
     }
 
-    public List<Transaction> getTransactions() {
+    /**
+     * Returns the balance of the account as a monetary string.
+     * @return the balance of the account in dollars
+     */
+    String balanceToString() {
+        return Formatting.toDollars(balance);
+    }
+
+    List<Transaction> getTransactions() {
         return transactions;
     }
 
     /**
-     * Checks for the existence of transactions within the corresponding account.
+     * Checks for the existence of transactions within this account.
      * @return whether the account has made any transactions
      */
     boolean hasTransactions() {
@@ -78,14 +114,14 @@ class Account {
         return accountType;
     }
 
-    String getAccountTypeToString() {
+    private String getAccountTypeToString() {
         switch (accountType) {
             case SAVINGS:
-                return "Savings Account\n";
+                return "Savings Account";
             case MAXI_SAVINGS:
-                return "Maxi Savings Account\n";
+                return "Maxi Savings Account";
             default:
-                return "Checking Account\n";
+                return "Checking Account";
         }
     }
 }

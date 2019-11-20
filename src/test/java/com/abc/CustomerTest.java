@@ -30,7 +30,7 @@ public class CustomerTest {
                 "\twithdrawal $200.00\n" +
                 "Total $3,800.00\n" +
                 "\n" +
-                "Total In All Accounts $3,900.00", henry.getStatement());
+                "Cross-account total: $3,900.00", henry.genStatement());
     }
 
     @Test

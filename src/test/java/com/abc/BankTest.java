@@ -14,7 +14,7 @@ public class BankTest {
         john.openAccount(new Account(AccountType.CHECKING));
         bank.addCustomer(john);
 
-        assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
+        assertEquals("Customer Summary\n\t- John (1 account)", bank.customerSummary());
     }
 
     @Test

@@ -1,74 +1,66 @@
 package com.abc;
 
+import com.abc.utils.Formatting;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Math.abs;
 
-public class Customer {
+class Customer {
     private String name;
     private List<Account> accounts;
 
-    public Customer(String name) {
+    Customer(String name) {
         this.name = name;
         this.accounts = new ArrayList<Account>();
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public Customer openAccount(Account account) {
+    Customer openAccount(Account account) {
         accounts.add(account);
         return this;
     }
 
-    public int getNumberOfAccounts() {
+    int getNumberOfAccounts() {
         return accounts.size();
     }
 
-    public double totalInterestEarned() {
+    /**
+     * Calculates the total amount of interest this customer has earned across all of their accounts.
+     * @return the total interest earned
+     */
+    double calcInterest() {
         double total = 0;
-        for (Account a : accounts)
-            total += a.interestEarned();
+
+        for (Account a : accounts) total += a.calcInterest();
+
         return total;
     }
 
-    public String getStatement() {
-        String statement = null;
-        statement = "Statement for " + name + "\n";
-        double total = 0.0;
-        for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
-            total += a.getBalance();
-        }
-        statement += "\nTotal In All Accounts " + toDollars(total);
-        return statement;
-    }
 
     /**
-     * Generates an account statement, composing of a balance and record for each transaction.
-     * @param myAccount the account, for which, to generate a statement
-     * @return the account statement
+     * Generates a statement for this customer, composing of statements for each account they hold at the bank.
+     * @return a complete customer statement
      */
-    private String statementForAccount(Account myAccount) {
-        StringBuilder statement = new StringBuilder(myAccount.getAccountTypeToString());
+    String genStatement() {
+        double total = 0.0;
+        StringBuilder statement = new StringBuilder();
 
-        // Appending information about each transaction.
-        for (Transaction t : myAccount.getTransactions()) {
-            statement.append("\t");
-            statement.append((t.amount < 0 ? "withdrawal" : "deposit"));
-            statement.append(toDollars(t.amount));
-            statement.append("\n");
+        statement.append("Statement for ");
+        statement.append(name);
+        statement.append('\n');
+
+        for (Account account : accounts) {
+            statement.append('\n');
+            statement.append(account.genStatement());
+            total += account.getBalance();
         }
-
-        statement.append("Total: ");
-        statement.append(toDollars(myAccount.getBalance()));
-
+        statement.append("\nCross-account total: ");
+        statement.append(Formatting.toDollars(total));
         return statement.toString();
     }
 
-    private String toDollars(double d){
-        return String.format("$%,.2f", abs(d));
+    String getName() {
+        return name;
     }
 }
