@@ -15,8 +15,8 @@ public class CustomerTest {
     private Account maxiSavingsAccount;
 
     /**
-     * Easier to create a single, and therefore consistent, customer which is reinitialised prior to each
-     * test, than to create new customers for each test.
+     * Easier to create a single, and therefore consistent, customer which is reinitialised prior to each test, than to
+     * create new customers for each test.
      */
     @Before
     public void defaultCustomer() {
@@ -24,14 +24,14 @@ public class CustomerTest {
     }
 
     /**
-     * Same premise as creating a default customer.
-     * Accounts of each type are initialised prior to tests, ensuring consistency across test cases.
+     * Same premise as creating a default customer. Accounts of each type are initialised prior to tests, ensuring
+     * consistency across test cases.
      */
     @Before
     public void defaultAccounts() {
-        checkingAccount = new Account(AccountType.CHECKING);
-        savingsAccount = new Account(AccountType.SAVINGS);
-        maxiSavingsAccount = new Account(AccountType.MAXI_SAVINGS);
+        checkingAccount = new CheckingAccount();
+        savingsAccount = new SavingsAccount();
+        maxiSavingsAccount = new MaxiSavingsAccount();
     }
 
     /**
@@ -46,17 +46,17 @@ public class CustomerTest {
         savingsAccount.withdraw(200.0);
 
         assertEquals("Statement for Elliot Alderson\n" +
-            "\n" +
-            "Checking Account\n" +
-            "\tdeposit $100.00\n" +
-            "Total $100.00\n" +
-            "\n" +
-            "Savings Account\n" +
-            "\tdeposit $4,000.00\n" +
-            "\twithdrawal $200.00\n" +
-            "Total $3,800.00\n" +
-            "\n" +
-            "Cross-account total: $3,900.00", elliot.genStatement());
+                "\n" +
+                "Checking Account\n" +
+                "Total: $100.00\n" +
+                "\tDeposit: $100.00\n" +
+                "\n" +
+                "Savings Account\n" +
+                "Total: $3,800.00\n" +
+                "\tDeposit: $4,000.00\n" +
+                "\tWithdrawal: -$200.00\n" +
+                "\n" +
+                "Cross-account total: $3,900.00", elliot.genStatement());
     }
 
     /**
@@ -73,8 +73,8 @@ public class CustomerTest {
      */
     @Test
     public void testTwoAccount() {
-        elliot.openAccount(new Account(AccountType.SAVINGS))
-                .openAccount(new Account(AccountType.CHECKING));
+        elliot.openAccount(savingsAccount)
+                .openAccount(checkingAccount);
         assertEquals(2, elliot.getNumberOfAccounts());
     }
 
@@ -84,9 +84,9 @@ public class CustomerTest {
     @Test
     public void testThreeAccounts() {
         // Chaining is easier than repeatedly referencing the elliot object
-        elliot.openAccount(new Account(AccountType.SAVINGS))
-                .openAccount(new Account(AccountType.MAXI_SAVINGS))
-                .openAccount(new Account(AccountType.CHECKING));
+        elliot.openAccount(savingsAccount)
+                .openAccount(maxiSavingsAccount)
+                .openAccount(checkingAccount);
         assertEquals(3, elliot.getNumberOfAccounts());
     }
 
@@ -109,16 +109,16 @@ public class CustomerTest {
         // Checking account inequality would benefit from overriding equals
         elliot.transfer(59, checkingAccount, maxiSavingsAccount);
 
-        assertEquals(checkingAccount.getBalance(), 399, 0);
+        assertEquals(840, checkingAccount.getBalance(), 0);
     }
 
     /**
-     * Test to guarantee customer's cannot transfer negative funds between accounts.
-     * Negative transfers, theoretically, would just be an inverse transfer. Still, we probably don't want that.
-     *
+     * Test to guarantee customer's cannot transfer negative funds between accounts. Negative transfers, theoretically,
+     * would just be an inverse transfer. Still, we probably don't want that.
+     * <p>
      * Testing for the presence of a thrown exception.
      */
-    @Test (expected = IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testNegativeTransfer() {
         checkingAccount.deposit(2019);
         maxiSavingsAccount.deposit(22);
@@ -130,10 +130,10 @@ public class CustomerTest {
     }
 
     /**
-     * Test to guarantee customer's cannot transfer more funds than available from one account to another.
-     * Violation of the test could cause a recession in production. :(
+     * Test to guarantee customer's cannot transfer more funds than available from one account to another. Violation of
+     * the test could cause a recession in production. :(
      */
-    @Test (expected = IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testExcessFundsTransfer() {
         checkingAccount.deposit(0.50);
         maxiSavingsAccount.deposit(0.25);
@@ -146,14 +146,45 @@ public class CustomerTest {
 
     /**
      * Test to ensure that transfers can only occur if the customer has, at least, 2 accounts.
-     * Incidentally also tests the inability to transfer between a single account.
      */
-    @Test (expected = IllegalArgumentException.class)
+    @Test(expected = IllegalStateException.class)
     public void testSingleAccountTranfer() {
         checkingAccount.deposit(50000);
 
         elliot.openAccount(checkingAccount);
 
         elliot.transfer(Double.MAX_VALUE, checkingAccount, checkingAccount);
+    }
+
+    /**
+     * Test to ensure that a customer cannot execute a transfer between the same account.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testSameAccountTransfer() {
+        checkingAccount.deposit(100);
+
+        elliot.openAccount(checkingAccount)
+                .openAccount(maxiSavingsAccount);
+
+        elliot.transfer(50, checkingAccount, checkingAccount);
+    }
+
+    /**
+     * Test to ensure customers can only execute transfers from accounts they own.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testOwnedAccount() {
+        Customer darlene = new Customer("Darlene Alderson");
+        Account darleneChecking = new CheckingAccount();
+
+        darleneChecking.deposit(5000);
+
+        darlene.openAccount(darleneChecking)
+                .openAccount(maxiSavingsAccount);
+
+        elliot.openAccount(checkingAccount)
+                .openAccount(savingsAccount);
+
+        elliot.transfer(1024, darleneChecking, checkingAccount);
     }
 }

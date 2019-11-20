@@ -8,8 +8,10 @@ import java.util.List;
 /**
  * Class correlating to bank accounts.
  */
-class Account {
+abstract class Account {
     private final AccountType accountType;
+
+    private Customer holder;
 
     private double balance = 0;
     private List<Transaction> transactions;
@@ -44,6 +46,26 @@ class Account {
     }
 
     /**
+     * Executes a bank transfer between this account and another, as long as they are held by
+     * the same customer.
+     * @param amount the amount to transfer across accounts
+     * @param toAccount the account, to which, to deposit the funds
+     */
+    void execTransfer(double amount, Account toAccount) {
+        if (toAccount.equals(this))
+            throw new IllegalArgumentException("A transfer cannot take place across the same account.");
+        else if (balance < amount)
+            throw new IllegalArgumentException("There are insufficient funds in the source account.");
+        else if (amount < 0)
+            throw new IllegalArgumentException("A negative amount cannot be transferred.");
+        else if (!toAccount.getHolder().equals(holder))
+            throw new IllegalArgumentException("Transfers cannot be executed between different customers.");
+
+        withdraw(amount);
+        toAccount.deposit(amount);
+    }
+
+    /**
      * Operating under the assumption that the statements:
      * "Savings accounts have a rate of 0.1% for the first $1,000 then 0.2%"
      * "Maxi-Savings accounts have a rate of 2% for the first $1,000 then 5% for the next $1,000 then 10%"
@@ -52,25 +74,20 @@ class Account {
      * Determines the interest earned by the bank account.
      * @return the amount made via interest for this account
      */
-    double calcInterest() {
-        switch (accountType) {
-            case SAVINGS:
-                return (balance <= 1000) ? balance * 0.001 : 1 + (balance - 1000) * 0.002;
-            case MAXI_SAVINGS:
-                if (balance <= 1000) return balance * 0.02;
-                else if (balance <= 2000) return 20 + (balance - 1000) * 0.05;
-                else return  70 + (balance - 2000) * 0.1;
-            default:
-                return balance * 0.001;
-        }
-    }
+    abstract double calcInterest();
 
     /**
      * Generates an account statement, composing of a balance and record for each transaction.
      * @return the account statement
      */
-    String genStatement() {
-        StringBuilder statement = new StringBuilder(getAccountTypeToString());
+    abstract String genStatement();
+
+    /**
+     * Generates an account statement, composing of a balance and record for each transaction.
+     * @return the account statement
+     */
+    String genStatement(String accountType) {
+        StringBuilder statement = new StringBuilder(accountType);
         statement.append("\nTotal: ");
         statement.append(balanceToString());
         statement.append('\n');
@@ -114,14 +131,11 @@ class Account {
         return accountType;
     }
 
-    private String getAccountTypeToString() {
-        switch (accountType) {
-            case SAVINGS:
-                return "Savings Account";
-            case MAXI_SAVINGS:
-                return "Maxi Savings Account";
-            default:
-                return "Checking Account";
-        }
+    private Customer getHolder() {
+        return holder;
+    }
+
+    void setHolder(Customer holder) {
+        this.holder = holder;
     }
 }

@@ -18,6 +18,7 @@ class Customer {
 
     Customer openAccount(Account account) {
         accounts.add(account);
+        account.setHolder(this);
         return this;
     }
 
@@ -37,6 +38,20 @@ class Customer {
         return total;
     }
 
+    /**
+     * Executes a bank transfer between accounts held by the customer.
+     * @param amount the amount to transfer across accounts
+     * @param fromAccount the account, from which, to withdraw the funds
+     * @param toAccount the account, to which, to deposit the funds
+     */
+    void transfer(double amount, Account fromAccount, Account toAccount) {
+        if (accounts.size() < 2)
+            throw new IllegalStateException("This customer does not have at least 2 accounts.");
+        else if (amount < 0)
+            throw new IllegalArgumentException("A negative amount cannot be transferred");
+
+        fromAccount.execTransfer(amount, toAccount);
+    }
 
     /**
      * Generates a statement for this customer, composing of statements for each account they hold at the bank.
