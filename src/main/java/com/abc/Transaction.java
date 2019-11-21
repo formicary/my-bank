@@ -1,16 +1,31 @@
 package com.abc;
 
-import java.util.Calendar;
 import java.util.Date;
 
-public class Transaction {
-    public final double amount;
+class Transaction {
+    private final double amount;
 
     private Date transactionDate;
 
-    public Transaction(double amount) {
+    Transaction(double amount) {
         this.amount = amount;
         this.transactionDate = DateProvider.getInstance().now();
     }
 
+    Date getTransactionDate() {
+        return transactionDate;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    /**
+     * Would not be necessary in production.
+     * Sets the date the transaction occurred to that specified.
+     * @param transactionDate a new transaction date.
+     */
+    void setTransactionDate(Date transactionDate) {
+        this.transactionDate = transactionDate;
+    }
 }

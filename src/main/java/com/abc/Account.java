@@ -95,8 +95,8 @@ abstract class Account {
         // Appending information about each transaction.
         for (Transaction transaction : transactions) {
             statement.append("\t");
-            statement.append((transaction.amount < 0 ? "Withdrawal: " : "Deposit: "));
-            statement.append(Formatting.toDollars(transaction.amount));
+            statement.append((transaction.getAmount() < 0 ? "Withdrawal: " : "Deposit: "));
+            statement.append(Formatting.toDollars(transaction.getAmount()));
             statement.append('\n');
         }
 
@@ -111,7 +111,7 @@ abstract class Account {
      * Returns the balance of the account as a monetary string.
      * @return the balance of the account in dollars
      */
-    String balanceToString() {
+    private String balanceToString() {
         return Formatting.toDollars(balance);
     }
 

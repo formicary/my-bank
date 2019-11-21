@@ -1,6 +1,6 @@
 package com.abc;
 
-public class CheckingAccount extends Account {
+class CheckingAccount extends Account {
 
     CheckingAccount() {
         super(AccountType.CHECKING);
