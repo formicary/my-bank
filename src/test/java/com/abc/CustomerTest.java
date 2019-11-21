@@ -207,6 +207,28 @@ public class CustomerTest {
     }
 
     /**
+     * Testing that the correct interest rate is applied on a Maxi-savings account which
+     */
+    @Test
+    public void test10DayInterest() {
+        Date tenDaysAgo = new Date();
+        tenDaysAgo.setTime(DateProvider.getInstance().now().getTime() - DateConstants.TEN_DAYS);
+
+        maxiSavingsAccount.deposit(1500);
+        maxiSavingsAccount.withdraw(500);
+
+        elliot.openAccount(maxiSavingsAccount);
+
+        maxiSavingsAccount.getTransactions().get(0).setTransactionDate(tenDaysAgo);
+        maxiSavingsAccount.getTransactions().get(1).setTransactionDate(tenDaysAgo);
+        maxiSavingsAccount.setPreviousInterestDate(tenDaysAgo);
+
+        maxiSavingsAccount.calcInterest();
+        // Checking that interest has compounded up to 10 days worth
+        assertEquals((double) 50 / 36.5, maxiSavingsAccount.getEarnedInterest(), 1e-9);
+    }
+
+    /**
      * Test ensuring that account interest compounds daily for checking accounts.
      */
     @Test
@@ -221,8 +243,8 @@ public class CustomerTest {
         checkingAccount.setPreviousInterestDate(yesterday);
         oneDayInterest = checkingAccount.calcInterest();
 
-        assertEquals(0, zeroDayInterest, 0);
-        assertEquals((double) 1 / 365, oneDayInterest, 0);
+        assertEquals(0, zeroDayInterest, 1e-9);
+        assertEquals((double) 1 / 365, oneDayInterest, 1e-9);
     }
 
     /**
@@ -240,8 +262,8 @@ public class CustomerTest {
         savingsAccount.setPreviousInterestDate(yesterday);
         oneDayInterest = savingsAccount.calcInterest();
 
-        assertEquals(0, zeroDayInterest, 0);
-        assertEquals((double) 1 / 365, oneDayInterest, 0);
+        assertEquals(0, zeroDayInterest, 1e-9);
+        assertEquals((double) 1 / 365, oneDayInterest, 1e-9);
     }
 
     /**
@@ -254,12 +276,37 @@ public class CustomerTest {
         maxiSavingsAccount.deposit(1000);
         zeroDayInterest = maxiSavingsAccount.calcInterest();
 
-        elliot.openAccount(maxiSavingsAccount);
-
         maxiSavingsAccount.setPreviousInterestDate(yesterday);
         oneDayInterest = maxiSavingsAccount.calcInterest();
 
-        assertEquals(0, zeroDayInterest, 0);
-        assertEquals((double) 1 / 365, oneDayInterest, 0);
+        assertEquals(0, zeroDayInterest, 1e-9);
+        assertEquals((double) 1 / 365, oneDayInterest, 1e-9);
+    }
+
+    /**
+     * Test to ensure that all interest is appropriately calculated for an entire year.
+     */
+    @Test
+    public void testYearInterest() {
+        checkingAccount.deposit(1000);
+        savingsAccount.deposit(1000);
+
+        maxiSavingsAccount.deposit(1500);
+        maxiSavingsAccount.withdraw(500);
+
+        maxiSavingsAccount.getTransactions().get(0).setTransactionDate(lastyear);
+        maxiSavingsAccount.getTransactions().get(1).setTransactionDate(lastyear);
+
+        checkingAccount.setPreviousInterestDate(lastyear);
+        savingsAccount.setPreviousInterestDate(lastyear);
+        maxiSavingsAccount.setPreviousInterestDate(lastyear);
+
+        double checkingInterest = checkingAccount.calcInterest();
+        double savingsInterest = savingsAccount.calcInterest();
+        double maxiInterest = maxiSavingsAccount.calcInterest();
+
+        assertEquals(1, checkingInterest, 1e-9);
+        assertEquals(1, savingsInterest, 1e-9);
+        assertEquals(50, maxiInterest, 1e-9);
     }
 }

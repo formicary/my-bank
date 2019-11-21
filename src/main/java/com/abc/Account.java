@@ -14,6 +14,7 @@ abstract class Account {
     private final AccountType ACCOUNT_TYPE;
 
     private Customer holder;
+    private Date creationDate;
 
     // Keeps a record as to when interest was last applied onto the account
     private Date prevInterestDate;
@@ -25,6 +26,7 @@ abstract class Account {
     Account(AccountType accountType) {
         this.ACCOUNT_TYPE = accountType;
         this.transactions = new ArrayList<Transaction>();
+        this.creationDate = DateProvider.getInstance().now();
         this.prevInterestDate = DateProvider.getInstance().now();
     }
 
@@ -147,7 +149,7 @@ abstract class Account {
         return !transactions.isEmpty();
     }
 
-    AccountType getACCOUNT_TYPE() {
+    AccountType getAccountType() {
         return ACCOUNT_TYPE;
     }
 
@@ -161,6 +163,10 @@ abstract class Account {
 
     double getEarnedInterest() {
         return earnedInterest;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
     }
 
     void setHolder(Customer holder) {
