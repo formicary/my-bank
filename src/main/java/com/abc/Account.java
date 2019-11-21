@@ -3,21 +3,25 @@ package com.abc;
 import com.abc.utils.Formatting;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Class correlating to bank accounts.
  */
 abstract class Account {
-    private final AccountType accountType;
+    private final AccountType ACCOUNT_TYPE;
 
     private Customer holder;
+
+    // Keeps a record as to when interest was last applied onto the account
+    private Date prevInterestDate;
 
     private double balance = 0;
     private List<Transaction> transactions;
 
     Account(AccountType accountType) {
-        this.accountType = accountType;
+        this.ACCOUNT_TYPE = accountType;
         this.transactions = new ArrayList<Transaction>();
     }
 
@@ -127,15 +131,23 @@ abstract class Account {
         return !transactions.isEmpty();
     }
 
-    AccountType getAccountType() {
-        return accountType;
+    AccountType getACCOUNT_TYPE() {
+        return ACCOUNT_TYPE;
     }
 
     private Customer getHolder() {
         return holder;
     }
 
+    public Date getPreviousInterestDate() {
+        return prevInterestDate;
+    }
+
     void setHolder(Customer holder) {
         this.holder = holder;
+    }
+
+    public void setPreviousInterestDate(Date prevInterestDate) {
+        this.prevInterestDate = prevInterestDate;
     }
 }

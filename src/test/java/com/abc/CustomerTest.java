@@ -5,6 +5,8 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.Date;
+
 import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
@@ -13,6 +15,14 @@ public class CustomerTest {
     private Account checkingAccount;
     private Account savingsAccount;
     private Account maxiSavingsAccount;
+
+    private static Date yesterday;
+
+    @BeforeClass
+    public static void setupYesterday() {
+        yesterday = DateProvider.getInstance().now();
+        yesterday.setTime(DateProvider.getInstance().now().getTime() - (24 * 60 * 60 * 1000));
+    }
 
     /**
      * Easier to create a single, and therefore consistent, customer which is reinitialised prior to each test, than to
@@ -186,5 +196,62 @@ public class CustomerTest {
                 .openAccount(savingsAccount);
 
         elliot.transfer(1024, darleneChecking, checkingAccount);
+    }
+
+    /**
+     * Test ensuring that account interest compounds daily for checking accounts.
+     */
+    @Test
+    public void testCheckingInterest() {
+        double zeroDayInterest, oneDayInterest;
+
+        checkingAccount.deposit(1000);
+        zeroDayInterest = checkingAccount.calcInterest();
+
+        elliot.openAccount(checkingAccount);
+
+        checkingAccount.setPreviousInterestDate(yesterday);
+        oneDayInterest = checkingAccount.calcInterest();
+
+        assertEquals(0, zeroDayInterest, 0);
+        assertEquals(1, oneDayInterest, 0);
+    }
+
+    /**
+     * Test ensuring that account interest compounds correctly each day for savings accounts.
+     */
+    @Test
+    public void testSavingsInterest() {
+        double zeroDayInterest, oneDayInterest;
+
+        savingsAccount.deposit(2000);
+        zeroDayInterest = savingsAccount.calcInterest();
+
+        elliot.openAccount(savingsAccount);
+
+        savingsAccount.setPreviousInterestDate(yesterday);
+        oneDayInterest = savingsAccount.calcInterest();
+
+        assertEquals(0, zeroDayInterest, 0);
+        assertEquals(4, oneDayInterest, 0);
+    }
+
+    /**
+     * Test ensuring that interest compounds daily for maxi-savings accounts.
+     */
+    @Test
+    public void testMaxiSavingsInterest() {
+        double zeroDayInterest, oneDayInterest;
+
+        savingsAccount.deposit(2000);
+        zeroDayInterest = maxiSavingsAccount.calcInterest();
+
+        elliot.openAccount(maxiSavingsAccount);
+
+        maxiSavingsAccount.setPreviousInterestDate(yesterday);
+        oneDayInterest = maxiSavingsAccount.calcInterest();
+
+        assertEquals(0, zeroDayInterest, 0);
+        assertEquals(1, oneDayInterest, 0);
     }
 }

@@ -15,6 +15,8 @@ class MaxiSavingsAccount extends Account {
         Date now = DateProvider.getInstance().now();
         long tenDaysMillis = 10 * 24 * 60 * 60 * 1000;
 
+        // By design, customer's are deemed ineligible for the 5% interest rate
+        // on accounts younger than 10 days old.
         Date withdrawalDate = (withdrawal == null) ? now : withdrawal.getTransactionDate();
 
         // Checking if 10 days has passed since the last withdrawal
