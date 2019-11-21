@@ -1,5 +1,7 @@
 package com.abc;
 
+import com.abc.utils.DateConstants;
+
 import java.util.Date;
 import java.util.List;
 
@@ -11,17 +13,28 @@ class MaxiSavingsAccount extends Account {
 
     @Override
     double calcInterest() {
+        long numDays = daysSinceInterestApplied();
+        double oldInterest = getEarnedInterest();
+
         Transaction withdrawal = lastWithdrawal();
         Date now = DateProvider.getInstance().now();
-        long tenDaysMillis = 10 * 24 * 60 * 60 * 1000;
+        long tenDaysMillis = 10 * DateConstants.ONE_DAY;
+
 
         // By design, customer's are deemed ineligible for the 5% interest rate
         // on accounts younger than 10 days old.
         Date withdrawalDate = (withdrawal == null) ? now : withdrawal.getTransactionDate();
 
         // Checking if 10 days has passed since the last withdrawal
-        if (withdrawalDate.getTime() - now.getTime() < tenDaysMillis) return getBalance() * 0.05;
-        else return getBalance() * 0.001;
+        double interestRate = (withdrawalDate.getTime() - now.getTime() > tenDaysMillis)
+            ? 0.05 / 365
+            : 0.001 / 365;
+        double interest = getBalance() * interestRate * numDays;
+
+
+        applyInterest(interest);
+
+        return getEarnedInterest() - oldInterest;
     }
 
     @Override

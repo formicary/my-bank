@@ -1,5 +1,6 @@
 package com.abc;
 
+import com.abc.utils.DateConstants;
 import com.abc.utils.Formatting;
 
 import java.util.ArrayList;
@@ -18,11 +19,13 @@ abstract class Account {
     private Date prevInterestDate;
 
     private double balance = 0;
+    private double earnedInterest = 0;
     private List<Transaction> transactions;
 
     Account(AccountType accountType) {
         this.ACCOUNT_TYPE = accountType;
         this.transactions = new ArrayList<Transaction>();
+        this.prevInterestDate = DateProvider.getInstance().now();
     }
 
     /**
@@ -76,6 +79,8 @@ abstract class Account {
      * Indicate the rate that applies for a balance
      *
      * Determines the interest earned by the bank account.
+     * If at least a day has passed since the last time interest was applied to the account,
+     * then the interest is applied, and the balance updated.
      * @return the amount made via interest for this account
      */
     abstract double calcInterest();
@@ -105,6 +110,17 @@ abstract class Account {
         }
 
         return statement.toString();
+    }
+
+    /**
+     * Determines the number of days that have elapsed since interest was last applied to this account.
+     * Can be used to prevent customers from missing out on interest.
+     * @return the number of days elapsed
+     */
+    long daysSinceInterestApplied() {
+        long interestDelta = DateProvider.getInstance().now().getTime() - prevInterestDate.getTime();
+
+        return interestDelta / DateConstants.ONE_DAY;
     }
 
     double getBalance() {
@@ -139,15 +155,26 @@ abstract class Account {
         return holder;
     }
 
-    public Date getPreviousInterestDate() {
+    Date getPreviousInterestDate() {
         return prevInterestDate;
+    }
+
+    double getEarnedInterest() {
+        return earnedInterest;
     }
 
     void setHolder(Customer holder) {
         this.holder = holder;
     }
 
-    public void setPreviousInterestDate(Date prevInterestDate) {
+    void setPreviousInterestDate(Date prevInterestDate) {
         this.prevInterestDate = prevInterestDate;
+    }
+
+    void applyInterest(double interest) {
+        balance += interest;
+        earnedInterest += interest;
+
+        setPreviousInterestDate(DateProvider.getInstance().now());
     }
 }

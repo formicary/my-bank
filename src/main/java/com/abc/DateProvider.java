@@ -4,7 +4,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * Date singleton class. Provides a universal baseline for all transactions.
+ * DateConstants singleton class. Provides a universal baseline for all transactions.
  * An epoch of sorts.
  */
 class DateProvider {

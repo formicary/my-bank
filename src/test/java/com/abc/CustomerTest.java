@@ -1,10 +1,12 @@
 package com.abc;
 
+import com.abc.utils.DateConstants;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
@@ -17,11 +19,17 @@ public class CustomerTest {
     private Account maxiSavingsAccount;
 
     private static Date yesterday;
+    private static Date lastyear;
 
     @BeforeClass
-    public static void setupYesterday() {
-        yesterday = DateProvider.getInstance().now();
-        yesterday.setTime(DateProvider.getInstance().now().getTime() - (24 * 60 * 60 * 1000));
+    public static void setupDates() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.YEAR, -1);
+
+        yesterday = new Date();
+        yesterday.setTime(DateProvider.getInstance().now().getTime() - (DateConstants.ONE_DAY));
+
+        lastyear = calendar.getTime();
     }
 
     /**
@@ -214,7 +222,7 @@ public class CustomerTest {
         oneDayInterest = checkingAccount.calcInterest();
 
         assertEquals(0, zeroDayInterest, 0);
-        assertEquals(1, oneDayInterest, 0);
+        assertEquals((double) 1 / 365, oneDayInterest, 0);
     }
 
     /**
@@ -224,7 +232,7 @@ public class CustomerTest {
     public void testSavingsInterest() {
         double zeroDayInterest, oneDayInterest;
 
-        savingsAccount.deposit(2000);
+        savingsAccount.deposit(1000);
         zeroDayInterest = savingsAccount.calcInterest();
 
         elliot.openAccount(savingsAccount);
@@ -233,7 +241,7 @@ public class CustomerTest {
         oneDayInterest = savingsAccount.calcInterest();
 
         assertEquals(0, zeroDayInterest, 0);
-        assertEquals(4, oneDayInterest, 0);
+        assertEquals((double) 1 / 365, oneDayInterest, 0);
     }
 
     /**
@@ -243,7 +251,7 @@ public class CustomerTest {
     public void testMaxiSavingsInterest() {
         double zeroDayInterest, oneDayInterest;
 
-        savingsAccount.deposit(2000);
+        maxiSavingsAccount.deposit(1000);
         zeroDayInterest = maxiSavingsAccount.calcInterest();
 
         elliot.openAccount(maxiSavingsAccount);
@@ -252,6 +260,6 @@ public class CustomerTest {
         oneDayInterest = maxiSavingsAccount.calcInterest();
 
         assertEquals(0, zeroDayInterest, 0);
-        assertEquals(1, oneDayInterest, 0);
+        assertEquals((double) 1 / 365, oneDayInterest, 0);
     }
 }
