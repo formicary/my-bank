@@ -8,9 +8,13 @@ public class Transaction {
 
     private Date transactionDate;
 
-    public Transaction(double amount) {
+    Transaction(double amount) {
         this.amount = amount;
         this.transactionDate = DateProvider.getInstance().now();
+    }
+    
+    public Date getTransactionDate() {
+    	return transactionDate;
     }
 
 }
