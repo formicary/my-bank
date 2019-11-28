@@ -1,46 +1,78 @@
 package com.abc;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Bank {
-    private List<Customer> customers;
+    // Store customers
+    private List<Customer> bankCustomers;
 
+    /**
+     * Constructor for bank
+     */
     public Bank() {
-        customers = new ArrayList<Customer>();
+        bankCustomers = new ArrayList<Customer>();
     }
-
-    public void addCustomer(Customer customer) {
-        customers.add(customer);
+    /**
+     * Add one or multiple customers to the list of customers in the bank
+     * @param customers
+     */
+    public void addCustomer(Customer... customers) {
+        bankCustomers.addAll(Arrays.asList(customers));
     }
-
-    public String customerSummary() {
-        String summary = "Customer Summary";
-        for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-        return summary;
-    }
-
-    //Make sure correct plural of word is created based on the number passed in:
-    //If number passed in is 1 just return the word otherwise add an 's' at the end
-    private String format(int number, String word) {
-        return number + " " + (number == 1 ? word : word + "s");
-    }
-
-    public double totalInterestPaid() {
-        double total = 0;
-        for(Customer c: customers)
-            total += c.totalInterestEarned();
-        return total;
-    }
-
-    public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
+    /**
+     * Get a summary of all the customers in the bank, including their IDs, names and
+     * number of opened accounts
+     * @return
+     */
+    public StringBuilder customerSummary() {
+        StringBuilder customerSummary = new StringBuilder();
+        customerSummary.append("Customer Summary:\n");
+        customerSummary.append(String.format("%-20s%-20s%-20s%-20s\n", "Customer ID",
+                "First Name",
+                "Last Name",
+                "No. of Accounts"));
+        for(Customer customer : bankCustomers) {
+            customerSummary.append(String.format("%-20s%-20s%-20s%-20s\n",
+                    customer.getCustomerId(),
+                    customer.getFirstName(),
+                    customer.getLastName(),
+                    customer.getNumberOfAccounts()));
         }
+        return customerSummary;
     }
+    /**
+     * Get a report showing the amount of interest the bank has to pay in total
+     * @return
+     */
+    public StringBuilder totalInterestReport() {
+        StringBuilder report = new StringBuilder();
+        report.append("Total interest paid by the Bank: " + toDollars(totalInterestPaid()));
+        return report;
+    }
+
+    // Calculate the total interest paid by the bank
+    private BigDecimal totalInterestPaid() {
+        BigDecimal totalInterest = BigDecimal.valueOf(0);
+        for (Customer customers : bankCustomers)
+            totalInterest = totalInterest.add(customers.totalInterestEarned());
+        return totalInterest;
+    }
+
+    // Convert the amount of money to dollar format
+    private String toDollars(BigDecimal amount){
+        return String.format("$%,.2f", amount.abs());
+    }
+
+    // Getters
+    /**
+     * Get the list of customers belonging to the bank
+     * @return
+     */
+    public List<Customer> getBankCustomers() {
+        return bankCustomers;
+    }
+
 }

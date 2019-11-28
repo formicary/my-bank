@@ -1,73 +1,119 @@
 package com.abc;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
-public class Account {
+// Abstract class 'Account' inherited by specific types of account: Checking, Savings, Maxi-Savings
+public abstract class Account {
+    private static final String ILLEGAL_AMOUNT = "Amount must be greater than zero!";
+    // All transactions under account will have a unique ID
+    private final AtomicLong transactionId = new AtomicLong(0);
+    // Account details
+    private long accountId = 0;
+    private static long idCount = 0;
+    private final String accountType;
+    // Store transactions for each customer
+    private List<Transaction> transactions;
+    // Variable to update account balance
+    private BigDecimal balance;
 
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
-
-    private final int accountType;
-    public List<Transaction> transactions;
-
-    public Account(int accountType) {
+    /**
+     * Constructor for class, take a string for the account type
+     * @param accountType
+     */
+    public Account(String accountType) {
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
+        this.balance = new BigDecimal("0");
+        //this.accountId = ACCOUNT_ID.getAndIncrement();
+        accountId = idCount++;
     }
 
+    /**
+     * Abstract implementation for interestEarned, calculations differ for each type of account
+     * @return [BigDecimal] returns big decimal value for interest
+     */
+    public abstract BigDecimal interestEarned();
+    /**
+     * Add a new pre-declared transaction to the account
+     * @param transaction
+     */
+    public void newTransaction(Transaction transaction) {
+        double transactionAmount = transaction.getAmount();
+        if(transactionAmount > 0) {
+            deposit(transactionAmount);
+        } else if(transactionAmount < 0) {
+            withdraw(transactionAmount);
+        } else {
+            throw new IllegalArgumentException(ILLEGAL_AMOUNT);
+        }
+    }
+    /**
+     * Deposit an amount of money, throws exception if value is less or equal than 0;
+     * @param amount
+     */
     public void deposit(double amount) {
         if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
+            throw new IllegalArgumentException(ILLEGAL_AMOUNT);
         } else {
-            transactions.add(new Transaction(amount));
+            transactions.add(new Transaction(amount, transactionId.getAndIncrement()));
+            balance = balance.add(BigDecimal.valueOf(amount));
+        }
+    }
+    /**
+     * Withdraw an amount of money, throws exception if value is less or equal than 0;
+     * Also throws exception if user tries to withdraw more money than they currently
+     * have on the account
+     * @param amount
+     */
+    public void withdraw(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException(ILLEGAL_AMOUNT);
+        } else {
+            if(balance.subtract(BigDecimal.valueOf(amount)).compareTo(BigDecimal.valueOf(0)) < 0) {
+                throw new IllegalArgumentException("Withdraw request larger than current balance: " + String.format("$%,.2f", balance.abs()));
+            } else {
+                transactions.add(new Transaction(-amount, transactionId.getAndIncrement()));
+                balance = balance.subtract(BigDecimal.valueOf(amount));
+            }
         }
     }
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
-    }
-}
-
-    public double interestEarned() {
-        double amount = sumTransactions();
-        switch(accountType){
-            case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
-            case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
-            default:
-                return amount * 0.001;
-        }
-    }
-
-    public double sumTransactions() {
-       return checkIfTransactionsExist(true);
-    }
-
-    private double checkIfTransactionsExist(boolean checkAll) {
-        double amount = 0.0;
-        for (Transaction t: transactions)
-            amount += t.amount;
-        return amount;
-    }
-
-    public int getAccountType() {
+    // Getters
+    /**
+     * Returns account type
+     * @return [String] string for the type of account
+     */
+    public String getAccountType() {
         return accountType;
     }
+    /**
+     * Returns list of transactions under this account
+     * @return List<Transaction> list of transactions under thisa ccount
+     */
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+    /**
+     * Returns calculated balance for the account
+     * @return [BigDecimal] returns big decimal value for current account balance
+     */
+    public BigDecimal getBalance() {
+        return balance;
+    }
+    /**
+     * Returns unique account ID
+     * @return [long] returns unique int accountId
+     */
+    public long getAccountId() {
+        return accountId;
+    }
+
+
+
+
+
 
 }

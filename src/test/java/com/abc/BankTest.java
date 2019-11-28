@@ -1,54 +1,90 @@
 package com.abc;
 
 import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class BankTest {
-    private static final double DOUBLE_DELTA = 1e-15;
+    private static final double DELTA = 1e-15;
 
     @Test
-    public void customerSummary() {
+    public void bank() {
         Bank bank = new Bank();
-        Customer john = new Customer("John");
-        john.openAccount(new Account(Account.CHECKING));
-        bank.addCustomer(john);
-
-        assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
+        assertTrue(bank instanceof Bank);
     }
 
+    // Test adding and retrieving a customer to the bank
     @Test
-    public void checkingAccount() {
-        Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.CHECKING);
-        Customer bill = new Customer("Bill").openAccount(checkingAccount);
-        bank.addCustomer(bill);
+    public void testAddCustomer() {
+        Bank testBank = new Bank();
+        Customer john = new Customer("John", "Doe");
 
-        checkingAccount.deposit(100.0);
-
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+        // Add one customer
+        testBank.addCustomer(john);
+        assertEquals("John", testBank.getBankCustomers().get(0).getFirstName());
     }
 
+    // Test adding multiple customers
     @Test
-    public void savings_account() {
-        Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+    public void testMultipleCustomers() {
+        Bank testBank = new Bank();
+        Customer john = new Customer("John", "Doe");
+        Customer cristi = new Customer("Cristian", "Beldie");
+        Customer mary = new Customer("Mary", "Jane");
 
-        checkingAccount.deposit(1500.0);
-
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        // Add three customers
+        testBank.addCustomer(john, cristi, mary);
+        assertEquals("John", testBank.getBankCustomers().get(0).getFirstName());
+        assertEquals("Cristian", testBank.getBankCustomers().get(1).getFirstName());
+        assertEquals("Mary", testBank.getBankCustomers().get(2).getFirstName());
+        // Adding extra customers
+        testBank.addCustomer(new Customer("Jane", "Doe"), new Customer("Richard", "Roe"));
+        assertEquals("Jane", testBank.getBankCustomers().get(3).getFirstName());
+        assertEquals("Richard", testBank.getBankCustomers().get(4).getFirstName());
     }
 
+    // Getting customer summary
     @Test
-    public void maxi_savings_account() {
-        Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+    public void testCustomerSummary() {
+        Bank testBank = new Bank();
+        Customer john = new Customer("John", "Doe");
+        Customer cristi = new Customer("Cristian", "Beldie");
 
-        checkingAccount.deposit(3000.0);
+        // Open some accounts for both
+        john.openAccount(new CheckingAccount());
+        cristi.openAccount(new CheckingAccount());
+        cristi.openAccount(new SavingsAccount());
 
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        // Test individual parts of the customer summary
+        // Name for customers
+        assertEquals("John", john.getFirstName());
+        assertEquals("Doe", john.getLastName());
+        assertEquals("Cristian", cristi.getFirstName());
+        assertEquals("Beldie", cristi.getLastName());
+        // Number of accounts
+        assertEquals(1, john.getNumberOfAccounts());
+        assertEquals(2, cristi.getNumberOfAccounts());
     }
 
+    // Getting a report for total interest paid
+    @Test
+    public void getInterestReport() {
+        Bank testBank = new Bank();
+        Customer john = new Customer("John", "Doe");
+        Customer cristi = new Customer("Cristian", "Beldie");
+
+        // Open accounts and deposit money
+        Account checkingAccount = new CheckingAccount();
+        Account savingsAccount = new SavingsAccount();
+        checkingAccount.deposit(2000);
+        savingsAccount.deposit(1200);
+        john.openAccount(checkingAccount);
+        cristi.openAccount(savingsAccount);
+
+        // Add customers to bank
+        testBank.addCustomer(john, cristi);
+        // Test report for interest
+        final String report = "Total interest paid by the Bank: $3.40";
+        assertEquals(report, testBank.totalInterestReport().toString());
+    }
 }
