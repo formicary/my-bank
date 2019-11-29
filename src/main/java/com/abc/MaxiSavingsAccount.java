@@ -11,28 +11,20 @@ public class MaxiSavingsAccount extends Account {
     private static final int FIRST_THRESHOLD = 1000;
     private static final int SECOND_THRESHOLD = 2000;
 
+    // NEW RATES AS PER NEW FEATURE - TESTING
+    private static final double NEW_RATE1 = 0.001;
+    private static final double NEW_RATE2 = 0.05;
+
+
     public MaxiSavingsAccount() {
         super("Maxi-Savings Account");
     }
 
     public BigDecimal interestEarned() {
         BigDecimal balance = getBalance();
-        BigDecimal interest;
-
-        if(balance.compareTo(BigDecimal.valueOf(FIRST_THRESHOLD)) <= 0) {
-            interest = balance.multiply(BigDecimal.valueOf(INITIAL_RATE));
-        } else if(balance.compareTo(BigDecimal.valueOf(FIRST_THRESHOLD)) > 0
-                && balance.compareTo(BigDecimal.valueOf(SECOND_THRESHOLD)) <= 0) {
-            // '20' magic number represents interest earned with the INITIAL_RATE
-            interest = balance.subtract(BigDecimal.valueOf(FIRST_THRESHOLD))
-                    .multiply(BigDecimal.valueOf(SECOND_RATE))
-                    .add(BigDecimal.valueOf(20));
-        } else {
-            // '70' magic number represents interest earned with the SECOND_RATE
-            interest = balance.subtract(BigDecimal.valueOf(SECOND_THRESHOLD))
-                    .multiply(BigDecimal.valueOf(THIRD_RATE))
-                    .add(BigDecimal.valueOf(70));
-        }
+        BigDecimal interest = daysSinceLastWithdraw() >= 10
+                ? balance.multiply(BigDecimal.valueOf(NEW_RATE2))
+                : balance.multiply(BigDecimal.valueOf(NEW_RATE1));
 
         return interest;
     }

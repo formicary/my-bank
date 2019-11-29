@@ -9,6 +9,8 @@ public class Transaction {
     private final String transactionType;
     private Date transactionDate;
     private long transactionId;
+    // Calendar for transaction class
+    private static final Calendar calendar = Calendar.getInstance();
 
     /**
      * Constructor for transaction, requires amount for transaction and ID which is
@@ -18,7 +20,7 @@ public class Transaction {
      */
     public Transaction(double amount, long transactionId) {
         this.amount = amount;
-        this.transactionDate = Calendar.getInstance().getTime();
+        this.transactionDate = calendar.getTime();
         this.transactionId = transactionId;
         this.transactionType = amount < 0 ? "Withdrawal" : "Deposit";
     }
@@ -29,7 +31,7 @@ public class Transaction {
      */
     public Transaction(double amount) {
         this.amount = amount;
-        this.transactionDate = Calendar.getInstance().getTime();
+        this.transactionDate = calendar.getTime();
         this.transactionType = amount < 0 ? "Withdrawal" : "Deposit";
     }
 

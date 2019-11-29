@@ -2,7 +2,10 @@ package com.abc;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 // Abstract class 'Account' inherited by specific types of account: Checking, Savings, Maxi-Savings
@@ -19,6 +22,10 @@ public abstract class Account {
     private List<Transaction> transactions;
     // Variable to update account balance
     private BigDecimal balance;
+    // Account date for last withdrawal
+    private Date lastWithdrawal;
+    // Calendar for account class
+    private Calendar calendar = Calendar.getInstance();
 
     /**
      * Constructor for class, take a string for the account type
@@ -29,6 +36,7 @@ public abstract class Account {
         this.transactions = new ArrayList<Transaction>();
         this.balance = new BigDecimal("0");
         this.accountId = ACCOUNT_ID.getAndIncrement();
+        this.lastWithdrawal = calendar.getTime();
     }
 
     /**
@@ -78,8 +86,18 @@ public abstract class Account {
             } else {
                 transactions.add(new Transaction(-amount, TRANSACTION_ID.getAndIncrement()));
                 balance = balance.subtract(BigDecimal.valueOf(amount));
+                lastWithdrawal = Calendar.getInstance().getTime();
             }
         }
+    }
+    /**
+     * Returns how many days there have been since last withdraw from account
+     * @return
+     */
+    public float daysSinceLastWithdraw() {
+        Date currentDate = calendar.getTime();
+        long diff = currentDate.getTime() - lastWithdrawal.getTime();
+        return (float) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
     }
 
     // Getters
@@ -112,6 +130,10 @@ public abstract class Account {
         return accountId;
     }
 
+    public Date getLastWithdrawal() {
+        return lastWithdrawal;
+    }
+
     // Setters
     /**
      * Update balance for the account
@@ -119,5 +141,9 @@ public abstract class Account {
      */
     public void setBalance(BigDecimal newBalance) {
         this.balance = newBalance;
+    }
+    // FOR TESTING PURPOSES
+    public void setLastWithdrawal(Date lastWithdrawal) {
+        this.lastWithdrawal = lastWithdrawal;
     }
 }

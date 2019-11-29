@@ -1,6 +1,10 @@
 package com.abc;
 
+import org.junit.Ignore;
 import org.junit.Test;
+
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -60,7 +64,7 @@ public class AccountTest {
 
         assertEquals("1", checkingAccount.interestEarned().stripTrailingZeros().toPlainString());
         assertEquals("2.2", savingsAccount.interestEarned().stripTrailingZeros().toPlainString());
-        assertEquals("190", maxiSavingsAccount.interestEarned().stripTrailingZeros().toPlainString());
+        assertEquals("3.2", maxiSavingsAccount.interestEarned().stripTrailingZeros().toPlainString());
     }
 
     // Check deposit/withdrawing
@@ -106,5 +110,23 @@ public class AccountTest {
         assertEquals("300", checkingAccount.getBalance().stripTrailingZeros().toPlainString());
         List<Transaction> transactions = checkingAccount.getTransactions();
         assertEquals("Deposit", transactions.get(0).getTransactionType());
+    }
+    // Test checking time between last withdrawal
+    @Test
+    public void testMaxiSavingsInterest() {
+        Account maxiSavings = new MaxiSavingsAccount();
+        maxiSavings.deposit(1200);
+        Calendar calendar = Calendar.getInstance();
+
+        // TEST FOR LAST WITHDRAW 10 DAYS AGO
+        calendar.add(Calendar.DATE, -10);
+        Date dummyDate = calendar.getTime();
+        maxiSavings.setLastWithdrawal(dummyDate);
+        assertEquals("60", maxiSavings.interestEarned().stripTrailingZeros().toPlainString());
+        // TEST FOR LAST WITHDRAW LESS THAN 10 DAYS AGO
+        calendar.add(Calendar.DATE, 5);
+        dummyDate = calendar.getTime();
+        maxiSavings.setLastWithdrawal(dummyDate);
+        assertEquals("1.2", maxiSavings.interestEarned().stripTrailingZeros().toPlainString());
     }
 }
