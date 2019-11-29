@@ -2,19 +2,24 @@ package com.abc;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class Customer  {
-    private static final AtomicLong CUSTOMER_ID = new AtomicLong(0);
+    private static final String ILLEGAL_AMOUNT = "Amount must be greater than zero!";
+    private static final String ILLEGAL_ACCOUNT = "Customer can only transform between his own accounts!";
     private static final String COLUMN_LENGTH = "%-20s%-20s%-20s%-20s\n";
     private static final String NOT_APPLICABLE = "N/A";
+    private static final AtomicLong CUSTOMER_ID = new AtomicLong(0);
     // Customer details
     private final long customerId;
     private String firstName;
     private String lastName;
     // Customer's accounts
     private List<Account> customerAccounts;
+    // HashMap of accounts
+    private HashMap<Long, Account> accountsHashMap;
 
     /**
      * Constructor for the Customer class. Creates a customer with brand new ID
@@ -27,6 +32,9 @@ public class Customer  {
         this.lastName = lastName;
         this.customerAccounts = new ArrayList<Account>();
         this.customerId = CUSTOMER_ID.getAndIncrement();
+
+        // Testing hashset
+        accountsHashMap = new HashMap<Long, Account>();
     }
     /**
      * Open a new account for a customer
@@ -35,7 +43,42 @@ public class Customer  {
      */
     public Customer openAccount(Account account) {
         customerAccounts.add(account);
+
+        // testing hashset
+        accountsHashMap.put(account.getAccountId(), account);
         return this;
+    }
+    /**
+     * Transfer money from an account to the other; only works with accounts that the customer owns
+     * Method accepts account IDs instead of account types. Uses hashmap to reduce search complexity
+     * @param amount
+     * @param transferAccId
+     * @param destintationAccID
+     */
+    public void transferMoney(double amount, long transferAccId, long destintationAccID) {
+            Account transferAccount = accountsHashMap.get(transferAccId);
+            Account destinationAccount = accountsHashMap.get(destintationAccID);
+            transferMoney(amount, transferAccount, destinationAccount);
+    }
+    /**
+     * Transfer money from an account to the other; only works with accounts that the customer owns
+     * Uses an amount and two account types as parameters
+     * @param amount
+     * @param transferAccount
+     * @param destinationAccount
+     */
+    public void transferMoney(double amount, Account transferAccount, Account destinationAccount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException(ILLEGAL_AMOUNT);
+        } else if(!accountsHashMap.containsKey(transferAccount.getAccountId())
+                || !accountsHashMap.containsKey(destinationAccount.getAccountId())) {
+            throw new IllegalArgumentException(ILLEGAL_ACCOUNT);
+        } else {
+            // Subtract money from target ID
+            transferAccount.setBalance(transferAccount.getBalance().subtract(BigDecimal.valueOf(amount)));
+            // Add money to destinationId
+            destinationAccount.setBalance(destinationAccount.getBalance().add(BigDecimal.valueOf(amount)));
+        }
     }
     /**
      * Calculate the total interest earned by the customer
@@ -84,7 +127,10 @@ public class Customer  {
         accountStatement.append("\nAccount Type: "
                 + account.getAccountType()
                 + "\n");
-
+        // Add account ID to statement so customer can distinguish between accounts of similar type
+        accountStatement.append("Account ID: "
+                + account.getAccountId()
+                + "\n");
         // Create table to show transactions
         accountStatement.append(String.format(COLUMN_LENGTH,
                 "Transaction ID",
@@ -131,7 +177,6 @@ public class Customer  {
     public String getLastName() {
         return lastName;
     }
-
     /**
      * Get unique ID
      * @return [int] customer's unique id
@@ -139,7 +184,6 @@ public class Customer  {
     public long getCustomerId() {
         return customerId;
     }
-
     /**
      * Retrieve list of accounts for that customer
      * @return [List<Accounts>] customer's accounts
@@ -147,7 +191,6 @@ public class Customer  {
     public List<Account> getCustomerAccounts() {
         return customerAccounts;
     }
-
     /**
      * Get number of accounts the customer has
      * @return [int] number of accounts the customer has opened
@@ -155,6 +198,4 @@ public class Customer  {
     public int getNumberOfAccounts() {
         return customerAccounts.size();
     }
-
-
 }

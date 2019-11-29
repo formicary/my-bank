@@ -74,5 +74,4 @@ public class Bank {
     public List<Customer> getBankCustomers() {
         return bankCustomers;
     }
-
 }

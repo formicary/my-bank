@@ -85,4 +85,40 @@ public class CustomerTest {
 
         assertEquals(4, john.getNumberOfAccounts());
     }
+    // Test transferring money between accounts
+    @Test
+    public void testTransferMoney() {
+        Customer john = new Customer("John", "Doe");
+        Account checkingAccount = new CheckingAccount();
+        Account savingsAccount = new SavingsAccount();
+
+        john.openAccount(checkingAccount);
+        john.openAccount(savingsAccount);
+
+        checkingAccount.deposit(1000);
+        savingsAccount.deposit(200);
+
+        john.transferMoney(300, checkingAccount, savingsAccount);
+        assertEquals("500", savingsAccount.getBalance().stripTrailingZeros().toPlainString());
+        assertEquals("700", checkingAccount.getBalance().stripTrailingZeros().toPlainString());
+    }
+
+    // Test transferring between accounts customer doesn't own
+    @Test(expected = IllegalArgumentException.class)
+    public void testTransferMoneyExpection() {
+        Customer john = new Customer("John", "Doe");
+        Customer jane = new Customer("Jane", "Doe");
+
+        // Two new accounts
+        Account checkingAccount = new CheckingAccount();
+        Account savingsAccount = new SavingsAccount();
+        // Assign them to two different people
+        john.openAccount(checkingAccount);
+        jane.openAccount(savingsAccount);
+        // Deposit some money
+        checkingAccount.deposit(1000);
+        savingsAccount.deposit(500);
+        // Transfer money
+        john.transferMoney(200, checkingAccount, savingsAccount);
+    }
 }

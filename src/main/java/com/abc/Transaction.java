@@ -22,7 +22,6 @@ public class Transaction {
         this.transactionId = transactionId;
         this.transactionType = amount < 0 ? "Withdrawal" : "Deposit";
     }
-
     /**
      * Constructor for transaction in case the transaction is declared outside of
      * the deposit and withdraw methods in the Account class
@@ -35,7 +34,6 @@ public class Transaction {
     }
 
     // Getters
-
     /**
      * Get transaction amount as a double
      * @return [double]
