@@ -7,7 +7,6 @@ public class MaxiSavingsAccount extends Account {
     private static final double WITHDRAW_SMALLER_10 = 0.001;
     private static final double WITHDRAW_LARGER_10 = 0.05;
 
-
     public MaxiSavingsAccount() {
         super("Maxi-Savings Account");
     }
