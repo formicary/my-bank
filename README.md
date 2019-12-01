@@ -6,9 +6,9 @@ This is a dummy application for part of a software development interview.
 Design Issues
 --------
 * Used inheritance with Abstract class for Account, there are some general functions for all accounts, but different account types have different interest rates.  This means we don't need switch case, and easy add new account types.  If there are more differences in the account, then can start using interfaces, especially multiple inheritance situation.
-* No date for transations, so added data parameter in constructor.
-* Customer and Account need unique IDs, as there's no database, just used static variables to keep track an give a unique number.
-* Added function to get transactions withing a date range.
+* No date for transactions, so added date parameter in constructor.
+* Customer and Account need unique IDs, as there's no database, just used static variables to keep track and give a unique number.
+* Added function to get transactions within a date range.
 
 Code Quality
 --------
@@ -29,4 +29,5 @@ Features
 
 Improvements
 --------
-* Can split Customer into Business and Personal (make Customer into interface/abstract), they might have different charges and services. 
+* Can split Customer into Business and Personal (make Customer into interface/abstract), they might have different charges and services.
+* Unhappy path/security checks, check valid account number and customer id before withdrawal and deposit, overdraft ability (let you take out more than your balance).  
