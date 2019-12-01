@@ -6,6 +6,11 @@ import java.util.List;
 import static java.lang.Math.abs;
 
 public class Customer {
+
+    /**
+     * Unique id if two people have same name etc.
+     */
+    private long customerId;
     private String name;
     private List<Account> accounts;
 
@@ -48,19 +53,7 @@ public class Customer {
 
     private String statementForAccount(Account a) {
         String s = "";
-
-       //Translate to pretty account type
-        switch(a.getAccountType()){
-            case Account.CHECKING:
-                s += "Checking Account\n";
-                break;
-            case Account.SAVINGS:
-                s += "Savings Account\n";
-                break;
-            case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
-                break;
-        }
+        s += a.getType() + "\n";
 
         //Now total up all the transactions
         double total = 0.0;
@@ -74,5 +67,14 @@ public class Customer {
 
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
+    }
+
+    public void transfer(double amount, Account from, Account to) {
+        from.withdraw(amount);
+        to.deposit(amount);
+    }
+
+    public void setCustomerId(long customerId) {
+        this.customerId = customerId;
     }
 }
