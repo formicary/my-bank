@@ -1,23 +1,22 @@
 package com.abc;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Transaction {
 	
     private final double amount;
-    private Date transactionDate;
+    private LocalDate transactionDate;
 
     public Transaction(double amount) {
         this.amount = amount;
-        this.transactionDate = Calendar.getInstance().getTime();
+        this.transactionDate = LocalDate.now();
     }
     
     public double getAmount() {
     	return amount;
     }
     
-    public Date getDate() {
+    public LocalDate getDate() {
     	return transactionDate;
     }
     
@@ -26,5 +25,5 @@ public class Transaction {
     	String a = String.format("$%,.2f", amount);
     	return (amount < 0 ? "withdrawal" : "deposit") + " " + a;
     }
-
+    
 }
