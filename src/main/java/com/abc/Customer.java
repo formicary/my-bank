@@ -25,6 +25,23 @@ public class Customer {
         return account;
     }
 
+    public void transfer(Account source, Account destination, double amount) {
+        if (accounts.indexOf(source) == -1) {
+            throw new IllegalArgumentException("source account not owned by customer");
+        }
+
+        if (source.calculateBalance() < amount) {
+            throw new IllegalArgumentException("source account has an insufficient balance");
+        }
+
+        if (amount <= 0) {
+            throw new IllegalArgumentException("amount must be larger than 0");
+        }
+
+        source.withdraw(amount);
+        destination.deposit(amount);
+    }
+
     public int getNumberOfAccounts() {
         return accounts.size();
     }

@@ -5,6 +5,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
+    private static final double DOUBLE_DELTA = 1e-15;
 
     @Test //Test customer statement generation
     public void testStatmentOutput(){
@@ -58,5 +59,44 @@ public class CustomerTest {
         oscar.openAccount(Account.AccountType.CHECKING);
         oscar.openAccount(Account.AccountType.MAXI_SAVINGS);
         assertEquals(3, oscar.getNumberOfAccounts());
+    }
+
+    @Test
+    public void testValidTransfer() {
+        Customer alice = new Customer("Alice");
+        Account aliceSavings = alice.openAccount(Account.AccountType.SAVINGS);
+        aliceSavings.deposit(100.00);
+
+        Customer bob = new Customer("Bob");
+        Account bobSavings = bob.openAccount(Account.AccountType.SAVINGS);
+
+        alice.transfer(aliceSavings, bobSavings, 50.0);
+
+        assertEquals(50.0, aliceSavings.calculateBalance(), DOUBLE_DELTA);
+        assertEquals(50.0, bobSavings.calculateBalance(), DOUBLE_DELTA);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testOverwithdrawTransfer() {
+        Customer alice = new Customer("Alice");
+        Account aliceSavings = alice.openAccount(Account.AccountType.SAVINGS);
+        aliceSavings.deposit(100.00);
+
+        Customer bob = new Customer("Bob");
+        Account bobSavings = bob.openAccount(Account.AccountType.SAVINGS);
+
+        alice.transfer(aliceSavings, bobSavings, 200.0);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testUnownedTransfer() {
+        Customer alice = new Customer("Alice");
+        Account aliceSavings = alice.openAccount(Account.AccountType.SAVINGS);
+        aliceSavings.deposit(100.00);
+
+        Customer bob = new Customer("Bob");
+        Account bobSavings = bob.openAccount(Account.AccountType.SAVINGS);
+
+        bob.transfer(aliceSavings, bobSavings, 200.0);
     }
 }
