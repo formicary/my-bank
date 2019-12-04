@@ -38,8 +38,8 @@ public class Customer {
             throw new IllegalArgumentException("amount must be larger than 0");
         }
 
-        source.withdraw(amount);
-        destination.deposit(amount);
+        source.addTransaction(new Transaction(-amount, Transaction.TransactionType.TRANSFER_OUT));
+        destination.addTransaction(new Transaction(amount, Transaction.TransactionType.TRANSFER_IN));
     }
 
     public int getNumberOfAccounts() {
@@ -49,8 +49,16 @@ public class Customer {
     public double totalInterestEarned() {
         double total = 0;
         for (Account a : accounts)
-            total += a.interestEarned();
+            total += a.getTotalInterestEarned();
         return total;
+    }
+
+    public void updateInterestPayments() {
+        for (Account a : accounts) {
+            if (a.checkInterestEligibility()) {
+                a.addTransaction(new Transaction(a.getDailyInterestEarned(), Transaction.TransactionType.INTEREST));
+            }
+        }
     }
 
     public String getStatement() {
@@ -92,7 +100,7 @@ public class Customer {
         double total = 0.0;
         for (Transaction t : a.getTransactions()) {
             statement.append("  ")
-                .append(t.getAmount() < 0 ? "withdrawal" : "deposit")
+                .append(t.getTransactionType().name())
                 .append(' ')
                 .append(toDollars(t.getAmount()))
                 .append('\n');

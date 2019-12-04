@@ -36,18 +36,16 @@ public class Bank {
         return number + " " + (number == 1 ? word : word + "s");
     }
 
+    public void updateInterestPayments() {
+        for (Customer c : customers) {
+            c.updateInterestPayments();
+        }
+    }
+
     public double totalInterestPaid() {
         double total = 0;
         for(Customer c : customers)
             total += c.totalInterestEarned();
         return total;
-    }
-
-    public String getFirstCustomer() {
-        if (customers.isEmpty()) {
-            return "no customers";
-        } else {
-            return customers.get(0).getName();
-        }
     }
 }
