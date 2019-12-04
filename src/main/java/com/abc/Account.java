@@ -1,7 +1,9 @@
 package com.abc;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Date;
 
 public class Account {
     public enum AccountType {
@@ -49,12 +51,10 @@ public class Account {
                 }
 
             case MAXI_SAVINGS:
-                if (balance <= 1000) {
-                    return balance * 0.02;
-                } else if (balance <=2000) {
-                    return 20 + (balance-1000) * 0.05;
+                if (afterMaxiWithdrawalPeriod()) {
+                    return balance * 0.05;
                 } else {
-                    return 70 + (balance-2000) * 0.1;
+                    return balance * 0.001;
                 }
                 
             default:
@@ -62,10 +62,38 @@ public class Account {
         }
     }
 
+    private boolean afterMaxiWithdrawalPeriod() {
+        if (transactions.isEmpty()) {
+            return true;
+        }
+
+        Date lastTransactionDate = transactions.get(transactions.size() - 1).getDate();
+
+        Date currentDate = DateProvider.getInstance().now();
+        Calendar dateCutoff = Calendar.getInstance();
+        dateCutoff.setTime(currentDate);
+
+        dateCutoff.roll(Calendar.DATE, -10);
+
+        for (int i = transactions.size() - 1; i >= 0; i--) {
+            lastTransactionDate = transactions.get(i).getDate();
+
+            if (lastTransactionDate.after(dateCutoff.getTime())) {
+                if (transactions.get(i).getAmount() < 0) {
+                    return false;
+                }
+            } else {
+                return true;
+            }
+        }
+
+        return true;
+    }
+
     public double calculateBalance() {
         double balance = 0.0;
         for (Transaction t: transactions)
-            balance += t.amount;
+            balance += t.getAmount();
         return balance;
     }
 

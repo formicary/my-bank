@@ -92,11 +92,11 @@ public class Customer {
         double total = 0.0;
         for (Transaction t : a.getTransactions()) {
             statement.append("  ")
-                .append(t.amount < 0 ? "withdrawal" : "deposit")
+                .append(t.getAmount() < 0 ? "withdrawal" : "deposit")
                 .append(' ')
-                .append(toDollars(t.amount))
+                .append(toDollars(t.getAmount()))
                 .append('\n');
-            total += t.amount;
+            total += t.getAmount();
         }
         statement.append("Total ")
             .append(toDollars(total));
