@@ -1,5 +1,6 @@
 package com.abc;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,23 +28,34 @@ public class Customer {
         return accounts.size();
     }
 
-    public double totalInterestEarned() {
-        double total = 0;
+    public BigDecimal totalInterestEarned() {
+        BigDecimal total = BigDecimal.ZERO;
         for (Account a : accounts)
-            total += a.interestEarned();
+            total = total.add(a.interestEarned());
         return total;
     }
 
     public String getStatement() {
         String statement = null;
         statement = "Statement for " + name + "\n";
-        double total = 0.0;
+        BigDecimal total = BigDecimal.ZERO;
         for (Account a : accounts) {
             statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+            total = total.add(a.sumTransactions());
         }
         statement += "\nTotal In All Accounts " + toDollars(total);
         return statement;
+    }
+
+    public void transferAccountFunds(Account from, Account to, double amount) {
+        if (amount > 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        }else if (from.sumTransactions().compareTo(new BigDecimal(amount)) < 0){
+            throw new IllegalArgumentException("account does not have enough funds");
+        }else {
+            from.withdraw(amount);
+            to.deposit(amount);
+        }
     }
 
     private String statementForAccount(Account a) {
@@ -63,16 +75,17 @@ public class Customer {
         }
 
         //Now total up all the transactions
-        double total = 0.0;
+        BigDecimal total = BigDecimal.ZERO;
         for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
+            s += "  " + (t.amount.compareTo(BigDecimal.ZERO) < 0 ? "withdrawal" : "deposit");
+            s += " " + toDollars(t.amount) + "\n";
+            total = total.add(t.amount);
         }
         s += "Total " + toDollars(total);
         return s;
     }
 
-    private String toDollars(double d){
-        return String.format("$%,.2f", abs(d));
+    private String toDollars(BigDecimal d){
+        return String.format("$%,.2f", d.abs().doubleValue());
     }
 }
