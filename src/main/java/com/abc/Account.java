@@ -21,6 +21,9 @@ public class Account {
         this.transactions = new ArrayList<Transaction>();
     }
 
+    /**
+     * @param amount to add to account
+     */
     public void deposit(double amount) {
         if (amount < 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
@@ -29,6 +32,9 @@ public class Account {
         }
     }
 
+    /**
+     * @param amount to remove from account
+     */
     public void withdraw(double amount) {
         if (amount < 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
@@ -41,13 +47,20 @@ public class Account {
         return accountType;
     }
 
+    /**
+     * @return The sum of all transactions
+     */
     public BigDecimal sumTransactions() {
-        return checkIfTransactionsExist(true);
+        BigDecimal amount = BigDecimal.ZERO;
+        for (Transaction t: transactions)
+            amount = amount.add(t.amount);
+        return amount;
     }
 
     /**
      * Calculate compound interest by recalculating balance for each day since first transaction.
-     * @return
+     * Assumes transactions are in chronological order
+     * @return The interest earned
      */
     public BigDecimal interestEarned() {
         BigDecimal balance = BigDecimal.ZERO;
@@ -57,17 +70,19 @@ public class Account {
         Calendar start = Calendar.getInstance();
         start.setTime(transactions.get(0).transactionDate);
         Date end = Calendar.getInstance().getTime();
-        //Calendar end = Calendar.getInstance();
+
         //increment days
         for (; !start.getTime().after(end); start.add(Calendar.DATE, 1)) {
             //add transactions to balance
             while (i < transactions.size() && !start.before(transactions.get(i))) {
                 Transaction transaction = transactions.get(i);
                 balance = balance.add(transaction.amount);
+                //reset when there has been withdrawal
                 if(transaction.amount.compareTo(BigDecimal.ZERO) < 0) {
                     lastWithdraw = 0;
                 }
-                if(lastWithdraw < 11) {//prevent overflow
+                //prevent overflow
+                if(lastWithdraw < 11) {
                     lastWithdraw++;
                 }
                 i++;
@@ -97,13 +112,13 @@ public class Account {
                 amount = amount.subtract(savingsLimit);
                 earned = earned.add(amount.multiply(pointTwo));
                 earned = earned.add(BigDecimal.ONE);
-                //return amount.multiply(interest_one);
-            }else {//calcuate interest under 1000
+            }else {
+                //calcuate interest under 1000
                 earned = earned.add(amount.multiply(pointOne));
             }
             return earned;
-            //return 1 + (amount - 1000) * 0.002;
         }else if(accountType == MAXI_SAVINGS) {
+            //check if 10 days has past since last withdraw
             if (lastWithdraw > 10) {
                 return amount.multiply(five);
             } else {
@@ -112,12 +127,5 @@ public class Account {
         }else{
             return amount.multiply(pointOne);
         }
-    }
-
-    private BigDecimal checkIfTransactionsExist(boolean checkAll) {
-        BigDecimal amount = BigDecimal.ZERO;
-        for (Transaction t: transactions)
-            amount = amount.add(t.amount);
-        return amount;
     }
 }

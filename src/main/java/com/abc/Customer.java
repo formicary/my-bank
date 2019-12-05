@@ -47,6 +47,12 @@ public class Customer {
         return statement;
     }
 
+    /**
+     * Transfer funds from one account to another.
+     * @param from Account to transfer from.
+     * @param to Account to transfer to.
+     * @param amount The amount to transfer
+     */
     public void transferAccountFunds(Account from, Account to, double amount) {
         if (amount > 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
