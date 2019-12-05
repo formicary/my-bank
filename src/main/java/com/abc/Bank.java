@@ -16,7 +16,9 @@ public class Bank {
 
     public String customerSummary() {
         String summary = "Customer Summary";
+        // What if there's no customers?
         for (Customer c : customers)
+        // Potentially hard to read, could give an example?
             summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
         return summary;
     }
@@ -34,6 +36,7 @@ public class Bank {
         return total;
     }
 
+// Is this method actually needed?
     public String getFirstCustomer() {
         try {
             customers = null;

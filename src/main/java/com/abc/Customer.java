@@ -20,6 +20,7 @@ public class Customer {
 
     public Customer openAccount(Account account) {
         accounts.add(account);
+        // Why are we returning this?
         return this;
     }
 
@@ -35,6 +36,7 @@ public class Customer {
     }
 
     public String getStatement() {
+        // But it's set to "" elsewhere 
         String statement = null;
         statement = "Statement for " + name + "\n";
         double total = 0.0;
@@ -65,6 +67,7 @@ public class Customer {
         //Now total up all the transactions
         double total = 0.0;
         for (Transaction t : a.transactions) {
+            // Can't read this easily
             s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
             total += t.amount;
         }
@@ -72,6 +75,7 @@ public class Customer {
         return s;
     }
 
+// Do we need this?
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
     }

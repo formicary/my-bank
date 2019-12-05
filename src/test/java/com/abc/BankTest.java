@@ -5,11 +5,15 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class BankTest {
+    // Purpose of this double?
     private static final double DOUBLE_DELTA = 1e-15;
 
     @Test
+    // Don't like the way these are tested, going to use a MethodName_Conditions_Returns approach
     public void customerSummary() {
+        // Setup method?
         Bank bank = new Bank();
+        // john isn't a good variable name
         Customer john = new Customer("John");
         john.openAccount(new Account(Account.CHECKING));
         bank.addCustomer(john);
@@ -18,6 +22,7 @@ public class BankTest {
     }
 
     @Test
+    // Test name discreprencies
     public void checkingAccount() {
         Bank bank = new Bank();
         Account checkingAccount = new Account(Account.CHECKING);

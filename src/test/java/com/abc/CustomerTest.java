@@ -8,6 +8,7 @@ import static org.junit.Assert.assertEquals;
 public class CustomerTest {
 
     @Test //Test customer statement generation
+    // Bad test name
     public void testApp(){
 
         Account checkingAccount = new Account(Account.CHECKING);
@@ -47,6 +48,7 @@ public class CustomerTest {
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
+// Purpose of this test?
     @Ignore
     public void testThreeAcounts() {
         Customer oscar = new Customer("Oscar")

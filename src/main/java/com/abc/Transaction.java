@@ -10,6 +10,7 @@ public class Transaction {
 
     public Transaction(double amount) {
         this.amount = amount;
+        // Is there a better way to get date?
         this.transactionDate = DateProvider.getInstance().now();
     }
 
