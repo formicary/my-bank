@@ -1,15 +1,25 @@
 package com.abc;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Bank {
     private List<Customer> customers;
+    private double lastInterestPaid;
 
     public Bank() {
         customers = new ArrayList<Customer>();
+        // scheduleMidnightInterests();
     }
+    
+    // returns the latest interest gain
+    public double getLastInterestPaid() { return lastInterestPaid; }
 
+    
     public void addCustomer(Customer customer) {
         customers.add(customer);
     }
@@ -27,20 +37,47 @@ public class Bank {
         return number + " " + (number == 1 ? word : word + "s");
     }
 
-    public double totalInterestPaid() {
+    // updates balances for all customers'accounts to include new interest gains
+    public void payInterests() {
         double total = 0;
         for(Customer c: customers)
-            total += c.totalInterestEarned();
+            total += c.earnDailyInterest();
+        lastInterestPaid = total;
+    }
+    
+    // returns the amount of money the bank spent on interests altogether
+    public double getTotalInterestPaid() {
+    	double total = 0;
+        for(Customer c: customers)
+            total += c.getTotalInterestEarned();
         return total;
     }
 
     public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
-        }
+        if (customers.isEmpty()) throw new IllegalStateException();
+        return customers.get(0).getName();
     }
+    
+    
+    // schedule interest updates to happen midnight every day
+    public void scheduleMidnightInterests() {
+	  Calendar calendar = Calendar.getInstance();
+	  calendar.set(Calendar.HOUR, 0);
+	  calendar.set(Calendar.MINUTE, 0);
+	  calendar.set(Calendar.SECOND, 0);	
+	  scheduleInterests(calendar);
+    }
+    
+    // schedule interest updates
+    public void scheduleInterests(Calendar calendar) {
+	      Timer timer = new Timer();
+	      Date time = calendar.getTime();
+	  
+	      timer.schedule(new TimerTask() {
+	    	  public void run() {
+	              Bank.this.payInterests();
+	           }
+	      }, time);    
+    }
+   
 }
