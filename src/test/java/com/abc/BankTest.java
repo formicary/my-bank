@@ -48,7 +48,33 @@ public class BankTest {
 
         checkingAccount.deposit(3000.0);
 
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(3.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+    }
+
+    @Test
+    public void maxi_savings_account_withdraw() {
+        Bank bank = new Bank();
+        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
+        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+
+        checkingAccount.datedDeposit(4000.0, DateProvider.getInstance().createDate(1,1,2019));
+        checkingAccount.datedDeposit(1000.0, DateProvider.getInstance().createDate(3, 1, 2019));
+        checkingAccount.withdraw(1000.0);
+
+        assertEquals(4.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+    }
+
+    @Test
+    public void maxi_savings_no_withdraw() {
+        Bank bank = new Bank();
+        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
+        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+
+        checkingAccount.datedDeposit(1000.0, DateProvider.getInstance().createDate(1, 1, 2019));
+        checkingAccount.datedDeposit(1000.0, DateProvider.getInstance().createDate(2, 1, 2019));
+        checkingAccount.datedDeposit(1000.0, DateProvider.getInstance().createDate(3, 1, 2019));
+
+        assertEquals(150.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
 }

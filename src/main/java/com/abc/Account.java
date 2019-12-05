@@ -1,6 +1,8 @@
 package com.abc;
 
+import java.time.temporal.TemporalAmount;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Account {
@@ -25,6 +27,14 @@ public class Account {
         }
     }
 
+    public void datedDeposit (double amount, Date date) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        } else {
+            transactions.add(new Transaction(amount, date));
+        }
+    }
+
 public void withdraw(double amount) {
     if (amount <= 0) {
         throw new IllegalArgumentException("amount must be greater than zero");
@@ -32,6 +42,23 @@ public void withdraw(double amount) {
         transactions.add(new Transaction(-amount));
     }
 }
+
+    public void datedWithdraw(double amount, Date date) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        } else {
+            transactions.add(new Transaction(-amount, date));
+        }
+    }
+
+    private boolean isOlderThanTenDays() {
+        if (transactions.isEmpty()) {
+            return false;
+        }
+        Transaction lastTransaction = transactions.get(transactions.size()-1);
+        Date fivePercentAccountDate = DateProvider.getInstance().inTenDaysPast();
+        return lastTransaction.getTransactionDate().before(fivePercentAccountDate);
+    }
 
     public double interestEarned() {
         double amount = sumTransactions();
@@ -45,11 +72,11 @@ public void withdraw(double amount) {
 //                if (amount <= 4000)
 //                    return 20;
             case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
+                if (isOlderThanTenDays()) {
+                    return amount * 0.05;
+                } else {
+                    return amount * 0.001;
+                }
             default:
                 return amount * 0.001;
         }

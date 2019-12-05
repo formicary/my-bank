@@ -34,6 +34,19 @@ public class Customer {
         return total;
     }
 
+    public void transferTo (double transferredAmount, Account accountFrom, Account accountTo ) {
+        if (transferredAmount <= 0) {
+            throw new IllegalArgumentException("negative amount not allowed");
+        }
+        else if ( transferredAmount >= accountFrom.sumTransactions()) {
+            throw new IllegalArgumentException("insufficient balance");
+        }
+        else {
+            accountFrom.withdraw(transferredAmount);
+            accountTo.deposit(transferredAmount);
+        }
+    }
+
     public String getStatement() {
         String statement = null;
         statement = "Statement for " + name + "\n";

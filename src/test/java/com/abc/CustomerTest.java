@@ -6,7 +6,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
-
+    private static final double DOUBLE_DELTA = 1e-15;
     @Test //Test customer statement generation
     public void testApp(){
 
@@ -53,5 +53,52 @@ public class CustomerTest {
                 .openAccount(new Account(Account.SAVINGS));
         oscar.openAccount(new Account(Account.CHECKING));
         assertEquals(3, oscar.getNumberOfAccounts());
+    }
+
+    @Test
+    public void testIfTransferred() {
+        Account accountFrom = new Account(Account.SAVINGS);
+        Account accountTo = new Account(Account.CHECKING);
+        accountFrom.deposit(100.0);
+        accountTo.deposit(200.0);
+        Customer oscar = new Customer("Oscar");
+        oscar.openAccount(accountFrom).openAccount(accountTo);
+        oscar.transferTo(20.0,accountFrom,accountTo);
+        assertEquals(80.0, accountFrom.sumTransactions(), DOUBLE_DELTA);
+        assertEquals(220.0, accountTo.sumTransactions(), DOUBLE_DELTA);
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void testIfNotTransferred() {
+        try {
+            Account accountFrom = new Account(Account.SAVINGS);
+            Account accountTo = new Account(Account.CHECKING);
+            accountFrom.deposit(100);
+            accountTo.deposit(200);
+            Customer oscar = new Customer("Oscar");
+            oscar.openAccount(accountFrom).openAccount(accountTo);
+            oscar.transferTo(110, accountFrom, accountTo);
+        } catch (IllegalArgumentException exception) {
+            assertEquals("insufficient balance", exception.getMessage());
+            throw exception;
+        }
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void testNegativeAmountTransfer() {
+        try {
+            Account accountFrom = new Account(Account.SAVINGS);
+            Account accountTo = new Account(Account.CHECKING);
+            accountFrom.deposit(100);
+            accountTo.deposit(200);
+            Customer oscar = new Customer("Oscar");
+            oscar.openAccount(accountFrom).openAccount(accountTo);
+            oscar.transferTo(-20, accountFrom, accountTo);
+        }
+        catch (IllegalArgumentException exception) {
+            assertEquals("negative amount not allowed", exception.getMessage());
+            throw exception;
+        }
+
     }
 }
