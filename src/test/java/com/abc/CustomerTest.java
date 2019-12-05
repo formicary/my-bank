@@ -4,11 +4,13 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Calendar;
+
 public class CustomerTest {
-    private static final double DOUBLE_DELTA = 1e-15;
+    private static final double DOUBLE_DELTA = 1e-9;
 
     @Test //Test customer statement generation
-    public void testStatmentOutput(){
+    public void testStatementOutput(){
         Customer henry = new Customer("Henry");
 
         Account checkingAccount = henry.openAccount(Account.AccountType.CHECKING);
@@ -17,17 +19,20 @@ public class CustomerTest {
         checkingAccount.deposit(100.0);
         savingsAccount.deposit(4000.0);
         savingsAccount.withdraw(200.0);
+        henry.transfer(savingsAccount, checkingAccount, 2000.0);
 
         assertEquals("Statement for Henry\n" +
                 "\n" +
                 "Checking Account\n" +
-                "  deposit $100.00\n" +
-                "Total $100.00\n" +
+                "  DEPOSIT $100.00\n" +
+                "  TRANSFER_IN $2,000.00\n" +
+                "Total $2,100.00\n" +
                 "\n" +
                 "Savings Account\n" +
-                "  deposit $4,000.00\n" +
-                "  withdrawal $200.00\n" +
-                "Total $3,800.00\n" +
+                "  DEPOSIT $4,000.00\n" +
+                "  WITHDRAWAL $200.00\n" +
+                "  TRANSFER_OUT $2,000.00\n" +
+                "Total $1,800.00\n" +
                 "\n" +
                 "Total In All Accounts $3,900.00", henry.getStatement());
     }
@@ -42,23 +47,13 @@ public class CustomerTest {
     }
 
     @Test
-    public void testTwoAccounts(){
-        Customer oscar = new Customer("Oscar");
-
-        oscar.openAccount(Account.AccountType.SAVINGS);
-        oscar.openAccount(Account.AccountType.CHECKING);
-
-        assertEquals(2, oscar.getNumberOfAccounts());
-    }
-
-    @Test
-    public void testThreeAcounts() {
+    public void testManyAcounts() {
         Customer oscar = new Customer("Oscar");
         
-        oscar.openAccount(Account.AccountType.SAVINGS);
-        oscar.openAccount(Account.AccountType.CHECKING);
-        oscar.openAccount(Account.AccountType.MAXI_SAVINGS);
-        assertEquals(3, oscar.getNumberOfAccounts());
+        for (int i = 0; i < 5; i++) {
+            oscar.openAccount(Account.AccountType.SAVINGS);
+        }
+        assertEquals(5, oscar.getNumberOfAccounts());
     }
 
     @Test
@@ -98,5 +93,63 @@ public class CustomerTest {
         Account bobSavings = bob.openAccount(Account.AccountType.SAVINGS);
 
         bob.transfer(aliceSavings, bobSavings, 200.0);
+    }
+
+    @Test
+    public void testInterestOneDay() {
+        Calendar c = Calendar.getInstance();
+        DateProvider.getInstance().setCustomDate(c.getTime());
+
+        Customer alice = new Customer("Alice");
+        Account aliceChecking = alice.openAccount(Account.AccountType.CHECKING);
+        aliceChecking.deposit(100.0);
+
+        c.add(Calendar.DATE, 1);
+        DateProvider.getInstance().setCustomDate(c.getTime());
+
+        alice.updateInterestPayments();
+
+        assertEquals(100.0 + (100.0 * 0.001 / 365.25), aliceChecking.calculateBalance(), DOUBLE_DELTA);
+
+    }
+
+    @Test
+    public void testInterestOneWeek() {
+        Calendar c = Calendar.getInstance();
+        DateProvider.getInstance().setCustomDate(c.getTime());
+
+        Customer alice = new Customer("Alice");
+        Account aliceChecking = alice.openAccount(Account.AccountType.CHECKING);
+        aliceChecking.deposit(100.0);
+
+        for (int i = 0; i < 7; i++) {
+            c.add(Calendar.DATE, 1);
+            c.add(Calendar.MILLISECOND, 1);
+            DateProvider.getInstance().setCustomDate(c.getTime());
+
+            alice.updateInterestPayments();
+        }
+
+        assertEquals(100.0 * Math.pow(1 + (0.001 / 365.25), 7.0), aliceChecking.calculateBalance(), DOUBLE_DELTA);
+    }
+
+    @Test
+    public void testInterestOneYear() {
+        Calendar c = Calendar.getInstance();
+        DateProvider.getInstance().setCustomDate(c.getTime());
+
+        Customer alice = new Customer("Alice");
+        Account aliceChecking = alice.openAccount(Account.AccountType.CHECKING);
+        aliceChecking.deposit(100.0);
+
+        for (int i = 0; i < 365; i++) {
+            c.add(Calendar.DATE, 1);
+            c.add(Calendar.MILLISECOND, 1);
+            DateProvider.getInstance().setCustomDate(c.getTime());
+
+            alice.updateInterestPayments();
+        }
+
+        assertEquals(100.0 * Math.pow(1 + (0.001 / 365.25), 365.0), aliceChecking.calculateBalance(), DOUBLE_DELTA);
     }
 }

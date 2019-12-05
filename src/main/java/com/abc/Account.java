@@ -68,14 +68,14 @@ public class Account {
         return yearlyInterestEarned() / 365.25;
     }
 
-    public double yearlyInterestEarned() {
+    private double yearlyInterestEarned() {
         double balance = calculateBalance();
         switch(accountType){
             case SAVINGS:
                 if (balance <= 1000) {
                     return balance * 0.001;
                 } else {
-                    return (1 + balance-1000) * 0.002;
+                    return 1 + (balance - 1000) * 0.002;
                 }
 
             case MAXI_SAVINGS:
@@ -101,12 +101,12 @@ public class Account {
         Calendar dateCutoff = Calendar.getInstance();
         dateCutoff.setTime(currentDate);
 
-        dateCutoff.roll(Calendar.DATE, -10);
+        dateCutoff.add(Calendar.DATE, -10);
 
         for (int i = transactions.size() - 1; i >= 0; i--) {
             lastTransactionDate = transactions.get(i).getDate();
 
-            if (lastTransactionDate.after(dateCutoff.getTime())) {
+            if (lastTransactionDate.compareTo(dateCutoff.getTime()) >= 0) {
                 if (transactions.get(i).getAmount() < 0) {
                     return false;
                 }
@@ -129,12 +129,12 @@ public class Account {
         Calendar dateCutoff = Calendar.getInstance();
         dateCutoff.setTime(currentDate);
 
-        dateCutoff.roll(Calendar.DATE, -1);
+        dateCutoff.add(Calendar.DATE, -1);
 
         for (int i = transactions.size() - 1; i >= 0; i--) {
             lastTransactionDate = transactions.get(i).getDate();
 
-            if (lastTransactionDate.after(dateCutoff.getTime())) {
+            if (lastTransactionDate.compareTo(dateCutoff.getTime()) >= 0) {
                 if (transactions.get(i).getTransactionType() == TransactionType.INTEREST) {
                     return false;
                 }
