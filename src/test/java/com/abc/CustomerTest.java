@@ -1,5 +1,6 @@
 package com.abc;
 
+import com.abc.account_types.Account;
 import org.junit.Ignore;
 import org.junit.Test;
 

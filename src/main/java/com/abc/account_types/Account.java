@@ -1,4 +1,6 @@
-package com.abc;
+package com.abc.account_types;
+
+import com.abc.Transaction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +13,7 @@ public class Account {
     public static final int MAXI_SAVINGS = 2;
 
     private final int accountType;
+    // Is this supposed to be public?
     public List<Transaction> transactions;
 
     public Account(int accountType) {
@@ -42,6 +45,7 @@ public void withdraw(double amount) {
     public double interestEarned() {
         double amount = sumTransactions();
         // Can bring this logic down into seperate classes, can make account abstract
+        // What happens when less than 0?
         switch(accountType){
             case SAVINGS:
                 if (amount <= 1000)
@@ -55,6 +59,7 @@ public void withdraw(double amount) {
 //                    return 20;
             case MAXI_SAVINGS:
                 if (amount <= 1000)
+                    // Are these decimals wrong?
                     return amount * 0.02;
                 if (amount <= 2000)
                     return 20 + (amount-1000) * 0.05;

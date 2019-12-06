@@ -1,5 +1,7 @@
 package com.abc;
 
+import com.abc.account_types.Account;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +20,7 @@ public class Customer {
         return name;
     }
 
+    // Account Factory? Why are we returning the account?
     public Customer openAccount(Account account) {
         accounts.add(account);
         // Why are we returning this?
