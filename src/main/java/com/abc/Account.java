@@ -14,6 +14,7 @@ public class Account {
     private final int accountType;
     private double balance;
     public List<Transaction> transactions;
+    //tracking variables
     private DateTime lastWithdrawal;
     private DateTime lastInterest;
     private double annualInterest;
@@ -64,7 +65,7 @@ public class Account {
             this.balance+=amount;
         }        
     }
-    
+    //deposit at different dates
     public void deposit(double amount, DateTime transDate) {
         if (Days.daysBetween(this.lastInterest, transDate).getDays()>=1){
             double interest=this.interestEarned()*this.balance;
@@ -79,7 +80,7 @@ public class Account {
         }
         
     }
-     
+ 
     public void withdraw(double amount) {
         if (Days.daysBetween(this.lastInterest, LocalDateTime.now().toDateTime()).getDays()>=1){
             double interest=this.interestEarned()*this.balance;
