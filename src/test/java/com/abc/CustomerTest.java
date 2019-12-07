@@ -34,13 +34,13 @@ public class CustomerTest {
     }
 
     @Test
-    public void testOpeningOneAccount(){
+    public void testOpeningOneAccounts(){
         Customer oscar = new Customer("Oscar").openAccount(new Account(AccountType.SAVINGS));
         assertEquals(1, oscar.getNumberOfAccounts());
     }
 
     @Test
-    public void testOpeningTwoAccount(){
+    public void testOpeningTwoAccounts(){
         Customer oscar = new Customer("Oscar")
                 .openAccount(new Account(AccountType.SAVINGS));
         oscar.openAccount(new Account(AccountType.CHECKING));
