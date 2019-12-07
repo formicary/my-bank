@@ -8,9 +8,8 @@ import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
 
-    @Test //Test customer statement generation
-    public void testApp(){
-
+    @Test
+    public void testCustomerStatementGeneration(){
         Account checkingAccount = new Account(AccountType.CHECKING);
         Account savingsAccount = new Account(AccountType.SAVINGS);
 
@@ -35,24 +34,26 @@ public class CustomerTest {
     }
 
     @Test
-    public void testOneAccount(){
+    public void testOpeningOneAccount(){
         Customer oscar = new Customer("Oscar").openAccount(new Account(AccountType.SAVINGS));
         assertEquals(1, oscar.getNumberOfAccounts());
     }
 
     @Test
-    public void testTwoAccount(){
+    public void testOpeningTwoAccount(){
         Customer oscar = new Customer("Oscar")
                 .openAccount(new Account(AccountType.SAVINGS));
         oscar.openAccount(new Account(AccountType.CHECKING));
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
-    @Ignore
-    public void testThreeAcounts() {
+    @Test
+    public void testOpeningThreeAcounts() {
         Customer oscar = new Customer("Oscar")
                 .openAccount(new Account(AccountType.SAVINGS));
         oscar.openAccount(new Account(AccountType.CHECKING));
+        oscar.openAccount(new Account(AccountType.MAXI_SAVINGS));
         assertEquals(3, oscar.getNumberOfAccounts());
     }
+
 }
