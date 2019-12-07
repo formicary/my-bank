@@ -5,50 +5,68 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class BankTest {
-    private static final double DOUBLE_DELTA = 1e-15;
+
+    private static final double DOUBLE_DELTA = 1e-9;
 
     @Test
     public void customerSummary() {
         Bank bank = new Bank();
         Customer john = new Customer("John");
-        john.openAccount(new Account(Account.CHECKING));
         bank.addCustomer(john);
-
-        assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
+        john.addAccount(0);
+        assertEquals("\nCustomer: John" + "\nAccounts: 1", bank.customerSummary());
     }
 
     @Test
     public void checkingAccount() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.CHECKING);
-        Customer bill = new Customer("Bill").openAccount(checkingAccount);
+        Customer bill = new Customer("Bill");
+        bill.addAccount(0);
         bank.addCustomer(bill);
+        bill.deposit(100.0, 0);
 
-        checkingAccount.deposit(100.0);
-
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(0.0002737850787, bank.interestSummary(), DOUBLE_DELTA);
     }
 
     @Test
     public void savings_account() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
-
-        checkingAccount.deposit(1500.0);
-
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        Customer bill = new Customer("Bill");
+        bill.addAccount(1);
+        bill.deposit(1500, 1);
+        assertEquals(8 / 1461, bank.interestSummary(), DOUBLE_DELTA);
     }
 
     @Test
     public void maxi_savings_account() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+        Customer bill = new Customer("Bill");
+        bill.addAccount(2);
+        bill.deposit(3000, 2);
+        assertEquals(20 / 487, bank.interestSummary(), DOUBLE_DELTA);
+    }
 
-        checkingAccount.deposit(3000.0);
+    @Test //Test customer statement generation
+    public void testApp() {
 
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        Customer henry = new Customer("Henry");
+        henry.addAccount(0);
+        henry.addAccount(1);
+        henry.deposit(100.0, 0);
+        henry.deposit(4000.0, 1);
+        henry.withdraw(200.0, 1);
+        henry.transfer(0, 1, 100);
+        henry.getStatement();
+        assertEquals(" Deposit of 100.0 concerning account type 0\nDeposit of 4000.0 "
+                + "concerning account type 1\nWithdrawal of 200.0 concerning account type "
+                + "1\nDeposit of 100.0 concerning account type 1\n"
+                + "Total Balance: 4000.0", henry.getStatement());
+
+
+
+
+        
+     
     }
 
 }
