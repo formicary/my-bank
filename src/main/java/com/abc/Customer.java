@@ -29,14 +29,14 @@ public class Customer {
 
     public double totalInterestEarned() {
         double total = 0;
-        for (Account a : accounts)
+        for (Account a : accounts) {
             total += a.interestEarned();
+        }
         return total;
     }
 
     public String getStatement() {
-        String statement = null;
-        statement = "Statement for " + name + "\n";
+        String statement = "Statement for " + name + "\n";
         double total = 0.0;
         for (Account a : accounts) {
             statement += "\n" + statementForAccount(a) + "\n";
@@ -49,8 +49,8 @@ public class Customer {
     private String statementForAccount(Account a) {
         String s = "";
 
-       //Translate to pretty account type
-        switch(a.getAccountType()){
+        // Translate to pretty account type
+        switch (a.getAccountType()) {
             case CHECKING:
                 s += "Checking Account\n";
                 break;
@@ -62,7 +62,7 @@ public class Customer {
                 break;
         }
 
-        //Now total up all the transactions
+        // Now total up all the transactions
         double total = 0.0;
         for (Transaction t : a.getTransactions()) {
             s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
@@ -72,7 +72,7 @@ public class Customer {
         return s;
     }
 
-    private String toDollars(double d){
+    private String toDollars(double d) {
         return String.format("$%,.2f", abs(d));
     }
 }
