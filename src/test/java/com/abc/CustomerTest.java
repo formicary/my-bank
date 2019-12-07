@@ -31,12 +31,12 @@ public class CustomerTest {
         assertEquals("Statement for Henry\n" +
                 "\n" +
                 "Checking Account\n" +
-                "  deposit $100.00   date:"+strDate+"\n" +
+                "  UNKNOWN  deposit $100.00   date:"+strDate+"\n" +
                 "Total $100.00\n" +
                 "\n" +
                 "Savings Account\n" +
-                "  deposit $4,000.00   date:"+strDate+"\n" +
-                "  withdrawal $200.00   date:"+strDate+"\n" +
+                "  UNKNOWN  deposit $4,000.00   date:"+strDate+"\n" +
+                "  UNKNOWN  withdrawal $200.00   date:"+strDate+"\n" +
                 "Total $3,800.00\n" +
                 "\n" +
                 "Total In All Accounts $3,900.00", henry.getStatement());
@@ -61,31 +61,32 @@ public class CustomerTest {
         //customer check
         Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount).openAccount(max_savingsAccount);
         checkingAccount.deposit(100.0);
-        savingsAccount.withdraw(200.0);
+        savingsAccount.withdraw(200.0,"LOAN");
         //max_savingsAccount.deposit(300,DateTime.now().toDateTime().plusDays(-5));
         max_savingsAccount.withdraw(200, DateTime.now().toDateTime().plusDays(-5));
         
         henry.transferMoney(1, 0, 500);
+ 
         assertEquals("Statement for Henry\n" +
                 "\n" +
                 "Checking Account\n" +
-                "  deposit $100.00   date:"+strDate+"\n" +
-                "  deposit $500.00   date:"+strDate+"\n" +
+                "  UNKNOWN  deposit $100.00   date:"+strDate+"\n" +
+                "  TRANSFER  deposit $500.00   date:"+strDate+"\n" +
                 "Total $600.00\n" +
                 "\n" +
                 "Savings Account\n" +
-                "  deposit $4,000.00   date:"+strDate2+"\n" +
-                "  deposit $8.11   date:"+strDate+"\n" +        
-                "  withdrawal $200.00   date:"+strDate+"\n" +
-                "  withdrawal $500.00   date:"+strDate+"\n" +
+                "  INITIAL  deposit $4,000.00   date:"+strDate2+"\n" +
+                "  INTEREST  deposit $8.11   date:"+strDate+"\n" +        
+                "  LOAN  withdrawal $200.00   date:"+strDate+"\n" +
+                "  TRANSFER  withdrawal $500.00   date:"+strDate+"\n" +
                 "Total $3,308.11\n" +
                 "\n" +
                 "Maxi Savings Account\n" +
-                "  deposit $4,000.00   date:"+strDate2+"\n" +
-                "  deposit $200.00   date:"+strDate3+"\n" +      
-                //DEposit is 5% interest, followed by withdrawal
-                "  withdrawal $200.00   date:"+strDate3+"\n" +
-                "  deposit $0.05   date:"+strDate+"\n" +
+                "  INITIAL  deposit $4,000.00   date:"+strDate2+"\n" +
+                "  INTEREST  deposit $200.00   date:"+strDate3+"\n" +      
+                //Deposit is 5% interest, followed by withdrawal
+                "  UNKNOWN  withdrawal $200.00   date:"+strDate3+"\n" +
+                "  INTEREST  deposit $0.05   date:"+strDate+"\n" +
                 "Total $4,000.05\n" +
                 "\n" +
                 "Total In All Accounts $7,908.16", henry.getStatement());

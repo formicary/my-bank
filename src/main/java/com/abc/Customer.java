@@ -26,8 +26,8 @@ public class Customer {
         if (Math.max(accNo1,accNo2)>=this.accounts.size()){
             throw new IllegalArgumentException("invalid account selected");
         }
-        this.accounts.get(accNo1).withdraw(amount);
-        this.accounts.get(accNo2).deposit(amount);
+        this.accounts.get(accNo1).withdraw(amount,"TRANSFER");
+        this.accounts.get(accNo2).deposit(amount,"TRANSFER");
         return this;
     }
     public int getNumberOfAccounts() {

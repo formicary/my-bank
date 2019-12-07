@@ -47,7 +47,7 @@ public class Account {
             this.lastWithdrawal=lastInt;
             this.accountType = accountType;
             this.transactions = new ArrayList<Transaction>();
-            this.deposit(amount,lastInt);            
+            this.deposit(amount,lastInt,"INITIAL");            
         }
     }
    
@@ -55,37 +55,50 @@ public class Account {
         if (Days.daysBetween(this.lastInterest, LocalDateTime.now().toDateTime()).getDays()>=1){
             double interest=this.interestEarned()*this.balance;
             this.interestSum+=interest;
-            this.deposit(interest);
+            this.deposit(interest,"INTEREST");
             
         }
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
-            if(transactions.add(new Transaction(amount)));
+            if(transactions.add(new Transaction(amount,"UNKNOWN")));
             this.balance+=amount;
         }        
     }
-    //deposit at different dates
-    public void deposit(double amount, DateTime transDate) {
-        if (Days.daysBetween(this.lastInterest, transDate).getDays()>=1){
+    public void deposit(double amount,String label) {
+        if (Days.daysBetween(this.lastInterest, LocalDateTime.now().toDateTime()).getDays()>=1){
             double interest=this.interestEarned()*this.balance;
             this.interestSum+=interest;
-            this.deposit(interest,transDate);
+            this.deposit(interest,"INTEREST");
+            
         }
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
-            if(transactions.add(new Transaction(amount,transDate)));
+            if(transactions.add(new Transaction(amount,label)));
             this.balance+=amount;
+        }        
+    }
+    //deposit with label
+    public void deposit(double amount, DateTime transDate, String label) {
+        if (Days.daysBetween(this.lastInterest, transDate).getDays()>=1){
+            double interest=this.interestEarned(transDate)*this.balance;
+            this.interestSum+=interest;
+            this.deposit(interest,transDate,"INTEREST");
         }
-        
+        if (amount <= 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        } else {
+            if(transactions.add(new Transaction(amount,label,transDate)));
+            this.balance+=amount;
+        }   
     }
  
     public void withdraw(double amount) {
         if (Days.daysBetween(this.lastInterest, LocalDateTime.now().toDateTime()).getDays()>=1){
             double interest=this.interestEarned()*this.balance;
             this.interestSum+=interest;
-            this.deposit(interest);
+            this.deposit(interest,"INTEREST");
             }
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
@@ -94,16 +107,16 @@ public class Account {
             throw new IllegalArgumentException("insufficient balance");
         } 
         else {
-            transactions.add(new Transaction(-amount));
+            transactions.add(new Transaction(-amount,"UNKNOWN"));
             this.balance-=amount;
             this.lastWithdrawal=LocalDateTime.now().toDateTime();
             }
     }
-    public void withdraw(double amount, DateTime transDate) {
-        if (Days.daysBetween(this.lastInterest, transDate).getDays()>=1){
+     public void withdraw(double amount, String label) {
+        if (Days.daysBetween(this.lastInterest, LocalDateTime.now().toDateTime()).getDays()>=1){
             double interest=this.interestEarned()*this.balance;
             this.interestSum+=interest;
-            this.deposit(interest,transDate);
+            this.deposit(interest,"INTEREST");
             }
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
@@ -112,7 +125,44 @@ public class Account {
             throw new IllegalArgumentException("insufficient balance");
         } 
         else {
-            transactions.add(new Transaction(-amount,transDate));
+            transactions.add(new Transaction(-amount,label));
+            this.balance-=amount;
+            this.lastWithdrawal=LocalDateTime.now().toDateTime();
+            }
+    }
+ 
+     public void withdraw(double amount, DateTime transDate) {
+        if (Days.daysBetween(this.lastInterest, transDate).getDays()>=1){
+            double interest=this.interestEarned(transDate)*this.balance;
+            this.interestSum+=interest;
+            this.deposit(interest,transDate, "INTEREST");
+            }
+        if (amount <= 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        } 
+        else if (amount > this.balance) {
+            throw new IllegalArgumentException("insufficient balance");
+        } 
+        else {
+            transactions.add(new Transaction(-amount,"UNKNOWN",transDate));
+            this.balance-=amount;
+            this.lastWithdrawal=transDate;
+            }
+    }
+    public void withdraw(double amount, DateTime transDate,String label) {
+        if (Days.daysBetween(this.lastInterest, transDate).getDays()>=1){
+            double interest=this.interestEarned(transDate)*this.balance;
+            this.interestSum+=interest;
+            this.deposit(interest,transDate, "INTEREST");
+            }
+        if (amount <= 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        } 
+        else if (amount > this.balance) {
+            throw new IllegalArgumentException("insufficient balance");
+        } 
+        else {
+            transactions.add(new Transaction(-amount,label,transDate));
             this.balance-=amount;
             this.lastWithdrawal=transDate;
             }
@@ -146,11 +196,6 @@ public class Account {
             return helper.dailyInterest(days4interest,this.annualInterest);
         
     }
-    
-    public double getInterestSum(){
-        return this.interestSum;
-    }
-    
     public double interestEarned(DateTime transDate) {
         double amount = sumTransactions();
         switch(accountType){
@@ -175,8 +220,13 @@ public class Account {
             
             int days4interest=Days.daysBetween(this.lastInterest, transDate).getDays();
             this.lastInterest = transDate;
+            
             return helper.dailyInterest(days4interest,this.annualInterest);
         
+    }
+    
+    public double getInterestSum(){
+        return this.interestSum;
     }
     
     public double sumTransactions() {
@@ -195,7 +245,7 @@ public class Account {
         if (Days.daysBetween(this.lastInterest, DateTime.now().toDateTime()).getDays()>=1){
             double interest=this.interestEarned()*this.balance;
             this.interestSum+=interest;
-            this.deposit(interest);
+            this.deposit(interest,"INTEREST");
             }
 
        //Translate to pretty account type
@@ -214,7 +264,7 @@ public class Account {
         //Now total up all the transactions
         double total = 0.0;
         for (Transaction t : this.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + helper.toDollars(t.amount) + "   date:"+t.TransactionDate()+"\n";
+            s += "  "+t.getLabel()+"  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + helper.toDollars(t.amount) + "   date:"+t.TransactionDate()+"\n";
             total += t.amount;
         }
         s += "Total " + helper.toDollars(total);

@@ -48,7 +48,7 @@ public class NewMain {
         //customer check
         Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount).openAccount(max_savingsAccount);
         checkingAccount.deposit(100.0);
-        savingsAccount.withdraw(200.0);
+        savingsAccount.withdraw(200.0,"LOAN");
         //max_savingsAccount.deposit(300,DateTime.now().toDateTime().plusDays(-5));
         max_savingsAccount.withdraw(200, DateTime.now().toDateTime().plusDays(-5));
         
