@@ -7,12 +7,13 @@ public class DateProvider {
     private static DateProvider instance = null;
 
     public static DateProvider getInstance() {
-        if (instance == null)
+        if (instance == null) {
             instance = new DateProvider();
-        return instance;
+        }
+        return (instance);
     }
 
     public Date now() {
-        return Calendar.getInstance().getTime();
+        return (Calendar.getInstance().getTime());
     }
 }
