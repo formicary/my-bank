@@ -58,6 +58,17 @@ public class Account {
         return amount;
     }
 
+    public void transferTo(Account account, double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        }
+        if (amount > sumTransactions()) {
+            throw new IllegalArgumentException("amount must be smaller than balance");
+        }
+        transactions.add(new Transaction(-amount));
+        account.transactions.add(new Transaction(amount));
+    }
+
     public AccountType getAccountType() {
         return accountType;
     }
