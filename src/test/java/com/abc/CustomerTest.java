@@ -1,5 +1,15 @@
 package com.abc;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+import org.joda.time.LocalDateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -9,12 +19,14 @@ public class CustomerTest {
 
     @Test //Test customer statement generation
     public void testApp(){
-
+        Date date = Calendar.getInstance().getTime();
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        String strDate = dateFormat.format(date);
         Account checkingAccount = new Account(Account.CHECKING);
         Account savingsAccount = new Account(Account.SAVINGS);
 
         Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
-
+       
         checkingAccount.deposit(100.0);
         savingsAccount.deposit(4000.0);
         savingsAccount.withdraw(200.0);
@@ -22,16 +34,66 @@ public class CustomerTest {
         assertEquals("Statement for Henry\n" +
                 "\n" +
                 "Checking Account\n" +
-                "  deposit $100.00\n" +
+                "  deposit $100.00   date:"+strDate+"\n" +
                 "Total $100.00\n" +
                 "\n" +
                 "Savings Account\n" +
-                "  deposit $4,000.00\n" +
-                "  withdrawal $200.00\n" +
+                "  deposit $4,000.00   date:"+strDate+"\n" +
+                "  withdrawal $200.00   date:"+strDate+"\n" +
                 "Total $3,800.00\n" +
                 "\n" +
                 "Total In All Accounts $3,900.00", henry.getStatement());
     }
+    
+    @Test
+    public void testInterestAndTransfer(){
+        DateTimeFormatter dateFormat = DateTimeFormat.forPattern("dd-MM-yyyy");
+        String strDate = dateFormat.print(DateTime.now().toDateTime());
+        //Test for 1 Year
+        DateTime tt2 = DateTime.now().toDateTime().plusDays(-370);
+        String strDate2 = dateFormat.print(tt2);
+        
+        String strDate3 = dateFormat.print(DateTime.now().toDateTime().plusDays(-5));
+        
+        
+        Account checkingAccount = new Account(Account.CHECKING);
+        Account savingsAccount = new Account(Account.SAVINGS,4000.00,tt2);
+        Account max_savingsAccount = new Account(Account.MAXI_SAVINGS,4000.00,tt2);
+        
+        
+        //customer check
+        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount).openAccount(max_savingsAccount);
+        checkingAccount.deposit(100.0);
+        savingsAccount.withdraw(200.0);
+        //max_savingsAccount.deposit(300,DateTime.now().toDateTime().plusDays(-5));
+        max_savingsAccount.withdraw(200, DateTime.now().toDateTime().plusDays(-5));
+        
+        henry.transferMoney(1, 0, 500);
+        assertEquals("Statement for Henry\n" +
+                "\n" +
+                "Checking Account\n" +
+                "  deposit $100.00   date:"+strDate+"\n" +
+                "  deposit $500.00   date:"+strDate+"\n" +
+                "Total $600.00\n" +
+                "\n" +
+                "Savings Account\n" +
+                "  deposit $4,000.00   date:"+strDate2+"\n" +
+                "  deposit $8.11   date:"+strDate+"\n" +        
+                "  withdrawal $200.00   date:"+strDate+"\n" +
+                "  withdrawal $500.00   date:"+strDate+"\n" +
+                "Total $3,308.11\n" +
+                "\n" +
+                "Maxi Savings Account\n" +
+                "  deposit $4,000.00   date:"+strDate2+"\n" +
+                "  deposit $200.00   date:"+strDate3+"\n" +      
+                //DEposit is 5% interest, followed by withdrawal
+                "  withdrawal $200.00   date:"+strDate3+"\n" +
+                "  deposit $0.05   date:"+strDate+"\n" +
+                "Total $4,000.05\n" +
+                "\n" +
+                "Total In All Accounts $7,908.16", henry.getStatement());
+    }
+    
 
     @Test
     public void testOneAccount(){
@@ -46,11 +108,38 @@ public class CustomerTest {
         oscar.openAccount(new Account(Account.CHECKING));
         assertEquals(2, oscar.getNumberOfAccounts());
     }
-
-    @Ignore
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testNegativeAmounts(){
+        Account save = new Account(Account.SAVINGS);
+        Customer oscar = new Customer("Oscar")
+                .openAccount(save);
+        oscar.openAccount(new Account(Account.CHECKING));
+        save.deposit(-200);
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testtransferAmounts(){
+        Account save = new Account(Account.SAVINGS);
+        Customer oscar = new Customer("Oscar")
+                .openAccount(save);
+        oscar.openAccount(new Account(Account.CHECKING));
+        oscar.transferMoney(0, 3, 400);
+    }
+    
+    @Test
     public void testThreeAcounts() {
         Customer oscar = new Customer("Oscar")
                 .openAccount(new Account(Account.SAVINGS));
+        oscar.openAccount(new Account(Account.CHECKING));
+        oscar.openAccount(new Account(Account.CHECKING));
+        assertEquals(3, oscar.getNumberOfAccounts());
+    }
+    @Ignore
+    public void testInterestAcounts() {
+        Customer oscar = new Customer("Oscar")
+                .openAccount(new Account(Account.SAVINGS));
+        oscar.openAccount(new Account(Account.CHECKING));
         oscar.openAccount(new Account(Account.CHECKING));
         assertEquals(3, oscar.getNumberOfAccounts());
     }

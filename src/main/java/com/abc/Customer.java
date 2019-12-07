@@ -3,7 +3,6 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Math.abs;
 
 public class Customer {
     private String name;
@@ -22,7 +21,15 @@ public class Customer {
         accounts.add(account);
         return this;
     }
-
+    
+    public Customer transferMoney(int accNo1,int accNo2, double amount){
+        if (Math.max(accNo1,accNo2)>=this.accounts.size()){
+            throw new IllegalArgumentException("invalid account selected");
+        }
+        this.accounts.get(accNo1).withdraw(amount);
+        this.accounts.get(accNo2).deposit(amount);
+        return this;
+    }
     public int getNumberOfAccounts() {
         return accounts.size();
     }
@@ -30,7 +37,7 @@ public class Customer {
     public double totalInterestEarned() {
         double total = 0;
         for (Account a : accounts)
-            total += a.interestEarned();
+            total += a.getInterestSum();
         return total;
     }
 
@@ -39,40 +46,12 @@ public class Customer {
         statement = "Statement for " + name + "\n";
         double total = 0.0;
         for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
+            statement += "\n" + a.statementForAccount() + "\n";
             total += a.sumTransactions();
         }
-        statement += "\nTotal In All Accounts " + toDollars(total);
+        statement += "\nTotal In All Accounts " + helper.toDollars(total);
         return statement;
     }
-
-    private String statementForAccount(Account a) {
-        String s = "";
-
-       //Translate to pretty account type
-        switch(a.getAccountType()){
-            case Account.CHECKING:
-                s += "Checking Account\n";
-                break;
-            case Account.SAVINGS:
-                s += "Savings Account\n";
-                break;
-            case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
-                break;
-        }
-
-        //Now total up all the transactions
-        double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
-        }
-        s += "Total " + toDollars(total);
-        return s;
-    }
-
-    private String toDollars(double d){
-        return String.format("$%,.2f", abs(d));
-    }
+    
+    
 }
