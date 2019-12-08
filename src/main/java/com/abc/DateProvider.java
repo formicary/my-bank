@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * Class that handles dates
  */
-public class DateProvider {
+class DateProvider {
 
     /**
      * Singleton instance of the class
@@ -22,7 +22,7 @@ public class DateProvider {
      * Singleton accessor
      * @return singleton of the DateProvider class
      */
-    public static DateProvider getInstance() {
+    static DateProvider getInstance() {
         if (instance == null)
             instance = new DateProvider();
         return instance;
@@ -32,7 +32,7 @@ public class DateProvider {
      * Function to get the current date
      * @return current date
      */
-    public Date now() {
+    Date now() {
         return Calendar.getInstance().getTime();
     }
 
@@ -40,7 +40,7 @@ public class DateProvider {
      * Function to get the date ten days ago
      * @return date ten days ago
      */
-    public Date daysAgo(int days) {
+    Date daysAgo(int days) {
         return new Date(now().getTime() - (days * DAY_MS));
     }
 }
