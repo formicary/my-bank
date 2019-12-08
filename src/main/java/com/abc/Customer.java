@@ -73,14 +73,14 @@ public class Customer {
      * @return statement of the customer
      */
     public String getStatement() {
-        String statement = "Statement for " + name + "\n";
+        StringBuilder stringBuilder = new StringBuilder("Statement for " + name + "\n");
         double total = 0.0;
         for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
+            stringBuilder.append("\n" + statementForAccount(a) + "\n");
             total += a.sumTransactions();
         }
-        statement += "\nTotal In All Accounts " + toDollars(total);
-        return statement;
+        stringBuilder.append("\nTotal In All Accounts " + toDollars(total));
+        return stringBuilder.toString();
     }
 
     /**
@@ -89,28 +89,28 @@ public class Customer {
      * @return the statement of the account
      */
     private String statementForAccount(Account account) {
-        String s = "";
+        StringBuilder stringBuilder = new StringBuilder();
 
         // Translate to pretty account type
         switch (account.getAccountType()) {
             case CHECKING:
-                s += "Checking Account\n";
+                stringBuilder.append("Checking Account\n");
                 break;
             case SAVINGS:
-                s += "Savings Account\n";
+                stringBuilder.append("Savings Account\n");
                 break;
             case MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
+                stringBuilder.append("Maxi Savings Account\n");
                 break;
         }
 
         double total = 0.0;
         for (Transaction t : account.getTransactions()) {
-            s += "  " + (t.getAmount() < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.getAmount()) + "\n";
+            stringBuilder.append("  " + (t.getAmount() < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.getAmount()) + "\n");
             total += t.getAmount();
         }
-        s += "Total " + toDollars(total);
-        return s;
+        stringBuilder.append("Total " + toDollars(total));
+        return stringBuilder.toString();
     }
 
     /**
