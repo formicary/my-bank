@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * Class to handle transaction level functions
  */
-public class Transaction {
+class Transaction {
 
     /**
      * Amount of the transaction
@@ -21,7 +21,7 @@ public class Transaction {
      * Constructor of the Transaction class
      * @param amount amount of the transaciton
      */
-    public Transaction(double amount) {
+    Transaction(double amount) {
         this.amount = amount;
         this.transactionDate = DateProvider.getInstance().now();
     }
@@ -30,7 +30,7 @@ public class Transaction {
      * Getter of the transaction date
      * @return transaction date
      */
-    public Date getTransactionDate() {
+    Date getTransactionDate() {
         return transactionDate;
     }
 
@@ -38,7 +38,7 @@ public class Transaction {
      * Getter of the amount
      * @return amount of the transaction
      */
-    public double getAmount() {
+    double getAmount() {
         return amount;
     }
 }
