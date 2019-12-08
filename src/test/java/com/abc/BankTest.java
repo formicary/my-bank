@@ -12,10 +12,10 @@ public class BankTest {
 
     private static final double DOUBLE_DELTA = 1e-15;
 
-    @Test
     /**
      * Test getting the summary of a customer
      */
+    @Test
     public void customerSummary() {
         Bank bank = new Bank();
         Customer john = new Customer("John");
@@ -25,10 +25,10 @@ public class BankTest {
         assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
     }
 
-    @Test
     /**
      * Test getting the interest earned from a checking account
      */
+    @Test
     public void checkingAccount() {
         Bank bank = new Bank();
         Account checkingAccount = new Account(AccountType.CHECKING);
@@ -40,10 +40,10 @@ public class BankTest {
         assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
-    @Test
     /**
      * Test getting the interest earned from a saving account
      */
+    @Test
     public void savingsAccount() {
         Bank bank = new Bank();
         Account checkingAccount = new Account(AccountType.SAVINGS);
@@ -54,10 +54,10 @@ public class BankTest {
         assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
-    @Test
     /**
      * Test getting the interest earned from a maxi saving account with no withdrawals
      */
+    @Test
     public void maxiSavingsAccountWithNoWithdrawals() {
         Bank bank = new Bank();
         Account checkingAccount = new Account(AccountType.MAXI_SAVINGS);
@@ -68,10 +68,10 @@ public class BankTest {
         assertEquals(150.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
-    @Test
     /**
      * Test getting the interest earned from a maxi saving account with withdrawals older than ten days
      */
+    @Test
     public void maxiSavingsAccountWithWithdrawalsOlderThanTenDays() {
         Bank bank = new Bank();
         Account checkingAccount = new Account(AccountType.MAXI_SAVINGS);

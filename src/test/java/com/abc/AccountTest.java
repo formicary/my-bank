@@ -12,10 +12,10 @@ public class AccountTest {
 
     private static final double DOUBLE_DELTA = 1e-15;
 
-    @Test
     /**
      * Test transferring money between two accounts
      */
+    @Test
     public void testTransferringBetweenAccounts() {
         Bank bank = new Bank();
         Account checkingAccount = new Account(AccountType.CHECKING);

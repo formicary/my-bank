@@ -10,10 +10,10 @@ import static org.junit.Assert.assertEquals;
  */
 public class CustomerTest {
 
-    @Test
     /**
      * Test customer statement generation
      */
+    @Test
     public void testCustomerStatementGeneration(){
         Account checkingAccount = new Account(AccountType.CHECKING);
         Account savingsAccount = new Account(AccountType.SAVINGS);
@@ -38,19 +38,19 @@ public class CustomerTest {
                 "Total In All Accounts $3,900.00", henry.getStatement());
     }
 
-    @Test
     /**
      * Test opening one account
      */
+    @Test
     public void testOpeningOneAccounts(){
         Customer oscar = new Customer("Oscar").openAccount(new Account(AccountType.SAVINGS));
         assertEquals(1, oscar.getNumberOfAccounts());
     }
 
-    @Test
     /**
      * Test opening two accounts
      */
+    @Test
     public void testOpeningTwoAccounts(){
         Customer oscar = new Customer("Oscar")
                 .openAccount(new Account(AccountType.SAVINGS));
@@ -58,10 +58,10 @@ public class CustomerTest {
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
-    @Test
     /**
      * Test opening three accounts
      */
+    @Test
     public void testOpeningThreeAccounts() {
         Customer oscar = new Customer("Oscar")
                 .openAccount(new Account(AccountType.SAVINGS));
