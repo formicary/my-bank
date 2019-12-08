@@ -19,6 +19,11 @@ class DateProvider {
     private final int DAY_MS = 1000 * 60 * 60 * 24;
 
     /**
+     * Private constructor to prevent creating other instance of the singleton
+     */
+    private DateProvider(){}
+
+    /**
      * Singleton accessor
      * @return singleton of the DateProvider class
      */
