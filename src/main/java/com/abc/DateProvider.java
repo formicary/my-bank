@@ -40,7 +40,7 @@ public class DateProvider {
      * Function to get the date ten days ago
      * @return date ten days ago
      */
-    public Date tenDaysAgo() {
-        return new Date(now().getTime() - (10 * DAY_MS));
+    public Date daysAgo(int days) {
+        return new Date(now().getTime() - (days * DAY_MS));
     }
 }

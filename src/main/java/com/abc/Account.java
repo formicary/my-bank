@@ -65,7 +65,7 @@ public class Account {
                 }
                 return 1 + (amount - 1000) * 0.002;
             case MAXI_SAVINGS:
-                if (hasWithdrawalInPastTenDays()) {
+                if (hasWithdrawalInPastDays(10)) {
                     return amount * 0.001;
                 }
                 return amount * 0.05;
@@ -106,8 +106,8 @@ public class Account {
      * Function to check if the account has a withdrawal in the past ten days
      * @return boolean that checks if the account has a withdrawal in the past 10 days
      */
-    private boolean hasWithdrawalInPastTenDays() {
-        Date tenDaysAgo = new DateProvider().tenDaysAgo();
+    private boolean hasWithdrawalInPastDays(int days) {
+        Date tenDaysAgo = new DateProvider().daysAgo(10);
         for (int i = 0; i < transactions.size(); i++) {
             Transaction t = transactions.get(i);
             if (t.getTransactionDate().after(tenDaysAgo) && t.getAmount() < 0) {
