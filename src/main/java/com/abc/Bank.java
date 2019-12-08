@@ -33,11 +33,11 @@ public class Bank {
      * @return the summary of all the customers
      */
     public String customerSummary() {
-        String summary = "Customer Summary";
+        StringBuilder stringBuilder = new StringBuilder("Customer Summary");
         for (Customer c : customers) {
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
+            stringBuilder.append("\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")");
         }
-        return summary;
+        return stringBuilder.toString();
     }
 
     /**
