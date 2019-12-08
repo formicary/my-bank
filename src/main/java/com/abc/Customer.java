@@ -76,10 +76,13 @@ class Customer {
         StringBuilder stringBuilder = new StringBuilder("Statement for " + name + "\n");
         double total = 0.0;
         for (Account a : accounts) {
-            stringBuilder.append("\n" + statementForAccount(a) + "\n");
+            stringBuilder.append("\n");
+            stringBuilder.append(statementForAccount(a));
+            stringBuilder.append("\n");
             total += a.sumTransactions();
         }
-        stringBuilder.append("\nTotal In All Accounts " + toDollars(total));
+        stringBuilder.append("\nTotal In All Accounts ");
+        stringBuilder.append(toDollars(total));
         return stringBuilder.toString();
     }
 
@@ -106,10 +109,15 @@ class Customer {
 
         double total = 0.0;
         for (Transaction t : account.getTransactions()) {
-            stringBuilder.append("  " + (t.getAmount() < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.getAmount()) + "\n");
+            stringBuilder.append("  ");
+            stringBuilder.append((t.getAmount() < 0 ? "withdrawal" : "deposit"));
+            stringBuilder.append(" ");
+            stringBuilder.append(toDollars(t.getAmount()));
+            stringBuilder.append("\n");
             total += t.getAmount();
         }
-        stringBuilder.append("Total " + toDollars(total));
+        stringBuilder.append("Total ");
+        stringBuilder.append(toDollars(total));
         return stringBuilder.toString();
     }
 
