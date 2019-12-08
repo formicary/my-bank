@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Class that handles the customer's account
+ */
 public class Account {
 
     /**
