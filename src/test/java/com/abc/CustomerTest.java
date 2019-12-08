@@ -62,7 +62,7 @@ public class CustomerTest {
     /**
      * Test opening three accounts
      */
-    public void testOpeningThreeAcounts() {
+    public void testOpeningThreeAccounts() {
         Customer oscar = new Customer("Oscar")
                 .openAccount(new Account(AccountType.SAVINGS));
         oscar.openAccount(new Account(AccountType.CHECKING));
