@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Class that handles bank-level functions such as adding customers and getting their summaries
  */
-public class Bank {
+class Bank {
 
     /**
      * List of customers of the bank
@@ -16,7 +16,7 @@ public class Bank {
     /**
      * Constructor of the class
      */
-    public Bank() {
+    Bank() {
         customers = new ArrayList<Customer>();
     }
 
@@ -24,7 +24,7 @@ public class Bank {
      * Function to add customers to the bank
      * @param customer customer to add to the bank
      */
-    public void addCustomer(Customer customer) {
+    void addCustomer(Customer customer) {
         customers.add(customer);
     }
 
@@ -32,7 +32,7 @@ public class Bank {
      * Function to get the summary of all the customers
      * @return the summary of all the customers
      */
-    public String customerSummary() {
+    String customerSummary() {
         StringBuilder stringBuilder = new StringBuilder("Customer Summary");
         for (Customer c : customers) {
             stringBuilder.append("\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")");
@@ -55,7 +55,7 @@ public class Bank {
      * Function to calculate the total interest paid for all the customers
      * @return total interest paid to all customers of the bank
      */
-    public double totalInterestPaid() {
+    double totalInterestPaid() {
         double total = 0;
         for (Customer c : customers) {
             total += c.totalInterestEarned();
