@@ -8,14 +8,29 @@ import java.util.List;
 
 public class Account {
 
+    /**
+     * Type of account
+     */
     private final AccountType accountType;
+
+    /**
+     * List containing all the transactions
+     */
     private List<Transaction> transactions;
 
+    /**
+     * Constructor of the Account class
+     * @param accountType the type of the account
+     */
     public Account(AccountType accountType) {
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
     }
 
+    /**
+     * Function to deposit money into the account
+     * @param amount amount to deposit into the account
+     */
     public void deposit(double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
@@ -23,6 +38,10 @@ public class Account {
         transactions.add(new Transaction(amount));
     }
 
+    /**
+     * Function to withdraw money from the account
+     * @param amount amount to withdraw from the account
+     */
     public void withdraw(double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
@@ -30,6 +49,10 @@ public class Account {
         transactions.add(new Transaction(-amount));
     }
 
+    /**
+     * Function to get the interest earned from the account
+     * @return the interest earned from the account
+     */
     public double interestEarned() {
         double amount = sumTransactions();
         switch (accountType) {
@@ -48,6 +71,10 @@ public class Account {
         }
     }
 
+    /**
+     * Function to provide the sum of transactions on the account
+     * @return the balance of the account
+     */
     public double sumTransactions() {
         double amount = 0.0;
         for (Transaction t : transactions) {
@@ -56,6 +83,11 @@ public class Account {
         return amount;
     }
 
+    /**
+     * Function to transfer money between the accounts
+     * @param account account that will receive the money
+     * @param amount amount that will be transferred
+     */
     public void transferTo(Account account, double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
@@ -67,6 +99,10 @@ public class Account {
         account.transactions.add(new Transaction(amount));
     }
 
+    /**
+     * Function to check if the account has a withdrawal in the past ten days
+     * @return boolean that checks if the account has a withdrawal in the past 10 days
+     */
     public boolean hasWithdrawalInPastTenDays() {
         Date tenDaysAgo = new DateProvider().tenDaysAgo();
         for (int i = 0; i < transactions.size(); i++) {
@@ -78,10 +114,18 @@ public class Account {
         return false;
     }
 
+    /**
+     * Getter for the account type
+     * @return account type
+     */
     public AccountType getAccountType() {
         return accountType;
     }
 
+    /**
+     * Getter for the transactions
+     * @return list of transactions
+     */
     public List<Transaction> getTransactions() {
         return transactions;
     }
