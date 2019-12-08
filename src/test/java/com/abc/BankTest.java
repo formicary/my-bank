@@ -5,11 +5,17 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * Tests for the Bank class
+ */
 public class BankTest {
 
     private static final double DOUBLE_DELTA = 1e-15;
 
     @Test
+    /**
+     * Test getting the summary of a customer
+     */
     public void customerSummary() {
         Bank bank = new Bank();
         Customer john = new Customer("John");
@@ -20,6 +26,9 @@ public class BankTest {
     }
 
     @Test
+    /**
+     * Test getting the interest earned from a checking account
+     */
     public void checkingAccount() {
         Bank bank = new Bank();
         Account checkingAccount = new Account(AccountType.CHECKING);
@@ -32,6 +41,9 @@ public class BankTest {
     }
 
     @Test
+    /**
+     * Test getting the interest earned from a saving account
+     */
     public void savingsAccount() {
         Bank bank = new Bank();
         Account checkingAccount = new Account(AccountType.SAVINGS);
@@ -43,6 +55,9 @@ public class BankTest {
     }
 
     @Test
+    /**
+     * Test getting the interest earned from a maxi saving account with no withdrawals
+     */
     public void maxiSavingsAccountWithNoWithdrawals() {
         Bank bank = new Bank();
         Account checkingAccount = new Account(AccountType.MAXI_SAVINGS);
@@ -54,6 +69,9 @@ public class BankTest {
     }
 
     @Test
+    /**
+     * Test getting the interest earned from a maxi saving account with withdrawals older than ten days
+     */
     public void maxiSavingsAccountWithWithdrawalsOlderThanTenDays() {
         Bank bank = new Bank();
         Account checkingAccount = new Account(AccountType.MAXI_SAVINGS);
