@@ -10,7 +10,7 @@ public class AccountTest {
     private static final double DOUBLE_DELTA = 1e-15;
 
     @Test
-    public void testTransferringBetweenAcounts() {
+    public void testTransferringBetweenAccounts() {
         Bank bank = new Bank();
         Account checkingAccount = new Account(AccountType.CHECKING);
         Customer bill = new Customer("Bill").openAccount(checkingAccount);
