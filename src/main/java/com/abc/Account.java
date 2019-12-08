@@ -103,7 +103,7 @@ public class Account {
      * Function to check if the account has a withdrawal in the past ten days
      * @return boolean that checks if the account has a withdrawal in the past 10 days
      */
-    public boolean hasWithdrawalInPastTenDays() {
+    private boolean hasWithdrawalInPastTenDays() {
         Date tenDaysAgo = new DateProvider().tenDaysAgo();
         for (int i = 0; i < transactions.size(); i++) {
             Transaction t = transactions.get(i);
