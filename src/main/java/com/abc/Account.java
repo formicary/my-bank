@@ -3,6 +3,7 @@ package com.abc;
 import com.abc.types.AccountType;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Account {
@@ -38,13 +39,10 @@ public class Account {
                 }
                 return 1 + (amount - 1000) * 0.002;
             case MAXI_SAVINGS:
-                if (amount <= 1000) {
-                    return amount * 0.02;
+                if (hasWithdrawalInPastTenDays()) {
+                    return amount * 0.001;
                 }
-                if (amount <= 2000) {
-                    return 20 + (amount - 1000) * 0.05;
-                }
-                return 70 + (amount - 2000) * 0.1;
+                return amount * 0.05;
             default:
                 return amount * 0.001;
         }
@@ -53,7 +51,7 @@ public class Account {
     public double sumTransactions() {
         double amount = 0.0;
         for (Transaction t : transactions) {
-            amount += t.amount;
+            amount += t.getAmount();
         }
         return amount;
     }
@@ -67,6 +65,17 @@ public class Account {
         }
         transactions.add(new Transaction(-amount));
         account.transactions.add(new Transaction(amount));
+    }
+
+    public boolean hasWithdrawalInPastTenDays() {
+        Date tenDaysAgo = new DateProvider().tenDaysAgo();
+        for (int i = 0; i < transactions.size(); i++) {
+            Transaction t = transactions.get(i);
+            if (t.getTransactionDate().after(tenDaysAgo) && t.getAmount() < 0) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public AccountType getAccountType() {
