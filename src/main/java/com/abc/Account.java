@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Class that handles the customer's account
  */
-public class Account {
+class Account {
 
     /**
      * Type of account
@@ -25,7 +25,7 @@ public class Account {
      * Constructor of the Account class
      * @param accountType the type of the account
      */
-    public Account(AccountType accountType) {
+    Account(AccountType accountType) {
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
     }
@@ -34,7 +34,7 @@ public class Account {
      * Function to deposit money into the account
      * @param amount amount to deposit into the account
      */
-    public void deposit(double amount) {
+    void deposit(double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         }
@@ -45,7 +45,7 @@ public class Account {
      * Function to withdraw money from the account
      * @param amount amount to withdraw from the account
      */
-    public void withdraw(double amount) {
+    void withdraw(double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         }
@@ -56,7 +56,7 @@ public class Account {
      * Function to get the interest earned from the account
      * @return the interest earned from the account
      */
-    public double interestEarned() {
+    double interestEarned() {
         double amount = sumTransactions();
         switch (accountType) {
             case SAVINGS:
@@ -78,7 +78,7 @@ public class Account {
      * Function to provide the sum of transactions on the account
      * @return the balance of the account
      */
-    public double sumTransactions() {
+    double sumTransactions() {
         double amount = 0.0;
         for (Transaction t : transactions) {
             amount += t.getAmount();
@@ -91,7 +91,7 @@ public class Account {
      * @param account account that will receive the money
      * @param amount amount that will be transferred
      */
-    public void transferTo(Account account, double amount) {
+    void transferTo(Account account, double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         }
@@ -121,7 +121,7 @@ public class Account {
      * Getter for the account type
      * @return account type
      */
-    public AccountType getAccountType() {
+    AccountType getAccountType() {
         return accountType;
     }
 
@@ -129,7 +129,7 @@ public class Account {
      * Getter for the transactions
      * @return list of transactions
      */
-    public List<Transaction> getTransactions() {
+    List<Transaction> getTransactions() {
         return transactions;
     }
 
