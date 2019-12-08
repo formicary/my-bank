@@ -5,9 +5,15 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * Tests of the Customer class
+ */
 public class CustomerTest {
 
     @Test
+    /**
+     * Test customer statement generation
+     */
     public void testCustomerStatementGeneration(){
         Account checkingAccount = new Account(AccountType.CHECKING);
         Account savingsAccount = new Account(AccountType.SAVINGS);
@@ -33,12 +39,18 @@ public class CustomerTest {
     }
 
     @Test
+    /**
+     * Test opening one account
+     */
     public void testOpeningOneAccounts(){
         Customer oscar = new Customer("Oscar").openAccount(new Account(AccountType.SAVINGS));
         assertEquals(1, oscar.getNumberOfAccounts());
     }
 
     @Test
+    /**
+     * Test opening two accounts
+     */
     public void testOpeningTwoAccounts(){
         Customer oscar = new Customer("Oscar")
                 .openAccount(new Account(AccountType.SAVINGS));
@@ -47,6 +59,9 @@ public class CustomerTest {
     }
 
     @Test
+    /**
+     * Test opening three accounts
+     */
     public void testOpeningThreeAcounts() {
         Customer oscar = new Customer("Oscar")
                 .openAccount(new Account(AccountType.SAVINGS));
