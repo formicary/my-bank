@@ -2,20 +2,17 @@ package com.abc;
 
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 // Rename to Tests
 public class TransactionTest {
+    private static final double DOUBLE_DELTA = 1e-15;
+    
     @Test
-    // Need more meaningful test
-    public void transaction() {
-        Transaction t = new Transaction(5);
-        assertTrue(t instanceof Transaction);
-    }
+    public void Transaction_WhenCreated_ContainsCorrectAmountAndDateTime(){
+        Transaction transaction = new Transaction(50.0);
 
-    @Test
-    public void Deposit_WhenCalledWithAmountLessThan0_ThrowsArgumentError(){
-        // Create a new transaction
-
-        // Add it to the
+        assertEquals(50.0, transaction.amount, DOUBLE_DELTA);
+        // Test for date/time
     }
 }

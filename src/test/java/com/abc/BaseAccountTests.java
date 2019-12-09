@@ -1,10 +1,11 @@
 package com.abc;
 
 import com.abc.account_types.BaseAccount;
+import com.abc.account_types.CheckingAccount;
+import com.abc.account_types.SavingsAccount;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.mockito.Mockito;
 
 import static org.junit.Assert.assertEquals;
 
@@ -86,10 +87,58 @@ public class BaseAccountTests {
 
         assertEquals(0, result, DOUBLE_DELTA);
     }
+
+    // Need to decide on leading capital
+    @Test
+    public void getAccountSummary_WhenCalledWithNoTransactionInAccount_ReturnsEmptySavingsSummary(){
+        SavingsAccount account = new SavingsAccount();
+
+        String result = account.getAccountSummary();
+
+        assertEquals("SavingsAccount\nTotal: $0.00", result);
+    }
+
+    @Test
+    public void getAccountSummary_WhenCalledWithNegativeTransactionInAccount_ReturnsNegativeSavingsSummary(){
+        SavingsAccount account = new SavingsAccount();
+        account.withdraw(50);
+
+        String result = account.getAccountSummary();
+
+        assertEquals("SavingsAccount\nWithdraw: $50.00\nTotal Balance: -$50.00", result);
+    }
+
+    @Test
+    public void getAccountSummary_WhenCalledWithPositiveTransactionInAccount_ReturnsPositiveSavingsSummary(){
+        SavingsAccount account = new SavingsAccount();
+        account.deposit(100);
+
+        String result = account.getAccountSummary();
+
+        assertEquals("SavingsAccount\nDeposit: $100.00\nTotal: $100.00", result);
+    }
+
+    // Make a test for both?
+
+    @Test
+    public void getInterestEarned_WhenCalledWithBalanceIsLessThan1000_ReturnsCorrectInterest(){
+        SavingsAccount account = new SavingsAccount();
+
+        account.deposit(500);
+
+        double result = account.getInterestEarned();
+
+        assertEquals(0.05, result, DOUBLE_DELTA);
+    }
 }
 
 class BaseAccountTestClass extends BaseAccount{
-    public String getAccountType() {
+
+    public String getAccountSummary() {
+        return null;
+    }
+
+    public Constants.AccountTypes getAccountType() {
         return null;
     }
 

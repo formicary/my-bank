@@ -8,15 +8,8 @@ import static org.junit.Assert.assertEquals;
 public class SavingsAccountTests {
     private static final double DOUBLE_DELTA = 1e-15;
 
-    @Test
     // Need to decide on leading capital
-    public void GetAccountType_WhenCalled_ReturnsSavingsAccount(){
-        SavingsAccount account = new SavingsAccount();
-
-        String result = account.getAccountType();
-
-        assertEquals("Savings Account", result);
-    }
+    // Make a test for both?
 
     @Test
     public void getInterestEarned_WhenCalledWithBalanceIsLessThan1000_ReturnsCorrectInterest(){
@@ -37,7 +30,7 @@ public class SavingsAccountTests {
 
         double result = account.getInterestEarned();
 
-        assertEquals(0.05, result, DOUBLE_DELTA);
+        assertEquals(0.5, result, DOUBLE_DELTA);
     }
 
     @Test

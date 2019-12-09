@@ -14,9 +14,9 @@ public class CheckingAccountTests {
     public void GetAccountType_WhenCalled_ReturnsCheckingAccount(){
         CheckingAccount account = new CheckingAccount();
 
-        String result = account.getAccountType();
+        Constants.AccountTypes result = account.getAccountType();
 
-        assertEquals("Checking Account", result);
+        assertEquals(Constants.AccountTypes.CheckingAccount, result);
     }
 
     @Test

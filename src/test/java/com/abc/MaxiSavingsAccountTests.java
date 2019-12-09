@@ -13,7 +13,7 @@ public class MaxiSavingsAccountTests {
     public void GetAccountType_WhenCalled_ReturnsMaxiSavingsAccount(){
         MaxiSavingAccount account = new MaxiSavingAccount();
 
-        String result = account.getAccountType();
+        Constants.AccountTypes result = account.getAccountType();
 
         assertEquals("Savings Account", result);
     }

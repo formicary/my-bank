@@ -1,8 +1,10 @@
 package com.abc.account_types;
 
+import com.abc.Constants.AccountTypes;
+
 public class SavingsAccount extends BaseAccount {
-    public String getAccountType() {
-        return "Savings Account";
+    public AccountTypes getAccountType() {
+        return AccountTypes.SavingsAccount;
     }
 
     public double getInterestEarned() {
