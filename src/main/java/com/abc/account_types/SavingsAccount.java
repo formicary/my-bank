@@ -3,6 +3,7 @@ package com.abc.account_types;
 import com.abc.Constants.AccountTypes;
 
 public class SavingsAccount extends BaseAccount {
+    // Maybe protected?
     public AccountTypes getAccountType() {
         return AccountTypes.SavingsAccount;
     }

@@ -12,6 +12,18 @@ public class MaxiSavingAccount extends BaseAccount {
     }
 
     public double getInterestEarned() {
-        return 0;
+        double amount = sumTransactions();
+
+        if(amount < 0){
+            return 0;
+        }
+
+        if(amount <= 1000){
+            return amount * 0.02;
+        } else if (amount > 1000 && amount <= 2000){
+            return amount * 0.05;
+        } else {
+            return amount * 0.1;
+        }
     }
 }

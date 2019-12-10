@@ -15,18 +15,18 @@ public class MaxiSavingsAccountTests {
 
         Constants.AccountTypes result = account.getAccountType();
 
-        assertEquals("Savings Account", result);
+        assertEquals(Constants.AccountTypes.MaxiSavingsAccount, result);
     }
 
     @Test
     public void getInterestEarned_WhenCalledWithBalanceIsLessThan1000_ReturnsCorrectInterestAt2(){
         MaxiSavingAccount account = new MaxiSavingAccount();
 
-        account.deposit(500);
+        account.deposit(100);
 
         double result = account.getInterestEarned();
 
-        assertEquals(0.05, result, DOUBLE_DELTA);
+        assertEquals(2, result, DOUBLE_DELTA);
     }
 
     //TODO: Fix these interest rates
@@ -34,11 +34,22 @@ public class MaxiSavingsAccountTests {
     public void getInterestEarned_WhenCalledWithBalanceBetween2000To3000_ReturnsCorrectInterestAt5(){
         MaxiSavingAccount account = new MaxiSavingAccount();
 
+        account.deposit(2000);
+
+        double result = account.getInterestEarned();
+
+        assertEquals(100, result, DOUBLE_DELTA);
+    }
+
+    @Test
+    public void getInterestEarned_WhenCalledWithBalanceMoreThan3000_ReturnsCorrectInterestAt10(){
+        MaxiSavingAccount account = new MaxiSavingAccount();
+
         account.deposit(5000);
 
         double result = account.getInterestEarned();
 
-        assertEquals(0.05, result, DOUBLE_DELTA);
+        assertEquals(500, result, DOUBLE_DELTA);
     }
 
     @Test

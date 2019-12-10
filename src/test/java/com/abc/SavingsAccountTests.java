@@ -11,6 +11,8 @@ public class SavingsAccountTests {
     // Need to decide on leading capital
     // Make a test for both?
 
+    // Get account type?
+
     @Test
     public void getInterestEarned_WhenCalledWithBalanceIsLessThan1000_ReturnsCorrectInterest(){
         SavingsAccount account = new SavingsAccount();
