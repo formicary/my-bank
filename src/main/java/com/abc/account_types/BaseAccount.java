@@ -51,13 +51,13 @@ public abstract class BaseAccount {
             total += t.amount;
         }
 
-        summary += "Total " + toDollars(total);
+        summary += "Total: " + toDollars(total);
 
         return summary;
     }
 
     private String toDollars(double d){
-        return String.format("$%,.2f", abs(d));
+        return String.format("$%,.2f", d);
     }
 
     abstract public AccountTypes getAccountType();
