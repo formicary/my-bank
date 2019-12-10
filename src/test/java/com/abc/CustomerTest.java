@@ -4,6 +4,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class CustomerTest {
 
@@ -53,5 +54,105 @@ public class CustomerTest {
                 .openAccount(new Account(Account.SAVINGS));
         oscar.openAccount(new Account(Account.CHECKING));
         assertEquals(3, oscar.getNumberOfAccounts());
+    }
+    
+    @Test
+    public void testTransferBetweenAccount() {
+    	try {
+    		Customer oscar = new Customer("Oscar");
+        	Account accOne = new Account(Account.CHECKING);
+        	Account accTwo = new Account(Account.CHECKING);
+        	
+        	accOne.deposit(100);
+        	
+        	oscar.openAccount(accOne);
+        	oscar.openAccount(accTwo);
+        	
+        	oscar.transferTo(accOne, accTwo, 100);
+    	}
+    	catch(IllegalArgumentException e) {
+    		fail(e.getMessage());
+    	}
+    }
+    
+    @Test
+    public void testTransferBetweenSameAccount() {
+    	boolean transferAllowed = true;
+    	try {
+    		Customer oscar = new Customer("Oscar");
+        	Account accOne = new Account(Account.CHECKING);
+        	
+        	accOne.deposit(100);
+        	
+        	oscar.openAccount(accOne);
+        	
+        	oscar.transferTo(accOne, accOne, 100);
+    	}
+    	catch(IllegalArgumentException e) {
+    		transferAllowed = false;
+    	}
+    	
+    	assertEquals(false, transferAllowed);
+    }
+    
+    @Test
+    public void testTransferAccountUserDoesntOwnBothAccounts() {
+    	boolean transferAllowed = true;
+    	try {
+    		Customer oscar = new Customer("Oscar");
+        	Account accOne = new Account(Account.CHECKING);
+        	Account accTwo = new Account(Account.CHECKING);
+        	
+        	accOne.deposit(100);
+        	
+        	oscar.openAccount(accOne);
+        	
+        	oscar.transferTo(accOne, accTwo, 100);
+    	}
+    	catch(IllegalArgumentException e) {
+    		transferAllowed = false;
+    	}
+    	
+    	assertEquals(false, transferAllowed);
+    }
+    
+    @Test
+    public void testTransferAccountUserDoesOwnFail() {
+    	try {
+    		Customer oscar = new Customer("Oscar");
+        	Account accOne = new Account(Account.CHECKING);
+        	Account accTwo = new Account(Account.CHECKING);
+        	
+        	accOne.deposit(100);
+        	
+        	oscar.openAccount(accOne);
+        	oscar.openAccount(accTwo);
+        	
+        	oscar.transferTo(accOne, accTwo, 100);
+    	}
+    	catch(IllegalArgumentException e) {
+    		fail(e.getMessage());
+    	}
+    }
+    
+    @Test
+    public void testTransferAccountUserWithInvalidAmount() {
+    	boolean transferAllowed = true;
+    	try {
+    		Customer oscar = new Customer("Oscar");
+        	Account accOne = new Account(Account.CHECKING);
+        	Account accTwo = new Account(Account.CHECKING);
+        	
+        	oscar.openAccount(accOne);
+        	oscar.openAccount(accTwo);
+        	
+        	oscar.transferTo(accOne, accTwo, -10);
+        	
+    	}
+    	catch(IllegalArgumentException e) {
+    		transferAllowed = false;
+    	}
+    	
+    	assertEquals(false, transferAllowed);
     }
 }

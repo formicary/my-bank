@@ -71,6 +71,43 @@ public class Customer {
         s += "Total " + toDollars(total);
         return s;
     }
+    
+    /**
+     * @param Account "accFrom" to transfer money from to Account "accTo" a double value of "amount"
+     * @return void
+     * Make sure the two objects are not the same, prevent transfer into the same account,
+     * and user owns both accounts, as specification mentions,
+     * before calling tranfer on "accFrom" with "accTo" as parameter
+     **/
+    public void transferTo(Account accFrom, Account accTo, double amount) {
+        //check if accounts are unique
+    	if(accFrom.equals(accTo)) {
+    		throw new IllegalArgumentException("Accounts must be unique");
+    	}
+    	else {
+    		//checking if user owns both accounts
+        	boolean isAccFromValid = false;
+        	boolean isAccToValid = false;
+        	
+        	for(Account a: accounts) {
+        		if(accFrom.equals(a)) {
+        			isAccFromValid = true;
+        		}
+        		else if(accTo.equals(a)) {
+        			isAccToValid = true;
+        		}
+        	}
+        	
+        	if(!isAccFromValid || !isAccToValid) {
+        		throw new IllegalArgumentException("User must own both accounts");
+        	}
+        	else {
+        		accFrom.withdraw(amount);
+        		accTo.deposit(amount);
+        	}
+        	
+    	}
+    }
 
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));

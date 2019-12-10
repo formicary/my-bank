@@ -26,7 +26,7 @@ public class BankTest {
 
         checkingAccount.deposit(100.0);
 
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(0.00027397260273972606, bank.totalInterestPaid(), DOUBLE_DELTA); //calculated hard coded value with a calculator
     }
 
     @Test
@@ -37,7 +37,7 @@ public class BankTest {
 
         checkingAccount.deposit(1500.0);
 
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(1.0027397260273974, bank.totalInterestPaid(), DOUBLE_DELTA); //calculated hard coded value with a calculator
     }
 
     @Test
@@ -48,7 +48,31 @@ public class BankTest {
 
         checkingAccount.deposit(3000.0);
 
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(0.4109589041095891, bank.totalInterestPaid(), DOUBLE_DELTA); //calculated hard coded value with a calculator
     }
-
+    
+    @Test
+    public void checkMaxiSavingInterestValidWithRecentWithdrawal() {
+    	Bank bank = new Bank();
+    	Account acc = new Account(Account.MAXI_SAVINGS);
+        bank.addCustomer(new Customer("Bill").openAccount(acc));
+    	
+    	
+    	acc.deposit(200);
+    	acc.withdraw(100);
+    	
+    	assertEquals(0.00027397260273972606,acc.interestEarned(),DOUBLE_DELTA); //calculated hard coded value with a calculator
+    }
+	
+	@Test
+	public void checkSavingUnder1000() {
+		Bank bank = new Bank();
+    	Account acc = new Account(Account.SAVINGS);
+        bank.addCustomer(new Customer("Bill").openAccount(acc));
+    	
+    	
+    	acc.deposit(100);
+    	
+    	assertEquals(0.00027397260273972606,acc.interestEarned(),DOUBLE_DELTA); //calculated hard coded value with a calculator
+	}
 }
