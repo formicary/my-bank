@@ -9,6 +9,7 @@ import org.junit.rules.ExpectedException;
 
 import static com.abc.TestConstants.DOUBLE_DELTA;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class BaseAccountTests {
     BaseAccountTestClass account;
@@ -46,11 +47,12 @@ public class BaseAccountTests {
     }
 
     @Test
-    public void withdraw_WhenCalledWithValue_AddsTransaction() {
+    public void withdraw_WhenCalledWithValue_AddsTransactionAndSetsDate() {
         account.withdraw(50);
 
         Transaction transaction = account.transactions.get(0);
         assertEquals(-50, transaction.amount, DOUBLE_DELTA);
+        assertNotNull(account.lastWithdrawal);
     }
 
     @Test

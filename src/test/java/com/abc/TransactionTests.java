@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import static com.abc.TestConstants.DOUBLE_DELTA;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+
 public class TransactionTests {
     @Test
     public void Transaction_WhenCreated_ContainsCorrectAmountAndDateTime(){

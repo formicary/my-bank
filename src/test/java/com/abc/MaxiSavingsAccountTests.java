@@ -9,6 +9,8 @@ import static com.abc.TestConstants.DOUBLE_DELTA;
 import static org.junit.Assert.assertEquals;
 import com.abc.shared.Constants.AccountTypes;
 
+import java.util.Date;
+
 
 public class MaxiSavingsAccountTests {
     MaxiSavingAccount account;
@@ -26,30 +28,32 @@ public class MaxiSavingsAccountTests {
     }
 
     @Test
-    public void getInterestEarned_WhenCalledWithBalanceIsLessThan1000_ReturnsCorrectInterestAt2(){
+    public void getInterestEarned_WhenCalledWithNoWithdrawalsInLast10Days_ReturnsCorrectInterestAt5(){
+        account.deposit(100);
+        account.lastWithdrawal = new Date(Long.MIN_VALUE);
+
+        double result = account.getInterestEarned();
+
+        assertEquals(5, result, DOUBLE_DELTA);
+    }
+
+    @Test
+    public void getInterestEarned_WhenCalledWithNoWithdrawal_ReturnsCorrectInterestAt5(){
         account.deposit(100);
 
         double result = account.getInterestEarned();
 
-        assertEquals(2, result, DOUBLE_DELTA);
+        assertEquals(5, result, DOUBLE_DELTA);
     }
 
     @Test
-    public void getInterestEarned_WhenCalledWithBalanceBetween2000To3000_ReturnsCorrectInterestAt5(){
-        account.deposit(2000);
+    public void getInterestEarned_WhenCalledWithWithdrawalInLast10Days_ReturnsCorrectInterestAt01(){
+        account.deposit(100);
+        account.withdraw(90);
 
         double result = account.getInterestEarned();
 
-        assertEquals(100, result, DOUBLE_DELTA);
-    }
-
-    @Test
-    public void getInterestEarned_WhenCalledWithBalanceMoreThan3000_ReturnsCorrectInterestAt10(){
-        account.deposit(5000);
-
-        double result = account.getInterestEarned();
-
-        assertEquals(500, result, DOUBLE_DELTA);
+        assertEquals(0.01, result, DOUBLE_DELTA);
     }
 
     @Test

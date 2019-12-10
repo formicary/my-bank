@@ -5,12 +5,15 @@ import com.abc.shared.Constants;
 import com.abc.Transaction;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import static com.abc.shared.Methods.toDollars;
 
 public abstract class BaseAccount {
     public List<Transaction> transactions;
+    public Date lastWithdrawal;
 
     public BaseAccount(){
         this.transactions = new ArrayList<Transaction>();
@@ -32,6 +35,7 @@ public abstract class BaseAccount {
             throw new IllegalArgumentException(Constants.GreaterThanZeroErrorMessage);
         } else {
             transactions.add(new Transaction(-amount));
+            lastWithdrawal = Calendar.getInstance().getTime();
         }
     }
 

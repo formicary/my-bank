@@ -2,6 +2,9 @@ package com.abc.account_types;
 
 import com.abc.shared.Constants.AccountTypes;
 
+import java.util.Calendar;
+import java.util.Date;
+
 public class MaxiSavingAccount extends BaseAccount {
     public AccountTypes getAccountType() { return AccountTypes.MaxiSavingsAccount; }
 
@@ -12,12 +15,14 @@ public class MaxiSavingAccount extends BaseAccount {
             return 0;
         }
 
-        if(amount <= 1000){
-            return amount * 0.02;
-        } else if (amount > 1000 && amount <= 2000){
+        Calendar tenDaysAgo;
+        tenDaysAgo = Calendar.getInstance();
+        tenDaysAgo.add(Calendar.DAY_OF_YEAR, -10);
+
+        if(lastWithdrawal == null || lastWithdrawal.before(tenDaysAgo.getTime())){
             return amount * 0.05;
         } else {
-            return amount * 0.1;
+            return amount * 0.001;
         }
     }
 }
