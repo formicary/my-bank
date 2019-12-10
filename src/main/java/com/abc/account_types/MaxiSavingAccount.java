@@ -1,11 +1,9 @@
 package com.abc.account_types;
 
-import com.abc.Constants;
+import com.abc.shared.Constants.AccountTypes;
 
 public class MaxiSavingAccount extends BaseAccount {
-    public Constants.AccountTypes getAccountType() {
-        return Constants.AccountTypes.MaxiSavingsAccount;
-    }
+    public AccountTypes getAccountType() { return AccountTypes.MaxiSavingsAccount; }
 
     public double getInterestEarned() {
         double amount = sumTransactions();

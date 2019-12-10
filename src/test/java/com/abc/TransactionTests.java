@@ -2,12 +2,10 @@ package com.abc;
 
 import org.junit.Test;
 
+import static com.abc.TestConstants.DOUBLE_DELTA;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-// Rename to Tests
-public class TransactionTest {
-    private static final double DOUBLE_DELTA = 1e-15;
-    
+public class TransactionTests {
     @Test
     public void Transaction_WhenCreated_ContainsCorrectAmountAndDateTime(){
         Transaction transaction = new Transaction(50.0);

@@ -1,38 +1,36 @@
 package com.abc;
 
 import com.abc.account_types.BaseAccount;
-import com.abc.account_types.CheckingAccount;
-import com.abc.account_types.SavingsAccount;
+import com.abc.shared.Constants;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import static com.abc.TestConstants.DOUBLE_DELTA;
 import static org.junit.Assert.assertEquals;
 
 public class BaseAccountTests {
-    private static final double DOUBLE_DELTA = 1e-15;
+    BaseAccountTestClass account;
 
-    // @ BEFORE
+    @Before
+    public void initEach(){
+        account = new BaseAccountTestClass();
+    }
 
     @Rule
     public ExpectedException expectedError = ExpectedException.none();
 
     @Test
-    public void Deposit_WhenCalledWithValueLessThan0_ThrowsIllegalArgumentError(){
+    public void deposit_WhenCalledWithValueLessThan0_ThrowsIllegalArgumentError() {
         expectedError.expect(IllegalArgumentException.class);
         expectedError.expectMessage("Amount must be greater than zero");
 
-        BaseAccountTestClass account = new BaseAccountTestClass();
         account.deposit(-10);
-
-        //BaseAccount account = Mockito.mock(BaseAccount.class, Mockito.CALLS_REAL_METHODS);
     }
 
     @Test
-    public void Deposit_WhenCalledWithValue_AddsTransaction(){
-        //BaseAccount account = Mockito.mock(BaseAccount.class, Mockito.CALLS_REAL_METHODS);
-        BaseAccountTestClass account = new BaseAccountTestClass();
-
+    public void deposit_WhenCalledWithValue_AddsTransaction() {
         account.deposit(10);
 
         Transaction transaction = account.transactions.get(0);
@@ -40,18 +38,15 @@ public class BaseAccountTests {
     }
 
     @Test
-    public void Withdraw_WhenCalledWithValueLessThan0_ThrowsIllegalArgumentError(){
+    public void withdraw_WhenCalledWithValueLessThan0_ThrowsIllegalArgumentError() {
         expectedError.expect(IllegalArgumentException.class);
         expectedError.expectMessage("Amount must be greater than zero");
 
-        BaseAccountTestClass account = new BaseAccountTestClass();
         account.withdraw(-10);
     }
 
     @Test
-    public void Withdraw_WhenCalledWithValue_AddsTransaction(){
-        BaseAccountTestClass account = new BaseAccountTestClass();
-
+    public void withdraw_WhenCalledWithValue_AddsTransaction() {
         account.withdraw(50);
 
         Transaction transaction = account.transactions.get(0);
@@ -59,9 +54,7 @@ public class BaseAccountTests {
     }
 
     @Test
-    public void SumAllTransactions_WhenCalledWithOneTransaction_ReturnsCorrectSum(){
-        BaseAccountTestClass account = new BaseAccountTestClass();
-
+    public void sumAllTransactions_WhenCalledWithOneTransaction_ReturnsCorrectSum() {
         account.deposit(100);
         double result = account.sumTransactions();
 
@@ -69,38 +62,31 @@ public class BaseAccountTests {
     }
 
     @Test
-    public void SumAllTransactions_WhenCalledWithTwoTransactions_ReturnsCorrectSum(){
-        BaseAccountTestClass account = new BaseAccountTestClass();
-
+    public void sumAllTransactions_WhenCalledWithTwoTransactions_ReturnsCorrectSum() {
         account.deposit(100);
         account.deposit(66);
+
         double result = account.sumTransactions();
 
         assertEquals(166, result, DOUBLE_DELTA);
     }
 
     @Test
-    public void SumAllTransactions_WhenCalledWithNoTransactions_Returns0(){
-        BaseAccountTestClass account = new BaseAccountTestClass();
-
+    public void sumAllTransactions_WhenCalledWithNoTransactions_Returns0() {
         double result = account.sumTransactions();
 
         assertEquals(0, result, DOUBLE_DELTA);
     }
 
-    // Need to decide on leading capital
     @Test
-    public void getAccountSummary_WhenCalledWithNoTransactionInAccount_ReturnsEmptySavingsSummary(){
-        BaseAccountTestClass account = new BaseAccountTestClass();
-
+    public void getAccountSummary_WhenCalledWithNoTransactionInAccount_ReturnsEmptySavingsSummary() {
         String result = account.getAccountSummary();
 
         assertEquals("SavingsAccount\nTotal: $0.00", result);
     }
 
     @Test
-    public void getAccountSummary_WhenCalledWithNegativeTransactionInAccount_ReturnsNegativeSavingsSummary(){
-        BaseAccountTestClass account = new BaseAccountTestClass();
+    public void getAccountSummary_WhenCalledWithNegativeTransactionInAccount_ReturnsNegativeSavingsSummary() {
         account.withdraw(50);
 
         String result = account.getAccountSummary();
@@ -109,28 +95,13 @@ public class BaseAccountTests {
     }
 
     @Test
-    public void getAccountSummary_WhenCalledWithPositiveTransactionInAccount_ReturnsPositiveSavingsSummary(){
-        BaseAccountTestClass account = new BaseAccountTestClass();
+    public void getAccountSummary_WhenCalledWithPositiveTransactionInAccount_ReturnsPositiveSavingsSummary() {
         account.deposit(100);
 
         String result = account.getAccountSummary();
 
         assertEquals("SavingsAccount\n- Deposit: $100.00\nTotal: $100.00", result);
     }
-
-    // Make a test for both Withdraw and deposit?
-
-    // Is this test supposed to be here?
-//    @Test
-//    public void getInterestEarned_WhenCalledWithBalanceIsLessThan1000_ReturnsCorrectInterest(){
-//        BaseAccountTestClass account = new BaseAccountTestClass();
-//
-//        account.deposit(500);
-//
-//        double result = account.getInterestEarned();
-//
-//        assertEquals(0.05, result, DOUBLE_DELTA);
-//    }
 }
 
 class BaseAccountTestClass extends BaseAccount{

@@ -1,10 +1,8 @@
-package com.abc;
-
-import com.abc.account_types.CheckingAccount;
-import com.abc.account_types.SavingsAccount;
+package com.abc.shared;
 
 public class Constants {
     public static String GreaterThanZeroErrorMessage = "Amount must be greater than zero";
+    public static String UnexpectedAccountTypeErrorMessage = "Unexpected account type!";
 
     public enum AccountTypes {
         CheckingAccount,

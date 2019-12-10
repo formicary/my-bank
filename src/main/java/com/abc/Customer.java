@@ -2,11 +2,12 @@ package com.abc;
 
 import com.abc.account_types.AccountFactory;
 import com.abc.account_types.BaseAccount;
+import com.abc.shared.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Math.abs;
+import static com.abc.shared.Methods.toDollars;
 
 public class Customer {
     private String name;
@@ -26,7 +27,7 @@ public class Customer {
 
     public BaseAccount openAccount(Constants.AccountTypes accountType) {
         AccountFactory accountFactory = new AccountFactory();
-        BaseAccount account = accountFactory.openAccount(accountType);
+        BaseAccount account = accountFactory.createAccount(accountType);
 
         accounts.add(account);
 
@@ -35,24 +36,25 @@ public class Customer {
 
     public double getTotalInterestEarned() {
         double total = 0;
-        for (BaseAccount a : accounts)
+
+        for (BaseAccount a : accounts) {
             total += a.getInterestEarned();
+        }
+
         return total;
     }
 
-    public String getStatement() {
+    public String getAccountsStatement() {
         String statement = "Statement for " + name + "\n";
         double total = 0.0;
+
         for (BaseAccount account : accounts) {
             statement += account.getAccountSummary() + "\n";
             total += account.sumTransactions();
         }
-        statement += "Total In All Accounts: " + toDollars(total);
-        return statement;
-    }
 
-// Do we need this? abs?
-    private String toDollars(double d){
-        return String.format("$%,.2f", abs(d));
+        statement += "Total In All Accounts: " + toDollars(total);
+
+        return statement;
     }
 }

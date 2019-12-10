@@ -1,10 +1,10 @@
 package com.abc.account_types;
 
-import com.abc.Constants;
+import com.abc.shared.Constants.AccountTypes;
 
 public class CheckingAccount extends BaseAccount{
-    public Constants.AccountTypes getAccountType() {
-        return Constants.AccountTypes.CheckingAccount;
+    public AccountTypes getAccountType() {
+        return AccountTypes.CheckingAccount;
     }
 
     public double getInterestEarned(){

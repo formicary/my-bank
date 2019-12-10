@@ -1,22 +1,22 @@
 package com.abc;
 
 import com.abc.account_types.SavingsAccount;
+import org.junit.Before;
 import org.junit.Test;
 
+import static com.abc.TestConstants.DOUBLE_DELTA;
 import static org.junit.Assert.assertEquals;
 
 public class SavingsAccountTests {
-    private static final double DOUBLE_DELTA = 1e-15;
+    SavingsAccount account;
 
-    // Need to decide on leading capital
-    // Make a test for both?
-
-    // Get account type?
+    @Before
+    public void initEach(){
+        account = new SavingsAccount();
+    }
 
     @Test
     public void getInterestEarned_WhenCalledWithBalanceIsLessThan1000_ReturnsCorrectInterest(){
-        SavingsAccount account = new SavingsAccount();
-
         account.deposit(500);
 
         double result = account.getInterestEarned();
@@ -26,8 +26,6 @@ public class SavingsAccountTests {
 
     @Test
     public void getInterestEarned_WhenCalledWithBalanceIsMoreThan1000_ReturnsCorrectInterest(){
-        SavingsAccount account = new SavingsAccount();
-
         account.deposit(5000);
 
         double result = account.getInterestEarned();
@@ -37,8 +35,6 @@ public class SavingsAccountTests {
 
     @Test
     public void getInterestEarned_WhenCalledInNegativeBalance_Returns0(){
-        SavingsAccount account = new SavingsAccount();
-
         account.withdraw(1000);
         double result = account.getInterestEarned();
 

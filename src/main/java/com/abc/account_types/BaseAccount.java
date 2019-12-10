@@ -1,11 +1,13 @@
 package com.abc.account_types;
 
-import com.abc.Constants.AccountTypes;
-import com.abc.Constants;
+import com.abc.shared.Constants.AccountTypes;
+import com.abc.shared.Constants;
 import com.abc.Transaction;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.abc.shared.Methods.toDollars;
 
 public abstract class BaseAccount {
     public List<Transaction> transactions;
@@ -53,9 +55,5 @@ public abstract class BaseAccount {
         summary += "Total: " + toDollars(total);
 
         return summary;
-    }
-
-    private String toDollars(double d){
-        return String.format("$%,.2f", d);
     }
 }

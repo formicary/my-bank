@@ -1,27 +1,32 @@
 package com.abc;
 
 import com.abc.account_types.MaxiSavingAccount;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 
+import static com.abc.TestConstants.DOUBLE_DELTA;
 import static org.junit.Assert.assertEquals;
+import com.abc.shared.Constants.AccountTypes;
+
 
 public class MaxiSavingsAccountTests {
-    private static final double DOUBLE_DELTA = 1e-15;
+    MaxiSavingAccount account;
+
+    @Before
+    public void initEach(){
+        account = new MaxiSavingAccount();
+    }
 
     @Test
-    // Need to decide on leading capital
-    public void GetAccountType_WhenCalled_ReturnsMaxiSavingsAccount(){
-        MaxiSavingAccount account = new MaxiSavingAccount();
+    public void getAccountType_WhenCalled_ReturnsMaxiSavingsAccount(){
+        AccountTypes result = account.getAccountType();
 
-        Constants.AccountTypes result = account.getAccountType();
-
-        assertEquals(Constants.AccountTypes.MaxiSavingsAccount, result);
+        assertEquals(AccountTypes.MaxiSavingsAccount, result);
     }
 
     @Test
     public void getInterestEarned_WhenCalledWithBalanceIsLessThan1000_ReturnsCorrectInterestAt2(){
-        MaxiSavingAccount account = new MaxiSavingAccount();
-
         account.deposit(100);
 
         double result = account.getInterestEarned();
@@ -29,11 +34,8 @@ public class MaxiSavingsAccountTests {
         assertEquals(2, result, DOUBLE_DELTA);
     }
 
-    //TODO: Fix these interest rates
     @Test
     public void getInterestEarned_WhenCalledWithBalanceBetween2000To3000_ReturnsCorrectInterestAt5(){
-        MaxiSavingAccount account = new MaxiSavingAccount();
-
         account.deposit(2000);
 
         double result = account.getInterestEarned();
@@ -43,8 +45,6 @@ public class MaxiSavingsAccountTests {
 
     @Test
     public void getInterestEarned_WhenCalledWithBalanceMoreThan3000_ReturnsCorrectInterestAt10(){
-        MaxiSavingAccount account = new MaxiSavingAccount();
-
         account.deposit(5000);
 
         double result = account.getInterestEarned();
@@ -54,8 +54,6 @@ public class MaxiSavingsAccountTests {
 
     @Test
     public void getInterestEarned_WhenCalledInNegativeBalance_Returns0(){
-        MaxiSavingAccount account = new MaxiSavingAccount();
-
         account.withdraw(1000);
         double result = account.getInterestEarned();
 

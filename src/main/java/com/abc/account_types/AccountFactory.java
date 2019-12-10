@@ -1,9 +1,10 @@
 package com.abc.account_types;
 
-import com.abc.Constants.AccountTypes;
+import com.abc.shared.Constants;
+import com.abc.shared.Constants.AccountTypes;
 
 public class AccountFactory {
-    public BaseAccount openAccount(AccountTypes accountType){
+    public BaseAccount createAccount(AccountTypes accountType){
         switch(accountType){
             case CheckingAccount:
                 return new CheckingAccount();
@@ -13,8 +14,9 @@ public class AccountFactory {
 
             case MaxiSavingsAccount:
                 return new MaxiSavingAccount();
-        }
 
-        return null;
+            default:
+                throw new IllegalArgumentException(Constants.UnexpectedAccountTypeErrorMessage);
+        }
     }
 }

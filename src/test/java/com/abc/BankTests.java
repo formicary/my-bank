@@ -1,18 +1,21 @@
 package com.abc;
 
-import com.abc.account_types.Account;
+import com.abc.shared.Constants;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class BankTest {
-    private static final double DOUBLE_DELTA = 1e-15;
+public class BankTests {
+    Bank bank;
 
-    // - List format?
+    @Before
+    public void initEach(){
+        bank = new Bank();
+    }
+
     @Test
     public void getCustomerSummary_WhenCalledWithNoCustomers_ReturnsEmptySummary() {
-        Bank bank = new Bank();
-
         String result = bank.getCustomerSummary();
 
         assertEquals("Customer Summary\n- No customer accounts!", result);
@@ -27,7 +30,6 @@ public class BankTest {
         Customer customer2 = new Customer("Tom");
         customer2.openAccount(Constants.AccountTypes.SavingsAccount);
 
-        Bank bank = new Bank();
         bank.addCustomer(customer);
         bank.addCustomer(customer2);
 
@@ -38,8 +40,6 @@ public class BankTest {
 
     @Test
     public void getInterestSummary_WhenCalledWithNoCustomers_ReturnsEmptySummary(){
-        Bank bank = new Bank();
-
         String result = bank.getInterestSummary();
 
         assertEquals("Interest Summary (0 accounts)\nInterest Paid: $0.00", result);
@@ -53,7 +53,6 @@ public class BankTest {
         Customer customer2 = new Customer("Tom");
         customer2.openAccount(Constants.AccountTypes.CheckingAccount).deposit(400);
 
-        Bank bank = new Bank();
         bank.addCustomer(customer);
         bank.addCustomer(customer2);
 
