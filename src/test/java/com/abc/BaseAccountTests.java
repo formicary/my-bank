@@ -105,7 +105,7 @@ public class BaseAccountTests {
 
         String result = account.getAccountSummary();
 
-        assertEquals("SavingsAccount\nWithdraw: $-50.00\nTotal: $-50.00", result);
+        assertEquals("SavingsAccount\n- Withdraw: $-50.00\nTotal: $-50.00", result);
     }
 
     @Test
@@ -115,7 +115,7 @@ public class BaseAccountTests {
 
         String result = account.getAccountSummary();
 
-        assertEquals("SavingsAccount\nDeposit: $100.00\nTotal: $100.00", result);
+        assertEquals("SavingsAccount\n- Deposit: $100.00\nTotal: $100.00", result);
     }
 
     // Make a test for both Withdraw and deposit?

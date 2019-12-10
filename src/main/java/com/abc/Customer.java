@@ -1,6 +1,7 @@
 package com.abc;
 
-import com.abc.account_types.Account;
+import com.abc.account_types.AccountFactory;
+import com.abc.account_types.BaseAccount;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,76 +10,48 @@ import static java.lang.Math.abs;
 
 public class Customer {
     private String name;
-    private List<Account> accounts;
+    private List<BaseAccount> accounts;
 
     public Customer(String name) {
         this.name = name;
-        this.accounts = new ArrayList<Account>();
+        this.accounts = new ArrayList<BaseAccount>();
     }
 
     public String getName() {
         return name;
     }
-
-    // Account Factory? Why are we returning the account?
-    public Customer openAccount(Account account) {
-        accounts.add(account);
-        // Why are we returning this?
-        return this;
-    }
-
     public int getNumberOfAccounts() {
         return accounts.size();
     }
 
-    public double totalInterestEarned() {
+    public BaseAccount openAccount(Constants.AccountTypes accountType) {
+        AccountFactory accountFactory = new AccountFactory();
+        BaseAccount account = accountFactory.openAccount(accountType);
+
+        accounts.add(account);
+
+        return account;
+    }
+
+    public double getTotalInterestEarned() {
         double total = 0;
-        for (Account a : accounts)
-            total += a.interestEarned();
+        for (BaseAccount a : accounts)
+            total += a.getInterestEarned();
         return total;
     }
 
     public String getStatement() {
-        // But it's set to "" elsewhere 
-        String statement = null;
-        statement = "Statement for " + name + "\n";
+        String statement = "Statement for " + name + "\n";
         double total = 0.0;
-        for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+        for (BaseAccount account : accounts) {
+            statement += account.getAccountSummary() + "\n";
+            total += account.sumTransactions();
         }
-        statement += "\nTotal In All Accounts " + toDollars(total);
+        statement += "Total In All Accounts: " + toDollars(total);
         return statement;
     }
 
-    private String statementForAccount(Account a) {
-        String s = "";
-
-       //Translate to pretty account type
-        switch(a.getAccountType()){
-            case Account.CHECKING:
-                s += "Checking Account\n";
-                break;
-            case Account.SAVINGS:
-                s += "Savings Account\n";
-                break;
-            case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
-                break;
-        }
-
-        //Now total up all the transactions
-        double total = 0.0;
-        for (Transaction t : a.transactions) {
-            // Can't read this easily
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
-        }
-        s += "Total " + toDollars(total);
-        return s;
-    }
-
-// Do we need this?
+// Do we need this? abs?
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
     }

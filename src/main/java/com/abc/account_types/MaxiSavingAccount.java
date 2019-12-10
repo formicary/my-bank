@@ -7,10 +7,6 @@ public class MaxiSavingAccount extends BaseAccount {
         return Constants.AccountTypes.MaxiSavingsAccount;
     }
 
-    public String getAccountSummary() {
-        return null;
-    }
-
     public double getInterestEarned() {
         double amount = sumTransactions();
 

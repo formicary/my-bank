@@ -6,55 +6,59 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class BankTest {
-    // Purpose of this double?
     private static final double DOUBLE_DELTA = 1e-15;
 
+    // - List format?
     @Test
-    // Don't like the way these are tested, going to use a MethodName_Conditions_Returns approach
-    public void customerSummary() {
-        // Setup method?
+    public void getCustomerSummary_WhenCalledWithNoCustomers_ReturnsEmptySummary() {
         Bank bank = new Bank();
-        // john isn't a good variable name
-        Customer john = new Customer("John");
-        john.openAccount(new Account(Account.CHECKING));
-        bank.addCustomer(john);
 
-        assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
+        String result = bank.getCustomerSummary();
+
+        assertEquals("Customer Summary\n- No customer accounts!", result);
     }
 
     @Test
-    // Test name discreprencies
-    public void checkingAccount() {
+    public void getCustomerSummary_WhenCalledWithTwoCustomers_ReturnsCorrectSummary() {
+        Customer customer = new Customer("John");
+        customer.openAccount(Constants.AccountTypes.CheckingAccount);
+        customer.openAccount(Constants.AccountTypes.SavingsAccount);
+
+        Customer customer2 = new Customer("Tom");
+        customer2.openAccount(Constants.AccountTypes.SavingsAccount);
+
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.CHECKING);
-        Customer bill = new Customer("Bill").openAccount(checkingAccount);
-        bank.addCustomer(bill);
+        bank.addCustomer(customer);
+        bank.addCustomer(customer2);
 
-        checkingAccount.deposit(100.0);
+        String result = bank.getCustomerSummary();
 
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals("Customer Summary\n - John (2 accounts)\n - Tom (1 account)", result);
     }
 
     @Test
-    public void savings_account() {
+    public void getInterestSummary_WhenCalledWithNoCustomers_ReturnsEmptySummary(){
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
-        checkingAccount.deposit(1500.0);
+        String result = bank.getInterestSummary();
 
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals("Interest Summary (0 accounts)\nInterest Paid: $0.00", result);
     }
 
     @Test
-    public void maxi_savings_account() {
+    public void getInterestSummary_WhenCalledWithTwoCustomers_ReturnsCorrectInterestSummary(){
+        Customer customer = new Customer("John");
+        customer.openAccount(Constants.AccountTypes.CheckingAccount).deposit(100);
+
+        Customer customer2 = new Customer("Tom");
+        customer2.openAccount(Constants.AccountTypes.CheckingAccount).deposit(400);
+
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+        bank.addCustomer(customer);
+        bank.addCustomer(customer2);
 
-        checkingAccount.deposit(3000.0);
+        String result = bank.getInterestSummary();
 
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals("Interest Summary (2 accounts)\nInterest Paid: $0.05", result);
     }
-
 }
