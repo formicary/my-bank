@@ -11,6 +11,5 @@ public class TransactionTests {
         Transaction transaction = new Transaction(50.0);
 
         assertEquals(50.0, transaction.amount, DOUBLE_DELTA);
-        // Test for date/time
     }
 }
