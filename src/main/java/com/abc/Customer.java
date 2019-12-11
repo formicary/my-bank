@@ -7,6 +7,7 @@ import com.abc.shared.Constants;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.abc.shared.Methods.roundTo2dp;
 import static com.abc.shared.Methods.toDollars;
 
 public class Customer {
@@ -41,7 +42,7 @@ public class Customer {
             total += a.getInterestEarned();
         }
 
-        return total;
+        return roundTo2dp(total);
     }
 
     public String getAccountsStatement() {

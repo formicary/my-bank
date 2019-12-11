@@ -16,7 +16,7 @@ public class SavingsAccountTests {
     }
 
     @Test
-    public void getInterestEarned_WhenCalledWithBalanceIsLessThan1000_ReturnsCorrectInterest(){
+    public void getInterestEarned_WhenCalledWithBalanceIsLessThan1000_ReturnsCorrectCompoundInterest(){
         account.deposit(500);
 
         double result = account.getInterestEarned();
@@ -25,12 +25,12 @@ public class SavingsAccountTests {
     }
 
     @Test
-    public void getInterestEarned_WhenCalledWithBalanceIsMoreThan1000_ReturnsCorrectInterest(){
+    public void getInterestEarned_WhenCalledWithBalanceIsMoreThan1000_ReturnsCorrectCompoundInterest(){
         account.deposit(75000);
 
         double result = account.getInterestEarned();
 
-        assertEquals(0.5, result, DOUBLE_DELTA);
+        assertEquals(3794.79, result, DOUBLE_DELTA);
     }
 
     @Test

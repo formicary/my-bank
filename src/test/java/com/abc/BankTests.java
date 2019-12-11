@@ -58,6 +58,6 @@ public class BankTests {
 
         String result = bank.getInterestSummary();
 
-        assertEquals("Interest Summary (2 accounts)\nInterest Paid: $0.05", result);
+        assertEquals("Interest Summary (2 accounts)\nInterest Paid: $0.50", result);
     }
 }

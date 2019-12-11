@@ -12,24 +12,15 @@ public class SavingsAccount extends BaseAccount {
 
     public double getInterestEarned() {
         double amount = sumTransactions();
-        double compoundInterest = 0;
 
         if(amount < 0){
             return 0;
         }
 
-        for(int i = 0; i < 365; i++){
-            if(amount < 1000){
-                double interestGained = amount * (0.001/365);
-                compoundInterest += interestGained;
-                amount += interestGained;
-            } else {
-                double interestGained = (1000*(0.001/365)) + ((amount - 1000)* (0.002/365));
-                compoundInterest += interestGained;
-                amount += interestGained;
-            }
+        if(amount < 1000){
+            return calculateCompoundInterest(0.001, amount);
+        } else {
+            return calculateCompoundInterest(0.001, 1000) + calculateCompoundInterest(0.05, amount - 1000);
         }
-
-        return roundTo2dp(compoundInterest);
     }
 }

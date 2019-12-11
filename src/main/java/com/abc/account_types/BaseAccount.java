@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import static com.abc.shared.Methods.roundTo2dp;
 import static com.abc.shared.Methods.toDollars;
 
 public abstract class BaseAccount {
@@ -59,5 +60,12 @@ public abstract class BaseAccount {
         summary += "Total: " + toDollars(total);
 
         return summary;
+    }
+
+    protected Double calculateCompoundInterest(double interestRate, double startingBalance){
+        double dailyRate = interestRate/365 + 1;
+        double value = Math.pow(dailyRate, 365) - 1;
+
+        return roundTo2dp(value * startingBalance);
     }
 }

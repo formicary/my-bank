@@ -56,7 +56,7 @@ public class CustomerTests {
 
         double result = customer.getTotalInterestEarned();
 
-        assertEquals(0.03, result, DOUBLE_DELTA);
+        assertEquals(0.30, result, DOUBLE_DELTA);
     }
 
     @Test
