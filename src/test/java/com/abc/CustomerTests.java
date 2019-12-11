@@ -4,7 +4,9 @@ import com.abc.account_types.BaseAccount;
 import com.abc.account_types.SavingsAccount;
 import com.abc.shared.Constants;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import static com.abc.TestConstants.DOUBLE_DELTA;
 import static org.junit.Assert.assertEquals;
@@ -12,6 +14,9 @@ import static org.junit.Assert.assertTrue;
 
 public class CustomerTests {
     Customer customer;
+
+    @Rule
+    public ExpectedException expectedError = ExpectedException.none();
 
     @Before
     public void initEach(){
@@ -69,5 +74,31 @@ public class CustomerTests {
         String result = customer.getAccountsStatement();
 
         assertEquals("Statement for John\nSavingsAccount\n- Deposit: $100.00\nTotal: $100.00\nCheckingAccount\n- Deposit: $500.00\nTotal: $500.00\nTotal In All Accounts: $600.00", result);
+    }
+
+    @Test
+    public void transferToAccount_WhenCalled_TransfersMoneyToSpecifiedAccount(){
+        BaseAccount account1 = customer.openAccount(Constants.AccountTypes.SavingsAccount);
+        account1.deposit(10000);
+        BaseAccount account2 = customer.openAccount(Constants.AccountTypes.CheckingAccount);
+
+        customer.transferToAccount(account1, account2, 10000);
+
+        double account1Balance = account1.sumTransactions();
+        double account2Balance = account2.sumTransactions();
+
+        assertEquals(account1Balance, 0.00, DOUBLE_DELTA);
+        assertEquals(account2Balance, 10000, DOUBLE_DELTA);
+    }
+
+    @Test
+    public void transferToAccount_WhenCalledWithInvalidAmount_ThrowsInvalidArgumentException(){
+        expectedError.expect(IllegalArgumentException.class);
+        expectedError.expectMessage("Amount must be greater than zero");
+
+        BaseAccount account1 = customer.openAccount(Constants.AccountTypes.SavingsAccount);
+        BaseAccount account2 = customer.openAccount(Constants.AccountTypes.CheckingAccount);
+
+        customer.transferToAccount(account1, account2, -10);
     }
 }

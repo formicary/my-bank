@@ -57,4 +57,13 @@ public class Customer {
 
         return statement;
     }
+
+    public void transferToAccount(BaseAccount accountFrom, BaseAccount accountTo, double amount){
+        if(amount < 0){
+            throw new IllegalArgumentException(Constants.GreaterThanZeroErrorMessage);
+        }
+
+        accountFrom.withdraw(amount);
+        accountTo.deposit(amount);
+    }
 }
