@@ -21,12 +21,12 @@ public class SavingsAccountTests {
 
         double result = account.getInterestEarned();
 
-        assertEquals(0.05, result, DOUBLE_DELTA);
+        assertEquals(0.50, result, DOUBLE_DELTA);
     }
 
     @Test
     public void getInterestEarned_WhenCalledWithBalanceIsMoreThan1000_ReturnsCorrectInterest(){
-        account.deposit(5000);
+        account.deposit(75000);
 
         double result = account.getInterestEarned();
 

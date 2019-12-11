@@ -24,11 +24,11 @@ public class CheckingAccountTests {
     }
 
     @Test
-    public void getInterestEarned_WhenCalled_ReturnsCorrectInterest(){
-        account.deposit(1000);
+    public void getInterestEarned_WhenCalled_ReturnsCorrectCompoundInterest(){
+        account.deposit(50000);
         double result = account.getInterestEarned();
 
-        assertEquals(0.1, result, DOUBLE_DELTA);
+        assertEquals(50.02, result, DOUBLE_DELTA);
     }
 
     @Test
