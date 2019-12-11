@@ -2,6 +2,7 @@ package com.abc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static java.lang.Math.abs;
 
@@ -21,6 +22,13 @@ public class Customer {
     public Customer openAccount(Account account) {
         accounts.add(account);
         return this;
+    }
+    
+    public Account switchAccounts(Account old_account, int new_accountType) {
+    	accounts.remove(old_account);
+    	old_account = new AccountFactory(new_accountType).getAccount();
+    	accounts.add(old_account);
+    	return old_account;
     }
 
     public int getNumberOfAccounts() {
@@ -51,20 +59,20 @@ public class Customer {
 
        //Translate to pretty account type
         switch(a.getAccountType()){
-            case Account.CHECKING:
+            case AccountFactory.CHECKING:
                 s += "Checking Account\n";
                 break;
-            case Account.SAVINGS:
+            case AccountFactory.SAVINGS:
                 s += "Savings Account\n";
                 break;
-            case Account.MAXI_SAVINGS:
+            case AccountFactory.MAXI_SAVINGS:
                 s += "Maxi Savings Account\n";
                 break;
         }
 
         //Now total up all the transactions
         double total = 0.0;
-        for (Transaction t : a.transactions) {
+        for (Transaction t : a.getTransactions()) {
             s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
             total += t.amount;
         }
@@ -73,6 +81,6 @@ public class Customer {
     }
 
     private String toDollars(double d){
-        return String.format("$%,.2f", abs(d));
+        return String.format(Locale.ROOT, "$%,.2f", abs(d));
     }
 }
