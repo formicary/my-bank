@@ -1,3 +1,9 @@
+CHANGES MADE
+================
+All additional feature tasks have been completed
+Code has been heavily refactored
+Tests have been made for all new and existing features that were refactored
+
 Programming Test
 ========
 

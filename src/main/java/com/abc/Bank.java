@@ -30,13 +30,12 @@ public class Bank {
     public double totalInterestPaid() {
         double total = 0;
         for(Customer c: customers)
-            total += c.totalInterestEarned();
+            total += c.getTotalInterestEarned();
         return total;
     }
 
     public String getFirstCustomer() {
         try {
-            customers = null;
             return customers.get(0).getName();
         } catch (Exception e){
             e.printStackTrace();

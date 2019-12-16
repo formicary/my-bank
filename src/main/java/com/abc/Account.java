@@ -1,73 +1,113 @@
 package com.abc;
 
+import static java.lang.Math.abs;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Account {
+import com.abc.Transaction.TransactionType;
 
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
+public abstract class Account {
+	
+	enum AccountType {
+		CHECKING,
+		SAVINGS,
+		MAXI_SAVINGS
+	}
 
-    private final int accountType;
-    public List<Transaction> transactions;
+    private List<Transaction> transactions;
+    private double balance;
+    private double totalInterestEarned;
+    // Days is used to calculate interest rate, we need daily compound
+    protected static final int DAYS = 365;
 
-    public Account(int accountType) {
-        this.accountType = accountType;
+    public Account() {
+    	this.balance = 0;
+    	this.totalInterestEarned = 0;
         this.transactions = new ArrayList<Transaction>();
     }
 
     public void deposit(double amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
+        if(!validAmount(amount)) {
+            throw new IllegalArgumentException("Amount must be greater than zero");
         } else {
-            transactions.add(new Transaction(amount));
+        	increaseBalance(amount);
+            transactions.add(new Transaction(amount, TransactionType.DEPOSIT));
         }
     }
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
+	public void withdraw(double amount) {
+		if(balance > 0) {
+			if(!validAmount(amount)) {
+		        throw new IllegalArgumentException("Amount must be greater than zero");
+		    } else {
+		    	decreaseBalance(amount);
+		        transactions.add(new Transaction(amount, TransactionType.WITHDRAW));
+		    }
+		}
+	}
+	
+	public void transfer(double amount, Account receiver) {
+		if(balance > 0) {
+			receiver.receive(amount, this);
+			decreaseBalance(amount);
+			transactions.add(new Transaction(amount, TransactionType.TRANSFER, this, receiver));
+		}
+	}
+	
+	public void receive(double amount, Account sender) {
+		increaseBalance(amount);
+		transactions.add(new Transaction(amount, TransactionType.RECEIVE, sender, this));
+	}
+    
+	private boolean validAmount(double amount) {
+    	if(amount <= 0) return false;
+    	return true;
     }
-}
+    
+    public String getStatement() {
+        String statement = "";
+        AccountType accountType = getType();
+        statement += ("Account Type: " + accountType.toString());
+        statement += ('\n');
 
-    public double interestEarned() {
-        double amount = sumTransactions();
-        switch(accountType){
-            case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
-            case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
-            default:
-                return amount * 0.001;
+        for (Transaction t : transactions) {
+        	statement += (t.getStatement());
+        	statement += ("\n");
         }
+        statement += ("Current balance: " + toDollars(balance));
+        return statement;
+    }
+    
+    protected void increaseBalance(double amount) {
+    	balance += amount;
+    }
+    
+    protected void decreaseBalance(double amount) {
+    	balance -= amount;
+    }
+    
+    protected void increaseTotalInterestEarned(double amount) {
+    	totalInterestEarned += amount;
+    }
+    
+    public double getBalance() {
+    	return this.balance;
+    }
+    
+    public double getTotalInterestEarned() {
+    	return this.totalInterestEarned;
+    }
+    
+    private String toDollars(double d){
+        return String.format("$%,.2f", abs(d));
     }
 
-    public double sumTransactions() {
-       return checkIfTransactionsExist(true);
+    public void gainInterest() {
+		double interestEarned = interestEarned();
+		increaseBalance(interestEarned);
     }
-
-    private double checkIfTransactionsExist(boolean checkAll) {
-        double amount = 0.0;
-        for (Transaction t: transactions)
-            amount += t.amount;
-        return amount;
-    }
-
-    public int getAccountType() {
-        return accountType;
-    }
-
+    
+    abstract double interestEarned();
+    abstract AccountType getType();
 }
