@@ -2,10 +2,15 @@ package com.abc;
 
 import org.junit.Test;
 
+//TODO: it is better for readability to avoid static imports, especially in big projects
 import static org.junit.Assert.assertEquals;
 
 public class BankTest {
     private static final double DOUBLE_DELTA = 1e-15;
+
+    //TODO: need to test the methods as units
+
+    //TODO: some of the setup can be put into a before method
 
     @Test
     public void customerSummary() {

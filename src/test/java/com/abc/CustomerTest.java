@@ -3,11 +3,15 @@ package com.abc;
 import org.junit.Ignore;
 import org.junit.Test;
 
+//TODO: it is better for readability to avoid static imports, especially in big projects
 import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
 
+    //TODO: need to add a test case for calculating the total interest earned
+
     @Test //Test customer statement generation
+    //TODO: can be named better
     public void testApp(){
 
         Account checkingAccount = new Account(Account.CHECKING);
@@ -34,12 +38,14 @@ public class CustomerTest {
     }
 
     @Test
+    //TODO: can be named better
     public void testOneAccount(){
         Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
         assertEquals(1, oscar.getNumberOfAccounts());
     }
 
     @Test
+    //TODO: not really needed, if one account works then 2 will work
     public void testTwoAccount(){
         Customer oscar = new Customer("Oscar")
                 .openAccount(new Account(Account.SAVINGS));
@@ -48,6 +54,7 @@ public class CustomerTest {
     }
 
     @Ignore
+    //TODO: delete this
     public void testThreeAcounts() {
         Customer oscar = new Customer("Oscar")
                 .openAccount(new Account(Account.SAVINGS));

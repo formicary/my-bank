@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Bank {
+    //TODO: can be final
     private List<Customer> customers;
 
     public Bank() {
@@ -16,11 +17,14 @@ public class Bank {
 
     public String customerSummary() {
         String summary = "Customer Summary";
-        for (Customer c : customers)
+        //TODO: could use a StringBuilder for more efficiency instead of repeatedly concatenating strings go from O(n^2) -> O(n)
+        for (Customer c : customers) {
             summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
+        }
         return summary;
     }
 
+    //TODO: method could be better named to increase readability
     //Make sure correct plural of word is created based on the number passed in:
     //If number passed in is 1 just return the word otherwise add an 's' at the end
     private String format(int number, String word) {
@@ -29,16 +33,20 @@ public class Bank {
 
     public double totalInterestPaid() {
         double total = 0;
-        for(Customer c: customers)
+        //TODO: could use a stream for more readable code
+        for(Customer c: customers) {
             total += c.totalInterestEarned();
+        }
         return total;
     }
 
+    //TODO: this method is never used it can be removed
     public String getFirstCustomer() {
+        //TODO: catching an exception here is not the best thing to do can just check the size of the customers List
         try {
             customers = null;
             return customers.get(0).getName();
-        } catch (Exception e){
+        } catch (Exception e){  //TODO: should never catch Exception always catch a specific exception when needed
             e.printStackTrace();
             return "Error";
         }

@@ -6,6 +6,7 @@ import java.util.List;
 import static java.lang.Math.abs;
 
 public class Customer {
+    //TODO: can both be final
     private String name;
     private List<Account> accounts;
 
@@ -29,12 +30,14 @@ public class Customer {
 
     public double totalInterestEarned() {
         double total = 0;
-        for (Account a : accounts)
+        for (Account a : accounts) {
             total += a.interestEarned();
+        }
         return total;
     }
 
     public String getStatement() {
+        //TODO: no need to split declaration and assignment like this
         String statement = null;
         statement = "Statement for " + name + "\n";
         double total = 0.0;
@@ -64,6 +67,7 @@ public class Customer {
 
         //Now total up all the transactions
         double total = 0.0;
+        //TODO could use a StringBuilder here
         for (Transaction t : a.transactions) {
             s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
             total += t.amount;

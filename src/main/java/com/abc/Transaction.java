@@ -6,6 +6,7 @@ import java.util.Date;
 public class Transaction {
     public final double amount;
 
+    //TODO: can be final and public, as this is just a POJO
     private Date transactionDate;
 
     public Transaction(double amount) {
