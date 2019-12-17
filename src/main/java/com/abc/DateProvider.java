@@ -23,6 +23,10 @@ public class DateProvider {
         return Date.from(LocalDate.now().minusDays(10).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
     }
 
+    public Date oneDayAgo() {
+        return Date.from(LocalDate.now().minusDays(1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+    }
+
     public Date now() {
         return Calendar.getInstance().getTime();
     }

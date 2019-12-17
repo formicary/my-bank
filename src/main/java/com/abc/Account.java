@@ -1,6 +1,5 @@
 package com.abc;
 
-import java.time.temporal.TemporalAmount;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,7 +15,7 @@ public class Account {
 
     public Account(int accountType) {
         this.accountType = accountType;
-        this.transactions = new ArrayList<Transaction>();
+        this.transactions = new ArrayList<>();
     }
 
     public void deposit(double amount) {
@@ -51,13 +50,15 @@ public void withdraw(double amount) {
         }
     }
 
-    private boolean isOlderThanTenDays() {
+    private boolean hasTransactionInLastTenDays() {
         if (transactions.isEmpty()) {
             return false;
         }
-        Transaction lastTransaction = transactions.get(transactions.size()-1);
-        Date fivePercentAccountDate = DateProvider.getInstance().inTenDaysPast();
-        return lastTransaction.getTransactionDate().before(fivePercentAccountDate);
+
+        return transactions
+                .stream()
+                .filter(x -> x.getTransactionDate().after(DateProvider.getInstance().inTenDaysPast()))
+                .count() >= 1;
     }
 
     public double interestEarned() {
@@ -72,10 +73,10 @@ public void withdraw(double amount) {
 //                if (amount <= 4000)
 //                    return 20;
             case MAXI_SAVINGS:
-                if (isOlderThanTenDays()) {
-                    return amount * 0.05;
-                } else {
+                if (hasTransactionInLastTenDays()) {
                     return amount * 0.001;
+                } else {
+                    return amount * 0.05;
                 }
             default:
                 return amount * 0.001;
