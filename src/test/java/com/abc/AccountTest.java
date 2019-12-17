@@ -26,13 +26,20 @@ public class AccountTest {
         Assert.assertEquals(-25, account.transactions.get(1).amount, DOUBLE_DELTA);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testCantWithdrawMoreThanBalance() {
+        Account account = new Account(AccountType.SAVINGS);
+
+        account.withdraw(25);
+    }
+
     @Test
     public void correctTransactionSum() {
         Account account = new Account(AccountType.SAVINGS);
 
         account.deposit(100);
 
-        Assert.assertEquals(100, account.sumTransactions(), DOUBLE_DELTA);
+        Assert.assertEquals(100, account.getBalance(), DOUBLE_DELTA);
     }
 
     @Test
