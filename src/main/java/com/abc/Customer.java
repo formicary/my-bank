@@ -56,7 +56,7 @@ public class Customer {
         return s.toString();
     }
 
-    private String toDollars(double d){
+    private String toDollars(final double d){
         return String.format("$%,.2f", abs(d));
     }
 }

@@ -9,7 +9,7 @@ public class Transaction {
     //TODO: can be final and public, as this is just a POJO
     private Date transactionDate;
 
-    public Transaction(double amount) {
+    public Transaction(final double amount) {
         this.amount = amount;
         this.transactionDate = DateProvider.getInstance().now();
     }
