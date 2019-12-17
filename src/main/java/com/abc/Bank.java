@@ -22,8 +22,6 @@ public class Bank {
         return summary.toString();
     }
 
-
-
     public double totalInterestPaid() {
         return customers.stream().mapToDouble(Customer::totalInterestEarned).sum();
     }
