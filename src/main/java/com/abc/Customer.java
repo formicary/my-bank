@@ -6,20 +6,19 @@ import java.util.List;
 import static java.lang.Math.abs;
 
 public class Customer {
-    //TODO: can both be final
-    private String name;
-    private List<Account> accounts;
+    private final String name;
+    private final List<Account> accounts;
 
-    public Customer(String name) {
+    public Customer(final String name) {
         this.name = name;
-        this.accounts = new ArrayList<Account>();
+        this.accounts = new ArrayList<>();
     }
 
     public String getName() {
         return name;
     }
 
-    public Customer openAccount(Account account) {
+    public Customer openAccount(final Account account) {
         accounts.add(account);
         return this;
     }
@@ -29,38 +28,32 @@ public class Customer {
     }
 
     public double totalInterestEarned() {
-        double total = 0;
-        for (Account a : accounts) {
-            total += a.interestEarned();
-        }
-        return total;
+        return accounts.stream().mapToDouble(Account::interestEarned).sum();
     }
 
     public String getStatement() {
-        //TODO: no need to split declaration and assignment like this
-        String statement = null;
-        statement = "Statement for " + name + "\n";
+        StringBuilder statement = new StringBuilder(String.format("Statement for %s\n", name));
         double total = 0.0;
         for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
+            statement.append(String.format("\n%s\n", statementForAccount(a)));
             total += a.sumTransactions();
         }
-        statement += "\nTotal In All Accounts " + toDollars(total);
-        return statement;
+        statement.append(String.format("\nTotal In All Accounts %s", toDollars(total)));
+        return statement.toString();
     }
 
-    private String statementForAccount(Account a) {
-        String s = a.getAccountType().readableName + " Account\n";
+    private String statementForAccount(final Account a) {
+        StringBuilder s = new StringBuilder(String.format("%s Account\n", a.getAccountType().readableName));
 
         //Now total up all the transactions
         double total = 0.0;
-        //TODO could use a StringBuilder here
         for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
+            String transactionType = t.amount < 0 ? "withdrawal" : "deposit";
+            s.append(String.format("  %s %s\n", transactionType, toDollars(t.amount)));
             total += t.amount;
         }
-        s += "Total " + toDollars(total);
-        return s;
+        s.append(String.format("Total %s", toDollars(total)));
+        return s.toString();
     }
 
     private String toDollars(double d){

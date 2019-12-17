@@ -16,12 +16,11 @@ public class Bank {
     }
 
     public String customerSummary() {
-        String summary = "Customer Summary";
-        //TODO: could use a StringBuilder for more efficiency instead of repeatedly concatenating strings go from O(n^2) -> O(n)
+        StringBuilder summary = new StringBuilder("Customer Summary");
         for (Customer c : customers) {
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
+            summary.append(String.format("\n - %s (%s)", c.getName(), format(c.getNumberOfAccounts(), "account")));
         }
-        return summary;
+        return summary.toString();
     }
 
     //TODO: method could be better named to increase readability
