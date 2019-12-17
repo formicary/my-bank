@@ -38,7 +38,7 @@ public class Customer {
             statement.append(String.format("\n%s\n", statementForAccount(a)));
             total += a.sumTransactions();
         }
-        statement.append(String.format("\nTotal In All Accounts %s", toDollars(total)));
+        statement.append(String.format("\nTotal In All Accounts %s", StringUtils.toDollars(total)));
         return statement.toString();
     }
 
@@ -49,14 +49,10 @@ public class Customer {
         double total = 0.0;
         for (Transaction t : a.transactions) {
             String transactionType = t.amount < 0 ? "withdrawal" : "deposit";
-            s.append(String.format("  %s %s\n", transactionType, toDollars(t.amount)));
+            s.append(String.format("  %s %s\n", transactionType, StringUtils.toDollars(t.amount)));
             total += t.amount;
         }
-        s.append(String.format("Total %s", toDollars(total)));
+        s.append(String.format("Total %s", StringUtils.toDollars(total)));
         return s.toString();
-    }
-
-    private String toDollars(final double d){
-        return String.format("$%,.2f", abs(d));
     }
 }
