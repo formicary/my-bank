@@ -8,7 +8,7 @@ public class AccountTest {
 
     @Test
     public void testDeposit() {
-        Account account = new Account(Account.SAVINGS);
+        Account account = new Account(AccountType.SAVINGS);
 
         account.deposit(100);
         Assert.assertEquals(1, account.transactions.size());
@@ -17,7 +17,7 @@ public class AccountTest {
 
     @Test
     public void testWithdraw() {
-        Account account = new Account(Account.SAVINGS);
+        Account account = new Account(AccountType.SAVINGS);
 
         account.deposit(100);
         account.withdraw(25);
@@ -28,7 +28,7 @@ public class AccountTest {
 
     @Test
     public void correctTransactionSum() {
-        Account account = new Account(Account.SAVINGS);
+        Account account = new Account(AccountType.SAVINGS);
 
         account.deposit(100);
 
@@ -37,27 +37,27 @@ public class AccountTest {
 
     @Test
     public void testGetAccountType() {
-        Account account = new Account(Account.SAVINGS);
-        Assert.assertEquals(Account.SAVINGS, account.getAccountType());
+        Account account = new Account(AccountType.SAVINGS);
+        Assert.assertEquals(AccountType.SAVINGS, account.getAccountType());
     }
 
     @Test
     public void testCorrectInterestCalculatedChecking() {
-        Account account = new Account(Account.CHECKING);
+        Account account = new Account(AccountType.CHECKING);
         account.deposit(100);
         Assert.assertEquals(0.1, account.interestEarned(), DOUBLE_DELTA);
     }
 
     @Test
     public void testCorrectInterestCalculatedSavings() {
-        Account account = new Account(Account.SAVINGS);
+        Account account = new Account(AccountType.SAVINGS);
         account.deposit(3000);
         Assert.assertEquals(5, account.interestEarned(), DOUBLE_DELTA);
     }
 
     @Test
     public void testCorrectInterestCalculatedMaxiSavings() {
-        Account account = new Account(Account.MAXI_SAVINGS);
+        Account account = new Account(AccountType.MAXI_SAVINGS);
         account.deposit(3000);
         Assert.assertEquals(170, account.interestEarned(), DOUBLE_DELTA);
     }
