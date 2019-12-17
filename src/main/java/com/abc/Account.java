@@ -21,8 +21,7 @@ public class Account {
         transactions.add(new Transaction(amount));
         balance += amount;
     }
-
-    //TODO: no check here that the customer has sufficient funds to withdraw the amount
+    
     public void withdraw(final double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
