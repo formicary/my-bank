@@ -13,6 +13,7 @@ public class AccountTest {
         account.deposit(100);
         Assert.assertEquals(1, account.transactions.size());
         Assert.assertEquals(100, account.transactions.get(0).amount, DOUBLE_DELTA);
+        Assert.assertEquals(100, account.getBalance(), DOUBLE_DELTA);
     }
 
     @Test
@@ -24,6 +25,14 @@ public class AccountTest {
         Assert.assertEquals(2, account.transactions.size());
         Assert.assertEquals(100, account.transactions.get(0).amount, DOUBLE_DELTA);
         Assert.assertEquals(-25, account.transactions.get(1).amount, DOUBLE_DELTA);
+        Assert.assertEquals(75, account.getBalance(), DOUBLE_DELTA);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testCantWithdrawMoreThanBalance() {
+        Account account = new Account(AccountType.SAVINGS);
+
+        account.withdraw(25);
     }
 
     @Test
@@ -32,7 +41,7 @@ public class AccountTest {
 
         account.deposit(100);
 
-        Assert.assertEquals(100, account.sumTransactions(), DOUBLE_DELTA);
+        Assert.assertEquals(100, account.getBalance(), DOUBLE_DELTA);
     }
 
     @Test
