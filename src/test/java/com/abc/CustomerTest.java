@@ -1,42 +1,61 @@
 package com.abc;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 public class CustomerTest {
+    private static final double DOUBLE_DELTA = 1e-15;
 
-    //TODO: need to add a test case for calculating the total interest earned
+    private Customer henry;
+    private Account savingsAccount;
+    private Account checkingAccount;
 
-    @Test //Test customer statement generation
-    //TODO: can be named better
-    public void testApp() {
+    @Before
+    public void createCustomer() {
+        henry = new Customer("Henry");
 
-        Account checkingAccount = new Account(AccountType.CHECKING);
-        Account savingsAccount = new Account(AccountType.SAVINGS);
 
-        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
+        savingsAccount = new Account(AccountType.SAVINGS);
+        checkingAccount = new Account(AccountType.CHECKING);
 
-        checkingAccount.deposit(100.0);
-        savingsAccount.deposit(4000.0);
-        savingsAccount.withdraw(200.0);
+        savingsAccount.deposit(1000);
+        checkingAccount.deposit(1000);
 
-        Assert.assertEquals("Statement for Henry\n" +
-                "\n" +
-                "Checking Account\n" +
-                "  deposit $100.00\n" +
-                "Total $100.00\n" +
-                "\n" +
-                "Savings Account\n" +
-                "  deposit $4,000.00\n" +
-                "  withdrawal $200.00\n" +
-                "Total $3,800.00\n" +
-                "\n" +
-                "Total In All Accounts $3,900.00", henry.getStatement());
+        henry.openAccount(savingsAccount);
+        henry.openAccount(checkingAccount);
     }
 
     @Test
-    public void testAccountAddedToCustomer() {
-        Customer oscar = new Customer("Oscar").openAccount(new Account(AccountType.SAVINGS));
-        Assert.assertEquals(1, oscar.getNumberOfAccounts());
+    public void nameIsStoredCorrectly() {
+        Assert.assertEquals("Henry", henry.getName());
+    }
+
+    @Test
+    public void addAccountAddsAccountToAccounts() {
+        Customer customer = new Customer("customer");
+        Assert.assertEquals(0, customer.getNumberOfAccounts());
+        customer.openAccount(savingsAccount);
+        Assert.assertEquals(1, customer.getNumberOfAccounts());
+    }
+
+    @Test
+    public void totalInterestEarnedIsCorrect() {
+        Assert.assertEquals(2, henry.totalInterestEarned(), DOUBLE_DELTA);
+    }
+
+    @Test //Test customer statement generation
+    public void testCustomerStatementIsCorrect() {
+        Assert.assertEquals("Statement for Henry\n" +
+                "\n" +
+                "Savings Account\n" +
+                "  deposit $1,000.00\n" +
+                "Total $1,000.00\n" +
+                "\n" +
+                "Checking Account\n" +
+                "  deposit $1,000.00\n" +
+                "Total $1,000.00\n" +
+                "\n" +
+                "Total In All Accounts $2,000.00", henry.getStatement());
     }
 }

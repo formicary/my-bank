@@ -21,7 +21,7 @@ public class Account {
         transactions.add(new Transaction(amount));
         balance += amount;
     }
-    
+
     public void withdraw(final double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
