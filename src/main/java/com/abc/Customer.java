@@ -45,14 +45,11 @@ public class Customer {
     private String statementForAccount(final Account a) {
         StringBuilder s = new StringBuilder(String.format("%s Account\n", a.getAccountType().readableName));
 
-        //Now total up all the transactions
-        double total = 0.0;
         for (Transaction t : a.transactions) {
             String transactionType = t.amount < 0 ? "withdrawal" : "deposit";
             s.append(String.format("  %s %s\n", transactionType, StringUtils.toDollars(t.amount)));
-            total += t.amount;
         }
-        s.append(String.format("Total %s", StringUtils.toDollars(total)));
+        s.append(String.format("Total %s", StringUtils.toDollars(a.getBalance())));
         return s.toString();
     }
 }
