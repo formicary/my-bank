@@ -1,14 +1,17 @@
 package com.abc;
 
+import java.time.LocalDate;
+import java.util.List;
+
 public enum AccountType {
     CHECKING("Checking") {
         @Override
-        public double calculateInterestEarned(double balance) {
+        public double calculateInterestEarned(double balance, List<Transaction> transactions) {
             return balance * 0.001;
         }
     }, SAVINGS("Savings") {
         @Override
-        public double calculateInterestEarned(double balance) {
+        public double calculateInterestEarned(double balance, List<Transaction> transactions) {
             if (balance <= 1000) {
                 return balance * 0.001;
             }
@@ -16,14 +19,19 @@ public enum AccountType {
         }
     }, MAXI_SAVINGS("Maxi Savings") {
         @Override
-        public double calculateInterestEarned(double balance) {
-            if (balance <= 1000) {
-                return balance * 0.02;
+        public double calculateInterestEarned(double balance, List<Transaction> transactions) {
+            Transaction lastWithdraw = null;
+            LocalDate withdrawThreshold = DateProvider.now().minusDays(10);
+            for (Transaction t: transactions) {
+                if (t.amount < 0) {
+                    lastWithdraw = t;
+                    break;
+                }
             }
-            if (balance <= 2000) {
-                return 20 + (balance - 1000) * 0.05;
+            if (lastWithdraw == null || lastWithdraw.transactionDate.isBefore(withdrawThreshold)) {
+                return balance * 0.05;
             }
-            return 70 + (balance - 2000) * 0.1;
+            return balance * 0.001;
         }
     };
 
@@ -33,5 +41,5 @@ public enum AccountType {
         this.readableName = readableName;
     }
 
-    public abstract double calculateInterestEarned(double balance);
+    public abstract double calculateInterestEarned(double balance, List<Transaction> transactions);
 }

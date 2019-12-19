@@ -34,7 +34,7 @@ public class Account {
     }
 
     public double interestEarned() {
-        return accountType.calculateInterestEarned(balance);
+        return accountType.calculateInterestEarned(balance, transactions);
     }
 
     public double getBalance() {

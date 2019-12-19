@@ -1,10 +1,17 @@
 package com.abc;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.time.Clock;
+import java.time.LocalDate;
 
 public class DateProvider {
-    public static Date now() {
-        return Calendar.getInstance().getTime();
+    private static Clock clock = Clock.systemDefaultZone();
+
+    public static LocalDate now() {
+        return LocalDate.now(DateProvider.clock);
+    }
+
+    //FOR TESTING ONLY
+    public static void setClock(final Clock clock) {
+        DateProvider.clock = clock;
     }
 }

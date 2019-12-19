@@ -3,6 +3,10 @@ package com.abc;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.time.Clock;
+import java.time.LocalDate;
+import java.time.ZoneId;
+
 public class AccountTest {
     private static final double DOUBLE_DELTA = 1e-15;
 
@@ -65,10 +69,28 @@ public class AccountTest {
     }
 
     @Test
-    public void testCorrectInterestCalculatedMaxiSavings() {
+    public void testCorrectInterestCalculatedMaxiSavingsNoWithdraws() {
         Account account = new Account(AccountType.MAXI_SAVINGS);
         account.deposit(3000);
-        Assert.assertEquals(170, account.interestEarned(), DOUBLE_DELTA);
+        Assert.assertEquals(150, account.interestEarned(), DOUBLE_DELTA);
+    }
+
+    @Test
+    public void testCorrectInterestCalculatedMaxiSavingsRecentWithdraw() {
+        Account account = new Account(AccountType.MAXI_SAVINGS);
+        account.deposit(4000);
+        account.withdraw(1000);
+        Assert.assertEquals(3, account.interestEarned(), DOUBLE_DELTA);
+    }
+
+    @Test
+    public void testCorrectInterestCalculatedMaxiSavingsWithdrawMoreThan10DaysAgo() {
+        Account account = new Account(AccountType.MAXI_SAVINGS);
+        account.deposit(4000);
+        DateProvider.setClock(Clock.fixed(LocalDate.now().minusDays(100).atStartOfDay(ZoneId.systemDefault()).toInstant(), ZoneId.systemDefault()));
+        account.withdraw(1000);
+        DateProvider.setClock(Clock.systemDefaultZone());
+        Assert.assertEquals(150, account.interestEarned(), DOUBLE_DELTA);
     }
 
 }
