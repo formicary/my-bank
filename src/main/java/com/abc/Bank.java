@@ -22,6 +22,11 @@ public class Bank {
         return summary.toString();
     }
 
+    public void transferMoney(Account from, Account to, double amount) {
+        from.withdraw(amount);
+        to.deposit(amount);
+    }
+
     public double totalInterestPaid() {
         return customers.stream().mapToDouble(Customer::totalInterestEarned).sum();
     }

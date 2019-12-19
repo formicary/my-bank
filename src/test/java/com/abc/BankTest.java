@@ -51,4 +51,12 @@ public class BankTest {
         Assert.assertEquals(2.1, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
+    @Test
+    public void transferMoneyMovesMoneyCorrectly() {
+        Bank bank = new Bank();
+        bank.transferMoney(checkingAccount, savingsAccount, 500);
+        Assert.assertEquals(500, checkingAccount.getBalance(), DOUBLE_DELTA);
+        Assert.assertEquals(1500, savingsAccount.getBalance(), DOUBLE_DELTA);
+    }
+
 }
