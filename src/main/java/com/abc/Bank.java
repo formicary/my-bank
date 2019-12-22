@@ -1,6 +1,7 @@
 package com.abc;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Bank {
@@ -14,33 +15,28 @@ public class Bank {
         customers.add(customer);
     }
 
+    //Summary of all the customers
     public String customerSummary() {
-        String summary = "Customer Summary";
+        StringBuilder summary = new StringBuilder("Customer Summary");
         for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-        return summary;
+            summary.append("\n - ").append(c.getName()).append(" (").append(Utils.format(c.getNumberOfAccounts(), "account")).append(")");
+        return summary.toString();
     }
 
-    //Make sure correct plural of word is created based on the number passed in:
-    //If number passed in is 1 just return the word otherwise add an 's' at the end
-    private String format(int number, String word) {
-        return number + " " + (number == 1 ? word : word + "s");
-    }
-
-    public double totalInterestPaid() {
+    //The total compund interest the bank has to pay to the given date
+    public double totalInterestPaid(Date date) {
         double total = 0;
         for(Customer c: customers)
-            total += c.totalInterestEarned();
+            total += c.totalCompoundInterestEarned(date);
         return total;
     }
 
     public String getFirstCustomer() {
         try {
-            customers = null;
             return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
+        } catch (IndexOutOfBoundsException e){
+            System.out.println("No customer found!");
+            return "No customer found!";
         }
     }
 }
