@@ -72,4 +72,40 @@ public class CustomerTest {
         oscar.openAccount(new Account (Account.MAXI_SAVINGS));
 		assertEquals(3, oscar.getNumberOfAccounts());
 	}
+    
+    @Test
+    public void testMultipleSavingsAccounts() {
+    	Customer oscar = new Customer("Oscar")
+    			.openAccount(new Account(Account.SAVINGS));
+    	oscar.openAccount(new Account(Account.SAVINGS));
+    	assertEquals(2, oscar.getNumberOfAccounts());
+    }
+    
+    @Test
+    public void testMultipleCheckingAccounts() {
+    	Customer oscar = new Customer("Oscar")
+    			.openAccount(new Account(Account.CHECKING));
+    	oscar.openAccount(new Account(Account.CHECKING));
+    	assertEquals(2, oscar.getNumberOfAccounts());
+    }
+    
+    @Test
+    public void testMultipleMaxiSavingsAccounts() {
+    	Customer oscar = new Customer("Oscar")
+    			.openAccount(new Account(Account.MAXI_SAVINGS));
+    	oscar.openAccount(new Account(Account.MAXI_SAVINGS));
+    	assertEquals(2, oscar.getNumberOfAccounts());
+    }
+    
+    @Test 
+    public void testMultipleAccounts() {
+    	Customer oscar = new Customer("Oscar");
+    	oscar.openAccount(new Account(Account.MAXI_SAVINGS));
+    	oscar.openAccount(new Account(Account.MAXI_SAVINGS));
+    	oscar.openAccount(new Account(Account.SAVINGS));
+    	oscar.openAccount(new Account(Account.SAVINGS));
+    	oscar.openAccount(new Account(Account.CHECKING));
+    	oscar.openAccount(new Account(Account.CHECKING));
+    	assertEquals(6, oscar.getNumberOfAccounts());
+    }
 }
