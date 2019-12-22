@@ -1,6 +1,7 @@
 package com.abc;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Account {
@@ -9,8 +10,10 @@ public class Account {
     public static final int SAVINGS = 1;
     public static final int MAXI_SAVINGS = 2;
 
-    private final int accountType;
+    protected final int accountType;
     public List<Transaction> transactions;
+    
+    protected Date lastWithdrawal;
 
     public Account(int accountType) {
         this.accountType = accountType;
@@ -25,13 +28,14 @@ public class Account {
         }
     }
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
+    public void withdraw(double amount) {
+    	if (amount <= 0) {
+    		throw new IllegalArgumentException("amount must be greater than zero");
+    	} else {
+    		transactions.add(new Transaction(-amount));
+    		lastWithdrawal = transactions.get(transactions.size() -1).getTransactionDate();
+    	}
     }
-}
 
     public double interestEarned() {
         double amount = sumTransactions();
@@ -41,9 +45,6 @@ public void withdraw(double amount) {
                     return amount * 0.001;
                 else
                     return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
             case MAXI_SAVINGS:
                 if (amount <= 1000)
                     return amount * 0.02;
