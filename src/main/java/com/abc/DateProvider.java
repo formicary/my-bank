@@ -15,4 +15,12 @@ public class DateProvider {
     public Date now() {
         return Calendar.getInstance().getTime();
     }
+    
+    public Date oneHundredDaysAgo() {
+    	Date today = now();
+    	Calendar cal = Calendar.getInstance();
+    	cal.add(Calendar.DAY_OF_MONTH, -100);
+    	return cal.getTime();
+    	
+    }
 }

@@ -5,6 +5,8 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
+	
+    private static final double DOUBLE_DELTA = 1e-15;
 
     @Test //Test customer statement generation
     public void testApp(){
@@ -17,7 +19,7 @@ public class CustomerTest {
         checkingAccount.deposit(100.0);
         savingsAccount.deposit(4000.0);
         savingsAccount.withdraw(200.0);
-
+        System.out.println(henry.getStatement());
         assertEquals("Statement for Henry\n" +
                 "\n" +
                 "Checking Account\n" +
@@ -108,4 +110,22 @@ public class CustomerTest {
     	oscar.openAccount(AccountFactory.getInstance().createAccount(Account.CHECKING));
     	assertEquals(6, oscar.getNumberOfAccounts());
     }
+    
+    @Test
+    public void testAccountTransfer() {
+    	Customer oscar = new Customer("Oscar");
+    	oscar.openAccount(AccountFactory.getInstance().createAccount(Account.CHECKING));
+    	oscar.openAccount(AccountFactory.getInstance().createAccount(Account.SAVINGS));
+    	oscar.getAccountByID(1).deposit(1000);
+    	
+    	assertEquals(1000, oscar.getAccountByID(1).getBalance(), DOUBLE_DELTA);
+    	assertEquals(0, oscar.getAccountByID(2).getBalance(), DOUBLE_DELTA);
+    	
+    	oscar.transferBetweenAccounts(1, 2, 500);
+    	
+    	assertEquals(500, oscar.getAccountByID(1).getBalance(), DOUBLE_DELTA);
+    	assertEquals(500, oscar.getAccountByID(2).getBalance(), DOUBLE_DELTA);
+    }
+    
+    
 }

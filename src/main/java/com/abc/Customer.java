@@ -53,10 +53,16 @@ public class Customer {
 		double total = 0.0;
 		for (Account a : accounts) {
 			statement += "\n" + statementForAccount(a) + "\n";
-			total += a.sumTransactions();
+			total += a.getBalance();
 		}
 		statement += "\nTotal In All Accounts " + toDollars(total);
 		return statement;
+	}
+	
+	public void transferBetweenAccounts(int source, int destination, double amount) {
+		getAccountByID(source).withdraw(amount);
+		getAccountByID(destination).deposit(amount);
+				
 	}
 
 	private String statementForAccount(Account a) {
@@ -88,4 +94,6 @@ public class Customer {
 	private String toDollars(double d) {
 		return String.format("$%,.2f", abs(d));
 	}
+	
+
 }

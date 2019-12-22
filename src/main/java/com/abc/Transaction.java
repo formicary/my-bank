@@ -21,12 +21,24 @@ public class Transaction {
         this.transactionType = type;
     }
     
+//  A function added to specific the time that the transaction was made. 
+//  Used by Accounts in debugging mode only.
+    public Transaction(double amount, TransactionType type, Date transactionDate) {
+        this.amount = amount;
+        this.transactionDate = transactionDate;
+        this.transactionType = type;
+    }
+    
     public Date getTransactionDate() {
     	return this.transactionDate;
     }
     
     public double getTransactionAmount() {
     	return this.amount;
+    }
+    
+    public TransactionType getTransactionType() {
+    	return this.transactionType;
     }
 
 }

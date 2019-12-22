@@ -3,15 +3,21 @@ package com.abc;
 public class CheckingAccount extends Account {
 
 	public CheckingAccount() {
-		super(Account.CHECKING);
+		super(Account.CHECKING, false);
+	}
+	
+	public CheckingAccount(boolean debuggingEnabled) {
+		super(Account.CHECKING, debuggingEnabled);
 	}
 
-	public double interestEarned() {
+	public void applyInterest() {
 		double amount = sumTransactions();
-		return amount * 0.001;
+		if (amount > 0 && daysSinceLastTransaction() > 0) {
+			interest(amount * 0.001);
+		}
 	}
 
-	public double sumTransactions() {
+	public double getBalance() {
 		return checkIfTransactionsExist(true);
 	}
 
