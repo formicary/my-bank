@@ -16,11 +16,18 @@ public class DateProvider {
         return Calendar.getInstance().getTime();
     }
     
-    public Date oneHundredDaysAgo() {
+    public Date oneYearAgo() {
     	Date today = now();
     	Calendar cal = Calendar.getInstance();
-    	cal.add(Calendar.DAY_OF_MONTH, -100);
+    	cal.setTime(today);
+    	cal.add(Calendar.YEAR, -1);
     	return cal.getTime();
-    	
+    }
+    
+    public Date incrementByDay(Date dateToIncrement) {
+    	Calendar cal = Calendar.getInstance();
+    	cal.setTime(dateToIncrement);
+    	cal.add(Calendar.DAY_OF_MONTH, 1);
+    	return cal.getTime();
     }
 }
