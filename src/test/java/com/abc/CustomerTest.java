@@ -32,6 +32,24 @@ public class CustomerTest {
                 "\n" +
                 "Total In All Accounts $3,900.00", henry.getStatement());
     }
+    
+    @Test
+    public void testSavingsAccountCreation(){
+        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
+        assertEquals(Account.SAVINGS, oscar.getAccountByID(1).getAccountType());
+    }
+    
+    @Test
+    public void testCheckingAccountCreation(){
+        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.CHECKING));
+        assertEquals(Account.CHECKING, oscar.getAccountByID(1).getAccountType());
+    }
+    
+    @Test
+    public void testMaxiAccountCreation(){
+        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.MAXI_SAVINGS));
+        assertEquals(Account.MAXI_SAVINGS, oscar.getAccountByID(1).getAccountType());
+    }
 
     @Test
     public void testOneAccount(){
@@ -47,11 +65,12 @@ public class CustomerTest {
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
-    @Ignore
+    @Test
     public void testThreeAcounts() {
         Customer oscar = new Customer("Oscar")
                 .openAccount(new Account(Account.SAVINGS));
         oscar.openAccount(new Account(Account.CHECKING));
-        assertEquals(3, oscar.getNumberOfAccounts());
-    }
+        oscar.openAccount(new Account (Account.MAXI_SAVINGS));
+		assertEquals(3, oscar.getNumberOfAccounts());
+	}
 }
