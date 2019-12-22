@@ -9,8 +9,8 @@ public class CustomerTest {
     @Test //Test customer statement generation
     public void testApp(){
 
-        Account checkingAccount = new Account(Account.CHECKING);
-        Account savingsAccount = new Account(Account.SAVINGS);
+        Account checkingAccount = AccountFactory.getInstance().createAccount(Account.CHECKING);
+        Account savingsAccount = AccountFactory.getInstance().createAccount(Account.SAVINGS);
 
         Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
 
@@ -34,78 +34,78 @@ public class CustomerTest {
     
     @Test
     public void testSavingsAccountCreation(){
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
+        Customer oscar = new Customer("Oscar").openAccount(AccountFactory.getInstance().createAccount(Account.SAVINGS));
         assertEquals(Account.SAVINGS, oscar.getAccountByID(1).getAccountType());
     }
     
     @Test
     public void testCheckingAccountCreation(){
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.CHECKING));
+        Customer oscar = new Customer("Oscar").openAccount(AccountFactory.getInstance().createAccount(Account.CHECKING));
         assertEquals(Account.CHECKING, oscar.getAccountByID(1).getAccountType());
     }
     
     @Test
     public void testMaxiAccountCreation(){
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.MAXI_SAVINGS));
+        Customer oscar = new Customer("Oscar").openAccount(AccountFactory.getInstance().createAccount(Account.MAXI_SAVINGS));
         assertEquals(Account.MAXI_SAVINGS, oscar.getAccountByID(1).getAccountType());
     }
 
     @Test
     public void testOneAccount(){
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
+        Customer oscar = new Customer("Oscar").openAccount(AccountFactory.getInstance().createAccount(Account.SAVINGS));
         assertEquals(1, oscar.getNumberOfAccounts());
     }
 
     @Test
     public void testTwoAccount(){
         Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
+                .openAccount(AccountFactory.getInstance().createAccount(Account.SAVINGS));
+        oscar.openAccount(AccountFactory.getInstance().createAccount(Account.CHECKING));
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
     @Test
     public void testThreeAcounts() {
         Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
-        oscar.openAccount(new Account (Account.MAXI_SAVINGS));
+                .openAccount(AccountFactory.getInstance().createAccount(Account.SAVINGS));
+        oscar.openAccount(AccountFactory.getInstance().createAccount(Account.CHECKING));
+        oscar.openAccount(AccountFactory.getInstance().createAccount (Account.MAXI_SAVINGS));
 		assertEquals(3, oscar.getNumberOfAccounts());
 	}
     
     @Test
     public void testMultipleSavingsAccounts() {
     	Customer oscar = new Customer("Oscar")
-    			.openAccount(new Account(Account.SAVINGS));
-    	oscar.openAccount(new Account(Account.SAVINGS));
+    			.openAccount(AccountFactory.getInstance().createAccount(Account.SAVINGS));
+    	oscar.openAccount(AccountFactory.getInstance().createAccount(Account.SAVINGS));
     	assertEquals(2, oscar.getNumberOfAccounts());
     }
     
     @Test
     public void testMultipleCheckingAccounts() {
     	Customer oscar = new Customer("Oscar")
-    			.openAccount(new Account(Account.CHECKING));
-    	oscar.openAccount(new Account(Account.CHECKING));
+    			.openAccount(AccountFactory.getInstance().createAccount(Account.CHECKING));
+    	oscar.openAccount(AccountFactory.getInstance().createAccount(Account.CHECKING));
     	assertEquals(2, oscar.getNumberOfAccounts());
     }
     
     @Test
     public void testMultipleMaxiSavingsAccounts() {
     	Customer oscar = new Customer("Oscar")
-    			.openAccount(new Account(Account.MAXI_SAVINGS));
-    	oscar.openAccount(new Account(Account.MAXI_SAVINGS));
+    			.openAccount(AccountFactory.getInstance().createAccount(Account.MAXI_SAVINGS));
+    	oscar.openAccount(AccountFactory.getInstance().createAccount(Account.MAXI_SAVINGS));
     	assertEquals(2, oscar.getNumberOfAccounts());
     }
     
     @Test 
     public void testMultipleAccounts() {
     	Customer oscar = new Customer("Oscar");
-    	oscar.openAccount(new Account(Account.MAXI_SAVINGS));
-    	oscar.openAccount(new Account(Account.MAXI_SAVINGS));
-    	oscar.openAccount(new Account(Account.SAVINGS));
-    	oscar.openAccount(new Account(Account.SAVINGS));
-    	oscar.openAccount(new Account(Account.CHECKING));
-    	oscar.openAccount(new Account(Account.CHECKING));
+    	oscar.openAccount(AccountFactory.getInstance().createAccount(Account.MAXI_SAVINGS));
+    	oscar.openAccount(AccountFactory.getInstance().createAccount(Account.MAXI_SAVINGS));
+    	oscar.openAccount(AccountFactory.getInstance().createAccount(Account.SAVINGS));
+    	oscar.openAccount(AccountFactory.getInstance().createAccount(Account.SAVINGS));
+    	oscar.openAccount(AccountFactory.getInstance().createAccount(Account.CHECKING));
+    	oscar.openAccount(AccountFactory.getInstance().createAccount(Account.CHECKING));
     	assertEquals(6, oscar.getNumberOfAccounts());
     }
 }
