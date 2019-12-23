@@ -12,7 +12,6 @@ public class AccountTest {
         Account account = AccountFactory.getInstance().createAccount(Account.CHECKING);
         account.deposit(1000);
         account.withdraw(1100);
-        System.out.println(account.getBalance());
     }
 
 }

@@ -2,18 +2,27 @@ package com.abc;
 
 public class CheckingAccount extends Account {
 
+	private static final double ANNUAL_INTEREST = 0.001;
+
 	public CheckingAccount() {
 		super(Account.CHECKING, false);
 	}
-	
+
 	public CheckingAccount(boolean debuggingEnabled) {
 		super(Account.CHECKING, debuggingEnabled);
 	}
 
 	public void applyInterest() {
 		double amount = sumTransactions();
-		if (amount > 0 && daysSinceLastTransaction() > 0) {
-			interest(amount * 0.001);
+		int days = daysSinceLastTransaction();
+		if (amount > 0 && days > 0) {
+			double yearLength = DateProvider.getInstance().getYearLength();
+			
+			double dailyInterestRate = ANNUAL_INTEREST / yearLength;
+			double dailyInterestRateRaised = Math.pow((1 + dailyInterestRate), days);
+			double interestEarned = (amount * (dailyInterestRateRaised)) - amount;
+
+			interest(Math.floor(interestEarned * 100) / 100);
 		}
 	}
 

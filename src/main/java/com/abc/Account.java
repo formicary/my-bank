@@ -45,7 +45,6 @@ public abstract class Account {
 			throw new IllegalArgumentException("amount must be greater than zero");
 		} else {
 			applyInterest();
-
 			if (DEBUG) {
 				debugTransaction(-amount, Transaction.TransactionType.WITHDRAWAL);
 			} else {
@@ -83,11 +82,16 @@ public abstract class Account {
 	}
 
 	protected int daysSinceLastTransaction() {
+		if (transactions.size() > 0) {
 		long currentTime = DateProvider.getInstance().now().getTime();
 		long lastTransactionTime = transactions.get(transactions.size() - 1).getTransactionDate().getTime();
 		long difference = currentTime - lastTransactionTime;
 		long differenceDays = (difference / (1000 * 60 * 60 * 24));
+		
 		return (int) differenceDays;
+		} else {
+			return 0;
+		}
 	}
 
 //  Apply interest before returning the sum of the transactions. Ensures a fully up to date

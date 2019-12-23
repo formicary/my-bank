@@ -19,7 +19,7 @@ public class CustomerTest {
         checkingAccount.deposit(100.0);
         savingsAccount.deposit(4000.0);
         savingsAccount.withdraw(200.0);
-        System.out.println(henry.getStatement());
+ 
         assertEquals("Statement for Henry\n" +
                 "\n" +
                 "Checking Account\n" +

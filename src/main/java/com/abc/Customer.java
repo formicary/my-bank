@@ -34,7 +34,6 @@ public class Customer {
 			throw new IllegalArgumentException("ID must be 1 or greater");
 		} else if (i > accounts.size() + 1) {
 //  		Return an account not found error message instead of saying out of bounds.
-//  		This means that knowledge of the number of accounts is not leaked.
 			throw new IllegalArgumentException("Account with this ID can't be found.");
 		}
 		return accounts.get(i - 1);

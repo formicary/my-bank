@@ -16,6 +16,15 @@ public class DateProvider {
         return Calendar.getInstance().getTime();
     }
     
+//  Gets the number of days in the current year.
+//  Used to work out if the current year is a leap year or not.
+    public int getYearLength() {
+    	Calendar cal = Calendar.getInstance();
+    	cal.setTime(now());
+    	return cal.getActualMaximum(Calendar.DAY_OF_YEAR);
+    }
+        
+//  The below two functions are manipulate dates for debugging purposes. 
     public Date oneYearAgo() {
     	Date today = now();
     	Calendar cal = Calendar.getInstance();
@@ -30,4 +39,5 @@ public class DateProvider {
     	cal.add(Calendar.DAY_OF_MONTH, 1);
     	return cal.getTime();
     }
+    
 }
