@@ -22,7 +22,7 @@ public class AccountTest {
     		account.deposit(5);
     	}
     
-    	assertEquals(1869.41, account.sumTransactions(), DOUBLE_DELTA);
+    	assertEquals(1871.51, account.getBalance(), DOUBLE_DELTA);
     }
     
     @Test
@@ -35,6 +35,59 @@ public class AccountTest {
     		account.deposit(5);
     	}
     	    	
-    	assertEquals(1816.95, account.sumTransactions(), DOUBLE_DELTA);
+    	assertEquals(1819.01, account.getBalance(), DOUBLE_DELTA);
     }
+    
+	@Test
+	public void checkingAccountTest() {
+		Bank bank = new Bank();
+		Account checkingAccount = AccountFactory.getInstance().createAccount(Account.CHECKING,
+				AccountFactory.DEBUG_ENABLED);
+		Customer bill = new Customer("Bill").openAccount(checkingAccount);
+		bank.addCustomer(bill);
+
+		checkingAccount.deposit(100.0);
+		
+//		Manually apply interest to the account for the year.
+		while(checkingAccount.transactions.size() < 365) {
+			checkingAccount.applyInterest();
+		}
+		
+		System.out.println(checkingAccount.sumTransactions());
+		assertEquals(0.10, bank.totalInterestPaid(), DOUBLE_DELTA);
+	}
+
+	@Test
+	public void savingsAccountAboveThresholdTest() {
+		Bank bank = new Bank();
+		Account savingsAccount = AccountFactory.getInstance().createAccount(Account.SAVINGS,
+				AccountFactory.DEBUG_ENABLED);
+		bank.addCustomer(new Customer("Bill").openAccount(savingsAccount));
+
+		savingsAccount.deposit(1500.0);
+//		Manually apply interest to the account for the year.
+		while(savingsAccount.transactions.size() < 365) {
+			savingsAccount.applyInterest();
+		}
+
+		assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+	}
+	
+	@Test
+	public void savingsAccountBelowThresholdTest() {
+		Bank bank = new Bank();
+		Account savingsAccount = AccountFactory.getInstance().createAccount(Account.SAVINGS,
+				AccountFactory.DEBUG_ENABLED);
+		bank.addCustomer(new Customer("Bill").openAccount(savingsAccount));
+
+		savingsAccount.deposit(500.0);
+//		Manually apply interest to the account for the year.
+		while(savingsAccount.transactions.size() < 365) {
+			savingsAccount.applyInterest();
+		}
+
+		assertEquals(0.5, bank.totalInterestPaid(), DOUBLE_DELTA);
+	}
+    
+    
 }

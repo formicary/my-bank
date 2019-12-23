@@ -22,7 +22,7 @@ public class CheckingAccount extends Account {
 			double dailyInterestRateRaised = Math.pow((1 + dailyInterestRate), days);
 			double interestEarned = (amount * (dailyInterestRateRaised)) - amount;
 
-			interest(Math.floor(interestEarned * 100) / 100);
+			interest(interestEarned);
 		}
 	}
 

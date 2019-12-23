@@ -29,7 +29,7 @@ public class SavingsAccount extends Account {
 
 				double dailyInterestRateRaised = Math.pow((1 + preThresholdDailyInterestRate), days);
 				double interestEarned = (amount * (dailyInterestRateRaised)) - amount;
-				interest(Math.floor(interestEarned * 100) / 100);
+				interest(interestEarned);
 
 			} else {
 
@@ -43,7 +43,7 @@ public class SavingsAccount extends Account {
 				double postThresoldInterestEarned = ((amount - THRESHOLD_AMOUNT)
 						* (postThresholdDailyInterestRateRaised)) - (amount - THRESHOLD_AMOUNT);
 
-				interest(Math.floor((preThresholdInterestEarned + postThresoldInterestEarned) * 100) / 100);
+				interest(preThresholdInterestEarned + postThresoldInterestEarned);
 			}
 		}
 	}

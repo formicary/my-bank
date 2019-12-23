@@ -27,15 +27,14 @@ public abstract class Account {
 
 //  Calculate Interest before performing the deposit.
 	public void deposit(double amount) {
-		if (amount <= 0) {
+		if (DEBUG) {
+			applyInterest();
+			debugTransaction(amount, TransactionType.DEPOSIT);
+		} else if (amount <= 0) {
 			throw new IllegalArgumentException("amount must be greater than zero");
 		} else {
 			applyInterest();
-			if (DEBUG) {
-				debugTransaction(amount, TransactionType.DEPOSIT);
-			} else {
-				transactions.add(new Transaction(amount, Transaction.TransactionType.DEPOSIT));
-			}
+			transactions.add(new Transaction(amount, Transaction.TransactionType.DEPOSIT));
 		}
 	}
 
@@ -110,14 +109,14 @@ public abstract class Account {
 //  Statement.
 	public double getBalance() {
 		applyInterest();
-		return checkIfTransactionsExist(true);
+		return Math.floor(checkIfTransactionsExist(true)*100)/100;
 	}
 
 	private double checkIfTransactionsExist(boolean checkAll) {
 		double amount = 0.0;
 		for (Transaction t : transactions)
 			amount += t.amount;
-		return Math.floor(amount * 100) / 100;
+		return amount;
 	}
 
 	public int getAccountType() {
@@ -133,6 +132,6 @@ public abstract class Account {
 			if (t.getTransactionType() == Transaction.TransactionType.INTEREST)
 				amount += t.amount;
 		}
-		return amount;
+		return Math.floor(amount*100)/100;
 	}
 }

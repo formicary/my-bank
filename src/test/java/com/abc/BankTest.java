@@ -17,40 +17,24 @@ public class BankTest {
 		assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
 	}
 
+
+	
 	@Test
-	public void checkingAccount() {
+	public void firstCustomerTest() {
 		Bank bank = new Bank();
-		Account checkingAccount = AccountFactory.getInstance().createAccount(Account.CHECKING,
-				AccountFactory.DEBUG_ENABLED);
-		Customer bill = new Customer("Bill").openAccount(checkingAccount);
+		Customer bill = new Customer("Bill");
 		bank.addCustomer(bill);
-
-		checkingAccount.deposit(100.0);
-		assertEquals(0.10, bank.totalInterestPaid(), DOUBLE_DELTA);
+		bank.addCustomer(new Customer("Bob"));
+		
+		assertEquals("Bill", bank.getFirstCustomer());
 	}
-
+	
 	@Test
-	public void savings_account() {
+	public void firstCustomerExceptionTest() {
 		Bank bank = new Bank();
-		Account savingsAccount = AccountFactory.getInstance().createAccount(Account.SAVINGS,
-				AccountFactory.DEBUG_ENABLED);
-		bank.addCustomer(new Customer("Bill").openAccount(savingsAccount));
-
-		savingsAccount.deposit(1500.0);
-
-		assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
-	}
-
-	@Test
-	public void maxi_savings_account() {
-		Bank bank = new Bank();
-		Account maxiAccount = AccountFactory.getInstance().createAccount(Account.MAXI_SAVINGS,
-				AccountFactory.DEBUG_ENABLED);
-		bank.addCustomer(new Customer("Bill").openAccount(maxiAccount));
-
-		maxiAccount.deposit(3000.0);
-
-		assertEquals(153.80, bank.totalInterestPaid(), DOUBLE_DELTA);
+		
+		assertEquals("Error", bank.getFirstCustomer());
+		
 	}
 
 }
