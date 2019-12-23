@@ -8,7 +8,7 @@ import com.abc.Transaction.TransactionType;
 
 public abstract class Account {
 
-	private boolean DEBUG = false;
+	protected boolean DEBUG = false;
 
 	public static final int CHECKING = 0;
 	public static final int SAVINGS = 1;
@@ -42,7 +42,7 @@ public abstract class Account {
 //  Calculate interest before performing the withdrawal
 	public void withdraw(double amount) {
 		if (amount <= 0) {
-			throw new IllegalArgumentException("amount must be greater than zero");
+			throw new IllegalArgumentException("amount be greater than zero");
 		} else {
 			applyInterest();
 			if (DEBUG) {
@@ -70,10 +70,16 @@ public abstract class Account {
 	}
 
 	public void interest(double amount) {
-		if (amount <= 0.0) {
-			throw new IllegalArgumentException("amount must be greater than zero");
+		if (amount < 0) {
+			throw new IllegalArgumentException("amount must not be less than zero");
+		} else if (amount == 0) {
+			return;
 		} else {
-			transactions.add(new Transaction(amount, Transaction.TransactionType.INTEREST));
+			if (DEBUG) {
+				debugTransaction(amount, Transaction.TransactionType.INTEREST);
+			} else {
+				transactions.add(new Transaction(amount, Transaction.TransactionType.INTEREST));
+			}
 		}
 	}
 
@@ -83,12 +89,18 @@ public abstract class Account {
 
 	protected int daysSinceLastTransaction() {
 		if (transactions.size() > 0) {
-		long currentTime = DateProvider.getInstance().now().getTime();
-		long lastTransactionTime = transactions.get(transactions.size() - 1).getTransactionDate().getTime();
-		long difference = currentTime - lastTransactionTime;
-		long differenceDays = (difference / (1000 * 60 * 60 * 24));
-		
-		return (int) differenceDays;
+			if (DEBUG) {
+//				If in Debug mode it is always 1 day since the last transaction.
+				return 1;
+			} else {
+
+				long currentTime = DateProvider.getInstance().now().getTime();
+				long lastTransactionTime = transactions.get(transactions.size() - 1).getTransactionDate().getTime();
+				long difference = currentTime - lastTransactionTime;
+				long differenceDays = (difference / (1000 * 60 * 60 * 24));
+
+				return (int) differenceDays;
+			}
 		} else {
 			return 0;
 		}
@@ -105,7 +117,7 @@ public abstract class Account {
 		double amount = 0.0;
 		for (Transaction t : transactions)
 			amount += t.amount;
-		return amount;
+		return Math.floor(amount * 100) / 100;
 	}
 
 	public int getAccountType() {
