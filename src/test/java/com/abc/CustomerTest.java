@@ -1,57 +1,107 @@
-package com.abc;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 
-import org.junit.Ignore;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
+import static org.junit.Assert.*;
 
-import static org.junit.Assert.assertEquals;
+/**
+ *
+ * @author batuhan yilmaz
+ */
 
 public class CustomerTest {
-
-    @Test //Test customer statement generation
-    public void testApp(){
-
-        Account checkingAccount = new Account(Account.CHECKING);
-        Account savingsAccount = new Account(Account.SAVINGS);
-
-        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
-
-        checkingAccount.deposit(100.0);
-        savingsAccount.deposit(4000.0);
-        savingsAccount.withdraw(200.0);
-
-        assertEquals("Statement for Henry\n" +
-                "\n" +
-                "Checking Account\n" +
-                "  deposit $100.00\n" +
-                "Total $100.00\n" +
-                "\n" +
-                "Savings Account\n" +
-                "  deposit $4,000.00\n" +
-                "  withdrawal $200.00\n" +
-                "Total $3,800.00\n" +
-                "\n" +
-                "Total In All Accounts $3,900.00", henry.getStatement());
+    private Customer henry;
+    private Account checking;
+    private Account saving;
+    private Account maxiSaving;
+    
+    public CustomerTest() {
+    }
+    
+    @Before
+    public void setUp() {
+        checking = new Account(AccountType.CHECKING);
+        saving = new Account(AccountType.SAVINGS);
+        maxiSaving = new Account(AccountType.MAXI_SAVINGS);
+    }
+    
+    @After
+    public void tearDown() {
     }
 
     @Test
-    public void testOneAccount(){
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
-        assertEquals(1, oscar.getNumberOfAccounts());
+    public void testAccountCreation(){
+        henry = new Customer("Henry").createAccount(checking);
+        assertEquals(1, henry.getAccounts().size());
+        henry.createAccount(saving);
+        assertEquals(2, henry.getAccounts().size());
+        henry.createAccount(maxiSaving);
+        assertEquals(3, henry.getAccounts().size());
     }
-
+    
     @Test
-    public void testTwoAccount(){
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
-        assertEquals(2, oscar.getNumberOfAccounts());
+    public void testFindUID(){
+        henry = new Customer("Henry").createAccount(checking);
+        assertEquals(checking, henry.findAccount(checking.getUniqueID()));
+        henry.createAccount(saving);
+        assertEquals(saving, henry.findAccount(saving.getUniqueID()));
+        henry.createAccount(maxiSaving);
+        assertEquals(maxiSaving, henry.findAccount(maxiSaving.getUniqueID()));
     }
+    
+    @Test
+    public void testDepositWithdraw(){
+        henry = new Customer("Henry").createAccount(checking);
+        henry.deposit(checking.getUniqueID(), 1000);
+        assertEquals(1000.0, checking.getBalance(),0.1);
+        henry.withdraw(checking.getUniqueID(), 250);
+        assertEquals(750.0, checking.getBalance(),0.1);
+    }
+    
+    @Test
+    public void testStatements(){
+        henry = new Customer("Henry").createAccount(checking).createAccount(saving).createAccount(maxiSaving);
+        henry.deposit(checking.getUniqueID(), 1000);
+        henry.withdraw(checking.getUniqueID(), 250);
+        henry.deposit(saving.getUniqueID(), 300);
+        henry.deposit(maxiSaving.getUniqueID(), 200);
 
-    @Ignore
-    public void testThreeAcounts() {
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
-        assertEquals(3, oscar.getNumberOfAccounts());
+        System.out.println(henry.getAllStatements());
+        
+        assertEquals("Statement for Henry\n\n" + "Checking Account\n"
+                + "Deposit $1000.0\n\n" + "Withdrawal $250.0\n\n" +
+                "Total $750.00\n\n" + "Savings Account\n" + "Deposit $300.0\n\n" +
+                "Total $300.00\n\n" + "Maxi Savings Account\n" + "Deposit $200.0\n\n"+
+                "Total $200.00\n\n" + "TotalBalance $1250"
+                , henry.getAllStatements());
     }
+    
+    @Test
+    public void testTransferFunds(){
+        henry = new Customer("Henry").createAccount(checking).createAccount(saving).createAccount(maxiSaving);
+        henry.transferFunds(checking.getUniqueID(), 500, saving.getUniqueID());
+        assertEquals(-500, checking.getBalance(),0.1);
+        assertEquals(500, saving.getBalance(),0.1);
+    }
+    
+    
+    @Test
+    public void testTotalInterest(){
+        henry = new Customer("Henry").createAccount(checking).createAccount(saving).createAccount(maxiSaving);
+        henry.deposit(checking.getUniqueID(), 1000);
+        henry.deposit(saving.getUniqueID(), 300);
+        henry.deposit(maxiSaving.getUniqueID(), 200);
+        assertEquals(1505.3,henry.totalInterestEarned(),0.1);
+        
+    }
+    
+    
+    
+
+
 }
