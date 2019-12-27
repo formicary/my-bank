@@ -1,16 +1,30 @@
-package com.abc;
+import java.text.SimpleDateFormat;
 
-import java.util.Calendar;
-import java.util.Date;
+/**
+ *
+ * @author batuhan yilmaz
+ */
 
 public class Transaction {
-    public final double amount;
-
-    private Date transactionDate;
-
-    public Transaction(double amount) {
+    private final double amount;
+    private final SimpleDateFormat transactionDate;
+    private final String type;
+    
+    public Transaction(double amount, String type) {
         this.amount = amount;
-        this.transactionDate = DateProvider.getInstance().now();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        this.transactionDate = formatter;
+        this.type = type;
     }
 
+    public double getAmount() {
+        return amount;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    
+    
 }
