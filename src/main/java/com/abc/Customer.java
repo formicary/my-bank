@@ -34,6 +34,31 @@ public class Customer {
         return total;
     }
 
+    public boolean transferBetweenAccounts(String from, String to, double amount) {
+        Account fromAccount = getAccount(from);
+        Account toAccount = getAccount(to);
+        if (fromAccount == null || toAccount == null) {
+            return false;
+        }
+        if (amount >= 0) {
+            fromAccount.withdraw(amount);
+            toAccount.deposit(amount);
+        } else {
+            fromAccount.deposit(amount);
+            toAccount.deposit(amount);
+        }
+        return true;
+    }
+
+    public Account getAccount(String accountName) {
+        for (Account account : accounts) {
+            if (account.getAccountName().equals(accountName)) {
+                return account;
+            }
+        }
+        return null;
+    }
+
     public String getStatement() {
         String statement = null;
         statement = "Statement for " + name + "\n";
