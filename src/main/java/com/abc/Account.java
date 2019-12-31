@@ -16,10 +16,12 @@ public class Account {
 
     private final int accountType;
     public List<Transaction> transactions;
+    private double balance;
 
     public Account(String accountName, int accountType) {
         this.accountName = accountName;
         this.accountType = accountType;
+        this.balance = 0;
         this.transactions = new ArrayList<Transaction>();
     }
 
@@ -28,19 +30,36 @@ public class Account {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
             transactions.add(new Transaction(amount));
+            balance += amount;
+            updateInterest();
         }
     }
 
     public void withdraw(double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
-        } else {
+        }
+        // Can add this in if account is Debit, but Idk how it works so Imma comment this out :/
+//        else if (balance <= 0) {
+//            throw new IllegalArgumentException("balance must be greater than zero");
+//        }
+        else {
             transactions.add(new Transaction(-amount));
+            balance -= amount;
+            updateInterest();
+        }
+    }
+
+    public void updateInterest() {
+        if (transactions.size() > 1 && getDaysFromLastMovement() > 1)  {
+            for (int i = 0; i < getDaysFromLastMovement(); i++) {
+                balance += interestEarned();
+            }
         }
     }
 
     public double interestEarned() {
-        double amount = sumTransactions();
+        double amount = balance;
         switch(accountType){
             case SAVINGS:
                 if (amount <= 1000)
@@ -71,6 +90,17 @@ public class Account {
         return amount;
     }
 
+    public Date getLastMovementDate() {
+        return transactions.get(transactions.size() - 1).transactionDate;
+    }
+
+    public int getDaysFromLastMovement() {
+        Date lastMovement = getLastMovementDate();
+        Date date = DateProvider.getInstance().now();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar.getTime().compareTo(lastMovement);
+    }
     public boolean checkWithdrawInThePast(int day) {
         Date date = DateProvider.getInstance().now();
         Calendar calendar = Calendar.getInstance();
