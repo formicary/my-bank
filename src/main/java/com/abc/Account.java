@@ -1,6 +1,7 @@
 package com.abc;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import static java.lang.Math.abs;
@@ -13,8 +14,6 @@ public class Account {
 
     private final int accountType;
     private List<Transaction> transactions;
-
-    private DateProvider dateProvider = DateProvider.getInstance();
 
     public Account(int accountType) {
         this.accountType = accountType;
@@ -52,9 +51,20 @@ public class Account {
                 }
             case MAXI_SAVINGS:
                 boolean noRecentWithdrawals = true;
-                long now = dateProvider.now().getTime();
+                Calendar now = Calendar.getInstance();
+                // Set now to the start of the day
+                now.set(Calendar.HOUR_OF_DAY, 0);
+                now.set(Calendar.MINUTE, 0);
+                now.set(Calendar.SECOND, 0);
+                now.set(Calendar.MILLISECOND, 0);
+                Calendar transactionCalendar;
                 for (Transaction t : transactions) {
-                    if (now - t.getTransactionDate().getTime() >= 10 * 24 * 60 * 60 * 1000) {
+                    transactionCalendar = t.getTransactionDate();
+                    transactionCalendar.set(Calendar.HOUR_OF_DAY, 0);
+                    transactionCalendar.set(Calendar.MINUTE, 0);
+                    transactionCalendar.set(Calendar.SECOND, 0);
+                    transactionCalendar.set(Calendar.MILLISECOND, 0);
+                    if (now.getTimeInMillis() - transactionCalendar.getTimeInMillis() <= 10 * 24 * 60 * 60 * 1000) {
                         noRecentWithdrawals = false;
                         break;
                     }
