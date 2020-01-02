@@ -48,4 +48,17 @@ public class Customer {
         statement.append("\nTotal In All Accounts ").append(toDollars(total));
         return statement.toString();
     }
+
+    public void transfer(Account transferFrom, Account transferTo, double amount) {
+        if (transferFrom == transferTo) {
+            throw new IllegalArgumentException("must transfer between 2 different accounts");
+        } else if (!accounts.contains(transferFrom)) {
+            throw new IllegalArgumentException(name + " must own transfer from account");
+        } else if (!accounts.contains(transferTo)) {
+            throw new IllegalArgumentException(name + " must own transfer to account");
+        } else {
+            transferFrom.withdraw(amount); // If withdraw fails, deposit is not executed
+            transferTo.deposit(amount);
+        }
+    }
 }
