@@ -51,4 +51,11 @@ public class AccountTest {
         checkingAccount.withdraw(1);
         assertEquals(0, checkingAccount.sumTransactions(), DOUBLE_DELTA);
     }
+
+    @Test
+    public void interestOnCheckingAccountWith1000is1() {
+        Account checkingAccount = new Account(Account.CHECKING);
+        checkingAccount.deposit(1000);
+        assertEquals(1, checkingAccount.interestEarned(), DOUBLE_DELTA);
+    }
 }
