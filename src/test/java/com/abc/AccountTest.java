@@ -8,44 +8,44 @@ public class AccountTest {
     private static final double DOUBLE_DELTA = 1e-15;
 
     @Test(expected = IllegalArgumentException.class)
-    public void zeroDepositThrowsException() {
+    public void depositZeroThrowsException() {
         Account checkingAccount = new Account(Account.CHECKING);
         checkingAccount.deposit(0);
     }
 
     @Test
-    public void positiveDepositAmount() {
+    public void depositOneHasBalanceOne() {
         Account checkingAccount = new Account(Account.CHECKING);
         checkingAccount.deposit(1);
         assertEquals(1, checkingAccount.sumTransactions(), DOUBLE_DELTA);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void negativeDepositThrowsException() {
+    public void depositNegativeOneThrowsException() {
         Account checkingAccount = new Account(Account.CHECKING);
         checkingAccount.deposit(-1);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void zeroWithdrawThrowsException() {
+    public void withdrawZeroThrowsException() {
         Account checkingAccount = new Account(Account.CHECKING);
         checkingAccount.withdraw(0);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void negativeWithdrawThrowsException() {
+    public void withdrawNegativeOneThrowsException() {
         Account checkingAccount = new Account(Account.CHECKING);
         checkingAccount.withdraw(-1);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void positiveWithdrawWithInsufficientBalance() {
+    public void withdrawOneWithZeroBalanceThrowsException() {
         Account checkingAccount = new Account(Account.CHECKING);
         checkingAccount.withdraw(1);
     }
 
     @Test
-    public void positiveWithdrawWithSufficientBalance() {
+    public void withdrawOneWithOneBalanceThrowsException() {
         Account checkingAccount = new Account(Account.CHECKING);
         checkingAccount.deposit(1);
         checkingAccount.withdraw(1);
