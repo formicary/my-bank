@@ -53,13 +53,13 @@ public class AccountTest {
     }
 
     @Test
-    public void interestOnCheckingAccountWith0is0() {
+    public void interestOnNewCheckingAccountIs0() {
         Account checkingAccount = new Account(Account.CHECKING);
         assertEquals(0, checkingAccount.interestEarned(), DOUBLE_DELTA);
     }
 
     @Test
-    public void interestOnCheckingAccountWith1000is1() {
+    public void interestOnCheckingAccountWith1000Is1() {
         Account checkingAccount = new Account(Account.CHECKING);
         checkingAccount.deposit(1000);
         assertEquals(1, checkingAccount.interestEarned(), DOUBLE_DELTA);
