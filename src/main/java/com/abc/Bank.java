@@ -15,10 +15,14 @@ public class Bank {
     }
 
     public String customerSummary() {
-        String summary = "Customer Summary";
+        StringBuilder summary = new StringBuilder("Customer Summary");
         for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-        return summary;
+            summary.append("\n - ")
+                    .append(c.getName())
+                    .append(" (")
+                    .append(format(c.getNumberOfAccounts(), "account"))
+                    .append(")");
+        return summary.toString();
     }
 
     //Make sure correct plural of word is created based on the number passed in:
