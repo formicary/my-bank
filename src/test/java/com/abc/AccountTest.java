@@ -64,4 +64,24 @@ public class AccountTest {
         checkingAccount.deposit(1000);
         assertEquals(1, checkingAccount.interestEarned(), DOUBLE_DELTA);
     }
+
+    @Test
+    public void interestOnNewSavingsAccountIs0() {
+        Account checkingAccount = new Account(Account.SAVINGS);
+        assertEquals(0, checkingAccount.interestEarned(), DOUBLE_DELTA);
+    }
+
+    @Test
+    public void interestOnSavingsAccountWith1000Is1() {
+        Account checkingAccount = new Account(Account.SAVINGS);
+        checkingAccount.deposit(1000);
+        assertEquals(1, checkingAccount.interestEarned(), DOUBLE_DELTA);
+    }
+
+    @Test
+    public void interestOnSavingsAccountWith1500Is2() {
+        Account checkingAccount = new Account(Account.SAVINGS);
+        checkingAccount.deposit(1500);
+        assertEquals(2, checkingAccount.interestEarned(), DOUBLE_DELTA);
+    }
 }
