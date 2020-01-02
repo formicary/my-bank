@@ -41,7 +41,7 @@ public class AccountTest {
     @Test(expected = IllegalArgumentException.class)
     public void positiveWithdrawWithInsufficientBalance() {
         Account checkingAccount = new Account(Account.CHECKING);
-        checkingAccount.deposit(1);
+        checkingAccount.withdraw(1);
     }
 
     @Test
