@@ -20,4 +20,10 @@ public class AccountTest {
         checkingAccount.deposit(1);
         assertEquals(1, checkingAccount.sumTransactions(), DOUBLE_DELTA);
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void negativeDepositThrowsException() {
+        Account checkingAccount = new Account(Account.CHECKING);
+        checkingAccount.deposit(-1);
+    }
 }
