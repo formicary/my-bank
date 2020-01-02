@@ -8,13 +8,13 @@ public class AccountTest {
     private static final double DOUBLE_DELTA = 1e-15;
 
     @Test(expected = IllegalArgumentException.class)
-    public void zeroDeposit() {
+    public void zeroDepositThrowsException() {
         Account checkingAccount = new Account(Account.CHECKING);
         checkingAccount.deposit(0);
     }
 
     @Test
-    public void positiveDeposit() {
+    public void positiveDepositAmount() {
         Account checkingAccount = new Account(Account.CHECKING);
         checkingAccount.deposit(1);
         assertEquals(1, checkingAccount.sumTransactions(), DOUBLE_DELTA);
