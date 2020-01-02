@@ -53,18 +53,12 @@ public class Account {
                 boolean noRecentWithdrawals = true;
                 Calendar now = Calendar.getInstance();
                 // Set now to the start of the day
-                now.set(Calendar.HOUR_OF_DAY, 0);
-                now.set(Calendar.MINUTE, 0);
-                now.set(Calendar.SECOND, 0);
-                now.set(Calendar.MILLISECOND, 0);
+                CalendarHelper.calendarToMidnight(now);
                 Calendar transactionCalendar;
                 for (Transaction t : transactions) {
                     transactionCalendar = t.getTransactionDate();
-                    transactionCalendar.set(Calendar.HOUR_OF_DAY, 0);
-                    transactionCalendar.set(Calendar.MINUTE, 0);
-                    transactionCalendar.set(Calendar.SECOND, 0);
-                    transactionCalendar.set(Calendar.MILLISECOND, 0);
-                    if (now.getTimeInMillis() - transactionCalendar.getTimeInMillis() <= 10 * 24 * 60 * 60 * 1000) {
+                    CalendarHelper.calendarToMidnight(transactionCalendar);
+                    if (CalendarHelper.milisecondDifference(now, transactionCalendar) <= 10 * 24 * 60 * 60 * 1000) {
                         noRecentWithdrawals = false;
                         break;
                     }
