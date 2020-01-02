@@ -94,21 +94,7 @@ public class AccountTest {
     @Test
     public void interestOnMaxiSavingsAccountWith1000Is20() {
         Account checkingAccount = new Account(Account.MAXI_SAVINGS);
-        checkingAccount.deposit(1000);
-        assertEquals(20, checkingAccount.interestEarned(), DOUBLE_DELTA);
-    }
-
-    @Test
-    public void interestOnMaxiSavingsAccountWith2000Is70() {
-        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
-        checkingAccount.deposit(2000);
-        assertEquals(70, checkingAccount.interestEarned(), DOUBLE_DELTA);
-    }
-
-    @Test
-    public void interestOnMaxiSavingsAccountWith2010Is71() {
-        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
-        checkingAccount.deposit(2010);
-        assertEquals(71, checkingAccount.interestEarned(), DOUBLE_DELTA);
+        checkingAccount.deposit(20);
+        assertEquals(21, checkingAccount.interestEarned(), DOUBLE_DELTA);
     }
 }
