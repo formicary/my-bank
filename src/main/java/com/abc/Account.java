@@ -25,13 +25,15 @@ public class Account {
         }
     }
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
+    public void withdraw(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        } else if (sumTransactions() < amount) {
+            throw new IllegalArgumentException("amount must not be greater than available balance");
+        } else {
+            transactions.add(new Transaction(-amount));
+        }
     }
-}
 
     public double interestEarned() {
         double amount = sumTransactions();
