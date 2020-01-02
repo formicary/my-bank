@@ -14,6 +14,8 @@ public class Account {
     private final int accountType;
     private List<Transaction> transactions;
 
+    private DateProvider dateProvider = DateProvider.getInstance();
+
     public Account(int accountType) {
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
@@ -49,12 +51,18 @@ public class Account {
                     return 1 + (amount-1000) * 0.002;
                 }
             case MAXI_SAVINGS:
-                if (amount <= 1000) {
-                    return amount * 0.02;
-                } else if (amount <= 2000) {
-                    return 20 + (amount-1000) * 0.05;
+                boolean noRecentWithdrawals = true;
+                long now = dateProvider.now().getTime();
+                for (Transaction t : transactions) {
+                    if (now - t.getTransactionDate().getTime() >= 10 * 24 * 60 * 60 * 1000) {
+                        noRecentWithdrawals = false;
+                        break;
+                    }
+                }
+                if (noRecentWithdrawals) {
+                    return amount * 0.05;
                 } else {
-                    return 70 + (amount - 2000) * 0.1;
+                    return amount * 0.001;
                 }
             default:
                 throw new IllegalArgumentException("Invalid account type: " + accountType);
