@@ -5,6 +5,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
+    private static final double DOUBLE_DELTA = 1e-15;
 
     @Test //Test customer statement generation
     public void testApp(){
@@ -53,5 +54,74 @@ public class CustomerTest {
         oscar.openAccount(new Account(Account.CHECKING));
         oscar.openAccount(new Account(Account.MAXI_SAVINGS));
         assertEquals(3, oscar.getNumberOfAccounts());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void transfer1BetweenSameAccount() {
+        Customer charlie = new Customer("Charlie");
+
+        Account account = new Account(Account.SAVINGS);
+        charlie.openAccount(account);
+        account.deposit(1);
+
+        charlie.transfer(account, account, 1);
+    }
+
+    @Test
+    public void transfer1FromDifferentAccountsWithSufficientFunds() {
+        Customer charlie = new Customer("Charlie");
+
+        Account account1 = new Account(Account.SAVINGS);
+        charlie.openAccount(account1);
+        account1.deposit(1);
+
+        Account account2 = new Account(Account.SAVINGS);
+        charlie.openAccount(account2);
+
+        charlie.transfer(account1, account2, 1);
+        assertEquals(0, account1.sumTransactions(), DOUBLE_DELTA);
+    }
+
+    @Test
+    public void transfer1ToDifferentAccountsWithSufficientFunds() {
+        Customer charlie = new Customer("Charlie");
+
+        Account account1 = new Account(Account.SAVINGS);
+        charlie.openAccount(account1);
+        account1.deposit(1);
+
+        Account account2 = new Account(Account.SAVINGS);
+        charlie.openAccount(account2);
+
+        charlie.transfer(account1, account2, 1);
+        assertEquals(1, account2.sumTransactions(), DOUBLE_DELTA);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void transfer1BetweenAccountsWithDifferentOwners() {
+        Customer charlie = new Customer("Charlie");
+        Account account1 = new Account(Account.SAVINGS);
+        charlie.openAccount(account1);
+        account1.deposit(1);
+
+        Customer eve = new Customer("Eve");
+        Account account2 = new Account(Account.SAVINGS);
+        eve.openAccount(account2);
+
+        charlie.transfer(account1, account2, 1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void transfer1BetweenAccountsWithSameOwnerByDifferentOwner() {
+        Customer charlie = new Customer("Charlie");
+        Account account1 = new Account(Account.SAVINGS);
+        charlie.openAccount(account1);
+        account1.deposit(1);
+
+        Account account2 = new Account(Account.SAVINGS);
+        charlie.openAccount(account2);
+
+        Customer eve = new Customer("Eve");
+        eve.transfer(account1, account2, 1);
     }
 }
