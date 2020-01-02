@@ -13,4 +13,11 @@ public class AccountTest {
         checkingAccount.deposit(0);
         assertEquals(0, checkingAccount.sumTransactions(), DOUBLE_DELTA);
     }
+
+    @Test
+    public void positiveDeposit() {
+        Account checkingAccount = new Account(Account.CHECKING);
+        checkingAccount.deposit(1);
+        assertEquals(1, checkingAccount.sumTransactions(), DOUBLE_DELTA);
+    }
 }
