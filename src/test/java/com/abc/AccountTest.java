@@ -25,4 +25,30 @@ public class AccountTest {
         Account checkingAccount = new Account(Account.CHECKING);
         checkingAccount.deposit(-1);
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void zeroWithdrawThrowsException() {
+        Account checkingAccount = new Account(Account.CHECKING);
+        checkingAccount.withdraw(0);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void negativeWithdrawThrowsException() {
+        Account checkingAccount = new Account(Account.CHECKING);
+        checkingAccount.withdraw(-1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void positiveWithdrawWithInsufficientBalance() {
+        Account checkingAccount = new Account(Account.CHECKING);
+        checkingAccount.deposit(1);
+    }
+
+    @Test
+    public void positiveWithdrawWithSufficientBalance() {
+        Account checkingAccount = new Account(Account.CHECKING);
+        checkingAccount.deposit(1);
+        checkingAccount.withdraw(1);
+        assertEquals(0, checkingAccount.sumTransactions(), DOUBLE_DELTA);
+    }
 }
