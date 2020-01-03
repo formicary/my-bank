@@ -1,8 +1,9 @@
 package com.abc;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.PriorityQueue;
 
 import static java.lang.Math.abs;
 
@@ -13,11 +14,15 @@ public class Account {
     public static final int MAXI_SAVINGS = 2;
 
     private final int accountType;
-    private List<Transaction> transactions;
+    private PriorityQueue<Transaction> transactions;
 
     public Account(int accountType) {
         this.accountType = accountType;
-        this.transactions = new ArrayList<Transaction>();
+        this.transactions = new PriorityQueue<Transaction>(11, new Comparator<Transaction>() {
+            public int compare(Transaction o1, Transaction o2) {
+                return o1.getTransactionDate().compareTo(o2.getTransactionDate());
+            }
+        });
     }
 
     public void deposit(double amount) {
