@@ -2,7 +2,6 @@ package com.abc;
 
 import java.util.Calendar;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.PriorityQueue;
 
 import static java.lang.Math.abs;
@@ -17,6 +16,8 @@ public class Account {
     private PriorityQueue<Transaction> transactions;
 
     public Account(int accountType) {
+        if (accountType < 0 || accountType > 2)
+            throw new IllegalArgumentException("Invalid account type " + accountType);
         this.accountType = accountType;
         this.transactions = new PriorityQueue<Transaction>(11, new Comparator<Transaction>() {
             public int compare(Transaction o1, Transaction o2) {
@@ -27,7 +28,7 @@ public class Account {
 
     public void deposit(double amount) {
         if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
+            throw new IllegalArgumentException("Amount must be greater than zero");
         } else {
             transactions.add(new Transaction(amount));
         }
@@ -35,9 +36,9 @@ public class Account {
 
     public void withdraw(double amount) {
         if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
+            throw new IllegalArgumentException("Amount must be greater than zero");
         } else if (sumTransactions() < amount) {
-            throw new IllegalArgumentException("amount must not be greater than available balance");
+            throw new IllegalArgumentException("Amount must not be greater than available balance");
         } else {
             transactions.add(new Transaction(-amount));
         }
