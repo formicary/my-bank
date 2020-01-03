@@ -66,7 +66,7 @@ public class Account {
             currentTime.add(Calendar.DATE, 1);
         }
 
-        return amount;
+        return amount - sumTransactions();
     }
 
     private double dayInterestOnAmount(double amount) {
