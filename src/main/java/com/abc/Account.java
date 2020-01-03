@@ -55,7 +55,7 @@ public class Account {
 
 
         while (currentTime.before(now)) {
-            amount += dayInterestOnAmount(amount);
+            amount += dayInterestOnAmount(amount, currentTime);
 
             while (nextTransaction != null && nextTransaction.getTransactionDate().before(currentTime)) {
                 amount += nextTransaction.amount;
@@ -69,7 +69,7 @@ public class Account {
         return amount - sumTransactions();
     }
 
-    private double dayInterestOnAmount(double amount) {
+    private double dayInterestOnAmount(double amount, Calendar from) {
         switch (accountType) {
             case CHECKING:
                 return amount * 0.001 / 365;
@@ -80,7 +80,7 @@ public class Account {
                     return 1D / 365 + (amount - 1000) * 0.002 / 365;
                 }
             case MAXI_SAVINGS:
-                if (isRecentWithdrawals(10)) {
+                if (isRecentWithdrawals(10, from)) {
                     return amount * 0.001 / 365;
                 } else {
                     return amount * 0.05 / 365;
@@ -90,11 +90,15 @@ public class Account {
         }
     }
 
-    private boolean isRecentWithdrawals(int numberOfDays) {
-        return isRecentWithdrawls(numberOfDays, CalendarHelper.now());
+    private double dayInterestOnAmount(double amount) {
+        return dayInterestOnAmount(amount, CalendarHelper.now());
     }
 
-    private boolean isRecentWithdrawls(int numberOfDays, Calendar from) {
+    private boolean isRecentWithdrawals(int numberOfDays) {
+        return isRecentWithdrawals(numberOfDays, CalendarHelper.now());
+    }
+
+    private boolean isRecentWithdrawals(int numberOfDays, Calendar from) {
         Calendar fromCopy = (Calendar) from.clone();
         CalendarHelper.calendarToMidnight(fromCopy);
         Calendar transactionCalendar;
