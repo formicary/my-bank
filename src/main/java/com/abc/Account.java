@@ -19,11 +19,7 @@ public class Account {
         if (accountType < 0 || accountType > 2)
             throw new IllegalArgumentException("Invalid account type " + accountType);
         this.accountType = accountType;
-        this.transactions = new PriorityQueue<Transaction>(11, new Comparator<Transaction>() {
-            public int compare(Transaction o1, Transaction o2) {
-                return o1.getTransactionDate().compareTo(o2.getTransactionDate());
-            }
-        });
+        this.transactions = new PriorityQueue<>(11, Comparator.comparing(Transaction::getTransactionDate));
     }
 
     public void deposit(double amount) {
