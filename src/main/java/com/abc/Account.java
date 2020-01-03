@@ -2,6 +2,7 @@ package com.abc;
 
 import java.util.Calendar;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.PriorityQueue;
 
 import static java.lang.Math.abs;
@@ -46,9 +47,9 @@ public class Account {
         double amount = 0;
 
         Iterator<Transaction> it = transactions.iterator();
-        Transaction nextTransation = it.next();
+        Transaction nextTransaction = it.next();
 
-        Calendar currentTime = nextTransation.getTransactionDate();
+        Calendar currentTime = nextTransaction.getTransactionDate();
         CalendarHelper.calendarToMidnight(currentTime);
         Calendar now = CalendarHelper.now();
 
@@ -56,10 +57,10 @@ public class Account {
         while (currentTime.before(now)) {
             amount += dayInterestOnAmount(amount);
 
-            while (nextTransation != null && nextTransation.getTransactionDate().before(currentTime)) {
-                amount += nextTransation.amount;
-                if (!it.hasNext()) nextTransation = null;
-                else nextTransation = it.next();
+            while (nextTransaction != null && nextTransaction.getTransactionDate().before(currentTime)) {
+                amount += nextTransaction.amount;
+                if (!it.hasNext()) nextTransaction = null;
+                else nextTransaction = it.next();
             }
 
             currentTime.add(Calendar.DATE, 1);
