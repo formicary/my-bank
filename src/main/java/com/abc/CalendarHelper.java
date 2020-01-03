@@ -17,4 +17,14 @@ public class CalendarHelper {
     public static long dayDifference(Calendar c1, Calendar c2) {
         return milisecondDifference(c1, c2) / (24 * 60 * 60 * 1000);
     }
+
+    public static Calendar now() {
+        return Calendar.getInstance();
+    }
+
+    public static Calendar minimumDate() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(Long.MIN_VALUE);
+        return calendar;
+    }
 }
