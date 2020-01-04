@@ -9,7 +9,7 @@ public class TransactionTest {
 	private static final double DOUBLE_DELTA = 1e-15;
 
 	@Test
-	//Test if transactions are correctly created.
+	//Test if transactions are correctly created .
 	public void transaction() {
 		Transaction t = new Transaction(5);
 		assertTrue(t instanceof Transaction);
