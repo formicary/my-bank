@@ -1,29 +1,16 @@
 package com.abc;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class Transaction {
-	
-	private final double amount;
-	private final Date transactionDate;
+    public final double amount;
 
-	public Transaction(double amount) {
-		this.amount = amount;
-		this.transactionDate = (new DateHelper()).now();
-	}
+    private Date transactionDate;
 
-	public Transaction(double amount, Date dateTest) {
-		this.amount = amount;
-		this.transactionDate = dateTest;
-	}
+    public Transaction(double amount) {
+        this.amount = amount;
+        this.transactionDate = DateProvider.getInstance().now();
+    }
 
-	// Return the amount of a transaction.
-	public double getAmount() {
-		return amount;
-	}
-
-	// Return the date of a transaction.
-	public Date getTransactionDate() {
-		return transactionDate;
-	}
 }

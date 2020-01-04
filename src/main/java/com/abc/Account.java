@@ -2,117 +2,72 @@ package com.abc;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Date;
 
-public abstract class Account {
+public class Account {
 
-	// Types of accounts.
-	public static final String CHECKING = "CHECKING";
-	public static final String SAVINGS = "SAVINGS";
-	public static final String MAXI_SAVINGS = "MAXI SAVINGS";
-	protected String accountType;
-	private List<Transaction> transactions;
-	// The opening day of the account.
-	private Date openingDate;
-	// Total amount of interest earned until this moment.
-	protected double totalInterestAmount;
-	// The time in milliseconds from the last update call until now.
-	protected long lastUpdate;
-	// Temporary amount of interest recalculated until the last transaction in a day
-	// occurs.
-	protected double tempInterest;
+    public static final int CHECKING = 0;
+    public static final int SAVINGS = 1;
+    public static final int MAXI_SAVINGS = 2;
 
-	public Account() {
-		openingDate = (new DateHelper()).now();
-		this.transactions = new ArrayList<Transaction>();
-	}
+    private final int accountType;
+    public List<Transaction> transactions;
 
-	// Updates the current interest.
-	// Implemented by each type of account.
-	public abstract void update(long time, double amount);
+    public Account(int accountType) {
+        this.accountType = accountType;
+        this.transactions = new ArrayList<Transaction>();
+    }
 
-	// Add funds to the account.
-	public void deposit(double amount) {
-		if (amount <= 0) {
-			throw new IllegalArgumentException("Amount must be greater than zero.");
-		} else {
-			Transaction t = new Transaction(amount);
-			update(t.getTransactionDate().getTime(), t.getAmount());
-			transactions.add(t);
-		}
-	}
+    public void deposit(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        } else {
+            transactions.add(new Transaction(amount));
+        }
+    }
 
-	// Add funds to the account on a specified date.
-	// Used for testing and admin purposes.
-	public void depositTest(double amount, Date testDate) {
-		if (amount <= 0) {
-			throw new IllegalArgumentException("Amount must be greater than zero.");
-		} else {
-			Transaction t = new Transaction(amount);
-			update(testDate.getTime(), t.getAmount());
-			transactions.add(t);
-		}
-	}
+public void withdraw(double amount) {
+    if (amount <= 0) {
+        throw new IllegalArgumentException("amount must be greater than zero");
+    } else {
+        transactions.add(new Transaction(-amount));
+    }
+}
 
-	// Subtract funds from the account.
-	public void withdraw(double amount) {
-		if (amount <= 0) {
-			throw new IllegalArgumentException("Amount must be greater than zero.");
-		} else if (getBalance() < amount) {
-			throw new IllegalArgumentException("Amount must be smaller than balance.");
-		} else {
-			Transaction t = new Transaction(-amount);
-			update(t.getTransactionDate().getTime(), t.getAmount());
-			transactions.add(t);
+    public double interestEarned() {
+        double amount = sumTransactions();
+        switch(accountType){
+            case SAVINGS:
+                if (amount <= 1000)
+                    return amount * 0.001;
+                else
+                    return 1 + (amount-1000) * 0.002;
+//            case SUPER_SAVINGS:
+//                if (amount <= 4000)
+//                    return 20;
+            case MAXI_SAVINGS:
+                if (amount <= 1000)
+                    return amount * 0.02;
+                if (amount <= 2000)
+                    return 20 + (amount-1000) * 0.05;
+                return 70 + (amount-2000) * 0.1;
+            default:
+                return amount * 0.001;
+        }
+    }
 
-		}
-	}
+    public double sumTransactions() {
+       return checkIfTransactionsExist(true);
+    }
 
-	// Subtract funds to the account on a specified date.
-	// Used for testing and admin purposes.
-	public void withdrawTest(double amount, Date testDate) {
-		if (amount <= 0) {
-			throw new IllegalArgumentException("Amount must be greater than zero.");
-		} else if (getBalance() < amount) {
-			throw new IllegalArgumentException("Amount must be smaller than balance.");
-		} else {
-			Transaction t = new Transaction(-amount);
-			update(testDate.getTime(), t.getAmount());
-			transactions.add(t);
+    private double checkIfTransactionsExist(boolean checkAll) {
+        double amount = 0.0;
+        for (Transaction t: transactions)
+            amount += t.amount;
+        return amount;
+    }
 
-		}
-	}
-
-	// Returns the balance of the current account.
-	public double getBalance() {
-		double amount = 0.0;
-		for (Transaction t : transactions) {
-			amount += t.getAmount();
-		}
-		return amount;
-	}
-
-	// Returns the list of transactions of the current account.
-	public List<Transaction> getTransactions() {
-		return transactions;
-	}
-
-	// Returns the total amount of interest earned on this account by today.
-	public double interestEarned() {
-		long today = (new DateHelper()).now().getTime();
-		update(today, 0.0);
-		return getTotalInterestEarned();
-	}
-
-	// Returns the account type.
-	public abstract String getAccountType();
-
-	// Returns the current amount of interest earned on this account.
-	public abstract double getTotalInterestEarned();
-
-	// Returns the opening date of the account.
-	public long getOpeningDate() {
-		return openingDate.getTime();
-	}
+    public int getAccountType() {
+        return accountType;
+    }
 
 }
