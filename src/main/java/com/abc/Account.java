@@ -96,8 +96,13 @@ public class Account {
         if (transactions.isEmpty())
             return 0.0;
 
+        int num_transactions = transactions.size();
+
         switch(accountType) {
             case CHECKING: // Per transaction pair
+
+                if (num_transactions == 1)
+                    return transactions.get(0).amount * 0.001;
 
                 for (int i = 0; i < transactions.size() - 1; i++) {
                     double diff = transactions.get(i + 1).amount - transactions.get(i).amount;
@@ -112,6 +117,15 @@ public class Account {
                 return incremental_interest;
             case SAVINGS: // Per transaction pair
 
+                if (num_transactions == 1) {
+                    double amount = transactions.get(0).amount;
+
+                    if (amount <= 1000)
+                        return amount * 0.001;
+                    else
+                        return 1 + ((amount-1000) * 0.002); // 0.1% of 1000 = 1
+                }
+
                 for (int i = 0; i < transactions.size() - 1; i++) {
                     double diff = transactions.get(i + 1).amount - transactions.get(i).amount;
                     double amount =
@@ -123,13 +137,16 @@ public class Account {
                             transactions.get(i + 1).transactionDate);
                     } else {
 
-                        incremental_interest += (10 + interestBetweenTwoDates((amount - 1000),
+                        incremental_interest += (1 + interestBetweenTwoDates((amount - 1000),
                             0.002, transactions.get(i).transactionDate,
-                            transactions.get(i + 1).transactionDate)); // 0.1% of 1000 = 10
+                            transactions.get(i + 1).transactionDate)); // 0.1% of 1000 = 1
 
                     }
                 }
+
+                return incremental_interest;
             case MAXI_SAVINGS: // Across all transactions
+
                 double amount = sumTransactions();
 
                 Date currentDate = DateProvider.getInstance().now();
@@ -163,7 +180,7 @@ public class Account {
                 if (amount <= 1000)
                     return amount * 0.001;
                 else
-                    return 10 + ((amount-1000) * 0.002); // 0.1% of 1000 = 10
+                    return 1 + ((amount-1000) * 0.002); // 0.1% of 1000 = 1
             case MAXI_SAVINGS:
                 Date currentDate = DateProvider.getInstance().now();
                 final int N = 10;
