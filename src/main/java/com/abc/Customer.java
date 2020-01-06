@@ -2,12 +2,15 @@ package com.abc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import static java.lang.Math.abs;
 
 public class Customer {
     private String name;
     private List<Account> accounts;
+    private final Lock transfer_lock = new ReentrantLock(true); // Uses fair locking
 
     public Customer(String name) {
         this.name = name;
@@ -21,6 +24,53 @@ public class Customer {
     public Customer openAccount(Account account) {
         accounts.add(account);
         return this;
+    }
+
+    private void _accountsEmptyCheck() throws IllegalArgumentException
+    {
+        if (accounts.isEmpty())
+            throw new IllegalArgumentException("no accounts exist for this customer");
+    }
+
+    private void _accountValidCheck(int accountNumber) throws IllegalArgumentException
+    {
+        if (accountNumber > getNumberOfAccounts())
+            throw new IllegalArgumentException("invalid account number (is greater than the available number of accounts for this customer)");
+    }
+
+    public void depositIntoAccount(int accountNumber, double amount) throws IllegalArgumentException
+    {
+        _accountValidCheck(accountNumber);
+        accounts.get(accountNumber).deposit(amount);
+    }
+
+    public void withdrawFromAccount(int accountNumber, double amount)
+    {
+        ///* mutex here per account? make sure withdrawal is done before anything else reads from 'accountFrom'?
+        _accountValidCheck(accountNumber);
+        accounts.get(accountNumber).withdraw(amount);
+        //*/
+    }
+
+    public void transferBetweenAccounts(int accountFrom, int accountTo)
+    {
+        _accountsEmptyCheck();
+        _accountValidCheck(accountFrom);
+        _accountValidCheck(accountTo);
+
+        transfer_lock.lock();
+        try {
+            ///* mutex here per account? make sure withdrawal/transfer is done before anything else reads from 'accountFrom' or 'accountTo'?
+            double transSumFrom = accounts.get(accountFrom).sumTransactions();
+            accounts.get(accountFrom).withdraw(transSumFrom);
+            accounts.get(accountTo).deposit(transSumFrom);
+            //*/
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            transfer_lock.unlock();
+        }
     }
 
     public int getNumberOfAccounts() {
