@@ -23,6 +23,44 @@ public class Customer {
         return this;
     }
 
+    private void _accountsEmptyCheck() throws IllegalArgumentException
+    {
+        if (accounts.isEmpty())
+            throw new IllegalArgumentException("no accounts exist for this customer");
+    }
+
+    private void _accountValidCheck(int accountNumber) throws IllegalArgumentException
+    {
+        if (accountNumber > getNumberOfAccounts())
+            throw new IllegalArgumentException("invalid account number (is greater than the available number of accounts for this customer)");
+    }
+
+    public void depositIntoAccount(int accountNumber, double amount) throws IllegalArgumentException
+    {
+        _accountValidCheck(accountNumber);
+        accounts.get(accountNumber).deposit(amount);
+    }
+
+    public void withdrawFromAccount(int accountNumber, double amount) throws IllegalArgumentException
+    {
+        _accountValidCheck(accountNumber);
+        accounts.get(accountNumber).withdraw(amount);
+    }
+
+    public void transferBetweenAccounts(int accountFrom, int accountTo) throws IllegalArgumentException
+    {
+        _accountsEmptyCheck();
+        _accountValidCheck(accountFrom);
+        _accountValidCheck(accountTo);
+
+        ///* mutex here per account? make sure withdrawal is done before anything else reads from 'accountFrom'?
+        double transSumFrom = accounts.get(accountFrom).sumTransactions();
+        accounts.get(accountFrom).withdraw(transSumFrom);
+        //*/
+
+        accounts.get(accountTo).deposit(transSumFrom);
+    }
+
     public int getNumberOfAccounts() {
         return accounts.size();
     }

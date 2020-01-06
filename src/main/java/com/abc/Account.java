@@ -17,7 +17,7 @@ public class Account {
         this.transactions = new ArrayList<Transaction>();
     }
 
-    public void deposit(double amount) {
+    public void deposit(double amount) throws IllegalArgumentException {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
@@ -25,41 +25,38 @@ public class Account {
         }
     }
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
+    public void withdraw(double amount) throws IllegalArgumentException {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        } else if (sumTransactions() - amount < 0) {
+            throw new IllegalArgumentException("balance too low to withdraw");
+        } else {
+            transactions.add(new Transaction(-amount));
+        }
     }
-}
 
     public double interestEarned() {
         double amount = sumTransactions();
         switch(accountType){
+            case CHECKING:
+                return amount * 0.001;
             case SAVINGS:
                 if (amount <= 1000)
                     return amount * 0.001;
                 else
-                    return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
+                    return 10 + ((amount-1000) * 0.002); // 0.1% of 1000 = 10
             case MAXI_SAVINGS:
                 if (amount <= 1000)
                     return amount * 0.02;
                 if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
+                    return 20 + ((amount-1000) * 0.05); // 2% of 1000 = 20
+                return 20 + 50 + ((amount-2000) * 0.1); // 2% of first 1000 = 20, // 5% of next 1000 = 50, total = 70
             default:
-                return amount * 0.001;
+                throw new IllegalArgumentException("invalid account type. valid account types are: 'SAVINGS', 'MAXI_SAVINGS', and 'CHECKING' accounts");
         }
     }
 
     public double sumTransactions() {
-       return checkIfTransactionsExist(true);
-    }
-
-    private double checkIfTransactionsExist(boolean checkAll) {
         double amount = 0.0;
         for (Transaction t: transactions)
             amount += t.amount;
