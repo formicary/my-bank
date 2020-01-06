@@ -44,7 +44,7 @@ public class Account {
                 if (amount <= 1000)
                     return amount * 0.001;
                 else
-                    return 10 + ((amount-1000) * 0.002); // 0.1% of 1000 = 10
+                    return 1 + ((amount-1000) * 0.002); // 0.1% of 1000 = 1
             case MAXI_SAVINGS:
                 if (amount <= 1000)
                     return amount * 0.02;
