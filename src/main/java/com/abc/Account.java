@@ -129,13 +129,12 @@ public class Account {
                 }
 
                 for (int i = 0; i < transactions.size() - 1; i++) {
-                    double diff = transactions.get(i + 1).amount - transactions.get(i).amount;
                     amount += transactions.get(i).amount;
 
                     double interest = 0.0;
 
                     if (amount <= 1000) {
-                        interest = interestBetweenTwoDates(transactions.get(i).amount,
+                        interest = interestBetweenTwoDates(amount,
                             0.001, transactions.get(i).transactionDate,
                             transactions.get(i + 1).transactionDate);
                     } else {
@@ -152,25 +151,55 @@ public class Account {
 
                 return incremental_interest;
             case MAXI_SAVINGS: // Across all transactions
-
-                amount = sumTransactions();
-
-                Date currentDate = DateProvider.getInstance().now();
                 final int N = 10;
 
-                boolean withdrawnInPastNDays = false;
-                for (Transaction t : transactions)
-                {
-                    if (Math.abs(currentDate.getDay() - t.transactionDate.getDay()) < N && t.amount < 0) { // < 0 indicates withdrawal
-                        withdrawnInPastNDays = true;
-                        break;
+                if (num_transactions == 1) {
+                    amount = transactions.get(0).amount;
+                    Date currentDate = DateProvider.getInstance().now();
+
+                    boolean withdrawnInPastNDays = false;
+                    for (Transaction t : transactions)
+                    {
+                        if (Math.abs(currentDate.getDay() - t.transactionDate.getDay()) < N && t.amount < 0) { // < 0 indicates withdrawal
+                            withdrawnInPastNDays = true;
+                            break;
+                        }
                     }
+
+                    if (withdrawnInPastNDays)
+                        return amount * 0.001;
+
+                    return amount * 0.05;
                 }
 
-                if (withdrawnInPastNDays)
-                    return amount * 0.001;
+                for (int i = 0; i < transactions.size() - 1; i++) {
+                    boolean withdrawnInPastNDays = false;
+                    double interest = 0.0;
 
-                return amount * 0.05;
+                    amount += transactions.get(i).amount;
+
+                    if (transactions.get(i+1).amount < 0 && Math.abs(transactions.get(i+1).transactionDate.getDay() -
+                        transactions.get(i).transactionDate.getDay()) < N) { // < 0 indicates withdrawal
+                        withdrawnInPastNDays = true;
+                    }
+
+                    if (withdrawnInPastNDays) {
+                        interest = interestBetweenTwoDates(amount,
+                            0.001, transactions.get(i).transactionDate,
+                            transactions.get(i + 1).transactionDate);
+                    }
+                    else
+                    {
+                        interest = interestBetweenTwoDates(amount,
+                            0.05, transactions.get(i).transactionDate,
+                            transactions.get(i + 1).transactionDate);
+                    }
+
+                    incremental_interest += interest;
+                    amount += interest;
+                }
+
+                return incremental_interest;
             default:
                 throw new IllegalArgumentException("invalid account type. valid account types are: 'SAVINGS', 'MAXI_SAVINGS', and 'CHECKING' accounts");
         }
