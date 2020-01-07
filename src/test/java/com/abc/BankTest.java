@@ -1,6 +1,7 @@
 package com.abc;
 
 import java.util.Calendar;
+import java.util.Date;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -59,7 +60,22 @@ public class BankTest {
 
         checkingAccount.withdraw(1000.0);
 
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        final Date currentDate = DateProvider.getInstance().now();
+
+        checkingAccount.transactions.get(0).transactionDate.setMonth(currentDate.getMonth());
+        checkingAccount.transactions.get(0).transactionDate.setDate(currentDate.getDate());
+
+        checkingAccount.transactions.get(1).transactionDate.setMonth(currentDate.getMonth());
+        checkingAccount.transactions.get(1).transactionDate.setDate(currentDate.getDate()+2);
+
+        assertEquals(0.0328768, bank.totalInterestPaid(), 1e-05);
+
+        checkingAccount.withdraw(500.0);
+
+        checkingAccount.transactions.get(2).transactionDate.setMonth(currentDate.getMonth());
+        checkingAccount.transactions.get(2).transactionDate.setDate(currentDate.getDate()+11);
+
+        assertEquals(1.123528, bank.totalInterestPaid(), 1e-05);
 
     }
 

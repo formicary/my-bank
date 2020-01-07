@@ -172,7 +172,7 @@ public class Account {
 
                     for (Transaction t : transactions)
                     {
-                        if (Math.abs(currentDate.getDay() - t.transactionDate.getDay()) < N && t.amount < 0) { // < 0 indicates withdrawal
+                        if (Math.abs(currentDate.getDate() - t.transactionDate.getDate()) < N && t.amount < 0) { // < 0 indicates withdrawal
                             withdrawnInPastNDays = true;
                             break;
                         }
@@ -190,8 +190,8 @@ public class Account {
 
                     amount += transactions.get(i).amount;
 
-                    if (transactions.get(i+1).amount < 0 && Math.abs(transactions.get(i+1).transactionDate.getDay() -
-                        transactions.get(i).transactionDate.getDay()) < N) { // < 0 indicates withdrawal
+                    if (transactions.get(i+1).amount < 0 && Math.abs(transactions.get(i+1).transactionDate.getDate() -
+                        transactions.get(i).transactionDate.getDate()) < N) { // < 0 indicates withdrawal
                         withdrawnInPastNDays = true;
                     }
 
@@ -214,8 +214,8 @@ public class Account {
                 // Remainder from last transaction to current day (what you would get if you withdrew today).
                 boolean willWithdrawAfterNDays = true;
 
-                if (Math.abs(currentDate.getDay() -
-                    transactions.get(num_transactions-1).transactionDate.getDay()) < N) {
+                if (Math.abs(currentDate.getDate() -
+                    transactions.get(num_transactions-1).transactionDate.getDate()) < N) {
                     willWithdrawAfterNDays = false;
                 }
 
@@ -253,7 +253,7 @@ public class Account {
                 boolean withdrawnInPastNDays = false;
                 for (Transaction t : transactions)
                 {
-                    if (Math.abs(currentDate.getDay() - t.transactionDate.getDay()) < N && t.amount < 0) { // < 0 indicates withdrawal
+                    if (Math.abs(currentDate.getDate() - t.transactionDate.getDate()) < N && t.amount < 0) { // < 0 indicates withdrawal
                         withdrawnInPastNDays = true;
                         break;
                     }
