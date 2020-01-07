@@ -140,7 +140,10 @@ public class Account {
                             transactions.get(i + 1).transactionDate);
                     } else {
 
-                        interest = (1 + interestBetweenTwoDates((amount - 1000),
+                        interest = (interestBetweenTwoDates(1000,
+                            0.001, transactions.get(i).transactionDate,
+                            transactions.get(i + 1).transactionDate) +
+                            interestBetweenTwoDates((amount - 1000),
                             0.002, transactions.get(i).transactionDate,
                             transactions.get(i + 1).transactionDate)); // 0.1% of 1000 = 1
 
