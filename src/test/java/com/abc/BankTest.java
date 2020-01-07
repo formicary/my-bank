@@ -33,7 +33,7 @@ public class BankTest {
 
         System.out.println(bank.totalInterestPaid());
 
-        assertEquals(0.33, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(0.0175357, bank.totalInterestPaid(), 1e-05);
     }
 
     @Test

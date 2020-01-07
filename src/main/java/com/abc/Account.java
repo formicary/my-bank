@@ -93,11 +93,12 @@ public class Account {
     public double interestEarned() {
         double incremental_interest = 0.0;
         double amount = 0.0;
+        final Date currentDate = DateProvider.getInstance().now();
 
         if (transactions.isEmpty())
             return 0.0;
 
-        int num_transactions = transactions.size();
+        final int num_transactions = transactions.size();
 
         switch(accountType) {
             case CHECKING: // Per transaction pair
@@ -149,15 +150,26 @@ public class Account {
                     amount += interest;
                 }
 
+                // Remainder from last transaction to current day (what you would get if you withdrew today).
+
+                if (amount <= 1000) {
+                    incremental_interest += interestBetweenTwoDates(amount,
+                        0.001, transactions.get(num_transactions-1).transactionDate,
+                        currentDate);
+                } else {
+                    incremental_interest += interestBetweenTwoDates(amount,
+                        0.002, transactions.get(num_transactions-1).transactionDate,
+                        currentDate);
+                }
+
                 return incremental_interest;
             case MAXI_SAVINGS: // Across all transactions
                 final int N = 10;
+                boolean withdrawnInPastNDays = false;
 
                 if (num_transactions == 1) {
                     amount = transactions.get(0).amount;
-                    Date currentDate = DateProvider.getInstance().now();
 
-                    boolean withdrawnInPastNDays = false;
                     for (Transaction t : transactions)
                     {
                         if (Math.abs(currentDate.getDay() - t.transactionDate.getDay()) < N && t.amount < 0) { // < 0 indicates withdrawal
@@ -173,7 +185,7 @@ public class Account {
                 }
 
                 for (int i = 0; i < transactions.size() - 1; i++) {
-                    boolean withdrawnInPastNDays = false;
+                    withdrawnInPastNDays = false;
                     double interest = 0.0;
 
                     amount += transactions.get(i).amount;
@@ -197,6 +209,24 @@ public class Account {
 
                     incremental_interest += interest;
                     amount += interest;
+                }
+
+                // Remainder from last transaction to current day (what you would get if you withdrew today).
+                boolean willWithdrawAfterNDays = true;
+
+                if (Math.abs(currentDate.getDay() -
+                    transactions.get(num_transactions-1).transactionDate.getDay()) < N) {
+                    willWithdrawAfterNDays = false;
+                }
+
+                if (willWithdrawAfterNDays) {
+                    incremental_interest += interestBetweenTwoDates(amount,
+                        0.05, transactions.get(num_transactions-1).transactionDate,
+                        currentDate);
+                } else {
+                    incremental_interest += interestBetweenTwoDates(amount,
+                        0.001, transactions.get(num_transactions-1).transactionDate,
+                        currentDate);
                 }
 
                 return incremental_interest;
