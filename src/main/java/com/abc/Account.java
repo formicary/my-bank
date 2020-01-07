@@ -92,6 +92,7 @@ public class Account {
 
     public double interestEarned() {
         double incremental_interest = 0.0;
+        double amount = 0.0;
 
         if (transactions.isEmpty())
             return 0.0;
@@ -105,20 +106,21 @@ public class Account {
                     return transactions.get(0).amount * 0.001;
 
                 for (int i = 0; i < transactions.size() - 1; i++) {
-                    double diff = transactions.get(i + 1).amount - transactions.get(i).amount;
-                    double amount =
-                        diff >= 0 ? transactions.get(i).amount : transactions.get(i + 1).amount;
+                    amount += transactions.get(i).amount;
 
-                    incremental_interest += interestBetweenTwoDates(amount,
+                    double interest = interestBetweenTwoDates(amount,
                         0.001, transactions.get(i).transactionDate,
                         transactions.get(i + 1).transactionDate);
+
+                    incremental_interest += interest;
+                    amount += interest;
                 }
 
                 return incremental_interest;
             case SAVINGS: // Per transaction pair
 
                 if (num_transactions == 1) {
-                    double amount = transactions.get(0).amount;
+                    amount = transactions.get(0).amount;
 
                     if (amount <= 1000)
                         return amount * 0.001;
@@ -128,26 +130,30 @@ public class Account {
 
                 for (int i = 0; i < transactions.size() - 1; i++) {
                     double diff = transactions.get(i + 1).amount - transactions.get(i).amount;
-                    double amount =
-                        diff >= 0 ? transactions.get(i).amount : transactions.get(i + 1).amount;
+                    amount += transactions.get(i).amount;
+
+                    double interest = 0.0;
 
                     if (amount <= 1000) {
-                        incremental_interest += interestBetweenTwoDates(transactions.get(i).amount,
+                        interest = interestBetweenTwoDates(transactions.get(i).amount,
                             0.001, transactions.get(i).transactionDate,
                             transactions.get(i + 1).transactionDate);
                     } else {
 
-                        incremental_interest += (1 + interestBetweenTwoDates((amount - 1000),
+                        interest = (1 + interestBetweenTwoDates((amount - 1000),
                             0.002, transactions.get(i).transactionDate,
                             transactions.get(i + 1).transactionDate)); // 0.1% of 1000 = 1
 
                     }
+
+                    incremental_interest += interest;
+                    amount += interest;
                 }
 
                 return incremental_interest;
             case MAXI_SAVINGS: // Across all transactions
 
-                double amount = sumTransactions();
+                amount = sumTransactions();
 
                 Date currentDate = DateProvider.getInstance().now();
                 final int N = 10;

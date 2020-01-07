@@ -1,5 +1,6 @@
 package com.abc;
 
+import java.util.Calendar;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -25,8 +26,14 @@ public class BankTest {
         bank.addCustomer(bill);
 
         checkingAccount.deposit(100.0);
+        checkingAccount.deposit(100.0);
 
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+        checkingAccount.transactions.get(0).transactionDate.setMonth(Calendar.JANUARY);
+        checkingAccount.transactions.get(1).transactionDate.setMonth(Calendar.MARCH);
+
+        System.out.println(bank.totalInterestPaid());
+
+        assertEquals(0.33, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
