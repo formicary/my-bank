@@ -5,13 +5,15 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+import com.abc.accounttypes.*;
+
 public class CustomerTest {
 
     @Test //Test customer statement generation
     public void testApp(){
 
-        Account checkingAccount = new Account(Account.AccountType.CHECKING);
-        Account savingsAccount = new Account(Account.AccountType.SAVINGS);
+        Account checkingAccount = new Account(new CheckingAccount());
+        Account savingsAccount = new Account(new SavingsAccount());
 
         Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
 
@@ -35,24 +37,24 @@ public class CustomerTest {
 
     @Test
     public void testOneAccount(){
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.AccountType.SAVINGS));
+        Customer oscar = new Customer("Oscar").openAccount(new Account(new SavingsAccount()));
         assertEquals(1, oscar.getNumberOfAccounts());
     }
 
     @Test
     public void testTwoAccount(){
         Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.AccountType.SAVINGS));
-        oscar.openAccount(new Account(Account.AccountType.CHECKING));
+                .openAccount(new Account(new SavingsAccount()));
+        oscar.openAccount(new Account(new CheckingAccount()));
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
     @Test
     public void testThreeAcounts() {
         Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.AccountType.SAVINGS));
-        oscar.openAccount(new Account(Account.AccountType.CHECKING));
-        oscar.openAccount(new Account(Account.AccountType.MAXI_SAVINGS));
+                .openAccount(new Account(new SavingsAccount()));
+        oscar.openAccount(new Account(new CheckingAccount()));
+        oscar.openAccount(new Account(new MaxiSavingsAccount()));
         assertEquals(3, oscar.getNumberOfAccounts());
     }
 }
