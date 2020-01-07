@@ -18,7 +18,7 @@ public class CustomerTest {
         checkingAccount.deposit(100.0);
         savingsAccount.deposit(4000.0);
         savingsAccount.withdraw(200.0);
-
+        //TODO: assert on individual values instead of the string
         assertEquals("Statement for Henry\n" +
                 "\n" +
                 "Checking Account\n" +
@@ -47,11 +47,12 @@ public class CustomerTest {
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
-    @Ignore
+    @Test
     public void testThreeAcounts() {
         Customer oscar = new Customer("Oscar")
                 .openAccount(new Account(Account.AccountType.SAVINGS));
         oscar.openAccount(new Account(Account.AccountType.CHECKING));
+        oscar.openAccount(new Account(Account.AccountType.MAXI_SAVINGS));
         assertEquals(3, oscar.getNumberOfAccounts());
     }
 }

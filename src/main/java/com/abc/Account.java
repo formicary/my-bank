@@ -5,11 +5,6 @@ import java.util.List;
 
 public class Account {
 
-    //TODO: make an enum to avoid unexpected ints and middle-man ints
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
-
     public enum AccountType {
         CHECKING, SAVINGS, MAXI_SAVINGS
     }
@@ -40,7 +35,6 @@ public void withdraw(double amount) {
 
     public double interestEarned() {
         double amount = sumTransactions();
-        //TODO: make an enum to avoid unexpected ints
         switch(accountType){
             case SAVINGS:
                 if (amount <= 1000)
@@ -73,7 +67,7 @@ public void withdraw(double amount) {
     }
 
     public AccountType getAccountType() {
-        return accountType;
+        return this.accountType;
     }
 
 }

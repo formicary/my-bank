@@ -62,7 +62,6 @@ public class Customer {
         return s;
     }
 
-
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
     }
