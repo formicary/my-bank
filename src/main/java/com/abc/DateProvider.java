@@ -13,6 +13,7 @@ public class DateProvider {
     }
 
     public Date now() {
+        //why do we need DateProvider if Calendar does all the work?
         return Calendar.getInstance().getTime();
     }
 }
