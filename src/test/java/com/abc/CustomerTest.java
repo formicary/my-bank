@@ -51,7 +51,7 @@ public class CustomerTest {
     @Test
     public void testDeposit(){
         Account savings = new Account(Account.SAVINGS);
-        Customer oscar = new Customer("Oscar").openAccount(savings);
+        Customer oscar = new Customer("Oscar").openAccount(savings); // object reference is retained
 
         oscar.depositIntoAccount(0, 50.0);
         assertEquals(50.0, savings.sumTransactions(), DOUBLE_DELTA);
@@ -60,7 +60,7 @@ public class CustomerTest {
     @Test
     public void testWithdraw(){
         Account savings = new Account(Account.SAVINGS);
-        Customer oscar = new Customer("Oscar").openAccount(savings);
+        Customer oscar = new Customer("Oscar").openAccount(savings); // object reference is retained
 
         oscar.depositIntoAccount(0, 500.0);
         assertEquals(500.0, savings.sumTransactions(), DOUBLE_DELTA);
@@ -74,8 +74,8 @@ public class CustomerTest {
         Account savings = new Account(Account.SAVINGS);
         Account checking = new Account(Account.CHECKING);
 
-        Customer oscar = new Customer("Oscar").openAccount(savings);
-        oscar.openAccount(checking);
+        Customer oscar = new Customer("Oscar").openAccount(savings); // object reference is retained
+        oscar.openAccount(checking); // object reference is retained
         assertEquals(2, oscar.getNumberOfAccounts());
 
         oscar.depositIntoAccount(0, 500.0);
