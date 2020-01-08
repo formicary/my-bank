@@ -52,8 +52,8 @@ public class Account {
         Calendar calFrom = Calendar.getInstance();
         Calendar calTo = Calendar.getInstance();
 
-        calFrom.set(from.getYear(), from.getMonth(), from.getDay());
-        calTo.set(to.getYear(), to.getMonth(), to.getDay());
+        calFrom.set(from.getYear(), from.getMonth(), from.getDate());
+        calTo.set(to.getYear(), to.getMonth(), to.getDate());
 
         int days = -1;
 

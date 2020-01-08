@@ -34,7 +34,7 @@ public class BankTest {
 
         System.out.println(bank.totalInterestPaid());
 
-        assertEquals(0.0175357, bank.totalInterestPaid(), 1e-5);
+        assertEquals(0.0164397, bank.totalInterestPaid(), 1e-5);
     }
 
     @Test
@@ -59,7 +59,7 @@ public class BankTest {
         checkingAccount.deposit(500.0);
         checkingAccount.transactions.get(2).transactionDate.setDate(currentDate.getDate()+10);
 
-        assertEquals(0.02465778, bank.totalInterestPaid(), 1e-5);
+        assertEquals(0.08219497, bank.totalInterestPaid(), 1e-5);
 
 
     }
@@ -85,7 +85,7 @@ public class BankTest {
         checkingAccount.withdraw(500.0);
         checkingAccount.transactions.get(2).transactionDate.setDate(currentDate.getDate()+11);
 
-        assertEquals(1.123528, bank.totalInterestPaid(), 1e-5);
+        assertEquals(3.0816172, bank.totalInterestPaid(), 1e-5);
 
     }
 
