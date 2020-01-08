@@ -36,7 +36,7 @@ public class Account {
     }
 
     public double interestEarned() {
-        return accountType.interestEarned();
+        return accountType.interestEarned(sumTransactions());
     }
 
     public double sumTransactions() {
