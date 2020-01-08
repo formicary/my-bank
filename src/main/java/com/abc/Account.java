@@ -22,7 +22,7 @@ public class Account {
         this.transactions = new ArrayList<Transaction>();
     }
 
-    public void deposit(double amount) throws IllegalArgumentException { // No mutex as depositing will add, not subtract. Can re-run method later for accuracy?
+    public void deposit(double amount) throws IllegalArgumentException { // No mutex as depositing will add, not subtract.
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
@@ -145,7 +145,7 @@ public class Account {
                             transactions.get(i + 1).transactionDate) +
                             interestBetweenTwoDates((amount - 1000),
                             0.002, transactions.get(i).transactionDate,
-                            transactions.get(i + 1).transactionDate)); // 0.1% of 1000 = 1
+                            transactions.get(i + 1).transactionDate));
 
                     }
 
