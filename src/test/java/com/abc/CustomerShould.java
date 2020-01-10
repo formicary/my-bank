@@ -1,5 +1,9 @@
 package com.abc;
 
+import com.abc.account.Account;
+import com.abc.account.CheckingAccount;
+import com.abc.account.MaxiSavingsAccount;
+import com.abc.account.SavingsAccount;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -8,8 +12,8 @@ public class CustomerShould {
     @Test
     public void GenerateStatement_GivenTheyHaveOpenAccounts() {
 
-        Account checkingAccount = new Account(Account.CHECKING);
-        Account savingsAccount = new Account(Account.SAVINGS);
+        Account checkingAccount = new CheckingAccount();
+        Account savingsAccount = new SavingsAccount();
 
         Customer customer = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
 
@@ -35,7 +39,7 @@ public class CustomerShould {
     public void BeAbleToOpenOneAccount() {
         Customer customer = new Customer("Oscar");
 
-        customer.openAccount(new Account(Account.SAVINGS));
+        customer.openAccount(new SavingsAccount());
 
         assertEquals(1, customer.getNumberOfAccounts());
     }
@@ -44,8 +48,8 @@ public class CustomerShould {
     public void BeAbleToOpenTwoAccounts() {
         Customer customer = new Customer("Oscar");
 
-        customer.openAccount(new Account(Account.SAVINGS));
-        customer.openAccount(new Account(Account.CHECKING));
+        customer.openAccount(new SavingsAccount());
+        customer.openAccount(new CheckingAccount());
 
         assertEquals(2, customer.getNumberOfAccounts());
     }
@@ -54,9 +58,9 @@ public class CustomerShould {
     public void BeAbleToOpenThreeAccounts() {
         Customer customer = new Customer("Oscar");
 
-        customer.openAccount(new Account(Account.SAVINGS));
-        customer.openAccount(new Account(Account.CHECKING));
-        customer.openAccount(new Account(Account.MAXI_SAVINGS));
+        customer.openAccount(new SavingsAccount());
+        customer.openAccount(new CheckingAccount());
+        customer.openAccount(new MaxiSavingsAccount());
 
         assertEquals(3, customer.getNumberOfAccounts());
     }

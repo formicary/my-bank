@@ -1,5 +1,9 @@
 package com.abc;
 
+import com.abc.account.Account;
+import com.abc.account.CheckingAccount;
+import com.abc.account.MaxiSavingsAccount;
+import com.abc.account.SavingsAccount;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -11,7 +15,7 @@ public class BankShould {
     public void GenerateCorrectUserSummary() {
         Bank bank = new Bank();
         Customer john = new Customer("John");
-        john.openAccount(new Account(Account.CHECKING));
+        john.openAccount(new CheckingAccount());
         bank.addCustomer(john);
 
         assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
@@ -20,7 +24,7 @@ public class BankShould {
     @Test
     public void CalculateCorrectInterest_GivenCheckingAccount() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.CHECKING);
+        Account checkingAccount = new CheckingAccount();
         Customer bill = new Customer("Bill").openAccount(checkingAccount);
         bank.addCustomer(bill);
 
@@ -32,7 +36,7 @@ public class BankShould {
     @Test
     public void CalculateCorrectInterest_GivenSavingsAccount() {
         Bank bank = new Bank();
-        Account savingsAccount = new Account(Account.SAVINGS);
+        Account savingsAccount = new SavingsAccount();
         bank.addCustomer(new Customer("Bill").openAccount(savingsAccount));
 
         savingsAccount.deposit(1500.0);
@@ -43,7 +47,7 @@ public class BankShould {
     @Test
     public void CalculateCorrectInterest_GivenMaxiSavingAccount() {
         Bank bank = new Bank();
-        Account MaxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
+        Account MaxiSavingsAccount = new MaxiSavingsAccount();
         bank.addCustomer(new Customer("Bill").openAccount(MaxiSavingsAccount));
 
         MaxiSavingsAccount.deposit(3000.0);
