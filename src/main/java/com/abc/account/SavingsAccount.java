@@ -13,7 +13,7 @@ public class SavingsAccount extends Account {
         double amount = sumTransactions();
         if (amount <= 1000) {
             interest = amount * 0.001;
-        }else {
+        } else {
             interest = 1 + (amount - 1000) * 0.002;
         }
         return interest;

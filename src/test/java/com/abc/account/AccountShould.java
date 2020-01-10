@@ -20,7 +20,7 @@ public class AccountShould {
     }
 
     @Test
-    public void AllowDeposits_GivenValueIsPositive(){
+    public void AllowDeposits_GivenValueIsPositive() {
         account.deposit(1.0d);
 
         double accountBalance = account.sumTransactions();
@@ -29,12 +29,12 @@ public class AccountShould {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void ThrowInvalidArgumentException_GivenANonPositiveDeposit(){
+    public void ThrowInvalidArgumentException_GivenANonPositiveDeposit() {
         account.deposit(-1.0d);
     }
 
     @Test
-    public void AllowWithdrawals_GivenValueIsPositive(){
+    public void AllowWithdrawals_GivenValueIsPositive() {
         account.withdraw(1.0d);
 
         double accountBalance = account.sumTransactions();
@@ -43,12 +43,12 @@ public class AccountShould {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void ThrowInvalidArgumentException_GivenANonPositiveWithdrawal(){
+    public void ThrowInvalidArgumentException_GivenANonPositiveWithdrawal() {
         account.withdraw(-1.0d);
     }
 
     @Test
-    public void GenerateCorrectAccountStatement_GivenThereAreNoTransactions(){
+    public void GenerateCorrectAccountStatement_GivenThereAreNoTransactions() {
         when(account.getPrettyAccountType()).thenReturn("Pretty Account Name");
 
         String expectedAccountStatement = "Pretty Account Name\nTotal $0.00";
@@ -57,7 +57,7 @@ public class AccountShould {
     }
 
     @Test
-    public void GenerateCorrectAccountStatement_GivenAnAccountHasTransactions(){
+    public void GenerateCorrectAccountStatement_GivenAnAccountHasTransactions() {
         when(account.getPrettyAccountType()).thenReturn("Pretty Account Name");
 
         account.deposit(5.0d);

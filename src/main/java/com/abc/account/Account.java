@@ -57,5 +57,6 @@ public abstract class Account {
     }
 
     public abstract double interestEarned();
+
     protected abstract String getPrettyAccountType();
 }

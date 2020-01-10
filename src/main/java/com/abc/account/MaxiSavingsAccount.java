@@ -14,9 +14,9 @@ public class MaxiSavingsAccount extends Account {
 
         if (amount <= 1000) {
             interest = amount * 0.02;
-        }else if (amount <= 2000) {
+        } else if (amount <= 2000) {
             interest = 20 + (amount - 1000) * 0.05;
-        }else {
+        } else {
             interest = 70 + (amount - 2000) * 0.1;
         }
 
