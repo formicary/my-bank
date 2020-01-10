@@ -15,10 +15,16 @@ public class Bank {
     }
 
     public String customerSummary() {
-        String summary = "Customer Summary";
-        for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-        return summary;
+        StringBuilder summaryStringBuilder = new StringBuilder();
+        summaryStringBuilder.append("Customer Summary");
+        for (Customer customer : customers) {
+            summaryStringBuilder.append("\n - ");
+            summaryStringBuilder.append(customer.getName());
+            summaryStringBuilder.append(" (");
+            summaryStringBuilder.append(format(customer.getNumberOfAccounts(), "account"));
+            summaryStringBuilder.append(")");
+        }
+        return summaryStringBuilder.toString();
     }
 
     //Make sure correct plural of word is created based on the number passed in:
@@ -32,15 +38,5 @@ public class Bank {
         for(Customer c: customers)
             total += c.totalInterestEarned();
         return total;
-    }
-
-    public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
-        }
     }
 }

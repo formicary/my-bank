@@ -44,7 +44,7 @@ public class AccountShould {
 
     @Test(expected = IllegalArgumentException.class)
     public void ThrowInvalidArgumentException_GivenANonPositiveWithdrawal(){
-        account.deposit(-1.0d);
+        account.withdraw(-1.0d);
     }
 
     @Test
