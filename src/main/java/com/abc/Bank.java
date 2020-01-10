@@ -35,12 +35,10 @@ public class Bank {
     }
 
     public String getFirstCustomer() {
-        try {
-            customers = null;
+    	if (customers.size() == 0) {
+    		throw new IllegalArgumentException("no customers found at this bank");
+    	} else {
             return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
         }
     }
 }
