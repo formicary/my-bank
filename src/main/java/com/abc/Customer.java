@@ -31,20 +31,31 @@ public class Customer {
 
     public double totalInterestEarned() {
         double total = 0;
-        for (Account a : accounts)
-            total += a.interestEarned();
+        for (Account account : accounts) {
+            total += account.interestEarned();
+        }
         return total;
     }
 
     public String getStatement() {
-        String statement = "Statement for " + name + "\n";
         double total = 0.0;
+        StringBuilder statementStringBuilder = new StringBuilder();
+
+        statementStringBuilder.append("Statement for ");
+        statementStringBuilder.append(name);
+        statementStringBuilder.append("\n");
+
         for (Account account : accounts) {
-            statement += "\n" + account.generateStatement() + "\n";
+            statementStringBuilder.append("\n");
+            statementStringBuilder.append(account.generateStatement());
+            statementStringBuilder.append("\n");
             total += account.sumTransactions();
         }
-        statement += "\nTotal In All Accounts " + toDollars(total);
-        return statement;
+
+        statementStringBuilder.append("\n");
+        statementStringBuilder.append("Total In All Accounts ");
+        statementStringBuilder.append(toDollars(total));
+        return statementStringBuilder.toString();
     }
 
 }

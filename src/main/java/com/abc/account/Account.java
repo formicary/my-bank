@@ -39,25 +39,23 @@ public abstract class Account {
 
 
     public String generateStatement() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(this.getPrettyAccountType());
-        sb.append("\n");
+        StringBuilder statementStringBuilder = new StringBuilder();
+        statementStringBuilder.append(this.getPrettyAccountType());
+        statementStringBuilder.append("\n");
         double total = 0.0;
         for (Transaction t : this.transactions) {
-            sb.append("  ");
-            sb.append(t.amount < 0 ? "withdrawal " : "deposit ");
-            sb.append(toDollars(t.amount));
-            sb.append("\n");
+            statementStringBuilder.append("  ");
+            statementStringBuilder.append(t.amount < 0 ? "withdrawal " : "deposit ");
+            statementStringBuilder.append(toDollars(t.amount));
+            statementStringBuilder.append("\n");
 
             total += t.amount;
         }
-        sb.append("Total ");
-        sb.append(toDollars(total));
-        return sb.toString();
+        statementStringBuilder.append("Total ");
+        statementStringBuilder.append(toDollars(total));
+        return statementStringBuilder.toString();
     }
 
     public abstract double interestEarned();
-
-    public abstract String getPrettyAccountType();
-
+    protected abstract String getPrettyAccountType();
 }
