@@ -1,3 +1,25 @@
+### UPDATE - January 2020
+In this version of the update, additional features and changes have been made:
+* Users can now transfer funds between their accounts
+* Maxi-Savings accounts now have an interest rate of 5% assuming no withdrawals in the past 10 days otherwise 0.1%
+* Time has been introduced, interest rates accrue and compound daily (incl. weekends)
+* Due to floating point variables being sometimes inaccurate, BigDouble has been used to try and add more accuracy to operations. 
+* Datatypes have been changed to better fit their variables, i.e. byte instead of int for account types
+* DateProvider has been removed to instead be replaced with the LocalDate package, which is enough for the purpose of this program
+* Some unused packages, functions and variables have been removed for better clarity
+* Some testing issues were fixed
+* Withdrawing more than account balance is not possible anymore
+* Some code structures have been changed to better follow defensive designs
+* Certain variable names have been changed to follow conventions (i.e. snake_case to camelCase)
+* Additional testing functions have been implemented for the additional features
+* Additional comments were added for clarity
+* An UML diagram has been designed to allows future developement to be quickly picked up thanks to a faster understanding of the object-oriented design
+* Future changes to UML diagram can be made [here](https://www.lucidchart.com/invitations/accept/4857632a-925a-4677-a5ac-f7c1a6fbdebe)
+
+
+**UML Diagram**
+![Bank System UML Diagram](bank_system.jpeg)
+
 Programming Test
 ========
 
