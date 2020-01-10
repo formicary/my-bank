@@ -1,9 +1,12 @@
 package com.abc;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static java.lang.Math.abs;
+
 
 public class Customer {
     private String name;
@@ -40,9 +43,10 @@ public class Customer {
         double total = 0.0;
         for (Account a : accounts) {
             statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+            total += a.getBalance();
         }
-        statement += "\nTotal In All Accounts " + toDollars(total);
+        // statement += "\nTotal In All Accounts " + toDollars(total);	// ORIGINAL LINE
+        statement += "\n" + String.format("%-23s: %23s", "Total In All Accounts", toDollars(total));
         return statement;
     }
 
@@ -62,17 +66,25 @@ public class Customer {
                 break;
         }
 
-        //Now total up all the transactions
-        double total = 0.0;
         for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
+            // s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";	// ORIGINAL LINE
+            s += toDate(t.getTransactionDate()) + "  " + ((t.amount < 0) ? "Withdrawal : " : "Deposit    : ");
+            s += toDollars(t.amount) + "  |" + toDollars(t.newBalance) + "\n";
         }
-        s += "Total " + toDollars(total);
+        // s += "Total " + toDollars(total);
+        s += String.format("%-23s: %23s", "Current Balance", toDollars(a.getBalance()));
         return s;
     }
 
     private String toDollars(double d){
-        return String.format("$%,.2f", abs(d));
+        // return String.format("$%,.2f", abs(d));	// ORIGINAL LINE
+    	String dollarFormat = String.format("$%,.2f", abs(d));
+        return String.format("%10s", dollarFormat);
+    }
+    
+	private String toDate(Date d) {
+    	String dateFormat = "dd/MM/yyyy";
+    	SimpleDateFormat s = new SimpleDateFormat(dateFormat);
+    	return s.format(d);
     }
 }
