@@ -1,10 +1,11 @@
 package com.abc;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Bank {
-    private List<Customer> customers;
+    private List<Customer> customers; // List of customers
 
     public Bank() {
         customers = new ArrayList<Customer>();
@@ -15,32 +16,28 @@ public class Bank {
     }
 
     public String customerSummary() {
-        String summary = "Customer Summary";
+        // Returns customer's info and his/her number of accounts
+        StringBuilder summary = new StringBuilder("Customer Summary");
         for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-        return summary;
+            summary.append("\n - ").append(c.getName()).append(" (")
+                    .append(format(c.getNumberOfAccounts())).append(")");
+        return summary.toString();
     }
 
-    //Make sure correct plural of word is created based on the number passed in:
-    //If number passed in is 1 just return the word otherwise add an 's' at the end
-    private String format(int number, String word) {
-        return number + " " + (number == 1 ? word : word + "s");
+    private String format(int number) {
+        // Returns the singular or plural form of accounts based on the number of accounts
+        return number + " " + (number == 1 ? "account" : "accounts");
     }
 
     public double totalInterestPaid() {
-        double total = 0;
-        for(Customer c: customers)
-            total += c.totalInterestEarned();
-        return total;
+        return totalInterestPaid(LocalDate.now());
     }
 
-    public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
-        }
+    public double totalInterestPaid(LocalDate date) {
+        // Returns total amount of interests paid by the bank. Date to be used only for testing purposes.
+        double total = 0;
+        for(Customer c: customers)
+            total += c.totalInterestEarned(date);
+        return total;
     }
 }

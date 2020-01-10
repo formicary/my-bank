@@ -1,11 +1,10 @@
 package com.abc;
 
 import org.junit.Test;
-
+import java.time.LocalDate;
 import static org.junit.Assert.assertEquals;
 
 public class BankTest {
-    private static final double DOUBLE_DELTA = 1e-15;
 
     @Test
     public void customerSummary() {
@@ -24,31 +23,30 @@ public class BankTest {
         Customer bill = new Customer("Bill").openAccount(checkingAccount);
         bank.addCustomer(bill);
 
-        checkingAccount.deposit(100.0);
-
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+        checkingAccount.deposit(100.0, LocalDate.of(2019,1,1));
+        assertEquals("0,10", String.format("%.2f", bank.totalInterestPaid(LocalDate.of(2020,1,1))));
     }
 
     @Test
-    public void savings_account() {
+    public void savingsAccount() {
         Bank bank = new Bank();
         Account checkingAccount = new Account(Account.SAVINGS);
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
-        checkingAccount.deposit(1500.0);
+        checkingAccount.deposit(100.0, LocalDate.of(2019,1,1));
 
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals("0,10", String.format("%.2f", bank.totalInterestPaid(LocalDate.of(2020,1,1))));
     }
 
     @Test
-    public void maxi_savings_account() {
+    public void maxiSavingsAccount() {
         Bank bank = new Bank();
         Account checkingAccount = new Account(Account.MAXI_SAVINGS);
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
-        checkingAccount.deposit(3000.0);
+        checkingAccount.deposit(3000.0, LocalDate.of(2019,1,1));
 
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals("145,47", String.format("%.2f", bank.totalInterestPaid(LocalDate.of(2020,1,1))));
     }
 
 }
