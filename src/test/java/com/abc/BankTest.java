@@ -24,7 +24,7 @@ public class BankTest {
     @Test
     public void checkingAccount() {
         Account checkingAccount = new Account(new CheckingAccount());
-        Customer bill = new Customer("Bill").openAccount(checkingAccount);
+        bill.openAccount(checkingAccount);
         bank.addCustomer(bill);
 
         checkingAccount.deposit(100.0);
@@ -35,7 +35,8 @@ public class BankTest {
     @Test
     public void savings_account() {
         Account savingsAccount = new Account(new SavingsAccount());
-        bank.addCustomer(new Customer("Bill").openAccount(savingsAccount));
+        bill.openAccount(savingsAccount);
+        bank.addCustomer(bill);
 
         savingsAccount.deposit(1500.0);
 
@@ -45,16 +46,25 @@ public class BankTest {
     @Test
     public void maxi_savings_account() {
         Account checkingAccount = new Account(new MaxiSavingsAccount());
-        bank.addCustomer(bill.openAccount(checkingAccount));
+        bill.openAccount(checkingAccount);
+        bank.addCustomer(bill);
 
         checkingAccount.deposit(3000.0);
 
         assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
-
-    @Ignore
+ 
+    @Test
     public void getFirstCustomer(){
-        
+        bank.addCustomer(bill);
+        bank.addCustomer(new Customer("Jake"));
+        assertEquals("Bill", bank.getFirstCustomerName());
     }
+
+    @Test
+    public void getFirstCustomer_NoCustomers(){
+        assertEquals("No customers in the current bank", bank.getFirstCustomerName());
+    }
+
 
 }

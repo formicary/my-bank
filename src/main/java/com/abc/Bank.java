@@ -37,13 +37,16 @@ public class Bank {
         return total;
     }
 
-    public String getFirstCustomer() {
+    /**
+     * 
+     * @return Customer's name
+     */
+    public String getFirstCustomerName() {
         try {
-            customers = null;
             return customers.get(0).getName();
-        } catch (Exception e){
+        } catch (IndexOutOfBoundsException e){
             e.printStackTrace();
-            return "Error";
+            return "No customers in the current bank";
         }
     }
 }
