@@ -10,6 +10,9 @@
     <name>bank</name>
 
     <properties>
+        <!--Set source and target setting to work with JDK 1.7+ -->
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
