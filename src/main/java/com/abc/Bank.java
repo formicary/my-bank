@@ -24,14 +24,8 @@ public class Bank {
 
     //Make sure correct plural of word is created based on the number passed in:
     //If number passed in is 1 just return the word otherwise add an 's' at the end
-    //TODO: prevent <=0 numbers
+    //TODO: prevent word = null and number < 1 
     private String format(int number, String word) {
-        try {
-         if (number <= 0) throw new InvalidParameterException("number cannot be less equal to zero: " + number);
-        }
-         catch (InvalidParameterException e) {
-            System.out.println(e.getMessage());
-        }
         return number + " " + (number == 1 ? word : word + "s");
         
     }
