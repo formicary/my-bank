@@ -7,10 +7,6 @@ import com.abc.accounttypes.AccountType;
 
 public class Account {
 
-    // public enum AccountType {
-    //     CHECKING, SAVINGS, MAXI_SAVINGS
-    // }
-
     private final AccountType accountType;
     public List<Transaction> transactions;
 

@@ -1,10 +1,10 @@
 package com.abc.accounttypes;
 
 public class CheckingAccount implements AccountType {
+    private static double interestRate = 0.001;
 
     public double interestEarned(double amount) {
-        // TODO Auto-generated method stub
-        return 0;
+        return amount * interestRate;
     }
     
 }
