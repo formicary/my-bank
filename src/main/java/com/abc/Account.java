@@ -3,9 +3,9 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.abc.accounttypes.AccountType;
+import com.abc.accounts.*;
 
-public class Account {
+public abstract class Account {
 
     private final AccountType accountType;
     public List<Transaction> transactions;
@@ -31,9 +31,10 @@ public class Account {
         }
     }
 
-    public double interestEarned() {
-        return accountType.interestEarned(sumTransactions());
-    }
+    public abstract double interestEarned();
+
+    @Override
+    public abstract String toString();
 
     public double sumTransactions() {
         double amount = 0.0;

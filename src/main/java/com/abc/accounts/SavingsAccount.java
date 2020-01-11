@@ -1,6 +1,8 @@
-package com.abc.accounttypes;
+package com.abc.accounts;
 
-public class SavingsAccount implements AccountType{
+import com.abc.Account;
+
+public class SavingsAccount extends Account {
 
     /**
      * interest rate for the first $1000
@@ -8,10 +10,17 @@ public class SavingsAccount implements AccountType{
     private double interestRate1 = 0.001;
     private double moneyCap1 = 1000.0;
 
+    /**
+     * interest rate after the initial $1000
+     */
     private double interestRate2 = 0.002;
 
-    
-    public double interestEarned(double amount) {
+    public SavingsAccount(AccountType accountType){
+        super(accountType);
+    }
+
+    public double interestEarned() {
+        double amount = sumTransactions();
         if (amount <= moneyCap1){
             return amount * interestRate1;
         }

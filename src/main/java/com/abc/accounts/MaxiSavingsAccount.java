@@ -1,6 +1,8 @@
-package com.abc.accounttypes;
+package com.abc.accounts;
 
-public class MaxiSavingsAccount implements AccountType{
+import com.abc.*;
+
+public class MaxiSavingsAccount extends Account{
     
     private double interestRate1 = 0.02;
     private double moneyCap1 = 1000.0;
@@ -10,8 +12,12 @@ public class MaxiSavingsAccount implements AccountType{
 
     private double interestRate3 = 0.1;
 
+    public MaxiSavingsAccount(AccountType accountType){
+        super(accountType);
+    }
 
-    public double interestEarned(double amount) {
+    public double interestEarned() {
+        double amount = sumTransactions();
         if(amount <= moneyCap1){
             return amount * interestRate1;
         }
