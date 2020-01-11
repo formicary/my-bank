@@ -70,4 +70,11 @@ public class CustomerTest {
         assertEquals(0, oscar.getNumberOfAccounts());
     }
 
+    @Test
+    public void totalInterestEarned_CheckingAccount(){
+        Account checkingAccount = new Account(new CheckingAccount());
+        oscar.openAccount(checkingAccount);
+
+    }
+
 }
