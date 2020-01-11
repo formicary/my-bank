@@ -6,5 +6,9 @@ public class CheckingAccount implements AccountType {
     public double interestEarned(double amount) {
         return amount * interestRate;
     }
+
+    public String toString(){
+        return "Checking Account";
+    }
     
 }

@@ -16,8 +16,10 @@ public class SavingsAccount implements AccountType{
             return amount * interestRate1;
         }
         return (amount - moneyCap1) * interestRate2 + moneyCap1 * interestRate1 ;
+    }
 
-        
+    public String toString(){
+        return "Savings Account";
     }
     
 }
