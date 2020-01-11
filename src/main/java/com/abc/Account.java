@@ -23,6 +23,7 @@ public class Account {
         }
     }
 
+    //TODO: cannot withdraw if there is no money left
     public void withdraw(double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
@@ -36,10 +37,6 @@ public class Account {
     }
 
     public double sumTransactions() {
-       return checkIfTransactionsExist(true);
-    }
-
-    private double checkIfTransactionsExist(boolean checkAll) {
         double amount = 0.0;
         for (Transaction t: transactions)
             amount += t.amount;
