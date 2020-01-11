@@ -30,7 +30,15 @@ public abstract class Account {
             transactions.add(new Transaction(-amount));
         }
     }
-
+    
+    /**
+     * TODO: consider how to handle negative transaction sum. Suggestions:
+     * a) Do not allow overdraft in the first place
+     *  (withdraw method checks if the specified amount of money exists)
+     * b) return 0
+     * 
+     * @return amount of money earned depending on the account type
+     */
     public abstract double interestEarned();
 
     @Override

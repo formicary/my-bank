@@ -21,6 +21,7 @@ public class SavingsAccount extends Account {
 
     public double interestEarned() {
         double amount = sumTransactions();
+        if(amount >= Double.MAX_VALUE)
         if (amount <= moneyCap1){
             return amount * interestRate1;
         }
