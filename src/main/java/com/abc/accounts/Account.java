@@ -1,18 +1,28 @@
-package com.abc;
+package com.abc.accounts;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.abc.DateProvider;
+import com.abc.Transaction;
+import com.abc.Utilities;
 import com.abc.accounts.*;
 
 public abstract class Account {
 
     private final AccountType accountType;
     public List<Transaction> transactions;
+    protected DateProvider dateProvider;
+    protected double currentInterest;
+
+
+
 
     public Account(AccountType accountType) {
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
+        this.dateProvider = DateProvider.getInstance();
+
     }
 
     /**
@@ -42,6 +52,7 @@ public abstract class Account {
     }
     
     /**
+     * Calculates daily interest rate.
      * TODO: consider how to handle negative transaction sum. To be discussed with business owner
      * @return amount of money earned depending on the account type
      */

@@ -1,7 +1,5 @@
 package com.abc.accounts;
 
-import com.abc.Account;
-
 public class SavingsAccount extends Account {
 
     /**

@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+import com.abc.accounts.Account;
 import com.abc.accounts.AccountFactory;
 import com.abc.accounts.AccountType;
 

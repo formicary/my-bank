@@ -1,5 +1,4 @@
 package com.abc.accounts;
-import com.abc.Account;
 
 public class AccountFactory{
 
