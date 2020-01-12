@@ -22,6 +22,8 @@ public class BankTest {
         assertEquals("Customer Summary\n - Bill (1 account)", bank.customerSummary());
     }
 
+    //TODO: test totalInterest earned by bank
+
     @Test
     public void checkingAccount() {
         Account checkingAccount = AccountFactory.createAccount(AccountType.CHECKING);

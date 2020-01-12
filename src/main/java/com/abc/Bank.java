@@ -21,6 +21,8 @@ public class Bank {
         return summary;
     }
 
+
+    //TODO: make this as a report(?)
     public double totalInterestPaid() {
         double total = 0;
         for(Customer c: customers)
