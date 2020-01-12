@@ -36,7 +36,6 @@ public class Customer {
     public String getStatement() {
         String statement = "Statement for " + name + "\n";
         double total = 0.0;
-        //TODO: calculating total twice: inside statementForAccount as well
         for (Account a : accounts) {
             statement += "\n" + a.statementForAccount() + "\n";
             total += a.sumTransactions();

@@ -42,11 +42,7 @@ public abstract class Account {
     }
     
     /**
-     * TODO: consider how to handle negative transaction sum. Suggestions:
-     * a) Do not allow overdraft in the first place
-     *  (withdraw method checks if the specified amount of money exists)
-     * b) return 0
-     * 
+     * TODO: consider how to handle negative transaction sum. To be discussed with business owner
      * @return amount of money earned depending on the account type
      */
     public abstract double interestEarned();

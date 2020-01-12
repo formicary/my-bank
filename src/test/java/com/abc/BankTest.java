@@ -62,10 +62,9 @@ public class BankTest {
         assertEquals("Bill", bank.getFirstCustomerName());
     }
 
-    @Test
+    @Test(expected = IndexOutOfBoundsException.class)
     public void getFirstCustomer_NoCustomers(){
-        assertEquals("No customers in the current bank", bank.getFirstCustomerName());
+        assertEquals(" ", bank.getFirstCustomerName());
     }
-
 
 }

@@ -1,6 +1,5 @@
 package com.abc;
 
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,16 +17,8 @@ public class Bank {
     public String customerSummary() {
         String summary = "Customer Summary";
         for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
+            summary += "\n - " + c.getName() + " (" + Utilities.format(c.getNumberOfAccounts(), "account") + ")";
         return summary;
-    }
-
-    //Make sure correct plural of word is created based on the number passed in:
-    //If number passed in is 1 just return the word otherwise add an 's' at the end
-    //TODO: prevent word = null and number < 1 
-    private String format(int number, String word) {
-        return number + " " + (number == 1 ? word : word + "s");
-        
     }
 
     public double totalInterestPaid() {
@@ -42,11 +33,9 @@ public class Bank {
      * @return Customer's name
      */
     public String getFirstCustomerName() {
-        try {
+        if(customers.size() == 0)
+            throw new IndexOutOfBoundsException("No customers in the bank");
+        else
             return customers.get(0).getName();
-        } catch (IndexOutOfBoundsException e){
-            e.printStackTrace();
-            return "No customers in the current bank";
-        }
     }
 }
