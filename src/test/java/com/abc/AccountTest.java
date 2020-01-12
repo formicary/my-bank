@@ -55,7 +55,14 @@ public class AccountTest {
     }
 
     @Test
-    public void interestEarned_checkingAccount_zero(){
+    public void interestEarned_checkingAccount_zeroDays(){
+        checkingAccount.deposit(1000);
+        assertEquals(0, checkingAccount.interestEarned(), DOUBLE_DELTA);
+
+    }
+
+    @Test
+    public void interestEarned_checkingAccount_zeroDeposit(){
         assertEquals(0, checkingAccount.interestEarned(), DOUBLE_DELTA);
     }
 
@@ -65,7 +72,6 @@ public class AccountTest {
         checkingAccount.withdraw(500);
         assertEquals(0, checkingAccount.interestEarned(), DOUBLE_DELTA);
     }
-
 
     //Savings account tests /////////////////////////////////////////
     @Test

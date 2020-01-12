@@ -13,6 +13,9 @@ public class CheckingAccount extends Account {
     }
     
     public double interestEarned() {
+        if(canCalculateInterest())
+            return 0;
+        
         int daysElapsed = dateProvider.getNumberOfElapsedDays();
         double dailyInterestRate = interestRate / dateProvider.getYearDays();
         double transactionSum = sumTransactions();

@@ -84,4 +84,8 @@ public abstract class Account {
         return s;
     }
 
+    public boolean canCalculateInterest(){
+        return (dateProvider.startingDate.getTime() < dateProvider.now().getTime());
+    }
+
 }
