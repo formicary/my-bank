@@ -30,18 +30,29 @@ public class BankTest {
     }
 
     @Test
-    public void savings_account() {
+    public void savingsAccountOver1000() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+        Account savingsAccount = new Account(Account.SAVINGS);
+        bank.addCustomer(new Customer("Bill").openAccount(savingsAccount));
 
-        checkingAccount.deposit(1500.0);
+        savingsAccount.deposit(1500.0);
 
         assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
-    public void maxi_savings_account() {
+    public void savingsAccountUnder1000() {
+        Bank bank = new Bank();
+        Account savingsAccount = new Account(Account.SAVINGS);
+        bank.addCustomer(new Customer("Bill").openAccount((savingsAccount)));
+
+        savingsAccount.deposit(999.00);
+
+        assertEquals(0.99, bank.totalInterestPaid(), DOUBLE_DELTA);
+    }
+
+    @Test
+    public void maxiSavingsAccount3000() {
         Bank bank = new Bank();
         Account checkingAccount = new Account(Account.MAXI_SAVINGS);
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
@@ -49,6 +60,28 @@ public class BankTest {
         checkingAccount.deposit(3000.0);
 
         assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+    }
+
+    @Test
+    public void maxiSavingsAccount2000() {
+        Bank bank = new Bank();
+        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
+        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+
+        checkingAccount.deposit(2000.0);
+
+        assertEquals(70.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+    }
+
+    @Test
+    public void maxiSavingsAccount1000() {
+        Bank bank = new Bank();
+        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
+        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+
+        checkingAccount.deposit(1000.0);
+
+        assertEquals(20.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
 }
