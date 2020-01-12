@@ -12,7 +12,7 @@ public abstract class Account {
 
     private final AccountType accountType;
     public List<Transaction> transactions;
-    protected DateProvider dateProvider;
+    public DateProvider dateProvider;
     protected double currentInterest;
 
 

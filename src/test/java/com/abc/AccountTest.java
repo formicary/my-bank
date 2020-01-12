@@ -4,6 +4,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import com.abc.accounts.Account;
 import com.abc.accounts.AccountFactory;
 import com.abc.accounts.AccountType;
@@ -18,11 +21,18 @@ public class AccountTest {
     public Account savingsAccount;
     public Account maxiSavingsAccount;
 
+    public Date startingDate;
+
     @Before
     public void setup(){
         checkingAccount = AccountFactory.createAccount(AccountType.CHECKING);
         savingsAccount = AccountFactory.createAccount(AccountType.SAVINGS);
         maxiSavingsAccount = AccountFactory.createAccount(AccountType.MAXI_SAVINGS);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, -2);
+        startingDate = new Date(calendar.getTimeInMillis());
+
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -39,9 +49,9 @@ public class AccountTest {
     //Checking account tests ////////////////////////////////////////
     @Test
     public void interestEarned_checkingAccount(){
-        checkingAccount.deposit(1500);
-        checkingAccount.withdraw(500);
-        assertEquals(1, checkingAccount.interestEarned(), DOUBLE_DELTA);
+        checkingAccount.deposit(1000);
+        checkingAccount.dateProvider.setStartingDate(startingDate);
+        assertEquals(0.005479459560774558, checkingAccount.interestEarned(), DOUBLE_DELTA);
     }
 
     @Test
