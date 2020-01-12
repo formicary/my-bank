@@ -65,4 +65,17 @@ public abstract class Account {
         return this.accountType;
     }
 
+    public String statementForAccount() {
+        String s = "";
+       //Translate to pretty account type
+       s += this.toString() + "\n";
+
+        //Now total up all the transactions
+        for (Transaction t : transactions) {
+            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + Utilities.toDollars(t.amount) + "\n";
+        }
+        s += "Total " + Utilities.toDollars(sumTransactions());
+        return s;
+    }
+
 }
