@@ -14,6 +14,8 @@ public class CustomerTest {
     private Account savingsAccount;
     private Account checkingAccount;
 
+    private static final double DOUBLE_DELTA = 1e-15;
+
     @Before
     public void setup(){
         oscar = new Customer("Oscar");
@@ -70,10 +72,104 @@ public class CustomerTest {
         assertEquals(0, oscar.getNumberOfAccounts());
     }
 
+    //TODO: Ignored?
     @Ignore
     public void totalInterestEarned_CheckingAccount(){
         oscar.openAccount(checkingAccount);
 
     }
+
+    //transferMoney Tests ///////////////////////////////////////////
+
+    @Test
+    public void transferMoney(){
+        oscar.openAccount(savingsAccount);
+        oscar.openAccount(checkingAccount);
+        savingsAccount.deposit(500);
+        oscar.transferMoney(savingsAccount, checkingAccount, 100);
+        assertEquals(savingsAccount.sumTransactions(), 400, DOUBLE_DELTA);
+        assertEquals(checkingAccount.sumTransactions(), 100, DOUBLE_DELTA);
+    }
+
+    @Test(expected = IllegalArgumentException.class )
+    public void transferMoney_amoutIsZeroOrLess(){
+        oscar.openAccount(savingsAccount);
+        oscar.openAccount(checkingAccount);
+        oscar.transferMoney(savingsAccount, checkingAccount, 0);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void transferMoney_accountFrom_doesNotExist(){
+        oscar.openAccount(checkingAccount);
+        oscar.transferMoney(null, checkingAccount, 40);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void transferMoney_accountTo_doesNotExist(){
+        oscar.openAccount(savingsAccount);
+        oscar.transferMoney(savingsAccount, null, 40);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void transferMoney_sameAccount(){
+        oscar.openAccount(savingsAccount);
+        oscar.transferMoney(savingsAccount, savingsAccount, 40);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void transferMoney_insufficientFunds(){
+        oscar.openAccount(savingsAccount);
+        oscar.openAccount(checkingAccount);
+        savingsAccount.deposit(500);
+        oscar.transferMoney(savingsAccount, checkingAccount, 1000);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void transferMoney_notCustomersAccount_accountFrom(){
+        oscar.openAccount(savingsAccount);
+        oscar.openAccount(checkingAccount);
+        savingsAccount.deposit(500);
+
+        Customer bill = new Customer("Bill");
+        Account billsAccount = AccountFactory.createAccount(AccountType.SAVINGS);
+        bill.openAccount(billsAccount);
+        
+        oscar.transferMoney(savingsAccount, billsAccount, 300);
+    }
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void transferMoney_notCustomersAccount_accountTo(){
+        oscar.openAccount(savingsAccount);
+        oscar.openAccount(checkingAccount);
+        savingsAccount.deposit(500);
+
+        Customer bill = new Customer("Bill");
+        Account billsAccount = AccountFactory.createAccount(AccountType.SAVINGS);
+        bill.openAccount(billsAccount);
+        billsAccount.deposit(1000);
+        
+        oscar.transferMoney(billsAccount, savingsAccount, 300);
+    }
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void transferMoney_notCustomersAccount_bothAccounts(){
+        oscar.openAccount(savingsAccount);
+        oscar.openAccount(checkingAccount);
+        savingsAccount.deposit(500);
+
+        Customer bill = new Customer("Bill");
+        Account billsAccount1 = AccountFactory.createAccount(AccountType.SAVINGS);
+        Account billsAccount2 = AccountFactory.createAccount(AccountType.CHECKING);
+        bill.openAccount(billsAccount1);
+        
+        billsAccount1.deposit(1000);
+        
+        oscar.transferMoney(billsAccount1, billsAccount2, 300);
+    }
+
+
+
 
 }

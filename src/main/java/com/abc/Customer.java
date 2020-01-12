@@ -47,14 +47,11 @@ public class Customer {
 
 
     /**
-     * 0. validate that accounts are not null and belong to this Customer
-     * 1. validate if accountFrom has sufficient amount of money to be transfered
-     * 2. amount must be more than zero
-     * 3. 
-     * TODO: consider adding transfer statuses to be outputted for particular interface instead of exceptions
-     *  
-     * @param accountTo
-     * @param amount
+     * Transfers money between two Accounts. The Accounts given must belong to the same Customer.
+     * 
+     * @param accountFrom Customer's Account that the money is withdrawn from 
+     * @param accountTo Customer's Account that the money is deposited to
+     * @param amount The amount of money that is transfered between Customer's Accounts
      */
     public void transferMoney(Account accountFrom, Account accountTo, double amount) throws NullPointerException, IllegalArgumentException {
         if(amount <= 0){
