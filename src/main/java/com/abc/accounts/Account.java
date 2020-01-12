@@ -52,8 +52,7 @@ public abstract class Account {
     }
     
     /**
-     * Calculates daily interest rate.
-     * TODO: consider how to handle negative transaction sum. To be discussed with business owner
+     * Calculates compound daily interest earned from the date when an account was opened.
      * @return amount of money earned depending on the account type
      */
     public abstract double interestEarned();

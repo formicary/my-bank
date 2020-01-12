@@ -1,7 +1,5 @@
 package com.abc.accounts;
 
-import java.sql.Date;
-
 public class CheckingAccount extends Account {
     /**
      * Flat interest rate of 0.1% per-annumm
@@ -13,12 +11,12 @@ public class CheckingAccount extends Account {
         super(accountType);
         currentInterest = 0.0;
     }
-
+    
     public double interestEarned() {
-
-        
-        // currentInterest = (currentInterest + sumTransactions()) * interestRate / dateProvider.getYearDays() ;
-        return currentInterest;
+        int daysElapsed = dateProvider.getNumberOfElapsedDays();
+        double dailyInterestRate = interestRate / dateProvider.getYearDays();
+        double interestEarned = sumTransactions() * Math.pow(dailyInterestRate, daysElapsed) - sumTransactions();
+        return interestEarned;
     }
 
     public String toString(){
