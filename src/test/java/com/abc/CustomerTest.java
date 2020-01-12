@@ -6,6 +6,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
+    private static final double DOUBLE_DELTA = 1e-15;
 
     @Test //Test customer statement generation
     public void testApp(){
@@ -63,5 +64,20 @@ public class CustomerTest {
                 .openAccount(new Account(Account.CHECKING))
                 .openAccount(new Account(Account.CHECKING));
         assertEquals(1, oscar.getNumberOfAccounts());
+    }
+
+    @Test
+    public void testTransfer() {
+        Account savings = new Account(Account.SAVINGS);
+        Account checking = new Account(Account.CHECKING);
+
+        checking.deposit(200);
+
+        Customer jeff = new Customer("Jeff")
+                .openAccount(savings)
+                .openAccount(checking)
+                .transfer(checking, savings, 200);
+
+        assertEquals(200, savings.sumTransactions(), DOUBLE_DELTA);
     }
 }

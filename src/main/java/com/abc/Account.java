@@ -1,7 +1,11 @@
 package com.abc;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class Account {
 
@@ -42,25 +46,39 @@ public class Account {
                 else
                     return 1 + (amount-1000) * 0.002;
             case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
+                //Filter transactions to get withdrawals
+                List<Transaction> withdrawals = transactions.stream()
+                        .filter(t -> t.getAmount() < 0)
+                        .collect(Collectors.toList());
+
+                //If no withdrawals then 5% interest
+                if (withdrawals.size() == 0) {
+                    return amount * 0.05;
+                }
+
+                //Get period between now and last withdrawal
+                int period = Period.between(
+                        LocalDate.now(), withdrawals.get(withdrawals.size() - 1).getTransactionDate()
+                ).getDays();
+
+                //If there has been a withdrawal within the last 10 days, interest is 0.1%
+                if (period < 10) {
+                    return amount * 0.001;
+                }
+
+                //Interest is 5% otherwise
+                return amount * 0.05;
             default:
                 return amount * 0.001;
         }
     }
 
     public double sumTransactions() {
-       return checkIfTransactionsExist(true);
-    }
+        Optional<Double> sum = transactions.stream()
+                .map(Transaction::getAmount)
+                .reduce(Double::sum);
 
-    private double checkIfTransactionsExist(boolean checkAll) {
-        double amount = 0.0;
-        for (Transaction t: transactions)
-            amount += t.amount;
-        return amount;
+        return sum.orElse(0.0);
     }
 
     public int getAccountType() {

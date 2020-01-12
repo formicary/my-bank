@@ -51,6 +51,16 @@ public class Customer {
         return statement.toString();
     }
 
+    //Since there is no policy, a customer can transfer up to any amount
+    //even when they don't have it in their account
+    public Customer transfer(Account from, Account to, double amount) {
+        if (from.getAccountType() == to.getAccountType()) return this;
+
+        from.withdraw(amount);
+        to.deposit(amount);
+        return this;
+    }
+
     private String statementForAccount(Account a) {
         StringBuilder s = new StringBuilder();
 
@@ -71,11 +81,11 @@ public class Customer {
         double total = 0.0;
         for (Transaction t : a.transactions) {
             s.append("  ")
-                    .append(t.amount < 0 ? "withdrawal" : "deposit")
+                    .append(t.getAmount() < 0 ? "withdrawal" : "deposit")
                     .append(" ")
-                    .append(toDollars(t.amount))
+                    .append(toDollars(t.getAmount()))
                     .append("\n");
-            total += t.amount;
+            total += t.getAmount();
         }
         s.append("Total ").append(toDollars(total));
         return s.toString();
@@ -84,4 +94,6 @@ public class Customer {
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
     }
+
+
 }
