@@ -15,6 +15,11 @@ public abstract class Account {
         this.transactions = new ArrayList<Transaction>();
     }
 
+    /**
+     * Adds a new transaction to an account Transaction List.
+     * @param amount money to deposit. Must be positive.
+     * @throws IllegalArgumentException when amount <= 0
+     */
     public void deposit(double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
@@ -23,6 +28,11 @@ public abstract class Account {
         }
     }
 
+    /**
+     * Adds a new Transaction with negative amount of money to the Transaction List.
+     * @param amount money to witdraw. Must be positive.
+     * @throws IllegalArgumentException when amount <= 0
+     */
     public void withdraw(double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");

@@ -3,11 +3,9 @@ package com.abc;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import com.abc.accounts.AccountFactory;
 import com.abc.accounts.AccountType;
-import com.abc.accounts.CheckingAccount;
 
 import org.junit.Before;
 
