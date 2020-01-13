@@ -30,7 +30,6 @@ public class DateProvider {
         return Calendar.getInstance().getTime();
     }
 
-    //TODO: consider leap year, or make it an average 365.25
     public int getYearDays(){
         return 365;
     }

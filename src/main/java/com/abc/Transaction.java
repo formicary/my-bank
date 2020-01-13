@@ -1,6 +1,5 @@
 package com.abc;
 
-import java.util.Calendar;
 import java.util.Date;
 
 public class Transaction {
@@ -17,6 +16,7 @@ public class Transaction {
         return new Date(transactionDate.getTime());
     }
 
+    //for testing
     public void setTransactionDate(Date newDate){
         transactionDate = new Date(newDate.getTime());
     }

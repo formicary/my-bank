@@ -1,8 +1,5 @@
 package com.abc.accounts;
 
-import java.util.Calendar;
-import java.util.Date;
-
 import com.abc.*;
 
 public class MaxiSavingsAccount extends Account{
@@ -15,9 +12,6 @@ public class MaxiSavingsAccount extends Account{
     }
 
     public double interestEarned() {
-        if(transactions.isEmpty()){
-            return 0;
-        }
         int daysElapsed = getTransactionPeriod();
         if(daysElapsed == 0) daysElapsed = 1;
 
@@ -34,7 +28,6 @@ public class MaxiSavingsAccount extends Account{
 
         }
         return calculateDailyCompoundInterest(interestRateMoreThan10Days, daysElapsed);
-
     }
 
     public String toString(){

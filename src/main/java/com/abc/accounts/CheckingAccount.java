@@ -13,9 +13,6 @@ public class CheckingAccount extends Account {
     }
     
     public double interestEarned() {
-        if(transactions.isEmpty()){
-            return 0;
-        }
         int daysElapsed = getTransactionPeriod();
         if(daysElapsed < 1) daysElapsed = 1;
         double dailyInterestRate = interestRate / dateProvider.getYearDays();

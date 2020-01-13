@@ -9,7 +9,6 @@ public class AccountFactory{
             case SAVINGS: return new SavingsAccount(accountType);
             case MAXI_SAVINGS: return new MaxiSavingsAccount(accountType);
             default: {
-                //TODO: fix null
                 throw new EnumConstantNotPresentException(null, "AccountType \"" + accountType + "\" is not existant");
             }
         }

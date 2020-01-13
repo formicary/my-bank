@@ -24,7 +24,6 @@ public class CustomerTest {
 
     }
 
-    //TODO: remove "test" prefixes
     @Test //Test customer statement generation
     public void testApp(){
         oscar.openAccount(checkingAccount).openAccount(savingsAccount);
@@ -70,13 +69,6 @@ public class CustomerTest {
     @Test
     public void getNumberOfAccounts_NoAccounts(){
         assertEquals(0, oscar.getNumberOfAccounts());
-    }
-
-    //TODO: Ignored?
-    @Ignore
-    public void totalInterestEarned_CheckingAccount(){
-        oscar.openAccount(checkingAccount);
-
     }
 
     //transferMoney Tests ///////////////////////////////////////////

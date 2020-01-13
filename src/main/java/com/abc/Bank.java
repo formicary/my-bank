@@ -21,8 +21,6 @@ public class Bank {
         return summary;
     }
 
-
-    //TODO: make this as a report(?)
     public double totalInterestPaid() {
         double total = 0;
         for(Customer c: customers)
@@ -30,10 +28,7 @@ public class Bank {
         return total;
     }
 
-    /**
-     * 
-     * @return Customer's name
-     */
+    //For testing
     public String getFirstCustomerName() {
         if(customers.size() == 0)
             throw new IndexOutOfBoundsException("No customers in the bank");
