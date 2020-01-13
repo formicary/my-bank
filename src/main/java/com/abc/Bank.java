@@ -1,5 +1,6 @@
 package com.abc;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,10 +34,14 @@ public class Bank {
     }
 
     //Fractions of pennies are dealt with by rounding down the total value
-    public double totalInterestPaid() {
+    public double totalInterestPaid(LocalDate upToDate) {
         double total = 0;
         for(Customer c: customers)
-            total += c.totalInterestEarned();
+            total += c.totalInterestEarned(upToDate);
         return Math.floor(total * 100.0) / 100.0;
+    }
+
+    public List<Customer> getCustomers() {
+        return customers;
     }
 }

@@ -2,75 +2,53 @@ package com.abc;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import java.time.LocalDate;
+
+import static org.junit.Assert.*;
 
 public class BankTest {
-    private static final double DOUBLE_DELTA = 1e-15;
+    public static final LocalDate START = LocalDate.of(2020,1,1);
+    public static final LocalDate END = LocalDate.of(2020,1,12);
+
+    @Test
+    public void addCustomer() {
+        Bank bank = new Bank();
+        Customer john = new Customer("John");
+        bank.addCustomer(john);
+
+        assertTrue(bank.getCustomers().contains(john));
+    }
 
     @Test
     public void customerSummary() {
         Bank bank = new Bank();
         Customer john = new Customer("John");
-        john.openAccount(new Account(Account.CHECKING));
+        john.openAccount(new CheckingAccount());
         bank.addCustomer(john);
 
         assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
     }
 
     @Test
-    public void checkingAccount() {
+    public void totalInterestPaid() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.CHECKING);
+        Account checkingAccount = new CheckingAccount();
+        Account savingsAccount = new SavingsAccount();
+        Account maxiSavingsAccount = new MaxiSavingsAccount();
+
         Customer bill = new Customer("Bill").openAccount(checkingAccount);
+        Customer jeff = new Customer("Jeff").openAccount(savingsAccount);
+        Customer harry = new Customer("Harry").openAccount(maxiSavingsAccount);
+
         bank.addCustomer(bill);
+        bank.addCustomer(jeff);
+        bank.addCustomer(harry);
 
-        checkingAccount.deposit(100.0);
+        checkingAccount.deposit(20000.0, START);
+        savingsAccount.deposit(20000.0, START);
+        maxiSavingsAccount.deposit(20000.0, START);
+        maxiSavingsAccount.withdraw(10000, LocalDate.of(2020,1,6));
 
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
-    }
-
-    @Test
-    public void savingsAccountOver1000() {
-        Bank bank = new Bank();
-        Account savingsAccount = new Account(Account.SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(savingsAccount));
-
-        savingsAccount.deposit(1500.0);
-
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
-    }
-
-    @Test
-    public void savingsAccountUnder1000() {
-        Bank bank = new Bank();
-        Account savingsAccount = new Account(Account.SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount((savingsAccount)));
-
-        savingsAccount.deposit(999.00);
-
-        assertEquals(0.99, bank.totalInterestPaid(), DOUBLE_DELTA);
-    }
-
-    @Test
-    public void maxiSavingsAccountNoWithdrawals() {
-        Bank bank = new Bank();
-        Account maxiSavings = new Account(Account.MAXI_SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(maxiSavings));
-
-        maxiSavings.deposit(3000.0);
-
-        assertEquals(150.0, bank.totalInterestPaid(), DOUBLE_DELTA);
-    }
-
-    @Test
-    public void maxiSavingsAccountWithdrawal() {
-        Bank bank = new Bank();
-        Account maxiSavings = new Account(Account.MAXI_SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(maxiSavings));
-
-        maxiSavings.deposit(3000.0);
-        maxiSavings.withdraw(500.0);
-
-        assertEquals(2.5, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(15.64, bank.totalInterestPaid(END), 0.01);
     }
 }

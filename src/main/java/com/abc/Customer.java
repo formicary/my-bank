@@ -1,5 +1,6 @@
 package com.abc;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class Customer {
 
     public Customer openAccount(final Account account) {
         //Ensure that a customer cannot open two of the same account
-        if (accounts.stream().anyMatch(acc -> acc.getAccountType() == account.getAccountType())) {
+        if (accounts.stream().anyMatch(acc -> acc.getClass() == account.getClass())) {
             return this;
         }
         accounts.add(account);
@@ -31,10 +32,10 @@ public class Customer {
         return accounts.size();
     }
 
-    public double totalInterestEarned() {
+    public double totalInterestEarned(LocalDate finalDate) {
         double total = 0;
         for (Account a : accounts)
-            total += a.interestEarned();
+            total += a.getInterestEarned(finalDate);
         return total;
     }
 
@@ -54,7 +55,7 @@ public class Customer {
     //Since there is no policy, a customer can transfer up to any amount
     //even when they don't have it in their account
     public Customer transfer(Account from, Account to, double amount) {
-        if (from.getAccountType() == to.getAccountType()) return this;
+        if (from.getClass() == to.getClass()) return this;
 
         from.withdraw(amount);
         to.deposit(amount);
@@ -63,19 +64,7 @@ public class Customer {
 
     private String statementForAccount(Account a) {
         StringBuilder s = new StringBuilder();
-
-       //Translate to pretty account type
-        switch(a.getAccountType()){
-            case Account.CHECKING:
-                s.append("Checking Account\n");
-                break;
-            case Account.SAVINGS:
-                s.append("Savings Account\n");
-                break;
-            case Account.MAXI_SAVINGS:
-                s.append("Maxi Savings Account\n");
-                break;
-        }
+        s.append(a.getAccountString());
 
         //Now total up all the transactions
         double total = 0.0;

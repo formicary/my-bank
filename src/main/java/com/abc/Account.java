@@ -1,76 +1,55 @@
 package com.abc;
 
 import java.time.LocalDate;
-import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-public class Account {
+public abstract class Account {
 
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
-
-    private final int accountType;
     public List<Transaction> transactions;
 
-    public Account(int accountType) {
-        this.accountType = accountType;
+    public Account() {
         this.transactions = new ArrayList<>();
     }
 
+    abstract String getAccountString();
+
+    abstract double calculateInterest(double amount, LocalDate dateInQuestion);
+
     public void deposit(double amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
-        } else {
-            transactions.add(new Transaction(amount));
-        }
+        checkAmount(amount);
+        transactions.add(new Transaction(amount));
+    }
+
+    //Overloaded to deposit at specific date for testing
+    public void deposit(double amount, LocalDate date) {
+        checkAmount(amount);
+        transactions.add(new Transaction(amount, date));
     }
 
     public void withdraw(double amount) {
-        if (amount <= 0) {
+        checkAmount(amount);
+        transactions.add(new Transaction(-amount));
+    }
+
+    //Overloaded to deposit at specific date for testing
+    public void withdraw(double amount, LocalDate date) {
+        checkAmount(amount);
+        transactions.add(new Transaction(-amount, date));
+    }
+
+    private void checkAmount(double amount) {
+        if (amount < 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
-        } else {
-            transactions.add(new Transaction(-amount));
         }
     }
 
-    public double interestEarned() {
-        double amount = sumTransactions();
-        switch(accountType){
-            case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
-            case MAXI_SAVINGS:
-                //Filter transactions to get withdrawals
-                List<Transaction> withdrawals = transactions.stream()
-                        .filter(t -> t.getAmount() < 0)
-                        .collect(Collectors.toList());
-
-                //If no withdrawals then 5% interest
-                if (withdrawals.size() == 0) {
-                    return amount * 0.05;
-                }
-
-                //Get period between now and last withdrawal
-                int period = Period.between(
-                        LocalDate.now(), withdrawals.get(withdrawals.size() - 1).getTransactionDate()
-                ).getDays();
-
-                //If there has been a withdrawal within the last 10 days, interest is 0.1%
-                if (period < 10) {
-                    return amount * 0.001;
-                }
-
-                //Interest is 5% otherwise
-                return amount * 0.05;
-            default:
-                return amount * 0.001;
+    public double getInterestEarned(LocalDate finalDate) {
+        if (transactions.size() < 1) {
+            return 0;
         }
+        return interestEarned(0, transactions.get(0).getTransactionDate(), 0, 0, finalDate);
     }
 
     public double sumTransactions() {
@@ -81,8 +60,32 @@ public class Account {
         return sum.orElse(0.0);
     }
 
-    public int getAccountType() {
-        return accountType;
-    }
+    private double interestEarned(int transactionsPointer,
+                                  LocalDate dateInQuestion,
+                                  double totalBalance,
+                                  double totalInterest,
+                                  LocalDate finalDate) {
+        //Base case, we have iterated through all dates and want to return the amount (compound interest)
+        if (dateInQuestion.isAfter(finalDate) ||
+                (dateInQuestion.equals(finalDate) && (transactionsPointer >= transactions.size()))) {
+            return totalInterest;
+        }
+        //Check if there is another transaction
+        if (transactionsPointer < transactions.size()) {
+            //Get its date
+            LocalDate nextTransactionDate = transactions.get(transactionsPointer).getTransactionDate();
 
+            //If the current recursion date is the date of the next transaction, add the amount of this transaction
+            if (dateInQuestion.equals(nextTransactionDate)) {
+                totalBalance += transactions.get(transactionsPointer).getAmount();
+                transactionsPointer++;
+            }
+        }
+
+        double interest = calculateInterest(totalBalance, dateInQuestion);
+        totalBalance += interest;
+        totalInterest += interest;
+
+        return interestEarned(transactionsPointer, dateInQuestion.plusDays(1), totalBalance, totalInterest, finalDate);
+    }
 }
