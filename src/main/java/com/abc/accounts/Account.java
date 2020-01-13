@@ -1,6 +1,7 @@
 package com.abc.accounts;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.abc.DateProvider;
@@ -84,8 +85,17 @@ public abstract class Account {
         return s;
     }
 
-    public boolean canCalculateInterest(){
-        return (dateProvider.startingDate.getTime() < dateProvider.now().getTime());
+    public int getTransactionPeriod(){
+        int numOfTransactions = transactions.size();
+        if(numOfTransactions == 0){
+            throw new NullPointerException("There are no transactions to calculate transaction period");
+        }
+        else{
+            Date firstTransactionDate = transactions.get(0).getTransactionDate();
+            Date lastTransactionDate = transactions.get(numOfTransactions-1).getTransactionDate();
+            int numOfDays = DateProvider.getDayDifference(firstTransactionDate, lastTransactionDate);
+            return numOfDays;
+        }
     }
 
 }

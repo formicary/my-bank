@@ -27,7 +27,6 @@ public class DateProvider {
     }
 
     public Date now() {
-        //TODO: why do we need DateProvider if Calendar does all the work?
         return Calendar.getInstance().getTime();
     }
 
@@ -36,9 +35,9 @@ public class DateProvider {
         return 365;
     }
 
-    public int getNumberOfElapsedDays(){
+    public static int getDayDifference(Date dateFrom, Date dateTo){
 
-        long diffMilis = this.now().getTime() - startingDate.getTime();
+        long diffMilis = Math.abs(dateFrom.getTime() - dateTo.getTime());
         int daysElapsed = (int)TimeUnit.DAYS.convert(diffMilis, TimeUnit.MILLISECONDS);
         return daysElapsed;
     }

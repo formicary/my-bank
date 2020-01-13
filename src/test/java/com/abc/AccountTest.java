@@ -51,7 +51,7 @@ public class AccountTest {
     public void interestEarned_checkingAccount(){
         checkingAccount.deposit(1000);
         checkingAccount.dateProvider.setStartingDate(startingDate);
-        assertEquals(0.005479459560774558, checkingAccount.interestEarned(), DOUBLE_DELTA);
+        assertEquals(0.002739726027357392, checkingAccount.interestEarned(), DOUBLE_DELTA);
     }
 
     @Test

@@ -20,14 +20,14 @@ public class DateProviderTest {
         dateProvider = DateProvider.getInstance();
     }
 
-    @Test
-    public void getNumberOfElapsedDays(){
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, -8);
+    // @Test
+    // public void getNumberOfElapsedDays(){
+    //     Calendar calendar = Calendar.getInstance();
+    //     calendar.add(Calendar.DATE, -8);
         
-        Date newDate = calendar.getTime();
-        dateProvider.setStartingDate(newDate);
+    //     Date newDate = calendar.getTime();
+    //     dateProvider.setStartingDate(newDate);
 
-        assertEquals(8, dateProvider.getNumberOfElapsedDays());
-    }
+    //     assertEquals(8, dateProvider.getNumberOfElapsedDays());
+    // }
 }
