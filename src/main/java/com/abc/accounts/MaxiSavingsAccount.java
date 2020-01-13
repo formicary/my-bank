@@ -1,5 +1,8 @@
 package com.abc.accounts;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import com.abc.*;
 
 public class MaxiSavingsAccount extends Account{
@@ -15,24 +18,28 @@ public class MaxiSavingsAccount extends Account{
         if(transactions.isEmpty()){
             return 0;
         }
-        //day difference between last transaction and current time
-        int daysSinceLastTransaction = 
-        DateProvider.getDayDifference(
-            transactions.get(transactions.size()-1).getTransactionDate(),
-             dateProvider.now());
-
         int daysElapsed = getTransactionPeriod();
-        double transactionSum = sumTransactions();
-        if(daysSinceLastTransaction >= 10){
-            return transactionSum * Math.pow(interestRateMoreThan10Days, daysElapsed);
+        if(daysElapsed == 0) daysElapsed = 1;
+
+        for(int i = transactions.size()-1; i >= 0; i--){
+            Transaction t = transactions.get(i);
+            int dayDifference = DateProvider.getDayDifference(dateProvider.now(), t.getTransactionDate());
+
+            if (dayDifference > 10){
+                break;
+            }
+            else if(t.amount < 0){
+                return calculateDailyCompoundInterest(interestRateLessThan10Days, daysElapsed);
+            }
+
         }
-        else{
-            return transactionSum * Math.pow(interestRateLessThan10Days, daysElapsed);
-        }
+        return calculateDailyCompoundInterest(interestRateMoreThan10Days, daysElapsed);
+
     }
 
     public String toString(){
         return "Maxi savings Account";
     } 
+
     
 }

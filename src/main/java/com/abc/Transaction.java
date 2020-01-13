@@ -17,4 +17,8 @@ public class Transaction {
         return new Date(transactionDate.getTime());
     }
 
+    public void setTransactionDate(Date newDate){
+        transactionDate = new Date(newDate.getTime());
+    }
+
 }

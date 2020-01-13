@@ -7,7 +7,6 @@ import java.util.List;
 import com.abc.DateProvider;
 import com.abc.Transaction;
 import com.abc.Utilities;
-import com.abc.accounts.*;
 
 public abstract class Account {
 
@@ -87,15 +86,14 @@ public abstract class Account {
 
     public int getTransactionPeriod(){
         int numOfTransactions = transactions.size();
-        if(numOfTransactions == 0){
-            throw new NullPointerException("There are no transactions to calculate transaction period");
-        }
-        else{
-            Date firstTransactionDate = transactions.get(0).getTransactionDate();
-            Date lastTransactionDate = transactions.get(numOfTransactions-1).getTransactionDate();
-            int numOfDays = DateProvider.getDayDifference(firstTransactionDate, lastTransactionDate);
-            return numOfDays;
-        }
+        Date firstTransactionDate = transactions.get(0).getTransactionDate();
+        Date lastTransactionDate = transactions.get(numOfTransactions-1).getTransactionDate();
+        int numOfDays = DateProvider.getDayDifference(firstTransactionDate, lastTransactionDate);
+        return numOfDays;
+    }
+
+    public double calculateDailyCompoundInterest(double interestRate, int numOfDays){
+        return sumTransactions() * Math.pow(interestRate/dateProvider.getYearDays(), numOfDays);
     }
 
 }

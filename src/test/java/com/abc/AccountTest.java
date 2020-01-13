@@ -21,7 +21,7 @@ public class AccountTest {
     public Account savingsAccount;
     public Account maxiSavingsAccount;
 
-    public Date startingDate;
+    public Date startDate;
 
     @Before
     public void setup(){
@@ -31,7 +31,7 @@ public class AccountTest {
 
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DATE, -2);
-        startingDate = new Date(calendar.getTimeInMillis());
+        startDate = new Date(calendar.getTimeInMillis());
 
     }
 
@@ -50,8 +50,7 @@ public class AccountTest {
     @Test
     public void interestEarned_checkingAccount(){
         checkingAccount.deposit(1000);
-        checkingAccount.dateProvider.setStartingDate(startingDate);
-        assertEquals(0.002739726027357392, checkingAccount.interestEarned(), DOUBLE_DELTA);
+        assertEquals(0.0027397260273972603, checkingAccount.interestEarned(), DOUBLE_DELTA);
     }
 
     @Test
@@ -61,29 +60,18 @@ public class AccountTest {
 
     }
 
-    @Test
-    public void interestEarned_checkingAccount_zeroDeposit(){
-        assertEquals(0, checkingAccount.interestEarned(), DOUBLE_DELTA);
-    }
-
-    //TODO: implement logic handling negative sum for all Accounts
-    @Test
-    public void interestEarned_checkingAccount_negativeTransactions(){
-        checkingAccount.withdraw(500);
-        assertEquals(0, checkingAccount.interestEarned(), DOUBLE_DELTA);
-    }
 
     //Savings account tests /////////////////////////////////////////
     @Test
     public void interestEarned_savingsAccount_interestRate1(){
         savingsAccount.deposit(1000);
-        assertEquals(1, savingsAccount.interestEarned(), DOUBLE_DELTA);
+        assertEquals(0.0027397260273972603, savingsAccount.interestEarned(), DOUBLE_DELTA);
     }
 
     @Test
     public void interestEarned_savingsAccount_interestRate2(){
         savingsAccount.deposit(2000);
-        assertEquals(3, savingsAccount.interestEarned(), DOUBLE_DELTA);
+        assertEquals(0.008219178082191782, savingsAccount.interestEarned(), DOUBLE_DELTA);
     }
 
     @Test
@@ -91,35 +79,19 @@ public class AccountTest {
         assertEquals(0, savingsAccount.interestEarned(), DOUBLE_DELTA);
     }
 
-    @Test
-    public void interestEarned_savingsAccount_maximum(){
-        savingsAccount.deposit(Double.MAX_VALUE + 1);
-        assertEquals(Double.MAX_VALUE + 50, savingsAccount.sumTransactions(),DOUBLE_DELTA);
-    }
-
     //Maxi Saving account tests /////////////////////////////////////
-
-    @Test
-    public void interestEarned_maxiSavingsAccount_interestRate1(){
+    @Test 
+    public void interestEarned_maxiSavingsAccount_noWithdrawals(){
         maxiSavingsAccount.deposit(1000);
-        assertEquals(20, maxiSavingsAccount.interestEarned(), DOUBLE_DELTA);
+        maxiSavingsAccount.deposit(500);
+        assertEquals(0.20547945205479454, maxiSavingsAccount.interestEarned(), DOUBLE_DELTA);
     }
 
     @Test
-    public void interestEarned_maxiSavingsAccount_interestRate2(){
-        maxiSavingsAccount.deposit(2000);
-        assertEquals(70, maxiSavingsAccount.interestEarned(), DOUBLE_DELTA);
-    }
-
-    @Test
-    public void interestEarned_maxiSavingsAccount_interestRate3(){
-        maxiSavingsAccount.deposit(3000);
-        assertEquals(170, maxiSavingsAccount.interestEarned(), DOUBLE_DELTA);
-    }
-
-    @Test
-    public void interestEarned_maxiSavingsAccount_zero(){
-        assertEquals(0, maxiSavingsAccount.interestEarned(), DOUBLE_DELTA);
+    public void interestEarned_maxiSavingsAccount_withdrawal(){
+        maxiSavingsAccount.deposit(1000);
+        maxiSavingsAccount.withdraw(500);
+        assertEquals(0.0013698630136986301, maxiSavingsAccount.interestEarned(), DOUBLE_DELTA);
     }
 
     @Test
