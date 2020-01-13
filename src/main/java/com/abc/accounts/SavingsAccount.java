@@ -18,6 +18,9 @@ public class SavingsAccount extends Account {
     }
 
     public double interestEarned() {
+        if(transactions.isEmpty()){
+            return 0;
+        }
         double amount = sumTransactions();
         int daysElapsed = getTransactionPeriod();
         if(daysElapsed < 1) daysElapsed = 1;

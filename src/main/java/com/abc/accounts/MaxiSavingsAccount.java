@@ -4,29 +4,31 @@ import com.abc.*;
 
 public class MaxiSavingsAccount extends Account{
     
-    private double interestRate1 = 0.02;
-    private double moneyCap1 = 1000.0;
-
-    private double interestRate2 = 0.05;
-    private double moneyCap2 = 2000.0;
-
-    private double interestRate3 = 0.1;
+    private double interestRateMoreThan10Days = 0.05;
+    private double interestRateLessThan10Days = 0.001;
 
     public MaxiSavingsAccount(AccountType accountType){
         super(accountType);
     }
 
     public double interestEarned() {
-        double amount = sumTransactions();
-        if(amount <= moneyCap1){
-            return amount * interestRate1;
+        if(transactions.isEmpty()){
+            return 0;
         }
-        if (amount <= moneyCap2){
-            return (amount - moneyCap1) * interestRate2 + moneyCap1 * interestRate1;
-        }
-        return (amount - moneyCap2) * interestRate3
-            + (moneyCap2 - moneyCap1) * interestRate2 + moneyCap1 * interestRate1;
+        //day difference between last transaction and current time
+        int daysSinceLastTransaction = 
+        DateProvider.getDayDifference(
+            transactions.get(transactions.size()-1).getTransactionDate(),
+             dateProvider.now());
 
+        int daysElapsed = getTransactionPeriod();
+        double transactionSum = sumTransactions();
+        if(daysSinceLastTransaction >= 10){
+            return transactionSum * Math.pow(interestRateMoreThan10Days, daysElapsed);
+        }
+        else{
+            return transactionSum * Math.pow(interestRateLessThan10Days, daysElapsed);
+        }
     }
 
     public String toString(){

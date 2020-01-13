@@ -13,11 +13,14 @@ public class CheckingAccount extends Account {
     }
     
     public double interestEarned() {
+        if(transactions.isEmpty()){
+            return 0;
+        }
         int daysElapsed = getTransactionPeriod();
         if(daysElapsed < 1) daysElapsed = 1;
         double dailyInterestRate = interestRate / dateProvider.getYearDays();
         double transactionSum = sumTransactions();
-        double interestEarned = transactionSum * Math.pow(1 +dailyInterestRate, daysElapsed) - transactionSum;
+        double interestEarned = transactionSum * Math.pow(dailyInterestRate, daysElapsed);
         return interestEarned;
     }
 

@@ -122,5 +122,10 @@ public class AccountTest {
         assertEquals(0, maxiSavingsAccount.interestEarned(), DOUBLE_DELTA);
     }
 
+    @Test
+    public void sumTransactions_none(){
+        assertEquals(0, checkingAccount.sumTransactions(), DOUBLE_DELTA);
+    }
+
 
 }
