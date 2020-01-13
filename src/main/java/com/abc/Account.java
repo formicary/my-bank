@@ -24,8 +24,9 @@ public class Account {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
-            transactions.add(new Transaction(amount));
-            balance += amount;
+        	balance += amount;
+            transactions.add(new Transaction(amount, balance));
+            
         }
     }
 
@@ -33,8 +34,9 @@ public void withdraw(double amount) {
     if (amount <= 0) {
         throw new IllegalArgumentException("amount must be greater than zero");
     } else {
-        transactions.add(new Transaction(-amount));
-        balance -= amount;
+    	balance -= amount;
+        transactions.add(new Transaction(-amount, balance));
+        
     }
 }
 
@@ -82,8 +84,13 @@ public void withdraw(double amount) {
     	
     }
 
+    
     public int getAccountType() {
         return accountType;
+    }
+    
+    public double getBalance()	{
+    	return balance;
     }
 
 }

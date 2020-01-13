@@ -40,7 +40,7 @@ public class Customer {
         double total = 0.0;
         for (Account a : accounts) {
             statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+            total += a.getBalance();
         }
         statement += "\nTotal In All Accounts " + toDollars(total);
         return statement;
