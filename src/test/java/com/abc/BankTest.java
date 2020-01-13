@@ -21,40 +21,59 @@ public class BankTest {
         assertEquals("Customer Summary\n - Bill (1 account)", bank.customerSummary());
     }
 
-    //TODO: test totalInterest earned by bank
+    @Test
+    public void allAccountsSummary(){
+        Account billSavings = AccountFactory.createAccount(AccountType.SAVINGS);
+        bill.openAccount(billSavings);
+        billSavings.deposit(1500);
+
+        Customer oscar = new Customer("Oscar");
+        Account oscarChecking = AccountFactory.createAccount(AccountType.CHECKING);
+        oscar.openAccount(oscarChecking);
+        oscarChecking.deposit(600);
+
+        bank.addCustomer(bill);
+        bank.addCustomer(oscar);
+
+        String expectedSummary =
+         "All Accounts Summary"
+         +bill.accountSummary() + oscar.accountSummary()
+         +"\n Total interest paid by bank: " + Utilities.toDollars(bank.totalInterestPaid());
+
+         assertEquals(expectedSummary, bank.allAccountsSummary());
+    }
 
     @Test
-    public void checkingAccount() {
+    public void totalInterestPaid_oneAccount() {
         Account checkingAccount = AccountFactory.createAccount(AccountType.CHECKING);
         bill.openAccount(checkingAccount);
         bank.addCustomer(bill);
 
-        checkingAccount.deposit(100.0);
+        checkingAccount.deposit(1000);
 
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(checkingAccount.interestEarned(), bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
-    public void savings_account() {
+    public void totalInterestPaid_multipleAccounts() {
+        Account checkingAccount = AccountFactory.createAccount(AccountType.CHECKING);
+        bill.openAccount(checkingAccount);
+        bank.addCustomer(bill);
+
+        checkingAccount.deposit(1000);
+
+        Customer oscar = new Customer("Oscar");
+        bank.addCustomer(oscar);
         Account savingsAccount = AccountFactory.createAccount(AccountType.SAVINGS);
-        bill.openAccount(savingsAccount);
-        bank.addCustomer(bill);
+        oscar.openAccount(savingsAccount);
 
-        savingsAccount.deposit(1500.0);
+        savingsAccount.deposit(3600);
 
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        double expectedInterestPaid = oscar.totalInterestEarned() + bill.totalInterestEarned();
+
+        assertEquals(expectedInterestPaid, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
-    @Test
-    public void maxi_savings_account() {
-        Account maxiSavingsAccount = AccountFactory.createAccount(AccountType.MAXI_SAVINGS);
-        bill.openAccount(maxiSavingsAccount);
-        bank.addCustomer(bill);
-
-        maxiSavingsAccount.deposit(3000.0);
-
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
-    }
  
     @Test
     public void getFirstCustomer(){

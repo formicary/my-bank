@@ -1,7 +1,6 @@
 package com.abc;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -13,6 +12,7 @@ public class CustomerTest {
     private Customer oscar;
     private Account savingsAccount;
     private Account checkingAccount;
+    private Account maxiSavingsAccount;
 
     private static final double DOUBLE_DELTA = 1e-15;
 
@@ -21,6 +21,7 @@ public class CustomerTest {
         oscar = new Customer("Oscar");
         savingsAccount = AccountFactory.createAccount(AccountType.SAVINGS);
         checkingAccount = AccountFactory.createAccount(AccountType.CHECKING);
+        maxiSavingsAccount = AccountFactory.createAccount(AccountType.MAXI_SAVINGS);
 
     }
 
@@ -159,6 +160,26 @@ public class CustomerTest {
         billsAccount1.deposit(1000);
         
         oscar.transferMoney(billsAccount1, billsAccount2, 300);
+    }
+
+    @Test
+    public void accountSummary(){
+        oscar.openAccount(checkingAccount);
+        checkingAccount.deposit(1000);
+        oscar.openAccount(savingsAccount);
+        savingsAccount.deposit(500);
+
+        oscar.openAccount(maxiSavingsAccount);
+        maxiSavingsAccount.deposit(1000);
+
+        String expectedSummary = "Account summary for Oscar" 
+                                +"\n - Checking Account. Interest Earned: " + Utilities.toDollars(checkingAccount.interestEarned())
+                                +"\n - Savings Account. Interest Earned: " + Utilities.toDollars(savingsAccount.interestEarned())
+                                +"\n - Maxi savings Account. Interest Earned: " + Utilities.toDollars(maxiSavingsAccount.interestEarned())
+                                +"\n Total interest earned: " + Utilities.toDollars(oscar.totalInterestEarned());
+
+        assertEquals(expectedSummary, oscar.accountSummary());
+        
     }
 
 

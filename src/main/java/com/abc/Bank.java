@@ -21,12 +21,25 @@ public class Bank {
         return summary;
     }
 
+    public String allAccountsSummary(){
+        String summary ="All Accounts Summary";
+        for(Customer c: customers){
+            summary += c.accountSummary();
+        }
+        summary += "\n Total interest paid by bank: " + Utilities.toDollars(totalInterestPaid());
+        return summary;
+    }
+
+
+
     public double totalInterestPaid() {
         double total = 0;
         for(Customer c: customers)
             total += c.totalInterestEarned();
         return total;
     }
+
+    
 
     //For testing
     public String getFirstCustomerName() {

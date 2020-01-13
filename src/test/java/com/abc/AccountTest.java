@@ -53,13 +53,6 @@ public class AccountTest {
         assertEquals(0.0027397260273972603, checkingAccount.interestEarned(), DOUBLE_DELTA);
     }
 
-    @Test
-    public void interestEarned_checkingAccount_zeroDays(){
-        checkingAccount.deposit(1000);
-        assertEquals(0, checkingAccount.interestEarned(), DOUBLE_DELTA);
-
-    }
-
 
     //Savings account tests /////////////////////////////////////////
     @Test

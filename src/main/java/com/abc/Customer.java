@@ -14,7 +14,7 @@ public class Customer {
         this.name = name;
         this.accounts = new ArrayList<Account>();
     }
-
+    
     public String getName() {
         return name;
     }
@@ -26,6 +26,15 @@ public class Customer {
 
     public int getNumberOfAccounts() {
         return accounts.size();
+    }
+
+    public String accountSummary(){
+        String summary = "Account summary for " + name;
+        for(Account a : accounts){
+            summary += "\n - " + a.toString() + ". Interest Earned: " + Utilities.toDollars(a.interestEarned());
+        }
+        summary += "\n Total interest earned: " + Utilities.toDollars(totalInterestEarned());
+        return summary;
     }
 
     public double totalInterestEarned() {
