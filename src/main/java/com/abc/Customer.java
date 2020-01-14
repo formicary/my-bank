@@ -5,8 +5,25 @@ import java.util.List;
 
 import static java.lang.Math.abs;
 
+
+/* -- Customer Class --
+    An object that represents a customer.
+        A customer has the following methods:
+            -Customer(String name) - Creats a customer with name 'name'
+            -String getName() - Accessor - Returns name of customer
+            -Customer openAccount(Account account) - Opens specified account
+            for the customer. Returns the customer. 
+            -int getNumberOfAccounts() - Accessor - Returns number of accounts
+            that the customer owns.
+            -double totalInterestEarned() - Utility Accessor - Returns total
+            interest the customer will earn across all accounts. 
+            -String generateStatement() - Returns a textual statement formatted
+            in a stylish way of all the accounts and transactions under the
+            customer.
+
+*/
 public class Customer {
-    private String name;
+    private final String name;
     private List<Account> accounts;
 
     public Customer(String name) {
@@ -14,27 +31,36 @@ public class Customer {
         this.accounts = new ArrayList<Account>();
     }
 
+    // Returns the customers name
     public String getName() {
-        return name;
+        return this.name;
     }
 
+    // Opens an account on the customer. Returns the object?
+    // Not exactly sure why, perhaps review with developer. 
     public Customer openAccount(Account account) {
-        accounts.add(account);
+        this.accounts.add(account);
         return this;
     }
 
+    // Returns length of accounts array list, i.e. the number of accounts 
+    // associated to the customer. 
     public int getNumberOfAccounts() {
-        return accounts.size();
+        return this.accounts.size();
     }
 
+    // Returns the total amount of interest the customer will earn across
+    // all accounts. 
     public double totalInterestEarned() {
         double total = 0;
-        for (Account a : accounts)
-            total += a.interestEarned();
+        for (Account account : accounts)
+            total += account.interestEarned();
         return total;
     }
 
-    public String getStatement() {
+    // Generates a textual statement of some predetermined format 
+    // of the amount in the customer's accounts. 
+    public String generateStatement() {
         String statement = null;
         statement = "Statement for " + name + "\n";
         double total = 0.0;
@@ -46,32 +72,34 @@ public class Customer {
         return statement;
     }
 
-    private String statementForAccount(Account a) {
-        String s = "";
+    // Private (utility) function. Generates a text statement for the account. 
+    private String statementForAccount(Account inputAccount) {
+        String returnForm = "";
 
        //Translate to pretty account type
-        switch(a.getAccountType()){
-            case Account.CHECKING:
-                s += "Checking Account\n";
+        switch(inputAccount.getAccountType()){
+            case CHECKING:
+                returnForm += "Checking Account\n";
                 break;
-            case Account.SAVINGS:
-                s += "Savings Account\n";
+            case SAVINGS:
+                returnForm += "Savings Account\n";
                 break;
-            case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
+            case MAXI_SAVINGS:
+                returnForm += "Maxi Savings Account\n";
                 break;
         }
 
         //Now total up all the transactions
         double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
+        for (Transaction t : inputAccount.transactions) {
+            returnForm += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
             total += t.amount;
         }
-        s += "Total " + toDollars(total);
-        return s;
+        returnForm += "Total " + toDollars(total);
+        return returnForm;
     }
 
+    // Private (utility) function. Converts given amount to dollars. 
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
     }

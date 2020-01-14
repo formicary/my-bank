@@ -1,0 +1,52 @@
+Refactor quasi-user stories
+
+
+
+SPRINT BACKLOG:
+
+
+
+
+Interest rates should acrrue and compound daily (including weekends). Rates above are
+per-annum. - Don't know what exactly this requirement is asking for. Need further
+clarification. 
+
+
+
+
+
+
+ICEBOX:
+
+
+The account class should not throw exceptions with errenous inputs. An exception 
+might not be a bad idea but it should not be thrown in the account class itself. 
+This is poor design. - Not sure this is worth fixing, or if it's even necessairly
+bad design. 
+
+
+
+DONE:
+
+A customer should be able to transfer money between their accounts. - DONE
+
+TransactionTest and BankTest are both substandard. They should test by public function. - DONE
+
+Maxi_Savings, Checking, Savings should be an ENUM. Currently implementation is
+confusing. - DONE
+
+totalInterestEarned is a somewhat confusing name for the method. Investigate
+whether it should be called something else. - DONE, totalInterestEarned is a 
+sound name for what it's supposed to do.
+
+Open_account returns the customer it belongs to. This is perhaps a mistake, there
+doesn't seem to be a function reason for this to be a feature of the method. 
+Consider making the function return void. - DONE, turns out returning customer
+makes the method somewhat more conveniant to use and test. 
+
+Account should probably be an abstract class. -
+Checking/Savings/Maxi-Savings accounts should probably be child classes that 
+extend the abstract class Account. Need to consult product owner/manager to 
+understand how necessary of a change this is (how much we want to extend 
+these sub-accounts in the future. As it stands, current solution is quite 
+elegant) - DONE - Changes implemented
