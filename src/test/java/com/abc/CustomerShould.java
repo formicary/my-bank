@@ -5,10 +5,16 @@ import com.abc.account.CheckingAccount;
 import com.abc.account.MaxiSavingsAccount;
 import com.abc.account.SavingsAccount;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.anyDouble;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 
 public class CustomerShould {
+    private static final double DOUBLE_DELTA = 1e-15;
+
     @Test
     public void GenerateStatement_GivenTheyHaveOpenAccounts() {
 
@@ -63,5 +69,88 @@ public class CustomerShould {
         customer.openAccount(new MaxiSavingsAccount());
 
         assertEquals(3, customer.getNumberOfAccounts());
+    }
+
+    @Test
+    public void TransferMoneyBetweenAccounts() {
+        Customer customer = new Customer("Test");
+
+        Account checkingAccount = new CheckingAccount();
+        Account savingsAccount = new SavingsAccount();
+
+        customer.openAccount(checkingAccount);
+        customer.openAccount(savingsAccount);
+
+        checkingAccount.deposit(100.0d);
+
+        customer.transferMoney(checkingAccount, savingsAccount, 50.0d);
+
+        assertEquals(checkingAccount.sumTransactions(), 50.0d, DOUBLE_DELTA);
+        assertEquals(savingsAccount.sumTransactions(), 50.0d, DOUBLE_DELTA);
+    }
+
+    @Test
+    public void NotChangeBalance_GivenWithdrawalPartOfTransferThrewException(){
+        Customer customer = new Customer("Test");
+
+        Account accountFrom = Mockito.mock(Account.class,
+                Mockito.withSettings()
+                        .useConstructor()
+                        .defaultAnswer(Mockito.CALLS_REAL_METHODS));
+
+        accountFrom.deposit(100);
+
+        Account accountTo = Mockito.mock(Account.class,
+                Mockito.withSettings()
+                        .useConstructor()
+                        .defaultAnswer(Mockito.CALLS_REAL_METHODS));
+
+        doThrow(IllegalArgumentException.class).when(accountFrom).withdraw(anyDouble());
+
+        customer.openAccount(accountFrom);
+        customer.openAccount(accountTo);
+
+        assertEquals(100, accountFrom.sumTransactions(), DOUBLE_DELTA);
+        assertEquals(0, accountTo.sumTransactions(), DOUBLE_DELTA);
+
+        try {
+            customer.transferMoney(accountFrom, accountTo, 50);
+        }catch (IllegalArgumentException e){
+
+        }
+
+        assertEquals(100, accountFrom.sumTransactions(), DOUBLE_DELTA);
+        assertEquals(0, accountTo.sumTransactions(), DOUBLE_DELTA);
+    }
+
+    @Test
+    public void NotChangeBalance_GivenDepositPartOfTransferThrewException(){
+        Customer customer = new Customer("Test");
+
+        Account accountFrom = Mockito.mock(Account.class,
+                Mockito.withSettings()
+                        .useConstructor()
+                        .defaultAnswer(Mockito.CALLS_REAL_METHODS));
+
+        accountFrom.deposit(100);
+
+        Account accountTo = Mockito.mock(Account.class,
+                Mockito.withSettings()
+                        .useConstructor()
+                        .defaultAnswer(Mockito.CALLS_REAL_METHODS));
+
+        doThrow(IllegalArgumentException.class).when(accountTo).deposit(anyDouble());
+
+        customer.openAccount(accountFrom);
+        customer.openAccount(accountTo);
+
+        try {
+            customer.transferMoney(accountFrom, accountTo, 50);
+        }catch (IllegalArgumentException e){
+
+        }
+
+        assertEquals(100, accountFrom.sumTransactions(), DOUBLE_DELTA);
+        assertEquals(0, accountTo.sumTransactions(), DOUBLE_DELTA);
     }
 }

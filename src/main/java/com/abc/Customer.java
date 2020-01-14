@@ -58,4 +58,22 @@ public class Customer {
         return statementStringBuilder.toString();
     }
 
+    public void transferMoney(Account accountFrom, Account accountTo, double value) {
+        boolean withdrawalSuccess = false;
+        boolean depositSuccess = false;
+
+        try {
+            accountFrom.withdraw(value);
+            withdrawalSuccess = true;
+
+            if(withdrawalSuccess){
+                accountTo.deposit(value);
+                depositSuccess = true;
+            }
+        } finally {
+            if (withdrawalSuccess && !depositSuccess){
+                accountFrom.deposit(value);
+            }
+        }
+    }
 }
