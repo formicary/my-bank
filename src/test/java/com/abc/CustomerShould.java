@@ -4,13 +4,13 @@ import com.abc.account.Account;
 import com.abc.account.CheckingAccount;
 import com.abc.account.MaxiSavingsAccount;
 import com.abc.account.SavingsAccount;
+import com.abc.util.IDateProvider;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyDouble;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class CustomerShould {
     private static final double DOUBLE_DELTA = 1e-15;
@@ -64,9 +64,12 @@ public class CustomerShould {
     public void BeAbleToOpenThreeAccounts() {
         Customer customer = new Customer("Oscar");
 
+        IDateProvider mockDateProvider = Mockito.mock(IDateProvider.class);
+
+
         customer.openAccount(new SavingsAccount());
         customer.openAccount(new CheckingAccount());
-        customer.openAccount(new MaxiSavingsAccount());
+        customer.openAccount(new MaxiSavingsAccount(mockDateProvider));
 
         assertEquals(3, customer.getNumberOfAccounts());
     }

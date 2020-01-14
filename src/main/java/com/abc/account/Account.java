@@ -1,8 +1,10 @@
 package com.abc.account;
 
 import com.abc.Transaction;
+import com.abc.util.DateProvider;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static com.abc.util.StringFormatter.toDollars;
@@ -18,7 +20,7 @@ public abstract class Account {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
-            transactions.add(new Transaction(amount));
+            transactions.add(new Transaction(amount, DateProvider.getInstance()));
         }
     }
 
@@ -26,14 +28,14 @@ public abstract class Account {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
-            transactions.add(new Transaction(-amount));
+            transactions.add(new Transaction(-amount, DateProvider.getInstance()));
         }
     }
 
     public double sumTransactions() {
         double amount = 0.0;
-        for (Transaction t : transactions)
-            amount += t.amount;
+        for (Transaction transaction : transactions)
+            amount += transaction.getAmount();
         return amount;
     }
 
@@ -43,13 +45,13 @@ public abstract class Account {
         statementStringBuilder.append(this.getPrettyAccountType());
         statementStringBuilder.append("\n");
         double total = 0.0;
-        for (Transaction t : this.transactions) {
+        for (Transaction transaction : this.transactions) {
             statementStringBuilder.append("  ");
-            statementStringBuilder.append(t.amount < 0 ? "withdrawal " : "deposit ");
-            statementStringBuilder.append(toDollars(t.amount));
+            statementStringBuilder.append(transaction.getAmount() < 0 ? "withdrawal " : "deposit ");
+            statementStringBuilder.append(toDollars(transaction.getAmount()));
             statementStringBuilder.append("\n");
 
-            total += t.amount;
+            total += transaction.getAmount();
         }
         statementStringBuilder.append("Total ");
         statementStringBuilder.append(toDollars(total));

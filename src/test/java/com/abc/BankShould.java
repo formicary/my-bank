@@ -7,6 +7,8 @@ import com.abc.account.SavingsAccount;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class BankShould {
     private static final double DOUBLE_DELTA = 1e-15;
@@ -22,37 +24,20 @@ public class BankShould {
     }
 
     @Test
-    public void CalculateCorrectInterest_GivenCheckingAccount() {
+    public void CalculateCorrectInterest() {
         Bank bank = new Bank();
-        Account checkingAccount = new CheckingAccount();
-        Customer bill = new Customer("Bill").openAccount(checkingAccount);
+
+        Account mockAccount = mock(Account.class);
+        when(mockAccount.interestEarned()).thenReturn(0.1);
+
+        Customer bill = new Customer("Bill").openAccount(mockAccount);
         bank.addCustomer(bill);
 
-        checkingAccount.deposit(100.0);
+
 
         assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
-    @Test
-    public void CalculateCorrectInterest_GivenSavingsAccount() {
-        Bank bank = new Bank();
-        Account savingsAccount = new SavingsAccount();
-        bank.addCustomer(new Customer("Bill").openAccount(savingsAccount));
 
-        savingsAccount.deposit(1500.0);
-
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
-    }
-
-    @Test
-    public void CalculateCorrectInterest_GivenMaxiSavingAccount() {
-        Bank bank = new Bank();
-        Account MaxiSavingsAccount = new MaxiSavingsAccount();
-        bank.addCustomer(new Customer("Bill").openAccount(MaxiSavingsAccount));
-
-        MaxiSavingsAccount.deposit(3000.0);
-
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
-    }
 
 }
