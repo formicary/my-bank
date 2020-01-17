@@ -10,6 +10,10 @@ public class Customer {
     private List<Account> accounts;
 
     public Customer(String name) {
+    	if (name.length()==0)	{
+    		throw new IllegalArgumentException("name cannot be blank");
+    	}
+    	
         this.name = name;
         this.accounts = new ArrayList<Account>();
     }
@@ -39,37 +43,25 @@ public class Customer {
         statement = "Statement for " + name + "\n";
         double total = 0.0;
         for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
-            total += a.getBalance();
+            statement += "\n" + a.getStatementForAccount() + "\n";
+        	total += a.getBalance();
         }
         statement += "\nTotal In All Accounts " + toDollars(total);
+        System.out.print("\n" + statement);
         return statement;
     }
 
-    private String statementForAccount(Account a) {
-        String s = "";
-
-       //Translate to pretty account type
-        switch(a.getAccountType()){
-            case Account.CHECKING:
-                s += "Checking Account\n";
-                break;
-            case Account.SAVINGS:
-                s += "Savings Account\n";
-                break;
-            case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
-                break;
-        }
-
-        //Now total up all the transactions
-        double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
-        }
-        s += "Total " + toDollars(total);
-        return s;
+	
+    
+    public void transfer (Account sender, Account receiver, double amount) {
+    	if (sender != receiver)	{
+    		
+    		if (amount > sender.getBalance())	{
+    			throw new IllegalArgumentException("You do not have enough funds to transfer");
+    		}
+    		sender.withdraw(amount);
+    		receiver.deposit(amount);
+    	}
     }
 
     private String toDollars(double d){

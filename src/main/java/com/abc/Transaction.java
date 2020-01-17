@@ -1,19 +1,25 @@
 package com.abc;
 
-import java.util.Calendar;
+import static java.lang.Math.abs;
+
+//import java.util.Calendar;
 import java.util.Date;
 
 public class Transaction {
     public final double amount;
-    public final double newBalance;
     private String description;
-
+    private final int transactionType;
     private Date transactionDate;
+    
+    public static final int WITHDRAWAL = 0;
+    public static final int DEPOSIT = 1;
 
-    public Transaction(double amount, double newBalance) {
-        this.amount = amount;
-        this.newBalance = newBalance;
-        this.transactionDate = DateProvider.getInstance().now();
+    public Transaction(double amount, int transactionType) {
+    	
+    	this.transactionType = transactionType;
+       
+		this.amount = amount;
+		this.transactionDate = DateProvider.getInstance().now();
         
         if (amount < 0.0 )	{
         	this.description = "Withdrawal";
@@ -28,8 +34,19 @@ public class Transaction {
     	return this.transactionDate;
     }
     
+   
+    
     public double getAmount()	{
-    	return amount;
+    	
+    	switch(transactionType) {
+    	case WITHDRAWAL :
+    		return (-amount);
+    	
+    	case DEPOSIT :
+    		return amount;
+    	default:
+    		return amount;
+    	}
     }
     
     public String getDescription()	{
@@ -37,6 +54,10 @@ public class Transaction {
     }
     
     public String toString()	{
-    	return "Transaction: " + this.description + " , amount = " + this.amount;
+    	return "Transaction : " + this.description + " , amount = " + toDollars(this.amount);
+    }
+    
+    private String toDollars(double d){
+        return String.format("$%,.2f", abs(d));
     }
 }
