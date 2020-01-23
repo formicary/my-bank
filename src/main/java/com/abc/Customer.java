@@ -60,6 +60,9 @@ public class Customer {
             case Account.MAXI_SAVINGS:
                 s += "Maxi Savings Account\n";
                 break;
+            default:
+                s+="Error\n";
+                break;
         }
 
         //Now total up all the transactions
