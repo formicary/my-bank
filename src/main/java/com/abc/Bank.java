@@ -15,10 +15,17 @@ public class Bank {
     }
 
     public String customerSummary() {
+    	StringBuilder builder=new StringBuilder();
         String summary = "Customer Summary";
-        for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-        return summary;
+        for (Customer customer : customers) {
+        	//string builders are a bit more efficient in for loops
+        	builder.append("\n - ");
+        	builder.append(customer.getName());
+        	builder.append(" (");
+        	builder.append(format(customer.getNumberOfAccounts(), "account"));
+        	builder.append(")");
+        }
+        return summary+builder.toString();
     }
 
     //Make sure correct plural of word is created based on the number passed in:
@@ -36,7 +43,7 @@ public class Bank {
 
     public String getFirstCustomer() {
         try {
-            customers = null;
+        	//removed null as that crashed a test
             return customers.get(0).getName();
         } catch (Exception e){
             e.printStackTrace();
