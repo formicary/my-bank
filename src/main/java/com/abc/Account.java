@@ -3,20 +3,29 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class Account {
 
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
-
     private final int accountType;
-    public List<Transaction> transactions;
-
+    private List<Transaction> transactions;
+    
+    //An account is created specifying the type of account and with an empty list of transactions.
     public Account(int accountType) {
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
     }
+    
+    //Access type of account.
+	public int getAccountType() { 
+		return accountType; 
+	}
+	
+	//Access list of transactions.
+    public List<Transaction> getTransactions() {
+    	return transactions;
+    }
 
+    //Deposit money into account.
     public void deposit(double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
@@ -24,50 +33,28 @@ public class Account {
             transactions.add(new Transaction(amount));
         }
     }
-
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
-    }
-}
-
+    
+    //Withdraw money from account.
+	public void withdraw(double amount) {
+	    if (amount <= 0) {
+	        throw new IllegalArgumentException("amount must be greater than zero");
+	    } else {
+	        transactions.add(new Transaction(-amount));
+	    }
+	}
+	
+	//Interest earned for an account, default interest rate is 0.1%.
     public double interestEarned() {
         double amount = sumTransactions();
-        switch(accountType){
-            case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
-            case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
-            default:
-                return amount * 0.001;
-        }
+        return amount * 0.001;
     }
 
+    //Total amount of money in account. 
     public double sumTransactions() {
-       return checkIfTransactionsExist(true);
+    	double amount = 0.0;
+    	for (Transaction t: transactions)
+    		amount += t.getAmount();
+    	return amount; 	
     }
-
-    private double checkIfTransactionsExist(boolean checkAll) {
-        double amount = 0.0;
-        for (Transaction t: transactions)
-            amount += t.amount;
-        return amount;
-    }
-
-    public int getAccountType() {
-        return accountType;
-    }
-
+    
 }
