@@ -8,6 +8,7 @@ import java.util.List;
 public abstract class Account {
     public List<Transaction> transactions;
     private double rate;
+    //TODO poriesit rate --> musi to byt premenna? Ako to zakomponovat tak aby to stacilo zmenit v kode raz?
 
     public abstract double interestEarned();
 
@@ -32,10 +33,13 @@ public abstract class Account {
     }
 
     private double checkIfTransactionsExist(boolean checkAll) {
-        double amount = 0.0;
-        for (Transaction t : transactions)
-            amount += t.amount;
-        return amount;
+        double totalAmount = 0.0;
+
+        for (Transaction transaction : transactions){
+            totalAmount += transaction.amount;
+        }
+
+        return totalAmount;
     }
 
     public double getRate() {
