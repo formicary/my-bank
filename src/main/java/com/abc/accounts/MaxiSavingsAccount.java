@@ -42,4 +42,9 @@ public class MaxiSavingsAccount extends Account {
             return amount * 0.2;
         }
     }
+
+    @Override
+    public String getType() {
+        return "Maxi Savings Account\n";
+    }
 }

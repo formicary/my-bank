@@ -11,6 +11,7 @@ public abstract class Account {
     //TODO poriesit rate --> musi to byt premenna? Ako to zakomponovat tak aby to stacilo zmenit v kode raz?
 
     public abstract double interestEarned();
+    public abstract String getType();
 
     public void deposit(double amount) {
         if (amount <= 0) {

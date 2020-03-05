@@ -30,4 +30,9 @@ public class SavingsAccount extends Account {
             return amount * 0.1;
         }
     }
+
+    @Override
+    public String getType() {
+        return "Savings Account\n";
+    }
 }

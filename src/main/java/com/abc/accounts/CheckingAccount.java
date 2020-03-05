@@ -18,4 +18,9 @@ public class CheckingAccount extends Account {
 
         return amount * getRate();
     }
+
+    @Override
+    public String getType() {
+        return "Checking Account\n";
+    }
 }
