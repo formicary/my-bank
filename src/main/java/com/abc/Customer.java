@@ -1,6 +1,7 @@
 package com.abc;
 
 import com.abc.accounts.Account;
+import com.abc.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,15 +38,25 @@ public class Customer {
     }
 
     public String getStatement() {
-        String statement = null;
-        statement = "Statement for " + name + "\n";
+        StringBuilder statement = new StringBuilder();
         double total = 0.0;
-        for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+
+        statement.append("Statement for ");
+        statement.append(name);
+        statement = Utils.appendNewLine(statement);
+
+        for (Account account : accounts) {
+            statement = Utils.appendNewLine(statement);
+            statement.append(statementForAccount(account));
+            statement = Utils.appendNewLine(statement);
+
+            total += account.sumTransactions();
         }
-        statement += "\nTotal In All Accounts " + toDollars(total);
-        return statement;
+        statement = Utils.appendNewLine(statement);
+        statement.append("Total In All Accounts ");
+        statement.append(toDollars(total));
+
+        return statement.toString();
     }
 
     private String statementForAccount(Account account) {
@@ -54,14 +65,14 @@ public class Customer {
 
         //Now total up all the transactions
         double totalAmount = 0.0;
-        for (Transaction t : account.transactions) {
+        for (Transaction transaction : account.transactions) {
             text.append("  ");
-            text.append(t.amount < 0 ? "withdrawal" : "deposit");
+            text.append(transaction.amount < 0 ? "withdrawal" : "deposit");
             text.append(" ");
-            text.append(toDollars(t.amount));
-            text.append("\n");
+            text.append(toDollars(transaction.amount));
+            text = Utils.appendNewLine(text);
 
-            totalAmount += t.amount;
+            totalAmount += transaction.amount;
         }
 
         text.append("Total ");
