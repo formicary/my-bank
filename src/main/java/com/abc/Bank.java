@@ -1,7 +1,5 @@
 package com.abc;
 
-import com.abc.utils.Utils;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,8 +19,7 @@ public class Bank {
         summaryText.append("Customer Summary");
 
         for (Customer customer : customers){
-            summaryText = Utils.appendNewLine(summaryText);
-            summaryText.append(" - ").append(customer.getName()).append(" (");
+            summaryText.append("\n").append(" - ").append(customer.getName()).append(" (");
             summaryText.append(format(customer.getNumberOfAccounts(), "account") ).append(")");
         }
         return summaryText.toString();

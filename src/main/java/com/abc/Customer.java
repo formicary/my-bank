@@ -1,7 +1,6 @@
 package com.abc;
 
 import com.abc.accounts.Account;
-import com.abc.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,16 +42,16 @@ public class Customer {
 
         statement.append("Statement for ");
         statement.append(name);
-        statement = Utils.appendNewLine(statement);
+        statement.append("\n");
 
         for (Account account : accounts) {
-            statement = Utils.appendNewLine(statement);
+            statement.append("\n");
             statement.append(statementForAccount(account));
-            statement = Utils.appendNewLine(statement);
+            statement.append("\n");
 
             total += account.sumTransactions();
         }
-        statement = Utils.appendNewLine(statement);
+        statement.append("\n");
         statement.append("Total In All Accounts ");
         statement.append(toDollars(total));
 
@@ -70,7 +69,7 @@ public class Customer {
             text.append(transaction.amount < 0 ? "withdrawal" : "deposit");
             text.append(" ");
             text.append(toDollars(transaction.amount));
-            text = Utils.appendNewLine(text);
+            text.append("\n");
 
             totalAmount += transaction.amount;
         }
