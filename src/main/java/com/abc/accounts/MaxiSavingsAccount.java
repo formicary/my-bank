@@ -19,15 +19,15 @@ public class MaxiSavingsAccount extends Account {
         double finalAmount = 0;
 
         if(Utils.isGraterThen1000(amount)){
-            //first 1000 with rate 0.2
+            //first 1000 with rate 0.02
 
-            finalAmount += 1000 * 0.2;
+            finalAmount += 1000 * 0.02;
             amount -= 1000;
 
             if(Utils.isGraterThen1000(amount)){
-                //second 1000 with rate 0.5
+                //second 1000 with rate 0.05
 
-                finalAmount += 1000 * 0.5;
+                finalAmount += 1000 * 0.05;
                 amount -= 1000;
 
                 //other finances that left with rate 0.1
