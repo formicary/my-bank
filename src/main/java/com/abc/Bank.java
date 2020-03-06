@@ -1,5 +1,7 @@
 package com.abc;
 
+import com.abc.utils.Utils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,10 +17,15 @@ public class Bank {
     }
 
     public String customerSummary() {
-        String summary = "Customer Summary";
-        for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-        return summary;
+        StringBuilder summaryText = new StringBuilder();
+        summaryText.append("Customer Summary");
+
+        for (Customer customer : customers){
+            summaryText = Utils.appendNewLine(summaryText);
+            summaryText.append(" - ").append(customer.getName()).append(" (");
+            summaryText.append(format(customer.getNumberOfAccounts(), "account") ).append(")");
+        }
+        return summaryText.toString();
     }
 
     //Make sure correct plural of word is created based on the number passed in:
