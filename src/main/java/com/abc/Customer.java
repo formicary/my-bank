@@ -49,16 +49,25 @@ public class Customer {
     }
 
     private String statementForAccount(Account account) {
-        String text = account.getType();
+        StringBuilder text = new StringBuilder();
+        text.append(account.getType());
 
         //Now total up all the transactions
-        double total = 0.0;
+        double totalAmount = 0.0;
         for (Transaction t : account.transactions) {
-            text += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
+            text.append("  ");
+            text.append(t.amount < 0 ? "withdrawal" : "deposit");
+            text.append(" ");
+            text.append(toDollars(t.amount));
+            text.append("\n");
+
+            totalAmount += t.amount;
         }
-        text += "Total " + toDollars(total);
-        return text;
+
+        text.append("Total ");
+        text.append(toDollars(totalAmount));
+
+        return text.toString();
     }
 
     private String toDollars(double d){
