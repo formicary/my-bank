@@ -31,8 +31,9 @@ public class Customer {
 
     public double totalInterestEarned() {
         double total = 0;
-        for (Account a : accounts)
-            total += a.interestEarned();
+        for (Account account : accounts){
+            total += account.interestEarned();
+        }
         return total;
     }
 
@@ -40,20 +41,14 @@ public class Customer {
         StringBuilder statement = new StringBuilder();
         double total = 0.0;
 
-        statement.append("Statement for ");
-        statement.append(name);
-        statement.append("\n");
+        statement.append("Statement for ").append(name).append("\n");
 
         for (Account account : accounts) {
-            statement.append("\n");
-            statement.append(statementForAccount(account));
-            statement.append("\n");
+            statement.append("\n").append(statementForAccount(account)).append("\n");
 
             total += account.sumTransactions();
         }
-        statement.append("\n");
-        statement.append("Total In All Accounts ");
-        statement.append(toDollars(total));
+        statement.append("\n").append("Total In All Accounts ").append(toDollars(total));
 
         return statement.toString();
     }
@@ -65,17 +60,13 @@ public class Customer {
         //Now total up all the transactions
         double totalAmount = 0.0;
         for (Transaction transaction : account.transactions) {
-            text.append("  ");
-            text.append(transaction.amount < 0 ? "withdrawal" : "deposit");
-            text.append(" ");
-            text.append(toDollars(transaction.amount));
-            text.append("\n");
+            text.append("  ").append(transaction.amount < 0 ? "withdrawal" : "deposit");
+            text.append(" ").append(toDollars(transaction.amount)).append("\n");
 
             totalAmount += transaction.amount;
         }
 
-        text.append("Total ");
-        text.append(toDollars(totalAmount));
+        text.append("Total ").append(toDollars(totalAmount));
 
         return text.toString();
     }
