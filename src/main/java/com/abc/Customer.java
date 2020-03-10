@@ -86,7 +86,7 @@ public class Customer {
             //updating transaction lists for both accounts not necessary --> withdraw() and deposit() did it
         }
         else {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("account does not belong to selected customer");
         }
     }
 }
