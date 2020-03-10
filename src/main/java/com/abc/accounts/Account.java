@@ -2,7 +2,6 @@ package com.abc.accounts;
 
 import com.abc.Transaction;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Account {

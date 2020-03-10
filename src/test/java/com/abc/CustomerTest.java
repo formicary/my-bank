@@ -57,4 +57,6 @@ public class CustomerTest {
         oscar.openAccount(new CheckingAccount());
         assertEquals(3, oscar.getNumberOfAccounts());
     }
+
+    
 }

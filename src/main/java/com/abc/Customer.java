@@ -74,4 +74,21 @@ public class Customer {
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
     }
+
+    public void transferMoneyTo(Account from, Account to, double amount) throws IllegalArgumentException{
+
+        //customer can transfer only through his accounts
+        if(this.accounts.contains(from) && this.accounts.contains(to)){
+
+            from.withdraw(amount);
+            to.deposit(amount);
+
+            //update transaction lists for both accounts
+            from.transactions.add(new Transaction(-amount));
+            to.transactions.add(new Transaction(amount));
+        }
+        else {
+            throw new IllegalArgumentException();
+        }
+    }
 }
