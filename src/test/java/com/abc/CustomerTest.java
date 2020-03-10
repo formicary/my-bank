@@ -73,4 +73,18 @@ public class CustomerTest {
 
         assertEquals(2000.0, checkingAccount.getTotalAmount(), DOUBLE_DELTA);
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testTransferBetweenAccountsThrowsException(){
+        SavingsAccount savingsAccount = new SavingsAccount();
+        CheckingAccount checkingAccount = new CheckingAccount();
+
+        Customer zuzana = new Customer("Zuzana")
+                .openAccount(savingsAccount);
+
+        Customer peter = new Customer("Peter").openAccount(checkingAccount);
+
+        savingsAccount.deposit(5000);
+        zuzana.transferMoneyTo(savingsAccount, checkingAccount, 2000);
+    }
 }
