@@ -83,9 +83,7 @@ public class Customer {
             from.withdraw(amount);
             to.deposit(amount);
 
-            //update transaction lists for both accounts
-            from.transactions.add(new Transaction(-amount));
-            to.transactions.add(new Transaction(amount));
+            //updating transaction lists for both accounts not necessary --> withdraw() and deposit() did it
         }
         else {
             throw new IllegalArgumentException();

@@ -32,6 +32,10 @@ public abstract class Account {
         return checkIfTransactionsExist(true);
     }
 
+    public double getTotalAmount(){
+        return checkIfTransactionsExist(true);
+    }
+
     private double checkIfTransactionsExist(boolean checkAll) {
         double totalAmount = 0.0;
 
