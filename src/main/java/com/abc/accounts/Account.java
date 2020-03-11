@@ -2,6 +2,7 @@ package com.abc.accounts;
 
 import com.abc.Transaction;
 
+import java.util.Date;
 import java.util.List;
 
 public abstract class Account {
@@ -17,6 +18,14 @@ public abstract class Account {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
             transactions.add(new Transaction(amount));
+        }
+    }
+
+    public void deposit(double amount, Date date) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        } else {
+            transactions.add(new Transaction(amount, date));
         }
     }
 

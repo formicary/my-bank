@@ -6,6 +6,8 @@ import com.abc.accounts.MaxiSavingsAccount;
 import com.abc.accounts.SavingsAccount;
 import org.junit.Test;
 
+import java.util.Date;
+
 import static org.junit.Assert.assertEquals;
 
 public class BankTest {
@@ -45,14 +47,31 @@ public class BankTest {
     }
 
     @Test
-    public void maxi_savings_account() {
+    public void maxiSavingsAccountNoWd() {
+        Date date = new Date();
+        date.setTime(1582999999999L);
         Bank bank = new Bank();
         Account maxiSavingsAccount = new MaxiSavingsAccount();
         bank.addCustomer(new Customer("Bill").openAccount(maxiSavingsAccount));
 
-        maxiSavingsAccount.deposit(3000.0);
+        maxiSavingsAccount.deposit(3000.0, date);
 
+        System.out.println("Date = " + date);
         assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+    }
+
+    @Test
+    public void maxiSavingsAccounWithWd() {
+        Date date = new Date();
+        date.setTime(1583100000000L);
+        Bank bank = new Bank();
+        Account maxiSavingsAccount = new MaxiSavingsAccount();
+        bank.addCustomer(new Customer("Bill").openAccount(maxiSavingsAccount));
+
+        maxiSavingsAccount.deposit(3000.0, date);
+
+        System.out.println("Date = " + date);
+        assertEquals(121.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
 }
