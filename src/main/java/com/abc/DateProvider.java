@@ -21,20 +21,12 @@ public class DateProvider {
 
 
     public long calculateDifferenceInDays(Date start, Date end, Locale locale) {
-        Calendar cal = Calendar.getInstance(locale);
+        Calendar cal;
 
-        cal.setTime(start);
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
+        cal = setToDefault(start, locale);
         long startTime = cal.getTimeInMillis();
 
-        cal.setTime(end);
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
+        cal = setToDefault(end, locale);
         long endTime = cal.getTimeInMillis();
 
         // calculate the offset if one of the dates is in summer time and the other one in winter time
@@ -44,5 +36,17 @@ public class DateProvider {
         int offset = offsetEnd - offsetStart;
 
         return TimeUnit.MILLISECONDS.toDays(endTime - startTime + offset);
+    }
+
+    private Calendar setToDefault(Date date, Locale locale){
+        Calendar calendar = Calendar.getInstance(locale);
+
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        return calendar;
     }
 }

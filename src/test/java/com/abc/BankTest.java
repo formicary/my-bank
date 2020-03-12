@@ -63,7 +63,7 @@ public class BankTest {
     @Test
     public void maxiSavingsAccounWithWd() {
         Date date = new Date();
-        date.setTime(1583100000000L);
+        //date.setTime(1583100000000L);
         Bank bank = new Bank();
         Account maxiSavingsAccount = new MaxiSavingsAccount();
         bank.addCustomer(new Customer("Bill").openAccount(maxiSavingsAccount));
