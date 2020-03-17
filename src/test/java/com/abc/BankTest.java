@@ -57,7 +57,7 @@ public class BankTest {
         maxiSavingsAccount.deposit(3000.0, date);
 
         System.out.println("Date = " + date);
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(150.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
@@ -71,7 +71,7 @@ public class BankTest {
         maxiSavingsAccount.deposit(3000.0, date);
 
         System.out.println("Date = " + date);
-        assertEquals(121.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(3, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
 }
