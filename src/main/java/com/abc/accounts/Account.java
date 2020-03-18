@@ -1,16 +1,19 @@
 package com.abc.accounts;
 
+import com.abc.DateProvider;
 import com.abc.Transaction;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
+import java.util.Locale;
 
 public abstract class Account {
-    public List<Transaction> transactions;
+    public ArrayList<Transaction> transactions;
     private double rate;
-    //TODO poriesit rate --> musi to byt premenna? Ako to zakomponovat tak aby to stacilo zmenit v kode raz?
 
-    public abstract double interestEarned();
+    public abstract double calculateInterest(double amount);
+
     public abstract String getType();
 
     public void deposit(double amount) {
@@ -41,14 +44,14 @@ public abstract class Account {
         return checkIfTransactionsExist(true);
     }
 
-    public double getTotalAmount(){
+    public double getTotalAmount() {
         return checkIfTransactionsExist(true);
     }
 
     private double checkIfTransactionsExist(boolean checkAll) {
         double totalAmount = 0.0;
 
-        for (Transaction transaction : transactions){
+        for (Transaction transaction : transactions) {
             totalAmount += transaction.amount;
         }
 
@@ -61,5 +64,38 @@ public abstract class Account {
 
     public void setRate(double rate) {
         this.rate = rate;
+    }
+
+    public double totalInterests() {
+        DateProvider dateProvider = new DateProvider();
+        Date now = new Date();
+        Date accountOpen = transactions.get(0).getTransactionDate();
+        long totalDays = Math.abs(dateProvider.calculateDifferenceInDays(accountOpen, now, Locale.getDefault()));
+        int lastHandledIndex = 0;
+        double dailyAmount = 0;
+        double dailyInterests = 0.0;
+
+        System.out.println("Days = " + totalDays);
+
+        for (int day = 0; day < totalDays; day++) {
+            for (int t = lastHandledIndex; t < transactions.size(); t++) {
+                if (transactions.get(t).getTransactionDate().before(now)) {
+                    dailyAmount += transactions.get(t).amount;
+                    lastHandledIndex++;
+
+                    //update now to another day
+                    Calendar c = Calendar.getInstance();
+                    c.setTime(now);
+                    c.add(Calendar.DAY_OF_MONTH, 1);
+                    now = c.getTime();
+                }
+            }
+
+            //calculate rate
+            dailyInterests += calculateInterest(dailyAmount);
+            dailyAmount += dailyInterests;
+        }
+
+        return dailyInterests;
     }
 }

@@ -6,6 +6,7 @@ import com.abc.accounts.MaxiSavingsAccount;
 import com.abc.accounts.SavingsAccount;
 import org.junit.Test;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
@@ -26,22 +27,37 @@ public class BankTest {
     @Test
     public void checkingAccount() {
         Bank bank = new Bank();
+        Date date = new Date();
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.YEAR, -1);
+        date = c.getTime();
+
+        System.out.println(date);
         Account checkingAccount = new CheckingAccount();
         Customer bill = new Customer("Bill").openAccount(checkingAccount);
         bank.addCustomer(bill);
 
-        checkingAccount.deposit(100.0);
+        checkingAccount.deposit(10000.0, date);
 
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(10.65209314882218, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
     public void savings_account() {
         Bank bank = new Bank();
+        Date date = new Date();
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.YEAR, -1);
+        date = c.getTime();
+
         Account savingsAccount = new SavingsAccount();
         bank.addCustomer(new Customer("Bill").openAccount(savingsAccount));
 
-        savingsAccount.deposit(1500.0);
+        savingsAccount.deposit(1000.0, date);
 
         assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
@@ -49,7 +65,12 @@ public class BankTest {
     @Test
     public void maxiSavingsAccountNoWd() {
         Date date = new Date();
-        date.setTime(1582999999999L);
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.YEAR, -1);
+        date = c.getTime();
+
         Bank bank = new Bank();
         Account maxiSavingsAccount = new MaxiSavingsAccount();
         bank.addCustomer(new Customer("Bill").openAccount(maxiSavingsAccount));
@@ -63,7 +84,6 @@ public class BankTest {
     @Test
     public void maxiSavingsAccounWithWd() {
         Date date = new Date();
-        //date.setTime(1583100000000L);
         Bank bank = new Bank();
         Account maxiSavingsAccount = new MaxiSavingsAccount();
         bank.addCustomer(new Customer("Bill").openAccount(maxiSavingsAccount));

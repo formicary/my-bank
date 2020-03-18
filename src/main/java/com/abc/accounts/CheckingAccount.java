@@ -13,10 +13,8 @@ public class CheckingAccount extends Account {
     }
 
     @Override
-    public double interestEarned() {
-        double amount = sumTransactions();
-
-        return amount * getRate();
+    public double calculateInterest(double amount) {
+        return amount * (0.001/365);
     }
 
     @Override

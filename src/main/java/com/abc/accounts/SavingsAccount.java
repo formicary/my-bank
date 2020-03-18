@@ -14,20 +14,19 @@ public class SavingsAccount extends Account {
     }
 
     @Override
-    public double interestEarned() {
-        double amount = sumTransactions();
+    public double calculateInterest(double amount) {
         double finalAmount = 0;
 
         if(Utils.isGraterThen1000(amount)){
             //first 1000 with rate 0.1
 
-            finalAmount += 1000 * 0.001;
+            finalAmount += 1000 * (0.001/365);
             amount -= 1000;
 
-            return finalAmount + amount * 0.002;
+            return finalAmount + amount * (0.002/365);
         }
         else{
-            return amount * 0.1;
+            return amount * (0.1/365);
         }
     }
 

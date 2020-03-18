@@ -16,15 +16,14 @@ public class MaxiSavingsAccount extends Account {
     }
 
     @Override
-    public double interestEarned() {
-        double amount = sumTransactions();
+    public double calculateInterest(double amount) {
         double rate;
 
         if(noWithdrawalsIn10Days()){
-            rate = 0.05;
+            rate = 0.05/365;
         }
         else{
-            rate = 0.001;
+            rate = 0.001/365;
         }
 
         return amount * rate;
