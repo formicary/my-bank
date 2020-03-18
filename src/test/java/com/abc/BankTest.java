@@ -85,6 +85,12 @@ public class BankTest {
     public void maxiSavingsAccounWithWd() {
         Date date = new Date();
         Bank bank = new Bank();
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.DATE, -8);
+        date = c.getTime();
+
         Account maxiSavingsAccount = new MaxiSavingsAccount();
         bank.addCustomer(new Customer("Bill").openAccount(maxiSavingsAccount));
 

@@ -26,7 +26,7 @@ public class MaxiSavingsAccount extends Account {
             rate = 0.001/365;
         }
 
-        return amount * rate;
+        return rate;
     }
 
     private boolean noWithdrawalsIn10Days(){

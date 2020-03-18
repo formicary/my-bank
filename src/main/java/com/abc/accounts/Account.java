@@ -72,7 +72,7 @@ public abstract class Account {
         Date accountOpen = transactions.get(0).getTransactionDate();
         long totalDays = Math.abs(dateProvider.calculateDifferenceInDays(accountOpen, now, Locale.getDefault()));
         int lastHandledIndex = 0;
-        double dailyAmount = 0;
+        double dailyAmount = 0.0;
         double dailyInterests = 0.0;
 
         System.out.println("Days = " + totalDays);
@@ -86,16 +86,16 @@ public abstract class Account {
                     //update now to another day
                     Calendar c = Calendar.getInstance();
                     c.setTime(now);
-                    c.add(Calendar.DAY_OF_MONTH, 1);
+                    c.add(Calendar.DATE, 1);
                     now = c.getTime();
                 }
             }
 
-            //calculate rate
-            dailyInterests += calculateInterest(dailyAmount);
-            dailyAmount += dailyInterests;
+
+            dailyAmount *= (calculateInterest(dailyAmount) + 1);
         }
 
-        return dailyInterests;
+        dailyAmount -= getTotalAmount();
+        return dailyAmount;
     }
 }

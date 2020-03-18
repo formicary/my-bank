@@ -14,7 +14,7 @@ public class CheckingAccount extends Account {
 
     @Override
     public double calculateInterest(double amount) {
-        return amount * (0.001/365);
+        return  (0.001/365);
     }
 
     @Override

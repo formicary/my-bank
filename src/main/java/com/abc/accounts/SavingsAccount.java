@@ -20,13 +20,15 @@ public class SavingsAccount extends Account {
         if(Utils.isGraterThen1000(amount)){
             //first 1000 with rate 0.1
 
-            finalAmount += 1000 * (0.001/365);
+            /*finalAmount += 1000 * (0.001/365);
             amount -= 1000;
 
             return finalAmount + amount * (0.002/365);
+             */
+            return 0.002/365;
         }
         else{
-            return amount * (0.1/365);
+            return (0.1/365);
         }
     }
 
