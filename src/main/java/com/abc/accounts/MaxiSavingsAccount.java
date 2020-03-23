@@ -15,10 +15,10 @@ public class MaxiSavingsAccount extends Account {
     }
 
     @Override
-    public double calculateInterest(double amount) {
+    public double calculateInterest(double amount, Date date) {
         double rate;
 
-        if(noWithdrawalsIn10Days()){
+        if(noWithdrawalsIn10Days(date)){
             rate = 0.05/365;
         }
         else{
@@ -28,23 +28,23 @@ public class MaxiSavingsAccount extends Account {
         return rate;
     }
 
-    private boolean noWithdrawalsIn10Days(){
+    private boolean noWithdrawalsIn10Days(Date currentDay){
         DateProvider dateProvider = new DateProvider();
         Date currentDate = dateProvider.now();
         double difference = 0;
 
-        System.out.println("current date: " + currentDate);
+        //System.out.println("current date: " + currentDate);
         for (Transaction transaction: this.transactions) {
-            System.out.println("Transaction date: " + transaction.getTransactionDate());
-            difference = dateProvider.calculateDifferenceInDays(transaction.getTransactionDate(), currentDate, Locale.getDefault());
+            //System.out.println("Transaction date: " + transaction.getTransactionDate());
+            difference = dateProvider.calculateDifferenceInDays(transaction.getTransactionDate(), currentDay, Locale.getDefault());
 
             if(difference <= 10){
-                System.out.println("difference = " +  difference);
+                //System.out.println("difference = " +  difference);
                 return false;
             }
         }
 
-        System.out.println("difference = " +  difference);
+        //System.out.println("difference = " +  difference);
         return true;
     }
 

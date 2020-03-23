@@ -4,6 +4,7 @@ import com.abc.Transaction;
 import com.abc.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class SavingsAccount extends Account {
     //Savings accounts = rate 0.001 for first 1000 then 0.002
@@ -13,7 +14,7 @@ public class SavingsAccount extends Account {
     }
 
     @Override
-    public double calculateInterest(double amount) {
+    public double calculateInterest(double amount, Date date) {
 
         if(Utils.isGraterThen1000(amount)){
             return 0.002/365;

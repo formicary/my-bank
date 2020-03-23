@@ -41,7 +41,7 @@ public class BankTest {
 
         checkingAccount.deposit(10000.0, date);
 
-        assertEquals(10.032412625883808, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(10.004987954684111, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
@@ -59,7 +59,7 @@ public class BankTest {
 
         savingsAccount.deposit(1000.0, date);
 
-        assertEquals(2.2765169383378634, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(2.2710250423102707, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
@@ -69,6 +69,7 @@ public class BankTest {
         Calendar c = Calendar.getInstance();
         c.setTime(date);
         c.add(Calendar.YEAR, -1);
+        c.add(Calendar.DATE, -10);
         date = c.getTime();
 
         Bank bank = new Bank();
@@ -76,9 +77,10 @@ public class BankTest {
         bank.addCustomer(new Customer("Bill").openAccount(maxiSavingsAccount));
 
         maxiSavingsAccount.deposit(3000.0, date);
+        maxiSavingsAccount.deposit(3000.0, date);
 
         System.out.println("Date = " + date);
-        assertEquals(154.23451714061684, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(307.7777920305598, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
@@ -88,16 +90,21 @@ public class BankTest {
 
         Calendar c = Calendar.getInstance();
         c.setTime(date);
-        c.add(Calendar.DATE, -8);
+        //c.add(Calendar.DATE, -8);
+        c.add(Calendar.YEAR, -1);
         date = c.getTime();
 
         Account maxiSavingsAccount = new MaxiSavingsAccount();
         bank.addCustomer(new Customer("Bill").openAccount(maxiSavingsAccount));
 
         maxiSavingsAccount.deposit(3000.0, date);
+        c.add(Calendar.YEAR, 1);
+        c.add(Calendar.DATE, -8);
+        date = c.getTime();
+        maxiSavingsAccount.deposit(3000.0 ,date);
 
         System.out.println("Date = " + date);
-        assertEquals(0.06575405517287436, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(3.05903110586587, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
 }

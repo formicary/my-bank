@@ -3,6 +3,7 @@ package com.abc.accounts;
 import com.abc.Transaction;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class CheckingAccount extends Account {
     //Checking accounts = rate 0.1%
@@ -12,7 +13,7 @@ public class CheckingAccount extends Account {
     }
 
     @Override
-    public double calculateInterest(double amount) {
+    public double calculateInterest(double amount, Date date) {
         return  (0.001/365);
     }
 

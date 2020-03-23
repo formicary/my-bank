@@ -11,7 +11,7 @@ import java.util.Locale;
 public abstract class Account {
     public ArrayList<Transaction> transactions;
 
-    public abstract double calculateInterest(double amount);
+    public abstract double calculateInterest(double amount, Date date);
 
     public abstract String getType();
 
@@ -65,25 +65,24 @@ public abstract class Account {
         int lastHandledIndex = 0;
         double dailyAmount = 0.0;
         double dailyInterests = 0.0;
+        Calendar c = Calendar.getInstance();
 
         System.out.println("Days = " + totalDays);
+        now = accountOpen;
+        c.setTime(now);
 
         for (int day = 0; day < totalDays; day++) {
             for (int t = lastHandledIndex; t < transactions.size(); t++) {
                 if (transactions.get(t).getTransactionDate().before(now)) {
                     dailyAmount += transactions.get(t).amount;
                     lastHandledIndex++;
-
-                    //update now to another day
-                    Calendar c = Calendar.getInstance();
-                    c.setTime(now);
-                    c.add(Calendar.DATE, 1);
-                    now = c.getTime();
                 }
             }
 
 
-            dailyAmount *= (calculateInterest(dailyAmount) + 1);
+            dailyAmount *= (calculateInterest(dailyAmount, now) + 1);
+            c.add(Calendar.DATE, 1);
+            now = c.getTime();
         }
 
         dailyAmount -= getTotalAmount();
