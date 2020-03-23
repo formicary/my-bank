@@ -26,7 +26,7 @@ public class BankTest {
 
         checkingAccount.deposit(100.0);
 
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(DateProvider.CalculateDailyCompound(0.1), bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
@@ -35,9 +35,9 @@ public class BankTest {
         Account checkingAccount = new Account(Account.SAVINGS);
         bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
-        checkingAccount.deposit(1500.0);
+        checkingAccount.deposit(10000.0);
 
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(DateProvider.CalculateDailyCompound(20.0), bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
@@ -48,7 +48,7 @@ public class BankTest {
 
         checkingAccount.deposit(3000.0);
 
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(DateProvider.CalculateDailyCompound(3.0), bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
 }

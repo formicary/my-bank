@@ -72,7 +72,15 @@ public class Customer {
         return s;
     }
 
-    private String toDollars(double d){
+    public List<Account> getAccounts() {
+		return accounts;
+	}
+
+	public void setAccounts(List<Account> accounts) {
+		this.accounts = accounts;
+	}
+
+	private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
     }
 }

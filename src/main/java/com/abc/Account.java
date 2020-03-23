@@ -1,6 +1,7 @@
 package com.abc;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Account {
@@ -11,47 +12,55 @@ public class Account {
 
     private final int accountType;
     public List<Transaction> transactions;
+    public double capital;
 
     public Account(int accountType) {
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
+        this.capital = 0;
     }
 
     public void deposit(double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
-            transactions.add(new Transaction(amount));
+            transactions.add(new Transaction(amount, Transaction.DEPOSIT));
+            this.capital += amount;
         }
     }
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
-    }
-}
+	public void withdraw(double amount) {
+	    if (amount <= 0) {
+	        throw new IllegalArgumentException("amount must be greater than zero");
+	    } else if (amount <= this.capital) {
+	    	this.capital -= amount;
+	        transactions.add(new Transaction(-amount, Transaction.WITHDRAW));
+	    } else {
+	    	throw new IllegalArgumentException("cannot withdraw more than account capital");
+	    }
+	}
 
+	public void transfer(Account recieving, double amount) {
+		this.withdraw(amount);
+		recieving.deposit(amount);
+	}
+	
     public double interestEarned() {
+    	Date lastWithdraw = this.lastWithdraw();
         double amount = sumTransactions();
         switch(accountType){
             case SAVINGS:
                 if (amount <= 1000)
-                    return amount * 0.001;
+                    return amount * DateProvider.CalculateDailyCompound(0.001);
                 else
-                    return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
+                    return amount * DateProvider.CalculateDailyCompound(0.002);
             case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
+                if (DateProvider.olderThanTenDays(lastWithdraw))
+                    return amount * DateProvider.CalculateDailyCompound(0.05);
+                else 
+                    return amount * DateProvider.CalculateDailyCompound(0.001);
             default:
-                return amount * 0.001;
+                return amount * DateProvider.CalculateDailyCompound(0.001);
         }
     }
 
@@ -65,9 +74,26 @@ public void withdraw(double amount) {
             amount += t.amount;
         return amount;
     }
+    
+    public Date lastWithdraw() {
+    	for (int i = this.transactions.size() - 1; i >= 0; i--) {
+    		if (transactions.get(i).type == Transaction.WITHDRAW) {
+    			return transactions.get(i).getTransactionDate();
+    		}
+    	}
+    	return null;
+    }
 
     public int getAccountType() {
         return accountType;
     }
 
+	public double getCapital() {
+		return capital;
+	}
+
+	public void setCapital(double capital) {
+		this.capital = capital;
+	}
+    
 }
