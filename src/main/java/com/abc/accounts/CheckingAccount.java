@@ -9,7 +9,6 @@ public class CheckingAccount extends Account {
 
     public CheckingAccount() {
         this.transactions = new ArrayList<Transaction>();
-        this.setRate(0.001);
     }
 
     @Override

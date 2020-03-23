@@ -10,7 +10,6 @@ import java.util.Locale;
 
 public abstract class Account {
     public ArrayList<Transaction> transactions;
-    private double rate;
 
     public abstract double calculateInterest(double amount);
 
@@ -56,14 +55,6 @@ public abstract class Account {
         }
 
         return totalAmount;
-    }
-
-    public double getRate() {
-        return this.rate;
-    }
-
-    public void setRate(double rate) {
-        this.rate = rate;
     }
 
     public double totalInterests() {

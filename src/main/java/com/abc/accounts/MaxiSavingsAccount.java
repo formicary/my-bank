@@ -12,7 +12,6 @@ public class MaxiSavingsAccount extends Account {
 
     public MaxiSavingsAccount() {
         this.transactions = new ArrayList<Transaction>();
-        this.setRate(0.02);
     }
 
     @Override
