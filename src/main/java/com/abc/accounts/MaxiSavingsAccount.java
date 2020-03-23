@@ -38,7 +38,7 @@ public class MaxiSavingsAccount extends Account {
             //System.out.println("Transaction date: " + transaction.getTransactionDate());
             difference = dateProvider.calculateDifferenceInDays(transaction.getTransactionDate(), currentDay, Locale.getDefault());
 
-            if(difference <= 10){
+            if(difference >= 0 && difference <= 10){
                 //System.out.println("difference = " +  difference);
                 return false;
             }

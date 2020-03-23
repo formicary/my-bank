@@ -92,6 +92,7 @@ public class BankTest {
         c.setTime(date);
         //c.add(Calendar.DATE, -8);
         c.add(Calendar.YEAR, -1);
+        c.add(Calendar.DATE, -10);
         date = c.getTime();
 
         Account maxiSavingsAccount = new MaxiSavingsAccount();
@@ -99,12 +100,13 @@ public class BankTest {
 
         maxiSavingsAccount.deposit(3000.0, date);
         c.add(Calendar.YEAR, 1);
+        c.add(Calendar.DATE, 10);
         c.add(Calendar.DATE, -8);
         date = c.getTime();
         maxiSavingsAccount.deposit(3000.0 ,date);
 
         System.out.println("Date = " + date);
-        assertEquals(3.05903110586587, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(150.5612950558725, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
 }
