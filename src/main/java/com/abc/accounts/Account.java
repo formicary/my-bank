@@ -64,7 +64,6 @@ public abstract class Account {
         long totalDays = Math.abs(dateProvider.calculateDifferenceInDays(accountOpen, now, Locale.getDefault()));
         int lastHandledIndex = 0;
         double dailyAmount = 0.0;
-        double dailyInterests = 0.0;
         Calendar c = Calendar.getInstance();
 
         System.out.println("Days = " + totalDays);

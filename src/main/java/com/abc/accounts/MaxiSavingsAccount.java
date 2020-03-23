@@ -30,21 +30,16 @@ public class MaxiSavingsAccount extends Account {
 
     private boolean noWithdrawalsIn10Days(Date currentDay){
         DateProvider dateProvider = new DateProvider();
-        Date currentDate = dateProvider.now();
-        double difference = 0;
+        double difference;
 
-        //System.out.println("current date: " + currentDate);
         for (Transaction transaction: this.transactions) {
-            //System.out.println("Transaction date: " + transaction.getTransactionDate());
             difference = dateProvider.calculateDifferenceInDays(transaction.getTransactionDate(), currentDay, Locale.getDefault());
 
             if(difference >= 0 && difference <= 10){
-                //System.out.println("difference = " +  difference);
                 return false;
             }
         }
 
-        //System.out.println("difference = " +  difference);
         return true;
     }
 
