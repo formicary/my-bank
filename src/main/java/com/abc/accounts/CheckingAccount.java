@@ -14,7 +14,7 @@ public class CheckingAccount extends Account {
 
     @Override
     public double calculateInterest(double amount, Date date) {
-        return  (0.001/365);
+        return  (0.001/DAYS_OF_YEAR);
     }
 
     @Override

@@ -19,10 +19,10 @@ public class MaxiSavingsAccount extends Account {
         double rate;
 
         if(noWithdrawalsIn10Days(date)){
-            rate = 0.05/365;
+            rate = 0.05/DAYS_OF_YEAR;
         }
         else{
-            rate = 0.001/365;
+            rate = 0.001/DAYS_OF_YEAR;
         }
 
         return rate;

@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.Locale;
 
 public abstract class Account {
+    public static final int DAYS_OF_YEAR = 365;
+
     public ArrayList<Transaction> transactions;
 
     public abstract double calculateInterest(double amount, Date date);
@@ -40,14 +42,14 @@ public abstract class Account {
     }
 
     public double sumTransactions() {
-        return checkIfTransactionsExist(true);
+        return sumAllTransactions(true);
     }
 
     public double getTotalAmount() {
-        return checkIfTransactionsExist(true);
+        return sumAllTransactions(true);
     }
 
-    private double checkIfTransactionsExist(boolean checkAll) {
+    private double sumAllTransactions(boolean checkAll) {
         double totalAmount = 0.0;
 
         for (Transaction transaction : transactions) {
