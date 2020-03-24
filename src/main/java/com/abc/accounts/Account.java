@@ -37,6 +37,8 @@ public abstract class Account {
     public void withdraw(double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
+        } else if (getTotalAmount() <= 0) {
+            throw new IllegalArgumentException("amount withdrawn can not be grater than total amount on account");
         } else {
             transactions.add(new Transaction(-amount));
         }
@@ -88,7 +90,7 @@ public abstract class Account {
         return dailyAmount;
     }
 
-    private Pair<Double, Integer> calculateDailyAmountAndIndex(double dailyAmount, int lastHandledIndex, Date now){
+    private Pair<Double, Integer> calculateDailyAmountAndIndex(double dailyAmount, int lastHandledIndex, Date now) {
         for (int t = lastHandledIndex; t < transactions.size(); t++) {
             if (transactions.get(t).getTransactionDate().before(now)) {
                 dailyAmount += transactions.get(t).amount;
