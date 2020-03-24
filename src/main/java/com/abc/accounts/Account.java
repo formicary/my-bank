@@ -2,6 +2,7 @@ package com.abc.accounts;
 
 import com.abc.DateProvider;
 import com.abc.Transaction;
+import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -73,12 +74,9 @@ public abstract class Account {
         c.setTime(now);
 
         for (int day = 0; day < totalDays; day++) {
-            for (int t = lastHandledIndex; t < transactions.size(); t++) {
-                if (transactions.get(t).getTransactionDate().before(now)) {
-                    dailyAmount += transactions.get(t).amount;
-                    lastHandledIndex++;
-                }
-            }
+            Pair<Double, Integer> dailyAmountAndIndex = calculateDailyAmountAndIndex(dailyAmount, lastHandledIndex, now);
+            dailyAmount = dailyAmountAndIndex.getKey();
+            lastHandledIndex = dailyAmountAndIndex.getValue();
 
 
             dailyAmount *= (calculateInterest(dailyAmount, now) + 1);
@@ -88,5 +86,16 @@ public abstract class Account {
 
         dailyAmount -= getTotalAmount();
         return dailyAmount;
+    }
+
+    private Pair<Double, Integer> calculateDailyAmountAndIndex(double dailyAmount, int lastHandledIndex, Date now){
+        for (int t = lastHandledIndex; t < transactions.size(); t++) {
+            if (transactions.get(t).getTransactionDate().before(now)) {
+                dailyAmount += transactions.get(t).amount;
+                lastHandledIndex++;
+            }
+        }
+
+        return new Pair<>(dailyAmount, lastHandledIndex);
     }
 }
