@@ -16,11 +16,10 @@ public class SavingsAccount extends Account {
     @Override
     public double calculateInterest(double amount, Date date) {
 
-        if(Utils.isGraterThen1000(amount)){
-            return 0.002/DAYS_OF_YEAR;
-        }
-        else{
-            return (0.1/DAYS_OF_YEAR);
+        if (Utils.isGraterThen1000(amount)) {
+            return 0.002 / DAYS_OF_YEAR;
+        } else {
+            return (0.1 / DAYS_OF_YEAR);
         }
     }
 
