@@ -1,6 +1,8 @@
-package com.abc;
+package com.accenture.mybank.tests;
 
 import org.junit.Test;
+
+import com.accenture.mybank.Transaction;
 
 import static org.junit.Assert.assertTrue;
 
