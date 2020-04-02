@@ -4,18 +4,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Account {
+public abstract class Account {
 
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
-
-    private final int accountType;
     public List<Transaction> transactions;
     public double capital;
 
-    public Account(int accountType) {
-        this.accountType = accountType;
+    public Account() {
         this.transactions = new ArrayList<Transaction>();
         this.capital = 0;
     }
@@ -46,22 +40,7 @@ public class Account {
 	}
 	
     public double interestEarned() {
-    	Date lastWithdraw = this.lastWithdraw();
-        double amount = sumTransactions();
-        switch(accountType){
-            case SAVINGS:
-                if (amount <= 1000)
-                    return amount * DateProvider.CalculateDailyCompound(0.001);
-                else
-                    return amount * DateProvider.CalculateDailyCompound(0.002);
-            case MAXI_SAVINGS:
-                if (DateProvider.olderThanTenDays(lastWithdraw))
-                    return amount * DateProvider.CalculateDailyCompound(0.05);
-                else 
-                    return amount * DateProvider.CalculateDailyCompound(0.001);
-            default:
-                return amount * DateProvider.CalculateDailyCompound(0.001);
-        }
+    	return Double.valueOf(0.0);
     }
 
     public double sumTransactions() {
@@ -75,17 +54,13 @@ public class Account {
         return amount;
     }
     
-    public Date lastWithdraw() {
+    public Date lastWithdrawDate() {
     	for (int i = this.transactions.size() - 1; i >= 0; i--) {
     		if (transactions.get(i).type == Transaction.WITHDRAW) {
     			return transactions.get(i).getTransactionDate();
     		}
     	}
     	return null;
-    }
-
-    public int getAccountType() {
-        return accountType;
     }
 
 	public double getCapital() {

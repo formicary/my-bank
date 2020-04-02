@@ -50,16 +50,12 @@ public class Customer {
         String s = "";
 
        //Translate to pretty account type
-        switch(a.getAccountType()){
-            case Account.CHECKING:
+        if (a instanceof CheckingAccount) {
                 s += "Checking Account\n";
-                break;
-            case Account.SAVINGS:
+        } else if (a instanceof SavingsAccount) {
                 s += "Savings Account\n";
-                break;
-            case Account.MAXI_SAVINGS:
+        } else if (a instanceof MaxiSavingsAccount) {
                 s += "Maxi Savings Account\n";
-                break;
         }
 
         //Now total up all the transactions
