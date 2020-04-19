@@ -1,6 +1,7 @@
 package com.abc;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Account {
@@ -21,7 +22,8 @@ public class Account {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
-            transactions.add(new Transaction(amount));
+        	Transaction transaction = new Transaction(amount);
+            transactions.add(transaction);
         }
     }
 
@@ -35,27 +37,30 @@ public void withdraw(double amount) {
 
     public double interestEarned() {
         double amount = sumTransactions();
+        int dayCount;
         switch(accountType){
-            case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
-            case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
-            default:
-                return amount * 0.001;
+        case SAVINGS:
+        	dayCount = DateUtil.getDayCount(transactions.get(transactions.size()-1).getTransactionDate(), 
+    				DateProvider.getInstance().now());
+        	if (amount <= 1000)
+        		return calcCompundInt(amount, 0.1, dayCount);
+            else
+                return calcCompundInt(amount-1000, 0.2, dayCount);        
+        case MAXI_SAVINGS:
+        	dayCount = DateUtil.getDayCount(getLastWithdraw(), DateProvider.getInstance().now());
+        	if(dayCount < 10) {
+        		return calcCompundInt(amount, 0.1, dayCount);
+        	}else {
+        		return calcCompundInt(amount, 5.0, dayCount);
+        	}
+        default:
+        	dayCount = DateUtil.getDayCount(transactions.get(transactions.size()-1).getTransactionDate(), 
+    				DateProvider.getInstance().now());
+        	return calcCompundInt(amount, 5.0, dayCount);
         }
     }
 
-    public double sumTransactions() {
+	public double sumTransactions() {
        return checkIfTransactionsExist(true);
     }
 
@@ -68,6 +73,28 @@ public void withdraw(double amount) {
 
     public int getAccountType() {
         return accountType;
+    }
+    
+    public Date getLastWithdraw() {
+    	if(transactions.size() == 0) {
+    		return null;
+    	}
+    	Date lastWithdraw = null;  	
+    	for(int i=transactions.size()-1; i >= 0; i--) {
+    		if(transactions.get(i).amount < 0) {
+    			lastWithdraw = transactions.get(i).getTransactionDate();
+    		}
+    	}
+    	if(null == lastWithdraw) {
+    		lastWithdraw = transactions.get(transactions.size()-1).getTransactionDate();
+    	}
+    	return lastWithdraw;
+    }
+    
+    private double calcCompundInt(double amount, double ratePer, int dayCount) {
+    	double rate = ratePer/100;
+    	double finalAmount = amount * Math.pow(1 + (rate / 365), dayCount);
+    	return finalAmount-amount;
     }
 
 }

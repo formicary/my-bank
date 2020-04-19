@@ -5,6 +5,8 @@ import java.util.List;
 
 import static java.lang.Math.abs;
 
+import java.text.ParseException;
+
 public class Customer {
     private String name;
     private List<Account> accounts;
@@ -75,4 +77,19 @@ public class Customer {
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
     }
+    
+    public boolean trasferBetweenAccounts(Account accFrom, Account accTo, double amount) throws ParseException {
+    	if(accFrom.getAccountType()==accTo.getAccountType()) {
+    		System.out.println("Both accounts are same");
+    		return false;
+    	}else if(accFrom.sumTransactions() < amount){
+    		System.out.println("Insufficiant Funds");
+    		return false;
+    	}else {
+    		accFrom.withdraw(amount);
+    		accTo.deposit(amount);
+    		return true;
+    	}
+    }
+    
 }
