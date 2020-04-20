@@ -1,5 +1,13 @@
 package com.abc;
 
+import com.abc.account.Account;
+import com.abc.account.AccountType;
+import com.abc.bank.Bank;
+import com.abc.customer.Customer;
+import com.abc.account.AccountService;
+import com.abc.bank.BankService;
+import com.abc.customer.CustomerService;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -7,48 +15,82 @@ import static org.junit.Assert.assertEquals;
 public class BankTest {
     private static final double DOUBLE_DELTA = 1e-15;
 
+    public static AccountService accountService;
+    public static CustomerService customerService;
+    public static BankService bankService;
+
+    @BeforeClass
+    public static void setup() {
+        accountService = AccountService.getInstance();
+        customerService = CustomerService.getInstance();
+        bankService = BankService.getInstance();
+    }
+
     @Test
     public void customerSummary() {
+        // given
         Bank bank = new Bank();
-        Customer john = new Customer("John");
-        john.openAccount(new Account(Account.CHECKING));
-        bank.addCustomer(john);
+        Account checkingAccount = new Account(AccountType.CHECKING);
+        Customer customer = new Customer("John");
+        customerService.openAccount(customer, checkingAccount);
+        bankService.addCustomer(bank, customer);
 
-        assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
+        // when
+        String customerSummary = bankService.customerSummary(bank);
+
+        // than
+        assertEquals("Customer Summary\n - John (1 account)", customerSummary);
     }
 
     @Test
     public void checkingAccount() {
+        // given
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.CHECKING);
-        Customer bill = new Customer("Bill").openAccount(checkingAccount);
-        bank.addCustomer(bill);
+        Account checkingAccount = new Account(AccountType.CHECKING);
+        Customer customer = new Customer("Bill");
+        customerService.openAccount(customer, checkingAccount);
+        bankService.addCustomer(bank, customer);
 
-        checkingAccount.deposit(100.0);
+        // when
+        accountService.deposit(checkingAccount, 100.0);
 
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+        // than
+        double totalInterestPaid = bankService.totalInterestPaid(bank);
+        assertEquals(0.1, totalInterestPaid, DOUBLE_DELTA);
     }
 
     @Test
-    public void savings_account() {
+    public void savingsAccount() {
+        // given
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+        Account savingsAccount = new Account(AccountType.SAVINGS);
+        Customer customer = new Customer("Bill");
+        customerService.openAccount(customer, savingsAccount);
+        bankService.addCustomer(bank, customer);
 
-        checkingAccount.deposit(1500.0);
+        // when
+        accountService.deposit(savingsAccount, 1500.0);
 
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        // than
+        double totalInterestPaid = bankService.totalInterestPaid(bank);
+        assertEquals(2.0, totalInterestPaid, DOUBLE_DELTA);
     }
 
     @Test
-    public void maxi_savings_account() {
+    public void maxiSavingsAccount() {
+        // given
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+        Account maxiSavingsAccount = new Account(AccountType.MAXI_SAVINGS);
+        Customer customer = new Customer("Bill");
+        customerService.openAccount(customer, maxiSavingsAccount);
+        bankService.addCustomer(bank, customer);
 
-        checkingAccount.deposit(3000.0);
+        // when
+        accountService.deposit(maxiSavingsAccount, 3000.0);
 
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        // than
+        double totalInterestPaid = bankService.totalInterestPaid(bank);
+        assertEquals(170.0, totalInterestPaid, DOUBLE_DELTA);
     }
 
 }
