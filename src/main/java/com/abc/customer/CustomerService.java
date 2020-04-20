@@ -15,6 +15,10 @@ public class CustomerService {
         accountService = AccountService.getInstance();
     }
 
+    /**
+     * getInstance
+     * @return
+     */
     public static synchronized CustomerService getInstance() {
         if (instance == null) {
             instance = new CustomerService();
@@ -23,15 +27,31 @@ public class CustomerService {
         return instance;
     }
 
+    /**
+     * openAccount
+     * @param customer
+     * @param account
+     * @return
+     */
     public Customer openAccount(Customer customer, Account account) {
         customer.getAccounts().add(account);
         return customer;
     }
 
+    /**
+     * getNumberOfAccounts
+     * @param customer
+     * @return
+     */
     public int getNumberOfAccounts(Customer customer) {
         return customer.getAccounts().size();
     }
 
+    /**
+     * totalInterestEarned
+     * @param customer
+     * @return
+     */
     public double totalInterestEarned(Customer customer) {
         double total = 0;
         for (Account account : customer.getAccounts()) {
@@ -40,6 +60,11 @@ public class CustomerService {
         return total;
     }
 
+    /**
+     * getStatement
+     * @param customer
+     * @return
+     */
     public String getStatement(Customer customer) {
         String statement = "Statement for " + customer.getName() + "\n";
         double total = 0.0;
@@ -51,6 +76,11 @@ public class CustomerService {
         return statement;
     }
 
+    /**
+     * statementForAccount
+     * @param a
+     * @return
+     */
     private String statementForAccount(Account a) {
         String s = "";
 
@@ -77,6 +107,11 @@ public class CustomerService {
         return s;
     }
 
+    /**
+     * toDollars
+     * @param d
+     * @return
+     */
     private String toDollars(double d) {
         return String.format("$%,.2f", abs(d));
     }

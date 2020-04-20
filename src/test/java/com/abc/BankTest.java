@@ -11,13 +11,14 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class BankTest {
     private static final double DOUBLE_DELTA = 1e-15;
 
-    public static AccountService accountService;
-    public static CustomerService customerService;
-    public static BankService bankService;
+    private static AccountService accountService;
+    private static CustomerService customerService;
+    private static BankService bankService;
 
     @BeforeClass
     public static void setup() {
@@ -91,6 +92,34 @@ public class BankTest {
         // than
         double totalInterestPaid = bankService.totalInterestPaid(bank);
         assertEquals(170.0, totalInterestPaid, DOUBLE_DELTA);
+    }
+
+    @Test
+    public void getFirstCustomer() {
+        // given
+        Bank bank = new Bank();
+        Customer firstCustomer = new Customer("Bill");
+        Customer secondCustomer = new Customer("John");
+        bankService.addCustomer(bank, firstCustomer);
+        bankService.addCustomer(bank, secondCustomer);
+
+        // when
+        String firstCustomerName = bankService.getFirstCustomerName(bank);
+
+        // than
+        assertEquals("Bill", firstCustomerName);
+    }
+
+    @Test
+    public void getFirstCustomerNoCustomers() {
+        // given
+        Bank bank = new Bank();
+
+        // when
+        String firstCustomerName = bankService.getFirstCustomerName(bank);
+
+        // than
+        assertNull("First customer name should be null", firstCustomerName);
     }
 
 }

@@ -10,7 +10,10 @@ import java.util.Date;
 public class Transaction {
 
     @NonNull
+    private  TransactionType transactionType;
+
+    @NonNull
     private double amount;
 
-    private Date transactionDate = DateProvider.getInstance().now();
+    private Date transactionDate = DateProvider.getInstance().getCurrentDate();
 }

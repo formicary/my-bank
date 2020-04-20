@@ -6,6 +6,7 @@ import java.util.Date;
 public class DateProvider {
 
     private static DateProvider instance = null;
+    private Calendar calendar;
 
     public static synchronized DateProvider getInstance() {
         if (instance == null) {
@@ -15,7 +16,13 @@ public class DateProvider {
         return instance;
     }
 
-    public Date now() {
+    public Date getCurrentDate() {
         return Calendar.getInstance().getTime();
+    }
+
+    public Date getCurrentDateBefore10Days() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR, -10);
+        return calendar.getTime();
     }
 }

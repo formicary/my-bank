@@ -12,8 +12,10 @@ import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
 
-    public static AccountService accountService;
-    public static CustomerService customerService;
+    private static final double DOUBLE_DELTA = 1e-15;
+
+    private static AccountService accountService;
+    private static CustomerService customerService;
 
     @BeforeClass
     public static void setup() {
@@ -99,5 +101,56 @@ public class CustomerTest {
 
         //than
         assertEquals(3, numberOfAccounts);
+    }
+
+    @Test
+    public void transfer() {
+        // given
+        Account sourceAccount = new Account(AccountType.CHECKING);
+        Account destinationAccount = new Account(AccountType.SAVINGS);
+
+        Customer customer = new Customer("Henry");
+        customerService.openAccount(customer, sourceAccount);
+        customerService.openAccount(customer, destinationAccount);
+
+        accountService.deposit(sourceAccount, 1000.0);
+
+        // when
+        accountService.transfer(sourceAccount, destinationAccount, 600.0);
+
+        // than
+        double balanceOfSourceAccount = accountService.sumTransactions(sourceAccount);
+        double balanceOfDestinationAccount = accountService.sumTransactions(destinationAccount);
+
+        assertEquals(400.0, balanceOfSourceAccount, DOUBLE_DELTA);
+        assertEquals(600.0, balanceOfDestinationAccount, DOUBLE_DELTA);
+    }
+
+    @Test
+    public void transferAmountBigerThanBalance() {
+        // given
+        Account sourceAccount = new Account(AccountType.CHECKING);
+        Account destinationAccount = new Account(AccountType.SAVINGS);
+
+        Customer customer = new Customer("Henry");
+        customerService.openAccount(customer, sourceAccount);
+        customerService.openAccount(customer, destinationAccount);
+
+        accountService.deposit(sourceAccount, 100.0);
+
+        // when
+        try {
+            accountService.transfer(sourceAccount, destinationAccount, 600.0);
+        } catch (IllegalArgumentException ex) {
+            // than
+            assertEquals("Amount must be greater than the balance of the source account. Balance: 100.0, "
+                    + "amount: 600.0", ex.getMessage());
+        }
+
+        double balanceOfSourceAccount = accountService.sumTransactions(sourceAccount);
+        double balanceOfDestinationAccount = accountService.sumTransactions(destinationAccount);
+
+        assertEquals(100.0, balanceOfSourceAccount, DOUBLE_DELTA);
+        assertEquals(0.0, balanceOfDestinationAccount, DOUBLE_DELTA);
     }
 }

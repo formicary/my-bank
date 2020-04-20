@@ -14,6 +14,10 @@ public class BankService {
         customerService = CustomerService.getInstance();
     }
 
+    /**
+     * getInstance
+     * @return
+     */
     public static synchronized BankService getInstance() {
         if (instance == null) {
             instance = new BankService();
@@ -22,10 +26,20 @@ public class BankService {
         return instance;
     }
 
+    /**
+     * addCustomer
+     * @param bank
+     * @param customer
+     */
     public void addCustomer(Bank bank, Customer customer) {
         bank.getCustomers().add(customer);
     }
 
+    /**
+     * customerSummary
+     * @param bank
+     * @return
+     */
     public String customerSummary(Bank bank) {
         String summary = "Customer Summary";
         for (Customer customer : bank.getCustomers()) {
@@ -35,12 +49,24 @@ public class BankService {
         return summary;
     }
 
-    //Make sure correct plural of word is created based on the number passed in:
-    //If number passed in is 1 just return the word otherwise add an 's' at the end
+    /**
+     * format
+     * Make sure correct plural of word is created based on the number passed in:
+     * If number passed in is 1 just return the word otherwise add an 's' at the end
+     *
+     * @param number
+     * @param word
+     * @return
+     */
     private String format(int number, String word) {
         return number + " " + (number == 1 ? word : word + "s");
     }
 
+    /**
+     * totalInterestPaid
+     * @param bank
+     * @return
+     */
     public double totalInterestPaid(Bank bank) {
         double total = 0;
         for (Customer customer : bank.getCustomers()) {
@@ -49,13 +75,18 @@ public class BankService {
         return total;
     }
 
-    public String getFirstCustomer(Bank bank) {
+    /**
+     * getFirstCustomerName
+     * @param bank
+     * @return
+     */
+    public String getFirstCustomerName(Bank bank) {
         List<Customer> customers = bank.getCustomers();
         if (customers.isEmpty() == false) {
             return customers.get(0).getName();
         } else {
             //log.warn("The bank has no customers");
-            return "Error";
+            return null;
         }
     }
 }
