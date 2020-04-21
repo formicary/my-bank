@@ -127,7 +127,7 @@ public class CustomerTest {
     }
 
     @Test
-    public void transferAmountBigerThanBalance() {
+    public void transferAmountBiggerThanBalance() {
         // given
         Account sourceAccount = new Account(AccountType.CHECKING);
         Account destinationAccount = new Account(AccountType.SAVINGS);

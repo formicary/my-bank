@@ -7,6 +7,9 @@ import com.abc.customer.Customer;
 import com.abc.account.AccountService;
 import com.abc.bank.BankService;
 import com.abc.customer.CustomerService;
+import com.abc.transaction.Transaction;
+import com.abc.transaction.TransactionType;
+import com.abc.util.DateProvider;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -19,12 +22,14 @@ public class BankTest {
     private static AccountService accountService;
     private static CustomerService customerService;
     private static BankService bankService;
+    private static DateProvider dateProvider;
 
     @BeforeClass
     public static void setup() {
         accountService = AccountService.getInstance();
         customerService = CustomerService.getInstance();
         bankService = BankService.getInstance();
+        dateProvider = DateProvider.getInstance();
     }
 
     @Test
@@ -51,12 +56,12 @@ public class BankTest {
         Customer customer = new Customer("Bill");
         customerService.openAccount(customer, checkingAccount);
         bankService.addCustomer(bank, customer);
-
-        // when
         accountService.deposit(checkingAccount, 100.0);
 
-        // than
+        // when
         double totalInterestPaid = bankService.totalInterestPaid(bank);
+
+        // than
         assertEquals(0.1, totalInterestPaid, DOUBLE_DELTA);
     }
 
@@ -68,12 +73,12 @@ public class BankTest {
         Customer customer = new Customer("Bill");
         customerService.openAccount(customer, savingsAccount);
         bankService.addCustomer(bank, customer);
-
-        // when
         accountService.deposit(savingsAccount, 1500.0);
 
-        // than
+        // when
         double totalInterestPaid = bankService.totalInterestPaid(bank);
+
+        // than
         assertEquals(2.0, totalInterestPaid, DOUBLE_DELTA);
     }
 
@@ -85,13 +90,32 @@ public class BankTest {
         Customer customer = new Customer("Bill");
         customerService.openAccount(customer, maxiSavingsAccount);
         bankService.addCustomer(bank, customer);
+        accountService.deposit(maxiSavingsAccount, 3000.0);
 
         // when
-        accountService.deposit(maxiSavingsAccount, 3000.0);
+        double totalInterestPaid = bankService.totalInterestPaid(bank);
+
+        // than
+        assertEquals(170.0, totalInterestPaid, DOUBLE_DELTA);
+    }
+
+    @Test
+    public void maxiSavingsAccountMoreThan10Days() {
+        // given
+        Bank bank = new Bank();
+        Account maxiSavingsAccount = new Account(AccountType.MAXI_SAVINGS);
+        Customer customer = new Customer("Bill");
+        customerService.openAccount(customer, maxiSavingsAccount);
+        bankService.addCustomer(bank, customer);
+
+        // when
+        Transaction transaction = new Transaction(TransactionType.DEPOSIT,3000.0);
+        transaction.setTransactionDate(dateProvider.addDaysToCurrentDate(-11));
+        maxiSavingsAccount.getTransactions().add(transaction);
 
         // than
         double totalInterestPaid = bankService.totalInterestPaid(bank);
-        assertEquals(170.0, totalInterestPaid, DOUBLE_DELTA);
+        assertEquals(178.5, totalInterestPaid, DOUBLE_DELTA);
     }
 
     @Test

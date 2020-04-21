@@ -20,9 +20,13 @@ public class DateProvider {
         return Calendar.getInstance().getTime();
     }
 
-    public Date getCurrentDateBefore10Days() {
+    public Date addDaysToCurrentDate(int days) {
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_YEAR, -10);
+        calendar.add(Calendar.DAY_OF_YEAR, days);
         return calendar.getTime();
+    }
+
+    public Date getCurrentDateBefore10Days() {
+        return addDaysToCurrentDate(-10);
     }
 }

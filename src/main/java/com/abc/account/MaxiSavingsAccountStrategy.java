@@ -29,7 +29,7 @@ public class MaxiSavingsAccountStrategy implements AccountStrategy {
 
         Date currentDateBefore10Days = DateProvider.getInstance().getCurrentDateBefore10Days();
         if (dateOfLastWithdrawal != null && dateOfLastWithdrawal.before(currentDateBefore10Days)) {
-            result = result * 0.005;
+            result = result * 1.05;
         }
 
         return result;
