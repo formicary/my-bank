@@ -6,9 +6,20 @@ public interface Account {
 
     double calculateInterest();
     String getAccountType();
-    void deposit(double amount);
-    void withdraw(double amount);
-    void transferAmount(double amount, Account otherAccount);
-    List<Transaction> getTransactions();
     double getBalance();
+    void setBalance(double amount);
+    List<Transaction> getTransactions();
+
+    CommonOperationsHelper getCommonOperation();
+
+    default void deposit(double amount) {
+        getCommonOperation().deposit(amount, this);
+    }
+    default void withdraw(double amount) {
+        getCommonOperation().withdraw(amount, this);
+    }
+    default void transferAmount(double amount, Account otherAccount) {
+        getCommonOperation().transferAmount(amount, this, otherAccount);
+    }
+
 }
