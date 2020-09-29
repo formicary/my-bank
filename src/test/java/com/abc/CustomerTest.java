@@ -1,7 +1,13 @@
 package com.abc;
 
+import com.abc.entity.Account;
+import com.abc.entity.AccountType;
+import com.abc.entity.Customer;
+import com.abc.exception.InvalidAccountException;
+import com.abc.exception.InvalidCustomerException;
+import com.abc.service.CustomerService;
+import com.abc.service.TransactionManager;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -17,60 +23,92 @@ public class CustomerTest {
 
     @Test
     public void newCustomerHasZeroAccounts(){
-        assertEquals("New customer does not have 0 accounts", 0, customer.getNumberOfAccounts());
+        assertEquals("New customer does not have 0 accounts", 0, customer.getAccounts().size());
+    }
+
+    @Test(expected = InvalidCustomerException.class)
+    public void customerCannotBeNullForNewAccount(){
+        CustomerService.openAccount(null, new Account(AccountType.CURRENT));
+    }
+
+    @Test(expected = InvalidAccountException.class)
+    public void accountCannotBeNullForNewAccount(){
+        CustomerService.openAccount(customer, null);
     }
 
     @Test
     public void customerCanAddCheckingAccount(){
-        customer.openAccount(new Account(0));
-        assertEquals("Customer checking account is not added to account list", 1, customer.getNumberOfAccounts());
+        CustomerService.openAccount(customer, new Account(AccountType.CURRENT));
+        assertEquals("Customer checking account is not added to account list", 1, customer.getAccounts().size());
     }
 
     @Test
     public void customerCanAddSavingsAccount(){
-        customer.openAccount(new Account(1));
-        assertEquals("Customer savings account is not added to account list", 1, customer.getNumberOfAccounts());
+        CustomerService.openAccount(customer,new Account(AccountType.SAVINGS));
+        assertEquals("Customer savings account is not added to account list", 1, customer.getAccounts().size());
 
     }
 
     @Test
     public void customerCanAddMaxiSavingsAccount(){
-        customer.openAccount(new Account(2));
-        assertEquals("Customer maxi savings account is not added to account list", 1, customer.getNumberOfAccounts());
+        CustomerService.openAccount(customer,new Account(AccountType.MAXI_SAVINGS));
+        assertEquals("Customer maxi savings account is not added to account list", 1, customer.getAccounts().size());
 
     }
 
     @Test
     public void customerCanAddMultipleCheckingAccount(){
-        customer.openAccount(new Account(0));
-        customer.openAccount(new Account(0));
-        assertEquals("Mutliple customer checking accounts are not added to account list", 2, customer.getNumberOfAccounts());
+        CustomerService.openAccount(customer,new Account(AccountType.CURRENT));
+        CustomerService.openAccount(customer,new Account(AccountType.CURRENT));
+        assertEquals("Mutliple customer checking accounts are not added to account list", 2, customer.getAccounts().size());
     }
 
     @Test
     public void customerCanAddMultipleSavingsAccount(){
-        customer.openAccount(new Account(1));
-        customer.openAccount(new Account(1));
-        assertEquals("Multiple customer savings accounts are not added to account list", 2, customer.getNumberOfAccounts());
+        CustomerService.openAccount(customer,new Account(AccountType.SAVINGS));
+        CustomerService.openAccount(customer,new Account(AccountType.SAVINGS));
+        assertEquals("Multiple customer savings accounts are not added to account list", 2, customer.getAccounts().size());
 
     }
 
     @Test
     public void customerCanAddMultipleMaxiSavingsAccount(){
-        customer.openAccount(new Account(2));
-        customer.openAccount(new Account(2));
-        assertEquals("Multiple customer maxi savings accounts are not added to account list", 2, customer.getNumberOfAccounts());
+        CustomerService.openAccount(customer,new Account(AccountType.MAXI_SAVINGS));
+        CustomerService.openAccount(customer,new Account(AccountType.MAXI_SAVINGS));
+        assertEquals("Multiple customer maxi savings accounts are not added to account list", 2, customer.getAccounts().size());
 
     }
 
     @Test
     public void customerCanAddMultipleAccountsOfDifferentTypes(){
-        customer.openAccount(new Account(0));
-        customer.openAccount(new Account(1));
-        customer.openAccount(new Account(2));
-        assertEquals("Multiple accounts of different types are not added to account list", 3, customer.getNumberOfAccounts());
+        CustomerService.openAccount(customer,new Account(AccountType.CURRENT));
+        CustomerService.openAccount(customer,new Account(AccountType.SAVINGS));
+        CustomerService.openAccount(customer,new Account(AccountType.MAXI_SAVINGS));
+        assertEquals("Multiple accounts of different types are not added to account list", 3, customer.getAccounts().size());
 
     }
+
+    @Test
+    public void newAccountHasZeroBalance(){
+        Account account = new Account(AccountType.CURRENT);
+        CustomerService.openAccount(customer, account);
+        assertEquals("", 0.0, TransactionManager.sumTransactions(account));
+    }
+    //customer can deposit funds
+
+    /*
+    new account has nothing in it
+    adding cash in will add money to account
+    adding cash twice will add money twice
+    adding 0 will throw exception
+    adding negative will throw exception
+
+
+     */
+
+    //customer can withdraw funds
+
+
 
 //    @Test //Test customer statement generation
 //    public void testApp(){
