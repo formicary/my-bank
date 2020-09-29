@@ -11,12 +11,12 @@ import static java.lang.Math.abs;
 
 public class ReportGenerator {
 
-    public static String getCustomerStatement(Customer customer) {
+    public static String customerStatement(Customer customer) {
         String statement = null;
         statement = "Statement for " + customer.getName() + "\n";
         BigDecimal total = new BigDecimal(0.0);
         for (Account a : customer.getAccounts()) {
-            statement += "\n" + statementForAccount(a) + "\n";
+            statement += "\n" + accountStatement(a) + "\n";
             total = total.add(TransactionManager.sumTransactions(a));
         }
         statement += "\nTotal In All Accounts " + toDollars(total);
@@ -35,7 +35,7 @@ public class ReportGenerator {
         return number + " " + (number == 1 ? word : word + "s");
     }
 
-    private static String statementForAccount(Account a) {
+    private static String accountStatement(Account a) {
         String s = "";
         s += a.getAccountType().toString() + ": ";
 

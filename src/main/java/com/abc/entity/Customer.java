@@ -1,5 +1,6 @@
 package com.abc.entity;
 
+import com.abc.exception.InputValidator;
 import com.abc.service.TransactionManager;
 import com.abc.util.InterestCalculator;
 
@@ -21,8 +22,10 @@ public class Customer {
         return name;
     }
 
-    public void addAccount(Account account){
+    public Customer addAccount(Account account){
+        InputValidator.verifyAccountOpen(account);
         this.accounts.add(account);
+        return this;
     }
 
     public List<Account> getAccounts() {
