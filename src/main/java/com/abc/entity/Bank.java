@@ -1,23 +1,23 @@
 package com.abc.entity;
 
-import com.abc.util.InterestCalculator;
+import com.abc.entity.impl.CustomerImpl;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Bank {
-    private List<Customer> customers;
+    private List<CustomerImpl> customers;
 
     public Bank() {
-        customers = new ArrayList<Customer>();
+        customers = new ArrayList<CustomerImpl>();
     }
 
-    public void addCustomer(Customer customer) {
+    public void addCustomer(CustomerImpl customer) {
         customers.add(customer);
     }
 
 
-    public List<Customer> getCustomers() {
+    public List<CustomerImpl> getCustomers() {
         return customers;
     }
 }

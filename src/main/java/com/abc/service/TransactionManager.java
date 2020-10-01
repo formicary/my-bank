@@ -1,6 +1,7 @@
 package com.abc.service;
 
 import com.abc.entity.Account;
+import com.abc.entity.Customer;
 import com.abc.entity.Transaction;
 import com.abc.exception.InputValidator;
 import com.abc.exception.InvalidTransactionException;
@@ -9,8 +10,13 @@ import java.math.BigDecimal;
 
 public class TransactionManager {
 
-    public static void deposit(Account account, BigDecimal amount) {
-        InputValidator.validateDeposit(account, amount);
+    private Customer customer;
+    public TransactionManager(Customer customer){
+        this.customer = customer;
+    }
+
+    public void deposit(Account account, BigDecimal amount) {
+        InputValidator.validateDeposit(customer, account, amount);
         if (amount.doubleValue() <= 0) {
             throw new InvalidTransactionException("deposit amount must be greater than zero");
         } else {
@@ -18,8 +24,8 @@ public class TransactionManager {
         }
     }
 
-    public static void withdraw(Account account, BigDecimal amount) {
-        InputValidator.validateWithdrawal(account, amount);
+    public void withdraw(Account account, BigDecimal amount) {
+        InputValidator.validateWithdrawal(customer, account, amount);
         if (amount.doubleValue() <= 0) {
             throw new InvalidTransactionException("withdrawal amount must be greater than zero");
         } else {

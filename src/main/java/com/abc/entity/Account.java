@@ -1,6 +1,6 @@
 package com.abc.entity;
 
-import com.abc.exception.InvalidTransactionException;
+import com.abc.entity.impl.AccountType;
 
 import java.util.ArrayList;
 import java.util.List;

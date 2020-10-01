@@ -15,7 +15,10 @@ public class InputValidator {
         }
     }
 
-    public static void validateDeposit(Account account, BigDecimal amount) {
+    public static void validateDeposit(Customer customer, Account account, BigDecimal amount) {
+        if(!customer.getAccounts().contains(account)){
+            throw new InvalidAccountException("Account must exist within customers accounts");
+        }
         if(account == null){
             throw new InvalidAccountException("Account cannot be null");
         }
@@ -24,8 +27,8 @@ public class InputValidator {
         }
     }
 
-    public static void validateWithdrawal(Account account, BigDecimal amount) {
-        validateDeposit(account, amount);
+    public static void validateWithdrawal(Customer customer, Account account, BigDecimal amount) {
+        validateDeposit(customer, account, amount);
         if(TransactionManager.sumTransactions(account).doubleValue() <= 0){
             throw new InvalidAccountException("Cannot withdraw from an account without positive balance");
         }
