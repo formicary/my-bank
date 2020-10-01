@@ -1,6 +1,5 @@
 package com.abc.entity.impl;
 
-import com.abc.entity.Account;
 import com.abc.entity.Customer;
 import com.abc.exception.InputValidator;
 
@@ -15,24 +14,24 @@ import static java.lang.Math.abs;
  */
 public class CustomerImpl implements Customer {
     private String name;
-    private List<Account> accounts;
+    private List<AccountImpl> accounts;
 
     public CustomerImpl(String name) {
         this.name = name;
-        this.accounts = new ArrayList<Account>();
+        this.accounts = new ArrayList<AccountImpl>();
     }
 
     public String getName() {
         return name;
     }
 
-    public CustomerImpl addAccount(Account account){
+    public CustomerImpl addAccount(AccountImpl account){
         InputValidator.verifyAccountOpen(account);
         this.accounts.add(account);
         return this;
     }
 
-    public List<Account> getAccounts() {
+    public List<AccountImpl> getAccounts() {
         return accounts;
     }
 }

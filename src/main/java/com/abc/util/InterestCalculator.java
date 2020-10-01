@@ -1,9 +1,9 @@
 package com.abc.util;
 
-import com.abc.entity.Account;
-import com.abc.entity.impl.AccountType;
+import com.abc.entity.impl.AccountImpl;
 import com.abc.entity.Bank;
-import com.abc.entity.impl.CustomerImpl;
+import com.abc.entity.Customer;
+import com.abc.entity.impl.AccountType;
 import com.abc.service.TransactionManager;
 
 import java.math.BigDecimal;
@@ -15,7 +15,7 @@ import java.math.RoundingMode;
  */
 public class InterestCalculator {
 
-    public static BigDecimal interestEarned(Account account) {
+    public static BigDecimal interestEarned(AccountImpl account) {
         BigDecimal accountHolding = TransactionManager.sumTransactions(account);
         BigDecimal interest = null;
         switch(account.getAccountType()){
@@ -71,9 +71,9 @@ public class InterestCalculator {
         return accountHolding.subtract(new BigDecimal(Integer.parseInt(i)));
     }
 
-    public static BigDecimal interestEarned(CustomerImpl customer) {
+    public static BigDecimal interestEarned(Customer customer) {
         BigDecimal total = new BigDecimal(0);
-        for (Account account : customer.getAccounts()) {
+        for (AccountImpl account : customer.getAccounts()) {
             total = total.add(InterestCalculator.interestEarned(account));
         }
         return total;
@@ -81,7 +81,7 @@ public class InterestCalculator {
 
     public static BigDecimal totalInterestPaid(Bank bank) {
         BigDecimal total = new BigDecimal(0);
-        for(CustomerImpl customer : bank.getCustomers())
+        for(Customer customer : bank.getCustomers())
             total = total.add(InterestCalculator.interestEarned(customer));
         return total;
     }

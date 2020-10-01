@@ -1,6 +1,6 @@
 package com.abc.service;
 
-import com.abc.entity.Account;
+import com.abc.entity.impl.AccountImpl;
 import com.abc.entity.Customer;
 import com.abc.entity.Transaction;
 import com.abc.exception.InputValidator;
@@ -15,7 +15,7 @@ public class TransactionManager {
         this.customer = customer;
     }
 
-    public void deposit(Account account, BigDecimal amount) {
+    public void deposit(AccountImpl account, BigDecimal amount) {
         InputValidator.validateDeposit(customer, account, amount);
         if (amount.doubleValue() <= 0) {
             throw new InvalidTransactionException("deposit amount must be greater than zero");
@@ -24,7 +24,7 @@ public class TransactionManager {
         }
     }
 
-    public void withdraw(Account account, BigDecimal amount) {
+    public void withdraw(AccountImpl account, BigDecimal amount) {
         InputValidator.validateWithdrawal(customer, account, amount);
         if (amount.doubleValue() <= 0) {
             throw new InvalidTransactionException("withdrawal amount must be greater than zero");
@@ -32,7 +32,7 @@ public class TransactionManager {
             account.getTransactions().add(new Transaction(amount.multiply(new BigDecimal(-1))));
         }
     }
-    public static BigDecimal sumTransactions(Account account) {
+    public static BigDecimal sumTransactions(AccountImpl account) {
 
         BigDecimal amount = new BigDecimal(0);
         for (Transaction t: account.getTransactions()) {

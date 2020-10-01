@@ -1,6 +1,6 @@
 package com.abc;
 
-import com.abc.entity.Account;
+import com.abc.entity.impl.AccountImpl;
 import com.abc.entity.Customer;
 import com.abc.entity.impl.AccountType;
 import com.abc.entity.impl.CustomerImpl;
@@ -15,19 +15,19 @@ import static org.junit.Assert.assertEquals;
 
 public class InterestCalculatorTest {
 
-    private static Account lowCurrent;
-    private static Account midCurrent;
-    private static Account highCurrent;
+    private static AccountImpl lowCurrent;
+    private static AccountImpl midCurrent;
+    private static AccountImpl highCurrent;
 
-    private static Account lowSaving;
-    private static Account midSaving;
-    private static Account highSaving;
+    private static AccountImpl lowSaving;
+    private static AccountImpl midSaving;
+    private static AccountImpl highSaving;
 
-    private static Account lowMaxSaving;
-    private static Account midMaxSaving;
-    private static Account midHighMaxSaving;
-    private static Account highMaxSaving;
-    private static Account veryHighMaxSaving;
+    private static AccountImpl lowMaxSaving;
+    private static AccountImpl midMaxSaving;
+    private static AccountImpl midHighMaxSaving;
+    private static AccountImpl highMaxSaving;
+    private static AccountImpl veryHighMaxSaving;
 
     private static TransactionManager transactionManager;
 
@@ -40,19 +40,19 @@ public class InterestCalculatorTest {
     @BeforeClass
     public static void setup(){
 
-        lowCurrent = new Account(AccountType.CURRENT);
-        midCurrent = new Account(AccountType.CURRENT);
-        highCurrent = new Account(AccountType.CURRENT);
+        lowCurrent = new AccountImpl(AccountType.CURRENT);
+        midCurrent = new AccountImpl(AccountType.CURRENT);
+        highCurrent = new AccountImpl(AccountType.CURRENT);
 
-        lowSaving = new Account(AccountType.SAVINGS);
-        midSaving = new Account(AccountType.SAVINGS);
-        highSaving = new Account(AccountType.SAVINGS);
+        lowSaving = new AccountImpl(AccountType.SAVINGS);
+        midSaving = new AccountImpl(AccountType.SAVINGS);
+        highSaving = new AccountImpl(AccountType.SAVINGS);
 
-        lowMaxSaving = new Account(AccountType.MAXI_SAVINGS);
-        midMaxSaving = new Account(AccountType.MAXI_SAVINGS);
-        midHighMaxSaving = new Account(AccountType.MAXI_SAVINGS);
-        highMaxSaving = new Account(AccountType.MAXI_SAVINGS);
-        veryHighMaxSaving = new Account(AccountType.MAXI_SAVINGS);
+        lowMaxSaving = new AccountImpl(AccountType.MAXI_SAVINGS);
+        midMaxSaving = new AccountImpl(AccountType.MAXI_SAVINGS);
+        midHighMaxSaving = new AccountImpl(AccountType.MAXI_SAVINGS);
+        highMaxSaving = new AccountImpl(AccountType.MAXI_SAVINGS);
+        veryHighMaxSaving = new AccountImpl(AccountType.MAXI_SAVINGS);
 
         Customer customer = new CustomerImpl("Customer");
         customer.addAccount(lowCurrent);
@@ -76,6 +76,13 @@ public class InterestCalculatorTest {
 
     }
 
+
+    @Test
+    public void zeroBalanceLeavesZeroInterest(){
+        assertEquals("Interest is not zero for empty account.",
+                new BigDecimal("0.00"),
+                InterestCalculator.interestEarned(lowCurrent));
+    }
     @Test
     public void currentAccountInterestLowAmount(){
         transactionManager.deposit(lowCurrent,low);

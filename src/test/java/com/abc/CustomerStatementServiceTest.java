@@ -1,6 +1,6 @@
 package com.abc;
 
-import com.abc.entity.Account;
+import com.abc.entity.impl.AccountImpl;
 import com.abc.entity.Customer;
 import com.abc.entity.impl.AccountType;
 import com.abc.entity.impl.CustomerImpl;
@@ -16,25 +16,23 @@ import static org.junit.Assert.assertEquals;
 public class CustomerStatementServiceTest {
 
     private static Customer customer;
-    private static CustomerStatementService statementService;
     private static TransactionManager transactionManager;
-    private static Account currentAccount;
-    private static Account savingsAccount;
-    private static Account maxiSavingsAccount;
+    private static AccountImpl currentAccount;
+    private static AccountImpl savingsAccount;
+    private static AccountImpl maxiSavingsAccount;
 
 
     @Before
     public void setup(){
-        currentAccount = new Account(AccountType.CURRENT);
-        savingsAccount = new Account(AccountType.SAVINGS);
-        maxiSavingsAccount = new Account(AccountType.MAXI_SAVINGS);
+        currentAccount = new AccountImpl(AccountType.CURRENT);
+        savingsAccount = new AccountImpl(AccountType.SAVINGS);
+        maxiSavingsAccount = new AccountImpl(AccountType.MAXI_SAVINGS);
 
         customer = new CustomerImpl("Customer A");
         customer.addAccount(currentAccount);
         customer.addAccount(savingsAccount);
         customer.addAccount(maxiSavingsAccount);
 
-        statementService = new CustomerStatementService(customer);
         transactionManager = new TransactionManager(customer);
     }
 
@@ -56,7 +54,7 @@ public class CustomerStatementServiceTest {
                 "MAXI_SAVINGS: \n" +
                 "Total $0.00\n" +
                 "\n" +
-                "Total In all Accounts $10.99", statementService.customerStatement());
+                "Total In all Accounts $10.99", CustomerStatementService.generateStatement(customer));
     }
 
     @Test
@@ -76,7 +74,7 @@ public class CustomerStatementServiceTest {
                 "MAXI_SAVINGS: \n" +
                 "Total $0.00\n" +
                 "\n" +
-                "Total In all Accounts $10.99", statementService.customerStatement());
+                "Total In all Accounts $10.99", CustomerStatementService.generateStatement(customer));
     }
 
     @Test
@@ -96,7 +94,7 @@ public class CustomerStatementServiceTest {
                 "  deposit $10.99\n" +
                 "Total $10.99\n" +
                 "\n" +
-                "Total In all Accounts $10.99", statementService.customerStatement());
+                "Total In all Accounts $10.99", CustomerStatementService.generateStatement(customer));
     }
 
     @Test
@@ -120,6 +118,6 @@ public class CustomerStatementServiceTest {
                 "  deposit $10.99\n" +
                 "Total $10.99\n" +
                 "\n" +
-                "Total In all Accounts $32.97", statementService.customerStatement());
+                "Total In all Accounts $32.97", CustomerStatementService.generateStatement(customer));
     }
 }

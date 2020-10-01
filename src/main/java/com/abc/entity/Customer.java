@@ -1,11 +1,13 @@
 package com.abc.entity;
 
+import com.abc.entity.impl.AccountImpl;
+
 import java.util.List;
 
 public interface Customer {
 
-    Customer addAccount(Account account);
+    Customer addAccount(AccountImpl account);
     String getName();
-    List<Account> getAccounts();
+    List<AccountImpl> getAccounts();
 
 }
