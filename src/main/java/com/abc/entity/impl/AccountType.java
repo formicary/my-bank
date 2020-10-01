@@ -2,6 +2,11 @@ package com.abc.entity.impl;
 
 import java.math.BigDecimal;
 
+/**
+ * Account type defines the different types of accounts that can be opened.
+ * Each account type defines savings rates that are applied by the {@Code InterestCalculator}
+ * @author aneesh
+ */
 public enum AccountType {
     CURRENT(new BigDecimal("0.001"), new BigDecimal("0.001"), new BigDecimal("0.001")),
     SAVINGS(new BigDecimal("0.001"), new BigDecimal("0.002"), new BigDecimal("0.002")),

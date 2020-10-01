@@ -7,16 +7,22 @@ import com.abc.entity.impl.CustomerImpl;
 import com.abc.service.TransactionManager;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
+/**
+ *
+ * @author aneesh
+ */
 public class InterestCalculator {
 
     public static BigDecimal interestEarned(Account account) {
         BigDecimal accountHolding = TransactionManager.sumTransactions(account);
-
+        BigDecimal interest = null;
         switch(account.getAccountType()){
             case SAVINGS:
-                if (accountHolding.intValue() <= 1000) {
-                    return accountHolding.multiply(AccountType.SAVINGS.getFlatRate());
+                if(accountHolding.intValue() <= 1000) {
+                    interest = accountHolding.multiply(AccountType.SAVINGS.getFlatRate());
+                    break;
                 }
                 else{
                     BigDecimal remainingBalance = getRemaining(accountHolding, "1000");
@@ -24,34 +30,41 @@ public class InterestCalculator {
                     BigDecimal remainingInterest = new BigDecimal(
                             String.valueOf(remainingBalance.multiply(AccountType.SAVINGS.getSecondRate()))
                     );
-                    return remainingInterest.add(AccountType.SAVINGS.getFlatRate().multiply(new BigDecimal("1000")));
+                    interest =  remainingInterest.add(AccountType.SAVINGS.getFlatRate().multiply(new BigDecimal("1000")));
+                    break;
+
                 }
             case MAXI_SAVINGS:
                 if (accountHolding.intValue()  <= 1000) {
-                    return accountHolding.multiply(AccountType.MAXI_SAVINGS.getFlatRate());
+                    interest = accountHolding.multiply(AccountType.MAXI_SAVINGS.getFlatRate());
+                    break;
+
                 }
                 else if(accountHolding.intValue() <= 2000){
                     BigDecimal remainingBalance = getRemaining(accountHolding, "1000");
                     BigDecimal remainingInterest = new BigDecimal(
                             String.valueOf(remainingBalance.multiply(AccountType.MAXI_SAVINGS.getSecondRate()))
                     );
-                    return remainingInterest.add(AccountType.MAXI_SAVINGS.getFlatRate().multiply(new BigDecimal("1000")));
+                    interest = remainingInterest.add(AccountType.MAXI_SAVINGS.getFlatRate().multiply(new BigDecimal("1000")));
+                    break;
+
                 }
                 else{
-                    BigDecimal remainingBalance1 = getRemaining(accountHolding, "1000");
+                    BigDecimal interest1 = AccountType.MAXI_SAVINGS.getFlatRate().multiply(new BigDecimal("1000"));
+                    BigDecimal interest2 = AccountType.MAXI_SAVINGS.getSecondRate().multiply(new BigDecimal("1000"));
+
                     BigDecimal remainingBalance2 = getRemaining(accountHolding, "2000");
-                    BigDecimal remainingInterest1 = new BigDecimal(
-                            String.valueOf(remainingBalance1.multiply(AccountType.MAXI_SAVINGS.getSecondRate()))
-                    );
+
                     BigDecimal remainingInterest2 = new BigDecimal(
                             String.valueOf(remainingBalance2.multiply(AccountType.MAXI_SAVINGS.getThirdRate()))
                     );
-                    return remainingInterest1.add(remainingInterest2).add(AccountType.MAXI_SAVINGS.getFlatRate().multiply(new BigDecimal("1000")));
-
+                    interest = interest1.add(interest2).add(remainingInterest2);
+                    break;
                 }
             default:
-                return accountHolding.multiply(AccountType.CURRENT.getFlatRate());
+                interest = accountHolding.multiply(AccountType.CURRENT.getFlatRate());
         }
+        return interest.setScale(2, RoundingMode.HALF_UP);
     }
 
     private static BigDecimal getRemaining(BigDecimal accountHolding, String i) {

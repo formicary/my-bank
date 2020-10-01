@@ -2,12 +2,10 @@ package com.abc;
 
 import com.abc.entity.Account;
 import com.abc.entity.Customer;
-import com.abc.entity.Transaction;
 import com.abc.entity.impl.AccountType;
 import com.abc.entity.impl.CustomerImpl;
 import com.abc.service.TransactionManager;
 import com.abc.util.InterestCalculator;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -76,31 +74,92 @@ public class InterestCalculatorTest {
         high = new BigDecimal("2000");
         veryHigh = new BigDecimal("3000");
 
-        transactionManager.deposit(midCurrent,mid);
-        transactionManager.deposit(highCurrent,high);
-        transactionManager.deposit(lowSaving,low);
-        transactionManager.deposit(midSaving,mid);
-        transactionManager.deposit(highSaving,high);
-        transactionManager.deposit(lowMaxSaving,low);
-        transactionManager.deposit(midMaxSaving,mid);
-        transactionManager.deposit(midHighMaxSaving,midHigh);
-        transactionManager.deposit(highMaxSaving,high);
-        transactionManager.deposit(veryHighMaxSaving,veryHigh);
-
     }
 
     @Test
-    public void currentAccountInterestLessThanThousand(){
+    public void currentAccountInterestLowAmount(){
         transactionManager.deposit(lowCurrent,low);
         assertEquals("Interest is not calculated correctly for current account of low balance.",
-                new BigDecimal("0.5"),
+                new BigDecimal("0.50"),
                 InterestCalculator.interestEarned(lowCurrent));
     }
-    /*
-    less than 1000
-    test 1000
-    test 2000
+    @Test
+    public void currentAccountInterestForMidAmount(){
+        transactionManager.deposit(midCurrent,mid);
+        assertEquals("Interest is not calculated correctly for current account of mid balance.",
+                new BigDecimal("1.00"),
+                InterestCalculator.interestEarned(midCurrent));
+    }
 
-     */
+    @Test
+    public void currentAccountInterestForHighAmount(){
+        transactionManager.deposit(highCurrent,high);
+        assertEquals("Interest is not calculated correctly for current account of high balance.",
+                new BigDecimal("2.00"),
+                InterestCalculator.interestEarned(highCurrent));
+    }
+
+    @Test
+    public void savingAccountInterestLowAmount(){
+        transactionManager.deposit(lowSaving,low);
+        assertEquals("Interest is not calculated correctly for saving account of low balance.",
+                new BigDecimal("0.50"),
+                InterestCalculator.interestEarned(lowSaving));
+    }
+    @Test
+    public void savingAccountInterestForMidAmount(){
+        transactionManager.deposit(midSaving,mid);
+        assertEquals("Interest is not calculated correctly for saving account of mid balance.",
+                new BigDecimal("1.00"),
+                InterestCalculator.interestEarned(midSaving));
+    }
+
+    @Test
+    public void savingAccountInterestForHighAmount(){
+        transactionManager.deposit(highSaving,high);
+        assertEquals("Interest is not calculated correctly for saving account of high balance.",
+                new BigDecimal("3.00"),
+                InterestCalculator.interestEarned(highSaving));
+    }
+
+
+    @Test
+    public void maxiSavingAccountInterestLowAmount(){
+        transactionManager.deposit(lowMaxSaving,low);
+        assertEquals("Interest is not calculated correctly for max saving account of low balance.",
+                new BigDecimal("10.00"),
+                InterestCalculator.interestEarned(lowMaxSaving));
+    }
+    @Test
+    public void maxiSavingAccountInterestForMidAmount(){
+        transactionManager.deposit(midMaxSaving,mid);
+        assertEquals("Interest is not calculated correctly for max saving account of mid balance.",
+                new BigDecimal("20.00"),
+                InterestCalculator.interestEarned(midMaxSaving));
+    }
+
+    @Test
+    public void maxiSavingAccountInterestForMidHighAmount(){
+        transactionManager.deposit(midHighMaxSaving,midHigh);
+        assertEquals("Interest is not calculated correctly for max saving account of mid-high balance.",
+                new BigDecimal("45.00"),
+                InterestCalculator.interestEarned(midHighMaxSaving));
+    }
+
+    @Test
+    public void maxiSavingAccountInterestForHighAmount(){
+        transactionManager.deposit(highMaxSaving,high);
+        assertEquals("Interest is not calculated correctly for max saving account of high balance.",
+                new BigDecimal("70.00"),
+                InterestCalculator.interestEarned(highMaxSaving));
+    }
+
+    @Test
+    public void maxiSavingAccountInterestForVeryHighAmount(){
+        transactionManager.deposit(veryHighMaxSaving,veryHigh);
+        assertEquals("Interest is not calculated correctly for max saving account of very high balance.",
+                new BigDecimal("170.00"),
+                InterestCalculator.interestEarned(veryHighMaxSaving));
+    }
 
 }

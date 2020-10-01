@@ -9,6 +9,10 @@ import java.util.List;
 
 import static java.lang.Math.abs;
 
+/**
+ * Implementation of {@code Customer}
+ * @author aneesh
+ */
 public class CustomerImpl implements Customer {
     private String name;
     private List<Account> accounts;
