@@ -1,8 +1,11 @@
 package com.abc;
 
+import com.abc.entity.Account;
+import com.abc.entity.Bank;
 import com.abc.entity.impl.AccountImpl;
 import com.abc.entity.Customer;
 import com.abc.entity.impl.AccountType;
+import com.abc.entity.impl.BankImpl;
 import com.abc.entity.impl.CustomerImpl;
 import com.abc.service.TransactionManager;
 import com.abc.util.InterestCalculator;
@@ -168,5 +171,33 @@ public class InterestCalculatorTest {
                 new BigDecimal("170.00"),
                 InterestCalculator.interestEarned(veryHighMaxSaving));
     }
+
+
+    @Test
+    public void zeroInterestPaidForZeroCustomers(){
+        Bank newBank = new BankImpl();
+        assertEquals("Bank with zero customers does not return zero interest paid",new BigDecimal("0.00"),InterestCalculator.totalInterestPaid(newBank));
+    }
+
+    @Test
+    public void interestPaidForOneCurrentCustomer(){
+        Bank newBank = new BankImpl();
+        Customer customer = new CustomerImpl("customer");
+        Account account1 = new AccountImpl(AccountType.CURRENT);
+        Account account2 = new AccountImpl(AccountType.SAVINGS);
+        Account account3 = new AccountImpl(AccountType.MAXI_SAVINGS);
+        customer.addAccount(account1);
+        customer.addAccount(account2);
+        customer.addAccount(account3);
+        TransactionManager tm = new TransactionManager(customer);
+        tm.deposit(account1, low);
+        tm.deposit(account2, mid);
+        tm.deposit(account3, high);
+        newBank.addCustomer(customer);
+        assertEquals("Bank with multiple accounts for one customer does not return expected interest paid",
+                new BigDecimal("71.50"),
+                InterestCalculator.totalInterestPaid(newBank));
+    }
+
 
 }

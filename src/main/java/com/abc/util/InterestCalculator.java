@@ -1,6 +1,6 @@
 package com.abc.util;
 
-import com.abc.entity.impl.AccountImpl;
+import com.abc.entity.Account;
 import com.abc.entity.Bank;
 import com.abc.entity.Customer;
 import com.abc.entity.impl.AccountType;
@@ -10,12 +10,12 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 /**
- *
+ * Interest calculator utility to calculate the interest earnt by each account.
  * @author aneesh
  */
 public class InterestCalculator {
 
-    public static BigDecimal interestEarned(AccountImpl account) {
+    public static BigDecimal interestEarned(Account account) {
         BigDecimal accountHolding = TransactionManager.sumTransactions(account);
         BigDecimal interest = null;
         switch(account.getAccountType()){
@@ -73,17 +73,17 @@ public class InterestCalculator {
 
     public static BigDecimal interestEarned(Customer customer) {
         BigDecimal total = new BigDecimal(0);
-        for (AccountImpl account : customer.getAccounts()) {
+        for (Account account : customer.getAccounts()) {
             total = total.add(InterestCalculator.interestEarned(account));
         }
         return total;
     }
 
     public static BigDecimal totalInterestPaid(Bank bank) {
-        BigDecimal total = new BigDecimal(0);
+        BigDecimal total = new BigDecimal("0");
         for(Customer customer : bank.getCustomers())
             total = total.add(InterestCalculator.interestEarned(customer));
-        return total;
+        return total.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
 }

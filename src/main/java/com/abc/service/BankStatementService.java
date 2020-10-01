@@ -4,6 +4,10 @@ import com.abc.entity.Bank;
 import com.abc.entity.Customer;
 import com.abc.exception.InputValidator;
 
+/**
+ * Bank statement service to generate reports on customers for the bank
+ * @author aneesh
+ */
 public class BankStatementService {
 
     public static String bankCustomerReport(Bank bank) {

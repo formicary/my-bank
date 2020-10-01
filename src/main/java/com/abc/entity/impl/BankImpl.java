@@ -2,11 +2,13 @@ package com.abc.entity.impl;
 
 import com.abc.entity.Bank;
 import com.abc.entity.Customer;
-import com.abc.entity.impl.CustomerImpl;
-
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementation of {@code Bank}
+ * @author aneesh
+ */
 public class BankImpl implements Bank {
     private List<Customer> customers;
 

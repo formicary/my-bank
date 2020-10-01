@@ -1,10 +1,13 @@
-package com.abc.entity;
+package com.abc.entity.impl;
 
 import com.abc.util.DateProvider;
-
 import java.math.BigDecimal;
 import java.util.Date;
 
+/**
+ * Transaction class defines a single transaction made onto an account
+ * @author aneesh
+ */
 public class Transaction {
     public final BigDecimal amount;
 

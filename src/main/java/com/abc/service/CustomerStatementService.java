@@ -1,13 +1,15 @@
 package com.abc.service;
 
-import com.abc.entity.impl.AccountImpl;
+import com.abc.entity.Account;
 import com.abc.entity.Customer;
-import com.abc.entity.Transaction;
-
+import com.abc.entity.impl.Transaction;
 import java.math.BigDecimal;
-
 import static java.lang.Math.abs;
 
+/**
+ * Customer statement service to generate statements of transactions for customers and accounts
+ * @author aneesh
+ */
 public class CustomerStatementService {
 
 
@@ -15,7 +17,7 @@ public class CustomerStatementService {
         StringBuilder statement = new StringBuilder();
         statement.append("Statement for " + customer.getName() + "\n");
         BigDecimal total = new BigDecimal(0.0);
-        for (AccountImpl a : customer.getAccounts()) {
+        for (Account a : customer.getAccounts()) {
             statement.append("\n" + accountStatement(a) + "\n");
             total = total.add(TransactionManager.sumTransactions(a));
         }
@@ -24,7 +26,7 @@ public class CustomerStatementService {
     }
 
 
-    private static String accountStatement(AccountImpl a) {
+    private static String accountStatement(Account a) {
         StringBuilder line = new StringBuilder();
         line.append(a.getAccountType().toString() + ": ");
 

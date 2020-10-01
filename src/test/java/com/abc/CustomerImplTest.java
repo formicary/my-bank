@@ -195,4 +195,8 @@ public class CustomerImplTest {
         transactionManager.withdraw(null, new BigDecimal("1.0"));
     }
 
+    @Test
+    public void nullCustomerTransferThrowsException(){
+        transactionManager.transfer(null, currentAccount, new BigDecimal("10.00"));
+    }
 }

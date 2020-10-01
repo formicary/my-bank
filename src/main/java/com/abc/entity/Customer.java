@@ -1,13 +1,15 @@
 package com.abc.entity;
 
-import com.abc.entity.impl.AccountImpl;
-
 import java.util.List;
 
+/**
+ * Customer interface for storing accounts and name of the customer
+ * @author aneesh
+ */
 public interface Customer {
 
-    Customer addAccount(AccountImpl account);
+    Customer addAccount(Account account);
     String getName();
-    List<AccountImpl> getAccounts();
+    List<Account> getAccounts();
 
 }

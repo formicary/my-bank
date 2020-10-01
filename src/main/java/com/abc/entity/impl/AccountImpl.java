@@ -1,11 +1,14 @@
 package com.abc.entity.impl;
 
 import com.abc.entity.Account;
-import com.abc.entity.Transaction;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementation of {@code Account}
+ * @author aneesh
+ */
 public class AccountImpl implements Account {
 
     private final AccountType accountType;
