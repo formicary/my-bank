@@ -6,7 +6,7 @@ import com.abc.exception.InputValidator;
 
 public class BankStatementService {
 
-    public static String bankCustomerSummary(Bank bank) {
+    public static String bankCustomerReport(Bank bank) {
         InputValidator.validateBank(bank);
         StringBuilder summary = new StringBuilder("Customer Summary");
         for (Customer customer : bank.getCustomers())
