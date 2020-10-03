@@ -2,7 +2,7 @@ package com.abc.service;
 
 import com.abc.entity.Account;
 import com.abc.entity.Customer;
-import com.abc.entity.impl.Transaction;
+import com.abc.entity.Transaction;
 import java.math.BigDecimal;
 import static java.lang.Math.abs;
 
@@ -17,9 +17,9 @@ public class CustomerStatementService {
         StringBuilder statement = new StringBuilder();
         statement.append("Statement for " + customer.getName() + "\n");
         BigDecimal total = new BigDecimal(0.0);
-        for (Account a : customer.getAccounts()) {
+        for (Account a : customer.getAccounts().values()) {
             statement.append("\n" + accountStatement(a) + "\n");
-            total = total.add(TransactionManager.sumTransactions(a));
+            total = total.add(a.calculateBalance());
         }
         statement.append("\nTotal In all Accounts " + toDollars(total));
         return statement.toString();
@@ -32,8 +32,8 @@ public class CustomerStatementService {
 
         BigDecimal total = new BigDecimal(0);
         for (Transaction t : a.getTransactions()) {
-            line.append("\n  " + (t.amount.intValue() < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount));
-            total = total.add(t.amount);
+            line.append("\n  " + (t.getAmount().intValue() < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.getAmount()));
+            total = total.add(t.getAmount());
         }
         line.append("\nTotal " + toDollars(total));
         return line.toString();

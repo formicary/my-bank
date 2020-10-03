@@ -1,9 +1,10 @@
-package com.abc;
+package com.abc.service;
 
+import com.abc.entity.Account;
 import com.abc.entity.Bank;
 import com.abc.entity.Customer;
 import com.abc.entity.impl.AccountImpl;
-import com.abc.entity.impl.AccountType;
+import com.abc.entity.AccountType;
 import com.abc.entity.impl.BankImpl;
 import com.abc.entity.impl.CustomerImpl;
 import com.abc.exception.InvalidBankException;
@@ -45,7 +46,7 @@ public class BankStatementTest {
     @Test
     public void oneCustomerOneAccountReport(){
         Customer customer1 = new CustomerImpl("customer");
-        customer1.addAccount(new AccountImpl(AccountType.CURRENT));
+        Account account = new AccountImpl(customer1, AccountType.CURRENT, "123");
         bank.addCustomer(customer1);
         assertEquals("Bank report with one customer is not printer as expected",
                 "Customer Summary\n" +
@@ -55,8 +56,9 @@ public class BankStatementTest {
     @Test
     public void oneCustomerTwoAccountsReport(){
         Customer customer1 = new CustomerImpl("customer");
-        customer1.addAccount(new AccountImpl(AccountType.CURRENT));
-        customer1.addAccount(new AccountImpl(AccountType.SAVINGS));
+        Account account = new AccountImpl(customer1, AccountType.CURRENT, "123");
+        Account account1 = new AccountImpl(customer1, AccountType.SAVINGS, "124");
+
         bank.addCustomer(customer1);
         assertEquals("Bank report with one customer is not printer as expected",
                 "Customer Summary\n" +
@@ -67,9 +69,9 @@ public class BankStatementTest {
     @Test
     public void oneCustomerThreeAccountsReport(){
         Customer customer1 = new CustomerImpl("customer");
-        customer1.addAccount(new AccountImpl(AccountType.CURRENT));
-        customer1.addAccount(new AccountImpl(AccountType.SAVINGS));
-        customer1.addAccount(new AccountImpl(AccountType.MAXI_SAVINGS));
+        Account account = new AccountImpl(customer1, AccountType.CURRENT, "123");
+        Account account1 = new AccountImpl(customer1, AccountType.SAVINGS, "124");
+        Account account2 = new AccountImpl(customer1, AccountType.MAXI_SAVINGS, "125");
         bank.addCustomer(customer1);
         assertEquals("Bank report with one customer is not printer as expected",
                 "Customer Summary\n" +
@@ -80,14 +82,14 @@ public class BankStatementTest {
     @Test
     public void multipleCustomersWithMultipleAccountsReport(){
         Customer customer1 = new CustomerImpl("customer");
-        customer1.addAccount(new AccountImpl(AccountType.CURRENT));
-        customer1.addAccount(new AccountImpl(AccountType.SAVINGS));
-        customer1.addAccount(new AccountImpl(AccountType.MAXI_SAVINGS));
+        Account account = new AccountImpl(customer1, AccountType.CURRENT, "123");
+        Account account1 = new AccountImpl(customer1, AccountType.SAVINGS, "124");
+        Account account2 = new AccountImpl(customer1, AccountType.MAXI_SAVINGS, "125");
         Customer customer2 = new CustomerImpl("customer2");
-        customer2.addAccount(new AccountImpl(AccountType.CURRENT));
-        customer2.addAccount(new AccountImpl(AccountType.SAVINGS));
+        Account account3 = new AccountImpl(customer2, AccountType.CURRENT, "126");
+        Account account4 = new AccountImpl(customer2, AccountType.SAVINGS, "127");
         Customer customer3 = new CustomerImpl("customer3");
-        customer3.addAccount(new AccountImpl(AccountType.CURRENT));
+        Account account5 = new AccountImpl(customer3, AccountType.CURRENT, "128");
 
         bank.addCustomer(customer1);
         bank.addCustomer(customer2);

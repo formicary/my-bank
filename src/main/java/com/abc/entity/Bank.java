@@ -8,6 +8,15 @@ import java.util.List;
  */
 public interface Bank {
 
+    /**
+     * Add customer to the bank
+     * @param customer
+     */
     void addCustomer(Customer customer);
+
+    /**
+     * obtain list of customers to the bank
+     * @return list of all customers
+     */
     List<Customer> getCustomers();
 }

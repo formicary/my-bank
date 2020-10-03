@@ -3,7 +3,8 @@ package com.abc.exception;
 import com.abc.entity.Account;
 import com.abc.entity.Bank;
 import com.abc.entity.Customer;
-import com.abc.service.TransactionManager;
+import com.abc.entity.AccountType;
+
 import java.math.BigDecimal;
 
 /**
@@ -12,28 +13,23 @@ import java.math.BigDecimal;
  */
 public class InputValidator {
 
-    public static void verifyAccountOpen( Account account) {
+    public static void verifyAccount(Account account) {
 
         if(account == null){
             throw new InvalidAccountException("Account cannot be null");
         }
     }
 
-    public static void validateDeposit(Customer customer, Account account, BigDecimal amount) {
-        if(!customer.getAccounts().contains(account)){
-            throw new InvalidAccountException("Account must exist within customers accounts");
-        }
-        if(account == null){
-            throw new InvalidAccountException("Account cannot be null");
-        }
+    public static void validateDeposit(Account account, BigDecimal amount) {
+        verifyAccount(account);
         if(amount == null || amount.doubleValue() <= 0){
             throw new InvalidAmountException("Amount must be greater than 0");
         }
     }
 
-    public static void validateWithdrawal(Customer customer, Account account, BigDecimal amount) {
-        validateDeposit(customer, account, amount);
-        if(TransactionManager.sumTransactions(account).doubleValue() <= 0){
+    public static void validateWithdrawal(Account account, BigDecimal amount) {
+        validateDeposit(account, amount);
+        if(account.calculateBalance().doubleValue() <= 0){
             throw new InvalidAccountException("Cannot withdraw from an account without positive balance");
         }
     }
@@ -44,18 +40,52 @@ public class InputValidator {
         }
     }
 
-    public static void validateTransfer(Customer customer, Account from, Account to, BigDecimal amount) {
-        if(customer == null){
-            throw new InvalidCustomerException("Customer cannot be null");
+    public static void validateTransfer(Account from, Account to, BigDecimal amount) {
+
+        verifyAccount(from);
+        verifyAccount(to);
+        if(from.equals(to)){
+            throw new InvalidAccountException("Transfer cannot be made between same account");
         }
-        if(from == null || to == null){
-            throw new InvalidAccountException("Accounts must not be null");
-        }
-        if(amount.doubleValue() <= 0 ){
+
+        if(amount == null || amount.doubleValue() <= 0 ){
             throw new InvalidAmountException("Transfer amount must be a positive amount");
         }
-        if(!(customer.getAccounts().contains(from) && customer.getAccounts().contains(to))){
-            throw new InvalidAccountException("Transfer must be made between the two accounts of the customer");
+        if(from.calculateBalance().doubleValue() <  amount.doubleValue()){
+            throw new InvalidAmountException("Insufficient funds to transfer " + amount + " from " + from);
+        }
+
+//
+//        if(!(customer.getAccounts().contains(from) && customer.getAccounts().contains(to))){
+//            throw new InvalidAccountException("Transfer must be made between the two accounts of the customer");
+//        }
+    }
+
+    public static void validateAccountType(AccountType accountType) {
+        if(accountType == null){
+            throw new InvalidAccountException("AccountType cannot be null for account");
+        }
+    }
+
+    public static void validateNewAccount(Customer customer, AccountType accountType, String accountNumber) {
+        if(customer == null){
+            throw new InvalidCustomerException("Customer must not be null");
+        }
+        validateAccountType(accountType);
+        if(customer.getAccounts().keySet().contains(accountNumber)){
+            throw new InvalidAccountException("Customer " + customer + " already contains the account number specified.");
+        }
+    }
+
+    public static void validateAddingCustomerAccount(Customer customer, Account account) {
+        if(account == null){
+            throw new InvalidAccountException("Account must not be null");
+        }
+        if(customer == null){
+            throw new InvalidCustomerException("Customer must not be null");
+        }
+        if(account.getCustomer() != customer){
+            throw new InvalidCustomerException("Cannot add account to customer as it belongs to: " + customer);
         }
     }
 }
