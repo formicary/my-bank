@@ -10,6 +10,11 @@ import com.abc.exception.InputValidator;
  */
 public class BankStatementService {
 
+    /**
+     * return a bank report of each customer within the bank and the number of accounts they hold
+     * @param bank bank to generate a report of
+     * @return a report of the customers and number of accounts they have with the bank
+     */
     public static String bankCustomerReport(Bank bank) {
         InputValidator.validateBank(bank);
         StringBuilder summary = new StringBuilder("Customer Summary");
@@ -18,6 +23,12 @@ public class BankStatementService {
         return summary.toString();
     }
 
+    /**
+     * convert a number into the plural representation of it
+     * @param number number to be assessed
+     * @param word word to be returned for the number
+     * @return
+     */
     private static String format(int number, String word) {
 
         return number + " " + (number == 1 ? word : word + "s");

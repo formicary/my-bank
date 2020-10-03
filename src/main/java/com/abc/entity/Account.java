@@ -33,8 +33,16 @@ public interface Account {
      */
     BigDecimal calculateBalance();
 
+    /**
+     * obtain the account number for the account
+     * @return the account number of the account
+     */
     String getAccountNumber();
 
+    /**
+     * obtain the customer for the account
+     * @return the customer of the account
+     */
     Customer getCustomer();
 
 

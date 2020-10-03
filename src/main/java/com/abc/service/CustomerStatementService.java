@@ -13,9 +13,15 @@ import static java.lang.Math.abs;
 public class CustomerStatementService {
 
 
+    /**
+     * Generate a report of the customers transactions and holdings for each account
+     * @param customer customer to generate a report for
+     * @return a report of the customer transactions for each account and final holdings
+     */
     public static String generateStatement(Customer customer) {
-        StringBuilder statement = new StringBuilder();
-        statement.append("Statement for " + customer.getName() + "\n");
+        StringBuilder statement = new StringBuilder()
+            .append("Statement for " + customer.getName() + "\n");
+
         BigDecimal total = new BigDecimal(0.0);
         for (Account a : customer.getAccounts().values()) {
             statement.append("\n" + accountStatement(a) + "\n");
@@ -25,10 +31,9 @@ public class CustomerStatementService {
         return statement.toString();
     }
 
-
     private static String accountStatement(Account a) {
-        StringBuilder line = new StringBuilder();
-        line.append(a.getAccountType().toString() + ": ");
+        StringBuilder line = new StringBuilder()
+                .append(a.getAccountType().toString() + ": ");
 
         BigDecimal total = new BigDecimal(0);
         for (Transaction t : a.getTransactions()) {
@@ -39,10 +44,8 @@ public class CustomerStatementService {
         return line.toString();
     }
 
-
-    private static String toDollars(BigDecimal d){
-        return String.format("$%,.2f", abs(d.doubleValue()));
+    private static String toDollars(BigDecimal amount){
+        return String.format("$%,.2f", abs(amount.doubleValue()));
     }
-
 
 }

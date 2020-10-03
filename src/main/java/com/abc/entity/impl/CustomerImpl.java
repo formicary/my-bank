@@ -29,15 +29,14 @@ public class CustomerImpl implements Customer {
         InputValidator.validateAddingCustomerAccount(this, account);
         accounts.putIfAbsent(account.getAccountNumber() ,account);
     }
-    public HashMap<String, Account> getAccounts() {
 
+    public HashMap<String, Account> getAccounts() {
         return accounts;
     }
 
     public void deposit(BigDecimal amount, Account account) {
         InputValidator.validateDeposit(account,  amount);
         account.addTransaction(new TransactionImpl(amount));
-
     }
 
     public void withdraw(BigDecimal amount, Account account) {

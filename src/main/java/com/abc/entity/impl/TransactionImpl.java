@@ -4,8 +4,6 @@ import com.abc.entity.Transaction;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Transaction class defines a single transaction made onto an account.
