@@ -55,6 +55,7 @@ A dummy application for a bank; should provide various functions of a retail ban
 * When an account is created, it is assigned a Customer as final variable.
 * Accounts have account numbers, this allows a customer to have multiple accounts of the same type.
 * Accounts are stored within a hashmap to support constant time access to accounts.  
+* Daily interest returns are scaled to 4 decimal places on a daily basis, and returned as scaled to 2 decimal places. 
 * InputValidator class is used to verify the arguments passed into each method
 * Custom exceptions are defined to improve readability of exception handling
 * JavaDoc is supported

@@ -13,6 +13,11 @@ import java.time.LocalDateTime;
  */
 public class AnnualInterestCalculator {
 
+    /**
+     * calculate the interest an account will earn in one year given it's current balance
+     * @param account account to assess the interest earned upon
+     * @return the interest that would be earned by the account in one year
+     */
     public static BigDecimal interestEarned(Account account) {
         BigDecimal accountHolding = account.calculateBalance();
         BigDecimal interest;
@@ -32,6 +37,18 @@ public class AnnualInterestCalculator {
         return interest.setScale(2, RoundingMode.HALF_UP);
     }
 
+    /**
+     * Calculate the annual interest a bank will pay as an accumulation of all it's customers
+     * @param bank the bank to calculate total interest paid for
+     * @return the total interest a bank will have to pay in 1 year for all the customers it has.
+     */
+    public static BigDecimal totalInterestPaid(Bank bank) {
+        BigDecimal total = new BigDecimal("0");
+        for(Customer customer : bank.getCustomers())
+            total = total.add(AnnualInterestCalculator.interestEarned(customer));
+        return total.setScale(2, BigDecimal.ROUND_HALF_UP);
+    }
+
     static BigDecimal calculateMaxiSavingInterestAdditionalFeature(BigDecimal accountHolding, Account account) {
 
         if(accountNotMadeWithdrawalsInDays(10, account)){
@@ -46,6 +63,7 @@ public class AnnualInterestCalculator {
 
         for(Transaction transaction : account.getTransactions()){
 
+
             if(transaction.getAmount().doubleValue() < 0 &&
                 transaction.getTransactionDate().isAfter(   LocalDateTime.now().minusDays(daysSince))){
                 return false;
@@ -55,6 +73,7 @@ public class AnnualInterestCalculator {
 
         return true;
     }
+
 
     static BigDecimal calculateMaxiSavingsInterest(BigDecimal accountHolding) {
         if (accountHolding.intValue()  <= 1000) {
@@ -107,11 +126,5 @@ public class AnnualInterestCalculator {
         return total;
     }
 
-    public static BigDecimal totalInterestPaid(Bank bank) {
-        BigDecimal total = new BigDecimal("0");
-        for(Customer customer : bank.getCustomers())
-            total = total.add(AnnualInterestCalculator.interestEarned(customer));
-        return total.setScale(2, BigDecimal.ROUND_HALF_UP);
-    }
 
 }

@@ -16,6 +16,11 @@ import java.time.temporal.ChronoUnit;
  */
 public class DailyInterestCalculator {
 
+    /**
+     * Calculate the interest that has accrued for an account since it's first deposit to the present day
+     * @param account the account to calculate accrued interest of
+     * @return the accrued interest of the account from when it was opened to the present day.
+     */
     public static BigDecimal interestEarned(Account account) {
 
         BigDecimal totalInterestEarned = new BigDecimal("0.00");
@@ -24,29 +29,28 @@ public class DailyInterestCalculator {
         for(int i = 0; i< account.getTransactions().size(); i++){
 
             accountBalance = accountBalance.add(account.getTransactions().get(i).getAmount());
-            BigDecimal interestPerDay = calculateInterestOfBalance(account, accountBalance);
+            BigDecimal interestPerDay = calculateDailyInterestOfBalance(account, accountBalance);
             if(i == account.getTransactions().size() -1){
-                totalInterestEarned = interestPerDay.multiply(new BigDecimal(ChronoUnit.DAYS.between(LocalDateTime.now(), account.getTransactions().get(i).getTransactionDate())));
+                totalInterestEarned = totalInterestEarned.add(interestPerDay.multiply(new BigDecimal(ChronoUnit.DAYS.between(account.getTransactions().get(i).getTransactionDate(),LocalDateTime.now()))));
             }else{
-                totalInterestEarned = interestPerDay.multiply(new BigDecimal(ChronoUnit.DAYS.between(account.getTransactions().get(i).getTransactionDate(), account.getTransactions().get(i+1).getTransactionDate())));
+                totalInterestEarned = totalInterestEarned.add(interestPerDay.multiply(new BigDecimal(ChronoUnit.DAYS.between(account.getTransactions().get(i).getTransactionDate(), account.getTransactions().get(i+1).getTransactionDate()))));
             }
-
         }
 
-        return totalInterestEarned.setScale(2, RoundingMode.HALF_UP);
+        return totalInterestEarned.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
-    private static BigDecimal calculateInterestOfBalance(Account account, BigDecimal accountBalance) {
+    private static BigDecimal calculateDailyInterestOfBalance(Account account, BigDecimal accountBalance) {
         BigDecimal year = new BigDecimal("365.00");
         switch(account.getAccountType()){
             case SAVINGS:
-                return AnnualInterestCalculator.calculateSavingsInterest(accountBalance).divide(year);
+                return AnnualInterestCalculator.calculateSavingsInterest(accountBalance).divide(year, 4, RoundingMode.HALF_UP);
             case MAXI_SAVINGS:
-                return AnnualInterestCalculator.calculateMaxiSavingsInterest(accountBalance).divide(year);
+                return AnnualInterestCalculator.calculateMaxiSavingsInterest(accountBalance).divide(year, 4, RoundingMode.HALF_UP);
             case MAXI_SAVINGS_ADD:
-                return AnnualInterestCalculator.calculateMaxiSavingInterestAdditionalFeature(accountBalance, account).divide(year);
+                return AnnualInterestCalculator.calculateMaxiSavingInterestAdditionalFeature(accountBalance, account).divide(year, 4, RoundingMode.HALF_UP);
             default:
-                return AccountType.CURRENT.getFlatRate().divide(year);
+                return AccountType.CURRENT.getFlatRate().multiply(accountBalance).divide(year,4, RoundingMode.HALF_UP);
         }
     }
 

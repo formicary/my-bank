@@ -12,4 +12,8 @@ public class AccountTest {
     public void cannotCreateNullAccountType(){
         Account account = new AccountImpl(new CustomerImpl("customer"), null, "123");
     }
+
+    //account cannot have same number as any other card for the same bank
+
+
 }
