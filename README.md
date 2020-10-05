@@ -41,21 +41,3 @@ A dummy application for a bank; should provide various functions of a retail ban
 * Change **Maxi-Savings accounts** to have an interest rate of 5% assuming no withdrawals in the past 10 days otherwise 0.1%
 * Interest rates should accrue and compound daily (incl. weekends), rates above are per-annum
 
-### Aneesh's design brief
-
-* Application + all additional features work as expected. Validated by unit testing
-* I have added a further Account type 'MAXI_SAVINGS_ADD' to demonstrate the basic features and the additional features
-* Strategy pattern has been used where appropriate to loosely-couple dependencies
-* ENUM class used to define the AccountTypes. This made it easier to implement the additional feature of the Account Type for interest rates
-* Report is created with StringBuilder class
-* BigDecimal has been used for accuracy of values (Base to 10). The performance hit is appropriate for the use of the application as a bank. 2 decimal places are always used.
-* Transaction class uses immutable class design so it cannot be changed once made. 
-* Mockito is used to mock transaction instances to test the annual interest calculator (additional feature 2)
-* Mockito plugin: test/resource/mockito-extensions/org.mockito.plugins.MockMaker is used to support mocking final classes (Transaction)
-* When an account is created, it is assigned a Customer as final variable.
-* Accounts have account numbers, this allows a customer to have multiple accounts of the same type.
-* Accounts are stored within a hashmap to support constant time access to accounts.  
-* Daily interest returns are scaled to 4 decimal places on a daily basis, and returned as scaled to 2 decimal places. 
-* InputValidator class is used to verify the arguments passed into each method
-* Custom exceptions are defined to improve readability of exception handling
-* JavaDoc is supported
