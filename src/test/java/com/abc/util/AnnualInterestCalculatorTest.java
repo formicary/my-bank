@@ -2,7 +2,6 @@ package com.abc.util;
 
 import com.abc.entity.*;
 import com.abc.entity.impl.*;
-import com.abc.util.AnnualInterestCalculator;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -35,6 +34,7 @@ public class AnnualInterestCalculatorTest {
     private static BigDecimal high;
     private static BigDecimal veryHigh;
     private static Customer customer;
+
     @BeforeClass
     public static void setup(){
         customer = new CustomerImpl("customer");
@@ -65,21 +65,21 @@ public class AnnualInterestCalculatorTest {
     public void zeroBalanceLeavesZeroInterest(){
         assertEquals("Interest is not zero for empty account.",
                 new BigDecimal("0.00"),
-                AnnualInterestCalculator.interestEarned(lowCurrent));
+                AnnualInterestCalculator.interestEarnedByAccount(lowCurrent));
     }
     @Test
     public void currentAccountInterestLowAmount(){
         customer.deposit( low, lowCurrent);
         assertEquals("Interest is not calculated correctly for current account of low balance.",
                 new BigDecimal("0.50"),
-                AnnualInterestCalculator.interestEarned(lowCurrent));
+                AnnualInterestCalculator.interestEarnedByAccount(lowCurrent));
     }
     @Test
     public void currentAccountInterestForMidAmount(){
         customer.deposit(mid, midCurrent);
         assertEquals("Interest is not calculated correctly for current account of mid balance.",
                 new BigDecimal("1.00"),
-                AnnualInterestCalculator.interestEarned(midCurrent));
+                AnnualInterestCalculator.interestEarnedByAccount(midCurrent));
     }
 
     @Test
@@ -87,7 +87,7 @@ public class AnnualInterestCalculatorTest {
         customer.deposit(high, highCurrent);
         assertEquals("Interest is not calculated correctly for current account of high balance.",
                 new BigDecimal("2.00"),
-                AnnualInterestCalculator.interestEarned(highCurrent));
+                AnnualInterestCalculator.interestEarnedByAccount(highCurrent));
     }
 
     @Test
@@ -95,14 +95,14 @@ public class AnnualInterestCalculatorTest {
         customer.deposit(low, lowSaving);
         assertEquals("Interest is not calculated correctly for saving account of low balance.",
                 new BigDecimal("0.50"),
-                AnnualInterestCalculator.interestEarned(lowSaving));
+                AnnualInterestCalculator.interestEarnedByAccount(lowSaving));
     }
     @Test
     public void savingAccountInterestForMidAmount(){
         customer.deposit(mid, midSaving);
         assertEquals("Interest is not calculated correctly for saving account of mid balance.",
                 new BigDecimal("1.00"),
-                AnnualInterestCalculator.interestEarned(midSaving));
+                AnnualInterestCalculator.interestEarnedByAccount(midSaving));
     }
 
     @Test
@@ -110,7 +110,7 @@ public class AnnualInterestCalculatorTest {
         customer.deposit(high, highSaving);
         assertEquals("Interest is not calculated correctly for saving account of high balance.",
                 new BigDecimal("3.00"),
-                AnnualInterestCalculator.interestEarned(highSaving));
+                AnnualInterestCalculator.interestEarnedByAccount(highSaving));
     }
 
 
@@ -119,14 +119,14 @@ public class AnnualInterestCalculatorTest {
         customer.deposit(low, lowMaxSaving);
         assertEquals("Interest is not calculated correctly for max saving account of low balance.",
                 new BigDecimal("10.00"),
-                AnnualInterestCalculator.interestEarned(lowMaxSaving));
+                AnnualInterestCalculator.interestEarnedByAccount(lowMaxSaving));
     }
     @Test
     public void maxiSavingAccountInterestForMidAmount(){
         customer.deposit(mid, midMaxSaving);
         assertEquals("Interest is not calculated correctly for max saving account of mid balance.",
                 new BigDecimal("20.00"),
-                AnnualInterestCalculator.interestEarned(midMaxSaving));
+                AnnualInterestCalculator.interestEarnedByAccount(midMaxSaving));
     }
 
     @Test
@@ -134,7 +134,7 @@ public class AnnualInterestCalculatorTest {
         customer.deposit(midHigh, midHighMaxSaving);
         assertEquals("Interest is not calculated correctly for max saving account of mid-high balance.",
                 new BigDecimal("45.00"),
-                AnnualInterestCalculator.interestEarned(midHighMaxSaving));
+                AnnualInterestCalculator.interestEarnedByAccount(midHighMaxSaving));
     }
 
     @Test
@@ -142,7 +142,7 @@ public class AnnualInterestCalculatorTest {
         customer.deposit(high, highMaxSaving);
         assertEquals("Interest is not calculated correctly for max saving account of high balance.",
                 new BigDecimal("70.00"),
-                AnnualInterestCalculator.interestEarned(highMaxSaving));
+                AnnualInterestCalculator.interestEarnedByAccount(highMaxSaving));
     }
 
     @Test
@@ -150,14 +150,14 @@ public class AnnualInterestCalculatorTest {
         customer.deposit(veryHigh, veryHighMaxSaving);
         assertEquals("Interest is not calculated correctly for max saving account of very high balance.",
                 new BigDecimal("170.00"),
-                AnnualInterestCalculator.interestEarned(veryHighMaxSaving));
+                AnnualInterestCalculator.interestEarnedByAccount(veryHighMaxSaving));
     }
 
 
     @Test
     public void zeroInterestPaidForZeroCustomers(){
         Bank newBank = new BankImpl();
-        assertEquals("Bank with zero customers does not return zero interest paid",new BigDecimal("0.00"), AnnualInterestCalculator.totalInterestPaid(newBank));
+        assertEquals("Bank with zero customers does not return zero interest paid",new BigDecimal("0.00"), AnnualInterestCalculator.totalInterestPaidByBank(newBank));
     }
 
     @Test
@@ -174,7 +174,7 @@ public class AnnualInterestCalculatorTest {
         newBank.addCustomer(customer);
         assertEquals("Bank with multiple accounts for one customer does not return expected interest paid",
                 new BigDecimal("71.50"),
-                AnnualInterestCalculator.totalInterestPaid(newBank));
+                AnnualInterestCalculator.totalInterestPaidByBank(newBank));
     }
 
     @Test
@@ -186,7 +186,7 @@ public class AnnualInterestCalculatorTest {
         customer.deposit( low, additionalAccount);
         assertEquals("Additional feature maxi savings does not record higher interest on zero withdrawals",
                 new BigDecimal("25.00"),
-                AnnualInterestCalculator.interestEarned(additionalAccount));
+                AnnualInterestCalculator.interestEarnedByAccount(additionalAccount));
 
     }
 
@@ -201,7 +201,7 @@ public class AnnualInterestCalculatorTest {
         customer.withdraw( new BigDecimal("50"),additionalAccount);
         assertEquals("Additional feature maxi savings does not record lower interest on more than 0 withdrawals",
                 new BigDecimal("0.45"),
-                AnnualInterestCalculator.interestEarned(additionalAccount));
+                AnnualInterestCalculator.interestEarnedByAccount(additionalAccount));
     }
 
     @Test
@@ -217,10 +217,7 @@ public class AnnualInterestCalculatorTest {
         additionalAccount.addTransaction(mockTx);
         assertEquals("Additional feature maxi savings does not record lower interest on more than 0 withdrawals",
                 new BigDecimal("24.50"),
-                AnnualInterestCalculator.interestEarned(additionalAccount));
+                AnnualInterestCalculator.interestEarnedByAccount(additionalAccount));
     }
-
-
-
 
 }

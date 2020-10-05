@@ -3,6 +3,8 @@ package com.abc.service;
 import com.abc.entity.Account;
 import com.abc.entity.Customer;
 import com.abc.entity.Transaction;
+import com.abc.exception.InputValidator;
+
 import java.math.BigDecimal;
 import static java.lang.Math.abs;
 
@@ -19,10 +21,11 @@ public class CustomerStatementService {
      * @return a report of the customer transactions for each account and final holdings
      */
     public static String generateStatement(Customer customer) {
+        InputValidator.validateCustomerNotNull(customer);
         StringBuilder statement = new StringBuilder()
             .append("Statement for " + customer.getName() + "\n");
 
-        BigDecimal total = new BigDecimal(0.0);
+        BigDecimal total = new BigDecimal("0.00");
         for (Account a : customer.getAccounts().values()) {
             statement.append("\n" + accountStatement(a) + "\n");
             total = total.add(a.calculateBalance());

@@ -19,18 +19,11 @@ public class BankStatementService {
         InputValidator.validateBank(bank);
         StringBuilder summary = new StringBuilder("Customer Summary");
         for (Customer customer : bank.getCustomers())
-            summary .append("\n - " + customer.getName() + " (" + format(customer.getAccounts().size(), "account") + ")");
+            summary.append("\n - " + customer.getName() + " (" + format(customer.getAccounts().size(), "account") + ")");
         return summary.toString();
     }
 
-    /**
-     * convert a number into the plural representation of it
-     * @param number number to be assessed
-     * @param word word to be returned for the number
-     * @return
-     */
     private static String format(int number, String word) {
-
         return number + " " + (number == 1 ? word : word + "s");
     }
 }

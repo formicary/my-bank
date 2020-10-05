@@ -1,10 +1,8 @@
 package com.abc.util;
 
-import com.abc.entity.Account;
-import com.abc.entity.AccountType;
-import com.abc.entity.Customer;
-import com.abc.entity.Transaction;
+import com.abc.entity.*;
 import com.abc.entity.impl.AccountImpl;
+import com.abc.entity.impl.BankImpl;
 import com.abc.entity.impl.CustomerImpl;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,6 +25,7 @@ public class DailyInterestCalculatorTest {
     private LocalDateTime daysAgo(int days){
         return LocalDateTime.now().minusDays(days);
     }
+
     @Before
     public  void setup(){
         customer = new CustomerImpl("customer");
@@ -37,11 +36,38 @@ public class DailyInterestCalculatorTest {
     }
 
     @Test
-    public void dailyInterestIsZeroForZeroTransactions(){
+    public void dailyInterestIsZeroForZeroTransactionsCurrentAccount(){
 
-        assertEquals("Daily interest calculator does not return zero for zero transactions",
+        assertEquals("Daily interest calculator does not return zero for zero transactions in current account",
                 new BigDecimal("0.00"),
-                DailyInterestCalculator.interestEarned(customer) );
+                DailyInterestCalculator.interestEarned(currentAccount) );
+
+    }
+
+    @Test
+    public void dailyInterestIsZeroForZeroTransactionsSavingsAccount(){
+
+        assertEquals("Daily interest calculator does not return zero for zero transactions in savings account",
+                new BigDecimal("0.00"),
+                DailyInterestCalculator.interestEarned(savingsAccount) );
+
+    }
+
+    @Test
+    public void dailyInterestIsZeroForZeroTransactionsMaxiSavingsAccount(){
+
+        assertEquals("Daily interest calculator does not return zero for zero transactions in maxi savings account",
+                new BigDecimal("0.00"),
+                DailyInterestCalculator.interestEarned(maxiSavingsAccount) );
+
+    }
+
+    @Test
+    public void dailyInterestIsZeroForZeroTransactionsMaxiSavingsAdditionalAccount(){
+
+        assertEquals("Daily interest calculator does not return zero for zero transactions in maxi savings additional account",
+                new BigDecimal("0.00"),
+                DailyInterestCalculator.interestEarned(maxiAdditionalSavingsAccount) );
 
     }
 
@@ -310,78 +336,23 @@ public class DailyInterestCalculatorTest {
                 DailyInterestCalculator.interestEarned(maxiSavingsAccount));
     }
 
-//
-//    @Test
-//    public void maxiSavingsAdditionalAccountHundredDaysAgoLargeDepositAndWithWithdrawal(){
-//        Transaction t1 = mock(Transaction.class);
-//        when(t1.getAmount()).thenReturn(new BigDecimal("1000000.00"));
-//        when(t1.getTransactionDate()).thenReturn(daysAgo(100));
-//        Transaction t2 = mock(Transaction.class);
-//        when(t2.getAmount()).thenReturn(new BigDecimal("-500000.00"));
-//        when(t2.getTransactionDate()).thenReturn(daysAgo(50));
-//        maxiAdditionalSavingsAccount.addTransaction(t1);
-//        maxiAdditionalSavingsAccount.addTransaction(t2);
-//
-//        assertEquals("Daily interest of current account is not accumulated for 4 days correctly",
-//                new BigDecimal("13698.63"),
-//                DailyInterestCalculator.interestEarned(maxiAdditionalSavingsAccount));
-//    }
-//
-//
-//    @Test
-//    public void maxiSavingsAdditionalAccountFourDaysAgoSmallDepositWithRecentWithdrawal(){
-//        Transaction t1 = mock(Transaction.class);
-//        when(t1.getAmount()).thenReturn(new BigDecimal("501.00"));
-//        when(t1.getTransactionDate()).thenReturn(daysAgo(4));
-//        Transaction t2 = mock(Transaction.class);
-//        when(t2.getAmount()).thenReturn(new BigDecimal("-1.00"));
-//        when(t2.getTransactionDate()).thenReturn(daysAgo(4));
-//        maxiAdditionalSavingsAccount.addTransaction(t1);
-//        maxiAdditionalSavingsAccount.addTransaction(t2);
-//
-//        assertEquals("Daily interest of current account is not accumulated for 4 days correctly",
-//                new BigDecimal("0.01"),
-//                DailyInterestCalculator.interestEarned(maxiAdditionalSavingsAccount));
-//    }
-//
-//    @Test
-//    public void maxiSavingsAdditionalAccountHundredDaysAgoSmallDepositWithRecentWithdrawal(){
-//        Transaction t1 = mock(Transaction.class);
-//        when(t1.getAmount()).thenReturn(new BigDecimal("501.00"));
-//        when(t1.getTransactionDate()).thenReturn(daysAgo(100));
-//        Transaction t2 = mock(Transaction.class);
-//        when(t2.getAmount()).thenReturn(new BigDecimal("-1.00"));
-//        when(t2.getTransactionDate()).thenReturn(daysAgo(4));
-//        maxiAdditionalSavingsAccount.addTransaction(t1);
-//        maxiAdditionalSavingsAccount.addTransaction(t2);
-//
-//        assertEquals("Daily interest of current account is not accumulated for 4 days correctly",
-//                new BigDecimal("6.85"),
-//                DailyInterestCalculator.interestEarned(maxiAdditionalSavingsAccount));
-//    }
-//
-//    @Test
-//    public void maxiSavingsAdditionalAccountFourDaysAgoLargeDepositWithRecentWithdrawal(){
-//        Transaction t1 = mock(Transaction.class);
-//        when(t1.getAmount()).thenReturn(new BigDecimal("1000000.00"));
-//        when(t1.getTransactionDate()).thenReturn(daysAgo(4));
-//        maxiAdditionalSavingsAccount.addTransaction(t1);
-//
-//        assertEquals("Daily interest of current account is not accumulated for 4 days correctly",
-//                new BigDecimal("547.95"),
-//                DailyInterestCalculator.interestEarned(maxiAdditionalSavingsAccount));
-//    }
-//
-//    @Test
-//    public void maxiSavingsAdditionalAccountHundredDaysAgoLargeDepositWithRecentWithdrawal(){
-//        Transaction t1 = mock(Transaction.class);
-//        when(t1.getAmount()).thenReturn(new BigDecimal("1000000.00"));
-//        when(t1.getTransactionDate()).thenReturn(daysAgo(100));
-//        maxiAdditionalSavingsAccount.addTransaction(t1);
-//
-//        assertEquals("Daily interest of current account is not accumulated for 4 days correctly",
-//                new BigDecimal("13698.63"),
-//                DailyInterestCalculator.interestEarned(maxiAdditionalSavingsAccount));
-//    }
+    @Test
+    public void interestPaidByBankForMultipleAccounts(){
+
+        Bank bank = new BankImpl();
+        bank.addCustomer(customer);
+        Transaction t1 = mock(Transaction.class);
+        when(t1.getAmount()).thenReturn(new BigDecimal("1000000.00"));
+        when(t1.getTransactionDate()).thenReturn(daysAgo(100));
+
+        currentAccount.addTransaction(t1);
+        savingsAccount.addTransaction(t1);
+        maxiSavingsAccount.addTransaction(t1);
+
+        assertEquals("Bank is not able to calculate daily interest paid for multiple accounts",
+                new BigDecimal("28183.28"),
+                DailyInterestCalculator.totalInterestPaid(bank));
+
+    }
 
 }

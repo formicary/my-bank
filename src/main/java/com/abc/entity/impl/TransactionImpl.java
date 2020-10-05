@@ -1,6 +1,7 @@
 package com.abc.entity.impl;
 
 import com.abc.entity.Transaction;
+import com.abc.exception.InputValidator;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -11,17 +12,12 @@ import java.time.LocalDateTime;
  * @author aneesh
  */
 public  class TransactionImpl implements Transaction {
-    /**
-     * amount of funds in transaction
-     */
-    private final BigDecimal amount;
 
-    /**
-     * date and time of transaction
-     */
+    private final BigDecimal amount;
     private LocalDateTime transactionDate;
 
     public TransactionImpl(BigDecimal amount) {
+        InputValidator.validateAmountNotNull(amount);
         this.amount = amount;
         this.transactionDate = LocalDateTime.now();
     }
@@ -32,5 +28,13 @@ public  class TransactionImpl implements Transaction {
 
     public BigDecimal getAmount() {
         return amount;
+    }
+
+    @Override
+    public String toString() {
+        return "TransactionImpl{" +
+                "amount=" + amount +
+                ", transactionDate=" + transactionDate +
+                '}';
     }
 }

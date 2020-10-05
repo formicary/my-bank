@@ -8,7 +8,6 @@ import com.abc.entity.AccountType;
 import com.abc.entity.impl.BankImpl;
 import com.abc.entity.impl.CustomerImpl;
 import com.abc.exception.InvalidBankException;
-import com.abc.service.BankStatementService;
 import org.junit.Before;
 import org.junit.Test;
 

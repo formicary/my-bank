@@ -8,7 +8,6 @@ import com.abc.exception.InputValidator;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -45,6 +44,7 @@ public class AccountImpl implements Account {
     }
 
     public void addTransaction(Transaction transaction){
+        InputValidator.validateTransaction(transaction);
         transactions.add(transaction);
     }
 
@@ -53,7 +53,7 @@ public class AccountImpl implements Account {
     }
 
     public BigDecimal calculateBalance() {
-        BigDecimal amount = new BigDecimal(0);
+        BigDecimal amount = new BigDecimal("0.00");
         for (Transaction transaction: getTransactions()) {
             amount = amount.add(transaction.getAmount());
         }
@@ -61,4 +61,12 @@ public class AccountImpl implements Account {
         return amount.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
+    @Override
+    public String toString() {
+        return "Account{" +
+                "accountType=" + accountType +
+                ", customer=" + customer +
+                ", accountNumber='" + accountNumber + '\'' +
+                '}';
+    }
 }

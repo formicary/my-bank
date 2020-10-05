@@ -10,6 +10,7 @@ import java.util.List;
  * @author aneesh
  */
 public class BankImpl implements Bank {
+
     private List<Customer> customers;
 
     public BankImpl() {

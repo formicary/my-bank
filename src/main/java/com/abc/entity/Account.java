@@ -11,7 +11,7 @@ public interface Account {
 
     /**
      * obtains all recorded transactions for the account
-     * @return list of transactions for the account
+     * @return list of all transactions for the account
      */
     List<Transaction> getTransactions();
 

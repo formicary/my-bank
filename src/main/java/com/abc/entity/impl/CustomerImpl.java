@@ -12,6 +12,8 @@ import java.util.*;
  * @author aneesh
  */
 public class CustomerImpl implements Customer {
+
+
     private String name;
     private HashMap<String, Account> accounts;
 
@@ -41,7 +43,7 @@ public class CustomerImpl implements Customer {
 
     public void withdraw(BigDecimal amount, Account account) {
         InputValidator.validateWithdrawal(account,  amount);
-        account.addTransaction(new TransactionImpl(amount.multiply(new BigDecimal(-1))));
+        account.addTransaction(new TransactionImpl(amount.multiply(new BigDecimal("-1"))));
     }
 
     public void transfer(BigDecimal amount,Account from, Account to){
@@ -50,4 +52,10 @@ public class CustomerImpl implements Customer {
         deposit(amount, to);
     }
 
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "name='" + name + '\'' +
+                '}';
+    }
 }

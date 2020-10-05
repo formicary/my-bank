@@ -1,9 +1,6 @@
 package com.abc.entity;
 
-import com.abc.entity.Account;
-import com.abc.entity.Customer;
 import com.abc.entity.impl.AccountImpl;
-import com.abc.entity.AccountType;
 import com.abc.entity.impl.CustomerImpl;
 import com.abc.exception.InvalidAccountException;
 import com.abc.exception.InvalidAmountException;
@@ -92,50 +89,24 @@ public class CustomerImplTest {
 
     }
 
-    @Test
-    public void newAccountHasZeroBalance(){
-        currentAccount = new AccountImpl(customer, AccountType.CURRENT, "123");
-        assertEquals("A new account does not have 0 sum of transactions.",
-                new BigDecimal("0.00"),
-                currentAccount.calculateBalance());
-    }
 
-    @Test
-    public void singleTransactionAddedToBalance(){
-        currentAccount = new AccountImpl(customer, AccountType.CURRENT, "123");
-        customer.deposit(new BigDecimal("10.99"), currentAccount);
-        assertEquals("A single transaction is not accumulated in the sum of transactions.",
-                new BigDecimal("10.99"),
-                currentAccount.calculateBalance());
-    }
-
-
-    @Test
-    public void multipleTransactionAddedToBalance(){
-        currentAccount = new AccountImpl(customer, AccountType.CURRENT, "123");
-        customer.deposit(new BigDecimal("10.99"), currentAccount );
-        customer.deposit(new BigDecimal("2.00"), currentAccount);
-        assertEquals("Multiple transactions are not accumulated in the sum of transactions.", new BigDecimal("12.99"),
-                currentAccount.calculateBalance());
-    }
 
     @Test(expected = InvalidAmountException.class)
-    public void zeroDepositAmountThrowsException(){
+    public void cannotHaveZeroValueForDeposit(){
+        currentAccount = new AccountImpl(customer, AccountType.CURRENT, "123");
         customer.deposit(new BigDecimal("0"), currentAccount);
     }
 
     @Test(expected = InvalidAmountException.class)
-    public void nullDepositAmountThrowsException(){
-        customer.deposit(null, currentAccount);
-    }
+    public void cannotHaveNullValueForDeposit(){
+        currentAccount = new AccountImpl(customer, AccountType.CURRENT, "123");
 
-    @Test(expected = InvalidAmountException.class)
-    public void negativeDepositAmountThrowsException(){
-        customer.deposit(new BigDecimal("-1.0"), currentAccount);
+        customer.deposit(null,
+                currentAccount);
     }
 
     @Test(expected = InvalidAccountException.class)
-    public void nullDepositAccountThrowsException(){
+    public void cannotHaveNullAccountForDeposit(){
         customer.deposit(new BigDecimal("1.0"), null);
     }
 
@@ -154,62 +125,65 @@ public class CustomerImplTest {
         customer.deposit(new BigDecimal("10.99"), currentAccount);
         customer.withdraw(new BigDecimal("2.00"), currentAccount);
         customer.withdraw(new BigDecimal("2.00"),currentAccount);
-        assertEquals("Two withdrawals from account is not reflected in sum transactions.", new BigDecimal("6.99"), currentAccount.calculateBalance());
+        assertEquals("Two withdrawals from account is not reflected in sum transactions.",
+                new BigDecimal("6.99"),
+                currentAccount.calculateBalance());
     }
 
     @Test(expected = InvalidAccountException.class)
-    public void withdrawFromEmptyAccountThrowsException(){
+    public void cannotWithdrawFromEmptyAccount(){
         customer.withdraw(new BigDecimal("1"), currentAccount);
     }
 
     @Test(expected = InvalidAmountException.class)
-    public void zeroWithdrawalAmountThrowsException(){
+    public void cannotWithdrawAmountOfZero(){
         currentAccount = new AccountImpl(customer, AccountType.CURRENT, "123");
+        customer.deposit(new BigDecimal("10"), currentAccount);
         customer.withdraw( new BigDecimal("0"), currentAccount);
     }
 
     @Test(expected = InvalidAmountException.class)
-    public void nullWithdrawalAmountThrowsException(){
+    public void cannotWithdrawNullAmount(){
 
         customer.withdraw(null, currentAccount);
     }
 
     @Test(expected = InvalidAmountException.class)
-    public void negativeWithdrawalAmountThrowsException(){
+    public void cannotWithdrawNegativeAmount(){
         currentAccount = new AccountImpl(customer, AccountType.CURRENT, "123");
 
         customer.withdraw( new BigDecimal("-1.0"),currentAccount);
     }
 
     @Test(expected = InvalidAccountException.class)
-    public void nullWithdrawalAccountThrowsException(){
+    public void cannotWithdrawAgainstNullAccount(){
         customer.withdraw(new BigDecimal("1.0"), null);
     }
 
     @Test(expected = InvalidAccountException.class)
-    public void nullFromTransferThrowsException(){
+    public void cannotTransferFromNullAccount(){
         customer.transfer(new BigDecimal("10.00"), null, currentAccount );
     }
 
     @Test(expected = InvalidAccountException.class)
-    public void nullToTransferThrowsException(){
+    public void cannotTransferToNullAccount(){
         customer.transfer( new BigDecimal("10.00"),currentAccount, null);
     }
 
     @Test(expected = InvalidAccountException.class)
-    public void fromEqualsToThrowsException(){
+    public void cannotTransferBetweenSameAccount(){
         customer.transfer( new BigDecimal("10.00"), currentAccount, currentAccount);
     }
 
     @Test(expected = InvalidAmountException.class)
-    public void amountNullThrowsException(){
+    public void cannotTransferNullAmount(){
         currentAccount = new AccountImpl(customer, AccountType.CURRENT, "123");
         savingsAccount = new AccountImpl(customer, AccountType.SAVINGS, "124");
         customer.transfer(null, savingsAccount, currentAccount);
     }
 
     @Test(expected = InvalidAmountException.class)
-    public void negativeAmountThrowsException(){
+    public void cannotTransferNegativeAmount(){
         customer.transfer(new BigDecimal("-1.0"),savingsAccount, currentAccount);
     }
 
@@ -238,7 +212,7 @@ public class CustomerImplTest {
     }
 
     @Test(expected = InvalidAmountException.class)
-    public void transferExcessiveFundsThrowsException(){
+    public void cannotTransferFundsMoreThanBalance(){
         currentAccount = new AccountImpl(customer, AccountType.CURRENT, "123");
         savingsAccount = new AccountImpl(customer, AccountType.SAVINGS, "124");
 

@@ -30,14 +30,48 @@ public class DailyInterestCalculator {
 
             accountBalance = accountBalance.add(account.getTransactions().get(i).getAmount());
             BigDecimal interestPerDay = calculateDailyInterestOfBalance(account, accountBalance);
-            if(i == account.getTransactions().size() -1){
-                totalInterestEarned = totalInterestEarned.add(interestPerDay.multiply(new BigDecimal(ChronoUnit.DAYS.between(account.getTransactions().get(i).getTransactionDate(),LocalDateTime.now()))));
+
+            if(noMoreTransactionsToProcess(i, account)){
+                totalInterestEarned = totalInterestEarned.add(remainingInterestToToday(i, account, interestPerDay));
             }else{
-                totalInterestEarned = totalInterestEarned.add(interestPerDay.multiply(new BigDecimal(ChronoUnit.DAYS.between(account.getTransactions().get(i).getTransactionDate(), account.getTransactions().get(i+1).getTransactionDate()))));
+                totalInterestEarned = totalInterestEarned.add(interestAccruedToNextTransaction(i, account, interestPerDay));
             }
         }
 
         return totalInterestEarned.setScale(2, BigDecimal.ROUND_HALF_UP);
+    }
+
+    /**
+     * calculate the total accrued interest paid by a bank to its customers since they opened their accounts
+     * @param bank the bank for which the customers belong
+     * @return total interest paid by the bank to its customers
+     */
+    public static BigDecimal totalInterestPaid(Bank bank) {
+        BigDecimal total = new BigDecimal("0");
+        for(Customer customer : bank.getCustomers()) {
+            total = total.add(DailyInterestCalculator.interestEarned(customer));
+        }
+        return total.setScale(2, BigDecimal.ROUND_HALF_UP);
+    }
+
+    private static BigDecimal interestAccruedToNextTransaction(int i, Account account, BigDecimal interestPerDay) {
+        return interestPerDay.multiply(new BigDecimal(ChronoUnit.DAYS.between(account.getTransactions().get(i).getTransactionDate(), account.getTransactions().get(i+1).getTransactionDate())));
+    }
+
+    private static BigDecimal remainingInterestToToday(int i, Account account, BigDecimal interestPerDay) {
+        return interestPerDay.multiply(new BigDecimal(ChronoUnit.DAYS.between(account.getTransactions().get(i).getTransactionDate(),LocalDateTime.now())));
+    }
+
+    private static boolean noMoreTransactionsToProcess(int i, Account account) {
+        return i == account.getTransactions().size() - 1;
+    }
+
+    private static BigDecimal interestEarned(Customer customer) {
+        BigDecimal total = new BigDecimal("0.00");
+        for (Account account : customer.getAccounts().values()) {
+            total = total.add(DailyInterestCalculator.interestEarned(account));
+        }
+        return total.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
     private static BigDecimal calculateDailyInterestOfBalance(Account account, BigDecimal accountBalance) {
@@ -53,21 +87,4 @@ public class DailyInterestCalculator {
                 return AccountType.CURRENT.getFlatRate().multiply(accountBalance).divide(year,4, RoundingMode.HALF_UP);
         }
     }
-
-
-    public static BigDecimal totalInterestPaid(Bank bank) {
-        BigDecimal total = new BigDecimal("0");
-        for(Customer customer : bank.getCustomers())
-            total = total.add(DailyInterestCalculator.interestEarned(customer));
-        return total.setScale(2, BigDecimal.ROUND_HALF_UP);
-    }
-
-    public static BigDecimal interestEarned(Customer customer) {
-        BigDecimal total = new BigDecimal(0);
-        for (Account account : customer.getAccounts().values()) {
-            total = total.add(DailyInterestCalculator.interestEarned(account));
-        }
-        return total.setScale(2, BigDecimal.ROUND_HALF_UP);
-    }
-
 }

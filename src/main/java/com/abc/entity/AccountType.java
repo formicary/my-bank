@@ -25,7 +25,7 @@ public enum AccountType {
 
     /**
      * Obtain the flat rate of interest for the account
-     * @return flat rate percentage
+     * @return flat rate interest percentage
      */
     public BigDecimal getFlatRate() {
         return flatRate;
@@ -33,7 +33,7 @@ public enum AccountType {
 
     /**
      * Obtain the second rate of interest for the account
-     * @return second rate percentage
+     * @return second rate interest percentage
      */
     public BigDecimal getSecondRate() {
         return secondRate;
@@ -41,7 +41,7 @@ public enum AccountType {
 
     /**
      * Obtain the third rate of interest for the account
-     * @return third rate percentage
+     * @return third rate interest percentage
      */
     public BigDecimal getThirdRate() {
         return thirdRate;

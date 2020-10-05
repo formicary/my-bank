@@ -4,7 +4,7 @@ import com.abc.entity.impl.AccountImpl;
 import com.abc.entity.Customer;
 import com.abc.entity.AccountType;
 import com.abc.entity.impl.CustomerImpl;
-import com.abc.service.CustomerStatementService;
+import com.abc.exception.InvalidCustomerException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -30,6 +30,10 @@ public class CustomerStatementServiceTest {
 
     }
 
+    @Test(expected = InvalidCustomerException.class)
+    public void customerCannotBeNull(){
+        CustomerStatementService.generateStatement(null);
+    }
 
     @Test
     public void testSingleCurrentDepositStatement(){
