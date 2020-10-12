@@ -1,57 +1,48 @@
 package com.abc;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
+import static com.abc.BankTest.DOUBLE_DELTA;
 import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
+    Account checkingAccount = new Account(Account.AccountType.CHECKING);
+    Account savingsAccount = new Account(Account.AccountType.SAVINGS);
+    Customer customer = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testNegativeWithdrw()
+    {
+        savingsAccount.withdraw(-200.0);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testNegativeDeposit()
+    {
+        checkingAccount.deposit(-4000);
+    }
 
     @Test //Test customer statement generation
-    public void testApp(){
-
-        Account checkingAccount = new Account(Account.CHECKING);
-        Account savingsAccount = new Account(Account.SAVINGS);
-
-        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
-
-        checkingAccount.deposit(100.0);
-        savingsAccount.deposit(4000.0);
+    public void testCustomerOperations(){
+        checkingAccount.deposit(4000);
+        savingsAccount.deposit(4200);
         savingsAccount.withdraw(200.0);
 
         assertEquals("Statement for Henry\n" +
                 "\n" +
                 "Checking Account\n" +
-                "  deposit $100.00\n" +
-                "Total $100.00\n" +
+                "  deposit $4,000.00\n" +
+                "Total $4,000.00\n" +
                 "\n" +
                 "Savings Account\n" +
-                "  deposit $4,000.00\n" +
-                "  withdrawal $200.00\n" +
-                "Total $3,800.00\n" +
+                "  deposit $4,200.00\n" +
+                "  withdraw $200.00\n" +
+                "Total $4,000.00\n" +
                 "\n" +
-                "Total In All Accounts $3,900.00", henry.getStatement());
-    }
+                "Total In All Accounts $8,000.00", customer.getStatement());
 
-    @Test
-    public void testOneAccount(){
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
-        assertEquals(1, oscar.getNumberOfAccounts());
-    }
-
-    @Test
-    public void testTwoAccount(){
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
-        assertEquals(2, oscar.getNumberOfAccounts());
-    }
-
-    @Ignore
-    public void testThreeAcounts() {
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
-        assertEquals(3, oscar.getNumberOfAccounts());
+        customer.transfer(checkingAccount,savingsAccount,1000);
+        assertEquals(3000,checkingAccount.sumTransactions(),DOUBLE_DELTA);
+        assertEquals(5000,savingsAccount.sumTransactions(),DOUBLE_DELTA);
     }
 }

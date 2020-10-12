@@ -1,18 +1,33 @@
 package com.abc;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Account {
+    enum AccountType{
+        CHECKING("Checking Account"),
+        SAVINGS("Savings Account"),
+        MAXI_SAVINGS("Maxi Savings Account");
 
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
+        private String accountTypeName;
 
-    private final int accountType;
-    public List<Transaction> transactions;
+        public String getAccountTypeName()
+        {
+            return accountTypeName;
+        }
 
-    public Account(int accountType) {
+        AccountType(String accountTypeName) {
+            this.accountTypeName=accountTypeName;
+        }
+    }
+
+    private final AccountType accountType;
+    private List<Transaction> transactions;
+    private LocalDate dateOfLastInterestsEarned;
+
+    public Account(AccountType accountType) {
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
     }
@@ -21,53 +36,69 @@ public class Account {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
-            transactions.add(new Transaction(amount));
+            addTransaction(new Transaction(amount,"deposit"));
         }
     }
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
+    public void withdraw(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        } else {
+            addTransaction(new Transaction(-amount,"withdraw"));
+        }
     }
-}
 
     public double interestEarned() {
         double amount = sumTransactions();
-        switch(accountType){
-            case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
-            case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
-            default:
-                return amount * 0.001;
+        double interest=0;
+        long daysFromLastInterestEarned=ChronoUnit.DAYS.between(dateOfLastInterestsEarned, LocalDate.now());
+        while(daysFromLastInterestEarned>0) {
+            switch (accountType) {
+                case SAVINGS:
+                    if (amount <= 1000)
+                        interest += amount * 0.001;
+                    else
+                        interest += 1 + (amount - 1000) * 0.002;
+                    break;
+                case CHECKING:
+                        interest += amount * 0.001;
+                    break;
+
+                case MAXI_SAVINGS:
+                    if (transactions.stream().filter(Transaction::isThereTenDaysWithdraw).count() > 0)
+                        interest += amount * 0.05;
+                    else
+                        interest += amount * 0.001;
+                    break;
+
+            }
+            amount+=interest;
+            daysFromLastInterestEarned--;
         }
+        dateOfLastInterestsEarned=LocalDate.now();
+        return interest;
+
     }
 
     public double sumTransactions() {
-       return checkIfTransactionsExist(true);
+        return transactions.stream().mapToDouble(Transaction::getTransactionAmount).sum();
     }
 
-    private double checkIfTransactionsExist(boolean checkAll) {
-        double amount = 0.0;
-        for (Transaction t: transactions)
-            amount += t.amount;
-        return amount;
-    }
-
-    public int getAccountType() {
+    public AccountType getAccountType() {
         return accountType;
+    }
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setDateOfLastInterestsEarned(LocalDate date)
+    {
+        this.dateOfLastInterestsEarned=date;
+    }
+
+    public void addTransaction(Transaction transaction)
+    {
+        transactions.add(transaction);
     }
 
 }

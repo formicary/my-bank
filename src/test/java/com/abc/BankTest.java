@@ -1,54 +1,62 @@
 package com.abc;
 
+import org.junit.Assert;
 import org.junit.Test;
+
+import java.time.LocalDate;
 
 import static org.junit.Assert.assertEquals;
 
 public class BankTest {
-    private static final double DOUBLE_DELTA = 1e-15;
+    public static final double DOUBLE_DELTA = 1e-15;
+    private Bank bank = new Bank();
+    private Customer testCustomer = new Customer("John");
+    private Transaction t = new Transaction(-1000,"withdraw");
 
     @Test
-    public void customerSummary() {
-        Bank bank = new Bank();
-        Customer john = new Customer("John");
-        john.openAccount(new Account(Account.CHECKING));
-        bank.addCustomer(john);
-
+    public void checkingAccount() {
+        createAccountForTest(Account.AccountType.CHECKING,3000,LocalDate.now().minusDays(1));
+        assertEquals(3, bank.totalInterestPaid(), DOUBLE_DELTA);
         assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
     }
 
     @Test
-    public void checkingAccount() {
-        Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.CHECKING);
-        Customer bill = new Customer("Bill").openAccount(checkingAccount);
-        bank.addCustomer(bill);
-
-        checkingAccount.deposit(100.0);
-
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+    public void testLastInterestPaidTwoDaysAgo()
+    {
+        createAccountForTest(Account.AccountType.CHECKING,3000,LocalDate.now().minusDays(2));
+        assertEquals(6.003, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
     public void savings_account() {
-        Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
-
-        checkingAccount.deposit(1500.0);
-
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        createAccountForTest(Account.AccountType.SAVINGS,3000,LocalDate.now().minusDays(1));
+        assertEquals(5.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        bank.getCustomers().get(0).getAccounts().clear();
+        createAccountForTest(Account.AccountType.SAVINGS,1000,LocalDate.now().minusDays(1));
+        assertEquals(1.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
     @Test
     public void maxi_savings_account() {
-        Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
-
-        checkingAccount.deposit(3000.0);
-
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        createAccountForTest(Account.AccountType.MAXI_SAVINGS,4000,LocalDate.now().minusDays(1));
+        t.setTransactionDate(LocalDate.of(2020,9,23));
+        bank.getCustomers().get(0).getAccounts().get(0).addTransaction(t);
+        assertEquals(150.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+    }
+    @Test
+    public void maxi_savings_account_with_withdraw_in_ten_days() {
+        createAccountForTest(Account.AccountType.MAXI_SAVINGS,4000,LocalDate.now().minusDays(1));
+        t.setTransactionDate(LocalDate.of(2020,10,9));
+        bank.getCustomers().get(0).getAccounts().get(0).addTransaction(t);
+        assertEquals(3.0, bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
+    private void createAccountForTest(Account.AccountType accountType, double amount, LocalDate dateOfLastInterestEarned)
+    {
+        Account checkingAccount = new Account(accountType);
+        bank.getCustomers().clear();
+        bank.addCustomer(testCustomer.openAccount(checkingAccount));
+        checkingAccount.setDateOfLastInterestsEarned(dateOfLastInterestEarned);
+        checkingAccount.deposit(amount);
+    }
 }

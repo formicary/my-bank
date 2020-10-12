@@ -2,6 +2,8 @@ package com.abc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Bank {
     private List<Customer> customers;
@@ -15,10 +17,10 @@ public class Bank {
     }
 
     public String customerSummary() {
-        String summary = "Customer Summary";
+        StringBuilder summary =new StringBuilder("Customer Summary");
         for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-        return summary;
+            summary.append("\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")");
+        return summary.toString();
     }
 
     //Make sure correct plural of word is created based on the number passed in:
@@ -28,19 +30,11 @@ public class Bank {
     }
 
     public double totalInterestPaid() {
-        double total = 0;
-        for(Customer c: customers)
-            total += c.totalInterestEarned();
-        return total;
+        return customers.stream().mapToDouble(Customer::totalInterestEarned).sum();
     }
 
-    public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
-        }
+    public List<Customer> getCustomers()
+    {
+        return customers;
     }
 }
