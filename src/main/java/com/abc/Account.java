@@ -1,34 +1,19 @@
 package com.abc;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class Account {
-    enum AccountType{
-        CHECKING("Checking Account"),
-        SAVINGS("Savings Account"),
-        MAXI_SAVINGS("Maxi Savings Account");
+public abstract class Account {
 
-        private String accountTypeName;
-
-        public String getAccountTypeName()
-        {
-            return accountTypeName;
-        }
-
-        AccountType(String accountTypeName) {
-            this.accountTypeName=accountTypeName;
-        }
-    }
-
-    private final AccountType accountType;
+    protected String accountTypeName;
     private List<Transaction> transactions;
     private LocalDate dateOfLastInterestsEarned;
 
-    public Account(AccountType accountType) {
-        this.accountType = accountType;
+    abstract double interestEarned();
+
+    public Account() {
         this.transactions = new ArrayList<Transaction>();
     }
 
@@ -36,7 +21,7 @@ public class Account {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
-            addTransaction(new Transaction(amount,"deposit"));
+            addTransaction(new Transaction(amount, Transaction.TransactionType.DEPOSIT));
         }
     }
 
@@ -44,61 +29,37 @@ public class Account {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
-            addTransaction(new Transaction(-amount,"withdraw"));
+            addTransaction(new Transaction(-amount, Transaction.TransactionType.WITHDRAW));
         }
-    }
-
-    public double interestEarned() {
-        double amount = sumTransactions();
-        double interest=0;
-        long daysFromLastInterestEarned=ChronoUnit.DAYS.between(dateOfLastInterestsEarned, LocalDate.now());
-        while(daysFromLastInterestEarned>0) {
-            switch (accountType) {
-                case SAVINGS:
-                    if (amount <= 1000)
-                        interest += amount * 0.001;
-                    else
-                        interest += 1 + (amount - 1000) * 0.002;
-                    break;
-                case CHECKING:
-                        interest += amount * 0.001;
-                    break;
-
-                case MAXI_SAVINGS:
-                    if (transactions.stream().filter(Transaction::isThereTenDaysWithdraw).count() > 0)
-                        interest += amount * 0.05;
-                    else
-                        interest += amount * 0.001;
-                    break;
-
-            }
-            amount+=interest;
-            daysFromLastInterestEarned--;
-        }
-        dateOfLastInterestsEarned=LocalDate.now();
-        return interest;
-
     }
 
     public double sumTransactions() {
         return transactions.stream().mapToDouble(Transaction::getTransactionAmount).sum();
     }
 
-    public AccountType getAccountType() {
-        return accountType;
-    }
     public List<Transaction> getTransactions() {
         return transactions;
     }
 
-    public void setDateOfLastInterestsEarned(LocalDate date)
-    {
-        this.dateOfLastInterestsEarned=date;
+    public void setDateOfLastInterestsEarned(LocalDate date) {
+        this.dateOfLastInterestsEarned = date;
     }
 
-    public void addTransaction(Transaction transaction)
-    {
+    public LocalDate getDateOfLastInterestsEarned() {
+        return dateOfLastInterestsEarned;
+    }
+
+    public void addTransaction(Transaction transaction) {
         transactions.add(transaction);
+    }
+
+    public String getAccountTypeName() {
+        return accountTypeName;
+    }
+
+    public double countAllTransactionsForOneDay(LocalDate date) {
+        List<Transaction> transactions = getTransactions();
+        return transactions.stream().filter(item -> date.equals(item.getTransactionDate())).collect(Collectors.summingDouble(Transaction::getTransactionAmount));
     }
 
 }

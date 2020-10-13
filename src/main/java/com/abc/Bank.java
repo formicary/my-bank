@@ -2,8 +2,6 @@ package com.abc;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Bank {
     private List<Customer> customers;
@@ -17,7 +15,7 @@ public class Bank {
     }
 
     public String customerSummary() {
-        StringBuilder summary =new StringBuilder("Customer Summary");
+        StringBuilder summary = new StringBuilder("Customer Summary");
         for (Customer c : customers)
             summary.append("\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")");
         return summary.toString();
@@ -33,8 +31,7 @@ public class Bank {
         return customers.stream().mapToDouble(Customer::totalInterestEarned).sum();
     }
 
-    public List<Customer> getCustomers()
-    {
+    public List<Customer> getCustomers() {
         return customers;
     }
 }

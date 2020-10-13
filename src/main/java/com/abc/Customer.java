@@ -42,7 +42,7 @@ public class Customer {
     }
 
     private String statementForAccount(Account account) {
-        String statement =account.getAccountType().getAccountTypeName()+"\n";
+        String statement = account.getAccountTypeName() + "\n";
         //Now total up all the transactions
         for (Transaction t : account.getTransactions()) {
             statement += "  " + (t.getTransactionType()) + " " + toDollars(t.getTransactionAmount()) + "\n";
@@ -51,18 +51,16 @@ public class Customer {
         return statement;
     }
 
-    public void transfer(Account fromAccount,Account toAccount, double amount)
-    {
+    public void transfer(Account fromAccount, Account toAccount, double amount) {
         fromAccount.withdraw(amount);
         toAccount.deposit(amount);
     }
 
-    private String toDollars(double d){
+    private String toDollars(double d) {
         return String.format("$%,.2f", abs(d));
     }
 
-    public List<Account> getAccounts()
-    {
+    public List<Account> getAccounts() {
         return accounts;
     }
 }
