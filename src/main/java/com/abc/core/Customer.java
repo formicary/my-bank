@@ -1,4 +1,4 @@
-package com.abc;
+package com.abc.core;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +40,7 @@ public class Customer {
         double total = 0.0;
         for (Account a : accounts) {
             statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+            total += a.sumOfTransactions();
         }
         statement += "\nTotal In All Accounts " + toDollars(total);
         return statement;
@@ -50,23 +50,25 @@ public class Customer {
         String s = "";
 
        //Translate to pretty account type
-        switch(a.getAccountType()){
-            case Account.CHECKING:
-                s += "Checking Account\n";
-                break;
-            case Account.SAVINGS:
-                s += "Savings Account\n";
-                break;
-            case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
-                break;
-        }
+//        switch(a.getAccountType()){
+//            case Account.CHECKING:
+//                s += "Checking Account\n";
+//                break;
+//            case Account.SAVINGS:
+//                s += "Savings Account\n";
+//                break;
+//            case Account.MAXI_SAVINGS:
+//                s += "Maxi Savings Account\n";
+//                break;
+//        }
+
+        s += a.getAccountType().getValue() + "\n";
 
         //Now total up all the transactions
         double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
+        for (Transaction t : a.getTransactions()) {
+            s += "  " + (t.getAmount() < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.getAmount()) + "\n";
+            total += t.getAmount();
         }
         s += "Total " + toDollars(total);
         return s;

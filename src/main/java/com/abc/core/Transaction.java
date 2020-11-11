@@ -1,19 +1,18 @@
-package com.abc;
+package com.abc.core;
 
-import java.util.Calendar;
+import lombok.Getter;
+
 import java.util.Date;
 
+@Getter
 public class Transaction {
-    public final double amount;
 
-    private Date transactionDate;
+    private final double amount;
+    private final Date transactionDate;
 
     public Transaction(double amount) {
         this.amount = amount;
         this.transactionDate = DateProvider.getInstance().now();
     }
 
-    public Date getTransactionDate() {
-        return transactionDate;
-    }
 }
