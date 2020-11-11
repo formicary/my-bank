@@ -15,7 +15,7 @@ public class Bank {
     }
 
     public String customerSummary() {
-        String summary = "Customer Summary";
+        String summary = "Customer Summary";        // TODO: change text if there are no customers
         for (Customer c : customers)
             summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
         return summary;
@@ -34,6 +34,7 @@ public class Bank {
         return total;
     }
 
+    // TODO: remove!
     public String getFirstCustomer() {
         try {
             customers = null;
