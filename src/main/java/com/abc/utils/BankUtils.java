@@ -1,6 +1,9 @@
 package com.abc.utils;
 
 import com.abc.core.Customer;
+import com.abc.core.Transaction;
+
+import static java.lang.Math.abs;
 
 public class BankUtils {
 
@@ -12,6 +15,16 @@ public class BankUtils {
         var accountsFormatted = String.format("%d %s", numAccounts, numAccounts == 1 ? ACCOUNT : ACCOUNT + "s");
 
         return String.format("\n - %s (%s)", customer.getName(), accountsFormatted);
+    }
+
+    public static String formatAmount(double amount){
+        return String.format("$%,.2f", abs(amount));
+    }
+
+    public static String formatTransaction(Transaction transaction) {
+        return String.format("  %s %s\n",
+                transaction.getAmount() > 0 ? "deposit" : "withdrawal",
+                BankUtils.formatAmount(transaction.getAmount()));
     }
 
 }

@@ -17,19 +17,8 @@ public class Bank {
         customers.add(customer);
     }
 
-    public String customerSummary() {
-//        String summary = "Customer Summary";        // TODO: change text if there are no customers
-//        for (Customer c : customers)
-//            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-//        return summary;
-
-//        StringBuilder builder = new StringBuilder("Customer Summary");
-//        customers.forEach(customer -> {
-//            builder.append(String.format("\n - %s (%s)", customer.getName(), format(customer.getNumberOfAccounts(), "account")));
-//        });
-//        return builder.toString();
-
-
+    public String summaryOfAllCustomers() {
+        // TODO: change text if there are no customers
         return customers.stream()
                 .map(BankUtils::formatCustomer)
                 .collect(
@@ -40,11 +29,6 @@ public class Bank {
     }
 
     public double totalInterestPaid() {
-//        double total = 0;
-//        for(Customer c: customers)
-//            total += c.totalInterestEarned();
-//        return total;
-
         return customers.stream()
                 .map(Customer::totalInterestEarned)
                 .reduce(0.0, Double::sum);

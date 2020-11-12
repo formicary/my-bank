@@ -1,5 +1,6 @@
 package com.abc.core;
 
+import com.abc.utils.BankUtils;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class Account {
 
     public double interestEarned() {
         double amount = sumOfTransactions();
-        switch (accountType) {
+        switch (accountType) {          // TODO: strategy pattern
             case SAVINGS:
                 if (amount <= 1000)
                     return amount * 0.001;
@@ -53,6 +54,26 @@ public class Account {
         return transactions.stream()
                 .map(Transaction::getAmount)
                 .reduce(0.0, Double::sum);
+    }
+
+    public String statementForAccount() {
+//        String s = accountType.getValue() + "\n";
+//        double total = 0.0;
+//        for (Transaction t : transactions) {
+//            s += "  " + (t.getAmount() < 0 ? "withdrawal" : "deposit") + " " + BankUtils.formatAmount(t.getAmount()) + "\n";
+//            total += t.getAmount();
+//        }
+//        s += "Total " + BankUtils.formatAmount(total);
+//        return s;
+
+        return transactions.stream()
+                .map(BankUtils::formatTransaction)
+                .collect(
+                        () -> new StringBuilder(accountType.getValue() + "\n"),
+                        StringBuilder::append,
+                        StringBuilder::append)
+                .append(String.format("Total %s", BankUtils.formatAmount(sumOfTransactions())))
+                .toString();
     }
 
     private void validateAmount(double amount) {

@@ -16,8 +16,14 @@ public class AccountTest {
         account.deposit(20.5);
 
         assertEquals(1, account.getTransactions().size());
-        assertEquals(20.5, account.getTransactions().get(0).getAmount(), DELTA);   // TODO: is it Ok to compare this way?
+        assertEquals(20.5, account.getTransactions().get(0).getAmount(), DELTA);
         assertNotNull(account.getTransactions().get(0).getTransactionDate());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void depositWithNegativeAmount() {
+        Account account = new Account(AccountType.SAVINGS);
+        account.deposit(-5.0);
     }
 
     @Test
@@ -31,6 +37,16 @@ public class AccountTest {
         assertNotNull(account.getTransactions().get(1).getTransactionDate());
         assertEquals(79.5, account.sumOfTransactions(), DELTA);
         // TODO: add test - customer can withdraw, only if he has enough money
+    }
+
+    @Test
+    public void sumOfTransactionsIsCorrect() {
+        Account account = new Account(AccountType.CHECKING);
+        account.deposit(1000.0);
+        account.withdraw(200.0);
+        account.deposit(50.0);
+
+        assertEquals(850.0, account.sumOfTransactions(), DELTA);
     }
 
     @Test
@@ -90,5 +106,18 @@ public class AccountTest {
         double expectedInterest = 0.02 * 1000 + 0.05 * 1000 + 0.1 * 500;
 
         assertEquals(expectedInterest, account.interestEarned(), DELTA);
+    }
+
+    // TODO: mock!!!
+    @Test
+    public void correctStatementForAccount() {
+        Account account = new Account(AccountType.CHECKING);
+        account.deposit(500.0);
+        account.withdraw(30.0);
+
+        assertEquals("Checking Account\n" +
+                "  deposit $500.00\n" +
+                "  withdrawal $30.00\n" +
+                "Total $470.00", account.statementForAccount());
     }
 }

@@ -3,14 +3,15 @@ package com.abc;
 import com.abc.core.Account;
 import com.abc.core.AccountType;
 import com.abc.core.Customer;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
 
-    @Test //Test customer statement generation
+    private static final double DELTA = 1e-15;
+
+    @Test
     public void customerStatementIsCorrect(){
 
         Account checkingAccount = new Account(AccountType.CHECKING);
@@ -37,31 +38,30 @@ public class CustomerTest {
     }
 
     @Test
-    public void testOneAccount(){
+    public void customerCanOpenOneAccount(){
         Customer oscar = new Customer("Oscar").openAccount(new Account(AccountType.SAVINGS));
         assertEquals(1, oscar.getNumberOfAccounts());
     }
 
     @Test
-    public void testTwoAccount(){
+    public void customerCanOpenMultipleAccounts(){
         Customer oscar = new Customer("Oscar")
                 .openAccount(new Account(AccountType.SAVINGS));
         oscar.openAccount(new Account(AccountType.CHECKING));
-        assertEquals(2, oscar.getNumberOfAccounts());
-    }
-
-    @Ignore
-    public void testThreeAcounts() {
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(AccountType.SAVINGS));
-        oscar.openAccount(new Account(AccountType.CHECKING));
+        oscar.openAccount(new Account(AccountType.MAXI_SAVINGS));
         assertEquals(3, oscar.getNumberOfAccounts());
     }
 
     @Test
-    public void customerCanOpenAccount() {
-        Customer john = new Customer("John").openAccount(new Account(AccountType.SAVINGS));
+    public void totalInterestEarnedIsCorrect() {
+        Account savingsAccount = new Account(AccountType.SAVINGS);
+        Customer jane = new Customer("Jane").openAccount(savingsAccount);
+        savingsAccount.deposit(1500.0);
+        Account maxiSavingsAccount = new Account(AccountType.MAXI_SAVINGS);
+        jane.openAccount(maxiSavingsAccount);
+        maxiSavingsAccount.deposit(2500.0);
 
-        assertEquals(1, john.getNumberOfAccounts());
+        assertEquals(122.0, jane.totalInterestEarned(), DELTA);
     }
+
 }
