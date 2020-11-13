@@ -1,7 +1,5 @@
-package com.abc;
+package com.abc.account;
 
-import com.abc.core.account.Account;
-import com.abc.core.account.AccountType;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

@@ -1,7 +1,7 @@
-package com.abc.core.bank;
+package com.abc.bank;
 
-import com.abc.core.customer.Customer;
-import com.abc.core.account.Transaction;
+import com.abc.account.Transaction;
+import com.abc.customer.Customer;
 
 import static java.lang.Math.abs;
 

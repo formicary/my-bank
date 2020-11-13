@@ -1,12 +1,10 @@
-package com.abc.core.bank;
+package com.abc.bank;
 
-import com.abc.core.customer.Customer;
+import com.abc.customer.Customer;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.abc.core.bank.BankUtils.CUSTOMER_SUMMARY;
 
 @NoArgsConstructor
 public class Bank {
@@ -21,7 +19,7 @@ public class Bank {
         return customers.stream()
                 .map(BankUtils::formatCustomer)
                 .collect(
-                        () -> new StringBuilder(CUSTOMER_SUMMARY),
+                        () -> new StringBuilder(BankUtils.CUSTOMER_SUMMARY),
                         StringBuilder::append,
                         StringBuilder::append)
                 .toString();

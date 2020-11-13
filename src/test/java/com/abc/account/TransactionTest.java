@@ -1,6 +1,5 @@
-package com.abc;
+package com.abc.account;
 
-import com.abc.core.account.Transaction;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

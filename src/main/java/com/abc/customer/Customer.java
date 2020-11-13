@@ -1,7 +1,7 @@
-package com.abc.core.customer;
+package com.abc.customer;
 
-import com.abc.core.account.Account;
-import com.abc.core.bank.BankUtils;
+import com.abc.bank.BankUtils;
+import com.abc.account.Account;
 import lombok.Getter;
 
 import java.util.ArrayList;

@@ -1,7 +1,7 @@
-package com.abc.core.account.interest;
+package com.abc.account.interest;
 
-import com.abc.core.account.Account;
-import com.abc.core.account.AccountType;
+import com.abc.account.Account;
+import com.abc.account.AccountType;
 
 public class MaxiSavingsInterestCalculator implements InterestCalculator {
 

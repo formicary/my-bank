@@ -1,6 +1,6 @@
-package com.abc.core.account.interest;
+package com.abc.account.interest;
 
-import com.abc.core.account.Account;
+import com.abc.account.Account;
 
 public interface InterestCalculator {
 

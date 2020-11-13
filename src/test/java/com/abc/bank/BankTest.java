@@ -1,9 +1,8 @@
-package com.abc;
+package com.abc.bank;
 
-import com.abc.core.account.Account;
-import com.abc.core.account.AccountType;
-import com.abc.core.bank.Bank;
-import com.abc.core.customer.Customer;
+import com.abc.account.Account;
+import com.abc.account.AccountType;
+import com.abc.customer.Customer;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

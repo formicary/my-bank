@@ -1,7 +1,10 @@
-package com.abc.core.account;
+package com.abc.account;
 
-import com.abc.core.account.interest.*;
-import com.abc.core.bank.BankUtils;
+import com.abc.account.interest.CheckingInterestCalculator;
+import com.abc.account.interest.InterestCalculator;
+import com.abc.account.interest.MaxiSavingsInterestCalculator;
+import com.abc.account.interest.SavingsInterestCalculator;
+import com.abc.bank.BankUtils;
 import lombok.Getter;
 
 import java.util.ArrayList;
