@@ -1,12 +1,12 @@
-package com.abc.core;
+package com.abc.core.bank;
 
+import com.abc.core.customer.Customer;
 import lombok.NoArgsConstructor;
-import com.abc.utils.BankUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.abc.utils.BankUtils.CUSTOMER_SUMMARY;
+import static com.abc.core.bank.BankUtils.CUSTOMER_SUMMARY;
 
 @NoArgsConstructor
 public class Bank {
@@ -18,7 +18,6 @@ public class Bank {
     }
 
     public String summaryOfAllCustomers() {
-        // TODO: change text if there are no customers
         return customers.stream()
                 .map(BankUtils::formatCustomer)
                 .collect(

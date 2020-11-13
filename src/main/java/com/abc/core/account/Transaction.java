@@ -1,7 +1,8 @@
-package com.abc.core;
+package com.abc.core.account;
 
 import lombok.Getter;
 
+import java.util.Calendar;
 import java.util.Date;
 
 @Getter
@@ -12,7 +13,7 @@ public class Transaction {
 
     public Transaction(double amount) {
         this.amount = amount;
-        this.transactionDate = DateProvider.getInstance().now();
+        this.transactionDate = Calendar.getInstance().getTime();
     }
 
 }

@@ -1,4 +1,4 @@
-package com.abc.core;
+package com.abc.core.account;
 
 import lombok.Getter;
 

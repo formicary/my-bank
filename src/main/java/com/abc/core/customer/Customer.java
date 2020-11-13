@@ -1,6 +1,7 @@
-package com.abc.core;
+package com.abc.core.customer;
 
-import com.abc.utils.BankUtils;
+import com.abc.core.account.Account;
+import com.abc.core.bank.BankUtils;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -33,14 +34,6 @@ public class Customer {
     }
 
     public String getStatement() {
-//        String statement = "Statement for " + name + "\n";
-//        double total = 0.0;
-//        for (Account a : accounts) {
-//            statement += "\n" + a.statementForAccount() + "\n";
-////            total += a.sumOfTransactions();
-//        }
-//        statement += "\nTotal In All Accounts " + BankUtils.formatAmount(total);
-
         double total = accounts.stream()
                 .map(Account::sumOfTransactions)
                 .reduce(0.0, Double::sum);

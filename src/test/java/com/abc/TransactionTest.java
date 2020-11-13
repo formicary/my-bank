@@ -1,6 +1,6 @@
 package com.abc;
 
-import com.abc.core.Transaction;
+import com.abc.core.account.Transaction;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -15,5 +15,12 @@ public class TransactionTest {
         Transaction transaction = new Transaction(5.0);
         assertEquals(5.0, transaction.getAmount(), DELTA);
         assertNotNull(transaction.getTransactionDate());
+    }
+
+    @Test
+    public void transactionWithNegativeAmountCanBeCreated() {
+        Transaction transaction = new Transaction(-20.0);
+        assertNotNull(transaction);
+        assertEquals(-20.0, transaction.getAmount(), DELTA);
     }
 }

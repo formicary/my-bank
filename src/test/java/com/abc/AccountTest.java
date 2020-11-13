@@ -1,7 +1,7 @@
 package com.abc;
 
-import com.abc.core.Account;
-import com.abc.core.AccountType;
+import com.abc.core.account.Account;
+import com.abc.core.account.AccountType;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -36,7 +36,12 @@ public class AccountTest {
         assertEquals(-20.5, account.getTransactions().get(1).getAmount(), DELTA);
         assertNotNull(account.getTransactions().get(1).getTransactionDate());
         assertEquals(79.5, account.sumOfTransactions(), DELTA);
-        // TODO: add test - customer can withdraw, only if he has enough money
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void notEnoughMoneyToWithdraw() {
+        Account account = new Account(AccountType.SAVINGS);
+        account.withdraw(100.0);
     }
 
     @Test
