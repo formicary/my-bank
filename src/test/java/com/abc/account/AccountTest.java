@@ -9,7 +9,7 @@ public class AccountTest {
     private static final double DELTA = 1e-15;
 
     @Test
-    public void customerCanDepositToAccount() {
+    public void When_DepositPositiveAmount_Expect_DepositToSucceed() {
         Account account = new Account(AccountType.CHECKING);
         account.deposit(20.5);
 
@@ -19,13 +19,13 @@ public class AccountTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void depositWithNegativeAmount() {
+    public void When_DepositNegativeAmount_Expect_ExceptionIsThrown() {
         Account account = new Account(AccountType.SAVINGS);
         account.deposit(-5.0);
     }
 
     @Test
-    public void customerCanWithdrawFromAccount() {
+    public void When_EnoughMoneyToWithdraw_Expect_WithdrawToSucceed() {
         Account account = new Account(AccountType.CHECKING);
         account.deposit(100);
         account.withdraw(20.5);
@@ -37,13 +37,13 @@ public class AccountTest {
     }
 
     @Test(expected = IllegalStateException.class)
-    public void notEnoughMoneyToWithdraw() {
+    public void When_NotEnoughMoneyToWithdraw_Expect_ExceptionIsThrown() {
         Account account = new Account(AccountType.SAVINGS);
         account.withdraw(100.0);
     }
 
     @Test
-    public void sumOfTransactionsIsCorrect() {
+    public void When_AccountHasMultipleTransactions_Expect_SumOfTransactionsToBeCorrect() {
         Account account = new Account(AccountType.CHECKING);
         account.deposit(1000.0);
         account.withdraw(200.0);
@@ -53,67 +53,7 @@ public class AccountTest {
     }
 
     @Test
-    public void checkingAccountInterest() {
-        Account account = new Account(AccountType.CHECKING);
-        account.deposit(100.0);
-
-        assertEquals(100 * 0.001, account.interestEarned(), DELTA);
-    }
-
-    @Test
-    public void savingsAccountInterestUnder1000Dollars() {
-        Account account = new Account(AccountType.SAVINGS);
-        account.deposit(500.0);
-
-        assertEquals(500 * 0.001, account.interestEarned(), DELTA);
-    }
-
-    @Test
-    public void savingsAccountInterestAbove1000Dollars() {
-        Account account = new Account(AccountType.SAVINGS);
-        account.deposit(1200.0);
-        double expectedInterest = 0.001 * 1000 + 0.002 * 200;
-
-        assertEquals(expectedInterest, account.interestEarned(), DELTA);
-    }
-
-    @Test
-    public void savingsAccountInterestAt1000Dollars() {
-        Account account = new Account(AccountType.SAVINGS);
-        account.deposit(1000.0);
-
-        assertEquals(1000 * 0.001, account.interestEarned(), DELTA);
-    }
-
-    @Test
-    public void maxiSavingsAccountInterestUpTo1000Dollars() {
-        Account account = new Account(AccountType.MAXI_SAVINGS);
-        account.deposit(800.0);
-
-        assertEquals(800 * 0.02, account.interestEarned(), DELTA);
-    }
-
-    @Test
-    public void maxiSavingsAccountInterestBetween1000And2000Dollars() {
-        Account account = new Account(AccountType.MAXI_SAVINGS);
-        account.deposit(1500.0);
-        double expectedInterest = 0.02 * 1000 + 0.05 * 500;
-
-        assertEquals(expectedInterest, account.interestEarned(), DELTA);
-    }
-
-    @Test
-    public void maxiSavingsAccountInterestAbove2000Dollars() {
-        Account account = new Account(AccountType.MAXI_SAVINGS);
-        account.deposit(2500.0);
-        double expectedInterest = 0.02 * 1000 + 0.05 * 1000 + 0.1 * 500;
-
-        assertEquals(expectedInterest, account.interestEarned(), DELTA);
-    }
-
-    // TODO: mock!!!
-    @Test
-    public void correctStatementForAccount() {
+    public void When_AccountHasMultipleTransactions_Expect_StatementToBeCorrect() {
         Account account = new Account(AccountType.CHECKING);
         account.deposit(500.0);
         account.withdraw(30.0);

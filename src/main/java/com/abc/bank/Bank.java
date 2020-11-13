@@ -1,6 +1,7 @@
 package com.abc.bank;
 
 import com.abc.customer.Customer;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Bank {
 
+    @Getter
     private final List<Customer> customers = new ArrayList<>();
 
     public void addCustomer(Customer customer) {

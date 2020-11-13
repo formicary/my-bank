@@ -11,7 +11,7 @@ public class SavingsInterestCalculatorTest {
     private static final double DELTA = 1e-15;
 
     @Test
-    public void interestUpTo1000IsCorrectlyCalculated() {
+    public void When_SumOfTransactionsIsLessThanOrEqual1000_Expect_InterestToBeCorrectlyCalculated() {
         InterestCalculator calculator = new SavingsInterestCalculator();
         Account account = new Account(AccountType.SAVINGS);
         account.deposit(100.0);
@@ -20,7 +20,7 @@ public class SavingsInterestCalculatorTest {
     }
 
     @Test
-    public void interestAbove1000IsCorrectlyCalculated() {
+    public void When_SumOfTransactionsIsGreaterThan1000_Expect_InterestToBeCorrectlyCalculated() {
         InterestCalculator calculator = new SavingsInterestCalculator();
         Account account = new Account(AccountType.SAVINGS);
         account.deposit(1500.0);
@@ -29,7 +29,7 @@ public class SavingsInterestCalculatorTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void incompatibleAccountTypeThrowsException() {
+    public void When_AccountTypeIsIncompatible_Expect_ExceptionIsThrown() {
         InterestCalculator calculator = new SavingsInterestCalculator();
         Account account = new Account(AccountType.MAXI_SAVINGS);
         account.deposit(500.0);

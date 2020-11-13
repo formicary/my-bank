@@ -11,7 +11,7 @@ public class MaxiSavingsInterestCalculatorTest {
     private static final double DELTA = 1e-15;
 
     @Test
-    public void interestUpTo1000IsCorrectlyCalculated() {
+    public void When_SumOfTransactionsIsLessThanOrEqual1000_Expect_InterestToBeCorrectlyCalculated() {
         InterestCalculator calculator = new MaxiSavingsInterestCalculator();
         Account account = new Account(AccountType.MAXI_SAVINGS);
         account.deposit(500.0);
@@ -20,7 +20,7 @@ public class MaxiSavingsInterestCalculatorTest {
     }
 
     @Test
-    public void interestBetween1000And2000IsCorrectlyCalculated() {
+    public void When_SumOfTransactionsIsBetween1000And2000_Expect_InterestToBeCorrectlyCalculated() {
         InterestCalculator calculator = new MaxiSavingsInterestCalculator();
         Account account = new Account(AccountType.MAXI_SAVINGS);
         account.deposit(1500.0);
@@ -29,7 +29,7 @@ public class MaxiSavingsInterestCalculatorTest {
     }
 
     @Test
-    public void interestAbove2000IsCorrectlyCalculated() {
+    public void When_SumOfTransactionsIsAbove2000_Expect_InterestToBeCorrectlyCalculated() {
         InterestCalculator calculator = new MaxiSavingsInterestCalculator();
         Account account = new Account(AccountType.MAXI_SAVINGS);
         account.deposit(2500.0);
@@ -38,7 +38,7 @@ public class MaxiSavingsInterestCalculatorTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void incompatibleAccountTypeThrowsException() {
+    public void When_AccountTypeIsIncompatible_Expect_ExceptionIsThrown() {
         InterestCalculator calculator = new MaxiSavingsInterestCalculator();
         Account account = new Account(AccountType.CHECKING);
         account.deposit(500.0);

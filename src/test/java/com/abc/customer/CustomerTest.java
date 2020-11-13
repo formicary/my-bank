@@ -11,11 +11,9 @@ public class CustomerTest {
     private static final double DELTA = 1e-15;
 
     @Test
-    public void customerStatementIsCorrect(){
-
+    public void When_CustomerHasMultipleAccounts_Expect_CustomerStatementToBeCorrect(){
         Account checkingAccount = new Account(AccountType.CHECKING);
         Account savingsAccount = new Account(AccountType.SAVINGS);
-
         Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
 
         checkingAccount.deposit(100.0);
@@ -37,13 +35,13 @@ public class CustomerTest {
     }
 
     @Test
-    public void customerCanOpenOneAccount(){
+    public void When_CustomerOpens1Account_Expect_NumberOfAccountsToBe1(){
         Customer oscar = new Customer("Oscar").openAccount(new Account(AccountType.SAVINGS));
         assertEquals(1, oscar.getNumberOfAccounts());
     }
 
     @Test
-    public void customerCanOpenMultipleAccounts(){
+    public void When_CustomerOpens3Accounts_Expect_NumberOfAccountsToBe3(){
         Customer oscar = new Customer("Oscar")
                 .openAccount(new Account(AccountType.SAVINGS));
         oscar.openAccount(new Account(AccountType.CHECKING));
@@ -52,7 +50,7 @@ public class CustomerTest {
     }
 
     @Test
-    public void totalInterestEarnedIsCorrect() {
+    public void When_CustomerHasMultipleAccounts_Expect_TotalInterestEarnedToBeCorrect() {
         Account savingsAccount = new Account(AccountType.SAVINGS);
         Customer jane = new Customer("Jane").openAccount(savingsAccount);
         savingsAccount.deposit(1500.0);

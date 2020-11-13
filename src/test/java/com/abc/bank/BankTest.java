@@ -12,40 +12,16 @@ public class BankTest {
     private static final double DOUBLE_DELTA = 1e-15;
 
     @Test
-    public void totalInterestPaidOnCheckingAccount() {
+    public void When_CustomerIsAdded_Expect_BankStateToBeCorrect() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(AccountType.CHECKING);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+        Customer customer = new Customer("John");
+        bank.addCustomer(customer);
 
-        checkingAccount.deposit(100.0);
-
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(1, bank.getCustomers().size());
     }
 
     @Test
-    public void totalInterestPaidOnSavingsAccount() {
-        Bank bank = new Bank();
-        Account savingsAccount = new Account(AccountType.SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(savingsAccount));
-
-        savingsAccount.deposit(1500.0);
-
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
-    }
-
-    @Test
-    public void totalInterestPaidOnMaxiSavingsAccount() {
-        Bank bank = new Bank();
-        Account maxiSavingsAccount = new Account(AccountType.MAXI_SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(maxiSavingsAccount));
-
-        maxiSavingsAccount.deposit(3000.0);
-
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
-    }
-
-    @Test
-    public void summaryOfAllCustomersIsCorrect() {
+    public void When_BankHasMultipleCustomers_Expect_CustomerSummaryToBeCorrect() {
         Bank bank = new Bank();
         Customer jane = new Customer("Jane").openAccount(new Account(AccountType.MAXI_SAVINGS));
         jane.openAccount(new Account(AccountType.SAVINGS));
@@ -59,13 +35,13 @@ public class BankTest {
     }
 
     @Test
-    public void summaryOfAllCustomersIfBankHasNoCustomers() {
+    public void When_BankHasNoCustomers_Expect_CustomerSummaryToBeCorrect() {
         Bank bank = new Bank();
         assertEquals("Customer Summary", bank.summaryOfAllCustomers());
     }
 
     @Test
-    public void totalInterestPaidByBank() {
+    public void When_BankHasMultipleCustomers_Expect_TotalInterestPaidToBeCorrect() {
         Bank bank = new Bank();
         Customer jane = new Customer("Jane");
         bank.addCustomer(jane);

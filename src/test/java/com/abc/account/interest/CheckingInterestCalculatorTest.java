@@ -11,7 +11,7 @@ public class CheckingInterestCalculatorTest {
     private static final double DELTA = 1e-15;
 
     @Test
-    public void interestIsCorrectlyCalculated() {
+    public void When_AccountTypeIsCorrect_Expect_InterestToBeCorrectlyCalculated() {
         InterestCalculator calculator = new CheckingInterestCalculator();
         Account account = new Account(AccountType.CHECKING);
         account.deposit(1000.0);
@@ -21,7 +21,7 @@ public class CheckingInterestCalculatorTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void incompatibleAccountTypeThrowsException() {
+    public void When_AccountTypeIsIncompatible_Expect_ExceptionIsThrown() {
         InterestCalculator calculator = new CheckingInterestCalculator();
         Account account = new Account(AccountType.SAVINGS);
         account.deposit(500.0);
