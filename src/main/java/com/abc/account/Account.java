@@ -33,7 +33,7 @@ public class Account {
         if (amount > sumOfTransactions()) {
             throw new IllegalStateException("not enough money on account");
         }
-        transactions.add(new Transaction(-amount)); // TODO ???
+        transactions.add(new Transaction(-amount));
     }
 
     public double interestEarned() {
