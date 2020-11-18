@@ -47,4 +47,12 @@ public class Customer {
                 .append(String.format("\nTotal In All Accounts %s", BankUtils.formatAmount(total))).toString();
     }
 
+    public void transferAmount(Account from, Account to, double amount) {
+        if (!accounts.contains(from) || !accounts.contains(to)) {
+            throw new IllegalArgumentException("customer can transfer only between his own accounts");
+        }
+        from.withdraw(amount);
+        to.deposit(amount);
+    }
+
 }

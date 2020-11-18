@@ -61,4 +61,57 @@ public class CustomerTest {
         assertEquals(127.0, jane.totalInterestEarned(), DELTA);
     }
 
+    @Test
+    public void When_CustomerTransfersBetweenAccounts_Expect_TotalOfBothAccountsToBeCorrect() {
+        Account maxiSavingsAccount = new Account(AccountType.MAXI_SAVINGS);
+        Account checkingAccount = new Account(AccountType.CHECKING);
+        Customer john = new Customer("John").openAccount(maxiSavingsAccount).openAccount(checkingAccount);
+        checkingAccount.deposit(1500.0);
+        maxiSavingsAccount.deposit(100.0);
+
+        john.transferAmount(checkingAccount, maxiSavingsAccount, 1000.0);
+
+        assertEquals(500.0, checkingAccount.sumOfTransactions(), DELTA);
+        assertEquals(1100.0, maxiSavingsAccount.sumOfTransactions(), DELTA);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void When_CustomerTransfersFromNotOwnAccount_Expect_TransferToThrowException() {
+        Account checkingAccount = new Account(AccountType.CHECKING);
+        checkingAccount.deposit(2000.0);
+        Account savingsAccount = new Account(AccountType.SAVINGS);
+        Customer john = new Customer("John").openAccount(savingsAccount);
+
+        john.transferAmount(checkingAccount, savingsAccount, 2000.0);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void When_CustomerTransfersToNotOwnAccount_Expect_TransferToThrowException() {
+        Account savingsAccount = new Account(AccountType.SAVINGS);
+        Customer john = new Customer("John").openAccount(savingsAccount);
+        savingsAccount.deposit(1000.0);
+        Account checkingAccount = new Account(AccountType.CHECKING);
+
+        john.transferAmount(savingsAccount, checkingAccount, 500.0);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void When_CustomerTransfersNegativeAmount_Expect_TransferToThrowException() {
+        Account maxiSavingsAccount = new Account(AccountType.MAXI_SAVINGS);
+        Account checkingAccount = new Account(AccountType.CHECKING);
+        Customer john = new Customer("John").openAccount(maxiSavingsAccount).openAccount(checkingAccount);
+        checkingAccount.deposit(500.0);
+
+        john.transferAmount(checkingAccount, maxiSavingsAccount, -200.0);
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void When_CustomerHasNotEnoughMoneyToTransfer_Expect_TransferToThrowException() {
+        Account maxiSavingsAccount = new Account(AccountType.MAXI_SAVINGS);
+        Account checkingAccount = new Account(AccountType.CHECKING);
+        Customer john = new Customer("John").openAccount(maxiSavingsAccount).openAccount(checkingAccount);
+        checkingAccount.deposit(500.0);
+
+        john.transferAmount(checkingAccount, maxiSavingsAccount, 1000.0);
+    }
 }
