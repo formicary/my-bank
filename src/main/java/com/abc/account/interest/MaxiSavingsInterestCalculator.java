@@ -8,26 +8,22 @@ import java.time.LocalDate;
 public class MaxiSavingsInterestCalculator implements InterestCalculator {
 
     @Override
-    public double calculateInterest(Account account) {
+    public double calculateDailyInterest(Account account) {
         if (account.getAccountType() != AccountType.MAXI_SAVINGS) {
             throw new IllegalArgumentException("account must be of type: Maxi Savings Account");
         }
         if (withdrawalInPastTenDays(account)) {
-            return 0.001 * account.sumOfTransactions();
+            return 0.001 * account.sumOfTransactions() / 365;
         }
-        return 0.05 * account.sumOfTransactions();
+        return 0.05 * account.sumOfTransactions() / 365;
     }
 
     private boolean withdrawalInPastTenDays(Account account) {
         LocalDate today = LocalDate.now();
         LocalDate tenDaysAgo = today.minusDays(10);
 
-        for (var transaction: account.getTransactions()) {
-            if (transaction.getAmount() < 0 && transaction.getTransactionDate().isAfter(tenDaysAgo)) {
-                return true;
-            }
-        }
-        return false;
+        return account.getTransactions().stream()
+                .anyMatch(transaction -> transaction.getAmount() < 0 && transaction.getTransactionDate().isAfter(tenDaysAgo));
     }
 
 }

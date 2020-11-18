@@ -4,6 +4,6 @@ import com.abc.account.Account;
 
 public interface InterestCalculator {
 
-    double calculateInterest(Account account);
+    double calculateDailyInterest(Account account);
 
 }

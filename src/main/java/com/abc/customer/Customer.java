@@ -1,5 +1,6 @@
 package com.abc.customer;
 
+import com.abc.account.TransactionType;
 import com.abc.bank.BankUtils;
 import com.abc.account.Account;
 import lombok.Getter;
@@ -52,7 +53,7 @@ public class Customer {
             throw new IllegalArgumentException("customer can transfer only between his own accounts");
         }
         from.withdraw(amount);
-        to.deposit(amount);
+        to.deposit(amount, TransactionType.CUSTOMER_DEPOSIT);
     }
 
 }

@@ -2,6 +2,7 @@ package com.abc.bank;
 
 import com.abc.account.Account;
 import com.abc.account.AccountType;
+import com.abc.account.TransactionType;
 import com.abc.customer.Customer;
 import org.junit.Test;
 
@@ -47,17 +48,21 @@ public class BankTest {
         bank.addCustomer(jane);
         Account janeSavings = new Account(AccountType.SAVINGS);
         jane.openAccount(janeSavings);
-        janeSavings.deposit(1500.0);
+        janeSavings.deposit(1500.0, TransactionType.CUSTOMER_DEPOSIT);
         Account janeChecking = new Account(AccountType.CHECKING);
         jane.openAccount(janeChecking);
-        janeChecking.deposit(500.0);
+        janeChecking.deposit(500.0, TransactionType.CUSTOMER_DEPOSIT);
         Customer john = new Customer("John");
         bank.addCustomer(john);
         Account johnMaxiSavings = new Account(AccountType.MAXI_SAVINGS);
         john.openAccount(johnMaxiSavings);
-        johnMaxiSavings.deposit(2500.0);
+        johnMaxiSavings.deposit(2500.0, TransactionType.CUSTOMER_DEPOSIT);
 
-        assertEquals(127.5 , bank.totalInterestPaid(), DOUBLE_DELTA);
+        janeSavings.addDailyInterestToAccount();
+        janeChecking.addDailyInterestToAccount();
+        johnMaxiSavings.addDailyInterestToAccount();
+
+        assertEquals(0.3493150684931507 , bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
 }

@@ -23,9 +23,9 @@ public class Account {
         setInterestCalculator();
     }
 
-    public void deposit(double amount) {
+    public void deposit(double amount, TransactionType type) {
         validateAmount(amount);
-        transactions.add(new Transaction(amount));
+        transactions.add(new Transaction(amount, type));
     }
 
     public void withdraw(double amount) {
@@ -33,11 +33,14 @@ public class Account {
         if (amount > sumOfTransactions()) {
             throw new IllegalStateException("not enough money on account");
         }
-        transactions.add(new Transaction(-amount));
+        transactions.add(new Transaction(-amount, TransactionType.CUSTOMER_WITHDRAWAL));
     }
 
     public double interestEarned() {
-        return calculator.calculateInterest(this);
+        return transactions.stream()
+                .filter(transaction -> transaction.getType() == TransactionType.INTEREST_ADDED)
+                .map(Transaction::getAmount)
+                .reduce(0.0, Double::sum);
     }
 
     public double sumOfTransactions() {
@@ -55,6 +58,11 @@ public class Account {
                         StringBuilder::append)
                 .append(String.format("Total %s", BankUtils.formatAmount(sumOfTransactions())))
                 .toString();
+    }
+
+    // this method would run at the end of each day
+    public void addDailyInterestToAccount() {
+        deposit(calculator.calculateDailyInterest(this), TransactionType.INTEREST_ADDED);
     }
 
     private void validateAmount(double amount) {

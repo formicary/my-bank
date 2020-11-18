@@ -11,15 +11,20 @@ public class TransactionTest {
 
     @Test
     public void When_AmountIsPositive_Expect_TransactionIsCreated() {
-        Transaction transaction = new Transaction(5.0);
+        Transaction transaction = new Transaction(5.0, TransactionType.CUSTOMER_DEPOSIT);
+
         assertEquals(5.0, transaction.getAmount(), DELTA);
+        assertEquals(TransactionType.CUSTOMER_DEPOSIT, transaction.getType());
         assertNotNull(transaction.getTransactionDate());
     }
 
     @Test
     public void When_AmountIsNegative_Expect_TransactionIsCreated() {
-        Transaction transaction = new Transaction(-20.0);
+        Transaction transaction = new Transaction(-20.0, TransactionType.CUSTOMER_WITHDRAWAL);
+
         assertNotNull(transaction);
         assertEquals(-20.0, transaction.getAmount(), DELTA);
+        assertEquals(TransactionType.CUSTOMER_WITHDRAWAL, transaction.getType());
+        assertNotNull(transaction.getTransactionDate());
     }
 }

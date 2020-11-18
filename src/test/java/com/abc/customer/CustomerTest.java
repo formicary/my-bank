@@ -2,6 +2,7 @@ package com.abc.customer;
 
 import com.abc.account.Account;
 import com.abc.account.AccountType;
+import com.abc.account.TransactionType;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -16,9 +17,10 @@ public class CustomerTest {
         Account savingsAccount = new Account(AccountType.SAVINGS);
         Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
 
-        checkingAccount.deposit(100.0);
-        savingsAccount.deposit(4000.0);
+        checkingAccount.deposit(100.0, TransactionType.CUSTOMER_DEPOSIT);
+        savingsAccount.deposit(4000.0, TransactionType.CUSTOMER_DEPOSIT);
         savingsAccount.withdraw(200.0);
+        savingsAccount.addDailyInterestToAccount();
 
         assertEquals("Statement for Henry\n" +
                 "\n" +
@@ -29,9 +31,10 @@ public class CustomerTest {
                 "Savings Account\n" +
                 "  deposit $4,000.00\n" +
                 "  withdrawal $200.00\n" +
-                "Total $3,800.00\n" +
+                "  deposit $0.02\n" +
+                "Total $3,800.02\n" +
                 "\n" +
-                "Total In All Accounts $3,900.00", henry.getStatement());
+                "Total In All Accounts $3,900.02", henry.getStatement());
     }
 
     @Test
@@ -52,13 +55,14 @@ public class CustomerTest {
     @Test
     public void When_CustomerHasMultipleAccounts_Expect_TotalInterestEarnedToBeCorrect() {
         Account savingsAccount = new Account(AccountType.SAVINGS);
-        Customer jane = new Customer("Jane").openAccount(savingsAccount);
-        savingsAccount.deposit(1500.0);
         Account maxiSavingsAccount = new Account(AccountType.MAXI_SAVINGS);
-        jane.openAccount(maxiSavingsAccount);
-        maxiSavingsAccount.deposit(2500.0);
+        Customer jane = new Customer("Jane").openAccount(savingsAccount).openAccount(maxiSavingsAccount);
+        savingsAccount.deposit(1500.0, TransactionType.CUSTOMER_DEPOSIT);
+        savingsAccount.addDailyInterestToAccount();
+        maxiSavingsAccount.deposit(2500.0, TransactionType.CUSTOMER_DEPOSIT);
+        maxiSavingsAccount.addDailyInterestToAccount();
 
-        assertEquals(127.0, jane.totalInterestEarned(), DELTA);
+        assertEquals(0.347945205479452, jane.totalInterestEarned(), DELTA);
     }
 
     @Test
@@ -66,8 +70,8 @@ public class CustomerTest {
         Account maxiSavingsAccount = new Account(AccountType.MAXI_SAVINGS);
         Account checkingAccount = new Account(AccountType.CHECKING);
         Customer john = new Customer("John").openAccount(maxiSavingsAccount).openAccount(checkingAccount);
-        checkingAccount.deposit(1500.0);
-        maxiSavingsAccount.deposit(100.0);
+        checkingAccount.deposit(1500.0, TransactionType.CUSTOMER_DEPOSIT);
+        maxiSavingsAccount.deposit(100.0, TransactionType.CUSTOMER_DEPOSIT);
 
         john.transferAmount(checkingAccount, maxiSavingsAccount, 1000.0);
 
@@ -78,7 +82,7 @@ public class CustomerTest {
     @Test(expected = IllegalArgumentException.class)
     public void When_CustomerTransfersFromNotOwnAccount_Expect_TransferToThrowException() {
         Account checkingAccount = new Account(AccountType.CHECKING);
-        checkingAccount.deposit(2000.0);
+        checkingAccount.deposit(2000.0, TransactionType.CUSTOMER_DEPOSIT);
         Account savingsAccount = new Account(AccountType.SAVINGS);
         Customer john = new Customer("John").openAccount(savingsAccount);
 
@@ -89,7 +93,7 @@ public class CustomerTest {
     public void When_CustomerTransfersToNotOwnAccount_Expect_TransferToThrowException() {
         Account savingsAccount = new Account(AccountType.SAVINGS);
         Customer john = new Customer("John").openAccount(savingsAccount);
-        savingsAccount.deposit(1000.0);
+        savingsAccount.deposit(1000.0, TransactionType.CUSTOMER_DEPOSIT);
         Account checkingAccount = new Account(AccountType.CHECKING);
 
         john.transferAmount(savingsAccount, checkingAccount, 500.0);
@@ -100,7 +104,7 @@ public class CustomerTest {
         Account maxiSavingsAccount = new Account(AccountType.MAXI_SAVINGS);
         Account checkingAccount = new Account(AccountType.CHECKING);
         Customer john = new Customer("John").openAccount(maxiSavingsAccount).openAccount(checkingAccount);
-        checkingAccount.deposit(500.0);
+        checkingAccount.deposit(500.0, TransactionType.CUSTOMER_DEPOSIT);
 
         john.transferAmount(checkingAccount, maxiSavingsAccount, -200.0);
     }
@@ -110,7 +114,7 @@ public class CustomerTest {
         Account maxiSavingsAccount = new Account(AccountType.MAXI_SAVINGS);
         Account checkingAccount = new Account(AccountType.CHECKING);
         Customer john = new Customer("John").openAccount(maxiSavingsAccount).openAccount(checkingAccount);
-        checkingAccount.deposit(500.0);
+        checkingAccount.deposit(500.0, TransactionType.CUSTOMER_DEPOSIT);
 
         john.transferAmount(checkingAccount, maxiSavingsAccount, 1000.0);
     }

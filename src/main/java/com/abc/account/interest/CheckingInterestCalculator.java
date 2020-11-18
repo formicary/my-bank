@@ -6,10 +6,10 @@ import com.abc.account.AccountType;
 public class CheckingInterestCalculator implements InterestCalculator {
 
     @Override
-    public double calculateInterest(Account account) {
+    public double calculateDailyInterest(Account account) {
         if (account.getAccountType() != AccountType.CHECKING) {
             throw new IllegalArgumentException("account must be of type: Checking Account");
         }
-        return account.sumOfTransactions() * 0.001;
+        return account.sumOfTransactions() * 0.001 / 365;
     }
 }
