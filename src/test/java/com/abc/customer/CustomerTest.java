@@ -58,7 +58,7 @@ public class CustomerTest {
         jane.openAccount(maxiSavingsAccount);
         maxiSavingsAccount.deposit(2500.0);
 
-        assertEquals(122.0, jane.totalInterestEarned(), DELTA);
+        assertEquals(127.0, jane.totalInterestEarned(), DELTA);
     }
 
 }

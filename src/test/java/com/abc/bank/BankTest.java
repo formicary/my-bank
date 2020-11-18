@@ -57,7 +57,7 @@ public class BankTest {
         john.openAccount(johnMaxiSavings);
         johnMaxiSavings.deposit(2500.0);
 
-        assertEquals(122.5 , bank.totalInterestPaid(), DOUBLE_DELTA);
+        assertEquals(127.5 , bank.totalInterestPaid(), DOUBLE_DELTA);
     }
 
 }

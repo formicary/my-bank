@@ -3,6 +3,8 @@ package com.abc.account.interest;
 import com.abc.account.Account;
 import com.abc.account.AccountType;
 
+import java.time.LocalDate;
+
 public class MaxiSavingsInterestCalculator implements InterestCalculator {
 
     @Override
@@ -10,12 +12,22 @@ public class MaxiSavingsInterestCalculator implements InterestCalculator {
         if (account.getAccountType() != AccountType.MAXI_SAVINGS) {
             throw new IllegalArgumentException("account must be of type: Maxi Savings Account");
         }
-        if (account.sumOfTransactions() <= 1000) {
-            return account.sumOfTransactions() * 0.02;
+        if (withdrawalInPastTenDays(account)) {
+            return 0.001 * account.sumOfTransactions();
         }
-        else if (account.sumOfTransactions() <= 2000) {
-            return 20 + 0.05 * (account.sumOfTransactions() - 1000);
-        }
-        return 70 + 0.1 * (account.sumOfTransactions() - 2000);
+        return 0.05 * account.sumOfTransactions();
     }
+
+    private boolean withdrawalInPastTenDays(Account account) {
+        LocalDate today = LocalDate.now();
+        LocalDate tenDaysAgo = today.minusDays(10);
+
+        for (var transaction: account.getTransactions()) {
+            if (transaction.getAmount() < 0 && transaction.getTransactionDate().isAfter(tenDaysAgo)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
