@@ -1,6 +1,8 @@
 package com.abc;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class Account {
@@ -24,16 +26,16 @@ public class Account {
 		if (amount <= 0) {
 			throw new IllegalArgumentException("amount must be greater than zero");
 		} else {
-			//add balance
+			balance += amount;
 			transactions.add(new Transaction(amount,accountType));
 		}
 	}
 
 	public void withdraw(double amount, int accountType) {
-		if (amount <= 0) {
+		if (amount <= 0&&amount<getBalance()) {
 			throw new IllegalArgumentException("amount must be greater than zero");
 		} else {
-			//balance
+			balance -= amount;
 			transactions.add(new Transaction(-amount,accountType));
 		}
 	}
@@ -46,37 +48,47 @@ public class Account {
 				return amount * 0.001;
 			else
 				return 1 + (amount - 1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
 		case MAXI_SAVINGS:
-			if (amount <= 1000)
-				return amount * 0.02;
-			if (amount <= 2000)
-				return 20 + (amount - 1000) * 0.05;
-			return 70 + (amount - 2000) * 0.1;
+			for (Transaction transaction : transactions) {
+				if (checkDate(transaction)&&transaction.getAmount()<0) {
+					return amount * 0.001;
+				} else {
+					return amount * 0.05;
+				}
+			}
+//			if (amount <= 1000)
+//				return amount * 0.02;
+//			if (amount <= 2000)
+//				return 20 + (amount - 1000) * 0.05;
+//			return 70 + (amount - 2000) * 0.1;
 		default:
 			return amount * 0.001;
 		}
 	}
 
-	public double sumTransactions() {
-		return checkIfTransactionsExist(true);
+	private boolean checkDate(Transaction transaction) {
+		Long transactionDayInMillSec =  transaction.getTransactionDateMillSec();
+		Long todayinMillSec = System.currentTimeMillis();
+		Long tenInMillSec = 864000000L;
+		return transactionDayInMillSec>todayinMillSec-tenInMillSec;
 	}
 
-	private double checkIfTransactionsExist(boolean checkAll) {
+	public double sumTransactions() {
 		double amount = 0.0;
 		for (Transaction t : transactions)
 			amount += t.amount;
 		return amount;
 	}
 
+//	private double checkIfTransactionsExist(boolean checkAll) {
+//		
+//	}
+
 	public int getAccountType() {
 		return accountType;
 	}
 
 	public double getBalance() {
-		// TODO Auto-generated method stub
 		return this.balance;
 	}
 

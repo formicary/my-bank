@@ -16,4 +16,7 @@ public class DateProvider {
 	public Date now() {
 		return Calendar.getInstance().getTime();
 	}
+	public Long nowMillSec() {
+		return Calendar.getInstance().getTimeInMillis();
+	}
 }

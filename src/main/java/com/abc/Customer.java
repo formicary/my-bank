@@ -43,7 +43,7 @@ public class Customer {
 			statement += "\n" + statementForAccount(a) + "\n";
 			total += a.sumTransactions();
 		}
-		statement += "\nTotal In All Accounts " + toDollars(total);
+		statement += "\n Total In All Accounts " + toDollars(total);
 		return statement;
 	}
 
@@ -77,21 +77,19 @@ public class Customer {
 		return String.format("$%,.2f", abs(d));
 	}
 	
-	private void transferBetweenAccounts(Account accountTypeFrom, Account accountTypeTo,double amount) throws Exception {
-		if (this.getNumberOfAccounts()>1&&accountTypeFrom!=accountTypeTo&&amount>=0) {
-			if (balanceCheck(accountTypeFrom,amount)) {
-				accountTypeFrom.withdraw(amount, accountTypeFrom.getAccountType());
-				accountTypeTo.deposit(amount, accountTypeTo.getAccountType());
+	private void transferBetweenAccounts(Account accountFrom, Account accountTo,double amount) throws Exception {
+		if (this.getNumberOfAccounts()>1&&accountFrom!=accountTo&&amount>=0) {
+			if (balanceCheck(accountFrom,amount)) {
+				accountFrom.withdraw(amount, accountFrom.getAccountType());
+				accountTo.deposit(amount, accountTo.getAccountType());
 			}
 		} else {
-			throw new IllegalAccessException("amount must be greater than zero and minimum 2 accounts needed \n"
-					+ "(account type must be different)");
+			throw new IllegalAccessException("amount must be greater than zero, accounts types must be different.");
 		}
 		
 	}
 
 	private boolean balanceCheck(Account accountTypeFrom, double amount) {
-		// this should be check the balance
 		return accountTypeFrom.getBalance()>amount;
 	}
 }
