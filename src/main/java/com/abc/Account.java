@@ -35,7 +35,7 @@ public class Account {
 		if (amount <= 0&&amount<getBalance()) {
 			throw new IllegalArgumentException("amount must be greater than zero");
 		} else {
-			balance -= amount;
+			balance = balance-amount;
 			transactions.add(new Transaction(-amount,accountType));
 		}
 	}
@@ -43,34 +43,33 @@ public class Account {
 	public double interestEarned() {
 		double amount = sumTransactions();
 		switch (accountType) {
-		case SAVINGS:
-			if (amount <= 1000)
-				return amount * 0.001;
-			else
-				return 1 + (amount - 1000) * 0.002;
-		case MAXI_SAVINGS:
-			for (Transaction transaction : transactions) {
-				if (checkDate(transaction)&&transaction.getAmount()<0) {
-					return amount * 0.001;
-				} else {
-					return amount * 0.05;
-				}
-			}
-//			if (amount <= 1000)
-//				return amount * 0.02;
-//			if (amount <= 2000)
-//				return 20 + (amount - 1000) * 0.05;
-//			return 70 + (amount - 2000) * 0.1;
-		default:
-			return amount * 0.001;
+			case SAVINGS:
+				return interestSavings(amount);
+			case MAXI_SAVINGS:
+				return interestMaxiSavings(amount);
+			default:
+				return amount * 0.001;	
 		}
+		
 	}
 
-	private boolean checkDate(Transaction transaction) {
+	private double interestMaxiSavings(double amount) {
+		for (Transaction transaction : transactions) {
+			if (checkLastTenDaysTransactions(transaction)&&transaction.getAmount()<0)
+				return amount * 0.001;
+		}
+		return amount * 0.05;
+	}
+
+	private double interestSavings(double amount) {
+		return amount<=1000 ? amount*0.001 : 1 + (amount - 1000) * 0.002;
+	}
+
+	private boolean checkLastTenDaysTransactions(Transaction transaction) {
 		Long transactionDayInMillSec =  transaction.getTransactionDateMillSec();
-		Long todayinMillSec = System.currentTimeMillis();
-		Long tenInMillSec = 864000000L;
-		return transactionDayInMillSec>todayinMillSec-tenInMillSec;
+		Long todayInMillSec = System.currentTimeMillis();
+		Long tenDayInMillSec = 864000000L;
+		return transactionDayInMillSec>todayInMillSec-tenDayInMillSec;
 	}
 
 	public double sumTransactions() {

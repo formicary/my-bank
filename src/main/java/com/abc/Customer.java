@@ -78,15 +78,22 @@ public class Customer {
 	}
 	
 	private void transferBetweenAccounts(Account accountFrom, Account accountTo,double amount) throws Exception {
-		if (this.getNumberOfAccounts()>1&&accountFrom!=accountTo&&amount>=0) {
+		if (accountIsExist(accountFrom)&&accountIsExist(accountTo)&&amount>0) {
 			if (balanceCheck(accountFrom,amount)) {
 				accountFrom.withdraw(amount, accountFrom.getAccountType());
 				accountTo.deposit(amount, accountTo.getAccountType());
 			}
 		} else {
-			throw new IllegalAccessException("amount must be greater than zero, accounts types must be different.");
+			throw new IllegalArgumentException("amount must be greater than zero, accounts must be exists.");
 		}
 		
+	}
+
+	private boolean accountIsExist(Account isExist) {
+		for (Account ac : accounts) 
+			if (ac.getAccountType()==isExist.getAccountType())
+				return true;
+		return false;
 	}
 
 	private boolean balanceCheck(Account accountTypeFrom, double amount) {
