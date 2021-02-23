@@ -1,8 +1,10 @@
 package com.abc;
 
 import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class Account {
@@ -26,6 +28,7 @@ public class Account {
 		if (amount <= 0) {
 			throw new IllegalArgumentException("amount must be greater than zero");
 		} else {
+			calculateDailyInterest();
 			balance += amount;
 			transactions.add(new Transaction(amount,accountType));
 		}
@@ -35,27 +38,31 @@ public class Account {
 		if (amount <= 0&&amount<getBalance()) {
 			throw new IllegalArgumentException("amount must be greater than zero");
 		} else {
+			calculateDailyInterest();
 			balance = balance-amount;
 			transactions.add(new Transaction(-amount,accountType));
 		}
 	}
-
+	
 	public double interestEarned() {
-		double amount = sumTransactions();
+		//double amount = sumTransactions();
 		switch (accountType) {
 			case SAVINGS:
-				return interestSavings(amount);
+				return interestSavings(balance);
 			case MAXI_SAVINGS:
-				return interestMaxiSavings(amount);
+				return interestMaxiSavings(balance);
 			default:
-				return amount * 0.001;	
+				return balance * 0.001;	
 		}
 		
 	}
 
 	private double interestMaxiSavings(double amount) {
+		//set minimum days without withdraw to earn maxiSavings
+		int minDays = 10;
 		for (Transaction transaction : transactions) {
-			if (checkLastTenDaysTransactions(transaction)&&transaction.getAmount()<0)
+			int pastDays = getPeriod(transaction.getTransactionLocalDate());
+			if (pastDays<minDays && transaction.getAmount()<0)
 				return amount * 0.001;
 		}
 		return amount * 0.05;
@@ -64,24 +71,41 @@ public class Account {
 	private double interestSavings(double amount) {
 		return amount<=1000 ? amount*0.001 : 1 + (amount - 1000) * 0.002;
 	}
-
-	private boolean checkLastTenDaysTransactions(Transaction transaction) {
-		Long transactionDayInMillSec =  transaction.getTransactionDateMillSec();
-		Long todayInMillSec = System.currentTimeMillis();
-		Long tenDayInMillSec = 864000000L;
-		return transactionDayInMillSec>todayInMillSec-tenDayInMillSec;
+	
+	//case of deposit or withdraw -interest calculate for this period, if period>0
+	private void calculateDailyInterest() {
+		LocalDate localDateTransaction;
+		if (transactions.size() > 0 && balance != 0.0) {
+			localDateTransaction = convertDateToLocalDate(transactions
+					.get(transactions.size()-1)
+					.getTransactionDate());
+			int days = getPeriod(localDateTransaction);
+			//call interestEarned times=days, for calculate amount,interest rate accrue
+			for(int i=0;i<days;i++) {
+				setBalance(interestEarned());
+			}
+		}
+		
 	}
 
-	public double sumTransactions() {
-		double amount = 0.0;
-		for (Transaction t : transactions)
-			amount += t.amount;
-		return amount;
+	private int getPeriod(LocalDate localDateTransaction) {
+		LocalDate localDateNow = LocalDate.now();
+		Period per = Period.between(localDateNow, localDateTransaction);
+		return per.getDays();
 	}
 
-//	private double checkIfTransactionsExist(boolean checkAll) {
-//		
+//	public double sumTransactions() {
+//		double amount = 0.0;
+//		for (Transaction t : transactions)
+//			amount += t.amount;
+//		return amount;
 //	}
+	
+	private LocalDate convertDateToLocalDate(Date date) {
+		return date.toInstant()
+			      .atZone(ZoneId.systemDefault())
+			      .toLocalDate();
+	}
 
 	public int getAccountType() {
 		return accountType;
@@ -89,6 +113,10 @@ public class Account {
 
 	public double getBalance() {
 		return this.balance;
+	}
+
+	private void setBalance(double balance) {
+		this.balance = balance;
 	}
 
 }

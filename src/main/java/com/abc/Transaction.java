@@ -1,19 +1,24 @@
 package com.abc;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.Date;
 
 public class Transaction {
 
 	public final double amount;
 	private Date transactionDate;
+	private LocalDate transactionLocalDate;
 	private Long transactionDateMillSec;
 	private int accountType;
 
 	public Transaction(double amount,int accountType) {
 		this.amount = amount;
-		this.transactionDate = DateProvider.getInstance().now();
 		this.accountType=accountType;
+		this.transactionDate = DateProvider.getInstance().now();
 		this.transactionDateMillSec = DateProvider.getInstance().nowMillSec();
+		this.transactionLocalDate = nowLocalDate();
 	}
 
 	public double getAmount() {
@@ -32,5 +37,14 @@ public class Transaction {
 		return transactionDateMillSec;
 	}
 
-
+	public LocalDate getTransactionLocalDate() {
+		return transactionLocalDate;
+	}
+	
+	private LocalDate nowLocalDate() {
+		return getTransactionDate().toInstant()
+			      .atZone(ZoneId.systemDefault())
+			      .toLocalDate();
+	}
+	
 }

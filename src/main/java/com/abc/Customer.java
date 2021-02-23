@@ -41,7 +41,7 @@ public class Customer {
 		double total = 0.0;
 		for (Account a : accounts) {
 			statement += "\n" + statementForAccount(a) + "\n";
-			total += a.sumTransactions();
+			total += a.getBalance();
 		}
 		statement += "\n Total In All Accounts " + toDollars(total);
 		return statement;
@@ -79,10 +79,9 @@ public class Customer {
 	
 	private void transferBetweenAccounts(Account accountFrom, Account accountTo,double amount) throws Exception {
 		if (accountIsExist(accountFrom)&&accountIsExist(accountTo)&&amount>0) {
-			if (balanceCheck(accountFrom,amount)) {
-				accountFrom.withdraw(amount, accountFrom.getAccountType());
-				accountTo.deposit(amount, accountTo.getAccountType());
-			}
+			accountFrom.withdraw(amount, accountFrom.getAccountType());
+			accountTo.deposit(amount, accountTo.getAccountType());
+				
 		} else {
 			throw new IllegalArgumentException("amount must be greater than zero, accounts must be exists.");
 		}
@@ -96,7 +95,4 @@ public class Customer {
 		return false;
 	}
 
-	private boolean balanceCheck(Account accountTypeFrom, double amount) {
-		return accountTypeFrom.getBalance()>amount;
-	}
 }
