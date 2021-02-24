@@ -34,12 +34,10 @@ public class Bank {
 	}
 
 	public String getFirstCustomer() {
-		try {
-			customers = null;
+		if (!customers.isEmpty()) {
 			return customers.get(0).getName();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "Error";
+		} else {
+			return "There is no any customer";
 		}
 	}
 }

@@ -77,21 +77,23 @@ public class Customer {
 		return String.format("$%,.2f", abs(d));
 	}
 	
-	private void transferBetweenAccounts(Account accountFrom, Account accountTo,double amount) throws Exception {
+	public String transferBetweenAccounts(Account accountFrom, Account accountTo,double amount) {
 		if (accountIsExist(accountFrom)&&accountIsExist(accountTo)&&amount>0) {
 			accountFrom.withdraw(amount, accountFrom.getAccountType());
 			accountTo.deposit(amount, accountTo.getAccountType());
-				
+			return "Transfer completed";
 		} else {
-			throw new IllegalArgumentException("amount must be greater than zero, accounts must be exists.");
+			return "amount must be greater than zero, accounts must be exists.";
 		}
 		
 	}
 
-	private boolean accountIsExist(Account isExist) {
-		for (Account ac : accounts) 
-			if (ac.getAccountType()==isExist.getAccountType())
-				return true;
+	public boolean accountIsExist(Account isExist) {
+		if (!(isExist==null)) {
+			for (Account ac : accounts) 
+				if (ac.getAccountType()==isExist.getAccountType())
+					return true;
+		}
 		return false;
 	}
 
