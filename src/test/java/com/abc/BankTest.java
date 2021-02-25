@@ -13,7 +13,7 @@ public class BankTest {
 	public void customerSummary() {
 		Bank bank = new Bank();
 		Customer john = new Customer("John");
-		john.openAccount(new Account(Account.CHECKING));
+		john.openAccount(new CheckingAccount());
 		bank.addCustomer(john);
 		assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
 	}
@@ -21,11 +21,11 @@ public class BankTest {
 	@Test
 	public void checkingAccount() {
 		Bank bank = new Bank();
-		Account checkingAccount = new Account(Account.CHECKING);
+		Account checkingAccount = new CheckingAccount();
 		Customer bill = new Customer("Bill").openAccount(checkingAccount);
 		bank.addCustomer(bill);
 
-		checkingAccount.deposit(100.0, 0);
+		checkingAccount.deposit(100.0, "CHECKING");
 
 		assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
 	}
@@ -33,10 +33,10 @@ public class BankTest {
 	@Test
 	public void savings_account() {
 		Bank bank = new Bank();
-		Account checkingAccount = new Account(Account.SAVINGS);
+		Account checkingAccount = new SavingsAccount();
 		bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
-		checkingAccount.deposit(1500.0, 1);
+		checkingAccount.deposit(1500.0, "SAVINGS");
 
 		assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
 	}
@@ -44,10 +44,10 @@ public class BankTest {
 	@Test
 	public void maxi_savings_account() {
 		Bank bank = new Bank();
-		Account checkingAccount = new Account(Account.MAXI_SAVINGS);
+		Account checkingAccount = new MaxiSavingsAccount();
 		bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
 
-		checkingAccount.deposit(3000.0, 2);
+		checkingAccount.deposit(3000.0, "MAXISAVINGS");
 
 		assertEquals(150.0, bank.totalInterestPaid(), DOUBLE_DELTA);
 	}
@@ -55,10 +55,10 @@ public class BankTest {
 	@Test
 	public void accountBalance() {
 		Bank bank = new Bank();
-		Account checkingAccount = new Account(Account.CHECKING);
+		Account checkingAccount = new CheckingAccount();
 		bank.addCustomer(new Customer("Joe").openAccount(checkingAccount));
 
-		checkingAccount.deposit(1000.0, 0);
+		checkingAccount.deposit(1000.0, "CHECKING");
 
 		assertEquals(1000.0, checkingAccount.getBalance(), DOUBLE_DELTA);
 	}
@@ -66,26 +66,26 @@ public class BankTest {
 	@Test
 	public void accountIsExist() {
 		Bank bank = new Bank();
-		Account checkingAccount = new Account(Account.CHECKING);
+		Account checkingAccount = new CheckingAccount();
 		Customer joe = new Customer("Joe").openAccount(checkingAccount);
 		bank.addCustomer(joe);
 
-		checkingAccount.deposit(100.0, 0);
+		checkingAccount.deposit(100.0, "CHECKING");
 
-		assertTrue(joe.accountIsExist(checkingAccount));
+		assertTrue(joe.accountTypeIsExist(checkingAccount));
 	}
 	
 	@Test
 	public void accountNotExist() {
 		Bank bank = new Bank();
-		Account checkingAccount = new Account(Account.CHECKING);
-		Account savingsAccount = new Account(Account.SAVINGS);
+		Account checkingAccount = new CheckingAccount();
+		Account savingsAccount = new SavingsAccount();
 		Customer joe = new Customer("Joe").openAccount(checkingAccount);
 		bank.addCustomer(joe);
 		
-		checkingAccount.deposit(100.0, 0);
+		checkingAccount.deposit(100.0, "CHECKING");
 		
-		assertFalse(joe.accountIsExist(savingsAccount));
+		assertFalse(joe.accountTypeIsExist(savingsAccount));
 	}
 
 	@Test

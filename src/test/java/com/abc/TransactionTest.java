@@ -7,7 +7,7 @@ import static org.junit.Assert.assertTrue;
 public class TransactionTest {
     @Test
     public void transaction() {
-        Transaction t = new Transaction(5,0);
+        Transaction t = new Transaction(5,"CHECKING");
         assertTrue(t instanceof Transaction);
     }
 }

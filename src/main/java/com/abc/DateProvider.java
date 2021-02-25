@@ -1,7 +1,8 @@
 package com.abc;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Calendar;
-import java.util.Date;
 
 public class DateProvider {
 
@@ -13,8 +14,8 @@ public class DateProvider {
 		return instance;
 	}
 
-	public Date now() {
-		return Calendar.getInstance().getTime();
+	public LocalDate now() {
+		return Calendar.getInstance().getTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 	}
 
 }
