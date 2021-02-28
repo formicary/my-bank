@@ -19,33 +19,32 @@ public abstract class Account {
 		this.balance = 0.0;
 	}
 
-	public String deposit(double amount, String accountType) {
-		if (amount <= 0.0 || accountType != this.accountType)
-			return "amount must be greater than zero";
-			this.balance += amount;
-			transactions.add(new Transaction(amount, accountType));
-			return "Deposit";
+	public void deposit(double amount) {
+		if (amount <= 0.0)
+			throw new IllegalArgumentException("amount must be greater than zero");
+		balance += amount;
+		transactions.add(new Transaction(amount, accountType));
 	}
 
-	public String withdraw(double amount, String accountType) {
-		if (amount <= 0.0 || amount > getBalance() || accountType != this.accountType)
-			return ("amount must be greater than zero and less than balance");
-			balance -= amount;
-			transactions.add(new Transaction(-amount, accountType));
-			return "Withdraw";
-		
+	public void withdraw(double amount) {
+		if (checkAmount(amount))
+			throw new IllegalArgumentException("amount must be greater than zero and less than balance");
+		balance -= amount;
+		transactions.add(new Transaction(-amount, accountType));
+	}
+	
+	public boolean checkAmount(Double amount) {
+		return amount <= 0.0 || amount > sumTransactions();
 	}
 
-	public abstract double interestEarned(Account account, double amount);
-
-	private void calculateDailyInterest(Account account, double amount) {
-		if (transactions.size() > 0 && balance != 0.0) {
-			int days = getPeriod(transactions.get(transactions.size() - 1).getTransactionLocalDate());
-			for (int i = 0; i < days; i++) {
-				balance+=interestEarned(account, amount);
-			}
-		}
+	public double sumTransactions() {
+		double amount = 0.0;
+		for (Transaction t : transactions)
+			amount += t.amount;
+		return amount;
 	}
+
+	public abstract double interestEarned();
 
 	protected int getPeriod(LocalDate localDateTransaction) {
 		Period per = Period.between(LocalDate.now(), localDateTransaction);
@@ -57,7 +56,8 @@ public abstract class Account {
 	}
 
 	public double getBalance() {
-		return this.balance;
+		return balance;
+
 	}
 
 }

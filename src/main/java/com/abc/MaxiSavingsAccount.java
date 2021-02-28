@@ -9,7 +9,8 @@ public class MaxiSavingsAccount extends Account {
 	}
 
 	@Override
-	public double interestEarned(Account account, double amount) {
+	public double interestEarned() {
+		double amount = this.sumTransactions();
 		int minDays = 10;
 		for (Transaction transaction : transactions) {
 			int pastDays = getPeriod(transaction.getTransactionLocalDate());

@@ -7,10 +7,11 @@ public class CheckingAccount extends Account {
 	public CheckingAccount() {
 		super(accountType);
 	}
-
+	
 	@Override
-	public double interestEarned(Account thisAccount , double amount) {
-		return amount*0.001;
+	public double interestEarned() {
+		return sumTransactions()*0.001;
 	}
 
 }
+ 
