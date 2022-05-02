@@ -1,5 +1,6 @@
 Completed programming test by Dainius Cerniauskas
 ========
+This is a university 3rd year project
 
 Discussion
 --------
