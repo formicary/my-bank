@@ -7,7 +7,7 @@ public class Bank {
     private List<Customer> customers;
 
     public Bank() {
-        customers = new ArrayList<Customer>();
+        customers = new ArrayList<>();
     }
 
     public void addCustomer(Customer customer) {
@@ -15,10 +15,16 @@ public class Bank {
     }
 
     public String customerSummary() {
-        String summary = "Customer Summary";
-        for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-        return summary;
+        StringBuilder summary = new StringBuilder("Customer Summary");
+        for (Customer customer : customers) {
+            summary.append("\n - ");
+            summary.append(customer.getName());
+            summary.append(" (");
+            summary.append(format(customer.getNumberOfAccounts(), "account"));
+            summary.append(")");
+        }
+        return summary.toString();
+
     }
 
     //Make sure correct plural of word is created based on the number passed in:
@@ -29,11 +35,12 @@ public class Bank {
 
     public double totalInterestPaid() {
         double total = 0;
-        for (Customer c : customers)
-            total += c.totalInterestEarned();
+        for (Customer customer : customers)
+            total += customer.totalInterestEarned();
         return total;
     }
 
+    // TODO: delete??
     public String getFirstCustomer() {
         try {
             customers = null;

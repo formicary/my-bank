@@ -8,15 +8,22 @@ public class BankTest {
     private static final double DOUBLE_DELTA = 1e-15;
 
     @Test
-    public void customerSummary() {
+    public void testCustomerSummary() {
         Bank bank = new Bank();
         Customer john = new Customer("John");
-        john.openAccount(new Account(Account.CHECKING));
-        bank.addCustomer(john);
+        Customer james = new Customer("James");
 
-        assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
+        bank.addCustomer(john);
+        bank.addCustomer(james);
+
+        john.openAccount(new Account(Account.CHECKING));
+        james.openAccount(new Account(Account.CHECKING));
+        james.openAccount(new Account(Account.SAVINGS));
+
+        assertEquals("Customer Summary\n - John (1 account)\n - James (2 accounts)", bank.customerSummary());
     }
 
+    // TODO Rewrite these tests
     @Test
     public void checkingAccount() {
         Bank bank = new Bank();
