@@ -69,6 +69,13 @@ public abstract class Account {
         return amount;
     }
 
+    public Transaction getLastTransaction() {
+        if (transactions.isEmpty()) {
+            return null;
+        }
+        return transactions.get(transactions.size()-1);
+    }
+
     public abstract double calcInterestEarned();
 
     public double getBalance() {

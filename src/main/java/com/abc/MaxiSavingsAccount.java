@@ -1,5 +1,8 @@
 package com.abc;
 
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
 public class MaxiSavingsAccount extends Account {
 
     public MaxiSavingsAccount(Customer customer, AccountType accountType) {
@@ -9,10 +12,20 @@ public class MaxiSavingsAccount extends Account {
     @Override
     public double calcInterestEarned() {
         double amount = getBalance();
-        if (amount <= 1000)
-            return amount * 0.02;
-        if (amount <= 2000)
-            return 20 + (amount - 1000) * 0.05;
-        return 70 + (amount - 2000) * 0.1;
+        if (calcDayDiff() > 10) {
+            return amount * 0.05;
+        } else {
+            return amount * 0.001;
+        }
+    }
+
+    private long calcDayDiff() {
+        Transaction transaction = getLastTransaction();
+        if (transaction == null) {
+            return Long.MAX_VALUE;
+        }
+        Date today = new Date();
+        long diffInMillis = Math.abs(today.getTime() - transaction.getTransactionDate().getTime());
+        return TimeUnit.DAYS.convert(diffInMillis, TimeUnit.MILLISECONDS);
     }
 }
