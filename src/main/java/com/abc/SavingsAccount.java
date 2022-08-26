@@ -8,7 +8,7 @@ public class SavingsAccount extends Account {
 
     @Override
     public double calcInterestEarned() {
-        double amount = sumTransactions();
+        double amount = getBalance();
         if (amount <= 1000)
             return amount * 0.001;
         else

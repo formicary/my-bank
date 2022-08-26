@@ -2,7 +2,6 @@ package com.abc;
 
 import static java.lang.Math.abs;
 
-// NOTE Statement could be an abstract class with a "create" method
 public final class CustomerStatement {
 
     private CustomerStatement() {

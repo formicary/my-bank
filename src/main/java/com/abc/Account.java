@@ -8,29 +8,44 @@ public abstract class Account {
     private final Customer customer;
     private final AccountType accountType;
     public List<Transaction> transactions;
+    private double balance;
 
     public Account(Customer customer, AccountType accountType) {
+        this.balance = 0.0;
         this.customer = customer;
         this.accountType = accountType;
         this.transactions = new ArrayList<>();
     }
 
-    public void deposit(double amount) {
+    public final void deposit(double amount) {
+        validateDeposit(amount);
+        transactions.add(new Transaction(amount));
+        balance += amount;
+    }
+
+    private void validateDeposit(double amount) {
         if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
-        } else {
-            transactions.add(new Transaction(amount));
+            throw new IllegalArgumentException("Amount must be greater than zero.");
         }
     }
 
-    public void withdraw(double amount) {
+    public final void withdraw(double amount) {
+        validateWithdraw(amount);
+        transactions.add(new Transaction(-amount));
+        balance -= amount;
+    }
+
+    private void validateWithdraw(double amount) {
         if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
-        } else {
-            transactions.add(new Transaction(-amount));
+            throw new IllegalArgumentException("Amount must be greater than zero.");
+        }
+        if (balance < amount) {
+            throw new RuntimeException("Amount must be greater than balance."); // Could be a custom exception.
         }
     }
 
+    // Currently it's the same as the account balance, but I choose not to remove it.
+    // Later it could be easily extended with a parameter (eg. time interval)
     public double sumTransactions() {
         double amount = 0.0;
         for (Transaction t : transactions)
@@ -39,6 +54,10 @@ public abstract class Account {
     }
 
     public abstract double calcInterestEarned();
+
+    public double getBalance() {
+        return balance;
+    }
 
     public Customer getCustomer() {
         return customer;
