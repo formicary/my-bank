@@ -5,10 +5,12 @@ import java.util.List;
 
 public class Account {
 
+    private final Customer customer;
     private final AccountType accountType;
     public List<Transaction> transactions;
 
-    public Account(AccountType accountType) {
+    public Account(Customer customer, AccountType accountType) {
+        this.customer = customer;
         this.accountType = accountType;
         this.transactions = new ArrayList<>();
     }
@@ -57,6 +59,10 @@ public class Account {
         for (Transaction t : transactions)
             amount += t.getAmount();
         return amount;
+    }
+
+    public Customer getCustomer() {
+        return customer;
     }
 
     public AccountType getAccountType() {

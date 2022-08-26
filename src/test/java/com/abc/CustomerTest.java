@@ -10,10 +10,12 @@ public class CustomerTest {
     @Test //Test customer statement generation
     public void testApp() {
 
-        Account checkingAccount = new Account(AccountType.CHECKING);
-        Account savingsAccount = new Account(AccountType.SAVINGS);
+        Customer henry = new Customer("Henry");
 
-        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
+        Account checkingAccount = new Account(henry, AccountType.CHECKING);
+        Account savingsAccount = new Account(henry, AccountType.SAVINGS);
+
+        henry.openAccount(checkingAccount).openAccount(savingsAccount);
 
         checkingAccount.deposit(100.0);
         savingsAccount.deposit(4000.0);
@@ -43,7 +45,7 @@ public class CustomerTest {
     public void testGetNumberOfAccountsWith3Accounts() {
         Customer oscar = new Customer("Oscar");
         for (int i = 0; i < 3; i++) {
-            oscar.openAccount(new Account(AccountType.SAVINGS));
+            oscar.openAccount(new Account(oscar, AccountType.SAVINGS));
         }
         assertEquals(3, oscar.getNumberOfAccounts());
     }

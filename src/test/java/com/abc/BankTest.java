@@ -16,9 +16,9 @@ public class BankTest {
         bank.addCustomer(john);
         bank.addCustomer(james);
 
-        john.openAccount(new Account(AccountType.CHECKING));
-        james.openAccount(new Account(AccountType.CHECKING));
-        james.openAccount(new Account(AccountType.SAVINGS));
+        john.openAccount(new Account(john, AccountType.CHECKING));
+        james.openAccount(new Account(james, AccountType.CHECKING));
+        james.openAccount( new Account(james, AccountType.SAVINGS));
 
         assertEquals("Customer Summary\n - John (1 account)\n - James (2 accounts)", bank.customerSummary());
     }
@@ -27,8 +27,9 @@ public class BankTest {
     @Test
     public void checkingAccount() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(AccountType.CHECKING);
-        Customer bill = new Customer("Bill").openAccount(checkingAccount);
+        Customer bill = new Customer("Bill");
+        Account checkingAccount = new Account(bill, AccountType.CHECKING);
+        bill.openAccount(checkingAccount);
         bank.addCustomer(bill);
 
         checkingAccount.deposit(100.0);
@@ -39,8 +40,10 @@ public class BankTest {
     @Test
     public void savings_account() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(AccountType.SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+        Customer bill = new Customer("Bill");
+        Account checkingAccount = new Account(bill, AccountType.SAVINGS);
+        bank.addCustomer(bill);
+        bill.openAccount(checkingAccount);
 
         checkingAccount.deposit(1500.0);
 
@@ -50,8 +53,10 @@ public class BankTest {
     @Test
     public void maxi_savings_account() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(AccountType.MAXI_SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+        Customer bill = new Customer("Bill");
+        Account checkingAccount = new Account(bill, AccountType.MAXI_SAVINGS);
+        bill.openAccount(checkingAccount);
+        bank.addCustomer(bill);
 
         checkingAccount.deposit(3000.0);
 
