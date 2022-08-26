@@ -16,9 +16,9 @@ public class BankTest {
         bank.addCustomer(john);
         bank.addCustomer(james);
 
-        john.openAccount(new Account(john, AccountType.CHECKING));
-        james.openAccount(new Account(james, AccountType.CHECKING));
-        james.openAccount( new Account(james, AccountType.SAVINGS));
+        john.openAccount(AccountFactory.create(john, AccountType.CHECKING));
+        james.openAccount(AccountFactory.create(james, AccountType.CHECKING));
+        james.openAccount(AccountFactory.create(james, AccountType.SAVINGS));
 
         assertEquals("Customer Summary\n - John (1 account)\n - James (2 accounts)", bank.customerSummary());
     }
@@ -28,7 +28,7 @@ public class BankTest {
     public void checkingAccount() {
         Bank bank = new Bank();
         Customer bill = new Customer("Bill");
-        Account checkingAccount = new Account(bill, AccountType.CHECKING);
+        Account checkingAccount = AccountFactory.create(bill, AccountType.CHECKING);
         bill.openAccount(checkingAccount);
         bank.addCustomer(bill);
 
@@ -41,7 +41,7 @@ public class BankTest {
     public void savings_account() {
         Bank bank = new Bank();
         Customer bill = new Customer("Bill");
-        Account checkingAccount = new Account(bill, AccountType.SAVINGS);
+        Account checkingAccount = AccountFactory.create(bill, AccountType.SAVINGS);
         bank.addCustomer(bill);
         bill.openAccount(checkingAccount);
 
@@ -54,7 +54,7 @@ public class BankTest {
     public void maxi_savings_account() {
         Bank bank = new Bank();
         Customer bill = new Customer("Bill");
-        Account checkingAccount = new Account(bill, AccountType.MAXI_SAVINGS);
+        Account checkingAccount = AccountFactory.create(bill, AccountType.MAXI_SAVINGS);
         bill.openAccount(checkingAccount);
         bank.addCustomer(bill);
 
