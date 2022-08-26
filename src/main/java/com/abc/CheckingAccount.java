@@ -7,7 +7,7 @@ public class CheckingAccount extends Account {
     }
 
     @Override
-    public double interestEarned() {
+    public double calcInterestEarned() {
         double amount = sumTransactions();
         return amount * 0.001;
     }

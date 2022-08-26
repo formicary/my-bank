@@ -38,7 +38,7 @@ public abstract class Account {
         return amount;
     }
 
-    public abstract double interestEarned();
+    public abstract double calcInterestEarned();
 
     public Customer getCustomer() {
         return customer;

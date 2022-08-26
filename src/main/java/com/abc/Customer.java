@@ -25,12 +25,12 @@ public class Customer {
     public double totalInterestEarned() {
         double total = 0.0;
         for (Account a : accounts)
-            total += a.interestEarned();
+            total += a.calcInterestEarned();
         return total;
     }
 
     public String getStatement() {
-        return CustomerStatement.createStatement(this);
+        return CustomerStatement.create(this);
     }
 
     public String getName() {

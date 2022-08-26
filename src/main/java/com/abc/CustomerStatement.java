@@ -2,7 +2,7 @@ package com.abc;
 
 import static java.lang.Math.abs;
 
-// NOTE Statement could be an abstract class with a "createStatement" method
+// NOTE Statement could be an abstract class with a "create" method
 public final class CustomerStatement {
 
     private CustomerStatement() {
@@ -10,7 +10,7 @@ public final class CustomerStatement {
 
     private static final String LINE_BREAK = "\n";
 
-    public static String createStatement(Customer customer) {
+    public static String create(Customer customer) {
         StringBuilder statement = new StringBuilder("Statement for ");
         statement.append(customer.getName());
         statement.append(LINE_BREAK);
