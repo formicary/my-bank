@@ -44,6 +44,22 @@ public abstract class Account {
         }
     }
 
+    public void transfer(double amount, Account targetAccount) {
+        validateTransfer(amount, targetAccount);
+        withdraw(amount);
+        targetAccount.deposit(amount);
+    }
+
+    private void validateTransfer(double amount, Account targetAccount) {
+        if (targetAccount == this) {
+            throw new RuntimeException("Target account must be a different account.");
+        }
+        if (targetAccount == null) {
+            throw new NullPointerException("Target account cannot be null.");
+        }
+        validateWithdraw(amount);
+    }
+
     // Currently it's the same as the account balance, but I choose not to remove it.
     // Later it could be easily extended with a parameter (eg. time interval)
     public double sumTransactions() {
