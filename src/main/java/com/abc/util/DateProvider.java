@@ -1,10 +1,13 @@
-package com.abc;
+package com.abc.util;
 
 import java.util.Calendar;
 import java.util.Date;
 
 public class DateProvider {
     private static DateProvider instance = null;
+
+    private DateProvider() {
+    }
 
     public static DateProvider getInstance() {
         if (instance == null)
