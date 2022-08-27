@@ -7,15 +7,20 @@ import java.util.List;
 public class Customer {
     private final String name;
     private final List<Account> accounts;
+    private Bank bank;
 
     public Customer(String name) {
         this.name = name;
         this.accounts = new ArrayList<>();
     }
 
-    public Customer openAccount(Account account) {
+    public Account openAccount(AccountType accountType) {
+        if (bank == null) {
+            throw new NullPointerException("Customer should be assigned to a bank first.");
+        }
+        Account account = bank.createAccount(this, accountType);
         accounts.add(account);
-        return this;
+        return account;
     }
 
     public int getNumberOfAccounts() {
@@ -39,5 +44,13 @@ public class Customer {
 
     public List<Account> getAccounts() {
         return Collections.unmodifiableList(accounts);
+    }
+
+    public Bank getBank() {
+        return bank;
+    }
+
+    public void setBank(Bank bank) {
+        this.bank = bank;
     }
 }

@@ -6,6 +6,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -57,5 +58,11 @@ public class BankTest {
         bank.addCustomer(CUSTOMER_2);
         bank.addCustomer(CUSTOMER_3);
         assertEquals(6.0, bank.totalInterestPaid(), DELTA);
+    }
+
+    @Test
+    public void testCreateAccount() {
+        Bank bank = new Bank();
+        assertNotNull(bank.createAccount(CUSTOMER_1, AccountType.CHECKING));
     }
 }

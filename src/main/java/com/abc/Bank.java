@@ -14,6 +14,7 @@ public class Bank {
     public void addCustomer(Customer customer) {
         if (customer != null && !customers.contains(customer)) {
             customers.add(customer);
+            customer.setBank(this);
         }
     }
 
@@ -42,6 +43,10 @@ public class Bank {
         for (Customer customer : customers)
             total += customer.totalInterestEarned();
         return total;
+    }
+
+    public Account createAccount(Customer customer, AccountType accountType) {
+        return AccountFactory.create(customer, accountType);
     }
 
     public List<Customer> getCustomers() {

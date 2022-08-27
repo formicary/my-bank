@@ -1,10 +1,21 @@
 package com.abc;
 
+import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.internal.matchers.Null;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.when;
 
+@RunWith(MockitoJUnitRunner.class)
 public class CustomerTest {
+
+    @Mock
+    Bank BANK;
 
 //    @Test //Test customer statement generation
 //    public void testApp() {
@@ -42,11 +53,28 @@ public class CustomerTest {
 
     @Test
     public void testGetNumberOfAccountsWith3Accounts() {
+        Bank bank = new Bank();
         Customer oscar = new Customer("Oscar");
+        bank.addCustomer(oscar);
         for (int i = 0; i < 3; i++) {
-            oscar.openAccount(AccountFactory.create(oscar, AccountType.SAVINGS));
+            oscar.openAccount(AccountType.SAVINGS);
         }
         assertEquals(3, oscar.getNumberOfAccounts());
     }
 
+    @Test(expected = NullPointerException.class)
+    public void testOpenAccountWhenBankIsNull() {
+        Customer customer = new Customer("Anna");
+        customer.openAccount(AccountType.CHECKING);
+    }
+
+//    @Ignore
+    @Test
+    public void testOpenAccount() {
+        Customer customer = new Customer("Anna");
+        customer.setBank(BANK);
+        when(BANK.createAccount(customer, AccountType.CHECKING))
+                .thenReturn(new CheckingAccount(customer,AccountType.CHECKING));
+        assertNotNull(customer.openAccount(AccountType.CHECKING));
+    }
 }
