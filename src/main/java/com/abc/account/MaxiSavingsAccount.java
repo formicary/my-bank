@@ -21,7 +21,7 @@ public class MaxiSavingsAccount extends Account {
         }
     }
 
-    private long calcDayDiff() {
+    private long calcDayDiff() { // TODO: return with rate?
         Transaction transaction = getLastTransaction();
         if (transaction == null) {
             return Long.MAX_VALUE;

@@ -5,7 +5,7 @@ public enum AccountType {
     SAVINGS("Savings Account"),
     MAXI_SAVINGS("Maxi Savings Account");
 
-    private String prettyName;
+    private final String prettyName;
 
     AccountType(String prettyName) {
         this.prettyName = prettyName;

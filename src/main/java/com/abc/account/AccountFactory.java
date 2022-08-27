@@ -16,6 +16,6 @@ public class AccountFactory {
             case MAXI_SAVINGS:
                 return new MaxiSavingsAccount(customer, accountType);
         }
-        return null;
+        throw new IllegalArgumentException("Invalid account type.");
     }
 }

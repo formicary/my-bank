@@ -14,53 +14,39 @@ public abstract class Account {
     private double balance;
 
     protected Account(Customer customer, AccountType accountType) {
-        this.balance = 0.0;
         this.customer = customer;
         this.accountType = accountType;
         this.transactions = new ArrayList<>();
     }
 
     public final void deposit(double amount) {
-        validateDeposit(amount);
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Amount must be greater than zero.");
+        }
         transactions.add(new Transaction(amount));
         balance += amount;
     }
 
-    private void validateDeposit(double amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("Amount must be greater than zero.");
-        }
-    }
-
     public final void withdraw(double amount) {
-        validateWithdraw(amount);
-        transactions.add(new Transaction(-amount));
-        balance -= amount;
-    }
-
-    private void validateWithdraw(double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("Amount must be greater than zero.");
         }
         if (balance < amount) {
-            throw new RuntimeException("Amount must be greater than balance."); // Could be a custom exception.
+            throw new IllegalArgumentException("Insufficient founds.");
         }
+        transactions.add(new Transaction(-amount)); // TODO: Transaction type
+        balance -= amount;
     }
 
     public void transfer(double amount, Account targetAccount) {
-        validateTransfer(amount, targetAccount);
-        withdraw(amount);
-        targetAccount.deposit(amount);
-    }
-
-    private void validateTransfer(double amount, Account targetAccount) {
         if (targetAccount == this) {
-            throw new RuntimeException("Target account must be a different account."); // Could be a custom exception.
+            throw new IllegalArgumentException("Target account must be a different account.");
         }
         if (targetAccount == null) {
-            throw new NullPointerException("Target account cannot be null.");
+            throw new IllegalArgumentException("Target account cannot be null.");
         }
-        validateWithdraw(amount);
+        withdraw(amount);
+        targetAccount.deposit(amount);
     }
 
     // Currently it's the same as the account balance, but I choose not to remove it.
@@ -76,7 +62,7 @@ public abstract class Account {
         if (transactions.isEmpty()) {
             return null;
         }
-        return transactions.get(transactions.size()-1);
+        return transactions.get(transactions.size() - 1);
     }
 
     public abstract double calcInterestEarned();
