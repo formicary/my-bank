@@ -26,19 +26,17 @@ public class Bank {
     public String createCustomerSummary() {
         StringBuilder summary = new StringBuilder("Customer Summary");
         for (Customer customer : customers) {
-            summary.append("\n - ");
-            summary.append(customer.getName());
-            summary.append(" (");
-            summary.append(customer.getNumberOfAccounts());
-            summary.append(pluralFormat(customer.getNumberOfAccounts(), " account"));
-            summary.append(")");
+            int numberOfAccounts = customer.getNumberOfAccounts();
+            String pluralFormat = pluralFormat(numberOfAccounts, " account");
+            String customerSummary = String.format("\n - %s (%s%s)",
+                    customer.getName(),
+                    numberOfAccounts,
+                    pluralFormat);
+            summary.append(customerSummary);
         }
         return summary.toString();
     }
 
-    /**
-     * @return If number passed in is 1 return the word otherwise add an 's' at the end
-     */
     private String pluralFormat(int number, String word) {
         return number == 1 ? word : word + "s";
     }

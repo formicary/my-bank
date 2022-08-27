@@ -40,7 +40,7 @@ public class AccountTest {
         account.withdraw(0.0);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testWithdrawIfAmountGreaterThanBalance() {
         Account account = AccountFactory.create(new Customer(TEST_CUSTOMER_NAME), AccountType.SAVINGS);
         account.deposit(100.0);
@@ -57,13 +57,13 @@ public class AccountTest {
         assertEquals(180.0, account.sumTransactions(), DELTA);
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testTransferWhenTargetAccountIsNull() {
         Account account = AccountFactory.create(new Customer(TEST_CUSTOMER_NAME), AccountType.SAVINGS);
         account.transfer(100.0, null);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testTransferWhenTargetAccountIsTheSameAccount() {
         Account account = AccountFactory.create(new Customer(TEST_CUSTOMER_NAME), AccountType.SAVINGS);
         account.transfer(100.0, account);
