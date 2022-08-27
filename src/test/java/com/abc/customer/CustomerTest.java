@@ -1,5 +1,6 @@
 package com.abc.customer;
 
+import com.abc.account.AccountFactory;
 import com.abc.bank.Bank;
 import com.abc.account.AccountType;
 import com.abc.account.CheckingAccount;
@@ -75,7 +76,7 @@ public class CustomerTest {
         Customer customer = new Customer("Anna");
         customer.setBank(BANK);
         when(BANK.createAccount(customer, AccountType.CHECKING))
-                .thenReturn(new CheckingAccount(customer,AccountType.CHECKING));
+                .thenReturn(AccountFactory.create(customer,AccountType.CHECKING));
         assertNotNull(customer.openAccount(AccountType.CHECKING));
     }
 }

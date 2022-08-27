@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 public class MaxiSavingsAccount extends Account {
 
-    public MaxiSavingsAccount(Customer customer, AccountType accountType) {
+    MaxiSavingsAccount(Customer customer, AccountType accountType) {
         super(customer, accountType);
     }
 

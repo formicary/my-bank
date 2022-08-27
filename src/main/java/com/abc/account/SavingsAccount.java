@@ -4,7 +4,7 @@ import com.abc.customer.Customer;
 
 public class SavingsAccount extends Account {
 
-    public SavingsAccount(Customer customer, AccountType accountType) {
+    SavingsAccount(Customer customer, AccountType accountType) {
         super(customer, accountType);
     }
 
