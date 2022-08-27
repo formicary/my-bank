@@ -23,7 +23,7 @@ public abstract class Account {
         if (amount <= 0) {
             throw new IllegalArgumentException("Amount must be greater than zero.");
         }
-        transactions.add(new Transaction(amount));
+        transactions.add(new Transaction(Transaction.TransactionType.DEPOSIT, amount));
         balance += amount;
     }
 
@@ -34,7 +34,7 @@ public abstract class Account {
         if (balance < amount) {
             throw new IllegalArgumentException("Insufficient founds.");
         }
-        transactions.add(new Transaction(-amount)); // TODO: Transaction type
+        transactions.add(new Transaction(Transaction.TransactionType.WITHDREW, amount));
         balance -= amount;
     }
 
