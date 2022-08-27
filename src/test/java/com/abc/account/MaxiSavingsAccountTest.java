@@ -17,39 +17,39 @@ import static org.mockito.Mockito.when;
 public class MaxiSavingsAccountTest {
 
     @Mock
-    Transaction TRANSACTION;
+    private Transaction mockTransaction;
 
     @Mock
-    MaxiSavingsAccount ACCOUNT;
+    private MaxiSavingsAccount mockAccount;
 
     private final double DELTA = 1e-15;
 
     @Test
     public void testCalcInterestEarnedWhenLastTransactionInLessThan10Days() {
-        when(ACCOUNT.getLastTransaction()).thenReturn(TRANSACTION);
-        when(ACCOUNT.getBalance()).thenReturn(900.0);
-        when(TRANSACTION.getTransactionDate()).thenReturn(
+        when(mockAccount.getLastTransaction()).thenReturn(mockTransaction);
+        when(mockAccount.getBalance()).thenReturn(900.0);
+        when(mockTransaction.getTransactionDate()).thenReturn(
                 new Date());
-        when(ACCOUNT.calcInterestEarned()).thenCallRealMethod();
-        assertEquals(0.9, ACCOUNT.calcInterestEarned(), DELTA);
+        when(mockAccount.calcInterestEarned()).thenCallRealMethod();
+        assertEquals(0.9, mockAccount.calcInterestEarned(), DELTA);
     }
 
     @Test
     public void testCalcInterestEarnedWhenLastTransactionInMoreThan10Days() throws ParseException {
-        when(ACCOUNT.getLastTransaction()).thenReturn(TRANSACTION);
-        when(ACCOUNT.getBalance()).thenReturn(900.0);
-        when(TRANSACTION.getTransactionDate()).thenReturn(
-                new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH).parse("08/16/2022"));
-        when(ACCOUNT.calcInterestEarned()).thenCallRealMethod();
-        assertEquals(45, ACCOUNT.calcInterestEarned(), DELTA);
+        when(mockAccount.getLastTransaction()).thenReturn(mockTransaction);
+        when(mockAccount.getBalance()).thenReturn(900.0);
+        when(mockTransaction.getTransactionDate()).thenReturn(
+                new SimpleDateFormat("MM/dd/yyyy").parse("08/16/2022"));
+        when(mockAccount.calcInterestEarned()).thenCallRealMethod();
+        assertEquals(45, mockAccount.calcInterestEarned(), DELTA);
     }
 
     @Test
     public void testCalcInterestEarnedWithNoTransactions() {
-        when(ACCOUNT.getLastTransaction()).thenReturn(null);
-        when(ACCOUNT.getBalance()).thenCallRealMethod();
-        when(ACCOUNT.calcInterestEarned()).thenCallRealMethod();
-        assertEquals(0, ACCOUNT.calcInterestEarned(), DELTA);
+        when(mockAccount.getLastTransaction()).thenReturn(null);
+        when(mockAccount.getBalance()).thenCallRealMethod();
+        when(mockAccount.calcInterestEarned()).thenCallRealMethod();
+        assertEquals(0, mockAccount.calcInterestEarned(), DELTA);
     }
 
 }

@@ -3,7 +3,6 @@ package com.abc.customer;
 import com.abc.account.AccountFactory;
 import com.abc.bank.Bank;
 import com.abc.account.AccountType;
-import com.abc.account.CheckingAccount;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -17,7 +16,7 @@ import static org.mockito.Mockito.when;
 public class CustomerTest {
 
     @Mock
-    Bank BANK;
+    private Bank mockBank;
 
 //    @Test //Test customer statement generation
 //    public void testApp() {
@@ -64,18 +63,17 @@ public class CustomerTest {
         assertEquals(3, oscar.getNumberOfAccounts());
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testOpenAccountWhenBankIsNull() {
         Customer customer = new Customer("Anna");
         customer.openAccount(AccountType.CHECKING);
     }
 
-//    @Ignore
     @Test
     public void testOpenAccount() {
         Customer customer = new Customer("Anna");
-        customer.setBank(BANK);
-        when(BANK.createAccount(customer, AccountType.CHECKING))
+        customer.setBank(mockBank);
+        when(mockBank.createAccount(customer, AccountType.CHECKING))
                 .thenReturn(AccountFactory.create(customer,AccountType.CHECKING));
         assertNotNull(customer.openAccount(AccountType.CHECKING));
     }

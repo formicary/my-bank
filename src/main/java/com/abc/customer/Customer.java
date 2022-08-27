@@ -20,7 +20,7 @@ public class Customer {
 
     public Account openAccount(AccountType accountType) {
         if (bank == null) {
-            throw new NullPointerException("Customer should be assigned to a bank first.");
+            throw new IllegalArgumentException("Customer should be assigned to a bank first.");
         }
         Account account = bank.createAccount(this, accountType);
         accounts.add(account);

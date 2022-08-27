@@ -1,6 +1,7 @@
 package com.abc.account;
 
 import com.abc.customer.Customer;
+import com.abc.util.DateProvider;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -26,7 +27,7 @@ public class MaxiSavingsAccount extends Account {
         if (transaction == null) {
             return Long.MAX_VALUE;
         }
-        Date today = new Date();
+        Date today = DateProvider.getInstance().now();
         long diffInMillis = Math.abs(today.getTime() - transaction.getTransactionDate().getTime());
         return TimeUnit.DAYS.convert(diffInMillis, TimeUnit.MILLISECONDS);
     }
