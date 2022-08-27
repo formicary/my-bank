@@ -1,5 +1,8 @@
-package com.abc;
+package com.abc.bank;
 
+import com.abc.account.AccountType;
+import com.abc.bank.Bank;
+import com.abc.customer.Customer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;

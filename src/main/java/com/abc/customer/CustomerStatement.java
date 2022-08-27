@@ -1,4 +1,7 @@
-package com.abc;
+package com.abc.customer;
+
+import com.abc.account.Transaction;
+import com.abc.account.Account;
 
 import static java.lang.Math.abs;
 
@@ -27,7 +30,7 @@ public final class CustomerStatement {
     private static String statementForAccount(Account account) {
         StringBuilder sb = new StringBuilder(account.getAccountType().getPrettyName());
         sb.append(LINE_BREAK);
-        for (Transaction t : account.transactions) {
+        for (Transaction t : account.getTransactions()) {
             if (t.getAmount() < 0) {
                 sb.append("  withdrawal ");
             } else {

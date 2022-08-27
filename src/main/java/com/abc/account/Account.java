@@ -1,16 +1,19 @@
-package com.abc;
+package com.abc.account;
+
+import com.abc.customer.Customer;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public abstract class Account {
 
     private final Customer customer;
     private final AccountType accountType;
-    public List<Transaction> transactions;
+    private final List<Transaction> transactions;
     private double balance;
 
-    public Account(Customer customer, AccountType accountType) {
+    protected Account(Customer customer, AccountType accountType) {
         this.balance = 0.0;
         this.customer = customer;
         this.accountType = accountType;
@@ -52,7 +55,7 @@ public abstract class Account {
 
     private void validateTransfer(double amount, Account targetAccount) {
         if (targetAccount == this) {
-            throw new RuntimeException("Target account must be a different account.");
+            throw new RuntimeException("Target account must be a different account."); // Could be a custom exception.
         }
         if (targetAccount == null) {
             throw new NullPointerException("Target account cannot be null.");
@@ -90,4 +93,7 @@ public abstract class Account {
         return accountType;
     }
 
+    public List<Transaction> getTransactions() {
+        return Collections.unmodifiableList(transactions);
+    }
 }

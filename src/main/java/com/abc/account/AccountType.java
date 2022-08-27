@@ -1,4 +1,4 @@
-package com.abc;
+package com.abc.account;
 
 public enum AccountType {
     CHECKING("Checking Account"),

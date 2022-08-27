@@ -1,5 +1,6 @@
-package com.abc;
+package com.abc.account;
 
+import com.abc.customer.Customer;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

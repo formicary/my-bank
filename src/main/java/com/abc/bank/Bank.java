@@ -1,4 +1,9 @@
-package com.abc;
+package com.abc.bank;
+
+import com.abc.account.Account;
+import com.abc.account.AccountFactory;
+import com.abc.account.AccountType;
+import com.abc.customer.Customer;
 
 import java.util.ArrayList;
 import java.util.Collections;

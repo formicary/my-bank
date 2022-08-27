@@ -1,4 +1,6 @@
-package com.abc;
+package com.abc.account;
+
+import com.abc.customer.Customer;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;

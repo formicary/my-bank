@@ -1,10 +1,11 @@
-package com.abc;
+package com.abc.customer;
 
-import org.junit.Ignore;
+import com.abc.bank.Bank;
+import com.abc.account.AccountType;
+import com.abc.account.CheckingAccount;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.internal.matchers.Null;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.junit.Assert.assertEquals;
