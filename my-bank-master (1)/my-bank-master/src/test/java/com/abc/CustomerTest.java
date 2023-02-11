@@ -19,7 +19,7 @@ public class CustomerTest {
         savingsAccount.deposit(4000.0);
         savingsAccount.withdraw(200.0);
 
-        assertEquals("Statement for Henry\n" +
+              assertEquals("Statement for Henry\n" +
                 "\n" +
                 "Checking Account\n" +
                 "  deposit $100.00\n" +
