@@ -57,5 +57,15 @@ public class AccountTest {
 		account.withdraw(100.0);
 		assertEquals(180.0, account.sumTransactions(), DELTA);
 	}
+	
+	@Test
+    public void testTransfer() {
+        Account account = AccountCreation.create(new Customer(TEST_CUSTOMER_NAME), AccountType.SAVINGS);
+        Account targetAccount = AccountCreation.create(new Customer(TEST_CUSTOMER_NAME), AccountType.CHECKING);
+        account.deposit(100.0);
+        account.transfer(30.0, targetAccount);
+        assertEquals(70.0, account.getBalance(), DELTA);
+        assertEquals(30.0, targetAccount.getBalance(), DELTA);
+    }
 
 }

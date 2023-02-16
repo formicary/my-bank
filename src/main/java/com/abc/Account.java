@@ -61,6 +61,18 @@ public abstract class Account {
 			amount += t.getAmount();
 		return amount;
 	}
+	
+	public void transfer(double amount, Account targetAccount) {
+        if (targetAccount == this) {
+            throw new IllegalArgumentException("Target account must be a different account.");
+        }
+        if (targetAccount == null) {
+            throw new IllegalArgumentException("Target account cannot be null.");
+        }
+        withdraw(amount);
+        targetAccount.deposit(amount);
+    }
+	
 
 	public List<Transaction> getTransactions() {
 		return Collections.unmodifiableList(transactions);
