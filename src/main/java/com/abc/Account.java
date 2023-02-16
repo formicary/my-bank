@@ -1,73 +1,93 @@
 package com.abc;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class Account {
+public abstract class Account {
 
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
+	private final Customer customer;
+	private final AccountType accountType;
+	public List<Transaction> transactions;
+	private double balance;
 
-    private final int accountType;
-    public List<Transaction> transactions;
+	public enum AccountType {
+		CHECKING("Checking Account"), 
+		SAVINGS("Savings Account"), 
+		MAXI_SAVINGS("Maxi Savings Account");
 
-    public Account(int accountType) {
-        this.accountType = accountType;
-        this.transactions = new ArrayList<Transaction>();
-    }
+		private final String name;
 
-    public void deposit(double amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
-        } else {
-            transactions.add(new Transaction(amount));
+		AccountType(String name) {
+			this.name = name;
+		}
+
+		public String getName() {
+			return name;
+		}
+	}
+
+	public Account(Customer customer, AccountType accountType) {
+		this.customer = customer;
+		this.accountType = accountType;
+		this.transactions = new ArrayList<Transaction>();
+	}
+
+	public void deposit(double amount) {
+		if (amount <= 0) {
+			throw new IllegalArgumentException("Amount must be greater than zero");
+		} else {
+			transactions.add(new Transaction(Transaction.TransactionType.DEPOSIT, amount));
+			balance += amount;
+		}
+	}
+
+	public void withdraw(double amount) {
+		if (amount <= 0) {
+			throw new IllegalArgumentException("Amount must be greater than zero");
+		}
+		if (balance < amount) {
+			throw new IllegalArgumentException("Insufficient Balance.");
+		}
+		transactions.add(new Transaction(Transaction.TransactionType.WITHDRAW, amount));
+		balance -= amount;
+	}
+
+	public abstract double interestEarned();
+
+	public double sumTransactions() {
+		double amount = 0.0;
+		for (Transaction t : transactions)
+			amount += t.getAmount();
+		return amount;
+	}
+	
+	public void transfer(double amount, Account targetAccount) {
+        if (targetAccount == this) {
+            throw new IllegalArgumentException("Target account must be a different account.");
         }
-    }
-
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
-    }
-}
-
-    public double interestEarned() {
-        double amount = sumTransactions();
-        switch(accountType){
-            case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
-            case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
-            default:
-                return amount * 0.001;
+        if (targetAccount == null) {
+            throw new IllegalArgumentException("Target account cannot be null.");
         }
+        withdraw(amount);
+        targetAccount.deposit(amount);
     }
+	
 
-    public double sumTransactions() {
-       return checkIfTransactionsExist(true);
-    }
+	public List<Transaction> getTransactions() {
+		return Collections.unmodifiableList(transactions);
+	}
 
-    private double checkIfTransactionsExist(boolean checkAll) {
-        double amount = 0.0;
-        for (Transaction t: transactions)
-            amount += t.amount;
-        return amount;
-    }
+	public Customer getCustomer() {
+		return customer;
+	}
 
-    public int getAccountType() {
-        return accountType;
-    }
+	public AccountType getAccountType() {
+		return accountType;
+	}
+
+	public double getBalance() {
+		return balance;
+	}
 
 }
