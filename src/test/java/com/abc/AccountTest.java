@@ -58,6 +58,19 @@ public class AccountTest {
 		assertEquals(180.0, account.sumTransactions(), DELTA);
 	}
 	
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testTransferAccountIsNull() {
+        Account account = AccountCreation.create(new Customer(TEST_CUSTOMER_NAME), AccountType.SAVINGS);
+        account.transfer(100.0, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testTransferAccountIsTheSameAccount() {
+        Account account = AccountCreation.create(new Customer(TEST_CUSTOMER_NAME), AccountType.SAVINGS);
+        account.transfer(100.0, account);
+    }
+	
 	@Test
     public void testTransfer() {
         Account account = AccountCreation.create(new Customer(TEST_CUSTOMER_NAME), AccountType.SAVINGS);
