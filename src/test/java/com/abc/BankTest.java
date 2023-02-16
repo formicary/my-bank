@@ -1,54 +1,69 @@
 package com.abc;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+
+import com.abc.Account.AccountType;
+
+import static org.mockito.Mockito.when;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
+@RunWith(MockitoJUnitRunner.class)
 public class BankTest {
-    private static final double DOUBLE_DELTA = 1e-15;
+	private static final double DOUBLE_DELTA = 1e-15;
 
-    @Test
-    public void customerSummary() {
-        Bank bank = new Bank();
-        Customer john = new Customer("John");
-        john.openAccount(new Account(Account.CHECKING));
-        bank.addCustomer(john);
+	@Mock
+	private Customer mockCustomer1;
+	@Mock
+	private Customer mockCustomer2;
+	@Mock
+	private Customer mockCustomer3;
 
-        assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
-    }
+	@Test
+	public void testCustomerSummary() {
+		when(mockCustomer1.getName()).thenReturn("John");
+		when(mockCustomer1.getNumberOfAccounts()).thenReturn(1);
+		when(mockCustomer2.getName()).thenReturn("James");
+		when(mockCustomer2.getNumberOfAccounts()).thenReturn(2);
 
-    @Test
-    public void checkingAccount() {
-        Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.CHECKING);
-        Customer bill = new Customer("Bill").openAccount(checkingAccount);
-        bank.addCustomer(bill);
+		Bank bank = new Bank();
+		bank.addCustomer(mockCustomer1);
+		bank.addCustomer(mockCustomer2);
 
-        checkingAccount.deposit(100.0);
+		assertEquals("Customer Summary\n - John (1 account)\n - James (2 accounts)", bank.customerSummary());
+	}
 
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
-    }
+	@Test
+	public void testAddCustomer() {
+		Bank bank = new Bank();
+		bank.addCustomer(mockCustomer1);
+		bank.addCustomer(mockCustomer2);
+		bank.addCustomer(mockCustomer3);
+		bank.addCustomer(mockCustomer1);
+		bank.addCustomer(null);
+		assertEquals(3, bank.getCustomers().size());
+	}
 
-    @Test
-    public void savings_account() {
-        Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
+	@Test
+	public void testTotalInterestPaid() {
+		when(mockCustomer1.totalInterestEarned()).thenReturn(1.0);
+		when(mockCustomer2.totalInterestEarned()).thenReturn(2.0);
+		when(mockCustomer3.totalInterestEarned()).thenReturn(3.0);
+		Bank bank = new Bank();
+		bank.addCustomer(mockCustomer1);
+		bank.addCustomer(mockCustomer2);
+		bank.addCustomer(mockCustomer3);
+		assertEquals(6.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+	}
 
-        checkingAccount.deposit(1500.0);
-
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
-    }
-
-    @Test
-    public void maxi_savings_account() {
-        Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
-
-        checkingAccount.deposit(3000.0);
-
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
-    }
+	@Test
+	public void testCreateAccount() {
+		Bank bank = new Bank();
+		assertNotNull(bank.createAccount(mockCustomer1, AccountType.CHECKING));
+	}
 
 }
