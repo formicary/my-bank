@@ -1,16 +1,35 @@
 package com.abc;
 
-import java.util.Calendar;
-import java.util.Date;
+import com.abc.ENUMS.TransactionType;
+
+import java.time.LocalDate;
+
 
 public class Transaction {
-    public final double amount;
+    private final double amount;
 
-    private Date transactionDate;
+    public double getAmount() {
+        return amount;
+    }
 
-    public Transaction(double amount) {
+    private TransactionType transactionType;
+
+    public TransactionType getTransactionType() {
+        return transactionType;
+    }
+
+    public LocalDate getTransactionDate() {
+        return transactionDate;
+    }
+
+    private LocalDate transactionDate;
+
+
+
+    public Transaction(double amount,TransactionType transactionType) {
         this.amount = amount;
         this.transactionDate = DateProvider.getInstance().now();
+        this.transactionType=transactionType;
     }
 
 }
