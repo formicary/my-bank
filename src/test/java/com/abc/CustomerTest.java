@@ -6,18 +6,19 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
+    private static final double DOUBLE_DELTA = 1e-15;
 
     @Test //Test customer statement generation
-    public void testApp(){
+    public void should_returnCorrectStatement_when_TransactionsAreMade() {
 
-        Account checkingAccount = new Account(Account.CHECKING);
-        Account savingsAccount = new Account(Account.SAVINGS);
+        Account savingsAccount = new SavingsAccount();
+        Account checkingAccount = new CheckingAccount();
 
         Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
 
-        checkingAccount.deposit(100.0);
-        savingsAccount.deposit(4000.0);
-        savingsAccount.withdraw(200.0);
+        checkingAccount.transact(100.0);
+        savingsAccount.transact(4000.0);
+        savingsAccount.transact(-200.0);
 
         assertEquals("Statement for Henry\n" +
                 "\n" +
@@ -34,24 +35,21 @@ public class CustomerTest {
     }
 
     @Test
-    public void testOneAccount(){
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
-        assertEquals(1, oscar.getNumberOfAccounts());
-    }
-
-    @Test
-    public void testTwoAccount(){
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
+    public void should_returnAccountNumberAsTwo_when_twoAccountsAreOpened() {
+        Customer oscar = new Customer("Oscar").openAccount(new SavingsAccount());
+        oscar.openAccount(new CheckingAccount());
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
-    @Ignore
-    public void testThreeAcounts() {
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
-        assertEquals(3, oscar.getNumberOfAccounts());
+    @Test
+    public void should_returnInterestAsTwo_when_twoAccountsAreOpenedWithDeposit() {
+        Account checkingAccount = new CheckingAccount();
+        Account savingsAccount = new SavingsAccount();
+        Customer sam = new Customer("Sam")
+                .openAccount(savingsAccount).openAccount(checkingAccount);
+        savingsAccount.transact(2000);
+        checkingAccount.transact(1000);
+        assertEquals(4, sam.totalInterestEarned(), DOUBLE_DELTA);
     }
+
 }
