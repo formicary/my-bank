@@ -3,6 +3,8 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.abc.Enums.TransactionType;
+
 import static java.lang.Math.abs;
 
 public class Customer {
@@ -46,31 +48,39 @@ public class Customer {
         return statement;
     }
 
-    private String statementForAccount(Account a) {
+    private String statementForAccount(Account account) {
         String s = "";
 
        //Translate to pretty account type
-        switch(a.getAccountType()){
-            case Account.CHECKING:
+        switch(account.getAccountType()){
+            case CHECKING:
                 s += "Checking Account\n";
                 break;
-            case Account.SAVINGS:
+            case SAVINGS:
                 s += "Savings Account\n";
                 break;
-            case Account.MAXI_SAVINGS:
+            case MAXI_SAVINGS:
                 s += "Maxi Savings Account\n";
                 break;
         }
 
         //Now total up all the transactions
         double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
+        for (Transaction t : account.transactions) {
+            s += "  " + (t.getTransactionType() == TransactionType.WITHDRAW  ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
             total += t.amount;
         }
         s += "Total " + toDollars(total);
         return s;
     }
+    public void transferBetween(Account a, Account b, double amount ) {
+        a.withdraw(amount, TransactionType.WITHDRAW);
+        b.deposit(amount,TransactionType.DEPOSIT);
+    }
+    //transfer function (account a, account b, double amount) {}
+    //withdraws from account a and deposits to account b
+
+
 
     private String toDollars(double d){
         return String.format("$%,.2f", abs(d));
