@@ -1,16 +1,48 @@
 package com.abc;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 
-public class Transaction {
-    public final double amount;
+import com.abc.Account.AccountType;
 
-    private Date transactionDate;
+public class Transaction {
+    private final double amount;
+
+    private String transactionDate;
 
     public Transaction(double amount) {
-        this.amount = amount;
-        this.transactionDate = DateProvider.getInstance().now();
+        this.transactionDate = createTimeStamp();
+        this.amount = amount;   
     }
 
+    //Getters//
+    public String getTransactionDate(){
+        return transactionDate;
+    }
+
+    public double getTransactionAmount(){
+        return amount;
+    }
+
+    public String createTimeStamp(){
+        LocalDateTime localDateTime = LocalDateTime.now();
+
+        //Format to be more readable
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedDateTime = formatter.format(localDateTime);
+
+        return formattedDateTime;
+    }
+
+
+    public static void main(String[] args) {
+    Transaction testTransaction = new Transaction(20);
+
+    System.out.println("[" + testTransaction.transactionDate + "] " + testTransaction.amount);
 }
+}
+
+
+

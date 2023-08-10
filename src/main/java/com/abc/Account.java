@@ -5,16 +5,38 @@ import java.util.List;
 
 public class Account {
 
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
-
-    private final int accountType;
+    enum AccountType {CHECKING, SAVINGS, MAXI_SAVINGS}
+    AccountType accountType;
     public List<Transaction> transactions;
+    private double balance;
 
-    public Account(int accountType) {
-        this.accountType = accountType;
+    public Account(AccountType test) {
+        this.accountType = test;
+        this.balance = 0; //Assuming a new account opens with an empty balance 
         this.transactions = new ArrayList<Transaction>();
+    }
+
+    //Getters//
+    public Account getAccount(){
+        return this;
+    }
+
+    public AccountType getAccountType(){
+        return accountType;
+    }
+
+    public List<Transaction> getTransactions(){
+        return transactions;
+    }
+
+    public double getBalance(){
+        return balance;
+    }
+
+    //Transaction Functions//
+    //Update balance, called everytime a deposit or withdrawal is made
+    public void updateBalance(double amount){
+        balance += amount;
     }
 
     public void deposit(double amount) {
@@ -22,14 +44,16 @@ public class Account {
             throw new IllegalArgumentException("amount must be greater than zero");
         } else {
             transactions.add(new Transaction(amount));
+            updateBalance(amount);
         }
     }
 
 public void withdraw(double amount) {
-    if (amount <= 0) {
+    if (amount <= 0 || amount > balance) {
         throw new IllegalArgumentException("amount must be greater than zero");
     } else {
         transactions.add(new Transaction(-amount));
+        updateBalance(-amount);
     }
 }
 
@@ -55,6 +79,7 @@ public void withdraw(double amount) {
         }
     }
 
+    //CURRENTLY UNUSED, LOOK AT LATER DATE///
     public double sumTransactions() {
        return checkIfTransactionsExist(true);
     }
@@ -66,8 +91,23 @@ public void withdraw(double amount) {
         return amount;
     }
 
-    public int getAccountType() {
-        return accountType;
-    }
 
+
+
+
+public static void main(String[] args) {
+    Account testAccount = new Account(AccountType.CHECKING);
+
+    testAccount.deposit(200);
+    testAccount.withdraw(20);
+    testAccount.withdraw(20);
+
+    System.out.println(testAccount.balance);
+
+    List<Transaction> transactions = testAccount.getTransactions();
+    for (Transaction t: transactions)
+            System.out.println(t.getTransactionDate() + " " + t.getTransactionAmount());
+
+
+}
 }
