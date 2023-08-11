@@ -1,4 +1,4 @@
-package com.abc;
+package com.abc.classes;
 
 import java.util.ArrayList;
 import java.util.List;

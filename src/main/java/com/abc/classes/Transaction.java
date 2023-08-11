@@ -1,11 +1,11 @@
-package com.abc;
+package com.abc.classes;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 
-import com.abc.Account.AccountType;
+import com.abc.classes.Account.AccountType;
 
 public class Transaction {
     private final double amount;
@@ -36,7 +36,7 @@ public class Transaction {
         return formattedDateTime;
     }
 
-
+    //Remove after testing
     public static void main(String[] args) {
     Transaction testTransaction = new Transaction(20);
 
