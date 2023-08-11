@@ -8,7 +8,7 @@ public class Account {
 
     enum AccountType {CHECKING, SAVINGS, MAXI_SAVINGS}
     AccountType accountType;
-    public List<Transaction> transactions;
+    private List<Transaction> transactions;
     private double balance;
     private double accruedInterest;
 
