@@ -46,61 +46,67 @@ public class Account {
         balance += amount;
     }
 
+    //Update the accrued interest, called everytime interest is added to the account
     public void updateAccuredInterest(double amount){
         accruedInterest += amount;
     }
 
-    public void deposit(double amount) {
+    //Private deposit functions wrapped in public try catch functions
+    private void deposit(double amount) {
         if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
+            throw new IllegalArgumentException("Amount must be greater than zero");
         } else {
             transactions.add(new Transaction(amount));
             updateBalance(amount);
         }
     }
 
-    public void withdraw(double amount) {
-        if (amount <= 0 || amount > balance) {
-            throw new IllegalArgumentException("amount must be greater than zero");
+    private void withdraw(double amount) {
+        if (amount <= 0){
+            throw new IllegalArgumentException("Amount must be greater than zero");
+        }
+        else if(amount > balance) {
+            throw new IllegalArgumentException("Amount withdrawn must be less than your current balance");
+            
         } else {
             transactions.add(new Transaction(-amount));
             updateBalance(-amount);
         }
     }
 
-    public double interestEarned() {
-        double amount = sumTransactions();
-        switch(accountType){
-            case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
-            case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
-            default:
-                return amount * 0.001;
+    public void tryDeposit(double amount){
+        try {
+            // Attempt to make a deposit
+            deposit(amount);
+            System.out.println("Deposit successful!");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    
+    public void tryWithdraw(double amount){
+        try {
+            // Attempt to make a withdrawal
+            withdraw(amount);
+            System.out.println("Withdrawal successful!");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
+    //Interest functions//
     public void addInterest() {
-        Account account = getAccount();
         switch(accountType){
             case CHECKING:
-                AccountInterests.calculateInterestChecking(account);
+                AccountInterests.calculateInterestChecking(getAccount());
                 break;
             case SAVINGS:
-                AccountInterests.calculateInterestSavings(account);
+                AccountInterests.calculateInterestSavings(getAccount());
                 break;
             case MAXI_SAVINGS:
-                AccountInterests.calculateInterestMaxiSavings(account);
+                AccountInterests.calculateInterestMaxiSavings(getAccount());
                 break;
             default:
                 System.out.println("Could not find account with account type: " + accountType);
