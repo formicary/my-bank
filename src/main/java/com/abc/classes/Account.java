@@ -46,6 +46,10 @@ public class Account {
         balance += amount;
     }
 
+    public void updateAccuredInterest(double amount){
+        accruedInterest += amount;
+    }
+
     public void deposit(double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
@@ -87,26 +91,17 @@ public class Account {
     }
 
     public void addInterest() {
-        double interestEarned;
+        Account account = getAccount();
         switch(accountType){
             case CHECKING:
-                interestEarned = AccountInterests.calculateInterestChecking(balance);
-                deposit(interestEarned);
-                accruedInterest += interestEarned;
+                AccountInterests.calculateInterestChecking(account);
                 break;
-
             case SAVINGS:
-                interestEarned = AccountInterests.calculateInterestSavings(balance);
-                deposit(interestEarned);
-                accruedInterest += interestEarned;
+                AccountInterests.calculateInterestSavings(account);
                 break;
-
             case MAXI_SAVINGS:
-                interestEarned = AccountInterests.calculateInterestMaxiSavings(balance);
-                deposit(interestEarned);
-                accruedInterest += interestEarned;
+                AccountInterests.calculateInterestMaxiSavings(account);
                 break;
-
             default:
                 System.out.println("Could not find account with account type: " + accountType);
         }
