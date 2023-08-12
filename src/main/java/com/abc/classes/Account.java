@@ -6,7 +6,7 @@ import com.abc.helpers.AccountInterests;
 
 public class Account {
 
-    enum AccountType {CHECKING, SAVINGS, MAXI_SAVINGS}
+    public enum AccountType {CHECKING, SAVINGS, MAXI_SAVINGS}
     AccountType accountType;
     private List<Transaction> transactions;
     private double balance;

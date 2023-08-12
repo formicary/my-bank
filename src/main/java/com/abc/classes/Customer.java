@@ -6,8 +6,6 @@ import java.util.List;
 import com.abc.classes.Account.AccountType;
 import com.abc.helpers.CustomerStatementBuilder;
 
-import static java.lang.Math.abs;
-
 public class Customer {
     private String name;
     private static List<Account> accounts;
@@ -31,58 +29,28 @@ public class Customer {
         return accounts.size();
     }
 
-    public double totalInterestEarned() {
+    public double getTotalInterestEarned() {
         double total = 0;
         for (Account a : accounts)
             total += a.getAccruedIntered();
         return total;
     }
 
-    public String getStatement() {
-        String statement = null;
-        statement = "Statement for " + name + "\n";
-        double total = 0.0;
-        for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
-        }
-        statement += "\nTotal In All Accounts " + toDollars(total);
+    public static String getAccountStatement(Account account){
+        String statement = CustomerStatementBuilder.createStatement(account);
         return statement;
     }
+    
+    public static List<String> getAllAccountStatements(){
+        List<String> accountStatements = new ArrayList<>();
+        accountStatements = CustomerStatementBuilder.createStatement(accounts);
 
-    private String statementForAccount(Account a) {
-        String s = "";
-
-       //Translate to pretty account type
-        switch(a.getAccountType()){
-            case Account.CHECKING:
-                s += "Checking Account\n";
-                break;
-            case Account.SAVINGS:
-                s += "Savings Account\n";
-                break;
-            case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
-                break;
-        }
-
-        //Now total up all the transactions
-        double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
-        }
-        s += "Total " + toDollars(total);
-        return s;
+        return accountStatements;
     }
 
-    public static void test(){
-        CustomerStatementBuilder.createStatement(accounts);
-    }
+    
 
-    private String toDollars(double d){
-        return String.format("$%,.2f", abs(d));
-    }
+   
 
         //Remove after testing
     public static void main(String[] args) {
@@ -97,7 +65,11 @@ public class Customer {
         // System.out.println(customer.getNumberOfAccounts());
         // System.out.println(newAccount.getBalance());
         // System.out.println(customer.totalInterestEarned());
-        test();
+        System.out.println(getAccountStatement(newAccount));
+        System.out.println("/////////////////////");
+        System.out.println(getAllAccountStatements());
+        
+        
 
 
 
