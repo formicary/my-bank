@@ -4,6 +4,9 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import com.abc.classes.Account;
+import com.abc.classes.Account.AccountType;
+import com.abc.classes.Bank;
+import com.abc.classes.Customer;
 
 import static org.junit.Assert.assertEquals;
 

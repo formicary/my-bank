@@ -52,14 +52,16 @@ public class Customer {
         }
     }
 
-    public static String getAccountStatement(Account account){
-        String statement = CustomerStatementBuilder.createStatement(account);
+    public String getAccountStatement(Customer customer, Account account){
+        String name = customer.getName();
+        String statement = CustomerStatementBuilder.createStatement(name, account);
         return statement;
     }
     
-    public static List<String> getAllAccountStatements(){
+    public List<String> getAllAccountStatements(Customer customer){
+        String name = customer.getName();
         List<String> accountStatements = new ArrayList<>();
-        accountStatements = CustomerStatementBuilder.createStatement(accounts);
+        accountStatements = CustomerStatementBuilder.createStatement(name, accounts);
 
         return accountStatements;
     }
@@ -81,9 +83,9 @@ public class Customer {
         // System.out.println(customer.getNumberOfAccounts());
         // System.out.println(newAccount.getBalance());
         // System.out.println(customer.totalInterestEarned());
-        System.out.println(getAccountStatement(newAccount));
+        System.out.println(customer.getAccountStatement(customer,newAccount));
         System.out.println("/////////////////////");
-        System.out.println(getAllAccountStatements());
+        System.out.println(customer.getAllAccountStatements(customer));
 
         
         
