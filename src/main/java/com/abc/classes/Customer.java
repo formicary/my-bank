@@ -38,6 +38,20 @@ public class Customer {
         return accounts.size();
     }
 
+    public String getAccountStatement(Customer customer, Account account){
+        String name = customer.getName();
+        String statement = CustomerStatementBuilder.createStatement(name, account);
+        return statement;
+    }
+    
+    public List<String> getAllAccountStatements(Customer customer){
+        String name = customer.getName();
+        List<String> accountStatements = new ArrayList<>();
+        accountStatements = CustomerStatementBuilder.createStatement(name, accounts);
+
+        return accountStatements;
+    }
+
     public double getTotalInterestEarned() {
         double total = 0;
         try{
@@ -52,19 +66,7 @@ public class Customer {
         }
     }
 
-    public String getAccountStatement(Customer customer, Account account){
-        String name = customer.getName();
-        String statement = CustomerStatementBuilder.createStatement(name, account);
-        return statement;
-    }
     
-    public List<String> getAllAccountStatements(Customer customer){
-        String name = customer.getName();
-        List<String> accountStatements = new ArrayList<>();
-        accountStatements = CustomerStatementBuilder.createStatement(name, accounts);
-
-        return accountStatements;
-    }
 
     
 

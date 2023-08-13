@@ -37,16 +37,23 @@ public class CustomerStatementBuilder {
         else{
             accountInfoList.add(name);
             //Loop through customer account and return a statement for each bank
+            double total = 0;
             for (Account account : accounts) {
                 String accountType = account.getAccountType().toString();
-                String balance = toDollars(account.getBalance());
-                String accruedInterest = toDollars(account.getAccruedInterest());
+                
+                //Get balance as double, add to running total before converting to string
+                double balance = account.getBalance();
+                total += balance;
+                String balanceString = toDollars(account.getBalance());
 
+                String accruedInterest = toDollars(account.getAccruedInterest());
+                
                 //Format into readable statement
-                String accountInfo = "\nAccount Type: " + accountType +  "\nBalance: " + balance + "\nAccrued Interest: " + accruedInterest +"\n";
+                String accountInfo = "\nAccount Type: " + accountType +  "\nBalance: " + balanceString + "\nAccrued Interest: " + accruedInterest +"\n";
                 accountInfoList.add(accountInfo);
                 
             }
+            accountInfoList.add("\nTotal balance of all accounts: " + toDollars(total));
             return accountInfoList;
         }     
     }
@@ -55,5 +62,12 @@ public class CustomerStatementBuilder {
     public static String toDollars(double d){
         return String.format("$%,.2f", abs(d));
     }
+
+    //Used to 
+    public static String concatenate(List<String> stringList, String delimiter) {
+        return String.join(delimiter, stringList);
+    }
+
+
 
 }

@@ -88,7 +88,6 @@ public class Account {
         try {
             // Attempt to make a withdrawal
             withdraw(amount);
-            System.out.println("Withdrawal successful!");
         } catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
             e.printStackTrace();
