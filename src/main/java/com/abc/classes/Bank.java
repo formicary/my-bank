@@ -3,46 +3,84 @@ package com.abc.classes;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.abc.classes.Account.AccountType;
+
 public class Bank {
-    private List<Customer> customers;
+    private static List<Customer> customers;
 
     public Bank() {
         customers = new ArrayList<Customer>();
     }
 
-    public void addCustomer(Customer customer) {
+    public Customer addCustomer(Customer customer) {
         customers.add(customer);
+        return customer;
     }
 
-    public String customerSummary() {
-        String summary = "Customer Summary";
-        for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-        return summary;
+    //Getters//
+    public Bank getBank(){
+        return this;
     }
 
-    //Make sure correct plural of word is created based on the number passed in:
-    //If number passed in is 1 just return the word otherwise add an 's' at the end
-    private String format(int number, String word) {
-        return number + " " + (number == 1 ? word : word + "s");
+    public static String getFirstCustomer() {
+        if(customers.isEmpty()){
+            return "No customer found";
+        }
+        else{
+            return customers.get(0).getName();
+        }
     }
 
-    public double totalInterestPaid() {
+    public static double gettotalInterestPaid() {
         double total = 0;
         for(Customer c: customers)
-            total += c.totalInterestEarned();
+            total += c.getTotalInterestEarned();
         return total;
     }
-
-    public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
+    
+    public static String getCustomerSummary() {
+        String summary = "Customer Summary";
+        if(customers.size() == 0){
+            summary += "\n - No customers found";
+            return summary;
+        }
+        else{
+            for (Customer c : customers)
+                summary += "\n - " + c.getName() + ": [" + c.getNumberOfAccounts() + " account(s)" +  " open]";
+            return summary; 
         }
     }
 
     
+
+    public static void main(String[] args) {
+        Bank bank = new Bank();
+        Customer customer = new Customer("Test Name");
+
+        //bank.addCustomer(customer);
+        //Customer bob = bank.addCustomer(new Customer("Bob"));
+        Account newAccount = customer.openAccount(AccountType.CHECKING);
+        Account newAccount1 = customer.openAccount(AccountType.SAVINGS);
+        Account newAccount2 = customer.openAccount(AccountType.MAXI_SAVINGS);
+        //bob.openAccount(AccountType.CHECKING);
+        newAccount.tryDeposit(5000);
+        newAccount1.tryDeposit(5000);
+        newAccount2.tryDeposit((5000));
+
+        newAccount.addInterest();
+        newAccount1.addInterest();
+        newAccount2.addInterest();
+        
+
+        System.out.println("Total interest across acounts = " + gettotalInterestPaid());
+        System.out.println(getCustomerSummary());
+
+        System.out.println("First customer is :" + getFirstCustomer());
+
+    
+    }
+
+    
 }
+
+

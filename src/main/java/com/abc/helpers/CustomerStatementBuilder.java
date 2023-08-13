@@ -10,12 +10,19 @@ public class CustomerStatementBuilder {
 
     //Singular statement for one account
     public static String createStatement(Account account) {
-        String accountType = account.getAccountType().toString();
-        String balance = toDollars(account.getBalance());
+        
+        if(account == null){
+            return "Account not found";
+        }
+        else{
+            String accountType = account.getAccountType().toString();
+            String balance = toDollars(account.getBalance());
+            String accruedInterest = toDollars(account.getAccruedInterest());
 
-        String accountInfo = "\nAccount Type: " + accountType + "\nBalance: " + balance + "\n";
+            String accountInfo = "\nAccount Type: " + accountType +  "\nBalance: " + balance + "\nAccrued Interest: " + accruedInterest +"\n";
 
-        return accountInfo;
+            return accountInfo;
+        }      
     }
 
     //Multiple statements for all accounts
@@ -27,19 +34,20 @@ public class CustomerStatementBuilder {
             accountInfoList.add("No accounts found for this customer");
             return accountInfoList;
         }
+        else{
+            //Loop through customer account and return a statement for each bank
+            for (Account account : accounts) {
+                String accountType = account.getAccountType().toString();
+                String balance = toDollars(account.getBalance());
+                String accruedInterest = toDollars(account.getAccruedInterest());
 
-        //Loop through customer account and return a statement for each bank
-        for (Account account : accounts) {
-            String accountType = account.getAccountType().toString();
-            String balance = toDollars(account.getBalance());
-            String accruedInterest = toDollars(account.getAccruedIntered());
-
-            //Format into readable statement
-            String accountInfo = "\nAccount Type: " + accountType +  "\nBalance: " + balance + "\nAccrued Interest: " + accruedInterest +"\n";
-            accountInfoList.add(accountInfo);
-            
-        }
-        return accountInfoList;
+                //Format into readable statement
+                String accountInfo = "\nAccount Type: " + accountType +  "\nBalance: " + balance + "\nAccrued Interest: " + accruedInterest +"\n";
+                accountInfoList.add(accountInfo);
+                
+            }
+            return accountInfoList;
+        }     
     }
     
     //Convert double to dollars for readable balance/accured interest

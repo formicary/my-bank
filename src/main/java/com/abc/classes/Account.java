@@ -36,7 +36,7 @@ public class Account {
         return balance;
     }
 
-    public double getAccruedIntered(){
+    public double getAccruedInterest(){
         return accruedInterest;
     }
 

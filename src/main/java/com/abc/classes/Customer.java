@@ -8,32 +8,48 @@ import com.abc.helpers.CustomerStatementBuilder;
 
 public class Customer {
     private String name;
-    private static List<Account> accounts;
+    private List<Account> accounts;
 
     public Customer(String name) {
         this.name = name;
-        Customer.accounts = new ArrayList<Account>();
-    }
-
-    public String getName() {
-        return name;
+        accounts = new ArrayList<Account>();
     }
 
     public Account openAccount(AccountType accountType) {
         Account newAccount = new Account(accountType);
         accounts.add(newAccount);
         return newAccount;
-    }   
+    } 
+    
+    //Getters//
+    public Customer getCustomer(){
+        return this;
+    }
+    
+    public String getName() {
+        return name;
+    }
 
+    public List<Account> getAccounts(){
+        return accounts;
+    }
+      
     public int getNumberOfAccounts() {
         return accounts.size();
     }
 
     public double getTotalInterestEarned() {
         double total = 0;
+        try{
         for (Account a : accounts)
-            total += a.getAccruedIntered();
+            total += a.getAccruedInterest();
         return total;
+        }
+        catch(NullPointerException e){
+            System.out.println("No customers found");
+            e.printStackTrace();
+            return total;
+        }
     }
 
     public static String getAccountStatement(Account account){
@@ -68,6 +84,8 @@ public class Customer {
         System.out.println(getAccountStatement(newAccount));
         System.out.println("/////////////////////");
         System.out.println(getAllAccountStatements());
+
+        
         
         
 
