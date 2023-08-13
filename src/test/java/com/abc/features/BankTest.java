@@ -93,8 +93,6 @@ public class BankTest {
         //Add interest
         maxiSavings.addInterest();
 
-        System.out.println(maxiSavings.getAccruedInterest());
-
         //Compare the expected results to the getTotalInterestPaid() function.
         assertEquals(170.0, bank.getTotalInterestPaid(), DOUBLE_DELTA);
     }
