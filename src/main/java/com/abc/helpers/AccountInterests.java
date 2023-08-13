@@ -46,7 +46,7 @@ public class AccountInterests {
             interest = (1000 * 0.02) + (balance - 1000) * 0.05;
             payInterest(account, interest);
         }
-        else if(balance > 3000){
+        else if(balance >= 3000){
             interest = (1000 * 0.02) + (1000 * 0.05) + (balance - 2000) * 0.1;
             payInterest(account, interest);
         } 

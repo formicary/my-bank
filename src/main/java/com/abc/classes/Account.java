@@ -78,7 +78,6 @@ public class Account {
         try {
             // Attempt to make a deposit
             deposit(amount);
-            System.out.println("Deposit successful!");
         } catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
             e.printStackTrace();

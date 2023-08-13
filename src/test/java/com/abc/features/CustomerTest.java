@@ -1,4 +1,4 @@
-package com.abc;
+package com.abc.features;
 
 import org.junit.Ignore;
 import org.junit.Test;
