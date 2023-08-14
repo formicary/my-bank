@@ -24,8 +24,12 @@ public class CustomerStatementBuilder {
             String balance = toDollars(account.getBalance());
             String accruedInterest = toDollars(account.getAccruedInterest());
 
+            //Loop through transactions within account
             for (Transaction transaction : account.getTransactions()){
+                //Format transaction to be more readable
                 String formattedTransaction = transactionFormatter(transaction);
+
+                //Add formatted transaction to string
                 transactionInfo += formattedTransaction;
                 transactionInfo += "\n";
                 
@@ -92,6 +96,7 @@ public class CustomerStatementBuilder {
         return String.format("$%,.2f", abs(d));
     }
 
+    //REMOVE AFTER TESTING
     public static void main(String[] args) {
         Customer bill = new Customer("Bill");
         Account newAccount = bill.openAccount(AccountType.CHECKING);

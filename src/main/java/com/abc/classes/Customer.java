@@ -41,7 +41,7 @@ public class Customer {
     public String getAccountStatement(Customer customer, Account account){
         String name = customer.getName();
         String statement = CustomerStatementBuilder.createStatement(name, account);
-        
+
         return statement;
     }
     
@@ -74,20 +74,31 @@ public class Customer {
 
         //Remove after testing
     public static void main(String[] args) {
-        Customer customer = new Customer("Test Name");
-        Account newAccount = customer.openAccount(AccountType.CHECKING);
-        Account newAccount1 = customer.openAccount(AccountType.MAXI_SAVINGS);
-        Account newAccount2 = customer.openAccount(AccountType.MAXI_SAVINGS);
-        newAccount.tryDeposit(5000);
-        newAccount.addInterest();
-        newAccount.addInterest();
+        // Customer customer = new Customer("Test Name");
+        // Account newAccount = customer.openAccount(AccountType.CHECKING);
+        // Account newAccount1 = customer.openAccount(AccountType.MAXI_SAVINGS);
+        // Account newAccount2 = customer.openAccount(AccountType.MAXI_SAVINGS);
+        // newAccount.tryDeposit(5000);
+        // newAccount.addInterest();
+        // newAccount.addInterest();
 
-        // System.out.println(customer.getNumberOfAccounts());
-        // System.out.println(newAccount.getBalance());
-        // System.out.println(customer.totalInterestEarned());
-        System.out.println(customer.getAccountStatement(customer,newAccount));
-        System.out.println("/////////////////////");
-        System.out.println(customer.getAllAccountStatements(customer));
+        // // System.out.println(customer.getNumberOfAccounts());
+        // // System.out.println(newAccount.getBalance());
+        // // System.out.println(customer.totalInterestEarned());
+        // System.out.println(customer.getAccountStatement(customer,newAccount));
+        // System.out.println("/////////////////////");
+        // System.out.println(customer.getAllAccountStatements(customer));
+
+        Customer henry = new Customer("Henry");
+
+        Account checkingAccount = henry.openAccount(AccountType.CHECKING);
+        Account savingsAccount = henry.openAccount(AccountType.SAVINGS);
+
+        checkingAccount.tryDeposit(100.0);
+        savingsAccount.tryDeposit(4000.0);
+        savingsAccount.tryWithdraw(200.0);
+
+        System.out.println(henry.getAllAccountStatements(henry));
 
         
         

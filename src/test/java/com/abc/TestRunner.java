@@ -9,8 +9,8 @@ import com.abc.features.TransactionTest;
 
 public class TestRunner {
     public static void main(String[] args){
-        Result result = JUnitCore.runClasses(BankTest.class,CustomerTest.class);
-        //Result result = JUnitCore.runClasses(CustomerTest.class);
+        //Result result = JUnitCore.runClasses(BankTest.class,CustomerTest.class);
+        Result result = JUnitCore.runClasses(CustomerTest.class);
 
         for (Failure failure : result.getFailures()){
             System.out.println(failure.toString());
