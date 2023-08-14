@@ -1,8 +1,6 @@
 package com.abc.helpers;
 
 import com.abc.classes.Account;
-import com.abc.classes.Account.AccountType;
-import com.abc.classes.Customer;
 import com.abc.classes.Transaction;
 
 import java.util.List;
