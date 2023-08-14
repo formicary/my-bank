@@ -69,7 +69,8 @@ public class Transaction {
             return overTenDays;
         }
     
-        }
+    }
+        
     //Used only for debugging/testing purposes, forces the transaction date to over 10 days to test interest rate change for MAXI_ACCOUNT
     public void forceTransactionDateOverTenDays(){
         unformattedTransactionDate = unformattedTransactionDate.plusDays(11);
