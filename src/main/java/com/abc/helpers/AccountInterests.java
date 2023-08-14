@@ -4,7 +4,7 @@ import com.abc.classes.Account;
 
 public class AccountInterests {
     //Deposit interest and update running accured interest for that account
-    public static void payInterest(Account account, double interest){
+    private static void payInterest(Account account, double interest){
         account.tryDeposit(interest);
         account.updateAccuredInterest(interest);
     }

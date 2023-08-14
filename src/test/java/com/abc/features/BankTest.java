@@ -17,7 +17,7 @@ public class BankTest {
 
     //Testing getCustomerSummary output
     @Test
-    public void getCustomerSummary() {
+    public void getCustomerSummaryTest() {
         //Open a Bank
         Bank bank = new Bank();
         //Create a new customer with the name 'John'
@@ -33,7 +33,7 @@ public class BankTest {
 
     //Testing getTotalInterestPaid output for a 'CHECKING' Account
     @Test
-    public void getTotalInterestPaidChecking() {
+    public void getTotalInterestPaidCheckingTest() {
         //Open a Bank
         Bank bank = new Bank();
         //Create a new customer with the name 'Bill'
@@ -55,7 +55,7 @@ public class BankTest {
 
     //Testing getTotalInterestPaid output for a 'SAVINGS' Account
     @Test
-    public void getTotalInterestPaidSavings() {
+    public void getTotalInterestPaidSavingsTest() {
         //Open a Bank
         Bank bank = new Bank();
         //Create a new customer with the name 'Bill'
@@ -77,7 +77,7 @@ public class BankTest {
 
     //Testing getTotalInterestPaid output for a 'MAXI_SAVINGS' Account
     @Test
-    public void getTotalInterestPaidMaxiSavings() {
+    public void getTotalInterestPaidMaxiSavingsTest() {
         //Open a Bank
         Bank bank = new Bank();
         //Create a new customer with the name 'Bill'

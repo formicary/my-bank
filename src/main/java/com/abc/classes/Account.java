@@ -56,7 +56,7 @@ public class Account {
         if (amount <= 0) {
             throw new IllegalArgumentException("Amount must be greater than zero");
         } else {
-            transactions.add(new Transaction(amount));
+            transactions.add(new Transaction(amount, "(DEPOSIT)"));
             updateBalance(amount);
         }
     }
@@ -69,7 +69,7 @@ public class Account {
             throw new IllegalArgumentException("Amount withdrawn must be less than your current balance");
             
         } else {
-            transactions.add(new Transaction(-amount));
+            transactions.add(new Transaction(-amount, "(WITHDRAWAL)"));
             updateBalance(-amount);
         }
     }
@@ -110,20 +110,6 @@ public class Account {
                 System.out.println("Could not find account with account type: " + accountType);
         }
     }
-
-    //CURRENTLY UNUSED, LOOK AT LATER DATE///
-    public double sumTransactions() {
-       return checkIfTransactionsExist(true);
-    }
-
-    private double checkIfTransactionsExist(boolean checkAll) {
-        double amount = 0.0;
-        for (Transaction t: transactions)
-            amount += t.amount;
-        return amount;
-    }
-
-
 
 
 //Remove after testing

@@ -11,10 +11,12 @@ public class Transaction {
     private final double amount;
 
     private String transactionDate;
+    private String transactionType;
 
-    public Transaction(double amount) {
+    public Transaction(double amount, String transactionType) {
         this.transactionDate = createTimeStamp();
-        this.amount = amount;   
+        this.amount = amount; 
+        this.transactionType = transactionType;  
     }
 
     //Getters//
@@ -26,6 +28,11 @@ public class Transaction {
         return amount;
     }
 
+    public String getTransactionType(){
+        return transactionType;
+    }
+
+    //Timestamp Function//
     public String createTimeStamp(){
         LocalDateTime localDateTime = LocalDateTime.now();
 
@@ -38,9 +45,9 @@ public class Transaction {
 
     //Remove after testing
     public static void main(String[] args) {
-    Transaction testTransaction = new Transaction(20);
+    Transaction testTransaction = new Transaction(20, "DEPOSIT");
 
-    System.out.println("[" + testTransaction.transactionDate + "] " + testTransaction.amount);
+    System.out.println("[" + testTransaction.transactionDate + "] " + testTransaction.getTransactionType() + testTransaction.amount);
 }
 }
 

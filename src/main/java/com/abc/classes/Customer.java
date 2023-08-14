@@ -41,15 +41,15 @@ public class Customer {
     public String getAccountStatement(Customer customer, Account account){
         String name = customer.getName();
         String statement = CustomerStatementBuilder.createStatement(name, account);
+        
         return statement;
     }
     
-    public List<String> getAllAccountStatements(Customer customer){
+    public String getAllAccountStatements(Customer customer){
         String name = customer.getName();
-        List<String> accountStatements = new ArrayList<>();
-        accountStatements = CustomerStatementBuilder.createStatement(name, accounts);
+        String statements = CustomerStatementBuilder.createStatement(name, accounts);
 
-        return accountStatements;
+        return statements;
     }
 
     public double getTotalInterestEarned() {

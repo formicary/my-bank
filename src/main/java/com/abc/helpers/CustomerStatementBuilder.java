@@ -1,8 +1,10 @@
 package com.abc.helpers;
 
 import com.abc.classes.Account;
+import com.abc.classes.Account.AccountType;
+import com.abc.classes.Customer;
+import com.abc.classes.Transaction;
 
-import java.util.ArrayList;
 import java.util.List;
 import static java.lang.Math.abs;
 
@@ -11,61 +13,102 @@ public class CustomerStatementBuilder {
     //Singular statement for one account
     public static String createStatement(String name, Account account) {
         
+        //Check if any accounts exist for customer
         if(account == null){
             return "Account not found for " + name;
         }
         else{
+            String transactionInfo = "";
+
             String accountType = account.getAccountType().toString();
             String balance = toDollars(account.getBalance());
             String accruedInterest = toDollars(account.getAccruedInterest());
 
+            for (Transaction transaction : account.getTransactions()){
+                String formattedTransaction = transactionFormatter(transaction);
+                transactionInfo += formattedTransaction;
+                transactionInfo += "\n";
+                
+            }
+
             String accountInfo = name + "\nAccount Type: " + accountType +  "\nBalance: " + balance + "\nAccrued Interest: " + accruedInterest +"\n";
+            accountInfo += transactionInfo;
+            return accountInfo;
+        }      
+    }
+
+    //Multiple Statements for multiple accounts
+    public static String createStatement(String name, List<Account> accounts) {
+        String accountInfo = "";
+        
+        //Check if any accounts exist for customer
+        if(accounts == null){
+            return "Account not found for " + name;
+        }
+        else{
+            
+            //Loop through accounts
+            for(Account account : accounts){
+                String accountType = account.getAccountType().toString();
+                String balance = toDollars(account.getBalance());
+                String accruedInterest = toDollars(account.getAccruedInterest());
+
+                String transactionInfo = "";
+
+                //Loop through transactions within account
+                for (Transaction transaction : account.getTransactions()){
+                    //Format transaction to be more readable
+                    String formattedTransaction = transactionFormatter(transaction);
+
+                    //Add formatted transaction to string
+                    transactionInfo += formattedTransaction;
+                    transactionInfo += "\n";
+                    
+                }
+
+                //Output Account infomation and the transactions
+                accountInfo += name + "\nAccount Type: " + accountType +  "\nBalance: " + balance + "\nAccrued Interest: " + accruedInterest +"\n";
+                accountInfo += transactionInfo;
+
+            }
 
             return accountInfo;
         }      
     }
 
-    //Multiple statements for all accounts
-    public static List<String> createStatement(String name, List<Account> accounts){
-        List<String> accountInfoList = new ArrayList<>();
+    //Format function to output transaction in more readable way: EXAMPLE: "2023-08-14 10:07:09 (DEPOSIT): $5.01"
+    public static String transactionFormatter(Transaction transaction){
+        String date = transaction.getTransactionDate();
+        String type = transaction.getTransactionType();
+        double amount = transaction.getTransactionAmount();
 
-        //Return a default value if no accounts found for customer.
-        if(accounts.isEmpty()){
-            accountInfoList.add("No accounts found for " + name);
-            return accountInfoList;
-        }
-        else{
-            accountInfoList.add(name);
-            //Loop through customer account and return a statement for each bank
-            double total = 0;
-            for (Account account : accounts) {
-                String accountType = account.getAccountType().toString();
-                
-                //Get balance as double, add to running total before converting to string
-                double balance = account.getBalance();
-                total += balance;
-                String balanceString = toDollars(account.getBalance());
+        String transactionString = date + " " + type + ": " + toDollars(amount);
 
-                String accruedInterest = toDollars(account.getAccruedInterest());
-                
-                //Format into readable statement
-                String accountInfo = "\nAccount Type: " + accountType +  "\nBalance: " + balanceString + "\nAccrued Interest: " + accruedInterest +"\n";
-                accountInfoList.add(accountInfo);
-                
-            }
-            accountInfoList.add("\nTotal balance of all accounts: " + toDollars(total));
-            return accountInfoList;
-        }     
+        return transactionString;
     }
     
-    //Convert double to dollars for readable balance/accured interest
+    //Convert double to dollars for readable balance/accured interest/transactions EXAMPLE :$5.01
     public static String toDollars(double d){
         return String.format("$%,.2f", abs(d));
     }
 
-    //Used to 
-    public static String concatenate(List<String> stringList, String delimiter) {
-        return String.join(delimiter, stringList);
+    public static void main(String[] args) {
+        Customer bill = new Customer("Bill");
+        Account newAccount = bill.openAccount(AccountType.CHECKING);
+        Account newAccount2 = bill.openAccount(AccountType.SAVINGS);
+
+        newAccount.tryDeposit(50);
+        newAccount.tryDeposit(51);
+        newAccount.tryDeposit(52);
+        newAccount.tryDeposit(53);
+        newAccount2.tryDeposit(54);
+
+        String test = createStatement(bill.getName(), bill.getAccounts());
+
+        System.out.println(test);
+
+    
+        
     }
 
 
