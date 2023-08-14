@@ -56,7 +56,7 @@ public class Account {
         if (amount <= 0) {
             throw new IllegalArgumentException("Amount must be greater than zero");
         } else {
-            transactions.add(new Transaction(amount, "(DEPOSIT)"));
+            transactions.add(new Transaction(amount, "(IN)"));
             updateBalance(amount);
         }
     }
@@ -69,7 +69,7 @@ public class Account {
             throw new IllegalArgumentException("Amount withdrawn must be less than your current balance");
             
         } else {
-            transactions.add(new Transaction(-amount, "(WITHDRAWAL)"));
+            transactions.add(new Transaction(-amount, "(OUT)"));
             updateBalance(-amount);
         }
     }
@@ -96,6 +96,7 @@ public class Account {
 
     //Interest functions//
     public void addInterest() {
+        //Switch case based on what type of account it is, taken to AccountInterests.java to handle the logic
         switch(accountType){
             case CHECKING:
                 AccountInterests.calculateInterestChecking(getAccount());
@@ -110,40 +111,4 @@ public class Account {
                 System.out.println("Could not find account with account type: " + accountType);
         }
     }
-
-
-//Remove after testing
-public static void main(String[] args) {
-    Account testChecking = new Account(AccountType.CHECKING);
-    Account testSavings = new Account(AccountType.SAVINGS);
-    Account testMaxi = new Account(AccountType.MAXI_SAVINGS);
-
-    testChecking.deposit(200);
-    testSavings.deposit(2500);
-    testMaxi.deposit(5000);
-
-    System.out.println("/////PRE INTEREST/////");
-    System.out.println(testChecking.balance);
-    System.out.println(testSavings.balance);
-    System.out.println(testMaxi.balance);
-
-    testChecking.addInterest();
-    testSavings.addInterest();
-    testMaxi.addInterest();
-
-    // testAccount.deposit(200);
-    // testAccount.withdraw(20);
-    // testAccount.withdraw(20);
-
-    System.out.println("/////POST INTEREST/////");
-    System.out.println(testChecking.balance);
-    System.out.println(testSavings.balance);
-    System.out.println(testMaxi.balance);
-
-    // List<Transaction> transactions = testAccount.getTransactions();
-    // for (Transaction t: transactions)
-    //         System.out.println(t.getTransactionDate() + " " + t.getTransactionAmount());
-
-
-}
 }

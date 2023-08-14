@@ -3,8 +3,6 @@ package com.abc.classes;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.abc.classes.Account.AccountType;
-
 public class Bank {
     private static List<Customer> customers;
 
@@ -51,7 +49,7 @@ public class Bank {
     public String getCustomerSummary() {
         String summary = "Customer Summary";
         if(customers.size() == 0){
-            summary += "\n - No customers found";
+            summary += "No customers found";
             return summary;
         }
         else{
@@ -61,35 +59,17 @@ public class Bank {
         }
     }
 
-    
-
-    public static void main(String[] args) {
-        Bank bank = new Bank();
-        Customer customer = new Customer("Test Name");
-
-        bank.addCustomer(customer);
-        Customer bob = bank.addCustomer(new Customer("Bob"));
-        Account newAccount = customer.openAccount(AccountType.CHECKING);
-        Account newAccount1 = customer.openAccount(AccountType.SAVINGS);
-        Account newAccount2 = customer.openAccount(AccountType.MAXI_SAVINGS);
-        bob.openAccount(AccountType.CHECKING);
-        newAccount.tryDeposit(5000);
-        newAccount1.tryDeposit(1500.0);
-        newAccount2.tryDeposit((3000.0));
-
-        //newAccount.addInterest();
-        //newAccount1.addInterest();
-        newAccount2.addInterest();
-        
-
-        System.out.println("Total interest across acounts = " + bank.getTotalInterestPaid());
-        System.out.println(bank.getCustomerSummary());
-
-        System.out.println("First customer is :" + bank.getFirstCustomer());
-
-    
+    //Pay interest function, can be called at set intervals
+    public void payInterestToAllAccounts(){
+        //Loop though all customers
+        for(Customer customer : customers){
+            List<Account> listOfAccounts = customer.getAccounts();
+            //For each account in cusomters, add interest
+            for (Account account : listOfAccounts){
+                account.addInterest();
+            }
+        }
     }
-
     
 }
 

@@ -17,98 +17,82 @@ import java.util.regex.Pattern;
 
 public class CustomerTest {
 
-    @Test //Test customer statement generation
-    public void testApp(){
-
+    //Testing customer statement generation
+    @Test 
+    public void getAllAccountStatementsTest(){
+        //Create a customer with name 'Henry'
         Customer henry = new Customer("Henry");
 
+        //Open a 'CHECKING' and 'SAVINGS' account for Henry
         Account checkingAccount = henry.openAccount(AccountType.CHECKING);
         Account savingsAccount = henry.openAccount(AccountType.SAVINGS);
 
+        //Make various transactions
         checkingAccount.tryDeposit(100.0);
         savingsAccount.tryDeposit(4000.0);
         savingsAccount.tryWithdraw(200.0);
 
-        // List<String> accountStatements = henry.getAllAccountStatements(henry);
-        // String comparisonString = CustomerStatementBuilder.concatenate(accountStatements,",");
+        //Declare expected outcomes
+        String expectedsubString1 = "(IN): $100.00";
+        String expectedsubString2 = "(IN): $4,000.00";
+        String expectedsubString3 = "(OUT): $200.00";
+        
+        //Get account statements
+        String actual = henry.getAllAccountStatements(henry);
 
-        // assertEquals("Henry,\n" +
-        //         "Account Type: CHECKING\n" +
-        //         "Balance: $100.00\n" +
-        //         "Accrued Interest: $0.00\n" +
-        //         ",\n" +
-        //         "Account Type: SAVINGS\n" +
-        //         "Balance: $3,800.00\n" +
-        //         "Accrued Interest: $0.00\n"+
-        //         ",\n" +
-        //         "Total balance of all accounts: $3,900.00", comparisonString);
-
-    //     assertEquals("Henry\r\n" +
-    //             "Account Type: CHECKING\r\n" +
-    //             "Balance: $100.00\r\n" +
-    //             "Accrued Interest: $0.00\r\n" +
-    //             "2023-08-14 10:16:55 (DEPOSIT): $100.00\r\n" +
-    //             "Henry\r\n" + //
-    //             "Account Type: SAVINGS\r\n" +
-    //             "Balance: $3,800.00\r\n" +
-    //             "Accrued Interest: $0.00\r\n" +
-    //             "2023-08-14 10:16:55 (DEPOSIT): $4,000.00\r\n" +
-    //             "2023-08-14 10:16:55 (WITHDRAWAL): $200.00", henry.getAllAccountStatements(henry));
-    // }
-
-    String text =
-    "Henry\n" +
-    "Account Type: CHECKING\n" +
-    "Balance: $100.00\n" +
-    "Accrued Interest: $0.00\n" +
-    "2023-08-14 10:44:23 (DEPOSIT): $100.00\n" +
-    "Henry\n" +
-    "Account Type: SAVINGS\n" +
-    "Balance: $3,800.00\n" +
-    "Accrued Interest: $0.00\n" +
-    "(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}) \\(DEPOSIT\\): \\$\\d+(,\\d{3})*(\\.\\d{2})?\\n" +
-    "(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}) \\(WITHDRAWAL\\): \\$\\d+(,\\d{3})*(\\.\\d{2})?\\n";
-
-    String actual = henry.getAllAccountStatements(henry);
-
-        System.out.println(text);
         System.out.println(actual);
+        boolean containsAllSubstrings = false;
+        
+        //Check to see if actual statement contains expected transactions
+        if(actual.contains(expectedsubString1) && actual.contains(expectedsubString2) && actual.contains(expectedsubString3)){
+            containsAllSubstrings = true;
+        }  
 
-        Pattern pattern = Pattern.compile(text);
-        Matcher matcher = pattern.matcher(actual);
-
-        boolean foundMatch = false;
-        while (matcher.find()) {
-            String match = matcher.group();
-            System.out.println(match);
-            foundMatch = true;
-        }
-
-        assertTrue(foundMatch);
-
-    
-
+        assertTrue(containsAllSubstrings);
     }
 
-    // @Test
-    // public void testOneAccount(){
-    //     Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
-    //     assertEquals(1, oscar.getNumberOfAccounts());
-    // }
+    //Test to ensure an accounts can be opened
+    @Test
+    public void openOneAccountTest(){
+        //Create a customer with the Name 'Oscar'
+        Customer oscar = new Customer("Oscar");
+        //Open one 'SAVINGS' account
+        oscar.openAccount(AccountType.SAVINGS);
 
-    // @Test
-    // public void testTwoAccount(){
-    //     Customer oscar = new Customer("Oscar")
-    //             .openAccount(new Account(Account.SAVINGS));
-    //     oscar.openAccount(new Account(Account.CHECKING));
-    //     assertEquals(2, oscar.getNumberOfAccounts());
-    // }
+        //Check to see if only one account has been opened
+        assertEquals(1, oscar.getNumberOfAccounts());
+    }
 
-    // @Ignore
-    // public void testThreeAcounts() {
-    //     Customer oscar = new Customer("Oscar")
-    //             .openAccount(new Account(Account.SAVINGS));
-    //     oscar.openAccount(new Account(Account.CHECKING));
-    //     assertEquals(3, oscar.getNumberOfAccounts());
-    // }
+    //Test to ensure multiple accounts can be opened
+    @Test
+    public void openMultipleAccountsTest(){
+        //Create a customer with the Name 'Oscar'
+        Customer oscar = new Customer("Oscar");
+
+        //Open multiple accounts of different types
+        oscar.openAccount(AccountType.SAVINGS);
+        oscar.openAccount(AccountType.CHECKING);
+        oscar.openAccount(AccountType.MAXI_SAVINGS);
+
+        //Check to see if multiple accounts have been created
+        assertTrue(oscar.getNumberOfAccounts() >1);
+    }
+
+    @Test
+    public void transferBetweenAccountsTest(){
+        //Create a customer with the Name 'Oscar'
+        Customer oscar = new Customer("Oscar");
+
+        //Open two accounts, desposit '100' into each
+        Account savings = oscar.openAccount(AccountType.SAVINGS);
+        savings.tryDeposit(100);
+        Account checking = oscar.openAccount(AccountType.CHECKING);
+        checking.tryDeposit(100);
+
+        //Transfer 20 from 'savings' to 'checkings'
+        oscar.transferBetweenAccounts(20, savings, checking);
+
+        //Check to see if the transfer went through
+        assertTrue(savings.getBalance() == 80 && checking.getBalance() == 120);
+    } 
 }

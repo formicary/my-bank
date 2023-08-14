@@ -15,6 +15,7 @@ public class AccountInterests {
         double balance = account.getBalance();
         
         interest = balance * 0.001;
+        System.out.println("///CHECKING INTEREST/// " + interest);
         payInterest(account, interest);
     }
 
@@ -26,10 +27,12 @@ public class AccountInterests {
         if (balance <= 1000){
             interest = balance * 0.001;
             payInterest(account, interest);
+            System.out.println("///SAVINGS INTEREST/// " + interest);
         }   
         else if(balance > 1000){
             interest = (1000 * 0.001) + (balance - 1000) * 0.002;
             payInterest(account, interest);
+            System.out.println("///SAVINGS INTEREST/// " + interest);
         }   
     }
 
@@ -41,14 +44,22 @@ public class AccountInterests {
         if (balance <= 1000){
             interest = balance * 0.02;
             payInterest(account, interest);
+            System.out.println("///MAXI INTEREST/// " + interest);
         }   
         else if(balance <= 2000){
             interest = (1000 * 0.02) + (balance - 1000) * 0.05;
             payInterest(account, interest);
+            System.out.println("///MAXI INTEREST/// " + interest);
         }
-        else if(balance >= 3000){
+        else if(balance >= 2000 && balance < 3000){
             interest = (1000 * 0.02) + (1000 * 0.05) + (balance - 2000) * 0.1;
             payInterest(account, interest);
+            System.out.println("///MAXI INTEREST/// " + interest);
+        }
+        else if(balance >= 3000){
+            interest = (1000 * 0.02) + (1000 * 0.05) + (1000 * 0.1);
+            payInterest(account, interest);
+            System.out.println("///MAXI INTEREST/// " + interest);
         } 
     }
 }
