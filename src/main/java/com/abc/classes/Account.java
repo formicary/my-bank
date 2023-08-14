@@ -6,7 +6,7 @@ import com.abc.helpers.AccountInterests;
 
 public class Account {
 
-    public enum AccountType {CHECKING, SAVINGS, MAXI_SAVINGS}
+    public enum AccountType {CHECKING, SAVINGS, MAXI_SAVINGS, MAXI_SAVINGS_PLUS}
     AccountType accountType;
     private List<Transaction> transactions;
     private double balance;
@@ -30,6 +30,11 @@ public class Account {
 
     public List<Transaction> getTransactions(){
         return transactions;
+    }
+
+    public Transaction getLatestTransaction(){
+        Transaction latestTransaction = transactions.get(transactions.size()-1);
+        return latestTransaction;
     }
 
     public double getBalance(){
@@ -106,6 +111,9 @@ public class Account {
                 break;
             case MAXI_SAVINGS:
                 AccountInterests.calculateInterestMaxiSavings(getAccount());
+                break;
+            case MAXI_SAVINGS_PLUS:
+                AccountInterests.calculateInterestMaxiSavingsPlus(getAccount());
                 break;
             default:
                 System.out.println("Could not find account with account type: " + accountType);

@@ -95,27 +95,4 @@ public class CustomerStatementBuilder {
     public static String toDollars(double d){
         return String.format("$%,.2f", abs(d));
     }
-
-    //REMOVE AFTER TESTING
-    public static void main(String[] args) {
-        Customer bill = new Customer("Bill");
-        Account newAccount = bill.openAccount(AccountType.CHECKING);
-        Account newAccount2 = bill.openAccount(AccountType.SAVINGS);
-
-        newAccount.tryDeposit(50);
-        newAccount.tryDeposit(51);
-        newAccount.tryDeposit(52);
-        newAccount.tryDeposit(53);
-        newAccount2.tryDeposit(54);
-
-        String test = createStatement(bill.getName(), bill.getAccounts());
-
-        System.out.println(test);
-
-    
-        
-    }
-
-
-
 }

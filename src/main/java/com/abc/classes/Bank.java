@@ -49,7 +49,7 @@ public class Bank {
     public String getCustomerSummary() {
         String summary = "Customer Summary";
         if(customers.size() == 0){
-            summary += "No customers found";
+            summary += " No customers found";
             return summary;
         }
         else{

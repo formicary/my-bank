@@ -1,19 +1,13 @@
 package com.abc.features;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.abc.classes.Account;
 import com.abc.classes.Account.AccountType;
-import com.abc.helpers.CustomerStatementBuilder;
 import com.abc.classes.Customer;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class CustomerTest {
 
@@ -78,6 +72,7 @@ public class CustomerTest {
         assertTrue(oscar.getNumberOfAccounts() >1);
     }
 
+    //Test to ensure balance can be transferred to different accounts
     @Test
     public void transferBetweenAccountsTest(){
         //Create a customer with the Name 'Oscar'

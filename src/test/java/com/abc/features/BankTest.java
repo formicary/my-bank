@@ -1,9 +1,6 @@
 package com.abc.features;
 
 import org.junit.Test;
-import org.junit.runner.JUnitCore;
-import org.junit.runner.Result;
-import org.junit.runner.notification.Failure;
 
 import com.abc.classes.Account;
 import com.abc.classes.Account.AccountType;
@@ -39,7 +36,7 @@ public class BankTest {
         Bank bank = new Bank();
         
         //Compare the expected results to the getCustomerSummary() function.
-        assertEquals("No customers found", bank.getCustomerSummary());
+        assertEquals("Customer Summary No customers found", bank.getCustomerSummary());
     }
 
 
