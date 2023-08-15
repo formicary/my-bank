@@ -40,16 +40,14 @@ public class Customer {
 
     public String getAccountStatement(Customer customer, Account account){
         String name = customer.getName();
-        String statement = CustomerStatementBuilder.createStatement(name, account);
 
-        return statement;
+        return CustomerStatementBuilder.createStatement(name, account);
     }
     
     public String getAllAccountStatements(Customer customer){
         String name = customer.getName();
-        String statements = CustomerStatementBuilder.createStatement(name, accounts);
 
-        return statements;
+        return CustomerStatementBuilder.createStatement(name, accounts);
     }
 
     public double getTotalInterestEarned() {
