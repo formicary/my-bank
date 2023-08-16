@@ -14,25 +14,52 @@ public class Customer {
         this.accounts = new ArrayList<Account>();
     }
 
+    /**
+     * @return String customer name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * 
+     * @param account
+     * @return account object
+     */
     public Customer openAccount(Account account) {
         accounts.add(account);
         return this;
     }
 
+    /**
+     * 
+     * @return number of accounts (int)
+     */
     public int getNumberOfAccounts() {
         return accounts.size();
     }
 
+    /**
+     * 
+     * @return total interest
+     */
+
     public double totalInterestEarned() {
         double total = 0;
         for (Account a : accounts)
-            total += a.interestEarned();
+            if (a.getAccountType() == 0)
+                total += a.interestEarnedChecking();
+            else if (a.getAccountType() == 1)
+                total += a.interestEarnedSavings();
+            else
+                total += a.interestEarnedMaxiSavings();
         return total;
     }
+
+    /**
+     * 
+     * @return statement across accounts (String)
+     */
 
     public String getStatement() {
         String statement = null;
@@ -40,17 +67,23 @@ public class Customer {
         double total = 0.0;
         for (Account a : accounts) {
             statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+            total += a.getAccountBalance();
         }
         statement += "\nTotal In All Accounts " + toDollars(total);
         return statement;
     }
 
+    /**
+     * 
+     * @param account
+     * @return statement for individual account (String)
+     */
+
     private String statementForAccount(Account a) {
         String s = "";
 
-       //Translate to pretty account type
-        switch(a.getAccountType()){
+        // Translate to pretty account type
+        switch (a.getAccountType()) {
             case Account.CHECKING:
                 s += "Checking Account\n";
                 break;
@@ -62,7 +95,7 @@ public class Customer {
                 break;
         }
 
-        //Now total up all the transactions
+        // Now total up all the transactions
         double total = 0.0;
         for (Transaction t : a.transactions) {
             s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
@@ -72,7 +105,13 @@ public class Customer {
         return s;
     }
 
-    private String toDollars(double d){
+    /**
+     * 
+     * @param amount
+     * @return formatted String to dollars
+     */
+    private String toDollars(double d) {
         return String.format("$%,.2f", abs(d));
     }
+
 }
