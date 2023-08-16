@@ -1,7 +1,8 @@
 package com.abc;
 
-import java.util.Calendar;
 import java.util.Date;
+
+import com.abc.DateUtils.DateProvider;
 
 public class Transaction {
     public final double amount;
@@ -11,6 +12,19 @@ public class Transaction {
     public Transaction(double amount) {
         this.amount = amount;
         this.transactionDate = DateProvider.getInstance().now();
+    }
+
+    public Date getTransactionDate() {
+        return transactionDate;
+    }
+
+    public double getTransactionAmount() {
+        return amount;
+    }
+
+    public boolean isAfter(Date date) {
+
+        return transactionDate.after(date);
     }
 
 }

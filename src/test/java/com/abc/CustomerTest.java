@@ -1,20 +1,19 @@
 package com.abc;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 public class CustomerTest {
 
-    @Test //Test customer statement generation
-    public void testApp(){
+    @Test // Test customer statement generation
+    public void testgetStatement() {
 
         Account checkingAccount = new Account(Account.CHECKING);
         Account savingsAccount = new Account(Account.SAVINGS);
 
-        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
-
+        Customer henry = new Customer("Henry").openAccount(checkingAccount);
+        henry.openAccount(savingsAccount);
         checkingAccount.deposit(100.0);
         savingsAccount.deposit(4000.0);
         savingsAccount.withdraw(200.0);
@@ -34,24 +33,32 @@ public class CustomerTest {
     }
 
     @Test
-    public void testOneAccount(){
+    public void testOneAccount() {
         Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
         assertEquals(1, oscar.getNumberOfAccounts());
     }
 
     @Test
-    public void testTwoAccount(){
+    public void testTwoAccountS() {
         Customer oscar = new Customer("Oscar")
                 .openAccount(new Account(Account.SAVINGS));
         oscar.openAccount(new Account(Account.CHECKING));
         assertEquals(2, oscar.getNumberOfAccounts());
     }
 
-    @Ignore
-    public void testThreeAcounts() {
+    @Test
+    public void testThreeAccounts() {
         Customer oscar = new Customer("Oscar")
                 .openAccount(new Account(Account.SAVINGS));
         oscar.openAccount(new Account(Account.CHECKING));
+        oscar.openAccount(new Account(Account.MAXI_SAVINGS));
         assertEquals(3, oscar.getNumberOfAccounts());
     }
+
+    @Test
+    public void testGetName() {
+        Customer oscar = new Customer("Oscar");
+        assertEquals("Oscar", oscar.getName());
+    }
+
 }

@@ -1,7 +1,10 @@
 package com.abc;
 
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.abc.DateUtils.DateChecker;
 
 public class Account {
 
@@ -11,12 +14,16 @@ public class Account {
 
     private final int accountType;
     public List<Transaction> transactions;
+    DateChecker dateCheck = new DateChecker();
 
+    // account class constructor
     public Account(int accountType) {
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
+
     }
 
+    // add money method
     public void deposit(double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
@@ -25,49 +32,62 @@ public class Account {
         }
     }
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
-    }
-}
-
-    public double interestEarned() {
-        double amount = sumTransactions();
-        switch(accountType){
-            case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
-            case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
-            default:
-                return amount * 0.001;
+    // withdraw money method
+    public void withdraw(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        } else {
+            transactions.add(new Transaction(-amount));
         }
     }
 
-    public double sumTransactions() {
-       return checkIfTransactionsExist(true);
+    // calculate checking account interest
+    public double interestEarnedChecking() {
+        double amount = getAccountBalance();
+        return amount * 0.001;
+
     }
 
+    // calculate savings account interest
+    public double interestEarnedSavings() {
+        double amount = getAccountBalance();
+        if (amount <= 1000)
+            return amount * 0.001;
+        else
+            return 1 + (amount - 1000) * 0.002;
+    }
+
+    // calculate maxi saver account interest
+    public double interestEarnedMaxiSavings() {
+        double amount = getAccountBalance();
+        boolean val = dateCheck.hasTransactionsWithinLastTenDays(transactions);
+        if (val) {
+            return amount * 0.001;
+        } else {
+            return amount * 0.05;
+        }
+    }
+
+    // add transactions
+    public double getAccountBalance() {
+        return checkIfTransactionsExist(true);
+    }
+
+    // check validity of transaction
     private double checkIfTransactionsExist(boolean checkAll) {
         double amount = 0.0;
-        for (Transaction t: transactions)
+        for (Transaction t : transactions)
             amount += t.amount;
         return amount;
     }
 
+    // get account type
     public int getAccountType() {
         return accountType;
+    }
+
+    public List<Transaction> getTransactionList() {
+        return transactions;
     }
 
 }

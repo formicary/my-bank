@@ -30,7 +30,12 @@ public class Customer {
     public double totalInterestEarned() {
         double total = 0;
         for (Account a : accounts)
-            total += a.interestEarned();
+            if (a.getAccountType() == 0)
+                total += a.interestEarnedChecking();
+            else if (a.getAccountType() == 1)
+                total += a.interestEarnedSavings();
+            else
+                total += a.interestEarnedMaxiSavings();
         return total;
     }
 
@@ -40,7 +45,7 @@ public class Customer {
         double total = 0.0;
         for (Account a : accounts) {
             statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+            total += a.getAccountBalance();
         }
         statement += "\nTotal In All Accounts " + toDollars(total);
         return statement;
@@ -49,8 +54,8 @@ public class Customer {
     private String statementForAccount(Account a) {
         String s = "";
 
-       //Translate to pretty account type
-        switch(a.getAccountType()){
+        // Translate to pretty account type
+        switch (a.getAccountType()) {
             case Account.CHECKING:
                 s += "Checking Account\n";
                 break;
@@ -62,7 +67,7 @@ public class Customer {
                 break;
         }
 
-        //Now total up all the transactions
+        // Now total up all the transactions
         double total = 0.0;
         for (Transaction t : a.transactions) {
             s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
@@ -72,7 +77,8 @@ public class Customer {
         return s;
     }
 
-    private String toDollars(double d){
+    private String toDollars(double d) {
         return String.format("$%,.2f", abs(d));
     }
+
 }
