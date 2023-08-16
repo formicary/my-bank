@@ -19,7 +19,6 @@ public class Account {
     public List<Transaction> transactions;
     DateChecker dateCheck = new DateChecker();
 
-    // account class constructor
     public Account(int accountType) {
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
@@ -52,7 +51,7 @@ public class Account {
 
     /**
      * 
-     * @return interest earned in chcecking account
+     * @return interest earned in checking account
      */
     public double interestEarnedChecking() {
 
