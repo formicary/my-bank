@@ -1,6 +1,5 @@
 package com.abc;
 
-import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +10,10 @@ public class Account {
     public static final int CHECKING = 0;
     public static final int SAVINGS = 1;
     public static final int MAXI_SAVINGS = 2;
+
+    private static final double DEFAULT_INTEREST_RATE = 0.001;
+    private static final double HIGHER_INTEREST_RATE_SAVINGS = 0.002;
+    private static final double HIGHER_INTEREST_RATE_MAXI = 0.05;
 
     private final int accountType;
     public List<Transaction> transactions;
@@ -23,7 +26,10 @@ public class Account {
 
     }
 
-    // add money method
+    /**
+     * @param amount
+     *               deposits money into account
+     */
     public void deposit(double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
@@ -32,7 +38,10 @@ public class Account {
         }
     }
 
-    // withdraw money method
+    /**
+     * @param amount
+     *               withdraws money from account
+     */
     public void withdraw(double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
@@ -41,39 +50,56 @@ public class Account {
         }
     }
 
-    // calculate checking account interest
+    /**
+     * 
+     * @return interest earned in chcecking account
+     */
     public double interestEarnedChecking() {
+
         double amount = getAccountBalance();
-        return amount * 0.001;
+        return amount * DEFAULT_INTEREST_RATE;
 
     }
 
-    // calculate savings account interest
+    /**
+     * 
+     * @return interest earned in savings account
+     */
     public double interestEarnedSavings() {
         double amount = getAccountBalance();
         if (amount <= 1000)
-            return amount * 0.001;
+            return amount * DEFAULT_INTEREST_RATE;
         else
-            return 1 + (amount - 1000) * 0.002;
+            return 1 + (amount - 1000) * HIGHER_INTEREST_RATE_SAVINGS;
     }
 
-    // calculate maxi saver account interest
+    /**
+     * 
+     * @return interest earned in maxi_savings_account
+     */
     public double interestEarnedMaxiSavings() {
         double amount = getAccountBalance();
         boolean val = dateCheck.hasTransactionsWithinLastTenDays(transactions);
         if (val) {
-            return amount * 0.001;
+            return amount * DEFAULT_INTEREST_RATE;
         } else {
-            return amount * 0.05;
+            return amount * HIGHER_INTEREST_RATE_MAXI;
         }
     }
 
-    // add transactions
+    /**
+     * 
+     * @return account balance
+     */
     public double getAccountBalance() {
         return checkIfTransactionsExist(true);
     }
 
-    // check validity of transaction
+    /**
+     * 
+     * @param checkAll
+     * @return total amount
+     */
     private double checkIfTransactionsExist(boolean checkAll) {
         double amount = 0.0;
         for (Transaction t : transactions)
@@ -81,11 +107,18 @@ public class Account {
         return amount;
     }
 
-    // get account type
+    /**
+     * 
+     * @return accountType (int): 0, 1, 2
+     */
     public int getAccountType() {
         return accountType;
     }
 
+    /**
+     * 
+     * @return list of transactions
+     */
     public List<Transaction> getTransactionList() {
         return transactions;
     }

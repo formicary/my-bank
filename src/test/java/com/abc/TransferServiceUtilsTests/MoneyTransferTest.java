@@ -1,4 +1,4 @@
-package com.abc.TransferServiceTests;
+package com.abc.TransferServiceUtilsTests;
 
 import org.junit.Test;
 

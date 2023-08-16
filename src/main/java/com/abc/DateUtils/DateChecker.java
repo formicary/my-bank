@@ -6,6 +6,11 @@ import java.util.List;
 import com.abc.Transaction;
 
 public class DateChecker {
+
+    /**
+     * @param transactionDate
+     * @return boolean if given date is in the last 10 days
+     */
     public boolean isWithinLast10Days(Date transactionDate) {
 
         Date today = new Date();
@@ -14,6 +19,11 @@ public class DateChecker {
 
         return differenceInMillis <= tenDaysInMillis;
     }
+
+    /**
+     * @param transactions
+     * @return boolean: true if there is a withdrawal in the last 10 days
+     */
 
     public boolean hasTransactionsWithinLastTenDays(List<Transaction> transactions) {
         Date today = new Date();

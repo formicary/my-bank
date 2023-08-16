@@ -14,18 +14,35 @@ public class Customer {
         this.accounts = new ArrayList<Account>();
     }
 
+    /**
+     * @return String customer name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * 
+     * @param account
+     * @return account object
+     */
     public Customer openAccount(Account account) {
         accounts.add(account);
         return this;
     }
 
+    /**
+     * 
+     * @return number of accounts (int)
+     */
     public int getNumberOfAccounts() {
         return accounts.size();
     }
+
+    /**
+     * 
+     * @return total interest
+     */
 
     public double totalInterestEarned() {
         double total = 0;
@@ -39,6 +56,11 @@ public class Customer {
         return total;
     }
 
+    /**
+     * 
+     * @return statement across accounts (String)
+     */
+
     public String getStatement() {
         String statement = null;
         statement = "Statement for " + name + "\n";
@@ -50,6 +72,12 @@ public class Customer {
         statement += "\nTotal In All Accounts " + toDollars(total);
         return statement;
     }
+
+    /**
+     * 
+     * @param account
+     * @return statement for individual account (String)
+     */
 
     private String statementForAccount(Account a) {
         String s = "";
@@ -77,6 +105,11 @@ public class Customer {
         return s;
     }
 
+    /**
+     * 
+     * @param amount
+     * @return formatted String to dollars
+     */
     private String toDollars(double d) {
         return String.format("$%,.2f", abs(d));
     }

@@ -10,7 +10,6 @@ import com.abc.Bank;
 import com.abc.Customer;
 import com.abc.Transaction;
 import java.util.Date;
-import java.util.ArrayList;
 import java.util.List;
 
 public class DateCheckerTest {
