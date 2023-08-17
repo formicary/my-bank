@@ -10,8 +10,9 @@ import com.abc.features.TransactionTest;
 import com.abc.features.AccountTest;
 
 public class TestRunner {
-    public static void main(String[] args){
-        Result result = JUnitCore.runClasses(BankTest.class,CustomerTest.class,TransactionTest.class,AccountTest.class);  
+    public static void main(String[] args) {
+        Result result = JUnitCore.runClasses(BankTest.class, CustomerTest.class, TransactionTest.class,
+                AccountTest.class);
 
         int totalTests = result.getRunCount();
         int failedTests = result.getFailureCount();

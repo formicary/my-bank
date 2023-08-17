@@ -19,32 +19,32 @@ public class Customer {
         Account newAccount = new Account(accountType);
         accounts.add(newAccount);
         return newAccount;
-    } 
-    
-    //Getters//
-    public Customer getCustomer(){
+    }
+
+    // Getters//
+    public Customer getCustomer() {
         return this;
     }
-    
+
     public String getName() {
         return name;
     }
 
-    public List<Account> getAccounts(){
+    public List<Account> getAccounts() {
         return accounts;
     }
-      
+
     public int getNumberOfAccounts() {
         return accounts.size();
     }
 
-    public String getAccountStatement(Customer customer, Account account){
+    public String getAccountStatement(Customer customer, Account account) {
         String name = customer.getName();
 
         return CustomerStatementBuilder.createStatement(name, account);
     }
-    
-    public String getAllAccountStatements(Customer customer){
+
+    public String getAllAccountStatements(Customer customer) {
         String name = customer.getName();
 
         return CustomerStatementBuilder.createStatement(name, accounts);
@@ -52,24 +52,22 @@ public class Customer {
 
     public double getTotalInterestEarned() {
         double total = 0;
-        try{
-        for (Account a : accounts)
-            total += a.getAccruedInterest();
-        return total;
-        }
-        catch(NullPointerException e){
+        try {
+            for (Account a : accounts)
+                total += a.getAccruedInterest();
+            return total;
+        } catch (NullPointerException e) {
             System.out.println("No customers found");
             e.printStackTrace();
             return total;
         }
     }
 
-
-    //ADDITIONAL FEATURES//
-    //A customer can transfer between their accounts
-    public void transferBetweenAccounts(double amount, Account from, Account to){
+    // ADDITIONAL FEATURES//
+    // A customer can transfer between their accounts
+    public void transferBetweenAccounts(double amount, Account from, Account to) {
         from.tryWithdraw(amount);
         to.tryDeposit(amount);
     }
- 
+
 }

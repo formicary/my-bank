@@ -12,113 +12,106 @@ import static org.junit.Assert.assertEquals;
 public class BankTest {
     private static final double DOUBLE_DELTA = 1e-15;
 
-    //Testing getCustomerSummary output//
+    // Testing getCustomerSummary output//
     @Test
     public void getCustomerSummaryTest() {
-        //Open a Bank
+        // Open a Bank
         Bank bank = new Bank();
-        //Create a new customer with the name 'John'
+        // Create a new customer with the name 'John'
         Customer john = new Customer("John");
-        //Open a 'CHECKING' account for 'John'
+        // Open a 'CHECKING' account for 'John'
         john.openAccount(AccountType.CHECKING);
-        //Add 'John' to the bank
+        // Add 'John' to the bank
         bank.addCustomer(john);
-        
-        //Compare the expected results to the getCustomerSummary() function.
+
+        // Compare the expected results to the getCustomerSummary() function.
         assertEquals("Customer Summary\n - John: [1 account(s) open]", bank.getCustomerSummary());
     }
 
-
-    //Testing getCustomerSummary output when no customers are in the bank//
+    // Testing getCustomerSummary output when no customers are in the bank//
     @Test
     public void getCustomerSummaryNoCustomersTest() {
-        //Open a Bank
+        // Open a Bank
         Bank bank = new Bank();
-        
-        //Compare the expected results to the getCustomerSummary() function.
+
+        // Compare the expected results to the getCustomerSummary() function.
         assertEquals("Customer Summary No customers found", bank.getCustomerSummary());
     }
 
-
-    //Testing getTotalInterestPaid output for a 'CHECKING' Account//
+    // Testing getTotalInterestPaid output for a 'CHECKING' Account//
     @Test
     public void getTotalInterestPaidCheckingTest() {
-        //Open a Bank
+        // Open a Bank
         Bank bank = new Bank();
-        //Create a new customer with the name 'Bill'
+        // Create a new customer with the name 'Bill'
         Customer bill = new Customer("Bill");
-        //Open a 'CHECKING' account for 'Bill'
+        // Open a 'CHECKING' account for 'Bill'
         Account checking = bill.openAccount(AccountType.CHECKING);
-        //Add 'Bill' to the bank
+        // Add 'Bill' to the bank
         bank.addCustomer(bill);
-        
 
-        //Deposit '100'
+        // Deposit '100'
         checking.tryDeposit(100.0);
-        //Add interest to the account
+        // Add interest to the account
         checking.addInterest();
 
-        //Compare the expected results to the getTotalInterestPaid() function.
+        // Compare the expected results to the getTotalInterestPaid() function.
         assertEquals(0.1, bank.getTotalInterestPaid(), DOUBLE_DELTA);
     }
 
-
-    //Testing getTotalInterestPaid output for a 'SAVINGS' Account//
+    // Testing getTotalInterestPaid output for a 'SAVINGS' Account//
     @Test
     public void getTotalInterestPaidSavingsTest() {
-        //Open a Bank
+        // Open a Bank
         Bank bank = new Bank();
-        //Create a new customer with the name 'Bill'
+        // Create a new customer with the name 'Bill'
         Customer bill = new Customer("Bill");
-        //Add 'Bill' to the bank
+        // Add 'Bill' to the bank
         bank.addCustomer(bill);
-        //Open a 'SAVINGS' account for 'Bill'
+        // Open a 'SAVINGS' account for 'Bill'
         Account savings = bill.openAccount(AccountType.SAVINGS);
-        
-        
-        //Deposit '1500'
+
+        // Deposit '1500'
         savings.tryDeposit(1500.0);
-        //Add interest
+        // Add interest
         savings.addInterest();
 
-        //Compare the expected results to the getTotalInterestPaid() function.
+        // Compare the expected results to the getTotalInterestPaid() function.
         assertEquals(2.0, bank.getTotalInterestPaid(), DOUBLE_DELTA);
     }
 
-
-    //Testing getTotalInterestPaid output for a 'MAXI_SAVINGS' Account//
+    // Testing getTotalInterestPaid output for a 'MAXI_SAVINGS' Account//
     @Test
     public void getTotalInterestPaidMaxiSavingsTest() {
-        //Open a Bank
+        // Open a Bank
         Bank bank = new Bank();
-        //Create a new customer with the name 'Bill'
+        // Create a new customer with the name 'Bill'
         Customer bill = new Customer("Bill");
-        //Add 'Bill' to the bank
+        // Add 'Bill' to the bank
         bank.addCustomer(bill);
-        //Open a 'MAXI_SAVINGS' account for 'Bill'
+        // Open a 'MAXI_SAVINGS' account for 'Bill'
         Account maxiSavings = bill.openAccount(AccountType.MAXI_SAVINGS);
-        
 
-        //Deposit '3000'
+        // Deposit '3000'
         maxiSavings.tryDeposit(3000.0);
-        //Add interest
+        // Add interest
         maxiSavings.addInterest();
 
-        //Compare the expected results to the getTotalInterestPaid() function.
+        // Compare the expected results to the getTotalInterestPaid() function.
         assertEquals(170.0, bank.getTotalInterestPaid(), DOUBLE_DELTA);
     }
 
-    //Testing getTotalInterestPaid across multiple accounts//
+    // Testing getTotalInterestPaid across multiple accounts//
     @Test
-    public void getTotalInterestEarnedMultipleTest(){
-        //Open a Bank
+    public void getTotalInterestEarnedMultipleTest() {
+        // Open a Bank
         Bank bank = new Bank();
-        //Create a new customer with the name 'Bill'
+        // Create a new customer with the name 'Bill'
         Customer bill = new Customer("Bill");
-        //Add 'Bill' to the bank
+        // Add 'Bill' to the bank
         bank.addCustomer(bill);
 
-        //Open multiple different accounts, deposit various amounts
+        // Open multiple different accounts, deposit various amounts
         Account maxiSavings = bill.openAccount(AccountType.MAXI_SAVINGS);
         maxiSavings.tryDeposit(2500);
         Account checking = bill.openAccount(AccountType.CHECKING);
@@ -126,11 +119,10 @@ public class BankTest {
         Account savings = bill.openAccount(Account.AccountType.SAVINGS);
         savings.tryDeposit(3500);
 
-        //Pay interest to all accounts in the bank
+        // Pay interest to all accounts in the bank
         bank.payInterestToAllAccounts();
 
         assertEquals(126.5, bank.getTotalInterestPaid(), DOUBLE_DELTA);
     }
-
 
 }
