@@ -4,10 +4,10 @@ import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 
-import com.abc.features.BankTest;
-import com.abc.features.CustomerTest;
-import com.abc.features.TransactionTest;
-import com.abc.features.AccountTest;
+import com.abc.tests.AccountTest;
+import com.abc.tests.BankTest;
+import com.abc.tests.CustomerTest;
+import com.abc.tests.TransactionTest;
 
 public class TestRunner {
     public static void main(String[] args) {

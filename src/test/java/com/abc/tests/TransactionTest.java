@@ -1,4 +1,4 @@
-package com.abc.features;
+package com.abc.tests;
 
 import org.junit.Test;
 
