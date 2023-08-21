@@ -7,30 +7,51 @@ import java.util.List;
 
 public class Account {
 
+    private double balance;
+
     private final AccountType accountType;
     public List<Transaction> transactions;
 
-    public Account(AccountType accountType) {
+    // constructor
+    public Account(AccountType accountType) { // I think this constructor should have balance as a property. Is setBalance needed then?
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
     }
 
-    public void deposit(double amount) {
+    // move this function to a utils folder...
+    public static void isPositiveAmount(double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
-        } else {
-            transactions.add(new Transaction(amount));
         }
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    private void setBalance(double balance) {
+        this.balance = balance;
+    }
+
+    private void deductAmount(double amount) {
+        double balance = this.getBalance();
+        balance += amount;
+        setBalance(balance);
+    }
+
+    public void deposit(double amount) {
+        isPositiveAmount(amount);
+        transactions.add(new Transaction(amount));
+        deductAmount(amount);
     }
 
     public void withdraw(double amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
-        } else {
-            transactions.add(new Transaction(-amount));
-        }
+        isPositiveAmount(amount);
+        transactions.add(new Transaction(-amount));
+        balance -= amount; // extract to own function and call that function here
     }
 
+    // refactor into modular functions
     public double interestEarned() {
         double amount = sumTransactions();
         switch(accountType){
@@ -57,7 +78,7 @@ public class Account {
        return checkIfTransactionsExist(true);
     }
 
-    private double checkIfTransactionsExist(boolean checkAll) {
+    private double checkIfTransactionsExist(boolean checkAll) { // what is checkAll?
         double amount = 0.0;
         for (Transaction t: transactions)
             amount += t.amount;
