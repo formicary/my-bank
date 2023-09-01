@@ -8,6 +8,7 @@ import static java.lang.Math.abs;
 public class Customer {
     private String name;
     private List<Account> accounts;
+    public double total;
 
     public Customer(String name) {
         this.name = name;
@@ -29,24 +30,30 @@ public class Customer {
 
     public double totalInterestEarned() {
         double total = 0;
+
         for (Account a : accounts)
             total += a.interestEarned();
+
         return total;
     }
 
-    public String getStatement() {
+    public String[] getStatement() {
         String statement = null;
         statement = "Statement for " + name + "\n";
-        double total = 0.0;
+        total = 0.0;
+
         for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
+            statement += statementForAccount(a) + "\n";
             total += a.sumTransactions();
         }
-        statement += "\nTotal In All Accounts " + toDollars(total);
-        return statement;
+
+        statement += "\nTotal Of " + name + "'s Accounts : " + toDollars(total);
+        String statementAndTotal[] = {statement, String.valueOf(total)};
+
+        return statementAndTotal;
     }
 
-    private String statementForAccount(Account a) {
+    public String statementForAccount(Account a) {
         String s = "";
 
        //Translate to pretty account type
@@ -61,18 +68,42 @@ public class Customer {
                 s += "Maxi Savings Account\n";
                 break;
         }
-
         //Now total up all the transactions
         double total = 0.0;
+
         for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
+            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " : " + toDollars(t.amount) + "\n";
             total += t.amount;
         }
-        s += "Total " + toDollars(total);
+
+        s += "Total : " + toDollars(total);
+
         return s;
     }
 
-    private String toDollars(double d){
+    public double[] transferFunds(double amount, Account fromAccount, Account toAccount) throws Exception {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        }
+
+        double amountInFromAccount = 0.0, amountInToAccount = 0.0;
+        fromAccount.withdraw(amount);
+        toAccount.deposit(amount);
+
+        for (Transaction t : fromAccount.transactions) {
+            amountInFromAccount += t.amount;
+        }
+
+        for (Transaction t : toAccount.transactions) {
+            amountInToAccount += t.amount;
+        }
+
+        double[] amountInAccounts = {amountInFromAccount, amountInToAccount};
+
+        return amountInAccounts;
+    }
+
+    public String toDollars(double d){
         return String.format("$%,.2f", abs(d));
     }
 }

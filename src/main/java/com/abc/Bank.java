@@ -16,8 +16,19 @@ public class Bank {
 
     public String customerSummary() {
         String summary = "Customer Summary";
-        for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
+        double overallTotal = 0.0;
+        String strOverallTotal = "";
+
+        for (Customer c : customers) {
+            overallTotal += Double.parseDouble(c.getStatement()[1]);
+            strOverallTotal = c.toDollars(overallTotal);
+
+            summary += "\n\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")"
+            + " - " + c.getStatement()[0];
+        }
+
+        summary += "\n\nTotal Of All Accounts : " + strOverallTotal;
+
         return summary;
     }
 
@@ -29,15 +40,25 @@ public class Bank {
 
     public double totalInterestPaid() {
         double total = 0;
+
         for(Customer c: customers)
             total += c.totalInterestEarned();
-        return total;
+            
+        return Double.valueOf(String.format("%.2f", total));
     }
 
     public String getFirstCustomer() {
         try {
-            customers = null;
             return customers.get(0).getName();
+        } catch (Exception e){
+            e.printStackTrace();
+            return "Error";
+        }
+    }
+
+    public String getLastCustomer() {
+        try {
+            return customers.get(customers.size() - 1).getName();
         } catch (Exception e){
             e.printStackTrace();
             return "Error";
