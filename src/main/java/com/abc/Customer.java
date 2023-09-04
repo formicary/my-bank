@@ -1,78 +1,77 @@
 package com.abc;
 
+import com.util.BigDecimalProvider;
+import com.util.CurrencyStringFormatter;
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Math.abs;
-
 public class Customer {
-    private String name;
-    private List<Account> accounts;
+    private final String name;
+    private final List<Account> accounts;
 
     public Customer(String name) {
         this.name = name;
-        this.accounts = new ArrayList<Account>();
+        this.accounts = new ArrayList<>();
     }
 
     public String getName() {
         return name;
     }
 
-    public Customer openAccount(Account account) {
+    public void openAccount(Account account) {
         accounts.add(account);
-        return this;
+    }
+
+    public void transfer(Account origin, Account target, BigDecimal amount) throws IllegalStateException {
+        if (!(checkAccounts(origin, target))) {
+            throw new IllegalArgumentException("One or more of provided accounts do not belong to the customer!");
+        }
+
+        Transaction withdrawal = origin.withdraw(amount);
+        origin.verifyTransaction(withdrawal);
+
+        try {
+            Transaction deposit = target.deposit(amount);
+            target.verifyTransaction(deposit);
+        } catch (IllegalStateException exception) {
+            origin.rollbackTransaction(withdrawal);
+            throw exception;
+        }
+    }
+
+    private boolean checkAccounts(Account origin, Account target) {
+        return accounts.contains(origin) && accounts.contains(target);
+
     }
 
     public int getNumberOfAccounts() {
         return accounts.size();
     }
 
-    public double totalInterestEarned() {
-        double total = 0;
-        for (Account a : accounts)
-            total += a.interestEarned();
+    public BigDecimal totalInterestEarned() {
+        BigDecimal total = BigDecimalProvider.getZero();
+        for (Account account : accounts) {
+            total = total.add(account.getInterestEarned());
+        }
         return total;
     }
 
     public String getStatement() {
-        String statement = null;
-        statement = "Statement for " + name + "\n";
-        double total = 0.0;
-        for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+        StringBuilder statement = new StringBuilder("Statement for " + name + "\n");
+        BigDecimal total = BigDecimalProvider.getZero();
+
+        for (Account account : accounts) {
+            statement.append("\n");
+            statement.append(account.getStatement());
+            statement.append("\n");
+            total = total.add(account.sumTransactions());
         }
-        statement += "\nTotal In All Accounts " + toDollars(total);
-        return statement;
+        statement.append("\nTotal In All Accounts ");
+        statement.append(CurrencyStringFormatter.format(total));
+
+        return statement.toString();
     }
 
-    private String statementForAccount(Account a) {
-        String s = "";
-
-       //Translate to pretty account type
-        switch(a.getAccountType()){
-            case Account.CHECKING:
-                s += "Checking Account\n";
-                break;
-            case Account.SAVINGS:
-                s += "Savings Account\n";
-                break;
-            case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
-                break;
-        }
-
-        //Now total up all the transactions
-        double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
-        }
-        s += "Total " + toDollars(total);
-        return s;
-    }
-
-    private String toDollars(double d){
-        return String.format("$%,.2f", abs(d));
-    }
 }
