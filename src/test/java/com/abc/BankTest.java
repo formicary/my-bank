@@ -1,54 +1,88 @@
 package com.abc;
 
+import com.util.BigDecimalProvider;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 public class BankTest {
-    private static final double DOUBLE_DELTA = 1e-15;
 
-    @Test
-    public void customerSummary() {
-        Bank bank = new Bank();
-        Customer john = new Customer("John");
-        john.openAccount(new Account(Account.CHECKING));
-        bank.addCustomer(john);
+    Bank bank;
+    Customer customer;
 
-        assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
+    @Before
+    public void setUp() {
+        bank = new Bank();
+        customer = new Customer("John");
+        bank.addCustomer(customer);
+    }
+
+    @After
+    public void tearDown() {
+        bank = null;
+        customer = null;
     }
 
     @Test
-    public void checkingAccount() {
-        Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.CHECKING);
-        Customer bill = new Customer("Bill").openAccount(checkingAccount);
-        bank.addCustomer(bill);
-
-        checkingAccount.deposit(100.0);
-
-        assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+    public void addCustomerTest() {
+        bank.addCustomer(customer);
+        assertEquals(true, bank.hasCustomer(customer));
     }
 
     @Test
-    public void savings_account() {
-        Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
-
-        checkingAccount.deposit(1500.0);
-
-        assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+    public void getAllCustomersSummaryTest() {
+        customer.openAccount(new AccountChecking());
+        assertEquals("Customer Summary\n - John (1 account)", bank.getAllCustomersSummary());
     }
 
     @Test
-    public void maxi_savings_account() {
-        Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.MAXI_SAVINGS);
-        bank.addCustomer(new Customer("Bill").openAccount(checkingAccount));
-
-        checkingAccount.deposit(3000.0);
-
-        assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+    public void getTotalInterestsPaidTest_CHECKING() {
+        AccountChecking accountChecking = new AccountChecking();
+        customer.openAccount(accountChecking);
+        accountChecking.deposit(BigDecimalProvider.format(798));
+        assertEquals(BigDecimalProvider.format(0.80), bank.getTotalInterestsPaid());
     }
 
+    @Test
+    public void getTotalInterestsPaidTest_SAVINGS_LOW() {
+        Account account = new AccountSavings();
+        customer.openAccount(account);
+        account.deposit(BigDecimalProvider.format(798));
+        assertEquals(BigDecimalProvider.format(0.80), bank.getTotalInterestsPaid());
+    }
+
+    @Test
+    public void getTotalInterestsPaidTest_SAVINGS_HIGH() {
+        Account account = new AccountSavings();
+        customer.openAccount(account);
+        account.deposit(BigDecimalProvider.format(3765));
+        assertEquals(BigDecimalProvider.format(6.53), bank.getTotalInterestsPaid());
+    }
+
+    @Test
+    public void getTotalInterestsPaidTest_MAXI_SAVINGS_LOW() {
+        Account account = new AccountMaxiSavings();
+        customer.openAccount(account);
+        account.deposit(BigDecimalProvider.format(587));
+        assertEquals(BigDecimalProvider.format(11.74), bank.getTotalInterestsPaid());
+    }
+
+    @Test
+    public void getTotalInterestsPaidTest_MAXI_SAVINGS_MID() {
+        Account account = new AccountMaxiSavings();
+        customer.openAccount(account);
+        account.deposit(BigDecimalProvider.format(1587));
+        assertEquals(BigDecimalProvider.format(49.35), bank.getTotalInterestsPaid());
+    }
+
+
+    @Test
+    public void getTotalInterestsPaidTest_MAXI_SAVINGS_HIGH() {
+        Account account = new AccountMaxiSavings();
+        customer.openAccount(account);
+        account.deposit(BigDecimalProvider.format(2587));
+        assertEquals(BigDecimalProvider.format(128.70), bank.getTotalInterestsPaid());
+    }
 }

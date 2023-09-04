@@ -1,73 +1,96 @@
 package com.abc;
 
+import com.util.BigDecimalProvider;
+import com.util.CurrencyStringFormatter;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Account {
 
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
+public abstract class Account {
+    protected List<Transaction> transactions = new ArrayList<>();
 
-    private final int accountType;
-    public List<Transaction> transactions;
+    abstract protected String getAccountTypeLabel();
 
-    public Account(int accountType) {
-        this.accountType = accountType;
-        this.transactions = new ArrayList<Transaction>();
+    abstract public BigDecimal getInterestEarned();
+
+
+    protected Transaction deposit(BigDecimal amount) {
+        Account.validateAmount(amount);
+        return commitTransaction(BigDecimalProvider.format(amount));
     }
 
-    public void deposit(double amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero");
-        } else {
-            transactions.add(new Transaction(amount));
+    protected Transaction withdraw(BigDecimal amount) {
+        Account.validateAmount(amount);
+        return commitTransaction(BigDecimalProvider.format(amount).negate());
+    }
+
+    protected static void validateAmount(BigDecimal amount) {
+        if (amount.compareTo(java.math.BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Provided amount must be greater than zero");
         }
     }
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
+    protected Transaction commitTransaction(BigDecimal amount) {
+        Transaction transaction = new Transaction(amount);
+        transactions.add(transaction);
+        return transaction;
     }
-}
 
-    public double interestEarned() {
-        double amount = sumTransactions();
-        switch(accountType){
-            case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
-            case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
-            default:
-                return amount * 0.001;
+    BigDecimal calculateInterest(BigDecimal amount, BigDecimal rate) {
+        return amount.multiply(rate).setScale(2, RoundingMode.HALF_EVEN);
+    }
+
+    public BigDecimal sumTransactions() {
+        BigDecimal amount = BigDecimalProvider.getZero();
+
+        if (transactions.isEmpty()) {
+            return amount;
         }
-    }
 
-    public double sumTransactions() {
-       return checkIfTransactionsExist(true);
-    }
-
-    private double checkIfTransactionsExist(boolean checkAll) {
-        double amount = 0.0;
-        for (Transaction t: transactions)
-            amount += t.amount;
+        for (Transaction transaction : transactions)
+            amount = amount.add(transaction.getAmount());
         return amount;
     }
 
-    public int getAccountType() {
-        return accountType;
+    public List<Transaction> getTransactions() {
+        return new ArrayList<>(transactions);
     }
+
+    public String getStatement() {
+        StringBuilder statement = new StringBuilder();
+        String accountTypeLabel = getAccountTypeLabel();
+        statement.append(accountTypeLabel);
+        statement.append("\n");
+
+        BigDecimal total = BigDecimalProvider.getZero();
+        for (Transaction transaction : this.getTransactions()) {
+            statement.append(" ");
+            statement.append(transaction.getAmount().compareTo(BigDecimal.ZERO) < 0 ? "withdrawal" : "deposit");
+            statement.append(" ");
+            statement.append(CurrencyStringFormatter.format(transaction.getAmount()));
+            statement.append("\n");
+            total = total.add(transaction.getAmount());
+        }
+        statement.append("Total ");
+        statement.append(CurrencyStringFormatter.format(total));
+
+        return statement.toString();
+    }
+
+    protected void verifyTransaction(Transaction transaction) {
+        if (!(transactions.contains(transaction))) {
+            throw new IllegalStateException("This account does not contain given transaction!");
+        }
+
+    }
+
+    protected void rollbackTransaction(Transaction transaction) {
+        verifyTransaction(transaction);
+        transactions.remove(transaction);
+    }
+
 
 }
