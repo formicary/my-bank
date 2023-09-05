@@ -1,10 +1,12 @@
 package com.abc;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.Objects;
 
 public class DateProvider {
+
     private static DateProvider instance = null;
+    private static LocalDate forcedDate = null;
 
     public static DateProvider getInstance() {
         if (instance == null)
@@ -12,7 +14,12 @@ public class DateProvider {
         return instance;
     }
 
-    public Date now() {
-        return Calendar.getInstance().getTime();
+    static void setForcedDate(LocalDate forcedDate) {
+        DateProvider.forcedDate = forcedDate;
     }
+
+    public LocalDate now() {
+        return Objects.requireNonNullElseGet(forcedDate, LocalDate::now);
+    }
+
 }
