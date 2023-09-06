@@ -1,14 +1,16 @@
-package com.abc;
+package com.abc.MainClasses;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.abc.Interfaces.CustomerInterface;
+
 import static java.lang.Math.abs;
 
-public class Customer {
+public class Customer implements CustomerInterface {
     private String name;
     private List<Account> accounts;
-    public double total;
+    private double total;
 
     public Customer(String name) {
         this.name = name;
@@ -31,8 +33,8 @@ public class Customer {
     public double totalInterestEarned() {
         double total = 0;
 
-        for (Account a : accounts)
-            total += a.interestEarned();
+        for (Account account : accounts)
+            total += account.interestEarned();
 
         return total;
     }
@@ -40,11 +42,11 @@ public class Customer {
     public String[] getStatement() {
         String statement = null;
         statement = "Statement for " + name + "\n";
-        total = 0.0;
+        total = 0;
 
-        for (Account a : accounts) {
-            statement += statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+        for (Account account : accounts) {
+            statement += statementForAccount(account) + "\n";
+            total += account.sumTransactions();
         }
 
         statement += "\nTotal Of " + name + "'s Accounts : " + toDollars(total);
@@ -53,27 +55,27 @@ public class Customer {
         return statementAndTotal;
     }
 
-    public String statementForAccount(Account a) {
+    public String statementForAccount(Account account) {
         String s = "";
 
        //Translate to pretty account type
-        switch(a.getAccountType()){
-            case Account.CHECKING:
+        switch(account.getAccountType()){
+            case CHECKING:
                 s += "Checking Account\n";
                 break;
-            case Account.SAVINGS:
+            case SAVINGS:
                 s += "Savings Account\n";
                 break;
-            case Account.MAXI_SAVINGS:
+            case MAXI_SAVINGS:
                 s += "Maxi Savings Account\n";
                 break;
         }
         //Now total up all the transactions
-        double total = 0.0;
+        double total = 0;
 
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " : " + toDollars(t.amount) + "\n";
-            total += t.amount;
+        for (Transaction t : account.getTransactions()) {
+            s += "  " + (t.getAmount() < 0 ? "withdrawal" : "deposit") + " : " + toDollars(t.getAmount()) + "\n";
+            total += t.getAmount();
         }
 
         s += "Total : " + toDollars(total);
@@ -81,25 +83,18 @@ public class Customer {
         return s;
     }
 
+    //Transfer funds from one account to another
     public double[] transferFunds(double amount, Account fromAccount, Account toAccount) throws Exception {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
         }
 
-        double amountInFromAccount = 0.0, amountInToAccount = 0.0;
+        //Withdraw from from source account and deposit to destination account
         fromAccount.withdraw(amount);
         toAccount.deposit(amount);
 
-        for (Transaction t : fromAccount.transactions) {
-            amountInFromAccount += t.amount;
-        }
-
-        for (Transaction t : toAccount.transactions) {
-            amountInToAccount += t.amount;
-        }
-
-        double[] amountInAccounts = {amountInFromAccount, amountInToAccount};
-
+        //Return list that contains the balance of each account
+        double[] amountInAccounts = {fromAccount.getBalance(), toAccount.getBalance()};
         return amountInAccounts;
     }
 

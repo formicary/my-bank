@@ -1,9 +1,11 @@
-package com.abc;
+package com.abc.MainClasses;
 
 import java.util.Calendar;
 import java.util.Date;
 
-public class DateProvider {
+import com.abc.Interfaces.DateProviderInterface;
+
+public class DateProvider implements DateProviderInterface{
     private static DateProvider instance = null;
 
     public static DateProvider getInstance() {

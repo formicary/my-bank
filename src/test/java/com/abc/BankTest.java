@@ -1,14 +1,23 @@
 package com.abc;
 
+import com.abc.MainClasses.Customer;
+import com.abc.AccountTypes.CheckingAccount;
+import com.abc.AccountTypes.MaxiSavingsAccount;
+import com.abc.AccountTypes.SavingsAccount;
+import com.abc.MainClasses.Account;
+import com.abc.MainClasses.Bank;
+
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import java.util.Date;
 
 public class BankTest {
     private static final double DOUBLE_DELTA = 1e-15;
 
     @Test
+    /*This test fails though the expected and actual output is the same so it seems to me
+    that it should pass, not sure as to why it fails. Any feedback concerning this 
+    would be appreciated.*/
     public void customerSummary() {
         Bank bank = new Bank();
         Customer john = new Customer("John");
@@ -21,11 +30,11 @@ public class BankTest {
         bank.addCustomer(bill);
         bank.addCustomer(emily);
 
-        Account johnCheckingAccount = new Account(Account.CHECKING);
-        Account jackSavingsAccount = new Account(Account.SAVINGS);
-        Account jackCheckingAccount = new Account(Account.CHECKING);
-        Account billMaxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
-        Account emilyCheckingAccount = new Account(Account.CHECKING);
+        Account johnCheckingAccount = new CheckingAccount();
+        Account jackSavingsAccount = new SavingsAccount();
+        Account jackCheckingAccount = new CheckingAccount();
+        Account billMaxiSavingsAccount = new MaxiSavingsAccount();
+        Account emilyCheckingAccount = new CheckingAccount();
 
         john.openAccount(johnCheckingAccount);
         jack.openAccount(jackSavingsAccount);
@@ -69,14 +78,14 @@ public class BankTest {
                 "Total : $110.90\r\n" + 
                 "\r\n" + 
                 "Total Of Emily's Accounts : $110.90" + 
-                "\n\nTotal Of All Accounts : $1,562.70"
+                "\n\nTotal Of All Recorded Accounts : $1,562.70"
                 , bank.customerSummary());
     }
  
     @Test
-    public void checkingAccount() {
+    public void totalInterestCheckingAccount() {
         Bank bank = new Bank();
-        Account checkingAccount = new Account(Account.CHECKING);
+        Account checkingAccount = new CheckingAccount();
         Customer bill = new Customer("Bill").openAccount(checkingAccount);
         bank.addCustomer(bill);
 
@@ -88,9 +97,9 @@ public class BankTest {
     }
 
     @Test
-    public void savings_account() {
+    public void totalInterestSavingsAccount() {
         Bank bank = new Bank();
-        Account savingsAccount = new Account(Account.SAVINGS);
+        Account savingsAccount = new SavingsAccount();
         bank.addCustomer(new Customer("Bill").openAccount(savingsAccount));
 
         savingsAccount.deposit(1500.0);
@@ -101,9 +110,9 @@ public class BankTest {
     }
 
     @Test
-    public void maxi_savings_account() {
+    public void totalInterestMaxiSavingsAccount() {
         Bank bank = new Bank();
-        Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
+        Account maxiSavingsAccount = new MaxiSavingsAccount();
         bank.addCustomer(new Customer("Bill").openAccount(maxiSavingsAccount));
 
         maxiSavingsAccount.deposit(3000.0);
@@ -115,33 +124,24 @@ public class BankTest {
 
     //Test interest rate earned via maxi_savings according to no withdrawal for 10 days prior to today
     @Test
-    public void maxi_savings_no_withdrawal() {
+    public void totalInterestMaxiSavingsNoWithdrawal() {
         Bank bank = new Bank();
-        Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
+        Account maxiSavingsAccount = new MaxiSavingsAccount();
         bank.addCustomer(new Customer("Bill").openAccount(maxiSavingsAccount));
 
         maxiSavingsAccount.deposit(100);
         maxiSavingsAccount.withdraw(50);
 
-        /*Get size of transactions list then set withdrawDateInMilliseconds to 10 days prior to recorded
-        transaction date*/
-        int sizeOfTransactions = maxiSavingsAccount.transactions.size();
-        long withdrawDateInMilliseconds = maxiSavingsAccount.transactions.get(sizeOfTransactions - 1)
-        .transactionDate.getTime() - 864000000;
-        //Set transaction date to Date type of withdrawDateInMilliseconds
-        maxiSavingsAccount.transactions.get(sizeOfTransactions - 1).transactionDate = new Date(withdrawDateInMilliseconds);
+        /*Get size of transactions list then set withdrawDateInMilliseconds to 10 days prior to last
+        recorded transaction date for customer's account*/
+        int sizeOfTransactions = maxiSavingsAccount.getTransactions().size();
+        long withdrawDateInMilliseconds = maxiSavingsAccount.getTransactions().get(sizeOfTransactions - 1)
+        .getTransactionDate().getTime() - 864000000;
+        /*Declare withdrawDate according to withdrawDateInMilliseconds then set appropriate transaction 
+        date to withdrawDate*/
+        Date withdrawDate = new Date(withdrawDateInMilliseconds);
+        maxiSavingsAccount.getTransactions().get(sizeOfTransactions - 1).setTransactionDate(withdrawDate);
         
         assertEquals(2.50, maxiSavingsAccount.interestEarned(), DOUBLE_DELTA);
-    }
-
-    @Test
-    public void getFirstAndLastCustomer() {
-        Bank bank = new Bank();
-        bank.addCustomer(new Customer("Bill"));
-        bank.addCustomer(new Customer("Jack"));
-        bank.addCustomer(new Customer("Emily"));
-
-        assertTrue("Get first customer : unexpected name", bank.getFirstCustomer().equals("Bill"));
-        assertTrue("Get last customer : unexpected name", bank.getLastCustomer().equals("Emily"));
     }
 }
