@@ -1,17 +1,49 @@
 package com.abc;
 
-import org.junit.Ignore;
-import org.junit.Test;
+import com.abc.MainClasses.Customer;
+import com.abc.AccountTypes.CheckingAccount;
+import com.abc.AccountTypes.MaxiSavingsAccount;
+import com.abc.AccountTypes.SavingsAccount;
+import com.abc.MainClasses.Account;
+import com.abc.MainClasses.Bank;
 
+import org.junit.Test;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class CustomerTest {
+    //Test customer statement generation
+    @Test
+    public void OneCustomerStatement() {
+        Bank bank = new Bank();
+        Customer jack = new Customer("Jack");
+        bank.addCustomer(jack);
+        jack.openAccount(new CheckingAccount());
 
-    @Test //Test customer statement generation
-    public void testApp(){
+        assertEquals("Statement for Jack\nChecking Account\nTotal : $0.00\n\nTotal Of Jack's Accounts : $0.00", jack.getStatement()[0]);
+    }
 
-        Account checkingAccount = new Account(Account.CHECKING);
-        Account savingsAccount = new Account(Account.SAVINGS);
+    @Test
+    public void summaryForZeroCustomers() {
+        Bank bank = new Bank();
+
+        assertEquals("There isn't a customer registered with the bank.", bank.customerSummary());
+    }
+
+    @Test
+    public void statementForAccount() {
+        Customer james = new Customer("James");
+        Account max_savings = new MaxiSavingsAccount();
+        james.openAccount(max_savings);
+        max_savings.deposit(150);
+
+        assertEquals("Maxi Savings Account\n  deposit : $150.00\nTotal : $150.00", james.statementForAccount(max_savings));
+    }
+
+    @Test
+    public void testGetStatement(){
+        Account checkingAccount = new CheckingAccount();
+        Account savingsAccount = new SavingsAccount();
 
         Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
 
@@ -20,38 +52,25 @@ public class CustomerTest {
         savingsAccount.withdraw(200.0);
 
         assertEquals("Statement for Henry\n" +
-                "\n" +
                 "Checking Account\n" +
-                "  deposit $100.00\n" +
-                "Total $100.00\n" +
-                "\n" +
+                "  deposit : $100.00\n" +
+                "Total : $100.00\n" +
                 "Savings Account\n" +
-                "  deposit $4,000.00\n" +
-                "  withdrawal $200.00\n" +
-                "Total $3,800.00\n" +
+                "  deposit : $4,000.00\n" +
+                "  withdrawal : $200.00\n" +
+                "Total : $3,800.00\n" +
                 "\n" +
-                "Total In All Accounts $3,900.00", henry.getStatement());
+                "Total Of Henry's Accounts : $3,900.00", henry.getStatement()[0]);
     }
 
     @Test
-    public void testOneAccount(){
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
-        assertEquals(1, oscar.getNumberOfAccounts());
-    }
+    public void getFirstAndLastCustomer() {
+        Bank bank = new Bank();
+        bank.addCustomer(new Customer("Bill"));
+        bank.addCustomer(new Customer("Jack"));
+        bank.addCustomer(new Customer("Emily"));
 
-    @Test
-    public void testTwoAccount(){
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
-        assertEquals(2, oscar.getNumberOfAccounts());
-    }
-
-    @Ignore
-    public void testThreeAcounts() {
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
-        assertEquals(3, oscar.getNumberOfAccounts());
+        assertTrue("Get first customer : unexpected name", bank.getFirstCustomer().equals("Bill"));
+        assertTrue("Get last customer : unexpected name", bank.getLastCustomer().equals("Emily"));
     }
 }
