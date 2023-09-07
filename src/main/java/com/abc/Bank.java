@@ -39,7 +39,7 @@ public class Bank {
             customers = null;
             return customers.get(0).getName();
         } catch (Exception e){
-            e.printStackTrace();
+            e.printStackTrace(); //todo: replace with exception handling
             return "Error";
         }
     }
