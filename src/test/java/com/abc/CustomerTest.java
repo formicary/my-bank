@@ -1,15 +1,67 @@
 package com.abc;
 
-import org.junit.Ignore;
 import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 
+/**
+ * This class contains unit tests for the Customer class.
+ * These tests cover various aspects of customer functionality.
+ */
 public class CustomerTest {
+    
+    private static final double DOUBLE_DELTA = 0.01;
 
-    @Test //Test customer statement generation
-    public void testApp(){
+    /**
+     * Tests opening one account for a customer.
+     */
+    @Test
+    public void openOneAccount() {
+        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
+        assertEquals(1, oscar.getNumberOfAccounts());
+    }
 
+    /**
+     * Tests opening multiple accounts for a customer.
+     */
+    @Test
+    public void openMultipleAccounts() {
+        Customer oscar = new Customer("Oscar")
+                .openAccount(new Account(Account.SAVINGS));
+        oscar.openAccount(new Account(Account.CHECKING));
+        assertEquals(2, oscar.getNumberOfAccounts());
+    }
+
+    /**
+     * Tests calculating the total interest earned by a customer.
+     */
+    @Test
+    public void testTotalInterestEarned() {
+        Customer alice = new Customer("Alice");
+        
+        Account checkingAccount = new Account(Account.CHECKING);
+        Account savingsAccount = new Account(Account.SAVINGS);
+        Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
+        
+        alice.openAccount(checkingAccount);
+        alice.openAccount(savingsAccount);
+        alice.openAccount(maxiSavingsAccount);
+        
+        checkingAccount.deposit(1000.0);
+        savingsAccount.deposit(2000.0);
+        maxiSavingsAccount.deposit(3000.0);
+        
+        double expectedTotalInterest = checkingAccount.interestEarned() +
+                savingsAccount.interestEarned() +
+                maxiSavingsAccount.interestEarned();
+        
+        assertEquals(expectedTotalInterest, alice.totalInterestEarned(), DOUBLE_DELTA);
+    }
+
+    /**
+     * Tests generating a customer statement.
+     */
+    @Test 
+    public void getStatement() {
         Account checkingAccount = new Account(Account.CHECKING);
         Account savingsAccount = new Account(Account.SAVINGS);
 
@@ -33,25 +85,49 @@ public class CustomerTest {
                 "Total In All Accounts $3,900.00", henry.getStatement());
     }
 
+    /**
+     * Tests transferring money between customer accounts.
+     */
     @Test
-    public void testOneAccount(){
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
-        assertEquals(1, oscar.getNumberOfAccounts());
-    }
+    public void transferBetweenAccounts() {
+        Customer alice = new Customer("Alice");
 
-    @Test
-    public void testTwoAccount(){
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
-        assertEquals(2, oscar.getNumberOfAccounts());
-    }
+        // Create accounts
+        Account checkingAccount = new Account(Account.CHECKING);
+        Account savingsAccount = new Account(Account.SAVINGS);
 
-    @Ignore
-    public void testThreeAcounts() {
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
-        assertEquals(3, oscar.getNumberOfAccounts());
+        // Open accounts for Alice
+        alice.openAccount(checkingAccount);
+        alice.openAccount(savingsAccount);
+
+        // Deposit some money into accounts
+        checkingAccount.deposit(1000.0);
+        savingsAccount.deposit(2000.0);
+
+        // Transfer from checking to savings
+        alice.transfer(checkingAccount, savingsAccount, 500.0);
+
+        // Check the balances after transfer
+        double checkingBalanceAfterTransfer = checkingAccount.getBalance();
+        double savingsBalanceAfterTransfer = savingsAccount.getBalance();
+
+        // Expectations after transfer:
+        // Checking account balance should be $500.0
+        // Savings account balance should be $2500.0
+        assertEquals(500.0, checkingBalanceAfterTransfer, DOUBLE_DELTA);
+        assertEquals(2500.0, savingsBalanceAfterTransfer, DOUBLE_DELTA);
+
+        // Transfer from savings to checking
+        alice.transfer(savingsAccount, checkingAccount, 1000.0);
+
+        // Check the balances after the second transfer
+        double checkingBalanceAfterSecondTransfer = checkingAccount.getBalance();
+        double savingsBalanceAfterSecondTransfer = savingsAccount.getBalance();
+
+        // Expectations after the second transfer:
+        // Checking account balance should be $1500.0
+        // Savings account balance should be $1500.0
+        assertEquals(1500.0, checkingBalanceAfterSecondTransfer, DOUBLE_DELTA);
+        assertEquals(1500.0, savingsBalanceAfterSecondTransfer, DOUBLE_DELTA);
     }
 }
