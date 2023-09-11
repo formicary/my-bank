@@ -7,9 +7,9 @@ import java.util.Date;
 public class Transaction {
     public final double amount;
 
-    private LocalDate transactionDate;
+    private final LocalDate transactionDate;
 
-    private TransactionType transactionType;
+    private final TransactionType transactionType;
 
     public Transaction(double amount, TransactionType transactionType ) {
         this.amount = amount;

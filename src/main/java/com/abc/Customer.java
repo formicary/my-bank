@@ -10,9 +10,9 @@ import static java.lang.Math.abs;
 import static java.lang.Math.log;
 
 public class Customer {
+    private static Logger logger = LoggerFactory.getLogger(Customer.class);
     private String name;
     private List<Account> accounts;
-    private static Logger logger = LoggerFactory.getLogger(Customer.class);
 
     public Customer(String name) {
         this.name = name;
@@ -78,14 +78,13 @@ public class Customer {
         return String.format("$%,.2f", abs(d));
     }
 
-    public void transferBetweenAccounts(Account from, Account to, int amount) {
+    public void transferBetweenAccounts(Account from, Account to, Double amount) {
         if (amount > from.sumTransactions()) {
             throw new IllegalArgumentException("Amount exceeds account balance.");
         } else {
             from.withdraw(amount);
             to.deposit(amount);
-            logger.info(String.format("%d has been deposited from %s to %s", amount, from, to));
+            logger.info(String.format("%f has been deposited from %s to %s", amount, from, to));
         }
-
     }
 }

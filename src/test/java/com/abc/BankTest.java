@@ -7,15 +7,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class BankTest {
     private static final double DOUBLE_DELTA = 1e-15;
-    Bank bank;
-    Customer john;
-    Account checkingAccount;
-    Account savingsAccount;
-    Account maxiSaving;
-    Exception exception;
+    private Bank bank;
+    private Customer john;
+    private Account checkingAccount;
+    private Account savingsAccount;
+    private Account maxiSaving;
+    private Exception exception;
 
     @Test
-    public void customerSuccessfulCustomerSummary() {
+    public void successfulCustomerSummary() {
         givenBank();
 
         whenCustomerOpensAccount();
@@ -25,7 +25,7 @@ public class BankTest {
     }
 
     @Test
-    public void unsuccessfullyCustomerSummary() {
+    public void unsuccessfulCustomerSummary() {
         givenBank();
 
         whenCustomerUnableToOpenAccount();
@@ -63,9 +63,13 @@ public class BankTest {
         givenMaxiSavingAccountIsCreated();
         givenCustomerOpensAccount(maxiSaving);
 
-        whenMoneyIsDepositedIntoMaxiSavingWithWithdrawl();
+        whenMoneyIsDepositedIntoMaxiSaving();
 
-        thenCorrectAmountOfInterest(150.0);
+        thenCorrectAmountOfInterest(300.0);
+    }
+
+    private void whenMoneyIsDepositedIntoMaxiSaving() {
+        maxiSaving.deposit(6000.0);
     }
 
     @Test
@@ -74,10 +78,12 @@ public class BankTest {
         givenMaxiSavingAccountIsCreated();
         givenCustomerOpensAccount(maxiSaving);
 
-        whenMoneyIsDepositedIntoMaxiSavingWithWithdrawl();
+        whenMoneyIsDepositedIntoMaxiSavingWithWithdrawal();
 
         thenCorrectAmountOfInterest(2.80);
     }
+
+    //TODO: Test case for getting first customer
 
     private void givenBank() {
         bank = new Bank();
@@ -127,7 +133,7 @@ public class BankTest {
     private void whenMoneyIsDepositedIntoSaving() {
         savingsAccount.deposit(1500.0);
     }
-    private void whenMoneyIsDepositedIntoMaxiSavingWithWithdrawl() {
+    private void whenMoneyIsDepositedIntoMaxiSavingWithWithdrawal() {
         maxiSaving.deposit(3000.0);
         maxiSaving.withdraw(200.0);
     }
