@@ -1,5 +1,6 @@
 package com.abc;
 
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -12,7 +13,11 @@ public class DateProvider {
         return instance;
     }
 
-    public Date now() {
-        return Calendar.getInstance().getTime();
+    public LocalDate now() {
+        return LocalDate.now();
+    }
+
+    public LocalDate tenDays() {
+        return now().minusDays(10);
     }
 }

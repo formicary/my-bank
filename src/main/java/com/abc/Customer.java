@@ -1,17 +1,22 @@
 package com.abc;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Math.abs;
+import static java.lang.Math.log;
 
 public class Customer {
     private String name;
     private List<Account> accounts;
+    private static Logger logger = LoggerFactory.getLogger(Customer.class);
 
     public Customer(String name) {
         this.name = name;
-        this.accounts = new ArrayList<Account>();
+        this.accounts = new ArrayList<>();
     }
 
     public String getName() {
@@ -19,7 +24,11 @@ public class Customer {
     }
 
     public Customer openAccount(Account account) {
-        accounts.add(account);
+        try {
+            accounts.add(account);
+        } catch (Exception e) {
+            logger.error("Error whilst opening account", e);
+        }
         return this;
     }
 
@@ -35,21 +44,20 @@ public class Customer {
     }
 
     public String getStatement() {
-        String statement = null;
-        statement = "Statement for " + name + "\n";
+        StringBuilder statement = new StringBuilder("Statement for ").append(name).append("\n");
         double total = 0.0;
         for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
+            statement.append("\n").append(statementForAccount(a)).append("\n");
             total += a.sumTransactions();
         }
-        statement += "\nTotal In All Accounts " + toDollars(total);
-        return statement;
+        statement.append("\nTotal In All Accounts ").append(toDollars(total));
+        return statement.toString();
     }
 
     private String statementForAccount(Account a) {
         StringBuilder s = new StringBuilder();
 
-       //Translate to pretty account type
+        //Translate to pretty account type
         switch (a.getAccountType()) {
             case Account.CHECKING -> s.append("Checking Account\n");
             case Account.SAVINGS -> s.append("Savings Account\n");
@@ -66,7 +74,18 @@ public class Customer {
         return s.toString();
     }
 
-    private String toDollars(double d){
+    private String toDollars(double d) {
         return String.format("$%,.2f", abs(d));
+    }
+
+    public void transferBetweenAccounts(Account from, Account to, int amount) {
+        if (amount > from.sumTransactions()) {
+            throw new IllegalArgumentException("Amount exceeds account balance.");
+        } else {
+            from.withdraw(amount);
+            to.deposit(amount);
+            logger.info(String.format("%d has been deposited from %s to %s", amount, from, to));
+        }
+
     }
 }

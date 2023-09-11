@@ -1,24 +1,32 @@
 package com.abc;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Bank {
-    private List<Customer> customers;
+    private final List<Customer> customers;
+    private static Logger logger = LoggerFactory.getLogger(Bank.class);
 
     public Bank() {
-        customers = new ArrayList<Customer>();
+        customers = new ArrayList<>();
     }
 
     public void addCustomer(Customer customer) {
-        customers.add(customer);
+        try {
+            customers.add(customer);
+        } catch (Exception e) {
+            logger.error("Error whilst adding customer", e);
+        }
     }
 
     public String customerSummary() {
-        String summary = "Customer Summary";
+        StringBuilder summary = new StringBuilder("Customer Summary");
         for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-        return summary;
+            summary.append("\n - ").append(c.getName()).append(" (").append(format(c.getNumberOfAccounts(), "account")).append(")");
+        return summary.toString();
     }
 
     //Make sure correct plural of word is created based on the number passed in:
@@ -29,18 +37,16 @@ public class Bank {
 
     public double totalInterestPaid() {
         double total = 0;
-        for(Customer c: customers)
+        for (Customer c : customers)
             total += c.totalInterestEarned();
         return total;
     }
 
     public String getFirstCustomer() {
         try {
-            customers = null;
             return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace(); //todo: replace with exception handling
-            return "Error";
+        } catch (Exception e) {
+            throw new RuntimeException("Error whilst getting customer", e);
         }
     }
 }
