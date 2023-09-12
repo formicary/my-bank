@@ -1,5 +1,9 @@
-package com.abc;
+package com.mybank;
 
+import com.mybank.Accounts.Account;
+import com.mybank.Accounts.CheckingAccount;
+import com.mybank.Accounts.MaxiSavingsAccount;
+import com.mybank.Accounts.SavingsAccount;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -90,15 +94,15 @@ public class BankTest {
     }
 
     private void givenCheckingAccountIsCreated() {
-        checkingAccount = new Account(Account.CHECKING);
+        checkingAccount = new CheckingAccount();
     }
 
     private void givenMaxiSavingAccountIsCreated() {
-        maxiSaving = new Account(Account.MAXI_SAVINGS);
+        maxiSaving = new MaxiSavingsAccount();
     }
 
     private void givenSavingAccountIsCreated() {
-        savingsAccount = new Account(Account.SAVINGS);
+        savingsAccount = new SavingsAccount();
     }
 
     private void givenCustomerOpensAccount(Account accountType) {
@@ -107,7 +111,7 @@ public class BankTest {
 
     private void whenCustomerOpensAccount() {
         try {
-            john = new Customer("John").openAccount(new Account(Account.CHECKING));
+            john = new Customer("John").openAccount(new CheckingAccount());
             bank.addCustomer(john);
         } catch (Exception e) {
             exception = e;
@@ -118,7 +122,7 @@ public class BankTest {
     private void whenCustomerUnableToOpenAccount() {
         try {
             Customer john = null;
-            john.openAccount(new Account(Account.CHECKING));
+            john.openAccount(new CheckingAccount());
             bank.addCustomer(john);
         } catch (Exception e) {
             exception = e;

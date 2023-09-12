@@ -1,4 +1,4 @@
-package com.abc;
+package com.mybank.Utlities;
 
 public enum TransactionType {
     WITHDRAWAL,

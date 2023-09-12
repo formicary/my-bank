@@ -1,11 +1,13 @@
-package com.abc;
+package com.mybank;
 
+import com.mybank.Utlities.TransactionType;
 import org.junit.Test;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 public class TransactionTest {
-    private Transaction t;
+    private Transaction transaction;
 
     @Test
     public void transaction() {
@@ -15,10 +17,10 @@ public class TransactionTest {
     }
 
     private void givenTransaction() {
-        t = new Transaction(5, TransactionType.DEPOSIT);
+        transaction = new Transaction(5.0, TransactionType.DEPOSIT);
     }
 
     private void thenIsInstanceOfTransaction() {
-        assertTrue(t instanceof Transaction);
+        assertNotNull(transaction);
     }
 }

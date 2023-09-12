@@ -1,5 +1,9 @@
-package com.abc;
+package com.mybank;
 
+import com.mybank.Accounts.Account;
+import com.mybank.Accounts.CheckingAccount;
+import com.mybank.Accounts.MaxiSavingsAccount;
+import com.mybank.Accounts.SavingsAccount;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -76,18 +80,20 @@ public class CustomerTest {
     }
 
     private void givenAccountOpening() {
-        henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
+        henry = new Customer("Henry")
+                .openAccount(checkingAccount)
+                .openAccount(savingsAccount);
     }
 
     private void givenBankAccounts() {
-        checkingAccount = new Account(Account.CHECKING);
-        savingsAccount = new Account(Account.SAVINGS);
+        checkingAccount = new CheckingAccount();
+        savingsAccount = new SavingsAccount();
     }
 
     private void givenBankAccountsForCustomer() {
-        checkingAccount = new Account(Account.CHECKING);
-        savingsAccount = new Account(Account.SAVINGS);
-        maxiSaving = new Account(Account.MAXI_SAVINGS);
+        checkingAccount = new CheckingAccount();
+        savingsAccount = new SavingsAccount();
+        maxiSaving = new MaxiSavingsAccount();
     }
 
     private void whenTransferringBetweenCheckingToSaving(Double amount) {
@@ -109,24 +115,23 @@ public class CustomerTest {
         checkingAccount.deposit(100.0);
         savingsAccount.deposit(4000.0);
         savingsAccount.withdraw(200.0);
-
     }
 
     private void whenOneAccountOpened() {
-        oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
+        oscar = new Customer("Oscar").openAccount(new SavingsAccount());
     }
 
     private void whenTwoAccountsOpened() {
         oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS))
-                .openAccount(new Account(Account.CHECKING));
+                .openAccount(new SavingsAccount())
+                .openAccount(new CheckingAccount());
     }
 
     private void whenThreeAccountsOpened() {
         oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS))
-                .openAccount(new Account(Account.CHECKING))
-                .openAccount(new Account(Account.MAXI_SAVINGS));
+                .openAccount(new SavingsAccount())
+                .openAccount(new CheckingAccount())
+                .openAccount(new MaxiSavingsAccount());
     }
 
     private void thenStatementsAreProduced() {

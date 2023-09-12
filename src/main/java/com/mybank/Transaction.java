@@ -1,14 +1,13 @@
-package com.abc;
+package com.mybank;
+
+import com.mybank.Utlities.DateProvider;
+import com.mybank.Utlities.TransactionType;
 
 import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.Date;
 
 public class Transaction {
-    public final double amount;
-
+    public double amount;
     private final LocalDate transactionDate;
-
     private final TransactionType transactionType;
 
     public Transaction(double amount, TransactionType transactionType ) {

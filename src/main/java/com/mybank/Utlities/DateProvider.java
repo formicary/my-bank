@@ -1,8 +1,6 @@
-package com.abc;
+package com.mybank.Utlities;
 
 import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.Date;
 
 public class DateProvider {
     private static DateProvider instance = null;

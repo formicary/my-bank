@@ -1,4 +1,4 @@
-package com.abc;
+package com.mybank;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,7 +8,8 @@ import java.util.List;
 
 public class Bank {
     private final List<Customer> customers;
-    private static Logger logger = LoggerFactory.getLogger(Bank.class);
+    private List<String> customerNames;
+    private static final Logger logger = LoggerFactory.getLogger(Bank.class);
 
     public Bank() {
         customers = new ArrayList<>();
@@ -25,12 +26,13 @@ public class Bank {
     public String customerSummary() {
         StringBuilder summary = new StringBuilder("Customer Summary");
         for (Customer c : customers)
-            summary.append("\n - ").append(c.getName()).append(" (").append(format(c.getNumberOfAccounts(), "account")).append(")");
+            summary.append("\n - ")
+                    .append(c.getName())
+                    .append(" (").append(format(c.getNumberOfAccounts(), "account"))
+                    .append(")");
         return summary.toString();
     }
 
-    //Make sure correct plural of word is created based on the number passed in:
-    //If number passed in is 1 just return the word otherwise add an 's' at the end
     private String format(int number, String word) {
         return number + " " + (number == 1 ? word : word + "s");
     }
@@ -42,9 +44,12 @@ public class Bank {
         return total;
     }
 
-    public String getFirstCustomer() {
+    public List<String> getCustomers() {
         try {
-            return customers.get(0).getName();
+            for (Customer customer : customers) {
+                customerNames.add(customer.getName());
+            }
+            return customerNames;
         } catch (Exception e) {
             throw new RuntimeException("Error whilst getting customer", e);
         }
