@@ -66,11 +66,11 @@ public class Customer {
         }
 
         double total = 0.0;
-        for (Transaction transaction : account.getTransactions()) {
+        for (Transaction transaction : account.transactions) {
             stringBuilder.append("  ")
                     .append(transaction.amount < 0 ? "withdrawal" : "deposit")
-                    .append(" ")
-                    .append(toDollars(transaction.amount)).append("\n");
+                    .append(" ").append(toDollars(transaction.amount))
+                    .append("\n");
             total += transaction.amount;
         }
         stringBuilder.append("Total ")

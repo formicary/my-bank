@@ -9,20 +9,39 @@ import java.util.List;
 
 public abstract class Account {
     private final AccountType accountType;
+    public List<Transaction> transactions;
 
     public Account(AccountType accountType) {
         this.accountType = accountType;
+        this.transactions = new ArrayList<>();
     }
 
     public abstract double interestEarned();
 
-    public abstract void deposit(double amount);
+    public void deposit(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        } else {
+            transactions.add(new Transaction(amount, TransactionType.DEPOSIT));
+        }
+    }
 
-    public abstract void withdraw(double amount);
+    public void withdraw(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("amount must be greater than zero");
+        } else if (amount > sumTransactions()) {
+            throw new IllegalArgumentException("Amount exceeds Account balance");
+        } else {
+            transactions.add(new Transaction(-amount, TransactionType.WITHDRAWAL));
+        }
+    }
 
-    public abstract List<Transaction> getTransactions();
-
-    public abstract double sumTransactions();
+    public double sumTransactions() {
+        double amount = 0.0;
+        for (Transaction transaction : transactions)
+            amount += transaction.amount;
+        return amount;
+    }
 
     public AccountType getAccountType() {
         return accountType;

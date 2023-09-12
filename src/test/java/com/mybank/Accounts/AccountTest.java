@@ -154,21 +154,21 @@ public class AccountTest {
     }
 
     private void thenMoneyIsDeposited(Account accountType, double expectedAmount) {
-        assertThat(accountType.getTransactions()).size().isEqualTo(1);
+        assertThat(accountType.transactions).size().isEqualTo(1);
 
-        for (Transaction transaction : accountType.getTransactions()) {
+        for (Transaction transaction : accountType.transactions) {
             double amount = transaction.amount;
             assertThat(amount).isEqualTo(expectedAmount);
         }
     }
 
     private void thenTotalBalanceIsCorrect(Account accountType, double expectedAmount) {
-        assertThat(accountType.getTransactions()).size().isEqualTo(2);
+        assertThat(accountType.transactions).size().isEqualTo(2);
         assertThat(accountType.sumTransactions()).isEqualTo(expectedAmount);
     }
 
     private void thenErrorIsLogged(Account accountType) {
-        assertThat(accountType.getTransactions()).size().isEqualTo(1);
+        assertThat(accountType.transactions).size().isEqualTo(1);
         assertThat(exception).isNotNull().isInstanceOf(IllegalArgumentException.class);
     }
 }
