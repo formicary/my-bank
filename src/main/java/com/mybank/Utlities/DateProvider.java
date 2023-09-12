@@ -1,7 +1,6 @@
-package com.abc;
+package com.mybank.Utlities;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
 
 public class DateProvider {
     private static DateProvider instance = null;
@@ -12,7 +11,11 @@ public class DateProvider {
         return instance;
     }
 
-    public Date now() {
-        return Calendar.getInstance().getTime();
+    public LocalDate now() {
+        return LocalDate.now();
+    }
+
+    public LocalDate tenDays() {
+        return now().minusDays(10);
     }
 }
