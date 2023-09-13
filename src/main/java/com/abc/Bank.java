@@ -4,43 +4,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Bank {
-    private List<Customer> customers;
+    private final List<Customer> customers = new ArrayList<>();
 
-    public Bank() {
-        customers = new ArrayList<Customer>();
-    }
-
+    /**
+     * Adds a new Customer to Bank
+     */
     public void addCustomer(Customer customer) {
         customers.add(customer);
     }
 
-    public String customerSummary() {
-        String summary = "Customer Summary";
+    /**
+     * prints a report showing the list of customers and how many accounts they have
+     */
+    public String printCustomerSummary() {
+        StringBuilder summary = new StringBuilder();
+        summary.append("Customer Summary");
         for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-        return summary;
+            summary.append(System.lineSeparator())
+                    .append(" - ")
+                    .append(c.getName()).append(" (")
+                    .append(c.getAccounts().size())
+                    .append(c.getAccounts().size()==1?" account":" accounts")
+                    .append(")");
+        return summary.toString();
     }
 
-    //Make sure correct plural of word is created based on the number passed in:
-    //If number passed in is 1 just return the word otherwise add an 's' at the end
-    private String format(int number, String word) {
-        return number + " " + (number == 1 ? word : word + "s");
-    }
-
-    public double totalInterestPaid() {
+    /**
+     * prints a report showing the total interest paid by the bank on all accounts
+     */
+    public double calculateTotalInterestsPaid() {
         double total = 0;
-        for(Customer c: customers)
+        for(Customer c: customers) {
             total += c.totalInterestEarned();
-        return total;
-    }
-
-    public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
         }
+        return total;
     }
 }
