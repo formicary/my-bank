@@ -1,51 +1,59 @@
 package com.abc;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 /**
  * Represents a bank account with various types (CHECKING, SAVINGS,
  * MAXI_SAVINGS).
  */
-public class Account {
+public abstract class Account {
 
-    // Account types
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
+    /**
+     * Enumeration representing the type of the account (CHECKING, SAVINGS,
+     * MAXI_SAVINGS).
+     */
+    public enum AccountType {
+        CHECKING,
+        SAVINGS,
+        MAXI_SAVINGS
+    }
+
+    private final AccountType accountType;
+    private LocalDate openedDate;
+    private BigDecimal balance;
+    private LocalDate lastWithdrawalDate;
+    public List<Transaction> transactions;
 
     // Interest rates
-    public static final double CHECKING_INTEREST_RATE = 0.001;
-    public static final double SAVINGS_LOW_INTEREST_RATE = 0.001;
-    public static final double SAVINGS_HIGH_INTEREST_RATE = 0.002;
-    public static final double MAXI_SAVINGS_LOW_INTEREST_RATE = 0.001;
-    public static final double MAXI_SAVINGS_HIGH_INTEREST_RATE = 0.05;
+    public static final BigDecimal CHECKING_INTEREST_RATE = new BigDecimal("0.001");
+    public static final BigDecimal SAVINGS_LOW_INTEREST_RATE = new BigDecimal("0.001");
+    public static final BigDecimal SAVINGS_HIGH_INTEREST_RATE = new BigDecimal("0.002");
+    public static final BigDecimal MAXI_SAVINGS_LOW_INTEREST_RATE = new BigDecimal("0.001");
+    public static final BigDecimal MAXI_SAVINGS_HIGH_INTEREST_RATE = new BigDecimal("0.05");
 
     // Interest rate thresholds
-    public static final double SAVINGS_THRESHOLD = 1000.0;
-    public static final double MAXI_SAVINGS_FIRST_THRESHOLD = 1000.0;
-    public static final double MAXI_SAVINGS_SECOND_THRESHOLD = 1000.0;
+    public static final BigDecimal SAVINGS_THRESHOLD = new BigDecimal("1000.00");
+    public static final BigDecimal MAXI_SAVINGS_FIRST_THRESHOLD = new BigDecimal("1000.00");
+    public static final BigDecimal MAXI_SAVINGS_SECOND_THRESHOLD = new BigDecimal("2000.00");
 
     // Number of days for Maxi-Savings interest rate calculation
     public static final int MAXI_SAVINGS_WITHDRAWAL_DAYS = 10;
-
-    private final int accountType;
-    private double balance;
-    private Date lastWithdrawalDate;
-    public List<Transaction> transactions;
 
     /**
      * Constructs an Account with the specified account type.
      *
      * @param accountType The type of the account (CHECKING, SAVINGS, MAXI_SAVINGS).
      */
-    public Account(int accountType) {
+    public Account(AccountType accountType) {
         this.accountType = accountType;
-        this.transactions = new ArrayList<Transaction>();
-        this.balance = 0.0;
+        this.openedDate = LocalDate.now(); // Set the opened date to the current date
+        this.balance = BigDecimal.ZERO;
         this.lastWithdrawalDate = null;
+        this.transactions = new ArrayList<Transaction>();
     }
 
     /**
@@ -54,12 +62,12 @@ public class Account {
      * @param amount The amount to deposit. Must be greater than zero.
      * @throws IllegalArgumentException if the amount is not greater than zero.
      */
-    public void deposit(double amount) {
-        if (amount <= 0) {
+    public void deposit(BigDecimal amount) {
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Invalid deposit amount");
         } else {
             transactions.add(new Transaction(amount));
-            balance += amount;
+            balance = balance.add(amount);
         }
     }
 
@@ -67,42 +75,48 @@ public class Account {
      * Withdraws the specified amount from the account.
      *
      * @param amount The amount to withdraw. Must be greater than zero.
-     * @throws IllegalArgumentException if the amount is not greater than zero.
+     * @throws IllegalArgumentException if the amount is not greater than zero or
+     *                                  exceeds the balance.
      */
-    public void withdraw(double amount) {
-        if (amount <= 0 || amount > balance) {
+    public void withdraw(BigDecimal amount) {
+        if (amount.compareTo(BigDecimal.ZERO) <= 0 || amount.compareTo(balance) > 0) {
             throw new IllegalArgumentException("Invalid withdrawal amount");
         } else {
-            transactions.add(new Transaction(-amount));
-            balance -= amount;
-            lastWithdrawalDate = DateProvider.getInstance().now();
+            transactions.add(new Transaction(amount.negate()));
+            balance = balance.subtract(amount);
+            lastWithdrawalDate = LocalDate.now();
         }
     }
 
     /**
      * Calculates the interest earned on the account based on its type and balance.
      *
+     * @param balance The current balance of the account.
      * @return The interest earned.
      */
-    public double interestEarned() {
-        double balance = getBalance();
-        double annualInterest = 0.0;
+    public abstract BigDecimal getInterestRate(BigDecimal balance);
 
-        switch (accountType) {
-            case CHECKING:
-                annualInterest = balance * CHECKING_INTEREST_RATE;
-                break;
-            case SAVINGS:
-                annualInterest = calculateSavingsInterest(balance);
-                break;
-            case MAXI_SAVINGS:
-                annualInterest = calculateMaxiSavingsInterest(balance);
-                break;
-            default:
-                annualInterest = balance * CHECKING_INTEREST_RATE; // for unknown account types
-        }
+    /**
+     * Calculates the compounded interest earned over a specified number of days.
+     *
+     * @param numberOfDays The number of days to calculate interest for.
+     * @return The compounded interest earned.
+     */
+    public BigDecimal compoundedInterestEarned(int numberOfDays) {
+        LocalDate date = LocalDate.now();
+        int daysInCurrentYear = date.lengthOfYear();        
+        
+        BigDecimal annualInterestRate = getInterestRate(balance);
+        int compoundingFrequency = daysInCurrentYear;
+        BigDecimal one = new BigDecimal("1.00");
+        
+        BigDecimal dailyInterestRate = annualInterestRate.divide(new BigDecimal(compoundingFrequency), 10,
+                RoundingMode.HALF_UP);
+        BigDecimal accruedInterest = balance
+                .multiply(one.add(dailyInterestRate).pow(numberOfDays))
+                .subtract(balance);
 
-        return annualInterest;
+        return (accruedInterest.setScale(2, RoundingMode.HALF_UP));
     }
 
     /**
@@ -110,11 +124,10 @@ public class Account {
      *
      * @return The sum of all transactions.
      */
-    public double sumTransactions() {
-        double amount = 0.0;
-        for (Transaction t : transactions)
-            amount += t.getAmount();
-        return amount;
+    public BigDecimal sumTransactions() {
+        return transactions.stream()
+                .map(Transaction::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     /**
@@ -122,7 +135,7 @@ public class Account {
      *
      * @return The account type (CHECKING, SAVINGS, MAXI_SAVINGS).
      */
-    public int getAccountType() {
+    public AccountType getAccountType() {
         return accountType;
     }
 
@@ -131,65 +144,25 @@ public class Account {
      *
      * @return The account balance.
      */
-    public double getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
     /**
-     * Calculates the daily interest rate for Savings accounts based on the balance.
+     * Gets the date when the account was opened.
      *
-     * @param balance The current balance of the account.
-     * @return The calculated daily interest rate.
+     * @return The opened date.
      */
-    private double calculateSavingsInterest(double balance) {
-        if (balance <= SAVINGS_THRESHOLD) {
-            return balance * SAVINGS_LOW_INTEREST_RATE;
-        } else {
-            double interest = SAVINGS_THRESHOLD * SAVINGS_LOW_INTEREST_RATE; // Interest on the first $1,000
-            interest += (balance - SAVINGS_THRESHOLD) * SAVINGS_HIGH_INTEREST_RATE; // Interest on the amount over
-                                                                                    // $1,000
-            return interest;
-        }
+    public LocalDate getOpenedDate() {
+        return openedDate;
     }
 
     /**
-     * Calculates the daily interest rate for Maxi-Savings accounts based on
-     * withdrawal
-     * history.
+     * Gets the date of the last withdrawal from the account.
      *
-     * @param balance The current balance of the account.
-     * @return The calculated daily interest rate.
+     * @return The last withdrawal date, or null if no withdrawals have been made.
      */
-    private double calculateMaxiSavingsInterest(double balance) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(DateProvider.getInstance().now());
-    
-        // Set the calendar to x days ago
-        calendar.add(Calendar.DAY_OF_YEAR, -MAXI_SAVINGS_WITHDRAWAL_DAYS);
-    
-        double dailyRate;
-        if (lastWithdrawalDate == null || lastWithdrawalDate.before(calendar.getTime())) {
-            // Return the higher interest rate if there were no withdrawals in the past x days
-            dailyRate = MAXI_SAVINGS_HIGH_INTEREST_RATE / getDaysInYear();
-        } else {
-            // Return the lower interest rate if there were withdrawals in the past x days
-            dailyRate = MAXI_SAVINGS_LOW_INTEREST_RATE / getDaysInYear();
-        }
-    
-        // Calculate compound interest over a year
-        double annualInterest = balance * (Math.pow(1 + dailyRate, getDaysInYear()) - 1);
-        return annualInterest;
-    }
-    
-
-    /**
-     * Gets the number of days in a year, considering leap years.
-     *
-     * @return The number of days in a year.
-     */
-    private int getDaysInYear() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(DateProvider.getInstance().now());
-        return calendar.getActualMaximum(Calendar.DAY_OF_YEAR);
+    public LocalDate getLastWithdrawalDate() {
+        return lastWithdrawalDate;
     }
 }

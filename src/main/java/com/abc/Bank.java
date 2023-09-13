@@ -1,5 +1,6 @@
 package com.abc;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class Bank {
      * Constructs a new Bank instance with an empty list of customers.
      */
     public Bank() {
-        customers = new ArrayList<Customer>();
+        customers = new ArrayList<>();
     }
 
     /**
@@ -35,10 +36,11 @@ public class Bank {
      * @return A summary of customers and their accounts.
      */
     public String customerSummary() {
-        String summary = "Customer Summary";
+        StringBuilder summary = new StringBuilder("Customer Summary");
         for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-        return summary;
+            summary.append("\n - ").append(c.getName()).append(" (")
+                    .append(format(c.getNumberOfAccounts(), "account")).append(")");
+        return summary.toString();
     }
 
     /**
@@ -55,12 +57,14 @@ public class Bank {
     /**
      * Calculates the total interest paid by all customers.
      *
+     * @param noOfDays The number of days for interest calculation.
      * @return The total interest paid.
      */
-    public double totalInterestPaid() {
-        double total = 0;
-        for (Customer c : customers)
-            total += c.totalInterestEarned();
+    public BigDecimal totalInterestPaid(int noOfDays) {
+        BigDecimal total = BigDecimal.ZERO;
+        for (Customer c : customers) {
+            total = total.add(c.totalInterestEarned(noOfDays));
+        }
         return total;
     }
 
@@ -76,7 +80,7 @@ public class Bank {
         } else {
             return customers.get(0).getName();
         }
-    }  
+    }
 
     /**
      * Gets the number of customers in the bank.

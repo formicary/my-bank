@@ -1,15 +1,15 @@
 package com.abc;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.lang.Math.abs;
 
 /**
  * Represents a customer of the bank with associated accounts.
  */
 public class Customer {
-    
+
     private String name;
     private List<Account> accounts;
 
@@ -55,26 +55,27 @@ public class Customer {
     /**
      * Calculates the total interest earned by the customer across all accounts.
      *
+     * @param noOfDays The number of days for which to calculate interest.
      * @return The total interest earned.
      */
-    public double totalInterestEarned() {
-        double total = 0;
+    public BigDecimal totalInterestEarned(int noOfDays) {
+        BigDecimal total = BigDecimal.ZERO;
         for (Account a : accounts)
-            total += a.interestEarned();
+            total = total.add(a.compoundedInterestEarned(noOfDays));
         return total;
     }
 
     /**
-     * Generates a statement summarising the customer's accounts and transactions.
+     * Generates a statement summarizing the customer's accounts and transactions.
      *
      * @return A statement for the customer.
      */
     public String getStatement() {
         StringBuilder statement = new StringBuilder("Statement for ").append(name).append("\n");
-        double total = 0.0;
+        BigDecimal total = BigDecimal.ZERO;
         for (Account a : accounts) {
             statement.append("\n").append(statementForAccount(a)).append("\n");
-            total += a.sumTransactions();
+            total = total.add(a.sumTransactions());
         }
         statement.append("\nTotal In All Accounts ").append(toDollars(total));
         return statement.toString();
@@ -88,39 +89,41 @@ public class Customer {
      * @return A statement for the account.
      */
     private String statementForAccount(Account a) {
-        String s = "";
+        StringBuilder s = new StringBuilder();
 
         // Translate to a more readable account type
         switch (a.getAccountType()) {
-            case Account.CHECKING:
-                s += "Checking Account\n";
+            case CHECKING:
+                s.append("Checking Account\n");
                 break;
-            case Account.SAVINGS:
-                s += "Savings Account\n";
+            case SAVINGS:
+                s.append("Savings Account\n");
                 break;
-            case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
+            case MAXI_SAVINGS:
+                s.append("Maxi Savings Account\n");
                 break;
         }
 
         // Now total up all the transactions for the account
-        double total = 0.0;
+        BigDecimal total = BigDecimal.ZERO;
         for (Transaction t : a.transactions) {
-            s += "  " + (t.getAmount() < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.getAmount()) + "\n";
-            total += t.getAmount();
+            s.append("  ").append(t.getAmount().compareTo(BigDecimal.ZERO) < 0 ? "withdrawal" : "deposit").append(" ")
+                    .append(toDollars(t.getAmount())).append("\n");
+            total = total.add(t.getAmount());
         }
-        s += "Total " + toDollars(total);
-        return s;
+        s.append("Total ").append(toDollars(total));
+        return s.toString();
     }
 
     /**
-     * Formats a double value as a currency amount.
+     * Formats a BigDecimal value as a currency amount.
      *
-     * @param d The double value to format.
+     * @param d The BigDecimal value to format.
      * @return A formatted currency string.
      */
-    private String toDollars(double d) {
-        return String.format("$%,.2f", abs(d));
+    private String toDollars(BigDecimal d) {
+        DecimalFormat df = new DecimalFormat("$#,##0.00");
+        return df.format(d.abs());
     }
 
     /**
@@ -133,8 +136,8 @@ public class Customer {
      *                                  belong to the customer
      *                                  or if the transfer amount is invalid.
      */
-    public void transfer(Account fromAccount, Account toAccount, double amount) {
-        if (fromAccount == null || toAccount == null || amount <= 0) {
+    public void transfer(Account fromAccount, Account toAccount, BigDecimal amount) {
+        if (fromAccount == null || toAccount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Invalid transfer request");
         }
 
@@ -142,7 +145,7 @@ public class Customer {
             throw new IllegalArgumentException("One or both accounts do not belong to this customer");
         }
 
-        if (fromAccount.getBalance() < amount) {
+        if (fromAccount.getBalance().compareTo(amount) < 0) {
             throw new IllegalArgumentException("Insufficient funds for transfer");
         }
 

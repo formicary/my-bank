@@ -1,11 +1,13 @@
 package com.abc;
 
-import java.util.Date;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -14,22 +16,32 @@ import org.junit.Test;
  */
 public class TransactionTest {
 
+    private BigDecimal transactionAmount;
+
+    /**
+     * Sets up common test objects and actions before each test method.
+     */
+    @Before
+    public void setUp() {
+        transactionAmount = new BigDecimal("10.00");
+    }
+
     /**
      * Tests creating a new transaction.
      */
     @Test
-    public void transaction() {
-        Transaction t = new Transaction(5);
-        assertTrue(t instanceof Transaction);
+    public void createTransaction() {
+        Transaction transaction = new Transaction(transactionAmount);
+        assertTrue(transaction instanceof Transaction);
     }
 
     /**
      * Tests getting the amount of a transaction.
      */
     @Test
-    public void getAmount() {
-        Transaction t = new Transaction(10.0);
-        assertEquals(10.0, t.getAmount(), 0.001);
+    public void getTransactionAmount() {
+        Transaction transaction = new Transaction(transactionAmount);
+        assertEquals(new BigDecimal("10.00"), transaction.getAmount());
     }
 
     /**
@@ -37,8 +49,8 @@ public class TransactionTest {
      */
     @Test
     public void getTransactionDate() {
-        Transaction t = new Transaction(15.0);
-        assertNotNull(t.getTransactionDate());
+        Transaction transaction = new Transaction(transactionAmount);
+        assertNotNull(transaction.getTransactionDate());
     }
 
     /**
@@ -46,8 +58,8 @@ public class TransactionTest {
      */
     @Test
     public void transactionDateConsistency() {
-        Transaction t = new Transaction(20.0);
-        Date initialDate = t.getTransactionDate();
+        Transaction transaction = new Transaction(transactionAmount);
+        LocalDate initialDate = transaction.getTransactionDate();
 
         // Simulate some delay
         try {
@@ -56,7 +68,7 @@ public class TransactionTest {
             e.printStackTrace();
         }
 
-        Date newDate = t.getTransactionDate();
+        LocalDate newDate = transaction.getTransactionDate();
         assertEquals(initialDate, newDate);
     }
 }

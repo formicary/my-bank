@@ -1,23 +1,24 @@
 package com.abc;
 
-import java.util.Date;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
 /**
  * Represents a financial transaction with an amount and a date.
  */
 public class Transaction {
     
-    private final double amount;
-    private final Date transactionDate;
+    private final BigDecimal amount;
+    private final LocalDate transactionDate;
 
     /**
      * Constructs a new Transaction with the given amount and the current date.
      *
      * @param amount The amount of the transaction.
      */
-    public Transaction(double amount) {
+    public Transaction(BigDecimal amount) {
         this.amount = amount;
-        this.transactionDate = DateProvider.getInstance().now();
+        this.transactionDate = LocalDate.now();
     }
 
     /**
@@ -25,7 +26,7 @@ public class Transaction {
      *
      * @return The transaction amount.
      */
-    public double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
@@ -34,7 +35,7 @@ public class Transaction {
      *
      * @return The transaction date.
      */
-    public Date getTransactionDate() {
+    public LocalDate getTransactionDate() {
         return transactionDate;
     }
 }
