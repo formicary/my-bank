@@ -16,3 +16,5 @@ public class DateProvider {
         return Calendar.getInstance().getTime();
     }
 }
+
+// Delete this file, I don't think it's needed.

@@ -1,25 +1,61 @@
 package com.abc;
 
-import org.junit.Ignore;
 import org.junit.Test;
+
+import com.abc.Utilities.Enums.AccountType;
 
 import static org.junit.Assert.assertEquals;
 
+import org.junit.After;
+import org.junit.Before;
+
+// Todo: add missing tests cases to ensure full coverage
 public class CustomerTest {
 
-    @Test //Test customer statement generation
-    public void testApp(){
+    private Customer customer;
+    private Account checkingAccount;
+    private Account savingsAccount;
+    private Account maxiSavingsAccount;
 
-        Account checkingAccount = new Account(Account.CHECKING);
-        Account savingsAccount = new Account(Account.SAVINGS);
+    @Before
+    public void setup() {
+        customer = new Customer("Jade");
+        checkingAccount = new Account(AccountType.CHECKING);
+        savingsAccount = new Account(AccountType.SAVINGS);
+        maxiSavingsAccount = new Account(AccountType.MAXI_SAVINGS);
+    }
 
-        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
+    @After
+    public void tearDown() {
+        customer = null;
+        checkingAccount = null;
+        savingsAccount = null;
+        maxiSavingsAccount = null;
+    }
 
-        checkingAccount.deposit(100.0);
-        savingsAccount.deposit(4000.0);
+    @Test
+    public void testOneAccount(){
+        customer.openAccount(checkingAccount);
+        assertEquals(1, customer.getNumberOfAccounts());
+    }
+
+    @Test
+    public void testMultipleAcounts() {
+        customer.openAccount(checkingAccount);
+        customer.openAccount(savingsAccount);
+        customer.openAccount(maxiSavingsAccount);
+        assertEquals(3, customer.getNumberOfAccounts());
+    }
+
+    @Test
+    public void testCustomerStatementGeneration(){
+        customer.openAccount(checkingAccount).openAccount(savingsAccount);
+
+        checkingAccount.depositFunds(100.0);
+        savingsAccount.depositFunds(4000.0);
         savingsAccount.withdraw(200.0);
 
-        assertEquals("Statement for Henry\n" +
+        assertEquals("Statement for Jade\n" +
                 "\n" +
                 "Checking Account\n" +
                 "  deposit $100.00\n" +
@@ -30,28 +66,6 @@ public class CustomerTest {
                 "  withdrawal $200.00\n" +
                 "Total $3,800.00\n" +
                 "\n" +
-                "Total In All Accounts $3,900.00", henry.getStatement());
-    }
-
-    @Test
-    public void testOneAccount(){
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
-        assertEquals(1, oscar.getNumberOfAccounts());
-    }
-
-    @Test
-    public void testTwoAccount(){
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
-        assertEquals(2, oscar.getNumberOfAccounts());
-    }
-
-    @Ignore
-    public void testThreeAcounts() {
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
-        assertEquals(3, oscar.getNumberOfAccounts());
+                "Total In All Accounts $3,900.00", customer.getStatement());
     }
 }

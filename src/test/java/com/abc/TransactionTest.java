@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
 
+// Todo: write meaning ful tests
 public class TransactionTest {
     @Test
     public void transaction() {

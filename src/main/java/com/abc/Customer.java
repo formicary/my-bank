@@ -5,6 +5,7 @@ import java.util.List;
 
 import static java.lang.Math.abs;
 
+// Todo: continue with refactor
 public class Customer {
     private String name;
     private List<Account> accounts;
@@ -27,6 +28,7 @@ public class Customer {
         return accounts.size();
     }
 
+    // Todo: replace single letter assignment with full words across the project e.g. a should be account
     public double totalInterestEarned() {
         double total = 0;
         for (Account a : accounts)
@@ -34,6 +36,7 @@ public class Customer {
         return total;
     }
 
+    // Todo: refactor to use SringBuilder()
     public String getStatement() {
         String statement = null;
         statement = "Statement for " + name + "\n";
@@ -46,18 +49,19 @@ public class Customer {
         return statement;
     }
 
+    // Todo: refactor and remove assignment to empty string
     private String statementForAccount(Account a) {
         String s = "";
 
        //Translate to pretty account type
         switch(a.getAccountType()){
-            case Account.CHECKING:
+            case CHECKING:
                 s += "Checking Account\n";
                 break;
-            case Account.SAVINGS:
+            case SAVINGS:
                 s += "Savings Account\n";
                 break;
-            case Account.MAXI_SAVINGS:
+            case MAXI_SAVINGS:
                 s += "Maxi Savings Account\n";
                 break;
         }
@@ -65,8 +69,8 @@ public class Customer {
         //Now total up all the transactions
         double total = 0.0;
         for (Transaction t : a.transactions) {
-            s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
-            total += t.amount;
+            s += "  " + (t.getAmount() < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.getAmount()) + "\n";
+            total += t.getAmount();
         }
         s += "Total " + toDollars(total);
         return s;

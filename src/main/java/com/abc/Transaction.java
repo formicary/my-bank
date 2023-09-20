@@ -1,16 +1,23 @@
 package com.abc;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDateTime;
 
+// Todo: revisit and also consider creating transactionType as enum
 public class Transaction {
-    public final double amount;
+    private final double amount;
 
-    private Date transactionDate;
+    private LocalDateTime transactionDate;
 
     public Transaction(double amount) {
         this.amount = amount;
-        this.transactionDate = DateProvider.getInstance().now();
+        this.transactionDate = LocalDateTime.now();
     }
 
+    public double getAmount() {
+        return amount;
+    }
+
+    public LocalDateTime getTransactionDate() {
+        return transactionDate;
+    }
 }
