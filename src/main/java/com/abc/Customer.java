@@ -1,11 +1,15 @@
 package com.abc;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Math.abs;
 
-// Todo: continue with refactor
+import static com.abc.Utilities.AmountValidator.isNegativeAmount;
+import static com.abc.Utilities.AmountValidator.canWithdraw;
+
+// Todo: continue with refactor and include similar to JSDoc
 public class Customer {
     private String name;
     private List<Account> accounts;
@@ -28,52 +32,62 @@ public class Customer {
         return accounts.size();
     }
 
-    // Todo: replace single letter assignment with full words across the project e.g. a should be account
     public double totalInterestEarned() {
-        double total = 0;
-        for (Account a : accounts)
-            total += a.interestEarned();
+        double total = 0.0d;
+        for (Account account : accounts)
+            total += account.interestEarned();
         return total;
     }
 
-    // Todo: refactor to use SringBuilder()
-    public String getStatement() {
-        String statement = null;
-        statement = "Statement for " + name + "\n";
-        double total = 0.0;
-        for (Account a : accounts) {
-            statement += "\n" + statementForAccount(a) + "\n";
-            total += a.sumTransactions();
+    public void transferFunds(Account initiatingAccount, Account destinationAccount, double amount) {
+        if (!accounts.contains(initiatingAccount) || !accounts.contains(destinationAccount)) {
+            throw new IllegalArgumentException("The account(s) provided does not belong to this customer");
         }
-        statement += "\nTotal In All Accounts " + toDollars(total);
-        return statement;
+
+        isNegativeAmount(amount);
+        canWithdraw(initiatingAccount.getBalance(), amount);
+        initiatingAccount.withdrawFunds(amount);
+        destinationAccount.depositFunds(amount);
     }
 
-    // Todo: refactor and remove assignment to empty string
-    private String statementForAccount(Account a) {
-        String s = "";
+    public String generateConsolidatedAcountsStatement() {
+        StringBuilder consolidatedStatement = new StringBuilder("Statement for ").append(name).append("\n");
+        
+        double total = 0.0d;
 
-       //Translate to pretty account type
-        switch(a.getAccountType()){
-            case CHECKING:
-                s += "Checking Account\n";
-                break;
-            case SAVINGS:
-                s += "Savings Account\n";
-                break;
-            case MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
-                break;
+        for (Account account : accounts) {
+            consolidatedStatement.append("\n").append(generateAccountStatement(account)).append("\n");
+            total += account.sumTransactions();
+        }
+        consolidatedStatement.append("\nTotal In All Accounts ").append(toDollars(total)); // is this desired? It seems odd to get one sum total from different account types
+        return consolidatedStatement.toString();
+    }
+
+    private String generateAccountStatement(Account account) {
+        StringBuilder accountStatement = new StringBuilder();
+
+        // State account type
+        switch (account.getAccountType()) {
+            case CHECKING -> accountStatement.append("Checking Account\n");
+            case SAVINGS -> accountStatement.append("Savings Account\n");
+            case MAXI_SAVINGS -> accountStatement.append("Maxi Savings Account\n");
+            // Default not used to enforce compile error if the AccountType enum is modified
         }
 
-        //Now total up all the transactions
-        double total = 0.0;
-        for (Transaction t : a.transactions) {
-            s += "  " + (t.getAmount() < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.getAmount()) + "\n";
-            total += t.getAmount();
+        // Now total up all transactions for the specified account
+        double total = 0.0d;
+
+        for (Transaction transaction : account.transactions) {
+            accountStatement.append("  ")
+            .append((transaction.getAmount() < 0 ? "withdrawal" : "deposit"))
+            .append(" ")
+            .append(toDollars(transaction.getAmount()))
+            .append("\n");
+            total += transaction.getAmount();
         }
-        s += "Total " + toDollars(total);
-        return s;
+        accountStatement.append("Total ").append(toDollars(total));
+
+        return accountStatement.toString();
     }
 
     private String toDollars(double d){

@@ -7,16 +7,16 @@ import com.abc.Utilities.Enums.AccountType;
 import static com.abc.Utilities.AmountValidator.isNegativeAmount;
 import static com.abc.Utilities.AmountValidator.canWithdraw;
 
-//Todo: refactor into abstract class and consider an interface. Create new childclasses per account type.
+//Todo: refactor into abstract class and consider an interface. Create new childclasses per account type. Include similar to JSDoc.
 public class Account {
     private final AccountType accountType;
-    private Double balance;
+    private double balance; // Todo: best practice to use BigDecimal for currencies to ensure accuracy, refactor all instances of double
     public List<Transaction> transactions;
 
     public Account(AccountType accountType) {
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
-        this.balance = 0.00;
+        this.balance = 0.0d;
     }
 
     public void depositFunds(double amount) {
@@ -25,7 +25,7 @@ public class Account {
         transactions.add(new Transaction(amount));
     }
 
-    public void withdraw(double amount) {
+    public void withdrawFunds(double amount) {
         isNegativeAmount(amount);
         canWithdraw(this.getBalance(), amount);
         balance -= amount;
@@ -51,19 +51,17 @@ public class Account {
         }
     }
 
-    // Todo: revist this function/assess it's need
-    public double checkIfTransactionsExist() {
-        if (transactions.isEmpty()) {
-            return transactions.get(0).getAmount();
-        };
-        
-        return 0.0d; // Todo: this is good practice, modify 0.00 to 0.0d across project
+    public boolean checkIfTransactionsExist() {
+        return transactions.isEmpty();
     }
 
-    // Todo: revist this function
     public double sumTransactions() {
-        checkIfTransactionsExist();
         double amount = 0.0d;
+
+        if (checkIfTransactionsExist()) {
+            return amount;
+        }
+
         for (Transaction transaction : transactions)
             amount += transaction.getAmount();
         return amount;
@@ -81,5 +79,4 @@ public class Account {
     public void setBalance(double balance) {
         this.balance = balance;
     }
-
 }

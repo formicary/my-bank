@@ -46,7 +46,7 @@ public class AccountTest {
     public void testWihdrawFunds() {
         customer.openAccount(checkingAccount);
         checkingAccount.depositFunds(100.00);
-        checkingAccount.withdraw(10.00);
+        checkingAccount.withdrawFunds(10.00);
 
         assertEquals(null, 90.00, checkingAccount.getBalance(), DOUBLE_DELTA);
     }
@@ -55,7 +55,7 @@ public class AccountTest {
     public void testWithdrawalExceedsBalance() {
         customer.openAccount(checkingAccount);
         checkingAccount.depositFunds(10.00);
-        checkingAccount.withdraw(100.00);
+        checkingAccount.withdrawFunds(100.00);
     }
     
 }
