@@ -4,7 +4,7 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Math.abs;
+import java.math.BigDecimal;
 
 import static com.abc.Utilities.AmountValidator.isNegativeAmount;
 import static com.abc.Utilities.AmountValidator.canWithdraw;
@@ -32,14 +32,14 @@ public class Customer {
         return accounts.size();
     }
 
-    public double totalInterestEarned() {
-        double total = 0.0d;
+    public BigDecimal totalInterestEarned() {
+        BigDecimal total = BigDecimal.ZERO;
         for (Account account : accounts)
-            total += account.interestEarned();
+            total.add(account.interestEarned());
         return total;
     }
 
-    public void transferFunds(Account initiatingAccount, Account destinationAccount, double amount) {
+    public void transferFunds(Account initiatingAccount, Account destinationAccount, BigDecimal amount) {
         if (!accounts.contains(initiatingAccount) || !accounts.contains(destinationAccount)) {
             throw new IllegalArgumentException("The account(s) provided does not belong to this customer");
         }
@@ -53,11 +53,11 @@ public class Customer {
     public String generateConsolidatedAcountsStatement() {
         StringBuilder consolidatedStatement = new StringBuilder("Statement for ").append(name).append("\n");
         
-        double total = 0.0d;
+        BigDecimal total = BigDecimal.ZERO;
 
         for (Account account : accounts) {
             consolidatedStatement.append("\n").append(generateAccountStatement(account)).append("\n");
-            total += account.sumTransactions();
+            total = total.add(account.sumTransactions());
         }
         consolidatedStatement.append("\nTotal In All Accounts ").append(toDollars(total)); // is this desired? It seems odd to get one sum total from different account types
         return consolidatedStatement.toString();
@@ -75,22 +75,22 @@ public class Customer {
         }
 
         // Now total up all transactions for the specified account
-        double total = 0.0d;
+        BigDecimal total = BigDecimal.ZERO;
 
         for (Transaction transaction : account.transactions) {
             accountStatement.append("  ")
-            .append((transaction.getAmount() < 0 ? "withdrawal" : "deposit"))
+            .append((transaction.getAmount().compareTo(BigDecimal.ZERO) < 0 ? "withdrawal" : "deposit"))
             .append(" ")
             .append(toDollars(transaction.getAmount()))
             .append("\n");
-            total += transaction.getAmount();
+            total = total.add(transaction.getAmount());
         }
         accountStatement.append("Total ").append(toDollars(total));
 
         return accountStatement.toString();
     }
 
-    private String toDollars(double d){
-        return String.format("$%,.2f", abs(d));
+    private String toDollars(BigDecimal value){
+        return String.format("$%,.2f", value.abs());
     }
 }

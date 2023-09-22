@@ -1,19 +1,20 @@
 package com.abc;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 // Todo: revisit and also consider creating transactionType as enum
 public class Transaction {
-    private final double amount;
+    private final BigDecimal amount;
 
     private LocalDateTime transactionDate;
 
-    public Transaction(double amount) {
+    public Transaction(BigDecimal amount) {
         this.amount = amount;
         this.transactionDate = LocalDateTime.now();
     }
 
-    public double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 

@@ -6,12 +6,16 @@ import com.abc.Utilities.Enums.AccountType;
 
 import static org.junit.Assert.assertEquals;
 
+import java.math.BigDecimal;
+
 import org.junit.After;
 import org.junit.Before;
 
 // Todo: add missing tests cases to ensure full coverage
 public class CustomerTest {
-    private static final double DOUBLE_DELTA = 1e-2; // is this good practice?
+    private BigDecimal amountToDeposit;
+    private BigDecimal amountToWithdraw;
+    private BigDecimal amountToTransfer;
 
     private Customer customer;
     private Customer customer2;
@@ -28,6 +32,9 @@ public class CustomerTest {
         checkingAccount2 = new Account(AccountType.CHECKING);
         savingsAccount = new Account(AccountType.SAVINGS);
         maxiSavingsAccount = new Account(AccountType.MAXI_SAVINGS);
+        amountToDeposit = BigDecimal.valueOf(150.00);
+        amountToWithdraw = BigDecimal.valueOf(10.00);
+        amountToTransfer = BigDecimal.valueOf(50.00);
     }
 
     @After
@@ -38,6 +45,9 @@ public class CustomerTest {
         checkingAccount2 = null;
         savingsAccount = null;
         maxiSavingsAccount = null;
+        amountToDeposit = null;
+        amountToWithdraw = null;
+        amountToTransfer = null;
     }
 
     @Test
@@ -59,10 +69,11 @@ public class CustomerTest {
         customer.openAccount(checkingAccount);
         customer.openAccount(savingsAccount);
 
-        checkingAccount.depositFunds(150.00);
-        customer.transferFunds(checkingAccount, savingsAccount, 50);
+        checkingAccount.depositFunds(amountToDeposit);
+        customer.transferFunds(checkingAccount, savingsAccount, amountToWithdraw);
+        BigDecimal expectedNewBalance = BigDecimal.valueOf(140.00);
 
-        assertEquals(null, 100, checkingAccount.getBalance(), DOUBLE_DELTA);
+        assertEquals(expectedNewBalance, checkingAccount.getBalance());
     }
 
     @Test
@@ -70,10 +81,11 @@ public class CustomerTest {
         customer.openAccount(checkingAccount);
         customer.openAccount(savingsAccount);
 
-        checkingAccount.depositFunds(150.00);
-        customer.transferFunds(checkingAccount, savingsAccount, 50);
+        checkingAccount.depositFunds(amountToDeposit);
+        customer.transferFunds(checkingAccount, savingsAccount, amountToTransfer);
+        BigDecimal expectedNewBalance = BigDecimal.valueOf(50.00);
 
-        assertEquals(null, 50, savingsAccount.getBalance(), DOUBLE_DELTA);
+        assertEquals(expectedNewBalance, savingsAccount.getBalance());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -81,8 +93,8 @@ public class CustomerTest {
         customer.openAccount(checkingAccount);
         customer2.openAccount(maxiSavingsAccount);
 
-        checkingAccount.depositFunds(150);
-        customer.transferFunds(checkingAccount, maxiSavingsAccount, 50);
+        checkingAccount.depositFunds(amountToDeposit);
+        customer.transferFunds(checkingAccount, maxiSavingsAccount, amountToTransfer);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -91,17 +103,20 @@ public class CustomerTest {
         customer.openAccount(savingsAccount);
         customer2.openAccount(checkingAccount2);
 
-        checkingAccount2.depositFunds(150);
-        customer.transferFunds(checkingAccount2, savingsAccount, 50);
+        checkingAccount2.depositFunds(amountToDeposit);
+        customer.transferFunds(checkingAccount2, savingsAccount, amountToTransfer);
     }
 
     @Test
     public void testCustomerStatementGeneration(){
         customer.openAccount(checkingAccount).openAccount(savingsAccount);
+        BigDecimal amountToDepositChecking = BigDecimal.valueOf(100.00);
+        BigDecimal amountToDepositSavings = BigDecimal.valueOf(4000.00);
+        BigDecimal amountToWithdrawSavings = BigDecimal.valueOf(200.00);
 
-        checkingAccount.depositFunds(100.0);
-        savingsAccount.depositFunds(4000.0);
-        savingsAccount.withdrawFunds(200.0);
+        checkingAccount.depositFunds(amountToDepositChecking);
+        savingsAccount.depositFunds(amountToDepositSavings);
+        savingsAccount.withdrawFunds(amountToWithdrawSavings);
 
         assertEquals("Statement for Jade\n" +
                 "\n" +

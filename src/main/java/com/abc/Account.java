@@ -1,5 +1,6 @@
 package com.abc;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,60 +11,65 @@ import static com.abc.Utilities.AmountValidator.canWithdraw;
 //Todo: refactor into abstract class and consider an interface. Create new childclasses per account type. Include similar to JSDoc.
 public class Account {
     private final AccountType accountType;
-    private double balance; // Todo: best practice to use BigDecimal for currencies to ensure accuracy, refactor all instances of double
+    private BigDecimal balance; // Todo: best practice to use BigDecimal for currencies to ensure accuracy, refactor all instances of double
     public List<Transaction> transactions;
 
     public Account(AccountType accountType) {
         this.accountType = accountType;
         this.transactions = new ArrayList<Transaction>();
-        this.balance = 0.0d;
+        this.balance = BigDecimal.ZERO;
     }
 
-    public void depositFunds(double amount) {
+    public void depositFunds(BigDecimal amount) {
         isNegativeAmount(amount);
-        balance += amount;
+        balance = balance.add(amount);
         transactions.add(new Transaction(amount));
     }
 
-    public void withdrawFunds(double amount) {
+    public void withdrawFunds(BigDecimal amount) {
         isNegativeAmount(amount);
         canWithdraw(this.getBalance(), amount);
-        balance -= amount;
-        transactions.add(new Transaction(-amount));
+        balance = balance.subtract(amount);
+        transactions.add(new Transaction(amount.negate()));
     }
 
-    public double interestEarned() {
-        double amount = sumTransactions();
+    // Todo: needs fixing and refactoring to use clean code but do once Account changed to abstract class and child classes implemented
+    public BigDecimal interestEarned() {
+        BigDecimal amount = sumTransactions();
         switch(accountType){
             case SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.001;
-                else
-                    return 1 + (amount-1000) * 0.002;
+                if (amount.compareTo(new BigDecimal(1000.00)) <= 0) {
+                    amount = amount.multiply(BigDecimal.valueOf(0.001));
+                } else
+                    amount = BigDecimal.ONE.add(amount.subtract(BigDecimal.valueOf(1000.00))).multiply(BigDecimal.valueOf(0.002));
             case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
+                if (amount.compareTo(new BigDecimal(1000)) <= 0) {
+                    amount = amount.multiply(new BigDecimal(0.02));
+                } else if
+                    (amount.compareTo(new BigDecimal(2000)) <= 0) {
+                    amount = new BigDecimal(20).add(amount.subtract(new BigDecimal(1000))).multiply(new BigDecimal(0.05));
+                } else
+                    amount = new BigDecimal(70).add(amount.subtract(new BigDecimal(2000))).multiply(new BigDecimal(0.1));
             default:
-                return amount * 0.001;
+                amount = amount.multiply(BigDecimal.valueOf(0.001));
         }
+        return amount;
     }
 
     public boolean checkIfTransactionsExist() {
         return transactions.isEmpty();
     }
 
-    public double sumTransactions() {
-        double amount = 0.0d;
+    public BigDecimal sumTransactions() {
+        BigDecimal amount = BigDecimal.ZERO;
 
         if (checkIfTransactionsExist()) {
             return amount;
         }
 
-        for (Transaction transaction : transactions)
-            amount += transaction.getAmount();
+        for (Transaction transaction : transactions) {
+            amount = amount.add(transaction.getAmount());
+        }
         return amount;
     }
 
@@ -72,11 +78,11 @@ public class Account {
         return accountType;
     }
 
-    public double getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(double balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 }
