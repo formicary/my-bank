@@ -2,7 +2,10 @@ package com.abc;
 
 import org.junit.Test;
 
-import com.abc.Utilities.Enums.AccountType;
+import com.abc.Account.Account;
+import com.abc.Account.CheckingAccount;
+import com.abc.Account.MaxiSavingsAccount;
+import com.abc.Account.SavingsAccount;
 
 import static org.junit.Assert.assertEquals;
 
@@ -11,7 +14,6 @@ import java.math.BigDecimal;
 import org.junit.After;
 import org.junit.Before;
 
-// Todo: add missing tests cases to ensure full coverage
 public class CustomerTest {
     private BigDecimal amountToDeposit;
     private BigDecimal amountToWithdraw;
@@ -28,10 +30,10 @@ public class CustomerTest {
     public void setup() {
         customer = new Customer("Jade");
         customer2 = new Customer("Jack");
-        checkingAccount = new Account(AccountType.CHECKING);
-        checkingAccount2 = new Account(AccountType.CHECKING);
-        savingsAccount = new Account(AccountType.SAVINGS);
-        maxiSavingsAccount = new Account(AccountType.MAXI_SAVINGS);
+        checkingAccount = new CheckingAccount();
+        checkingAccount2 = new CheckingAccount();
+        savingsAccount = new SavingsAccount();
+        maxiSavingsAccount = new MaxiSavingsAccount();
         amountToDeposit = BigDecimal.valueOf(150.00);
         amountToWithdraw = BigDecimal.valueOf(10.00);
         amountToTransfer = BigDecimal.valueOf(50.00);

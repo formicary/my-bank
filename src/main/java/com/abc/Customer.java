@@ -4,6 +4,8 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.abc.Account.Account;
+
 import java.math.BigDecimal;
 
 import static com.abc.Utilities.AmountValidator.isNegativeAmount;
@@ -34,8 +36,9 @@ public class Customer {
 
     public BigDecimal totalInterestEarned() {
         BigDecimal total = BigDecimal.ZERO;
-        for (Account account : accounts)
-            total.add(account.interestEarned());
+        for (Account account : accounts) {
+            total = total.add(account.interestEarned());
+        }
         return total;
     }
 

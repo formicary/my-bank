@@ -2,7 +2,8 @@ package com.abc;
 
 import org.junit.Test;
 
-import com.abc.Utilities.Enums.AccountType;
+import com.abc.Account.Account;
+import com.abc.Account.CheckingAccount;
 
 import static org.junit.Assert.assertEquals;
 
@@ -11,7 +12,6 @@ import java.math.BigDecimal;
 import org.junit.After;
 import org.junit.Before;
 
-// Todo: add missing test cases to ensure full coverage. Consider global variable for e.g. deposit amount
 public class AccountTest {
     private BigDecimal amountToDeposit;
     private BigDecimal amountToWithdraw;
@@ -22,7 +22,7 @@ public class AccountTest {
     @Before
     public void setup() {
         customer = new Customer("Jade");
-        checkingAccount = new Account(AccountType.CHECKING);
+        checkingAccount = new CheckingAccount();
         amountToDeposit = new BigDecimal(150.00);
         amountToWithdraw = new BigDecimal(10.00);
 ;    }
@@ -38,7 +38,7 @@ public class AccountTest {
     @Test
     public void testDepositFunds() {
         customer.openAccount(checkingAccount);
-        checkingAccount.depositFunds(new BigDecimal(150.00));
+        checkingAccount.depositFunds(amountToDeposit);
         BigDecimal expectedNewBalance = new BigDecimal(150.00);
 
         assertEquals(expectedNewBalance, checkingAccount.getBalance());
