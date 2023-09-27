@@ -2,8 +2,8 @@ package com.abc;
 
 import org.junit.Test;
 
-import com.abc.Account.Account;
-import com.abc.Account.CheckingAccount;
+import com.abc.account.Account;
+import com.abc.account.CheckingAccount;
 
 import static org.junit.Assert.assertEquals;
 
@@ -25,6 +25,8 @@ public class AccountTest {
         checkingAccount = new CheckingAccount();
         amountToDeposit = new BigDecimal(150.00);
         amountToWithdraw = new BigDecimal(10.00);
+
+        customer.openAccount(checkingAccount);
 ;    }
 
     @After
@@ -37,22 +39,25 @@ public class AccountTest {
 
     @Test
     public void testDepositFunds() {
-        customer.openAccount(checkingAccount);
         checkingAccount.depositFunds(amountToDeposit);
         BigDecimal expectedNewBalance = new BigDecimal(150.00);
 
         assertEquals(expectedNewBalance, checkingAccount.getBalance());
     }
 
+    @Test
+    public void testDepositFundsGeneratesTransaction() {
+        checkingAccount.depositFunds(amountToDeposit);
+        assertEquals(1, checkingAccount.getTransactions().size());
+    }
+
     @Test(expected = IllegalArgumentException.class) // Todo: is good practice? Can this be asserted instead?
     public void testDepositFundsWithNegativeAmount() {
-        customer.openAccount(checkingAccount);
         checkingAccount.depositFunds(amountToDeposit.negate());
     }
 
     @Test
     public void testWihdrawFunds() {
-        customer.openAccount(checkingAccount);
         checkingAccount.depositFunds(amountToDeposit);
         checkingAccount.withdrawFunds(amountToWithdraw);
         BigDecimal expectedNewBalance = new BigDecimal(140.00);
@@ -60,9 +65,16 @@ public class AccountTest {
         assertEquals(expectedNewBalance, checkingAccount.getBalance());
     }
 
-    @Test(expected = IllegalStateException.class) // Todo: is good practice? Can this be asserted instead?
+    @Test
+    public void testWihdrawFundsGeneratesTransaction() {
+        checkingAccount.depositFunds(amountToDeposit);
+        checkingAccount.withdrawFunds(amountToWithdraw);
+
+        assertEquals(2, checkingAccount.getTransactions().size());
+    }
+
+    @Test(expected = IllegalStateException.class)
     public void testWithdrawalExceedsBalance() {
-        customer.openAccount(checkingAccount);
         checkingAccount.depositFunds(amountToDeposit);
         checkingAccount.withdrawFunds(new BigDecimal(200.00));
     }

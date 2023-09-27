@@ -2,10 +2,10 @@ package com.abc;
 
 import org.junit.Test;
 
-import com.abc.Account.Account;
-import com.abc.Account.CheckingAccount;
-import com.abc.Account.MaxiSavingsAccount;
-import com.abc.Account.SavingsAccount;
+import com.abc.account.Account;
+import com.abc.account.CheckingAccount;
+import com.abc.account.MaxiSavingsAccount;
+import com.abc.account.SavingsAccount;
 
 import static org.junit.Assert.assertEquals;
 
@@ -110,8 +110,9 @@ public class CustomerTest {
     }
 
     @Test
-    public void testCustomerStatementGeneration(){
-        customer.openAccount(checkingAccount).openAccount(savingsAccount);
+    public void testCustomerConsolidatedStatementGeneration(){
+        customer.openAccount(checkingAccount);
+        customer.openAccount(savingsAccount);
         BigDecimal amountToDepositChecking = BigDecimal.valueOf(100.00);
         BigDecimal amountToDepositSavings = BigDecimal.valueOf(4000.00);
         BigDecimal amountToWithdrawSavings = BigDecimal.valueOf(200.00);
@@ -136,7 +137,8 @@ public class CustomerTest {
 
     @Test
     public void testCustomerStatementGenerationWhenNoTransactions() {
-        customer.openAccount(checkingAccount).openAccount(savingsAccount);
+        customer.openAccount(checkingAccount);
+        customer.openAccount(savingsAccount);
 
             assertEquals("Statement for Jade\n" +
                 "\n" +

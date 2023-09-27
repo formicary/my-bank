@@ -1,4 +1,4 @@
-package com.abc.Utilities.Enums;
+package com.abc.utilities.enums;
 
 public enum AccountType {
     CHECKING,

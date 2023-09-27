@@ -1,10 +1,13 @@
-package com.abc.Account;
+package com.abc.account;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-import com.abc.Utilities.Enums.AccountType;
+import com.abc.utilities.enums.AccountType;
 
+/*
+ * Savings Account - inherits from Account class
+ */
 public class SavingsAccount extends Account {
     private final BigDecimal LOW_INTEREST_RATE = BigDecimal.valueOf(0.001);
     private final BigDecimal HIGH_INTEREST_RATE = BigDecimal.valueOf(0.002);
@@ -13,10 +16,16 @@ public class SavingsAccount extends Account {
 
     private final BigDecimal MAX_LOW_INTEREST = BigDecimal.ONE;
     
+    /**
+     * Intialises a new Savings Account instance object
+     */
     public SavingsAccount() {
         super(AccountType.SAVINGS);
     }
 
+    /*
+     * Calculates the interest earned for a Savings Account
+     */
     @Override
     public BigDecimal interestEarned() {
         BigDecimal amount = sumTransactions();

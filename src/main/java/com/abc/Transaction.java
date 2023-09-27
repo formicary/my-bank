@@ -3,21 +3,47 @@ package com.abc;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-// Todo: revisit and also consider creating transactionType as enum
+import com.abc.utilities.enums.TransactionType;
+
+/**
+ * Financial transaction that captures the transaction type, quantity and date
+ */
 public class Transaction {
     private final BigDecimal amount;
-
+    private final TransactionType transactionType;
     private LocalDateTime transactionDate;
 
-    public Transaction(BigDecimal amount) {
+    /**
+     * Initialises a new transaction instance object with a given amount, transaction type and date
+     * @param amount quantity
+     * @param transactionType deposit or withdrawal
+     */
+    public Transaction(BigDecimal amount, TransactionType transactionType) {
         this.amount = amount;
+        this.transactionType = transactionType;
         this.transactionDate = LocalDateTime.now();
     }
 
+    /**
+     * Gets the transaction amount
+     * @return transaction amount
+     */
     public BigDecimal getAmount() {
         return amount;
     }
 
+    /**
+     * Gets the type of transaction made
+     * @return transaction type
+     */
+    public TransactionType getTransactionType() {
+        return transactionType;
+    }
+ 
+    /**
+     * Gets the date and time the transaction took place
+     * @return an immutable date time object
+     */
     public LocalDateTime getTransactionDate() {
         return transactionDate;
     }
