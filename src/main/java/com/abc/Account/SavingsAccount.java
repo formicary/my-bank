@@ -13,8 +13,6 @@ public class SavingsAccount extends Account {
 
     private final BigDecimal NEW_INTEREST_RATE_THRESHOLD = BigDecimal.valueOf(1000.00);
 
-    // private final BigDecimal MAX_LOW_INTEREST = BigDecimal.ONE;
-    
     /**
      * Intialises a new Savings Account instance object
      */

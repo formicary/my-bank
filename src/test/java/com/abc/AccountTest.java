@@ -51,7 +51,7 @@ public class AccountTest {
         assertEquals(1, checkingAccount.getTransactions().size());
     }
 
-    @Test(expected = IllegalArgumentException.class) // Todo: is good practice? Can this be asserted instead?
+    @Test(expected = IllegalArgumentException.class)
     public void testDepositFundsWithNegativeAmount() {
         checkingAccount.depositFunds(amountToDeposit.negate());
     }

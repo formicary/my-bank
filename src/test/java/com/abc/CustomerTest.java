@@ -63,6 +63,7 @@ public class CustomerTest {
         customer.openAccount(checkingAccount);
         customer.openAccount(savingsAccount);
         customer.openAccount(maxiSavingsAccount);
+        
         assertEquals(3, customer.getNumberOfAccounts());
     }
 
