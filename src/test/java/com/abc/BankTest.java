@@ -17,6 +17,7 @@ import org.junit.Before;
 public class BankTest {
     private BigDecimal amountToDeposit;
     private BigDecimal amountToDeposit2;
+    private int numberOfDays;
 
 
     private Bank bank;
@@ -37,6 +38,7 @@ public class BankTest {
         maxiSavingsAccount = new MaxiSavingsAccount();
         amountToDeposit = BigDecimal.valueOf(1500.00);
         amountToDeposit2 = BigDecimal.valueOf(1000.00);
+        numberOfDays = 30;
     }
 
     @After
@@ -48,6 +50,7 @@ public class BankTest {
         maxiSavingsAccount = null;
         amountToDeposit = null;
         amountToDeposit2 = null;
+        numberOfDays = 0;
     }
 
     @Test
@@ -61,47 +64,48 @@ public class BankTest {
     public void testCheckingInterestPaid() {
         customer.openAccount(checkingAccount);
         checkingAccount.depositFunds(amountToDeposit);
-        BigDecimal expectedInterestPaid = new BigDecimal("1.50");
+        BigDecimal expectedInterestPaid = new BigDecimal("0.12");
 
-        assertEquals(expectedInterestPaid, bank.totalInterestPaid());
+        assertEquals(expectedInterestPaid, bank.totalInterestPaid(numberOfDays));
     }
 
     @Test
     public void testSavingsLowInterestPaid() {
         customer.openAccount(savingsAccount);
         savingsAccount.depositFunds(amountToDeposit2);
-        BigDecimal expectedInterestPaid = new BigDecimal("1.00");
+        BigDecimal expectedInterestPaid = new BigDecimal("0.08");
 
-        assertEquals(expectedInterestPaid, bank.totalInterestPaid());
+        assertEquals(expectedInterestPaid, bank.totalInterestPaid(numberOfDays));
     }
 
     @Test
     public void testSavingsHighInterestPaid() {
         customer.openAccount(savingsAccount);
         savingsAccount.depositFunds(amountToDeposit);
-        BigDecimal expectedInterestPaid = new BigDecimal("2.00");
+        BigDecimal expectedInterestPaid = new BigDecimal("0.25");
+        int numberOfDays = 30;
 
-        assertEquals(expectedInterestPaid, bank.totalInterestPaid());
+        assertEquals(expectedInterestPaid, bank.totalInterestPaid(numberOfDays));
     }
 
     @Test
     public void testMaxiSavingsNoWithdrawalInterestPaid() {
         customer.openAccount(maxiSavingsAccount);
         maxiSavingsAccount.depositFunds(amountToDeposit);
-        BigDecimal expectedInterestPaid = new BigDecimal("75.00");
+        BigDecimal expectedInterestPaid = new BigDecimal("6.18");
 
-        assertEquals(expectedInterestPaid, bank.totalInterestPaid());
+        assertEquals(expectedInterestPaid, bank.totalInterestPaid(numberOfDays));
     }
 
     @Test
     public void testMaxiSavingsWithdrawalWithin10DaysInterestPaid() {
         customer.openAccount(maxiSavingsAccount);
-        maxiSavingsAccount.depositFunds(amountToDeposit);
-        BigDecimal amountToWithdraw = BigDecimal.valueOf(500.00);
+        maxiSavingsAccount.depositFunds(amountToDeposit); //1500
+        BigDecimal amountToWithdraw = BigDecimal.valueOf(10.00);
         maxiSavingsAccount.withdrawFunds(amountToWithdraw);
-        BigDecimal expectedInterestPaid = new BigDecimal("1.00");
+        BigDecimal expectedInterestPaid = new BigDecimal("0.12");
 
-        assertEquals(expectedInterestPaid, bank.totalInterestPaid());
+        assertEquals(expectedInterestPaid, bank.totalInterestPaid(numberOfDays));
     }
 }
     

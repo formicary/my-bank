@@ -4,6 +4,7 @@ import static com.abc.utilities.AmountValidator.canWithdraw;
 import static com.abc.utilities.AmountValidator.isNegativeAmount;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,9 +13,11 @@ import com.abc.utilities.enums.AccountType;
 import com.abc.utilities.enums.TransactionType;
 
 /**
- *  Bank account template inherited by child classes
+ *  Bank account template to be inherited by different account types
  */
 public abstract class Account {
+    private final BigDecimal DAYS_PER_YEAR = BigDecimal.valueOf(365);
+
     private final AccountType accountType;
     private BigDecimal balance;
     public List<Transaction> transactions;
@@ -25,7 +28,7 @@ public abstract class Account {
      */
     public Account(AccountType accountType) {
         this.accountType = accountType;
-        this.transactions = new ArrayList<Transaction>();
+        this.transactions = new ArrayList<>();
         this.balance = BigDecimal.ZERO;
     }
 
@@ -74,10 +77,21 @@ public abstract class Account {
         transactions.add(new Transaction(amount.negate(), TransactionType.WITHDRAWAL));
     }
 
+    public abstract BigDecimal getAnnualInterestRate();
+
     /**
      * Calculates the interest earned according to the implementation of each individual account type
      */
-    public abstract BigDecimal interestEarned();
+    public BigDecimal compoundInterestEarned(int timeInDays) {
+        BigDecimal amount = sumTransactions();
+
+        BigDecimal annualInterestRate = getAnnualInterestRate();
+        BigDecimal dailyInterestRate = annualInterestRate.divide(DAYS_PER_YEAR, 10, RoundingMode.HALF_UP);
+        BigDecimal accruedCompoundInterest = amount
+            .multiply(((BigDecimal.ONE).add(dailyInterestRate)).pow(timeInDays))
+            .subtract(amount);
+        return accruedCompoundInterest.setScale(2, RoundingMode.HALF_UP);
+    };
 
     /**
      * Checks if any transactions currently exist

@@ -1,7 +1,7 @@
 package com.abc;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import com.abc.utilities.enums.TransactionType;
 
@@ -11,7 +11,7 @@ import com.abc.utilities.enums.TransactionType;
 public class Transaction {
     private final BigDecimal amount;
     private final TransactionType transactionType;
-    private LocalDateTime transactionDate;
+    private LocalDate transactionDate;
 
     /**
      * Initialises a new transaction instance object with a given amount, transaction type and date
@@ -21,7 +21,7 @@ public class Transaction {
     public Transaction(BigDecimal amount, TransactionType transactionType) {
         this.amount = amount;
         this.transactionType = transactionType;
-        this.transactionDate = LocalDateTime.now();
+        this.transactionDate = LocalDate.now();
     }
 
     /**
@@ -44,7 +44,7 @@ public class Transaction {
      * Gets the date and time the transaction took place
      * @return an immutable date time object
      */
-    public LocalDateTime getTransactionDate() {
+    public LocalDate getTransactionDate() {
         return transactionDate;
     }
 }

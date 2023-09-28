@@ -132,7 +132,7 @@ public class CustomerTest {
                 "  withdrawal $200.00\n" +
                 "Total $3,800.00\n" +
                 "\n" +
-                "Total In All Accounts $3,900.00", customer.generateConsolidatedAcountsStatement());
+                "Total In All Accounts $3,900.00", customer.generateConsolidatedStatementForAccounts());
     }
 
     @Test
@@ -148,6 +148,6 @@ public class CustomerTest {
                 "Savings Account\n" +
                 "Total $0.00\n" +
                 "\n" +
-                "Total In All Accounts $0.00", customer.generateConsolidatedAcountsStatement());
+                "Total In All Accounts $0.00", customer.generateConsolidatedStatementForAccounts());
     }
 }

@@ -24,7 +24,7 @@ public class Customer {
      */
     public Customer(String name) {
         this.name = name;
-        this.accounts = new ArrayList<Account>();
+        this.accounts = new ArrayList<>();
     }
 
     /**
@@ -55,10 +55,10 @@ public class Customer {
      * Calculates the total interest earned across all accounts for a given customer
      * @return total amount of interest
      */
-    public BigDecimal totalInterestEarned() {
+    public BigDecimal totalInterestEarned(int numberOfDays) {
         BigDecimal total = BigDecimal.ZERO;
         for (Account account : accounts) {
-            total = total.add(account.interestEarned());
+            total = total.add(account.compoundInterestEarned(numberOfDays));
         }
         return total;
     }
@@ -85,7 +85,7 @@ public class Customer {
      * the total amount of funds across all their accounts combined
      * @return statement summary
      */
-    public String generateConsolidatedAcountsStatement() {
+    public String generateConsolidatedStatementForAccounts() {
         StringBuilder consolidatedStatement = new StringBuilder("Statement for ")
             .append(name)
             .append("\n");

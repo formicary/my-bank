@@ -14,7 +14,7 @@ public class Bank {
      * Initialises a new bank object with an empty list of customers
      */
     public Bank() {
-        customers = new ArrayList<Customer>();
+        customers = new ArrayList<>();
     }
 
     /**
@@ -47,11 +47,11 @@ public class Bank {
      * Calculates the total interest paid on accounts to a given customer
      * @return totalled interest
      */
-    public BigDecimal totalInterestPaid() {
+    public BigDecimal totalInterestPaid(int numberOfDays) {
         BigDecimal total = BigDecimal.ZERO;
 
         for (Customer customer : customers) {
-            total = total.add(customer.totalInterestEarned());
+            total = total.add(customer.totalInterestEarned(numberOfDays));
         }
         return total;
     }
