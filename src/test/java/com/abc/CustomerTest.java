@@ -1,25 +1,128 @@
 package com.abc;
 
-import org.junit.Ignore;
 import org.junit.Test;
+
+import com.abc.account.Account;
+import com.abc.account.CheckingAccount;
+import com.abc.account.MaxiSavingsAccount;
+import com.abc.account.SavingsAccount;
 
 import static org.junit.Assert.assertEquals;
 
+import java.math.BigDecimal;
+
+import org.junit.After;
+import org.junit.Before;
+
 public class CustomerTest {
+    private BigDecimal amountToDeposit;
+    private BigDecimal amountToWithdraw;
+    private BigDecimal amountToTransfer;
 
-    @Test //Test customer statement generation
-    public void testApp(){
+    private Customer customer;
+    private Customer customer2;
+    private Account checkingAccount;
+    private Account checkingAccount2;
+    private Account savingsAccount;
+    private Account maxiSavingsAccount;
 
-        Account checkingAccount = new Account(Account.CHECKING);
-        Account savingsAccount = new Account(Account.SAVINGS);
+    @Before
+    public void setup() {
+        customer = new Customer("Jade");
+        customer2 = new Customer("Jack");
+        checkingAccount = new CheckingAccount();
+        checkingAccount2 = new CheckingAccount();
+        savingsAccount = new SavingsAccount();
+        maxiSavingsAccount = new MaxiSavingsAccount();
+        amountToDeposit = BigDecimal.valueOf(150.00);
+        amountToWithdraw = BigDecimal.valueOf(10.00);
+        amountToTransfer = BigDecimal.valueOf(50.00);
+    }
 
-        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
+    @After
+    public void tearDown() {
+        customer = null;
+        customer2 = null;
+        checkingAccount = null;
+        checkingAccount2 = null;
+        savingsAccount = null;
+        maxiSavingsAccount = null;
+        amountToDeposit = null;
+        amountToWithdraw = null;
+        amountToTransfer = null;
+    }
 
-        checkingAccount.deposit(100.0);
-        savingsAccount.deposit(4000.0);
-        savingsAccount.withdraw(200.0);
+    @Test
+    public void testOneAccount(){
+        customer.openAccount(checkingAccount);
+        assertEquals(1, customer.getNumberOfAccounts());
+    }
 
-        assertEquals("Statement for Henry\n" +
+    @Test
+    public void testMultipleAcounts() {
+        customer.openAccount(checkingAccount);
+        customer.openAccount(savingsAccount);
+        customer.openAccount(maxiSavingsAccount);
+        
+        assertEquals(3, customer.getNumberOfAccounts());
+    }
+
+    @Test
+    public void testTransferFundsDeductsAmountFromInitialAccount() {
+        customer.openAccount(checkingAccount);
+        customer.openAccount(savingsAccount);
+
+        checkingAccount.depositFunds(amountToDeposit);
+        customer.transferFunds(checkingAccount, savingsAccount, amountToWithdraw);
+        BigDecimal expectedNewBalance = BigDecimal.valueOf(140.00);
+
+        assertEquals(expectedNewBalance, checkingAccount.getBalance());
+    }
+
+    @Test
+    public void testFundsTransferredToDestinationAccount() {
+        customer.openAccount(checkingAccount);
+        customer.openAccount(savingsAccount);
+
+        checkingAccount.depositFunds(amountToDeposit);
+        customer.transferFunds(checkingAccount, savingsAccount, amountToTransfer);
+        BigDecimal expectedNewBalance = BigDecimal.valueOf(50.00);
+
+        assertEquals(expectedNewBalance, savingsAccount.getBalance());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testTransferFundsToNonCustomerAccount() {
+        customer.openAccount(checkingAccount);
+        customer2.openAccount(maxiSavingsAccount);
+
+        checkingAccount.depositFunds(amountToDeposit);
+        customer.transferFunds(checkingAccount, maxiSavingsAccount, amountToTransfer);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testTransferFundsFromNonCustomerAccount() {
+        customer.openAccount(checkingAccount);
+        customer.openAccount(savingsAccount);
+        customer2.openAccount(checkingAccount2);
+
+        checkingAccount2.depositFunds(amountToDeposit);
+        customer.transferFunds(checkingAccount2, savingsAccount, amountToTransfer);
+    }
+
+    @Test
+    public void testCustomerConsolidatedStatementGeneration(){
+        customer.openAccount(checkingAccount);
+        customer.openAccount(savingsAccount);
+        BigDecimal amountToDepositChecking = BigDecimal.valueOf(100.00);
+        BigDecimal amountToDepositSavings = BigDecimal.valueOf(4000.00);
+        BigDecimal amountToWithdrawSavings = BigDecimal.valueOf(200.00);
+
+        checkingAccount.depositFunds(amountToDepositChecking);
+        savingsAccount.depositFunds(amountToDepositSavings);
+        savingsAccount.withdrawFunds(amountToWithdrawSavings);
+
+        assertEquals("Statement for Jade\n" +
                 "\n" +
                 "Checking Account\n" +
                 "  deposit $100.00\n" +
@@ -30,28 +133,22 @@ public class CustomerTest {
                 "  withdrawal $200.00\n" +
                 "Total $3,800.00\n" +
                 "\n" +
-                "Total In All Accounts $3,900.00", henry.getStatement());
+                "Total In All Accounts $3,900.00", customer.generateConsolidatedStatementForAccounts());
     }
 
     @Test
-    public void testOneAccount(){
-        Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
-        assertEquals(1, oscar.getNumberOfAccounts());
-    }
+    public void testCustomerStatementGenerationWhenNoTransactions() {
+        customer.openAccount(checkingAccount);
+        customer.openAccount(savingsAccount);
 
-    @Test
-    public void testTwoAccount(){
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
-        assertEquals(2, oscar.getNumberOfAccounts());
-    }
-
-    @Ignore
-    public void testThreeAcounts() {
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
-        assertEquals(3, oscar.getNumberOfAccounts());
+            assertEquals("Statement for Jade\n" +
+                "\n" +
+                "Checking Account\n" +
+                "Total $0.00\n" +
+                "\n" +
+                "Savings Account\n" +
+                "Total $0.00\n" +
+                "\n" +
+                "Total In All Accounts $0.00", customer.generateConsolidatedStatementForAccounts());
     }
 }

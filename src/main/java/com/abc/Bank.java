@@ -1,46 +1,58 @@
 package com.abc;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Bank category that represents a real bank with customers
+ */
 public class Bank {
     private List<Customer> customers;
 
+    /**
+     * Initialises a new bank object with an empty list of customers
+     */
     public Bank() {
-        customers = new ArrayList<Customer>();
+        customers = new ArrayList<>();
     }
 
+    /**
+     * Adds a new customer
+     * @param customer customer to be added
+     */
     public void addCustomer(Customer customer) {
         customers.add(customer);
     }
 
-    public String customerSummary() {
-        String summary = "Customer Summary";
-        for (Customer c : customers)
-            summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-        return summary;
-    }
+    /**
+     * Creates a bank summary listing all customers and their accounts
+     * @return summary of all customers and their accounts
+     */
+    public String generateCustomerSummary() {
+        StringBuilder summary = new StringBuilder("Customer Summary");
 
-    //Make sure correct plural of word is created based on the number passed in:
-    //If number passed in is 1 just return the word otherwise add an 's' at the end
-    private String format(int number, String word) {
-        return number + " " + (number == 1 ? word : word + "s");
-    }
-
-    public double totalInterestPaid() {
-        double total = 0;
-        for(Customer c: customers)
-            total += c.totalInterestEarned();
-        return total;
-    }
-
-    public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
+        for (Customer customer : customers) {
+            summary.append("\n - ")
+                    .append(customer.getCustomerName())
+                    .append(" (")
+                    .append(customer.getNumberOfAccounts())
+                    .append(customer.getNumberOfAccounts() == 1 ? " account" : "  saccounts")
+                    .append(")");
         }
+        return summary.toString();
+    }
+
+    /**
+     * Calculates the total interest paid on accounts to a given customer
+     * @return totalled interest
+     */
+    public BigDecimal totalInterestPaid(int numberOfDays) {
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (Customer customer : customers) {
+            total = total.add(customer.totalInterestEarned(numberOfDays));
+        }
+        return total;
     }
 }
